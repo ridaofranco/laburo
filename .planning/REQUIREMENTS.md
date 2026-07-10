@@ -87,13 +87,34 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (populated by roadmap) | | |
+| DATA-01 | Phase 1 | Pending |
+| DATA-02 | Phase 1 | Pending |
+| DATA-03 | Phase 1 | Pending |
+| SRCH-01 | Phase 2 | Pending |
+| SRCH-02 | Phase 2 | Pending |
+| SRCH-03 | Phase 2 | Pending |
+| PERF-01 | Phase 2 | Pending |
+| PERF-02 | Phase 2 | Pending |
+| OFER-01 | Phase 3 | Pending |
+| OFER-02 | Phase 3 | Pending |
+| OFER-03 | Phase 3 | Pending |
+| ACPT-01 | Phase 4 | Pending |
+| ACPT-02 | Phase 4 | Pending |
+| ACPT-03 | Phase 4 | Pending |
+| STAT-01 | Phase 4 | Pending |
+| STAT-02 | Phase 5 | Pending |
+| XTRA-01 | Phase 5 | Pending |
+| XTRA-02 | Phase 5 | Pending |
+| XTRA-03 | Phase 5 | Pending |
+| XTRA-04 | Phase 5 | Pending |
+| SHIP-01 | Phase 5 | Pending |
+| SHIP-02 | Phase 5 | Pending |
 
 **Coverage:**
-- v1 requirements: 21 total
-- Mapped to phases: 0
-- Unmapped: 21 ⚠️ (pending roadmap)
+- v1 requirements: 22 total (note: earlier "21" was an off-by-one miscount — PERF-01/02 were not tallied)
+- Mapped to phases: 22
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-07-10*
-*Last updated: 2026-07-10 after initial definition*
+*Last updated: 2026-07-10 after roadmap creation (traceability populated)*
