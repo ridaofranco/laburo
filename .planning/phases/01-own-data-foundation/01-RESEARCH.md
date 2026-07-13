@@ -33,7 +33,7 @@
 
 ## Summary
 
-Phase 1 is **all SQL against a brand-new Supabase project** — no npm packages, no app framework, no UI. The work is: (1) create the new project in org `wsvqlrjmizvivgrgnfpw`; (2) build an org-scoped, RLS-enabled schema whose `staff_profiles` is a **superset of HITO's live 29-column table** (so the web form inserts unchanged) plus `organization_id`; (3) create `gigs`/`crew`/`offers` and the `organizations`/`members` + `is_org_member`/`is_org_writer` helpers copied from HITO; (4) build the three magic-link RPCs as SECURITY DEFINER functions and prove them in SQL; (5) repoint the live form (two hardcoded constants + a `staff-cvs` bucket) with zero downtime; (6) backfill from **two** sources.
+Phase 1 is **all SQL against a brand-new Supabase project** — no npm packages, no app framework, no UI. The work is: (1) create the new project in org `wsvqlrjmizvivgrgnfpw`; (2) build an org-scoped, RLS-enabled schema whose `staff_profiles` is a **superset of HITO's live 31-column table** (so the web form inserts unchanged) plus `organization_id`; (3) create `gigs`/`crew`/`offers` and the `organizations`/`members` + `is_org_member`/`is_org_writer` helpers copied from HITO; (4) build the three magic-link RPCs as SECURITY DEFINER functions and prove them in SQL; (5) repoint the live form (two hardcoded constants + a `staff-cvs` bucket) with zero downtime; (6) backfill from **two** sources.
 
 Every load-bearing pattern already exists and was read directly from `/Users/fridao/Proyectos/HITO-by-DER-main`: the accept-RPC (`00008_proposal_acceptance.sql`), the org helpers (`00001`, `00052`), the crew tables (`00035`), the token-in-URL flow (`app/.../propuesta/actions.ts`). **This phase should COPY those patterns but strengthen the two places HITO is weak:** HITO's share_token is only 96-bit (`randomBytes(12).base64url`) and stored raw, and HITO's `accept_proposal` does **not** check `expires_at` inside the RPC. Phase 1's tokens must be 256-bit, **hashed at rest**, with **expiry enforced inside** the RPC.
 
@@ -119,7 +119,7 @@ $$ LANGUAGE sql SECURITY DEFINER STABLE;
 ```
 - Seed **one** `organizations` row for SOMOS DER with a **fixed UUID** (hardcode it — pitfall #4: multi-tenant = data shape only, not org-management UI). `members` stays empty until Franco's auth is wired (Phase 2); that's fine — Phase 1 has no dashboard reads. `[CITED: HITO 00001_rls_policies.sql, 00052_roles_permissions.sql]`
 
-### `staff_profiles` (superset of the live 29 columns + org)
+### `staff_profiles` (superset of the live 31 columns + org)
 - Reproduce **every** live column with identical name/type/default (see Ground Truth list) so the repointed form inserts with zero code change beyond URL/key.
 - Add `organization_id uuid REFERENCES organizations(id)` **NULLABLE** (pitfall #8 — never NOT NULL on a live-insert table). Stamp it via BEFORE INSERT trigger + backfill; only consider NOT NULL after cutover is proven.
 - RLS: `ENABLE ROW LEVEL SECURITY`; anon **INSERT** policy (`WITH CHECK` constraining required fields / forcing `organization_id IS NULL`); member **SELECT** policy `USING (is_org_member(organization_id))`. Column-grant INSERT to `anon` on only the form's columns.
@@ -382,12 +382,14 @@ $$ LANGUAGE sql SECURITY DEFINER STABLE;
 
 ## Open Questions
 
-1. **Google Sheet export (BLOCKS DATA-02 completion, not schema/RPC).**
+> All three questions below were RESOLVED during planning (plan-checker audit 2026-07-13): Q1 → 01-04's blocking human checkpoint; Q2 → 01-03 Task 2 consent-notice verification; Q3 → nullable `organization_id` design adopted in 01-01/01-03.
+
+1. **(RESOLVED — 01-04 checkpoint:human) Google Sheet export (BLOCKS DATA-02 completion, not schema/RPC).**
    - Known: ~146 applicants exist somewhere outside HITO's DB.
    - Unclear: exact location, columns, whether CV links exist.
    - Recommendation: plan schema + RPCs + cutover + Source-A backfill without it; gate the Source-B import task on Franco delivering the CSV. Add a `checkpoint:human` for the export.
-2. **Consent/PII notice on the form (Ley 25.326).** The live form already has a consent checkbox ("Acepto que DER guarde mis datos…"). STATE.md flags a compliance gap; the form-repoint slice is the natural place to confirm the notice names the correct controller and rights. Low effort; note for the planner. `[CITED: StaffRegistro.astro consent line 256-258; STATE.md blocker]`
-3. **`NOT NULL organization_id` timing.** Recommend leaving nullable through Phase 1; revisit adding NOT NULL + FK after cutover + backfill are proven (expand-migrate-contract step 4).
+2. **(RESOLVED — 01-03 Task 2) Consent/PII notice on the form (Ley 25.326).** The live form already has a consent checkbox ("Acepto que DER guarde mis datos…"). STATE.md flags a compliance gap; the form-repoint slice is the natural place to confirm the notice names the correct controller and rights. Low effort; note for the planner. `[CITED: StaffRegistro.astro consent line 256-258; STATE.md blocker]`
+3. **(RESOLVED — nullable through Phase 1, per 01-01/01-03) `NOT NULL organization_id` timing.** Recommend leaving nullable through Phase 1; revisit adding NOT NULL + FK after cutover + backfill are proven (expand-migrate-contract step 4).
 
 ## Environment Availability
 

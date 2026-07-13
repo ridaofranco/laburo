@@ -128,8 +128,8 @@ App de contratación de staff eventual para eventos — **producto independiente
 | **Supabase Auth magic link for staff** | Creates auth accounts; v1 requires "staff sin cuenta" | Opaque token + `SECURITY DEFINER` RPC (HITO pattern) |
 | **Paid ESP (Resend/SendGrid)** | Violates zero-budget constraint | `nodemailer` + existing DER Ferozo SMTP |
 | **WhatsApp Business Cloud API** | Per-conversation cost + template approval | `wa.me` deep link (one tap, manual send) |
-| **New crew tables** | PROJECT forbids parallel tables; HITO owns crew data | Write to `crew_members` / `crew_assignments` via RPC |
-| **A second/duplicate database** | "Supabase HITO como única fuente de verdad" | Migrate `staff_profiles` to multi-tenant in-place in HITO |
+| **Writing to HITO's crew tables from the app** | ARCHITECTURE REVISION 2026-07-13: the app owns its data; HITO is an optional link deferred to Phase 6 | App-own `crew` table; HITO push only via the Phase 6 bridge |
+| **Sharing HITO's database** | SUPERSEDED (2026-07-13): the app has its OWN Supabase project (org `wsvqlrjmizvivgrgnfpw`, $0) — .planning/ docs win over any older note here | App-own schema: `staff_profiles`, `gigs`, `crew`, `offers` |
 | **Client-side service-role key** | Full DB access leaked to the browser | Service role only in server actions/route handlers; anon key client-side |
 | **Zod v3 + resolvers v4** | Version mismatch with Zod v4 | Zod v4 + `@hookform/resolvers` v5 |
 

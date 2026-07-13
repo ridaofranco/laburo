@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: planning
+status: executing
 stopped_at: Phase 1 context gathered (bridge → Phase 6)
-last_updated: "2026-07-13T20:53:57.261Z"
-last_activity: 2026-07-13 — Phase 1 context captured; ALL HITO bridge work (BRDG-01/02/03) deferred to new Phase 6 per Franco's direction (app standalone first)
+last_updated: "2026-07-13T21:21:20.310Z"
+last_activity: 2026-07-13 -- Phase 1 planning complete
 progress:
   total_phases: 6
   completed_phases: 0
-  total_plans: 0
+  total_plans: 4
   completed_plans: 0
   percent: 0
 ---
@@ -27,8 +27,8 @@ See: .planning/PROJECT.md (updated 2026-07-13, after architecture revision)
 
 Phase: 1 of 6 (Own Data Foundation)
 Plan: 0 of 3 in current phase
-Status: Context gathered — ready to plan
-Last activity: 2026-07-13 — Phase 1 context captured; ALL HITO bridge work (BRDG-01/02/03) deferred to new Phase 6 per Franco's direction (app standalone first)
+Status: Ready to execute
+Last activity: 2026-07-13 -- Phase 1 planning complete
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -67,7 +67,7 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-None yet.
+- **Phase 4 planning note (from plan-checker 2026-07-13):** `accept_offer` returns `{ok:false, reason:'invalid_or_expired'}` on an already-accepted token (idempotency guard) — Phase 4's public page must add a distinct "already accepted" reason code or handle the client-side messaging so the candidate doesn't see a misleading error.
 
 ### Blockers/Concerns
 
