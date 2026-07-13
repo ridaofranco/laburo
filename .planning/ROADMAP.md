@@ -30,12 +30,13 @@ Structure is derived from the build order (own data first, critical path before 
   1. The app's own Supabase project exists ($0) with its own org-scoped, RLS-enabled schema — `staff_profiles`, `gigs` (with a nullable `hito_event_id` kept as a cheap future-link reference), `crew`, `offers` — and no table is readable by anon directly.
   2. The somosder-web "Trabajá con nosotros" form (+ CV upload) writes into the APP database and its CV bucket, with zero downtime during the cutover; the existing 146+ applicants are copied into the app DB and verified with no loss.
   3. Calling `get_public_offer` / `accept_offer` / `decline_offer` against a real token in SQL behaves correctly in the APP DB: accept atomically creates crew in the app, is single-use/idempotent, rejects expired or replayed tokens, tokens are 256-bit and hashed at rest, and `get_advisors` reports no `function_search_path_mutable` or RLS findings.
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 01-01: New app Supabase project + own schema (`staff_profiles`, `gigs` w/ nullable `hito_event_id`, `crew`, `offers`), org-scoped with RLS from day 1 (DATA-01)
-- [ ] 01-02: Repoint somosder-web form + CV bucket to the app DB (no downtime) and backfill the 146+ applicants, verified (DATA-02, DATA-03)
-- [ ] 01-03: App magic-link RPCs (`get_public_offer`/`accept_offer`/`decline_offer`, SECURITY DEFINER, hashed token) — all SQL-tested (DATA-04)
+- [ ] 01-01-PLAN.md — New app Supabase project + own org-scoped RLS schema (`staff_profiles` superset, `gigs` w/ nullable `hito_event_id`, `crew`, `offers`) (DATA-01)
+- [ ] 01-02-PLAN.md — Magic-link RPCs (`get_public_offer`/`accept_offer`/`decline_offer`, SECURITY DEFINER, 256-bit hashed token, in-RPC expiry) — SQL-tested (DATA-04)
+- [ ] 01-03-PLAN.md — Repoint somosder-web form + private `staff-cvs` bucket to the app DB (zero downtime) + backfill Source A (7 HITO applicants + CVs), verified (DATA-03, DATA-02)
+- [ ] 01-04-PLAN.md — Import Source B (~146 Google-Sheet applicants) via staging + dedup, verified [human checkpoint: Franco provides CSV] (DATA-02)
 
 ### Phase 2: Find Staff
 **Goal**: Franco can log into a phone-first standalone app and find the right candidate from the app's own 146-applicant pool faster than the Google Sheet.
@@ -131,7 +132,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Own Data Foundation | 0/3 | Not started | - |
+| 1. Own Data Foundation | 0/4 | Not started | - |
 | 2. Find Staff | 0/3 | Not started | - |
 | 3. Create & Send Offers | 0/2 | Not started | - |
 | 4. Accept & Close the Loop | 0/2 | Not started | - |
