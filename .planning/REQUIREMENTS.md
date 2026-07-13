@@ -105,8 +105,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-02 | Phase 1 | Pending |
 | DATA-03 | Phase 1 | Pending |
 | DATA-04 | Phase 1 | Pending |
-| BRDG-01 | Phase 1 | Pending |
-| BRDG-02 | Phase 1 | Pending |
+| BRDG-01 | Phase 6 | Pending |
+| BRDG-02 | Phase 6 | Pending |
 | SRCH-01 | Phase 2 | Pending |
 | SRCH-02 | Phase 2 | Pending |
 | SRCH-03 | Phase 2 | Pending |
@@ -118,7 +118,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ACPT-01 | Phase 4 | Pending |
 | ACPT-02 | Phase 4 | Pending |
 | ACPT-03 | Phase 4 | Pending |
-| BRDG-03 | Phase 4 | Pending |
+| BRDG-03 | Phase 6 | Pending |
 | STAT-01 | Phase 4 | Pending |
 | STAT-02 | Phase 5 | Pending |
 | XTRA-01 | Phase 5 | Pending |
@@ -133,8 +133,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 - Mapped to phases: 26
 - Unmapped: 0 ✓
 
-**Per-phase counts:** Phase 1 = 6 · Phase 2 = 5 · Phase 3 = 3 · Phase 4 = 5 · Phase 5 = 7
+**Per-phase counts:** Phase 1 = 4 · Phase 2 = 5 · Phase 3 = 3 · Phase 4 = 4 · Phase 5 = 7 · Phase 6 = 3
 
 ---
 *Requirements defined: 2026-07-10*
-*Last updated: 2026-07-13 after architecture revision + roadmap regeneration*
+*Last updated: 2026-07-13 — HITO bridge (BRDG-01/02/03) deferred to Phase 6 per Franco's direction: app standalone first, HITO link last*

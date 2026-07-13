@@ -73,6 +73,7 @@ Franco encuentra y contrata staff real para un evento real en un solo flujo dent
 | Pagos solo informativos en v1; MeCubro en v2 | Evita complejidad fiscal prematura; integrar seguros con el ciclo base validado | — Pending |
 | Stack: Next.js 15 standalone espejando patrones de HITO | Copiar código probado (auth, RPC, mailer) sin heredar el scope de HITO | — Pending |
 | Éxito v1 = 1 contratación real completa + Franco deja el Sheet | Criterio doble: funcional (ciclo entero con una persona real) y de adopción | — Pending |
+| Puente HITO diferido a la ÚLTIMA fase (Fase 6) — la app primero | Franco (2026-07-13): "lo importante es que sea una app de trabajos y que después sea enlazable con HITO mediante algún medio, sea API o MCP o lo que sea". No gastar tiempo de diseño en la integración antes de que la app funcione; el mecanismo del enlace se confirma recién al llegar a esa fase | — Pending |
 
 ## Evolution
 
