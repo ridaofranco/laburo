@@ -2,11 +2,11 @@
 
 ## What This Is
 
-App de contratación de staff eventual para eventos. En v1 es la herramienta interna de SOMOS DER: Franco busca personal por rol y disponibilidad sobre la base real de postulantes (`staff_profiles`, alimentada por el formulario "Trabajá con nosotros" de somosder-web), ve el perfil/CV, manda una oferta con pago y fechas, y la persona acepta con un link mágico — al aceptar queda contratada en HITO (`crew_member` + `crew_assignment`). La visión de largo plazo es un marketplace multi-empleador de staff eventual.
+App de contratación de staff eventual para eventos — **producto independiente con base de datos propia**, que corre por su cuenta y a la vez está **integrado a HITO** (no fusionado). Tiene sus propios trabajadores, sus propios eventos/gigs y su propio crew. En v1 es la herramienta interna de SOMOS DER: Franco busca personal por rol y disponibilidad sobre su pool real de postulantes, ve el perfil/CV, manda una oferta con pago y fechas, y la persona acepta con un link mágico — al aceptar queda contratada como crew **de la app**. Si ese gig está marcado como evento de HITO, además se empuja a HITO como `crew_member` + `crew_assignment` para gestionarlo/evaluarlo/pagarlo desde HITO. La visión de largo plazo es un marketplace multi-empleador de staff eventual.
 
 ## Core Value
 
-Franco encuentra y contrata staff real para un evento real en un solo flujo dentro de la app — sin volver al Google Sheet ni al WhatsApp manual.
+Franco encuentra y contrata staff real para un evento real en un solo flujo dentro de la app — sin volver al Google Sheet ni al WhatsApp manual. La integración con HITO es un puente opcional, no un requisito para que la app funcione.
 
 ## Requirements
 
@@ -16,55 +16,63 @@ Franco encuentra y contrata staff real para un evento real en un solo flujo dent
 
 ### Active
 
-- [ ] Buscador de staff por rol/oficio y disponibilidad sobre `staff_profiles` (146+ postulantes reales)
-- [ ] Vista de perfil del postulante: datos, oficios, experiencia, CV (bucket `staff-cvs`), links
-- [ ] Crear oferta de trabajo: evento, rol, fechas, monto y condiciones (monto solo informativo)
-- [ ] Envío de oferta por email (SMTP marca DER existente) + botón wa.me con mensaje pre-armado
+- [ ] Base de datos PROPIA de la app (proyecto Supabase nuevo, confirmado $0): staff propio, eventos/gigs propios, crew propio, ofertas — org-scoped desde el día 1
+- [ ] Migrar los 146+ postulantes existentes desde `staff_profiles` de HITO a la base de la app (backfill único)
+- [ ] Repuntar el formulario "Trabajá con nosotros" de somosder-web (+ bucket de CVs) para que escriba en la base de la APP, no en HITO — sin downtime ni postulantes perdidos
+- [ ] Buscador de staff por rol/oficio y disponibilidad sobre el pool propio (los 64 oficios)
+- [ ] Vista de perfil del postulante: datos, oficios, experiencia, CV, links
+- [ ] Crear un gig/evento propio de la app (opcionalmente vinculable a un evento de HITO), con rol, fechas, monto informativo y condiciones
+- [ ] Envío de oferta por email (SMTP marca DER) + botón wa.me con mensaje pre-armado
 - [ ] Link mágico de aceptación: el staff acepta/rechaza sin crear cuenta
-- [ ] Al aceptar: se crea `crew_member` + `crew_assignment` en HITO, atado al evento
+- [ ] Al aceptar: se crea crew **en la app**; y **si el gig está vinculado a un evento de HITO**, se empuja `crew_member` + `crew_assignment` a HITO por el puente (función/RPC de HITO)
 - [ ] Estado de cada oferta visible (enviada / vista / aceptada / rechazada / vencida)
-- [ ] Datos multi-tenant desde el día 1: todo atado a `organization_id` (patrón HITO existente)
-- [ ] Migrar `staff_profiles` al modelo multi-tenant (hoy es standalone sin org_id)
+- [ ] Tablero de ofertas por gig (qué roles están cubiertos y cuáles no)
 
 ### Out of Scope
 
-- Marketplace multi-empleador (registro de terceros, billing, moderación) — v2: primero validar el flujo con la operación propia de SOMOS DER; la arquitectura queda preparada
+- Marketplace multi-empleador (registro de terceros, billing, moderación) — v2: primero validar el flujo con la operación propia de SOMOS DER; la arquitectura queda preparada (org-scoped)
 - Login/cuenta del staff — v2: el link mágico cubre v1 sin fricción; el panel del staff (perfil, disponibilidad, historial) llega después
-- Integración MeCubro (seguros por contratado) — v2: se integra cuando el ciclo base esté validado; mientras tanto sigue el circuito actual
-- Procesar/trackear pagos reales al staff — el monto es informativo en v1; el pago sigue por el circuito actual de Franco (complejidad fiscal/CBU no justificada aún)
+- MCP para que una IA opere la app hablándole ("buscá 3 bartenders y ofertá") — v2 opcional; NO es el mecanismo de integración con HITO (para datos, el puente es una función/RPC, no un MCP)
+- Integración MeCubro (seguros por contratado) — v2: se integra cuando el ciclo base esté validado
+- Procesar/trackear pagos reales al staff — el monto es informativo en v1; el pago sigue por el circuito actual de Franco
 - API oficial de WhatsApp (Meta) — costo por conversación + aprobación de plantillas; v1 usa email automático + wa.me manual en un tap
+- La app dependiendo de HITO para funcionar — explícitamente NO: la app corre sola; HITO es un puente opcional por gig
 
 ## Context
 
-- **Base de datos existente:** Supabase HITO (`luillpzfqzbpoqkgvjuw`). Tablas relevantes: `staff_profiles` (29 cols, RLS, insert público anon vía formulario web), bucket privado `staff-cvs`, `crew_members`, `crew_assignments`, `events`, multi-tenant por `organization_id` con helpers `is_org_member`/`is_org_writer` y patrón de acceso público por token con funciones SECURITY DEFINER (ya probado en `register_web_lead`, `get_public_proposal`, `accept_proposal`).
-- **Alimentación de datos ya en producción:** formulario `StaffRegistro.astro` en somosder-web (`/trabaja-con-nosotros`), multi-país, 64 oficios, sube CV real. Autollenado de CV con Gemini construido (falta encender: `GEMINI_API_KEY`).
-- **Repo HITO:** `github.com/ridaofranco/HITO-by-DER` (copia local en `/Users/fridao/Proyectos/HITO-by-DER-main` y `~/Downloads/hito-live`). Next.js 15 App Router + React 19 + Supabase SSR + Drizzle + Tailwind + Base UI + Motion + Capacitor. Franco lo considera sobre-scoped (~40 secciones) y no lo lanzó; hay flags `SHOW_*` para ocultar secciones.
-- **Decisión abierta (la resuelve el research):** app standalone nueva vs módulo dentro del repo HITO-by-DER.
-- **Cuentas/orgs sin consolidar:** Franco tiene 2 cuentas (ridaofrancorg@gmail.com y franco@somosder.ar); la org "SOMOS DER" real con datos está en la cuenta de su socia (cottludmila@gmail.com). Consolidar antes de operar en serio.
-- **Infra existente reutilizable:** SMTP propio marca DER (ferozo, `src/lib/email.js` en somosder-web), Vercel (CLI logueado como ridaofranco-8135), Gemini API (tier gratis).
-- **Origen del problema:** Franco gestionaba contrataciones con Google Form→Sheet (146 postulantes) + WhatsApp manual. La visión completa está en su nota de voz: marketplace → contratar → pagos HITO → seguro MeCubro por contratado.
+- **Base de datos propia (nueva):** la app tendrá su propio proyecto Supabase (crear en la org `wsvqlrjmizvivgrgnfpw`, costo verificado $0). Es dueña de sus datos: staff, gigs, crew, ofertas. Nada de escribir en las tablas de HITO como si fuera parte de HITO.
+- **Puente con HITO (integración, no fusión):** el servidor de la app (Next.js) tiene credenciales de las dos bases. Cuando un gig está vinculado a un evento de HITO y se confirma un trabajador, la app llama a una función SECURITY DEFINER de HITO (mismo patrón ya probado: `register_web_lead`, `accept_proposal`) para crear el crew allá. Guarda las referencias `hito_event_id`/`hito_crew_member_id`. Si el gig no es de HITO, no hay llamada. Cross-project = sin foreign keys físicas; el vínculo es por referencia guardada.
+- **Origen de datos del staff (a repuntar):** hoy el formulario `StaffRegistro.astro` de somosder-web inserta en `staff_profiles` de HITO (publishable key). Con la app dueña del staff, el form pasa a escribir en la base de la APP + su bucket de CVs. Los 146 postulantes de HITO se copian una vez a la app.
+- **Autollenado de CV con Gemini** construido en la web (falta encender: `GEMINI_API_KEY`) — se conserva apuntando al nuevo destino.
+- **Repo HITO (referencia de patrones a copiar, no a importar):** `github.com/ridaofranco/HITO-by-DER` (copias locales en `/Users/fridao/Proyectos/HITO-by-DER-main` y `~/Downloads/hito-live`). Next.js 15 App Router + React 19 + Supabase SSR + Drizzle + Tailwind + Base UI + Motion + Capacitor. Se copian auth+org gate, patrón de RPC de aceptación (`00008_proposal_acceptance.sql`) y `mailer.ts`.
+- **HITO Supabase (`luillpzfqzbpoqkgvjuw`):** ahí se crea la función-puente que recibe el push de crew. Tiene `crew_members`, `crew_assignments`, `events`, multi-tenant por `organization_id` con `is_org_member`/`is_org_writer`.
+- **Cuentas/orgs sin consolidar:** Franco tiene 2 cuentas (ridaofrancorg@gmail.com y franco@somosder.ar); la org "SOMOS DER" real con datos está en la cuenta de su socia (cottludmila@gmail.com). Relevante para el destino del push a HITO (a qué org/evento se empuja el crew).
+- **Infra existente reutilizable:** SMTP propio marca DER (ferozo), Vercel (CLI logueado como ridaofranco-8135), Gemini API (tier gratis).
+- **Origen del problema:** Franco gestionaba contrataciones con Google Form→Sheet (146 postulantes) + WhatsApp manual. Visión completa en su nota de voz: marketplace → contratar → pagos → seguro MeCubro por contratado, con HITO como uno de los destinos de trabajo.
 
 ## Constraints
 
-- **Presupuesto**: CERO gasto en servicios pagos — regla dura de Franco (no pagar APIs, no Zapier). Todo en tiers gratis (Supabase existente, Vercel hobby, SMTP propio, Gemini free tier).
-- **Tech stack**: Supabase HITO como única fuente de verdad del staff — "todo tiene que estar atado a esta tabla" (`staff_profiles`) y al patrón multi-tenant de HITO. No duplicar bases.
-- **Dependencias**: HITO es la capa de datos de contratación (`crew_members`, `crew_assignments`, `events`) — la app escribe ahí, no inventa tablas paralelas de crew.
-- **Seguridad**: RLS obligatoria en toda tabla nueva; acceso público solo vía funciones SECURITY DEFINER por token (patrón existente). El link mágico sigue este patrón.
-- **UX**: mobile-first — tanto Franco como el staff operan desde el teléfono.
+- **Presupuesto**: CERO gasto en servicios pagos — regla dura de Franco (no pagar APIs, no Zapier). Todo en tiers gratis (Supabase nuevo $0, Vercel hobby, SMTP propio, Gemini free tier).
+- **Independencia**: la app es dueña de sus datos y corre sin HITO. HITO es un puente OPCIONAL por gig, no una dependencia. (Debe poder correr para un cliente que no tenga HITO.)
+- **Integración**: el puente app→HITO es una función/RPC segura de HITO (patrón existente), NO un MCP y NO escritura directa cruda a las tablas de HITO. HITO controla qué se puede escribir.
+- **Seguridad**: RLS obligatoria en toda tabla nueva; acceso público (link mágico) solo vía funciones SECURITY DEFINER por token con `search_path` fijado.
+- **UX**: mobile-first — Franco y el staff operan desde el teléfono.
 - **Animaciones**: librería Motion (`motion`) — preferencia global del usuario.
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Interno primero, marketplace después | Validar el flujo con la operación propia antes de abrir a terceros; menos scope en v1 | — Pending |
-| Datos multi-tenant desde el día 1 | Abrir el marketplace después debe ser configuración, no reescritura; HITO ya es org-based | — Pending |
-| Staff sin cuenta: link mágico | Cero fricción para trabajadores de eventos; patrón token+SECURITY DEFINER ya probado en HITO | — Pending |
-| Canal de oferta: email automático + wa.me en un tap | Email gratis con SMTP propio; WhatsApp API oficial cuesta y burocratiza; wa.me refuerza donde vive el staff | — Pending |
-| Pagos solo informativos en v1 | Registrar monto/condiciones sin procesar plata; evita complejidad fiscal prematura | — Pending |
-| MeCubro en v2 | Integrar seguros recién con el ciclo base validado | — Pending |
-| Arquitectura standalone vs módulo HITO: decide el research | Franco no quiso decidir a ciegas; el research compara contra la DB y el repo reales | — Pending |
-| Éxito v1 = 1 contratación real completa + Franco deja el Sheet | Criterio doble: funcional (ciclo entero con una persona real) y de adopción (la próxima búsqueda se gestiona 100% en la app) | — Pending |
+| App con base de datos PROPIA (proyecto Supabase nuevo), NO compartir la de HITO | Independencia real: corre sola, vendible a terceros sin HITO; no se acopla a un producto sobre-scopeado y sin lanzar. Costo verificado $0 | — Pending |
+| Integración con HITO por PUENTE (función/RPC), no fusión | El evento puede no ser de HITO; si lo es, se empuja el crew a HITO para evaluar/pagar allá. HITO controla la escritura vía SECURITY DEFINER | — Pending |
+| MCP descartado como mecanismo de integración de datos | MCP es para que una IA use herramientas, no para sincronizar dos apps; queda como lujo v2 (operar la app hablándole) | — Pending |
+| El formulario web pasa a alimentar la base de la app | La app es dueña del staff; el intake flexible ya existe, solo se repunta el destino + se copian los 146 | — Pending |
+| Interno primero, marketplace después; datos org-scoped desde el día 1 | Validar el flujo propio antes de abrir a terceros, sin reescribir después | — Pending |
+| Staff sin cuenta: link mágico (token + SECURITY DEFINER) | Cero fricción para trabajadores de eventos; patrón ya probado en HITO | — Pending |
+| Canal de oferta: email automático + wa.me en un tap | Email gratis con SMTP propio; WhatsApp API oficial cuesta y burocratiza | — Pending |
+| Pagos solo informativos en v1; MeCubro en v2 | Evita complejidad fiscal prematura; integrar seguros con el ciclo base validado | — Pending |
+| Stack: Next.js 15 standalone espejando patrones de HITO | Copiar código probado (auth, RPC, mailer) sin heredar el scope de HITO | — Pending |
+| Éxito v1 = 1 contratación real completa + Franco deja el Sheet | Criterio doble: funcional (ciclo entero con una persona real) y de adopción | — Pending |
 
 ## Evolution
 
@@ -84,4 +92,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-08 after initialization*
+*Last updated: 2026-07-13 after architecture revision (base propia + puente a HITO, no fusión)*

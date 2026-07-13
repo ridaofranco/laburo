@@ -355,3 +355,18 @@ Rejection / expiry follow the same RPC shape (`reject_offer`, or a scheduled job
 ---
 *Architecture research for: event-staffing app over HITO Supabase*
 *Researched: 2026-07-10*
+
+---
+
+## ⚠️ ADDENDUM 2026-07-13 — Decisión del dueño anula el veredicto de "Supabase compartida"
+
+Franco corrigió la premisa: la app NO debe ser un anexo de HITO ni escribir en su base como si fuera parte de HITO. Debe ser **un producto independiente con base de datos propia**, integrado a HITO por un **puente**, no fusionado.
+
+**Decisión final (reemplaza la sección de data model de arriba):**
+- **Base propia:** proyecto Supabase nuevo (org `wsvqlrjmizvivgrgnfpw`, costo verificado **$0** vía `get_cost`). La app es dueña de: `staff_profiles` (propio), `gigs` (eventos propios, con `hito_event_id` nullable opcional), `crew` (propio), `offers`.
+- **El formulario web se repunta** a la base de la app; los 146 postulantes de HITO se copian una vez (backfill). Ya NO se migra `staff_profiles` in-place dentro de HITO.
+- **Puente app→HITO:** función SECURITY DEFINER EN HITO que recibe el push de crew (crea `crew_member`+`crew_assignment` en la org/evento de HITO), idempotente, por token/service. La app la llama SOLO cuando el gig está vinculado a un evento de HITO. Cross-project ⇒ sin FKs físicas; vínculo por referencia guardada (`hito_event_id`, `hito_crew_member_id`).
+- **Puente HITO→app (lectura):** la app lee la lista de eventos de HITO para poder vincular un gig.
+- **MCP:** descartado como mecanismo de integración de datos (es IA↔herramientas, no sync de apps). Posible v2: operar la app por lenguaje natural.
+
+Lo que SIGUE vigente del veredicto original: standalone Next.js 15 espejando patrones de HITO (auth+org gate, patrón de RPC de aceptación, `mailer.ts`); RLS + tokens SECURITY DEFINER para el link mágico; el mismo build order (datos y RPCs primero, UI después). Lo único que cambia es DÓNDE viven los datos (base propia, no la de HITO) y que aparece una capa-puente explícita.

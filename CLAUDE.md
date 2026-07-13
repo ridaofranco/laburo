@@ -4,17 +4,17 @@
 
 **Staff App (nombre pendiente — familia "by DER")**
 
-App de contratación de staff eventual para eventos. En v1 es la herramienta interna de SOMOS DER: Franco busca personal por rol y disponibilidad sobre la base real de postulantes (`staff_profiles`, alimentada por el formulario "Trabajá con nosotros" de somosder-web), ve el perfil/CV, manda una oferta con pago y fechas, y la persona acepta con un link mágico — al aceptar queda contratada en HITO (`crew_member` + `crew_assignment`). La visión de largo plazo es un marketplace multi-empleador de staff eventual.
+App de contratación de staff eventual para eventos — **producto independiente con base de datos propia**, que corre por su cuenta y a la vez está **integrado a HITO** (no fusionado). Tiene sus propios trabajadores, sus propios eventos/gigs y su propio crew. En v1 es la herramienta interna de SOMOS DER: Franco busca personal por rol y disponibilidad sobre su pool real de postulantes, ve el perfil/CV, manda una oferta con pago y fechas, y la persona acepta con un link mágico — al aceptar queda contratada como crew **de la app**. Si ese gig está marcado como evento de HITO, además se empuja a HITO como `crew_member` + `crew_assignment` para gestionarlo/evaluarlo/pagarlo desde HITO. La visión de largo plazo es un marketplace multi-empleador de staff eventual.
 
-**Core Value:** Franco encuentra y contrata staff real para un evento real en un solo flujo dentro de la app — sin volver al Google Sheet ni al WhatsApp manual.
+**Core Value:** Franco encuentra y contrata staff real para un evento real en un solo flujo dentro de la app — sin volver al Google Sheet ni al WhatsApp manual. La integración con HITO es un puente opcional, no un requisito para que la app funcione.
 
 ### Constraints
 
-- **Presupuesto**: CERO gasto en servicios pagos — regla dura de Franco (no pagar APIs, no Zapier). Todo en tiers gratis (Supabase existente, Vercel hobby, SMTP propio, Gemini free tier).
-- **Tech stack**: Supabase HITO como única fuente de verdad del staff — "todo tiene que estar atado a esta tabla" (`staff_profiles`) y al patrón multi-tenant de HITO. No duplicar bases.
-- **Dependencias**: HITO es la capa de datos de contratación (`crew_members`, `crew_assignments`, `events`) — la app escribe ahí, no inventa tablas paralelas de crew.
-- **Seguridad**: RLS obligatoria en toda tabla nueva; acceso público solo vía funciones SECURITY DEFINER por token (patrón existente). El link mágico sigue este patrón.
-- **UX**: mobile-first — tanto Franco como el staff operan desde el teléfono.
+- **Presupuesto**: CERO gasto en servicios pagos — regla dura de Franco (no pagar APIs, no Zapier). Todo en tiers gratis (Supabase nuevo $0, Vercel hobby, SMTP propio, Gemini free tier).
+- **Independencia**: la app es dueña de sus datos y corre sin HITO. HITO es un puente OPCIONAL por gig, no una dependencia. (Debe poder correr para un cliente que no tenga HITO.)
+- **Integración**: el puente app→HITO es una función/RPC segura de HITO (patrón existente), NO un MCP y NO escritura directa cruda a las tablas de HITO. HITO controla qué se puede escribir.
+- **Seguridad**: RLS obligatoria en toda tabla nueva; acceso público (link mágico) solo vía funciones SECURITY DEFINER por token con `search_path` fijado.
+- **UX**: mobile-first — Franco y el staff operan desde el teléfono.
 - **Animaciones**: librería Motion (`motion`) — preferencia global del usuario.
 
 <!-- GSD:project-end -->

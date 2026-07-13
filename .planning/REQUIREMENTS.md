@@ -1,32 +1,40 @@
 # Requirements: Staff App (by DER)
 
 **Defined:** 2026-07-10
-**Core Value:** Franco encuentra y contrata staff real para un evento real en un solo flujo dentro de la app — sin volver al Google Sheet ni al WhatsApp manual.
+**Revised:** 2026-07-13 (arquitectura: base propia + puente a HITO, no fusión)
+**Core Value:** Franco encuentra y contrata staff real para un evento real en un solo flujo dentro de la app — sin volver al Google Sheet ni al WhatsApp manual. La integración con HITO es un puente opcional, no un requisito para que la app funcione.
 
 ## v1 Requirements
 
 Requirements for initial release. Each maps to roadmap phases.
 
-### Datos (multi-tenant)
+### Datos (base propia)
 
-- [ ] **DATA-01**: `staff_profiles` queda migrada a multi-tenant (`organization_id` nullable + trigger de default + backfill) sin romper el formulario público vivo de somosder-web (expand-migrate-contract)
-- [ ] **DATA-02**: Existe la tabla `offers` org-scoped (evento, rol, fechas, monto informativo, condiciones, token, estado, vencimiento) con RLS vía `is_org_member`/`is_org_writer`
-- [ ] **DATA-03**: Las RPCs públicas del link mágico (`get_public_offer`, `accept_offer`, `decline_offer`) son SECURITY DEFINER con `search_path` fijado, token fuerte (256-bit, hasheado en reposo), vencimiento y aceptación de un solo uso — verificadas con tests SQL y `get_advisors` limpio
+- [ ] **DATA-01**: La app tiene su propio proyecto Supabase (nuevo, org `wsvqlrjmizvivgrgnfpw`, costo $0) con su esquema propio: `staff_profiles`, `gigs` (eventos propios, con `hito_event_id` nullable opcional), `crew`, `offers` — todo org-scoped y con RLS desde el día 1
+- [ ] **DATA-02**: Los 146+ postulantes existentes de `staff_profiles` de HITO quedan copiados a la base de la app (backfill único, verificado sin pérdida)
+- [ ] **DATA-03**: El formulario "Trabajá con nosotros" de somosder-web (+ subida de CV) queda repuntado para escribir en la base de la APP, no en HITO — sin downtime; el intake sigue funcionando durante el corte
+- [ ] **DATA-04**: Las RPCs públicas del link mágico (`get_public_offer`, `accept_offer`, `decline_offer`) son SECURITY DEFINER en la base de la APP, con `search_path` fijado, token fuerte (256-bit, hasheado en reposo), vencimiento y aceptación de un solo uso — verificadas con tests SQL y `get_advisors` limpio
+
+### Puente con HITO
+
+- [ ] **BRDG-01**: Existe en HITO una función SECURITY DEFINER que recibe el push de crew desde la app (crea `crew_member` + `crew_assignment` atómicamente en la org/evento de HITO correctos), idempotente y autenticada por token/service — probada en SQL
+- [ ] **BRDG-02**: El usuario puede vincular un gig de la app a un evento existente de HITO (la app lee la lista de eventos de HITO por el puente); un gig también puede quedar SIN vincular
+- [ ] **BRDG-03**: Al confirmarse un trabajador en un gig vinculado a HITO, la app llama al puente y guarda las referencias devueltas (`hito_event_id`, `hito_crew_member_id`); si el gig no está vinculado, no hay llamada; una falla del puente no pierde la contratación del lado app (reintentable)
 
 ### Búsqueda
 
-- [ ] **SRCH-01**: El usuario puede buscar candidatos por rol/oficio (multi-select sobre los 64 oficios) y texto libre sobre el pool real de `staff_profiles`
-- [ ] **SRCH-02**: El usuario puede filtrar por disponibilidad básica: "no asignado ya a un evento solapado en HITO" + nota manual de disponibilidad
+- [ ] **SRCH-01**: El usuario puede buscar candidatos por rol/oficio (multi-select sobre los 64 oficios) y texto libre sobre el pool propio de `staff_profiles`
+- [ ] **SRCH-02**: El usuario puede filtrar por disponibilidad básica: "no asignado ya a un gig solapado en la app" + nota manual de disponibilidad
 - [ ] **SRCH-03**: La búsqueda funciona bien en el teléfono (mobile-first)
 
 ### Perfil
 
 - [ ] **PERF-01**: El usuario puede ver el perfil completo del candidato: datos, oficios, experiencia, links y estado
-- [ ] **PERF-02**: El usuario puede ver/descargar el CV desde el bucket privado `staff-cvs` vía signed URL de TTL corto
+- [ ] **PERF-02**: El usuario puede ver/descargar el CV desde el bucket privado de la app vía signed URL de TTL corto
 
 ### Oferta
 
-- [ ] **OFER-01**: El usuario puede crear una oferta atada a un evento de HITO (elegir evento existente o crearlo rápido), con rol, fechas, monto informativo y condiciones
+- [ ] **OFER-01**: El usuario puede crear una oferta atada a un gig de la app (elegir gig existente o crearlo rápido; el gig puede o no estar vinculado a un evento de HITO), con rol, fechas, monto informativo y condiciones
 - [ ] **OFER-02**: La oferta sale automáticamente por email (SMTP marca DER) con el link mágico
 - [ ] **OFER-03**: El usuario tiene un botón wa.me con el mensaje pre-armado (oferta + link) para reforzar por WhatsApp en un tap
 
@@ -34,12 +42,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [ ] **ACPT-01**: El candidato puede ver la oferta desde el link sin crear cuenta (página pública por token)
 - [ ] **ACPT-02**: El candidato puede aceptar o rechazar con confirmación explícita por POST (los bots de preview de email/WhatsApp no pueden disparar la aceptación)
-- [ ] **ACPT-03**: Al aceptar se crean `crew_member` + `crew_assignment` en HITO atómicamente, atados al evento y la org
+- [ ] **ACPT-03**: Al aceptar se crea el crew **en la app** atómicamente; si el gig está vinculado a HITO, se dispara además el puente (BRDG-03)
 
 ### Estado
 
 - [ ] **STAT-01**: El usuario ve el estado de cada oferta: enviada / vista (= link abierto) / aceptada / rechazada / vencida
-- [ ] **STAT-02**: El usuario ve un tablero de ofertas por evento para saber qué roles están cubiertos y cuáles no
+- [ ] **STAT-02**: El usuario ve un tablero de ofertas por gig para saber qué roles están cubiertos y cuáles no
 
 ### Extras (después del ciclo core)
 
@@ -51,7 +59,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Entrega
 
 - [ ] **SHIP-01**: La app está deployada en producción (Vercel, proyecto propio) con SPF/DKIM verificados para que las ofertas no caigan en spam
-- [ ] **SHIP-02**: Se completó 1 contratación real de punta a punta (persona real encontrada, ofertada, aceptó por el link, quedó en HITO para un evento real)
+- [ ] **SHIP-02**: Se completó 1 contratación real de punta a punta (persona real encontrada, ofertada, aceptó por el link, quedó como crew en la app; y si el gig era de HITO, también en HITO)
 
 ## v2 Requirements
 
@@ -67,13 +75,19 @@ Deferred to future release. Tracked but not in current roadmap.
 ### Integraciones
 
 - **INTG-01**: Integración MeCubro (seguro por contratado al confirmar)
-- **INTG-02**: Tracking de estados de pago reusando tablas de pagos de HITO
+- **INTG-02**: Sincronización enriquecida con HITO (evaluaciones/pagos de vuelta a la app, no solo push de crew)
+- **INTG-03**: MCP para operar la app por lenguaje natural (una IA busca staff y ofertá por vos)
 
 ## Out of Scope
 
+Explicitly excluded. Documented to prevent scope creep.
+
 | Feature | Reason |
 |---------|--------|
-| Calendario completo de scheduling/rostering | Scope masivo; HITO ya es dueño del crew assignment; es exactamente lo que hundió a HITO |
+| App dependiente de HITO para funcionar | Explícitamente NO: la app corre sola; HITO es un puente opcional por gig |
+| Escritura directa cruda a las tablas de HITO | El puente es una función SECURITY DEFINER que HITO controla; no se tocan sus tablas desde afuera |
+| MCP como mecanismo de integración de datos | MCP es para IA↔herramientas, no para sincronizar apps; queda v2 como operación por lenguaje |
+| Calendario completo de scheduling/rostering | Scope masivo; es exactamente lo que hundió a HITO |
 | Time-tracking / clock-in geofenced / timesheets | Requiere app del staff; el pago es informativo en v1 — costo puro sin valor |
 | Procesar pagos reales / payroll | Complejidad fiscal/CBU + regla de cero servicios pagos; circuito manual actual |
 | WhatsApp Business API oficial | Costo por conversación + aprobación Meta — viola cero-gasto; wa.me cumple |
@@ -90,6 +104,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-01 | Phase 1 | Pending |
 | DATA-02 | Phase 1 | Pending |
 | DATA-03 | Phase 1 | Pending |
+| DATA-04 | Phase 1 | Pending |
+| BRDG-01 | Phase 1 | Pending |
+| BRDG-02 | Phase 1 | Pending |
 | SRCH-01 | Phase 2 | Pending |
 | SRCH-02 | Phase 2 | Pending |
 | SRCH-03 | Phase 2 | Pending |
@@ -101,6 +118,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ACPT-01 | Phase 4 | Pending |
 | ACPT-02 | Phase 4 | Pending |
 | ACPT-03 | Phase 4 | Pending |
+| BRDG-03 | Phase 4 | Pending |
 | STAT-01 | Phase 4 | Pending |
 | STAT-02 | Phase 5 | Pending |
 | XTRA-01 | Phase 5 | Pending |
@@ -111,10 +129,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SHIP-02 | Phase 5 | Pending |
 
 **Coverage:**
-- v1 requirements: 22 total (note: earlier "21" was an off-by-one miscount — PERF-01/02 were not tallied)
-- Mapped to phases: 22
+- v1 requirements: 26 total (the earlier "24" count was stale — enumerating the IDs after the DATA/BRDG split yields 26)
+- Mapped to phases: 26
 - Unmapped: 0 ✓
+
+**Per-phase counts:** Phase 1 = 6 · Phase 2 = 5 · Phase 3 = 3 · Phase 4 = 5 · Phase 5 = 7
 
 ---
 *Requirements defined: 2026-07-10*
-*Last updated: 2026-07-10 after roadmap creation (traceability populated)*
+*Last updated: 2026-07-13 after architecture revision + roadmap regeneration*
