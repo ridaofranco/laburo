@@ -42,7 +42,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 01-02-PLAN.md — Magic-link RPCs (`get_public_offer`/`accept_offer`/`decline_offer`, SECURITY DEFINER, 256-bit hashed token, in-RPC expiry) — SQL-tested (DATA-04)
+- [x] 01-02-PLAN.md — Magic-link RPCs (`get_public_offer`/`accept_offer`/`decline_offer`, SECURITY DEFINER, 256-bit hashed token, in-RPC expiry) — SQL-tested (DATA-04) ✅ 2026-07-14
 - [ ] 01-03-PLAN.md — Repoint somosder-web form to `staff_app` (same project, zero downtime; CVs stay in place) + backfill Source A (web applicants), verified (DATA-03, DATA-02)
 
 **Wave 3** *(blocked on Wave 2 completion)*
@@ -163,7 +163,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Own Data Foundation | 1/4 | In Progress | - |
+| 1. Own Data Foundation | 2/4 | In Progress | - |
 | 2. Find Staff | 0/3 | Not started | - |
 | 3. Create & Send Offers | 0/2 | Not started | - |
 | 4. Accept & Close the Loop | 0/2 | Not started | - |

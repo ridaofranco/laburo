@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-01-PLAN.md
-last_updated: "2026-07-14T16:20:14Z"
-last_activity: 2026-07-14 -- Completed plan 01-01 (staff_app schema foundation)
+stopped_at: Completed 01-02-PLAN.md
+last_updated: "2026-07-14T16:44:00Z"
+last_activity: 2026-07-14 -- Completed plan 01-02 (magic-link RPCs, SQL-tested)
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 4
-  completed_plans: 1
-  percent: 25
+  completed_plans: 2
+  percent: 50
 ---
 
 # Project State
@@ -26,25 +26,25 @@ See: .planning/PROJECT.md (updated 2026-07-13, after architecture revision)
 ## Current Position
 
 Phase: 1 (Own Data Foundation) — EXECUTING
-Plan: 2 of 4
-Status: Executing Phase 1 (01-01 complete)
-Last activity: 2026-07-14 -- Completed plan 01-01 (staff_app schema + core tables)
+Plan: 3 of 4
+Status: Executing Phase 1 (01-01, 01-02 complete)
+Last activity: 2026-07-14 -- Completed plan 01-02 (magic-link RPCs, SQL-tested)
 
-Progress: [██░░░░░░░░] 25%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 1
-- Average duration: 6 min
-- Total execution time: ~0.1 hours
+- Total plans completed: 2
+- Average duration: 12 min
+- Total execution time: ~0.4 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1. Own Data Foundation | 1/4 | 6 min | 6 min |
+| 1. Own Data Foundation | 2/4 | 24 min | 12 min |
 
 **Recent Trend:**
 
@@ -65,6 +65,7 @@ Recent decisions affecting current work:
 - Build order: own data (SQL-tested) first, UI after; app must run without HITO.
 - Priority (2026-07-13, discuss-phase 1): ALL HITO integration deferred to Phase 6 (last). Franco: "lo importante es que sea una app de trabajos; el enlace con HITO viene después por el medio que sea". Phase 1 = app foundation only (DATA-01..04); bridge mechanism re-confirmed at Phase 6 start.
 - Data foundation (2026-07-14, plan 01-01): `staff_app` schema created inside HITO's project `luillpzfqzbpoqkgvjuw` (D-03, no new project). **Fixed SOMOS DER org UUID = `aa29aa2f-4d34-4e53-b62c-7397e8a4d123`** — every later plan/backfill stamps `organization_id` with this value. Helpers named `staff_app.is_org_member`/`is_org_writer` (own schema, no collision with HITO public). `get_advisors(security)` post-migration is identical to the pre-migration baseline (zero NEW staff_app findings).
+- Magic-link RPCs (2026-07-14, plan 01-02): migration `staff_app_0003_magic_link_rpcs` added `staff_app.get_public_offer`/`accept_offer`/`decline_offer` — SECURITY DEFINER, `SET search_path = staff_app, pg_temp`, 256-bit sha256-hashed tokens, in-RPC `expires_at > now()` + `status IN ('sent','viewed')` guard, atomic crew INSERT `ON CONFLICT (gig_id,staff_profile_id) DO NOTHING`. **Grant model:** anon has EXECUTE on those 3 RPCs + USAGE on schema `staff_app` (0001 had revoked schema usage — re-granted so the RPC grants are reachable); helpers `is_org_member`/`is_org_writer` locked from PUBLIC to authenticated-only (no other anon-callable function in staff_app). 7-case SQL harness passed; `get_advisors(security)` still clean vs baseline. **Phase-4 REST-exposure decision recorded (not built):** expose `staff_app` via PostgREST OR add thin `public` wrappers to call the RPCs from the anon client.
 
 ### Pending Todos
 
@@ -87,6 +88,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-07-14T16:20:14Z
-Stopped at: Completed 01-01-PLAN.md (staff_app schema + core tables)
-Resume file: None — next is 01-02 (magic-link RPCs) in Wave 2
+Last session: 2026-07-14T16:44:00Z
+Stopped at: Completed 01-02-PLAN.md (magic-link RPCs, SQL-tested)
+Resume file: None — next is 01-03 (form repoint + Source-A backfill) in Wave 2
