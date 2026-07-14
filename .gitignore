@@ -1,0 +1,4 @@
+
+# PII: raw applicant exports must never live in the repo (CR-01)
+source-b-applicants.csv
+*_source_b_load.sql
