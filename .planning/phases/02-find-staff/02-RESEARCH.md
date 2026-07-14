@@ -472,18 +472,20 @@ GRANT SELECT ON public.staff_app_my_membership TO authenticated;
 
 **These are the items `/gsd-discuss-phase` or the executor must confirm on the live project before/at planning.** All are verifiable read-only via Supabase MCP (which the executor has; this researcher did not).
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **SRCH-02 availability semantics in Phase 2 (near-zero gigs).**
+> All 3 questions were resolved at planning (2026-07-14): the plans adopted each recommendation. Markers inline below.
+
+1. **SRCH-02 availability semantics in Phase 2 (near-zero gigs).** — **RESOLVED:** plans 02-01/02-03 implement the minimum-honest version (staff_app_crew_busy view + "ocultar ya asignados" toggle + disponibilidad_aviso on profile); interval/overnight overlap deferred to Phase 3, explicitly flagged in 02-03's SUMMARY requirements.
    - What we know: gigs/crew tables exist (Phase 1) but are empty until Phase 3 creates gigs. The requirement wants "not assigned to an overlapping app gig" + manual note.
    - What's unclear: whether the search UI even has a date window to overlap against yet (offers/gigs are Phase 3).
    - Recommendation: implement the *minimum honest* version — show `disponibilidad_aviso` on the profile, and a "ocultar ya asignados" toggle backed by a `staff_app_crew_busy` security-invoker view (exclude staff_profile_ids currently in `crew`). Defer true interval/overnight overlap logic (PITFALLS.md Pitfall 9) to Phase 3 where gigs have real `starts_at`/`ends_at`. Flag in the plan so it isn't mistaken for "done".
 
-2. **CV signing: service-role server-action vs `storage.objects` RLS policy.**
+2. **CV signing: service-role server-action vs `storage.objects` RLS policy.** — **RESOLVED:** plan 02-04 uses service-role signing in a server action after a membership check (no shared-bucket policy change); A3 cv_url format check folded into 02-04 Task 1.
    - What we know: `staff-cvs` is a shared private bucket (somosder-web uploads there); its current object-read policies are unverified (WR-08 noted no size/MIME limits).
    - Recommendation: default to **service-role signing in a server action after a membership check** (zero shared-storage-policy change). If the team prefers not to use service-role for reads, the alternative is a scoped `storage.objects` SELECT policy for `bucket_id='staff-cvs'` limited to staff_app members — but that's another shared-config touch. Executor should confirm the 8 bucket keys and the bucket's current policies.
 
-3. **GitHub OAuth (D-05 "only if trivial").**
+3. **GitHub OAuth (D-05 "only if trivial").** — **RESOLVED:** plan 02-02 skips GitHub (not trivial on the shared project, no value for 2 users); Google + magic-link only.
    - What we know: HITO's login shows Google + magic-link, not GitHub. Enabling GitHub needs a GitHub OAuth app + secret on the shared project.
    - Recommendation: **skip GitHub this phase** (it's not trivial on a shared project and adds no value for 2 users). UI-SPEC already marks it conditional. Revisit only if Franco asks.
 
