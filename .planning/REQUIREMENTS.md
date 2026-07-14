@@ -10,7 +10,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Datos (base propia)
 
-- [ ] **DATA-01**: La app tiene su esquema propio **`staff_app`** dentro del proyecto Supabase de HITO (`luillpzfqzbpoqkgvjuw`) — decisión de Franco 2026-07-14 por el límite de 2 proyectos activos del tier gratis; independencia lógica, cero escritura en `public.*` de HITO. Tablas propias: `staff_profiles`, `gigs` (eventos propios, con `hito_event_id` nullable opcional), `crew`, `offers` — todo org-scoped y con RLS desde el día 1
+- [x] **DATA-01**: La app tiene su esquema propio **`staff_app`** dentro del proyecto Supabase de HITO (`luillpzfqzbpoqkgvjuw`) — decisión de Franco 2026-07-14 por el límite de 2 proyectos activos del tier gratis; independencia lógica, cero escritura en `public.*` de HITO. Tablas propias: `staff_profiles`, `gigs` (eventos propios, con `hito_event_id` nullable opcional), `crew`, `offers` — todo org-scoped y con RLS desde el día 1
 - [ ] **DATA-02**: Los 146+ postulantes existentes de `staff_profiles` de HITO quedan copiados a la base de la app (backfill único, verificado sin pérdida)
 - [ ] **DATA-03**: El formulario "Trabajá con nosotros" de somosder-web (+ subida de CV) queda repuntado para escribir en la base de la APP, no en HITO — sin downtime; el intake sigue funcionando durante el corte
 - [ ] **DATA-04**: Las RPCs públicas del link mágico (`get_public_offer`, `accept_offer`, `decline_offer`) son SECURITY DEFINER en la base de la APP, con `search_path` fijado, token fuerte (256-bit, hasheado en reposo), vencimiento y aceptación de un solo uso — verificadas con tests SQL y `get_advisors` limpio
@@ -101,7 +101,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DATA-01 | Phase 1 | Pending |
+| DATA-01 | Phase 1 | Complete (01-01, 2026-07-14) |
 | DATA-02 | Phase 1 | Pending |
 | DATA-03 | Phase 1 | Pending |
 | DATA-04 | Phase 1 | Pending |

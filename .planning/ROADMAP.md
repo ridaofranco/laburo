@@ -38,7 +38,7 @@ Structure is derived from the build order (own data first, critical path before 
 Plans:
 **Wave 1**
 
-- [ ] 01-01-PLAN.md — `staff_app` schema in HITO's project + own org-scoped RLS tables (`staff_profiles` superset, `gigs` w/ nullable `hito_event_id`, `crew`, `offers`) (DATA-01)
+- [x] 01-01-PLAN.md — `staff_app` schema in HITO's project + own org-scoped RLS tables (`staff_profiles` superset, `gigs` w/ nullable `hito_event_id`, `crew`, `offers`) (DATA-01) ✅ 2026-07-14
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -163,7 +163,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Own Data Foundation | 0/4 | Not started | - |
+| 1. Own Data Foundation | 1/4 | In Progress | - |
 | 2. Find Staff | 0/3 | Not started | - |
 | 3. Create & Send Offers | 0/2 | Not started | - |
 | 4. Accept & Close the Loop | 0/2 | Not started | - |
