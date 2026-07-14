@@ -12,13 +12,11 @@ Franco encuentra y contrata staff real para un evento real en un solo flujo dent
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Base de datos PROPIA de la app — *Validated in Phase 1 (2026-07-14)*: schema `staff_app` dentro del proyecto de HITO (decisión D-03 por límite free-tier), tablas propias org-scoped con RLS, RPCs de link mágico SQL-tested
+- [x] Backfill de postulantes — *Validated in Phase 1*: eran 711 en el Google Sheet (no 146 en HITO) + 8 del form web = **687 en la base tras dedup**, ubicación normalizada a provincias oficiales
+- [x] Formulario "Trabajá con nosotros" repuntado — *Validated in Phase 1*: escribe en `staff_app` vía RPC endurecida, deploy verificado en producción con test real, aviso de consentimiento Ley 25.326 agregado
 
 ### Active
-
-- [ ] Base de datos PROPIA de la app (proyecto Supabase nuevo, confirmado $0): staff propio, eventos/gigs propios, crew propio, ofertas — org-scoped desde el día 1
-- [ ] Migrar los 146+ postulantes existentes desde `staff_profiles` de HITO a la base de la app (backfill único)
-- [ ] Repuntar el formulario "Trabajá con nosotros" de somosder-web (+ bucket de CVs) para que escriba en la base de la APP, no en HITO — sin downtime ni postulantes perdidos
 - [ ] Buscador de staff por rol/oficio y disponibilidad sobre el pool propio (los 64 oficios)
 - [ ] Vista de perfil del postulante: datos, oficios, experiencia, CV, links
 - [ ] Crear un gig/evento propio de la app (opcionalmente vinculable a un evento de HITO), con rol, fechas, monto informativo y condiciones
@@ -94,4 +92,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-13 after architecture revision (base propia + puente a HITO, no fusión)*
+*Last updated: 2026-07-14 — Phase 1 (Own Data Foundation) complete: 687 postulantes en staff_app, form repuntado, RPCs probadas*
