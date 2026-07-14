@@ -63,14 +63,25 @@ Plans:
   4. Franco can open a candidate profile (data, oficios, experience, links, status) and view/download the CV via a short-TTL signed URL from the app's private CV bucket.
   5. The full search-to-profile flow is usable one-handed on a phone.
 
-**Plans**: TBD
+**Plans**: 4 plans
 **UI hint**: yes
 
 Plans:
+**Wave 1**
 
-- [ ] 02-01: Standalone Next.js 15 scaffold + auth gate / org layout copied from HITO patterns, app-DB server config
-- [ ] 02-02: Search + filter over the app's `staff_profiles` (role/oficio multi-select, text, availability), mobile-first
-- [ ] 02-03: Candidate profile page + CV signed-URL view from the app bucket
+- [ ] 02-01-PLAN.md — DB read layer: `public` security_invoker views over `staff_app` + search indexes + WR-04/WR-05 hardening + admin members seed (SRCH-01, SRCH-02)
+
+**Wave 2** *(blocked on Wave 1)*
+
+- [ ] 02-02-PLAN.md — Next.js 15.5 scaffold at repo root (HITO-verbatim Supabase clients) + LABURO brand token layer + Google/magic-link login + membership gate (D-05, D-06; SRCH-03)
+
+**Wave 3** *(blocked on Wave 2)*
+
+- [ ] 02-03-PLAN.md — Search home: oficio chips + free text + Filtros bottom sheet + candidate cards over `staff_app_profiles`, mobile-first (SRCH-01, SRCH-02, SRCH-03)
+
+**Wave 4** *(blocked on Wave 3)*
+
+- [ ] 02-04-PLAN.md — Candidate profile + hybrid CV (short-TTL signed URL for bucket, new-tab for Drive) + wa.me/tel quick actions (PERF-01, PERF-02)
 
 ### Phase 3: Create & Send Offers
 
@@ -164,7 +175,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Own Data Foundation | 4/4 | Complete    | 2026-07-14 |
-| 2. Find Staff | 0/3 | Not started | - |
+| 2. Find Staff | 0/4 | Not started | - |
 | 3. Create & Send Offers | 0/2 | Not started | - |
 | 4. Accept & Close the Loop | 0/2 | Not started | - |
 | 5. Status Board, Extras & Real Hire | 0/3 | Not started | - |
