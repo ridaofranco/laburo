@@ -25,7 +25,7 @@ brand: LABURO
 | Component library | **@base-ui/react** `^1.6` (headless, accessible primitives; copy HITO's styled wrappers — mechanics, NOT aesthetics) |
 | Styling | Tailwind CSS `4.x` (`@tailwindcss/postcss`), CSS custom-property token layer in `globals.css` |
 | Icon library | **lucide-react** (HITO parity) |
-| Fonts | **Baloo 2** (brand display — rounded/bubble "globos") + **Inter** (UI/body) — both FREE Google Fonts, self-hosted via `next/font/google` (zero-budget, no runtime CDN) |
+| Fonts | **Inter** (the UI typeface — the entire type scale) + **Baloo 2** 700 loaded solely as the **logo/lockup asset** for the LABURO wordmark (outside the type scale, see Typography) — both FREE Google Fonts, self-hosted via `next/font/google` (zero-budget, no runtime CDN) |
 | Animation | **motion** (`motion/react`) — sparingly, mobile-first, `prefers-reduced-motion` respected |
 | Theme | dark-only for v1 (dark base is required for the blue neon to read); `next-themes` wired but locked to dark |
 
@@ -57,18 +57,17 @@ brand: LABURO
 
 ## Typography
 
-Two typefaces, disciplined roles. Baloo 2 is a **brand asset** used ONLY for brand moments; the UI face is Inter with exactly **2 weights (400 / 600)**.
+One UI typeface (Inter), exactly **2 weights (400 / 600)** and 3 sizes. This table IS the complete type scale — no text renders outside it except the brand lockup asset (below), which is a logo, not type.
 
 | Role | Font | Size | Weight | Line Height | Where |
 |------|------|------|--------|-------------|-------|
-| Display (brand) | **Baloo 2** | 28px | 700 | 1.1 | LABURO wordmark, login hero, empty-state hero, screen title on the search home |
-| Heading | Inter | 20px | 600 | 1.25 | Candidate name on profile, section titles, filter-panel title |
+| Heading | Inter | 20px | 600 | 1.25 | Candidate name on profile, section titles, filter-panel title, screen titles, empty-state heading |
 | Body | Inter | 16px | 400 | 1.5 | Profile data, descriptions, input text, default paragraph |
-| Label / meta | Inter | 14px | 600 | 1.4 | Chip text, form labels, card meta (provincia/ciudad), button labels |
+| Label / meta | Inter | 14px | 600 | 1.4 | Chip text, form labels, button labels |
 
-**Weight discipline:** UI face = **400 + 600 only** (no 500/700 in the working UI). Baloo 2 700 is the single brand-display weight, reserved for brand moments (an intentional exception, not a third UI weight).
+**Weight discipline:** **400 + 600 only.** No 500/700 anywhere in the UI type scale.
 
-**Brand-moment rule:** Baloo 2 appears ONLY in: the LABURO wordmark, the login hero, empty-state heroes, and the search-home screen title. Cards, lists, forms, filters, profile bodies, buttons → **Inter only**.
+**Brand lockup (logo asset — explicitly OUTSIDE the type scale):** the LABURO wordmark is a fixed **logo/lockup treatment**: Baloo 2 700, 28px (login hero: 40px), line-height 1.1, with the text-glow recipe. It is a brand asset in the same category as an SVG logo — not a typographic role — and it renders ONLY the string "LABURO": app-header wordmark, login hero, and as the small visual crown of the empty-state hero. It is never used to set headings, titles, labels, or any other copy. Any in-UI "brand moment" header text (e.g. the empty-state heading "Sin resultados") uses **Inter 20px/600 with the text-glow recipe** — never Baloo 2.
 
 **Card meta variant:** provincia/ciudad and experience line on cards use 14px Inter, weight 400, muted foreground (`--fg-muted`) — the 600 label weight is reserved for chips, form labels, and buttons.
 
@@ -102,7 +101,7 @@ Dark base, blue as the trust color, neon glow reserved for brand moments. 60/30/
 3. Active nav/tab item
 4. Focus ring (`0 0 0 3px rgba(47,128,255,0.45)`)
 5. Links (portfolio/LinkedIn/CV link text)
-6. The LABURO wordmark fill + its glow
+6. The LABURO wordmark lockup fill + its glow
 
 Everything else (card surfaces, list rows, inactive chips, form fields, body text) stays neutral (dominant/secondary/border/foreground tokens) — no blue.
 
@@ -119,7 +118,7 @@ Deterministic: `hash(primary_oficio) % 8` → index into the array (same oficio 
 
 Glow is a **static box/text-shadow** (not animated by default — mobile perf + `prefers-reduced-motion`). ONLY on brand moments.
 
-**Text glow (LABURO wordmark, login/empty hero):**
+**Text glow (LABURO wordmark lockup; also applied to Inter 600 brand-moment headers like the empty-state heading):**
 ```css
 color: #EAF4FF;
 text-shadow:
@@ -135,13 +134,18 @@ box-shadow:
   0 0 16px rgba(47, 128, 255, 0.35);
 ```
 
-**Restraint rule (checker-enforceable):** Glow appears ONLY on — LABURO wordmark, login hero, empty-state hero, the primary CTA, and active filter chips. Working UI (candidate cards, list rows, form fields, profile data blocks, inactive chips) = **flat, no glow**. If everything glows, nothing does.
+**Restraint rule (checker-enforceable):** Glow appears ONLY on — the LABURO wordmark lockup, login hero, empty-state hero heading, the primary CTA, and active filter chips. Working UI (candidate cards, list rows, form fields, profile data blocks, inactive chips) = **flat, no glow**. If everything glows, nothing does.
 
-**Optional micro-pulse (wordmark only, `prefers-reduced-motion: no-preference`):** a 3s ease-in-out opacity breathe on the outer text-shadow layer, amplitude ≤ 15%. Never on the working UI.
+**Optional micro-pulse (wordmark lockup only, `prefers-reduced-motion: no-preference`):** a 3s ease-in-out opacity breathe on the outer text-shadow layer, amplitude ≤ 15%. Never on the working UI.
 
 ---
 
 ## Component Anatomy
+
+### Visual anchors (one focal point per screen — declared, checker-enforceable)
+- **Search home:** the **search input + oficio chip row is the focal point on load** (top of screen, first visual weight); candidate cards are secondary content below it. The LABURO wordmark lockup sits small in the header and does not compete.
+- **Profile:** the **candidate name (header) + sticky bottom action bar is the focal point**; data blocks are secondary reading content between the two.
+- **Login:** the **LABURO lockup hero + the auth actions form the single focal group**; nothing else carries visual weight on that screen.
 
 ### Candidate card (D-03 — simple, fast, legible, attractive; mobile adaptive)
 - **Container:** secondary surface `#141B31`, `border 1px #2A3455`, radius `16px`, padding `16px`, gap between cards `12–16px`. Whole card is one 44px+ tap target → opens profile.
@@ -168,8 +172,8 @@ box-shadow:
 
 ### Profile screen (PERF-01, PERF-02)
 - **Header:** back affordance + initials avatar (larger, 56px) + name (Inter 20px/600) + estado pill + location meta.
-- **Quick actions (Claude's Discretion, locked):** primary **"Escribir por WhatsApp"** (accent, `wa.me/<E164 sin +>?text=…`) + secondary **"Llamar"** (`tel:`) — sticky bottom action bar, 44px+, `telefono` in E.164.
-- **Data blocks (Inter body, flat, no glow):** oficios (tags), experiencia (`experiencia`/`anios_experiencia`/`experiencia_detalle`), disponibilidad flags (finde/viajar/movilidad as labeled togg30 read-only pills), situación legal / donde_trabajar, motivación, internal availability note.
+- **Quick actions (Claude's Discretion, locked):** primary **"Escribir por WhatsApp"** (accent, `wa.me/<E164 sin +>?text=…`) + secondary **"Llamar al candidato"** (`tel:`) — the visible label may shorten to "Llamar" when space-constrained, but the accessible label (`aria-label`) is always "Llamar al candidato". Sticky bottom action bar, 44px+, `telefono` in E.164.
+- **Data blocks (Inter body, flat, no glow):** oficios (tags), experiencia (`experiencia`/`anios_experiencia`/`experiencia_detalle`), disponibilidad flags (finde/viajar/movilidad as labeled read-only pills), situación legal / donde_trabajar, motivación, internal availability note.
 - **Links:** CV (see below), `portfolio_url`, `linkedin_url` as accent links with `ExternalLink` icon; omit rows whose value is null (never render empty links).
 - **CV (PERF-02 + Claude's Discretion):** primary "Ver CV" → embedded viewer when viable (own-bucket PDF via short-TTL signed URL from the private `staff-cvs` bucket; Google-Drive `open?id=` links rendered via `/preview` iframe when permissions allow), with a universal fallback **"Abrir CV"** in a new tab. If the link is dead/unavailable → graceful message (see Copywriting), never a crash.
 
@@ -181,7 +185,7 @@ box-shadow:
 |-------|-----------|
 | Loading (results) | 3–5 skeleton cards (secondary surface, subtle shimmer, `prefers-reduced-motion` → static), no spinner-only screens |
 | Loading (profile/CV) | Skeleton blocks for data; CV area shows a framed "Cargando CV…" placeholder |
-| Empty (no matches) | Empty-state hero (Baloo 2 + glow) + body copy + "Limpiar filtros" action (see Copywriting) |
+| Empty (no matches) | Empty-state hero: LABURO lockup (small) as visual crown + heading "Sin resultados" in Inter 20px/600 with text-glow + body copy + "Limpiar filtros" action (see Copywriting) |
 | Error (fetch failed) | Neutral card, honest message + "Reintentar" (never a silent failure) |
 | Access denied (D-06 gate) | Non-authorized email that logs in sees a dedicated "sin acceso" screen (they must NOT see the 687-person PII pool) + "Cerrar sesión" |
 | Offline / dead CV link | Inline fallback message + "Abrir en Drive" / "Abrir CV" escape hatch |
@@ -199,7 +203,7 @@ Voice: **Argentine Spanish, voseo, warm, direct.** (See Voice & Tone.)
 | Filters trigger | "Filtros" (+ active-count badge) |
 | Filters apply / reset | "Aplicar" / "Limpiar filtros" |
 | Profile quick action (primary) | "Escribir por WhatsApp" |
-| Profile quick action (secondary) | "Llamar" |
+| Profile quick action (secondary) | **"Llamar al candidato"** (visible label may shorten to "Llamar" if space-constrained; accessible label / `aria-label` always "Llamar al candidato") |
 | CV primary / fallback | "Ver CV" / "Abrir CV" |
 | Login — Google | "Entrar con Google" |
 | Login — magic link | "Mandame un link" (+ input "Tu email") |
@@ -222,7 +226,7 @@ Voice: **Argentine Spanish, voseo, warm, direct.** (See Voice & Tone.)
 | Card press | subtle scale 0.99 + accent ring on active | opens profile |
 | Results appear | staggered fade/slide-up (≤ 8 items, 20–30ms stagger) | skip on `prefers-reduced-motion` |
 | Filters bottom sheet | slide-up + backdrop fade (Base UI Dialog + Motion) | native-feeling |
-| Wordmark | optional static glow / ≤15% breathe | brand moment only |
+| Wordmark lockup | optional static glow / ≤15% breathe | brand moment only |
 
 Global rules: honor `prefers-reduced-motion` (disable transforms/stagger, keep instant); durations ≤ 250ms; no motion on the working data (card contents, form fields). No GSAP/anime/manual CSS transitions (global rule — Motion only).
 
