@@ -13,7 +13,7 @@ Structure is derived from the build order (own data first, critical path before 
 - Integer phases (1, 2, 3): Planned milestone work
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
-- [ ] **Phase 1: Own Data Foundation** - App's own Supabase (staff/gigs/crew/offers) + form repoint + 146 backfill + SQL-tested magic-link RPCs
+- [x] **Phase 1: Own Data Foundation** - App's own Supabase (staff/gigs/crew/offers) + form repoint + backfill (8 web + 679 sheet = 687) + SQL-tested magic-link RPCs ✅ 2026-07-14
 - [ ] **Phase 2: Find Staff** - App scaffold + phone-first search/filter and profile/CV view over the app's own pool
 - [ ] **Phase 3: Create & Send Offers** - Offer tied to an app gig, auto-email with magic link + one-tap wa.me
 - [ ] **Phase 4: Accept & Close the Loop** - No-account accept/decline that atomically creates crew in the app, with per-offer status
@@ -47,7 +47,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-04-PLAN.md — Import Source B (711 Google-Sheet applicants, fetched via Drive MCP — no Franco action needed) via staging + dedup + location normalization, verified (DATA-02)
+- [x] 01-04-PLAN.md — Import Source B (711 Google-Sheet applicants) via staging + dedup + location normalization, verified — 687 total (8 web + 679 sheet), 0 NULL org, 0 dup emails (DATA-02) ✅ 2026-07-14
 
 ### Phase 2: Find Staff
 
@@ -163,7 +163,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Own Data Foundation | 3/4 | In Progress | - |
+| 1. Own Data Foundation | 4/4 | Complete | 2026-07-14 |
 | 2. Find Staff | 0/3 | Not started | - |
 | 3. Create & Send Offers | 0/2 | Not started | - |
 | 4. Accept & Close the Loop | 0/2 | Not started | - |
