@@ -47,7 +47,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-04-PLAN.md — Import Source B (~146 Google-Sheet applicants) via staging + dedup, verified [human checkpoint: Franco provides CSV] (DATA-02)
+- [ ] 01-04-PLAN.md — Import Source B (145 Google-Sheet applicants, fetched via Drive MCP — no Franco action needed) via staging + dedup + location normalization, verified (DATA-02)
 
 ### Phase 2: Find Staff
 

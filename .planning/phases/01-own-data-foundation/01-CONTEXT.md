@@ -79,6 +79,7 @@ El resto de las áreas grises de la fase quedan a criterio de Claude (Franco no 
 ## Deferred Ideas
 
 - **Puente HITO completo** (BRDG-01, BRDG-02, BRDG-03: receptor SECURITY DEFINER en HITO, lectura de eventos, push de crew con refs y retry) → movido a **Fase 6 (HITO Link)**, con el mecanismo (RPC/API/otro) a confirmar al llegar. La consolidación de cuentas/orgs de Franco se resuelve recién ahí.
+- **Ubicación real elegida por el staff + autocomplete de mapa (idea de Franco, 2026-07-14):** cuando el staff tenga su panel (v2, MRKT-02), cada persona elige/corrige su ubicación real con autocomplete. Restricción $0: NO Google Maps Platform (pide tarjeta) — usar Georef API (datos.gob.ar, gratis, provincias/localidades oficiales AR) o Nominatim/OpenStreetMap. Lo que SÍ entra en v1: normalización determinística de ubicación en el import (Fase 1, plan 01-04) + campos estructurados provincia/ciudad para que el filtro de la Fase 2 funcione.
 
 </deferred>
 
