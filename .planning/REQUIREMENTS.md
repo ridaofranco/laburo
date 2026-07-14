@@ -129,6 +129,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SHIP-02 | Phase 5 | Pending |
 
 **Coverage:**
+
 - v1 requirements: 26 total (the earlier "24" count was stale — enumerating the IDs after the DATA/BRDG split yields 26)
 - Mapped to phases: 26
 - Unmapped: 0 ✓
