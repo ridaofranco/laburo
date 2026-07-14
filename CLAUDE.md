@@ -2,7 +2,7 @@
 
 ## Project
 
-**Staff App (nombre pendiente — familia "by DER")**
+**LABURO** — Staff App de SOMOS DER (nombre confirmado 2026-07-14; marca propia: azul confianza + glow neon + tipografía bubble, ni look DER ni HITO)
 
 App de contratación de staff eventual para eventos — **producto independiente con base de datos propia**, que corre por su cuenta y a la vez está **integrado a HITO** (no fusionado). Tiene sus propios trabajadores, sus propios eventos/gigs y su propio crew. En v1 es la herramienta interna de SOMOS DER: Franco busca personal por rol y disponibilidad sobre su pool real de postulantes, ve el perfil/CV, manda una oferta con pago y fechas, y la persona acepta con un link mágico — al aceptar queda contratada como crew **de la app**. Si ese gig está marcado como evento de HITO, además se empuja a HITO como `crew_member` + `crew_assignment` para gestionarlo/evaluarlo/pagarlo desde HITO. La visión de largo plazo es un marketplace multi-empleador de staff eventual.
 

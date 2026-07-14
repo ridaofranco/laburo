@@ -1,4 +1,4 @@
-# Staff App (nombre pendiente — familia "by DER")
+# LABURO — Staff App (SOMOS DER)
 
 ## What This Is
 
@@ -92,4 +92,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-14 — Phase 1 (Own Data Foundation) complete: 687 postulantes en staff_app, form repuntado, RPCs probadas*
+*Last updated: 2026-07-14 — Phase 1 complete + nombre confirmado: LABURO (elegido por Franco sobre propuesta de Claude; marca propia azul/glow/bubble, ni DER ni HITO)*
