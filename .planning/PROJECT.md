@@ -74,6 +74,7 @@ Franco encuentra y contrata staff real para un evento real en un solo flujo dent
 | Stack: Next.js 15 standalone espejando patrones de HITO | Copiar código probado (auth, RPC, mailer) sin heredar el scope de HITO | — Pending |
 | Éxito v1 = 1 contratación real completa + Franco deja el Sheet | Criterio doble: funcional (ciclo entero con una persona real) y de adopción | — Pending |
 | Puente HITO diferido a la ÚLTIMA fase (Fase 6) — la app primero | Franco (2026-07-13): "lo importante es que sea una app de trabajos y que después sea enlazable con HITO mediante algún medio, sea API o MCP o lo que sea". No gastar tiempo de diseño en la integración antes de que la app funcione; el mecanismo del enlace se confirma recién al llegar a esa fase | — Pending |
+| Schema `staff_app` dentro del proyecto Supabase de HITO, NO proyecto nuevo | Franco (2026-07-14): el tier gratis permite 2 proyectos activos y ambos trabajan (sales + HITO); no pausar nada, no pagar. Eligió HITO porque la app se enlaza a HITO al final. Independencia lógica (schema/RLS/orgs propios, cero escritura en `public.*` de HITO hasta Fase 6); migrable a proyecto propio a futuro | — Pending |
 
 ## Evolution
 

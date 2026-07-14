@@ -24,30 +24,30 @@ Structure is derived from the build order (own data first, critical path before 
 
 ### Phase 1: Own Data Foundation
 
-**Goal**: The app has its own Supabase database owning staff/gigs/crew/offers and a secure single-use magic-link offer lifecycle — all proven directly in SQL before any UI exists, and without ever breaking the live web intake.
+**Goal**: The app has its own database layer owning staff/gigs/crew/offers and a secure single-use magic-link offer lifecycle — all proven directly in SQL before any UI exists, and without ever breaking the live web intake. (Infra revision 2026-07-14: own SCHEMA `staff_app` inside HITO's Supabase project `luillpzfqzbpoqkgvjuw` — free-tier 2-active-project limit, Franco chose HITO co-location since the app links to HITO in Phase 6. Logical independence: own tables/RLS/orgs, zero writes to HITO's `public.*` this phase.)
 **Mode:** mvp
-**Depends on**: Nothing (first phase). Prerequisite: exact `staff_profiles` columns verified via live query before backfilling the 146 real applicants.
+**Depends on**: Nothing (first phase). Prerequisite: exact `staff_profiles` columns verified via live query before backfilling the real applicants (done 2026-07-14).
 **Requirements**: DATA-01, DATA-02, DATA-03, DATA-04
 **Success Criteria** (what must be TRUE):
 
-  1. The app's own Supabase project exists ($0) with its own org-scoped, RLS-enabled schema — `staff_profiles`, `gigs` (with a nullable `hito_event_id` kept as a cheap future-link reference), `crew`, `offers` — and no table is readable by anon directly.
-  2. The somosder-web "Trabajá con nosotros" form (+ CV upload) writes into the APP database and its CV bucket, with zero downtime during the cutover; the existing 146+ applicants are copied into the app DB and verified with no loss.
-  3. Calling `get_public_offer` / `accept_offer` / `decline_offer` against a real token in SQL behaves correctly in the APP DB: accept atomically creates crew in the app, is single-use/idempotent, rejects expired or replayed tokens, tokens are 256-bit and hashed at rest, and `get_advisors` reports no `function_search_path_mutable` or RLS findings.
+  1. The `staff_app` schema exists in HITO's Supabase project with its own org-scoped, RLS-enabled tables — `staff_profiles`, `gigs` (with a nullable `hito_event_id` kept as a cheap future-link reference), `crew`, `offers` — no table readable by anon directly, and nothing written to HITO's `public.*` tables.
+  2. The somosder-web "Trabajá con nosotros" form (+ CV upload) writes into `staff_app.staff_profiles` (same project URL/keys — CV bucket unchanged), with zero downtime during the cutover; the existing applicants (7 web + 711 Sheet) are copied into the app schema and verified with no loss.
+  3. Calling `get_public_offer` / `accept_offer` / `decline_offer` against a real token in SQL behaves correctly in the APP schema: accept atomically creates crew in the app, is single-use/idempotent, rejects expired or replayed tokens, tokens are 256-bit and hashed at rest, and `get_advisors` reports no `function_search_path_mutable` or RLS findings.
 
 **Plans**: 4 plans
 Plans:
 **Wave 1**
 
-- [ ] 01-01-PLAN.md — New app Supabase project + own org-scoped RLS schema (`staff_profiles` superset, `gigs` w/ nullable `hito_event_id`, `crew`, `offers`) (DATA-01)
+- [ ] 01-01-PLAN.md — `staff_app` schema in HITO's project + own org-scoped RLS tables (`staff_profiles` superset, `gigs` w/ nullable `hito_event_id`, `crew`, `offers`) (DATA-01)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
 - [ ] 01-02-PLAN.md — Magic-link RPCs (`get_public_offer`/`accept_offer`/`decline_offer`, SECURITY DEFINER, 256-bit hashed token, in-RPC expiry) — SQL-tested (DATA-04)
-- [ ] 01-03-PLAN.md — Repoint somosder-web form + private `staff-cvs` bucket to the app DB (zero downtime) + backfill Source A (7 HITO applicants + CVs), verified (DATA-03, DATA-02)
+- [ ] 01-03-PLAN.md — Repoint somosder-web form to `staff_app` (same project, zero downtime; CVs stay in place) + backfill Source A (web applicants), verified (DATA-03, DATA-02)
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-04-PLAN.md — Import Source B (145 Google-Sheet applicants, fetched via Drive MCP — no Franco action needed) via staging + dedup + location normalization, verified (DATA-02)
+- [ ] 01-04-PLAN.md — Import Source B (711 Google-Sheet applicants, fetched via Drive MCP — no Franco action needed) via staging + dedup + location normalization, verified (DATA-02)
 
 ### Phase 2: Find Staff
 
