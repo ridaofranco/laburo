@@ -11,20 +11,8 @@ import {
   parseSearchParams,
   type RawSearchParams,
 } from "@/lib/search-params";
-
-/** Columnas de card (NO motivacion/experiencia_detalle — payload chico). */
-export interface StaffCard {
-  id: string;
-  nombre: string | null;
-  apellido: string | null;
-  oficios: string[] | null;
-  oficios_otro: string | null;
-  provincia: string | null;
-  ciudad: string | null;
-  experiencia: boolean | null;
-  anios_experiencia: number | null;
-  eventos_trabajados: number | null;
-}
+import { SearchClient } from "./search-client";
+import type { StaffCard } from "./candidate-card";
 
 const CARD_COLUMNS =
   "id,nombre,apellido,oficios,oficios_otro,provincia,ciudad,experiencia,anios_experiencia,eventos_trabajados";
@@ -85,21 +73,10 @@ export default async function SearchPage({
   const candidates = (data ?? []) as StaffCard[];
 
   return (
-    <section className="flex flex-col gap-md">
-      <h1 className="text-heading font-semibold text-fg">Buscá gente</h1>
-      {error ? (
-        <p className="text-body text-fg-muted">
-          No pudimos cargar los candidatos.
-        </p>
-      ) : (
-        <ul className="flex flex-col gap-sm">
-          {candidates.map((c) => (
-            <li key={c.id} className="text-body text-fg">
-              {c.nombre} {c.apellido}
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
+    <SearchClient
+      candidates={candidates}
+      error={Boolean(error)}
+      initialFilters={filters}
+    />
   );
 }
