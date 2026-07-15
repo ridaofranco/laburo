@@ -8,7 +8,8 @@ updated: 2026-07-15
 
 ## Current Test
 
-[awaiting human testing on Franco's phone — requires a deployed URL]
+**DEPLOYADO 2026-07-15:** LABURO en producción → **https://laburo-henna.vercel.app**
+Bloqueante para probar: agregar `https://laburo-henna.vercel.app/auth/callback` a Supabase Auth → URL Configuration → Redirect URLs.
 
 ## Tests
 
