@@ -12,6 +12,7 @@ import {
 } from "@/lib/search-params";
 import { CandidateCard, type StaffCard } from "./candidate-card";
 import { EmptyResults, ErrorResults, LoadingResults } from "./results-states";
+import { FiltrosSheet, type FineFilters } from "./filtros-sheet";
 
 interface Props {
   candidates: StaffCard[];
@@ -40,16 +41,18 @@ export function SearchClient({ candidates, error, initialFilters }: Props) {
   textRef.current = text;
 
   const composeAndPush = useCallback(
-    (q: string, oficios: string[]) => {
+    (q: string, oficios: string[], fine?: FineFilters) => {
       const qs = buildQueryString({
         q,
         oficios,
-        provincia: initialFilters.provincia,
-        ciudad: initialFilters.ciudad,
-        finde: initialFilters.finde,
-        viajar: initialFilters.viajar,
-        movilidad: initialFilters.movilidad,
-        ocultarAsignados: initialFilters.ocultarAsignados,
+        provincia: fine ? fine.provincia : initialFilters.provincia,
+        ciudad: fine ? fine.ciudad : initialFilters.ciudad,
+        finde: fine ? fine.finde : initialFilters.finde,
+        viajar: fine ? fine.viajar : initialFilters.viajar,
+        movilidad: fine ? fine.movilidad : initialFilters.movilidad,
+        ocultarAsignados: fine
+          ? fine.ocultarAsignados
+          : initialFilters.ocultarAsignados,
       });
       startTransition(() => {
         router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
@@ -57,6 +60,10 @@ export function SearchClient({ candidates, error, initialFilters }: Props) {
     },
     [initialFilters, pathname, router],
   );
+
+  // Filtros finos aplicados desde el bottom sheet (SRCH-02 incluido).
+  const applyFine = (fine: FineFilters) =>
+    composeAndPush(textRef.current, selectedRef.current, fine);
 
   // Texto libre: debounce 280ms (Pitfall 4 — mantené el payload chico).
   useEffect(() => {
@@ -175,6 +182,20 @@ export function SearchClient({ candidates, error, initialFilters }: Props) {
           </ul>
         </div>
       )}
+
+      <FiltrosSheet
+        open={showFiltros}
+        onOpenChange={setShowFiltros}
+        initial={{
+          provincia: initialFilters.provincia,
+          ciudad: initialFilters.ciudad,
+          finde: initialFilters.finde,
+          viajar: initialFilters.viajar,
+          movilidad: initialFilters.movilidad,
+          ocultarAsignados: initialFilters.ocultarAsignados,
+        }}
+        onApply={applyFine}
+      />
     </section>
   );
 }
