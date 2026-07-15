@@ -77,7 +77,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2)*
 
-- [ ] 02-03-PLAN.md — Search home: oficio chips + free text + Filtros bottom sheet + candidate cards over `staff_app_profiles`, mobile-first (SRCH-01, SRCH-02, SRCH-03)
+- [x] 02-03-PLAN.md — Search home: oficio chips + free text + Filtros bottom sheet + candidate cards over `staff_app_profiles`, mobile-first (SRCH-01, SRCH-02, SRCH-03) ✅ 2026-07-15
 
 **Wave 4** *(blocked on Wave 3)*
 
@@ -175,7 +175,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Own Data Foundation | 4/4 | Complete    | 2026-07-14 |
-| 2. Find Staff | 2/4 | In Progress | - |
+| 2. Find Staff | 3/4 | In Progress | - |
 | 3. Create & Send Offers | 0/2 | Not started | - |
 | 4. Accept & Close the Loop | 0/2 | Not started | - |
 | 5. Status Board, Extras & Real Hire | 0/3 | Not started | - |
