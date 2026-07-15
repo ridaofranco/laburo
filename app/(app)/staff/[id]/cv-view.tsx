@@ -81,6 +81,9 @@ function BucketCv({ objectKey }: { objectKey: string }) {
   // de nuevo, no reusar una URL vieja).
   const abrir = async () => {
     const win = window.open("about:blank", "_blank");
+    // WR-04: cortar window.opener antes de navegar a un CV subido por el
+    // postulante (podria ser HTML malicioso que secuestre la pestaña de LABURO).
+    if (win) win.opener = null;
     try {
       const url = await signCv(objectKey);
       if (url && win) {

@@ -10,6 +10,10 @@
  * Requiere SUPABASE_SERVICE_ROLE_KEY en env (NUNCA exponer al cliente).
  */
 
+// WR-05: guard de build-time. Si este modulo (con la service-role key) se
+// importa alguna vez desde un componente cliente, el build falla en vez de
+// filtrar la key al browser.
+import "server-only";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
 export function createServiceRoleClient() {

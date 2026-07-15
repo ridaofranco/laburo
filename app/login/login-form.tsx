@@ -34,6 +34,10 @@ export function LoginForm() {
       email,
       options: {
         emailRedirectTo: callbackUrl(),
+        // Gate LABURO: solo los 2 emails admin ya existen en auth.users. Sin esto,
+        // /login publico permite crear usuarios ilimitados en el proyecto Supabase
+        // COMPARTIDO con HITO y quemar la cuota de mails (login DoS). CR-01.
+        shouldCreateUser: false,
       },
     });
     setLoading(false);

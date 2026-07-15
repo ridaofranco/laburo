@@ -39,6 +39,22 @@ export async function signCv(objectKey: string): Promise<string | null> {
 
   if (!membership) throw new Error("forbidden");
 
+  // 1b. Validar la object key (CR-02): esta action es un endpoint invocable, un
+  // miembro podria pasar `../<otro-bucket>/archivo` y firmar cualquier objeto de
+  // cualquier bucket del proyecto COMPARTIDO. Las keys legitimas de staff-cvs son
+  // nombres de archivo planos (sin subdirectorios) tras sacar el prefijo. Rechazar
+  // cualquier traversal / path absoluto / caracteres de control.
+  if (
+    !objectKey ||
+    objectKey.includes("..") ||
+    objectKey.startsWith("/") ||
+    objectKey.includes("\\") ||
+    // eslint-disable-next-line no-control-regex
+    /[\x00-\x1f\x7f]/.test(objectKey)
+  ) {
+    return null;
+  }
+
   // 2. Firmar con service-role, server-only, TTL corta.
   const admin = createServiceRoleClient();
   const { data, error } = await admin.storage
