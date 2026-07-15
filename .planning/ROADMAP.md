@@ -69,7 +69,7 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 02-01-PLAN.md — DB read layer: `public` security_invoker views over `staff_app` + search indexes + WR-04/WR-05 hardening + admin members seed (SRCH-01, SRCH-02)
+- [x] 02-01-PLAN.md — DB read layer: `public` security_invoker views over `staff_app` + search indexes + WR-04/WR-05 hardening + admin members seed (SRCH-01, SRCH-02) ✅ 2026-07-15
 
 **Wave 2** *(blocked on Wave 1)*
 

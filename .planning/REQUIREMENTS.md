@@ -107,8 +107,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-04 | Phase 1 | Complete (01-02, 2026-07-14) |
 | BRDG-01 | Phase 6 | Pending |
 | BRDG-02 | Phase 6 | Pending |
-| SRCH-01 | Phase 2 | Pending |
-| SRCH-02 | Phase 2 | Pending |
+| SRCH-01 | Phase 2 | In Progress (02-01 DB read layer: staff_app_profiles view + oficios GIN / nombre trigram indexes; UI in 02-03) |
+| SRCH-02 | Phase 2 | In Progress (02-01 staff_app_crew_busy view + disponibilidad columns; UI toggle in 02-03) |
 | SRCH-03 | Phase 2 | Pending |
 | PERF-01 | Phase 2 | Pending |
 | PERF-02 | Phase 2 | Pending |
