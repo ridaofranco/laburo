@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+/*
+ * LABURO — capa de tokens de marca (D-01 / 02-UI-SPEC.md).
+ * Base oscura, azul confianza #2F80FF, glow #4CC9FF SOLO en momentos de marca.
+ */
+@theme {
+  /* Superficies (60/30) */
+  --color-surface-0: #0a0f1f; /* fondo app */
+  --color-surface-1: #141b31; /* cards, header, panel */
+  --color-surface-2: #1e2740; /* inputs, chips inactivos, pressed */
+  --color-border: #2a3455;
+
+  /* Acento (10) + glow */
+  --color-accent: #2f80ff; /* azul confianza: solo CTA primario, estados activos, wordmark, links, focus */
+  --color-glow: #4cc9ff; /* SOLO dentro de recetas de sombra, nunca fill ni texto */
+
+  /* Sistema */
+  --color-positive: #3dd68c; /* pill "Disponible" */
+  --color-destructive: #f0555c; /* reservado, sin uso en Fase 2 */
+
+  /* Texto */
+  --color-fg: #f2f5fa;
+  --color-fg-muted: #9aa5c0;
+  --color-fg-subtle: #6b7699;
+
+  /* Tipografía: Inter (UI, 400/600) + Baloo 2 700 (lockup de marca únicamente) */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-baloo: var(--font-baloo), var(--font-inter), ui-sans-serif, sans-serif;
+
+  /* Escala tipográfica (3 tamaños): heading 20/600, body 16/400, label 14/600 */
+  --text-heading: 20px;
+  --text-heading--line-height: 1.25;
+  --text-body: 16px;
+  --text-body--line-height: 1.5;
+  --text-label: 14px;
+  --text-label--line-height: 1.4;
+
+  /* Escala de espaciado 8-pt (múltiplos de 4) */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+}
+
+/*
+ * Recetas de glow (UI-SPEC § Glow Effect Spec).
+ * SOLO en: wordmark LABURO, hero de login, heading de empty-state,
+ * CTA primario y chips de filtro activos. El resto de la UI es plana.
+ */
+@utility text-glow {
+  color: #eaf4ff;
+  text-shadow:
+    0 0 6px rgba(76, 201, 255, 0.55),
+    0 0 18px rgba(47, 128, 255, 0.4),
+    0 0 40px rgba(47, 128, 255, 0.2);
+}
+
+@utility box-glow {
+  box-shadow:
+    0 0 0 1px rgba(47, 128, 255, 0.65),
+    0 0 16px rgba(47, 128, 255, 0.35);
+}
+
+/* Lockup de marca: Baloo 2 700, solo para la palabra "LABURO" */
+@utility font-lockup {
+  font-family: var(--font-baloo);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+}
+
+html {
+  background-color: var(--color-surface-0);
+}
+
+body {
+  min-height: 100dvh;
+}

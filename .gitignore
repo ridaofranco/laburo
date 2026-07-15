@@ -2,3 +2,20 @@
 # PII: raw applicant exports must never live in the repo (CR-01)
 source-b-applicants.csv
 *_source_b_load.sql
+
+# Env / secrets (never commit the service-role key)
+.env*
+!.env.example
+
+# Next.js scaffold
+/node_modules
+/.next/
+/out/
+/build
+/coverage
+.DS_Store
+*.pem
+npm-debug.log*
+*.tsbuildinfo
+next-env.d.ts
+.vercel
