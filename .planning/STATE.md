@@ -78,6 +78,8 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
+- **Straggler intake en HITO (detectado 2026-07-15):** una postulante (14:06Z) cayó en `public.staff_profiles` de HITO post-cutover (página vieja cacheada; el INSERT anon viejo sigue vigente). Copiada a `staff_app` (total 688). PENDIENTE: tras ventana de gracia (~1 semana), revocar la policy de INSERT anon en `public.staff_profiles` de HITO ('contract' del expand-migrate-contract) + delta-check final antes de revocar.
+
 - **WR-05 convention (from plan 02-01, 2026-07-15):** `ALTER DEFAULT PRIVILEGES ... REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC` does NOT take effect on this managed Supabase project (verified no-op). Any NEW `staff_app` function (Phase 3+ RPCs, HITO bridge) MUST include an explicit per-function `REVOKE EXECUTE ... FROM PUBLIC, anon;` + scoped `GRANT` — do not rely on default privileges.
 - **Phase 4 planning note (from plan-checker 2026-07-13):** `accept_offer` returns `{ok:false, reason:'invalid_or_expired'}` on an already-accepted token (idempotency guard) — Phase 4's public page must add a distinct "already accepted" reason code or handle the client-side messaging so the candidate doesn't see a misleading error.
 
