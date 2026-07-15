@@ -41,6 +41,9 @@ findings:
 status: issues_found
 ---
 
+
+> **REMEDIATION (2026-07-15, commit 42ab56e):** CR-01, CR-02, WR-04, WR-05 FIXED and build-verified. WR-01/02/03/06/07/08 deferred to a dedicated polish pass or Phase 3 (tracked in STATE.md Pending Todos). Info items acknowledged.
+
 # Phase 2: Code Review Report
 
 **Reviewed:** 2026-07-15T20:07:17Z
