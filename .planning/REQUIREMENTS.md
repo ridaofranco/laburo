@@ -29,8 +29,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Perfil
 
-- [ ] **PERF-01**: El usuario puede ver el perfil completo del candidato: datos, oficios, experiencia, links y estado
-- [ ] **PERF-02**: El usuario puede ver/descargar el CV desde el bucket privado de la app vía signed URL de TTL corto
+- [x] **PERF-01**: El usuario puede ver el perfil completo del candidato: datos, oficios, experiencia, links y estado
+- [x] **PERF-02**: El usuario puede ver/descargar el CV desde el bucket privado de la app vía signed URL de TTL corto
 
 ### Oferta
 
@@ -110,8 +110,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SRCH-01 | Phase 2 | In Progress (02-01 DB read layer: staff_app_profiles view + oficios GIN / nombre trigram indexes; UI in 02-03) |
 | SRCH-02 | Phase 2 | In Progress (02-01 staff_app_crew_busy view + disponibilidad columns; UI toggle in 02-03) |
 | SRCH-03 | Phase 2 | In Progress (02-02 mobile-first foundation: dark theme, 16px inputs, 44px targets, viewport-fit, LABURO tokens; search UI in 02-03) |
-| PERF-01 | Phase 2 | Pending |
-| PERF-02 | Phase 2 | Pending |
+| PERF-01 | Phase 2 | Complete |
+| PERF-02 | Phase 2 | Complete |
 | OFER-01 | Phase 3 | Pending |
 | OFER-02 | Phase 3 | Pending |
 | OFER-03 | Phase 3 | Pending |

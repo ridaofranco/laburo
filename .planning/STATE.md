@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 02-03-PLAN.md
-last_updated: "2026-07-15T18:40:00Z"
-last_activity: 2026-07-15 -- 02-03 search home (chips + free text + Filtros sheet + candidate cards) complete
+status: verifying
+stopped_at: Completed 02-04-PLAN.md (candidate profile + hybrid CV + quick actions); Phase 2 complete 4/4
+last_updated: "2026-07-15T18:38:01.433Z"
+last_activity: 2026-07-15
 progress:
   total_phases: 6
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 8
-  completed_plans: 7
-  percent: 44
+  completed_plans: 8
+  percent: 33
 ---
 
 # Project State
@@ -27,8 +27,8 @@ See: .planning/PROJECT.md (updated 2026-07-13, after architecture revision)
 
 Phase: 2 (Find Staff) — EXECUTING
 Plan: 4 of 4
-Status: Executing Phase 2 (02-03 search home complete; next 02-04 profile + CV)
-Last activity: 2026-07-15 -- 02-03 search home (chips + free text + Filtros sheet + candidate cards) complete
+Status: Phase complete — ready for verification
+Last activity: 2026-07-15
 
 Progress (Phase 2 plans): [████████··] 3/4
 
@@ -53,6 +53,7 @@ Progress (Phase 2 plans): [████████··] 3/4
 - Trend: —
 
 *Updated after each plan completion*
+| Phase 02-find-staff P04 | 50 min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -73,6 +74,7 @@ Recent decisions affecting current work:
 
 - Search home live (2026-07-15, plan 02-03): `(app)/page.tsx` = ONE server query over `public.staff_app_profiles` (card columns only) with `.overlaps('oficios',…)` (GIN) + parameterized `.or(ilike…)` on nombre/apellido/experiencia_detalle/oficios_otro/ciudad/provincia + `.eq` toggles + `crew_busy` exclusion + `.range(0,49)`. Client (`search-client.tsx`) = debounced text (280ms) + multi-select oficio chips that write the URL searchParams (server re-queries). `filtros-sheet.tsx` = Base UI Dialog bottom sheet (Motion slide-up) with provincia Select (24), ciudad, finde/viajar/movilidad + SRCH-02 "ocultar ya asignados" toggle; Aplicar/Limpiar footer with safe-area. Cards (D-03, no photo) = initials avatar colored by `oficioColor(oficios[0])` + tags + ciudad/provincia + experience pill. **Catalog reality:** the Phase-1 normalizer stored some category-level labels NOT in the somosder-web item list (Producción 192, Catering 149, Técnica 61, Orientador/a, Acomodador/a) — `lib/oficios.ts` includes them (OFICIOS_EXTRA_POOL) + a verified OFICIOS_FRECUENTES chip list so chips return >0 and the V5 whitelist accepts every chip/select value. **SRCH-02 = minimum-honest** (excludes current crew members only; crew_busy=0 today, no gigs; interval overlap deferred to Phase 3). **Live UI proof (Playwright 390px, authed via minted session):** home 50 (range cap), tap "Bartender" chip → 6 candidatos (=DB), Filtros→Córdoba→Aplicar → 18 candidatos (=DB), badge "1", zero console errors.
 - LABURO app live at repo root (2026-07-15, plan 02-02): Next 15.5.20 + HITO-verbatim Supabase SSR clients (middleware i18n-stripped, public paths `['/login','/auth/callback']`) + LABURO `@theme` token layer (D-01) + Inter 400/600 / Baloo 2 700 lockup. Login = Google OAuth + magic link (D-05, exact UI-SPEC copy, no GitHub). `/auth/callback` provisions via `supabase.rpc('staff_app_provision_member')` with the authed client (never a PostgREST staff_app schema call — PGRST106). `(app)` layout gates on `staff_app_my_membership` `.maybeSingle()`; 0 rows renders AccesoDenegado. DB gate proof re-run: non-member 0/0 rows, admin 1 owner + 687. Env in `.env.local` (service key `sb_secret_…`, git-ignored). ⚠️ Redirect-URL allowlist entry `http://localhost:3000/auth/callback` unconfirmed (Franco ambiguous) — see 02-USER-SETUP.md; symptom = OAuth lands on wrong origin. Vercel project not yet created (later plan).
+- [Phase 02-find-staff]: Profile + hybrid CV live (plan 02-04): /staff/[id] renders the full PERF-01 profile from public.staff_app_profiles (null-safe row omission; donde_trabajar is text[] in the live schema; portfolio/linkedin gated by isHttpUrl because the pool stores free text there). CV (PERF-02): classifyCv routes drive/bucket/none; A3 resolved live = 9 bucket CVs, 8 with 'staff-cvs/' prefix (stripped before signing), 1 orphan bare key that exercises the dead-link state. signCv ('use server') checks staff_app_my_membership BEFORE service-role createSignedUrl (TTL 60s, proven: 200 fresh, 400 after 65s, public/tampered paths 400). Quick actions: wa.me + tel: sticky bar. Playwright 390px smoke 25/25. Phase 2 complete (4/4). — Service-role must stay confined to membership-gated 'use server' actions returning only short-lived artifacts; classifyCv is the single CV routing source for Phase 3 offer emails.
 
 ### Pending Todos
 
@@ -96,6 +98,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-07-15T18:40:00Z
-Stopped at: Completed 02-03-PLAN.md (search home: chips + free text + Filtros sheet + candidate cards)
-Resume file: None (next: 02-04-PLAN.md — candidate profile + hybrid CV + wa.me/tel quick actions)
+Last session: 2026-07-15T18:37:17.723Z
+Stopped at: Completed 02-04-PLAN.md (candidate profile + hybrid CV + quick actions); Phase 2 complete 4/4
+Resume file: None

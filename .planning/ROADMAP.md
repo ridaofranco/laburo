@@ -81,7 +81,7 @@ Plans:
 
 **Wave 4** *(blocked on Wave 3)*
 
-- [ ] 02-04-PLAN.md — Candidate profile + hybrid CV (short-TTL signed URL for bucket, new-tab for Drive) + wa.me/tel quick actions (PERF-01, PERF-02)
+- [x] 02-04-PLAN.md — Candidate profile + hybrid CV (short-TTL signed URL for bucket, new-tab for Drive) + wa.me/tel quick actions (PERF-01, PERF-02)
 
 ### Phase 3: Create & Send Offers
 
