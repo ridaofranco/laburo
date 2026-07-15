@@ -24,7 +24,7 @@ function hash(s: string): number {
 
 /** hash(primary_oficio) % 8 → hex de la paleta. Mismo oficio → mismo color. */
 export function oficioColor(primaryOficio: string | null | undefined): string {
-  const key = (primaryOficio ?? "").trim() || "—";
+  const key = (primaryOficio ?? "").trim() || "sin-oficio";
   return AVATAR_PALETTE[Math.abs(hash(key)) % AVATAR_PALETTE.length];
 }
 
