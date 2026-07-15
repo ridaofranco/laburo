@@ -109,7 +109,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BRDG-02 | Phase 6 | Pending |
 | SRCH-01 | Phase 2 | In Progress (02-01 DB read layer: staff_app_profiles view + oficios GIN / nombre trigram indexes; UI in 02-03) |
 | SRCH-02 | Phase 2 | In Progress (02-01 staff_app_crew_busy view + disponibilidad columns; UI toggle in 02-03) |
-| SRCH-03 | Phase 2 | Pending |
+| SRCH-03 | Phase 2 | In Progress (02-02 mobile-first foundation: dark theme, 16px inputs, 44px targets, viewport-fit, LABURO tokens; search UI in 02-03) |
 | PERF-01 | Phase 2 | Pending |
 | PERF-02 | Phase 2 | Pending |
 | OFER-01 | Phase 3 | Pending |

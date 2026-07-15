@@ -73,7 +73,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1)*
 
-- [ ] 02-02-PLAN.md — Next.js 15.5 scaffold at repo root (HITO-verbatim Supabase clients) + LABURO brand token layer + Google/magic-link login + membership gate (D-05, D-06; SRCH-03)
+- [x] 02-02-PLAN.md — Next.js 15.5 scaffold at repo root (HITO-verbatim Supabase clients) + LABURO brand token layer + Google/magic-link login + membership gate (D-05, D-06; SRCH-03) ✅ 2026-07-15
 
 **Wave 3** *(blocked on Wave 2)*
 
@@ -175,7 +175,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Own Data Foundation | 4/4 | Complete    | 2026-07-14 |
-| 2. Find Staff | 0/4 | Not started | - |
+| 2. Find Staff | 2/4 | In Progress | - |
 | 3. Create & Send Offers | 0/2 | Not started | - |
 | 4. Accept & Close the Loop | 0/2 | Not started | - |
 | 5. Status Board, Extras & Real Hire | 0/3 | Not started | - |

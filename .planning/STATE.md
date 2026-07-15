@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-01-PLAN.md
-last_updated: "2026-07-15T13:45:37Z"
-last_activity: 2026-07-15 -- 02-01 DB read layer complete
+stopped_at: Completed 02-02-PLAN.md
+last_updated: "2026-07-15T14:26:19Z"
+last_activity: 2026-07-15 -- 02-02 LABURO scaffold + login + membership gate complete
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 8
-  completed_plans: 5
-  percent: 17
+  completed_plans: 6
+  percent: 33
 ---
 
 # Project State
@@ -26,19 +26,19 @@ See: .planning/PROJECT.md (updated 2026-07-13, after architecture revision)
 ## Current Position
 
 Phase: 2 (Find Staff) — EXECUTING
-Plan: 2 of 4
-Status: Executing Phase 2 (02-01 DB read layer complete)
-Last activity: 2026-07-15 -- 02-01 DB read layer complete
+Plan: 3 of 4
+Status: Executing Phase 2 (02-02 scaffold + login + gate complete; next 02-03 search UI)
+Last activity: 2026-07-15 -- 02-02 LABURO scaffold + login + membership gate complete
 
-Progress (Phase 2 plans): [██▌·······] 1/4
+Progress (Phase 2 plans): [█████·····] 2/4
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 6
-- Average duration: 12 min
-- Total execution time: ~0.4 hours
+- Total plans completed: 7
+- Average duration: ~17 min
+- Total execution time: ~1.2 hours
 
 **By Phase:**
 
@@ -71,6 +71,8 @@ Recent decisions affecting current work:
 - DB read layer + Phase-1 hardening (2026-07-15, plan 02-01): migrations `staff_app_0006_hardening` (WR-04: `members_role_check` CHECK + `is_org_writer` enumerate-allowed `role IN ('owner','writer')`) and `staff_app_0007_read_layer`. 0007 adds **3 public security_invoker views** over `staff_app.*` (`staff_app_profiles`, `staff_app_my_membership` [filtered `WHERE user_id = auth.uid()`], `staff_app_crew_busy`) — zero `pgrst.db_schemas` change; `authenticated` granted base-table SELECT so security_invoker resolves, `anon` explicitly REVOKEd on the views. Search indexes: oficios GIN + provincia + `nombre` trigram (`pg_trgm` in `extensions`). **Seeded the 2 admin `members` owner rows** (both emails already in `auth.users`: ridaofrancorg=73fc15e0…, franco=37987a10…) → D-06 gate live on first login. `public.staff_app_provision_member()` SECURITY DEFINER, authenticated-only, in-DB allowlist self-provision (login-time fallback). Impersonated-JWT SQL proofs: non-member 0 rows, admin 687 + 1 owner membership, provision allowlisted→1 idempotent row / non-allowlisted→NULL+0. Advisor diff = only the sanctioned `staff_app_provision_member` under `authenticated_security_definer_function_executable`; no `security_definer_view`. **WR-05 gap:** `ALTER DEFAULT PRIVILEGES REVOKE FROM PUBLIC` is a no-op on this managed project (verified) — every new `staff_app` function MUST keep an explicit per-function `REVOKE EXECUTE FROM PUBLIC/anon`.
 - Form cutover + Source-A backfill (2026-07-14, plan 01-03): migration `staff_app_0004_intake_function` added **`public.staff_app_register_applicant`** — the ONLY Staff App object in `public` (D-03 sanctioned so PostgREST serves `/rest/v1/rpc/…` with no exposed-schemas change), SECURITY DEFINER `SET search_path = staff_app, public, pg_temp`, validates nombre/email/telefono, forces organization_id/estado/source, inserts into `staff_app.staff_profiles`. anon+authenticated EXECUTE; anon has NO direct INSERT (staff_app not PostgREST-exposed). `StaffRegistro.astro` repointed from direct `POST /rest/v1/staff_profiles` to `.rpc('staff_app_register_applicant')` (same URL/anon key, CV bucket untouched) + Ley 25.326 consent (SOMOS DER controller + rights + rrhh@somosder.com.ar) + honest errors; **deployed to Vercel prod (`dpl_FCVmXqecEMKhiaqW7NDhNAbW3P3s` → www.somosder.ar) — cutover 2026-07-14T16:50:15Z**. HITO `public.staff_profiles` frozen; **N=8** captured (was 7, +1 from 2026-07-14 01:08) and backfilled into `staff_app` (id + cv_url intact, org stamped) — **8 in = 8 out**, zero NULL org, zero dup emails. `get_advisors` clean (0 new search_path findings). **NOTE: somosder-web is NOT a git repo — the form change is version-anchored by the Vercel deployment ID, not a commit.**
 
+- LABURO app live at repo root (2026-07-15, plan 02-02): Next 15.5.20 + HITO-verbatim Supabase SSR clients (middleware i18n-stripped, public paths `['/login','/auth/callback']`) + LABURO `@theme` token layer (D-01) + Inter 400/600 / Baloo 2 700 lockup. Login = Google OAuth + magic link (D-05, exact UI-SPEC copy, no GitHub). `/auth/callback` provisions via `supabase.rpc('staff_app_provision_member')` with the authed client (never a PostgREST staff_app schema call — PGRST106). `(app)` layout gates on `staff_app_my_membership` `.maybeSingle()`; 0 rows renders AccesoDenegado. DB gate proof re-run: non-member 0/0 rows, admin 1 owner + 687. Env in `.env.local` (service key `sb_secret_…`, git-ignored). ⚠️ Redirect-URL allowlist entry `http://localhost:3000/auth/callback` unconfirmed (Franco ambiguous) — see 02-USER-SETUP.md; symptom = OAuth lands on wrong origin. Vercel project not yet created (later plan).
+
 ### Pending Todos
 
 - **WR-05 convention (from plan 02-01, 2026-07-15):** `ALTER DEFAULT PRIVILEGES ... REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC` does NOT take effect on this managed Supabase project (verified no-op). Any NEW `staff_app` function (Phase 3+ RPCs, HITO bridge) MUST include an explicit per-function `REVOKE EXECUTE ... FROM PUBLIC, anon;` + scoped `GRANT` — do not rely on default privileges.
@@ -93,6 +95,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-07-15T13:45:37Z
-Stopped at: Completed 02-01-PLAN.md (DB read layer)
-Resume file: None (next: 02-02-PLAN.md — Next.js scaffold + login + membership gate)
+Last session: 2026-07-15T14:26:19Z
+Stopped at: Completed 02-02-PLAN.md (LABURO scaffold + login + membership gate)
+Resume file: None (next: 02-03-PLAN.md — search home: chips + free text + Filtros + candidate cards)
