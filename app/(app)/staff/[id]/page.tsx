@@ -17,8 +17,9 @@ import Link from "next/link";
 import { ChevronLeft, ExternalLink } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { oficioColor, initials } from "@/lib/avatar-color";
-import { isHttpUrl } from "@/lib/cv";
+import { isHttpUrl, classifyCv } from "@/lib/cv";
 import { QuickActions } from "./quick-actions";
+import { CvView } from "./cv-view";
 
 const PROFILE_COLUMNS =
   "id,nombre,apellido,oficios,oficios_otro,provincia,ciudad,experiencia,anios_experiencia,eventos_trabajados,experiencia_detalle,disponibilidad_finde,disponibilidad_viajar,movilidad_propia,disponibilidad_aviso,estado,cv_url,portfolio_url,linkedin_url,telefono,email,situacion_legal,donde_trabajar,pais_residencia,motivacion";
@@ -46,7 +47,7 @@ interface Profile {
   telefono: string | null;
   email: string | null;
   situacion_legal: string | null;
-  donde_trabajar: string | null;
+  donde_trabajar: string[] | null; // text[] en el schema (verificado en vivo)
   pais_residencia: string | null;
   motivacion: string | null;
 }
@@ -134,13 +135,15 @@ export default async function ProfilePage({
 
   const hasExperiencia = Boolean(expLine || (p.experiencia_detalle ?? "").trim());
   const hasDisponibilidad = dispPills.length > 0 || Boolean((p.disponibilidad_aviso ?? "").trim());
+  const dondeTrabajar = (p.donde_trabajar ?? []).filter(Boolean).join(", ");
   const hasSituacion = Boolean(
     (p.situacion_legal ?? "").trim() ||
-      (p.donde_trabajar ?? "").trim() ||
+      dondeTrabajar ||
       (p.pais_residencia ?? "").trim(),
   );
   const hasLinks =
     isHttpUrl(p.portfolio_url) || isHttpUrl(p.linkedin_url);
+  const cv = classifyCv(p.cv_url);
 
   return (
     <div className="flex flex-col gap-lg pb-lg">
@@ -227,7 +230,7 @@ export default async function ProfilePage({
       {hasSituacion && (
         <Section title="Situación">
           <InfoRow label="Situación legal" value={p.situacion_legal} />
-          <InfoRow label="Dónde puede trabajar" value={p.donde_trabajar} />
+          <InfoRow label="Dónde puede trabajar" value={dondeTrabajar} />
           <InfoRow label="País de residencia" value={p.pais_residencia} />
         </Section>
       )}
@@ -239,7 +242,15 @@ export default async function ProfilePage({
         </Section>
       )}
 
-      {/* Links (portfolio / linkedin). CV se agrega en 02-04 Task 2. */}
+      {/* CV (PERF-02): visor híbrido bucket firmado / Drive preview + Abrir CV.
+          Se omite la sección entera sólo si no hay cv_url (null-safety). */}
+      {cv.kind !== "none" && (
+        <Section title="CV">
+          <CvView classification={cv} />
+        </Section>
+      )}
+
+      {/* Links (portfolio / linkedin): sólo URLs http(s) reales */}
       {hasLinks && (
         <Section title="Links">
           <ExternalRow label="Portfolio" value={p.portfolio_url} />
