@@ -6,16 +6,25 @@
  * D-01: usa los tokens/patrones de Fase 2 (16px inputs anti-zoom iOS, targets
  * 44px+, Base UI Select como en filtros-sheet). Copy en voseo, sin em dash.
  *
- * Task 1 (este commit): arma la UI y el estado local. El botón de envío se
+ * Al enviar llama al server action createAndSendOffer (crea gig + oferta + token
+ * atómico, arma el link mágico, renderiza y manda el email). El botón se
  * deshabilita mientras hay un submit en vuelo (Pitfall 5: evita doble oferta /
- * doble gig por doble-tap). El WRITE (crear gig + oferta + token) y el envío
- * (email + wa.me) se cablean en Task 2 via el server action createAndSendOffer;
- * este componente NUNCA inserta directo en offers/gigs (Pitfall 1).
+ * doble gig por doble-tap). Este componente NUNCA inserta directo en
+ * offers/gigs (Pitfall 1) — todo el WRITE pasa por el action.
+ *
+ * Estado honesto (D-02): sending / sent / failed. Cuando el email falla, igual
+ * se ofrece el botón wa.me con el MISMO link mágico (Pitfall 7: el raw token no
+ * se puede recuperar de la DB, así que se reusa el link en memoria y no se crea
+ * una segunda oferta). El botón wa.me usa el glifo OFICIAL de WhatsApp (D-03).
  */
 
 import { useState } from "react";
 import { Select } from "@base-ui/react/select";
-import { Check, ChevronDown } from "lucide-react";
+import { Check, ChevronDown, ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import { toast } from "sonner";
+import { WhatsAppGlyph } from "@/components/icons/whatsapp-glyph";
+import { createAndSendOffer } from "../offer-actions";
 
 export interface OfferFormCandidate {
   id: string;
@@ -35,6 +44,14 @@ export interface OfferFormGig {
 
 /** Valor centinela del Select para el branch "crear gig nuevo". */
 const NEW_GIG = "__new__";
+
+/** Resultado de una creación exitosa: el link/waLink se reusan (Pitfall 7). */
+interface SendResult {
+  link: string;
+  waLink: string;
+  mailOk: boolean;
+  mailError?: string;
+}
 
 /** Etiqueta legible de un gig existente: título · fecha · lugar. */
 function gigLabel(g: OfferFormGig): string {
@@ -91,8 +108,10 @@ export function OfferForm({
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useState<SendResult | null>(null);
 
   const isNewGig = gigChoice === NEW_GIG;
+  const primerNombre = (candidate.nombre ?? "").trim().split(/\s+/)[0] ?? "";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -113,10 +132,125 @@ export function OfferForm({
       return;
     }
 
+    // El gig elegido aporta título/fecha/lugar para el copy del email + wa.me.
+    const pickedGig = isNewGig
+      ? null
+      : (gigs.find((g) => g.id === gigChoice) ?? null);
+    const parsedAmount = amount.trim()
+      ? Number(amount.replace(/[^\d.]/g, ""))
+      : null;
+
     setSubmitting(true);
-    // TODO(Task 2): llamar createAndSendOffer y manejar sending/sent/failed +
-    // el botón wa.me de fallback con el link mágico.
-    setSubmitting(false);
+    try {
+      const res = await createAndSendOffer({
+        staffProfileId: candidate.id,
+        role: role.trim(),
+        firstName: primerNombre,
+        email: candidate.email,
+        telefono: candidate.telefono,
+        gigId: isNewGig ? null : gigChoice,
+        gigTitle: isNewGig ? gigTitle.trim() : (pickedGig?.title ?? ""),
+        gigStartsAt: isNewGig ? gigDate || null : (pickedGig?.starts_at ?? null),
+        gigVenue: isNewGig ? gigVenue.trim() || null : (pickedGig?.venue_name ?? null),
+        amount:
+          parsedAmount != null && !Number.isNaN(parsedAmount)
+            ? parsedAmount
+            : null,
+        conditions: conditions.trim() || null,
+      });
+
+      if (!res.ok) {
+        setError(res.reason || "No se pudo crear la oferta.");
+        return;
+      }
+
+      setResult({
+        link: res.link,
+        waLink: res.waLink,
+        mailOk: res.mail.ok,
+        mailError: res.mail.error,
+      });
+      if (res.mail.ok) {
+        toast.success("Oferta enviada por email");
+      } else {
+        toast.warning("Oferta creada, pero el email no salió");
+      }
+    } catch (err) {
+      setError(
+        err instanceof Error && err.message === "forbidden"
+          ? "No tenés permiso para crear ofertas."
+          : "Algo falló al crear la oferta. Probá de nuevo.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  // Oferta ya creada: panel de estado honesto (D-02). Reusa el MISMO link para
+  // el wa.me (Pitfall 7) — no se crea una segunda oferta al reforzar.
+  if (result) {
+    return (
+      <div className="flex flex-col gap-lg">
+        <div
+          className="flex flex-col gap-xs rounded-xl border p-md"
+          style={
+            result.mailOk
+              ? { borderColor: "#3dd68c66", backgroundColor: "#3dd68c14" }
+              : undefined
+          }
+        >
+          <p className="text-body font-semibold text-fg">
+            {result.mailOk
+              ? "Oferta enviada por email"
+              : "Oferta creada, pero el email no salió"}
+          </p>
+          <p className="text-label text-fg-muted">
+            {result.mailOk
+              ? "Le llegó la propuesta con el link para confirmar. Reforzá por WhatsApp si querés."
+              : "La oferta quedó registrada igual. Mandale el link por WhatsApp así no se pierde."}
+          </p>
+          {!result.mailOk && result.mailError ? (
+            <p className="text-label text-fg-subtle break-words">
+              Detalle: {result.mailError}
+            </p>
+          ) : null}
+        </div>
+
+        {result.waLink ? (
+          <a
+            href={result.waLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-xs min-h-[48px] rounded-xl bg-[#25D366] text-white text-label font-semibold px-md transition-transform active:scale-[0.98]"
+          >
+            <WhatsAppGlyph size={20} className="shrink-0" />
+            {result.mailOk ? "Reforzar por WhatsApp" : "Enviar por WhatsApp"}
+          </a>
+        ) : (
+          <p className="text-label text-fg-subtle">
+            Este candidato no tiene teléfono cargado para el WhatsApp.
+          </p>
+        )}
+
+        {/* El link mágico por si Franco quiere copiarlo a mano. */}
+        <div className="flex flex-col gap-xs">
+          <span className="text-label font-semibold text-fg-muted">
+            Link de la oferta
+          </span>
+          <span className="text-label text-fg-subtle break-all">
+            {result.link}
+          </span>
+        </div>
+
+        <Link
+          href={`/staff/${candidate.id}`}
+          className="inline-flex items-center gap-xs min-h-[44px] text-fg-muted text-label font-semibold"
+        >
+          <ArrowLeft size={18} aria-hidden="true" />
+          Volver al perfil
+        </Link>
+      </div>
+    );
   }
 
   return (

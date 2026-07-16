@@ -7,7 +7,8 @@
  * candidato". La oferta formal llega en Fase 3.
  */
 
-import { MessageCircle, Phone } from "lucide-react";
+import { Phone } from "lucide-react";
+import { WhatsAppGlyph } from "@/components/icons/whatsapp-glyph";
 import { waLink, telLink } from "@/lib/wa";
 
 export function QuickActions({
@@ -31,7 +32,7 @@ export function QuickActions({
           rel="noopener noreferrer"
           className="flex flex-1 items-center justify-center gap-xs min-h-[48px] rounded-xl bg-accent box-glow text-fg text-label font-semibold px-md transition-transform active:scale-[0.98]"
         >
-          <MessageCircle size={18} aria-hidden="true" className="shrink-0" />
+          <WhatsAppGlyph size={18} className="shrink-0" />
           Escribir por WhatsApp
         </a>
         <a
