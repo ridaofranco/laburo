@@ -14,7 +14,7 @@
 
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ChevronLeft, ExternalLink } from "lucide-react";
+import { ChevronLeft, ExternalLink, FilePlus2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { oficioColor, initials } from "@/lib/avatar-color";
 import { isHttpUrl, classifyCv } from "@/lib/cv";
@@ -177,6 +177,16 @@ export default async function ProfilePage({
           </div>
         </div>
       </header>
+
+      {/* Crear oferta (Fase 3): CTA primario que abre la pantalla dedicada del
+          flujo pick-or-create gig + rol/monto/condiciones → email + wa.me. */}
+      <Link
+        href={`/staff/${id}/oferta`}
+        className="flex items-center justify-center gap-xs min-h-[48px] rounded-xl bg-accent box-glow text-fg text-label font-semibold px-md transition-transform active:scale-[0.98]"
+      >
+        <FilePlus2 size={18} aria-hidden="true" className="shrink-0" />
+        Crear oferta
+      </Link>
 
       {/* Oficios */}
       {oficios.length > 0 && (
