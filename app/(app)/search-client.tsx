@@ -53,6 +53,9 @@ export function SearchClient({ candidates, error, initialFilters }: Props) {
         ocultarAsignados: fine
           ? fine.ocultarAsignados
           : initialFilters.ocultarAsignados,
+        // XTRA-02: conservar el modo "buscar reemplazo" al ajustar otros
+        // filtros; se limpia sólo con "Ver todos" (href="/") o clearAll.
+        gig: initialFilters.gig,
       });
       startTransition(() => {
         router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });

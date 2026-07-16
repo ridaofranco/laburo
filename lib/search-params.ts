@@ -20,6 +20,7 @@ export const PARAM = {
   viajar: "viajar",
   movilidad: "movilidad",
   libres: "libres", // "ocultar ya asignados" (SRCH-02)
+  gig: "gig", // modo "buscar reemplazo": re-filtro por gig (XTRA-02)
 } as const;
 
 export interface SearchFilters {
@@ -31,7 +32,16 @@ export interface SearchFilters {
   viajar: boolean;
   movilidad: boolean;
   ocultarAsignados: boolean;
+  gig: string | null;
 }
+
+/**
+ * UUID (cualquier versión). El ?gig= entra desde la URL (input no confiable,
+ * T-5-12): si no matchea un UUID, lo tratamos como ausente (null) y NUNCA lo
+ * metemos crudo en la query.
+ */
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export type RawSearchParams = Record<string, string | string[] | undefined>;
 
@@ -67,6 +77,9 @@ export function parseSearchParams(raw: RawSearchParams): SearchFilters {
     ? provinciaRaw // V5 whitelist
     : null;
 
+  const gigRaw = first(raw[PARAM.gig]).trim();
+  const gig = UUID_RE.test(gigRaw) ? gigRaw : null; // T-5-12: sólo UUID válido
+
   return {
     q: sanitizeText(first(raw[PARAM.q])),
     oficios,
@@ -76,6 +89,7 @@ export function parseSearchParams(raw: RawSearchParams): SearchFilters {
     viajar: isOn(raw[PARAM.viajar]),
     movilidad: isOn(raw[PARAM.movilidad]),
     ocultarAsignados: isOn(raw[PARAM.libres]),
+    gig,
   };
 }
 
@@ -91,6 +105,9 @@ export function buildQueryString(filters: Partial<SearchFilters>): string {
   if (filters.viajar) p.set(PARAM.viajar, "1");
   if (filters.movilidad) p.set(PARAM.movilidad, "1");
   if (filters.ocultarAsignados) p.set(PARAM.libres, "1");
+  // gig se conserva para que el modo "buscar reemplazo" no se pierda al ajustar
+  // otros filtros. NO cuenta como filtro fino visible (ver activeFineFilterCount).
+  if (filters.gig) p.set(PARAM.gig, filters.gig);
   return p.toString();
 }
 
