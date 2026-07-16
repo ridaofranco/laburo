@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AccesoDenegado } from "./acceso-denegado";
@@ -36,9 +37,25 @@ export default async function AppLayout({
   return (
     <div className="min-h-dvh flex flex-col">
       <header className="sticky top-0 z-10 bg-surface-1 border-b border-border px-md py-sm pt-[max(var(--spacing-sm),env(safe-area-inset-top))]">
-        <span className="font-lockup text-glow text-[28px] select-none">
-          LABURO
-        </span>
+        <div className="flex items-center justify-between gap-md">
+          <span className="font-lockup text-glow text-[28px] select-none">
+            LABURO
+          </span>
+          <nav className="flex items-center gap-xs" aria-label="Secciones">
+            <Link
+              href="/"
+              className="inline-flex items-center min-h-[44px] rounded-full bg-surface-2 border border-border text-fg text-label font-semibold px-md"
+            >
+              Buscar
+            </Link>
+            <Link
+              href="/tablero"
+              className="inline-flex items-center min-h-[44px] rounded-full bg-surface-2 border border-border text-fg text-label font-semibold px-md"
+            >
+              Tablero
+            </Link>
+          </nav>
+        </div>
       </header>
       <main className="flex-1 w-full max-w-[520px] mx-auto px-md py-lg pb-[max(var(--spacing-lg),env(safe-area-inset-bottom))]">
         {children}
