@@ -20,6 +20,7 @@ import { oficioColor, initials } from "@/lib/avatar-color";
 import { isHttpUrl, classifyCv } from "@/lib/cv";
 import { QuickActions } from "./quick-actions";
 import { CvView } from "./cv-view";
+import { OfferStatusList, type OfferRow } from "./offer-status";
 
 const PROFILE_COLUMNS =
   "id,nombre,apellido,oficios,oficios_otro,provincia,ciudad,experiencia,anios_experiencia,eventos_trabajados,experiencia_detalle,disponibilidad_finde,disponibilidad_viajar,movilidad_propia,disponibilidad_aviso,estado,cv_url,portfolio_url,linkedin_url,telefono,email,situacion_legal,donde_trabajar,pais_residencia,motivacion";
@@ -120,6 +121,18 @@ export default async function ProfilePage({
   if (!data) notFound();
   const p = data as Profile;
 
+  // STAT-01: estado de cada oferta del candidato, leído de la vista
+  // public.staff_app_offers con el CLIENTE AUTENTICADO. La RLS is_org_member de
+  // la vista security_invoker scopea al org de Franco — un no-miembro obtiene 0
+  // filas. NO se accede a staff_app directo; 'vencida' se deriva en el render
+  // (offer-status.tsx), nunca del enum status.
+  const { data: offersData } = await supabase
+    .from("staff_app_offers")
+    .select("id,role,gig_title,status,expires_at,sent_at,viewed_at,responded_at")
+    .eq("staff_profile_id", id)
+    .order("sent_at", { ascending: false });
+  const offers = (offersData ?? []) as OfferRow[];
+
   const nombreCompleto =
     [p.nombre, p.apellido].filter(Boolean).join(" ").trim() || "Sin nombre";
   const primary = p.oficios?.[0] ?? "";
@@ -187,6 +200,15 @@ export default async function ProfilePage({
         <FilePlus2 size={18} aria-hidden="true" className="shrink-0" />
         Crear oferta
       </Link>
+
+      {/* Ofertas (STAT-01): estado de cada oferta enviada al candidato. Se omite
+          la sección entera si todavía no hay ninguna (null-safety, molde del
+          perfil). El label "vencida" se deriva de now()>expires_at. */}
+      {offers.length > 0 && (
+        <Section title="Ofertas">
+          <OfferStatusList offers={offers} />
+        </Section>
+      )}
 
       {/* Oficios */}
       {oficios.length > 0 && (
