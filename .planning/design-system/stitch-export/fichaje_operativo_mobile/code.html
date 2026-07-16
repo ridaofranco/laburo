@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LABURO - Fichaje</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@500&amp;family=Inter:wght@400&amp;family=Syne:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#e2e2e2",
+                        "surface-container-high": "#2a2a2a",
+                        "tertiary-fixed-dim": "#b9c3ff",
+                        "inverse-surface": "#e5e2e1",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "on-primary-fixed-variant": "#474747",
+                        "surface-bright": "#393939",
+                        "error": "#ffb4ab",
+                        "surface-variant": "#353535",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "primary": "#c6c6c6",
+                        "on-secondary-container": "#b4b5b5",
+                        "on-tertiary-container": "#4266ff",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-primary-fixed": "#1b1b1b",
+                        "on-tertiary-fixed": "#001257",
+                        "inverse-primary": "#5e5e5e",
+                        "secondary-container": "#454747",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "primary-container": "#000000",
+                        "outline-variant": "#4c4546",
+                        "surface-container": "#20201f",
+                        "on-background": "#e5e2e1",
+                        "on-surface": "#e5e2e1",
+                        "on-secondary-fixed-variant": "#454747",
+                        "tertiary": "#b9c3ff",
+                        "secondary": "#c6c6c7",
+                        "on-primary": "#303030",
+                        "surface": "#131313",
+                        "secondary-fixed": "#e2e2e2",
+                        "surface-tint": "#c6c6c6",
+                        "on-surface-variant": "#cfc4c5",
+                        "surface-container-highest": "#353535",
+                        "tertiary-fixed": "#dde1ff",
+                        "tertiary-container": "#000000",
+                        "error-container": "#93000a",
+                        "outline": "#988e90",
+                        "background": "#131313",
+                        "surface-dim": "#131313",
+                        "inverse-on-surface": "#313030",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "surface-container-low": "#1c1b1b",
+                        "on-tertiary-fixed-variant": "#0033c0",
+                        "on-tertiary": "#00228a",
+                        "on-secondary": "#2f3131",
+                        "on-primary-container": "#757575"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "80px",
+                        "container-max": "1440px",
+                        "stack-sm": "8px",
+                        "stack-md": "24px",
+                        "gutter": "32px",
+                        "section-gap": "160px",
+                        "margin-mobile": "24px",
+                        "stack-lg": "48px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Geist"],
+                        "headline-md": ["Syne"],
+                        "headline-lg-mobile": ["Syne"],
+                        "headline-lg": ["Syne"],
+                        "body-md": ["Inter"],
+                        "display-xl": ["Syne"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "140%", "letterSpacing": "0.1em", "fontWeight": "500" }],
+                        "headline-md": ["32px", { "lineHeight": "120%", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["40px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["64px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "display-xl": ["120px", { "lineHeight": "110%", "letterSpacing": "-0.04em", "fontWeight": "800" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>.map-bg {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuB8HWrkXBMxG3s5_Z4Vyjn_38w47TyNCVf4lla5r8Qk-AkOwwyZPDN7kMGoGv2ZXwjNwrEiPHCM1ZA4wIPNMkzahbLZ29WAie-ctpuuTujt5rMNVYtEh8W35jgKyPNQqpdfv3wpFR0S3p3wUjkOptzhqZF61Tf26DspJgxH96OodBVQb2YzT5Q8GnDptiW-MkOzsYMIiT7zcae9TJXkzfN7HDA2eJyWdnwYkDZBe2YA1bcEFN_PTDwc3Nh6OwWUVvyDayEa05UQduI);
+    background-size: cover;
+    background-position: center
+    }
+.pulse-ring {
+    animation: pulse 2s infinite cubic-bezier(0.66, 0, 0, 1)
+    }
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(198, 198, 198, 0.7);
+        } 70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 20px rgba(198, 198, 198, 0);
+        } 100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(198, 198, 198, 0);
+        }
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md h-screen w-screen overflow-hidden flex flex-col antialiased">
+<!-- Top Navigation (Mobile Hidden, shown on MD if needed, but context is Mobile App primarily, keeping JSON structure for TopAppBar if displayed on larger screens, though prompt specifies Mobile) -->
+<nav class="hidden md:flex justify-between items-center px-6 py-4 w-full h-16 bg-surface-dim/80 backdrop-blur-xl border-b border-border-glass fixed top-0 z-50 flat no shadows">
+<div class="font-display-lg text-display-lg tracking-tighter text-primary">LABURO</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-glass transition-colors cursor-pointer p-2 rounded-full">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-glass transition-colors cursor-pointer p-2 rounded-full">settings</span>
+</div>
+</nav>
+<!-- Map Background -->
+<div class="absolute inset-0 z-0 map-bg grayscale opacity-40 mix-blend-screen" data-alt="A radical minimalist dark mode map showing a high-contrast urban grid. The map is monochromatic with deep blacks and subtle grey lines. A specific location is subtly highlighted in the center. The visual style is architectural, precise, and devoid of unnecessary details, reflecting a premium, disciplined aesthetic suitable for a high-end digital interface." data-location="Buenos Aires" style=""></div>
+<!-- Main Content Area -->
+<main class="relative z-10 flex-1 flex flex-col h-full md:pt-16 pb-[80px]"> <!-- pb-[80px] to account for bottom nav -->
+<!-- Header / Status -->
+<header class="px-margin-mobile pt-stack-lg pb-stack-md flex flex-col items-center justify-center text-center">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tighter mb-2">08:45</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Jueves, 24 Octubre</p>
+<div class="mt-stack-md flex items-center gap-2 bg-surface-container-high/50 border border-surface-container-highest rounded-full px-4 py-2 backdrop-blur-md">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<span class="font-label-sm text-label-sm text-primary">Estás en el lugar correcto</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Estadio Monumental</p>
+</header>
+<!-- Massive Check-in Button -->
+<section class="flex-1 flex items-center justify-center px-margin-mobile">
+<button class="relative group w-64 h-64 rounded-full bg-primary text-primary-container font-headline-md text-headline-md tracking-tight flex items-center justify-center shadow-2xl pulse-ring transition-transform duration-150 active:scale-95 focus:outline-none" id="checkInBtn">
+<span class="relative z-10 flex flex-col items-center">
+<span class="material-symbols-outlined text-5xl mb-2" style="font-variation-settings: 'FILL' 0;">fingerprint</span>
+                    CHECK IN
+                </span>
+<div class="absolute inset-0 rounded-full border border-primary/20 scale-110 group-hover:scale-125 transition-transform duration-500 ease-out"></div>
+<div class="absolute inset-0 rounded-full border border-primary/10 scale-125 group-hover:scale-150 transition-transform duration-700 ease-out"></div>
+</button>
+</section>
+<!-- Today's History -->
+<section class="px-margin-mobile pb-stack-lg">
+<div class="border-t border-surface-container-highest pt-stack-sm">
+<h2 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-stack-sm">Historial Hoy</h2>
+<ul class="space-y-0">
+<li class="flex justify-between items-center py-4 border-b border-surface-container-high border-opacity-50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-opacity-50">login</span>
+<span class="font-body-md text-body-md text-on-surface">Entrada</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary">--:--</span>
+</li>
+<li class="flex justify-between items-center py-4 opacity-50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-opacity-50">logout</span>
+<span class="font-body-md text-body-md text-on-surface">Salida</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">--:--</span>
+</li>
+</ul>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile) - Assuming Check-in is a primary action on the Dashboard/Events context, but setting active based on 'Events' as it's a workplace/event app context based on "Estadio Monumental" -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-6 h-20 bg-surface-container/80 backdrop-blur-lg border border-border-glass shadow-lg rounded-t-xl md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-glass p-2 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">search</span>
+<span class="font-label-sm text-label-sm">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-glass p-2 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">local_offer</span>
+<span class="font-label-sm text-label-sm">Offers</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-glass p-2 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">favorite</span>
+<span class="font-label-sm text-label-sm">Favorites</span>
+</a>
+<!-- Active state: Events (Working at an event) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-lg px-4 py-2 scale-90 duration-200" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">event</span>
+<span class="font-label-sm text-label-sm font-bold">Events</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction script for the check-in button
+        document.getElementById('checkInBtn').addEventListener('click', function() {
+            const btn = this;
+            const innerText = btn.querySelector('span:last-child');
+            const icon = btn.querySelector('.material-symbols-outlined');
+            
+            // Simulate action
+            btn.classList.remove('pulse-ring');
+            btn.classList.add('bg-surface-container-highest', 'text-primary');
+            btn.classList.remove('bg-primary', 'text-primary-container');
+            
+            icon.textContent = 'check_circle';
+            innerText.textContent = 'CHECKED IN';
+            
+            // Update history visually
+            setTimeout(() => {
+                const historyEntry = document.querySelector('ul li:first-child span:last-child');
+                historyEntry.textContent = '08:45';
+                historyEntry.classList.add('text-primary');
+            }, 500);
+        });
+    </script>
+</body></html>

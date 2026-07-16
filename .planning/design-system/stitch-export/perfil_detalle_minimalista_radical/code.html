@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sabrina Soler - Staff Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@500&family=Inter:wght@400&family=Syne:wght@600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&family=Syne:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#000000",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "on-error": "#690005",
+                        "error": "#ffb4ab",
+                        "secondary-fixed": "#e2e2e2",
+                        "on-surface": "#e5e2e1",
+                        "on-primary": "#303030",
+                        "secondary": "#c6c6c7",
+                        "tertiary": "#b9c3ff",
+                        "surface-container-low": "#1c1b1b",
+                        "tertiary-fixed-dim": "#b9c3ff",
+                        "on-tertiary-fixed": "#001257",
+                        "on-tertiary-container": "#4266ff",
+                        "on-background": "#e5e2e1",
+                        "error-container": "#93000a",
+                        "secondary-container": "#454747",
+                        "on-primary-container": "#757575",
+                        "surface": "#131313",
+                        "on-primary-fixed": "#1b1b1b",
+                        "background": "#131313",
+                        "on-tertiary-fixed-variant": "#0033c0",
+                        "on-secondary": "#2f3131",
+                        "on-secondary-container": "#b4b5b5",
+                        "primary-fixed": "#e2e2e2",
+                        "inverse-on-surface": "#313030",
+                        "on-secondary-fixed-variant": "#454747",
+                        "surface-bright": "#393939",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-tertiary": "#00228a",
+                        "on-surface-variant": "#cfc4c5",
+                        "tertiary-fixed": "#dde1ff",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-dim": "#131313",
+                        "surface-container": "#20201f",
+                        "surface-tint": "#c6c6c6",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "primary-container": "#000000",
+                        "primary": "#c6c6c6",
+                        "surface-variant": "#353535",
+                        "inverse-surface": "#e5e2e1",
+                        "on-primary-fixed-variant": "#474747",
+                        "surface-container-highest": "#353535",
+                        "outline": "#988e90",
+                        "outline-variant": "#4c4546",
+                        "inverse-primary": "#5e5e5e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "stack-sm": "8px",
+                        "margin-mobile": "24px",
+                        "margin-desktop": "80px",
+                        "section-gap": "160px",
+                        "gutter": "32px",
+                        "stack-md": "24px",
+                        "stack-lg": "48px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Syne"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Syne"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Geist"],
+                        "display-xl": ["Syne"],
+                        "headline-lg-mobile": ["Syne"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["32px", { "lineHeight": "120%", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "headline-lg": ["64px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "140%", "letterSpacing": "0.1em", "fontWeight": "500" }],
+                        "display-xl": ["120px", { "lineHeight": "110%", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+                        "headline-lg-mobile": ["40px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #000000; /* Absolute black requested */
+            color: theme('colors.on-background');
+        }
+        .hairline-border {
+            border: 1px solid theme('colors.surface-container-high');
+        }
+        .hairline-b {
+            border-bottom: 1px solid theme('colors.surface-container-high');
+        }
+        .hairline-t {
+            border-top: 1px solid theme('colors.surface-container-high');
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col font-body-md">
+<!-- TopNavBar -->
+<header class="bg-background dark:bg-background text-primary dark:text-primary docked full-width top-0 border-b border-outline-variant flat no shadows flex justify-between items-center w-full px-margin-desktop py-8 max-w-container-max mx-auto z-50 sticky md:flex hidden">
+<div class="font-headline-lg text-headline-lg font-bold tracking-tighter text-on-background uppercase">EVENT.LOG</div>
+<nav class="flex gap-gutter font-headline-md text-headline-md uppercase tracking-tighter">
+<a class="text-primary border-b-2 border-primary pb-1 cursor-pointer active:opacity-80 transition-opacity" href="#">Staff</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-150 cursor-pointer active:opacity-80 transition-opacity" href="#">Schedule</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-150 cursor-pointer active:opacity-80 transition-opacity" href="#">Venues</a>
+</nav>
+<div class="flex items-center gap-stack-md">
+<button class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface hover:text-primary transition-colors">Create Event</button>
+<div class="flex gap-stack-sm">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">settings</span>
+</div>
+</div>
+</header>
+<main class="flex-grow flex flex-col md:flex-row w-full max-w-container-max mx-auto relative pt-margin-mobile md:pt-0">
+<!-- SideNavBar - Visible on Web -->
+<aside class="bg-background dark:bg-background text-primary dark:text-primary docked left-0 h-screen w-64 border-r border-outline-variant flat no shadows fixed left-0 top-0 h-full flex flex-col py-margin-mobile gap-stack-lg z-40 hidden md:flex">
+<div class="px-margin-mobile">
+<div class="font-headline-md text-headline-md text-on-background mb-stack-sm">OPERATIONS</div>
+<div class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">V.01.24</div>
+</div>
+<nav class="flex-grow flex flex-col gap-stack-sm font-label-sm text-label-sm uppercase tracking-widest">
+<a class="text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150 flex items-center gap-stack-sm py-2" href="#">
+<span class="material-symbols-outlined">grid_view</span> Dashboard
+                </a>
+<a class="text-primary font-bold border-l-2 border-primary pl-4 hover:bg-surface-container transition-all duration-150 flex items-center gap-stack-sm py-2" href="#">
+<span class="material-symbols-outlined">group</span> Roster
+                </a>
+<a class="text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150 flex items-center gap-stack-sm py-2" href="#">
+<span class="material-symbols-outlined">event_repeat</span> Timelines
+                </a>
+<a class="text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150 flex items-center gap-stack-sm py-2" href="#">
+<span class="material-symbols-outlined">inventory_2</span> Inventory
+                </a>
+<a class="text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150 flex items-center gap-stack-sm py-2" href="#">
+<span class="material-symbols-outlined">analytics</span> Reports
+                </a>
+</nav>
+<div class="px-margin-mobile">
+<button class="w-full bg-primary text-primary-container font-label-sm text-label-sm uppercase py-3 hover:bg-surface-tint transition-colors duration-150">Quick Dispatch</button>
+</div>
+<div class="flex flex-col gap-stack-sm font-label-sm text-label-sm uppercase tracking-widest mt-auto">
+<a class="text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150 flex items-center gap-stack-sm py-2" href="#">
+<span class="material-symbols-outlined">help_outline</span> Support
+                </a>
+<a class="text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150 flex items-center gap-stack-sm py-2" href="#">
+<span class="material-symbols-outlined">logout</span> Sign Out
+                </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<div class="flex-grow md:ml-64 px-margin-mobile md:px-margin-desktop py-stack-lg md:py-section-gap flex flex-col gap-section-gap">
+<!-- Hero Section -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-end">
+<div class="col-span-1 md:col-span-8 flex flex-col gap-stack-md">
+<h1 class="font-display-xl text-display-xl md:text-[120px] text-[64px] leading-none uppercase text-on-background tracking-tighter">Sabrina<br/>Soler</h1>
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest hairline-b pb-stack-sm">Lead Event Coordinator</div>
+</div>
+<div class="col-span-1 md:col-span-4 flex flex-col gap-stack-md mt-stack-lg md:mt-0">
+<img alt="Sabrina Soler Profile Photo" class="w-full aspect-[1.5] object-cover grayscale opacity-80 mix-blend-screen hairline-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBD4WeoxwaeyYJyKXFRqMMJGdpOkCB52VrOTWdRuE2SQSw6az8n6QU7ycF0f8wyDSuYw3Rl58W7cmPSOWvqyegNfqZ5-GRDhrSVKLk712FH8drVxyrgmttaAEOeipkNXYesHnJYTvwOTQ1JCkdmaQnYgXSjVIYrHb_9D5lHv0IY9HC5zUcLPxxyduKL_tKUrdTDZkwfyzV-On6ObLBShpk9b9ulHGpXL_K196oxoiQC8hdViAyWJ-qmHUp5FiUIDmNFFBH3mCOQnmk"/>
+</div>
+</section>
+<!-- Actions Row -->
+<section class="flex flex-col sm:flex-row gap-stack-md w-full justify-end hairline-t pt-stack-md">
+<button class="bg-transparent border border-primary text-primary font-label-sm text-label-sm uppercase tracking-widest py-4 px-8 hover:bg-surface-container-low transition-colors duration-150">GUARDAR</button>
+<button class="bg-primary text-primary-container font-label-sm text-label-sm uppercase tracking-widest py-4 px-8 hover:bg-transparent hover:text-primary border border-transparent hover:border-primary transition-all duration-150">ENVIAR PROPUESTA</button>
+</section>
+<!-- Bio & Metrics Grid -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<div class="col-span-1 md:col-span-8 flex flex-col gap-stack-lg">
+<div>
+<h2 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest hairline-b pb-stack-sm mb-stack-md">Professional Bio</h2>
+<p class="font-body-lg text-body-lg text-on-background max-w-2xl text-justify">
+                            Sabrina brings over a decade of rigorous experience in high-stakes event coordination. Her approach is characterized by absolute precision, a deep understanding of spatial dynamics, and an unwavering commitment to seamless execution. Specializing in large-scale corporate summits and avant-garde art installations, she operates with a clinical efficiency that guarantees structural integrity from conception to teardown.
+                        </p>
+</div>
+<div>
+<h2 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest hairline-b pb-stack-sm mb-stack-md">Experience Timeline</h2>
+<div class="flex flex-col gap-stack-sm">
+<div class="grid grid-cols-12 py-stack-sm hairline-b group hover:bg-surface-container-lowest transition-colors">
+<div class="col-span-3 font-label-sm text-label-sm text-on-surface-variant pt-1">2021 — Present</div>
+<div class="col-span-9 flex flex-col gap-1">
+<div class="font-body-lg text-body-lg text-on-background group-hover:text-tertiary transition-colors">Lead Coordinator, EVENT.LOG</div>
+<div class="font-body-md text-body-md text-on-surface-variant">Spearheaded structural operations for Tier-1 global tech summits.</div>
+</div>
+</div>
+<div class="grid grid-cols-12 py-stack-sm hairline-b group hover:bg-surface-container-lowest transition-colors">
+<div class="col-span-3 font-label-sm text-label-sm text-on-surface-variant pt-1">2018 — 2021</div>
+<div class="col-span-9 flex flex-col gap-1">
+<div class="font-body-lg text-body-lg text-on-background group-hover:text-tertiary transition-colors">Logistics Director, Apex Venues</div>
+<div class="font-body-md text-body-md text-on-surface-variant">Managed supply chains and on-site deployment for 500+ attendee events.</div>
+</div>
+</div>
+<div class="grid grid-cols-12 py-stack-sm hairline-b group hover:bg-surface-container-lowest transition-colors">
+<div class="col-span-3 font-label-sm text-label-sm text-on-surface-variant pt-1">2015 — 2018</div>
+<div class="col-span-9 flex flex-col gap-1">
+<div class="font-body-lg text-body-lg text-on-background group-hover:text-tertiary transition-colors">Stage Manager, Null Protocol</div>
+<div class="font-body-md text-body-md text-on-surface-variant">Orchestrated technical staging for experimental electronic music festivals.</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-1 md:col-span-4 flex flex-col gap-stack-lg">
+<div>
+<h2 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest hairline-b pb-stack-sm mb-stack-md">Metrics</h2>
+<div class="grid grid-cols-2 gap-stack-md">
+<div class="bg-surface-container-lowest p-stack-md hairline-border flex flex-col gap-stack-sm items-center justify-center aspect-square">
+<div class="font-display-xl text-headline-lg md:text-headline-lg-mobile text-on-background">99.8%</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-center">Attendance</div>
+</div>
+<div class="bg-surface-container-lowest p-stack-md hairline-border flex flex-col gap-stack-sm items-center justify-center aspect-square">
+<div class="font-display-xl text-headline-lg md:text-headline-lg-mobile text-on-background">4.9</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-center">Rating</div>
+</div>
+</div>
+</div>
+<div>
+<h2 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest hairline-b pb-stack-sm mb-stack-md">Skills</h2>
+<div class="flex flex-wrap gap-stack-sm">
+<span class="px-4 py-2 hairline-border font-label-sm text-label-sm text-on-background uppercase tracking-widest hover:border-tertiary cursor-default transition-colors">Spatial Planning</span>
+<span class="px-4 py-2 hairline-border font-label-sm text-label-sm text-on-background uppercase tracking-widest hover:border-tertiary cursor-default transition-colors">Vendor Negotiation</span>
+<span class="px-4 py-2 hairline-border font-label-sm text-label-sm text-on-background uppercase tracking-widest hover:border-tertiary cursor-default transition-colors">Crisis Management</span>
+<span class="px-4 py-2 hairline-border font-label-sm text-label-sm text-on-background uppercase tracking-widest hover:border-tertiary cursor-default transition-colors">Audio/Visual Tech</span>
+<span class="px-4 py-2 hairline-border font-label-sm text-label-sm text-on-background uppercase tracking-widest hover:border-tertiary cursor-default transition-colors">VIP Protocols</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-background dark:bg-background text-on-surface-variant dark:text-on-surface-variant font-label-sm text-label-sm uppercase full-width bottom-0 border-t border-outline-variant flat no shadows w-full px-margin-desktop py-stack-md flex justify-between items-center mt-section-gap md:ml-64">
+<div class="font-label-sm text-label-sm">©2024 RADICAL MINIMALISM ARCHIVE</div>
+<nav class="flex gap-gutter">
+<a class="text-on-surface-variant hover:text-on-surface instant transition-colors" href="#">Privacy</a>
+<a class="text-on-surface-variant hover:text-on-surface instant transition-colors" href="#">Terms</a>
+<a class="text-on-surface-variant hover:text-on-surface instant transition-colors" href="#">API Status</a>
+</nav>
+</footer>
+</body></html>

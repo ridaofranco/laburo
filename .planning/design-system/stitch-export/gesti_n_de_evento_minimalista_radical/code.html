@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LABURO - Gestión de Evento</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@500&amp;family=Inter:wght@400&amp;family=Syne:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#dde1ff",
+                        "surface-tint": "#c6c6c6",
+                        "on-background": "#e5e2e1",
+                        "on-primary": "#303030",
+                        "on-error": "#690005",
+                        "inverse-surface": "#e5e2e1",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "tertiary": "#b9c3ff",
+                        "outline-variant": "#4c4546",
+                        "on-primary-fixed-variant": "#474747",
+                        "surface-container": "#20201f",
+                        "inverse-on-surface": "#313030",
+                        "on-secondary": "#2f3131",
+                        "error-container": "#93000a",
+                        "secondary-container": "#454747",
+                        "on-tertiary-container": "#4266ff",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "secondary-fixed": "#e2e2e2",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-container-highest": "#353535",
+                        "on-tertiary-fixed-variant": "#0033c0",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "background": "#131313",
+                        "surface-container-high": "#2a2a2a",
+                        "error": "#ffb4ab",
+                        "primary-container": "#000000",
+                        "on-secondary-fixed-variant": "#454747",
+                        "on-tertiary": "#00228a",
+                        "surface-bright": "#393939",
+                        "primary": "#c6c6c6",
+                        "on-surface": "#e5e2e1",
+                        "surface-container-low": "#1c1b1b",
+                        "tertiary-fixed-dim": "#b9c3ff",
+                        "surface": "#131313",
+                        "secondary": "#c6c6c7",
+                        "surface-dim": "#131313",
+                        "on-secondary-container": "#b4b5b5",
+                        "surface-variant": "#353535",
+                        "outline": "#988e90",
+                        "inverse-primary": "#5e5e5e",
+                        "on-surface-variant": "#cfc4c5",
+                        "on-primary-fixed": "#1b1b1b",
+                        "on-primary-container": "#757575",
+                        "on-tertiary-fixed": "#001257",
+                        "tertiary-container": "#000000",
+                        "primary-fixed": "#e2e2e2",
+                        "on-error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "48px",
+                        "margin-desktop": "80px",
+                        "stack-sm": "8px",
+                        "section-gap": "160px",
+                        "container-max": "1440px",
+                        "stack-md": "24px",
+                        "gutter": "32px",
+                        "margin-mobile": "24px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Geist"],
+                        "headline-md": ["Syne"],
+                        "headline-lg": ["Syne"],
+                        "display-xl": ["Syne"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Syne"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "140%", "letterSpacing": "0.1em", "fontWeight": "500" }],
+                        "headline-md": ["32px", { "lineHeight": "120%", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg": ["64px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-xl": ["120px", { "lineHeight": "110%", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+                        "body-md": ["16px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["40px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: theme('colors.background'); color: theme('colors.on-background'); }
+        .grid-swiss { display: grid; grid-template-columns: repeat(12, 1fr); gap: theme('spacing.gutter'); }
+        .hairline-border { border: 1px solid theme('colors.outline-variant'); }
+        .hairline-border-b { border-bottom: 1px solid theme('colors.outline-variant'); }
+        .hairline-border-t { border-top: 1px solid theme('colors.outline-variant'); }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-background dark:bg-background text-primary dark:text-primary docked full-width top-0 border-b border-outline-variant flat no shadows flex justify-between items-center w-full px-margin-desktop py-8 max-w-container-max mx-auto hidden md:flex z-50">
+<div class="font-headline-lg text-headline-lg font-bold tracking-tighter text-on-background uppercase">EVENT.LOG</div>
+<nav class="flex gap-8">
+<a class="font-headline-md text-headline-md uppercase tracking-tighter text-on-surface-variant hover:text-primary transition-colors duration-150 cursor-pointer active:opacity-80 transition-opacity" href="#">Staff</a>
+<a class="font-headline-md text-headline-md uppercase tracking-tighter text-primary border-b-2 border-primary pb-1 hover:text-primary transition-colors duration-150 cursor-pointer active:opacity-80 transition-opacity" href="#">Schedule</a>
+<a class="font-headline-md text-headline-md uppercase tracking-tighter text-on-surface-variant hover:text-primary transition-colors duration-150 cursor-pointer active:opacity-80 transition-opacity" href="#">Venues</a>
+</nav>
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined cursor-pointer hover:text-on-background" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-on-background" data-icon="settings">settings</span>
+<button class="bg-surface-tint text-on-primary px-6 py-3 font-label-sm text-label-sm uppercase hover:bg-transparent hover:text-surface-tint border border-surface-tint transition-all duration-150">Create Event</button>
+</div>
+</header>
+<div class="flex flex-1 max-w-container-max mx-auto w-full">
+<!-- SideNavBar -->
+<aside class="bg-background dark:bg-background text-primary dark:text-primary border-r border-outline-variant flat no shadows hidden lg:flex flex-col py-margin-mobile gap-stack-lg sticky top-0 h-screen w-64 z-40">
+<div class="px-6 flex flex-col gap-2">
+<div class="w-12 h-12 bg-surface-container rounded-full overflow-hidden mb-4">
+<img class="w-full h-full object-cover" data-alt="A minimalist black and white headshot portrait of a professional operations manager in a high-contrast studio setting. The lighting is dramatic and directional, creating a sophisticated and authoritative mood fitting a luxury corporate environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDAG-5Aiy02MvafKeraws9nAcShY_s_0iK75mr_gYqrmuq5ujfssHZ66vIAsdR47e2soMnR0vrIP2xXO62wwKFUb6K1n7Ja5f8ORb9f7Bk_O7a1ptEw_L9ueZTry6lYBGxB5Zaib0RUV7bzOCgdUPIlXLl44l0BeuesFdDOuld-0tYDRYwcWgpoWc4eVcJCIwNoqKTT4K8oC9NoGdrlDW3jLD8PXa9YhczcQhteB7iKfIHvT7t8ndYNLbGbLUSEW8DIeEaKmsRs9E"/>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-background">OPERATIONS</h2>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">V.01.24</span>
+</div>
+<nav class="flex-1 flex flex-col gap-4 mt-8">
+<a class="flex items-center gap-4 text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150 font-label-sm text-label-sm uppercase tracking-widest py-3" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>Dashboard
+                </a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150 font-label-sm text-label-sm uppercase tracking-widest py-3" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>Roster
+                </a>
+<a class="flex items-center gap-4 text-primary font-bold border-l-2 border-primary pl-4 hover:bg-surface-container transition-all duration-150 font-label-sm text-label-sm uppercase tracking-widest py-3" href="#">
+<span class="material-symbols-outlined" data-icon="event_repeat">event_repeat</span>Timelines
+                </a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150 font-label-sm text-label-sm uppercase tracking-widest py-3" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>Inventory
+                </a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150 font-label-sm text-label-sm uppercase tracking-widest py-3" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>Reports
+                </a>
+</nav>
+<div class="px-4 mb-8">
+<button class="w-full bg-surface-tint text-on-primary py-3 font-label-sm text-label-sm uppercase hover:bg-transparent hover:text-surface-tint border border-surface-tint transition-all duration-150">Quick Dispatch</button>
+</div>
+<div class="flex flex-col gap-4 pb-8">
+<a class="flex items-center gap-4 text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150 font-label-sm text-label-sm uppercase tracking-widest py-2" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>Support
+                </a>
+<a class="flex items-center gap-4 text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150 font-label-sm text-label-sm uppercase tracking-widest py-2" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>Sign Out
+                </a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 px-margin-mobile md:px-margin-desktop py-stack-lg w-full">
+<!-- Event Header -->
+<section class="mb-section-gap">
+<p class="font-label-sm text-label-sm uppercase text-on-surface-variant mb-stack-sm tracking-widest">EVENT ID: F-AMK-24-X</p>
+<h1 class="font-display-xl text-display-xl md:text-[160px] leading-none mb-stack-lg uppercase break-words w-full">FIESTA AMERIKA</h1>
+<div class="grid-swiss pt-8 hairline-border-t">
+<div class="col-span-12 md:col-span-4">
+<p class="font-label-sm text-label-sm uppercase text-on-surface-variant mb-2">DATE &amp; TIME</p>
+<p class="font-headline-md text-headline-md">OCT 24, 2024</p>
+<p class="font-body-lg text-body-lg text-on-surface-variant">23:00 - 07:00</p>
+</div>
+<div class="col-span-12 md:col-span-4">
+<p class="font-label-sm text-label-sm uppercase text-on-surface-variant mb-2">VENUE</p>
+<p class="font-headline-md text-headline-md">COMPLEX 42</p>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Sector Industrial Sur</p>
+</div>
+<div class="col-span-12 md:col-span-4 flex items-end justify-start md:justify-end">
+<span class="px-4 py-2 border border-tertiary-fixed font-label-sm text-label-sm text-tertiary-fixed uppercase">Status: Live Build</span>
+</div>
+</div>
+</section>
+<!-- Metrics Dashboard -->
+<section class="mb-section-gap">
+<div class="grid-swiss">
+<div class="col-span-12 md:col-span-4 p-8 hairline-border bg-surface-container-low flex flex-col justify-between min-h-[200px]">
+<p class="font-label-sm text-label-sm uppercase text-on-surface-variant tracking-widest">STAFF CONFIRMED</p>
+<div class="flex items-baseline gap-2">
+<span class="font-display-xl text-display-xl">42</span>
+<span class="font-headline-md text-headline-md text-on-surface-variant">/ 50</span>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 p-8 hairline-border bg-surface-container-low flex flex-col justify-between min-h-[200px]">
+<p class="font-label-sm text-label-sm uppercase text-on-surface-variant tracking-widest">PENDING APPROVALS</p>
+<div class="flex items-baseline gap-2">
+<span class="font-display-xl text-display-xl text-error">08</span>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 p-8 hairline-border bg-surface-container-low flex flex-col justify-between min-h-[200px]">
+<p class="font-label-sm text-label-sm uppercase text-on-surface-variant tracking-widest">CRITICAL SHORTAGES</p>
+<div class="flex items-baseline gap-2">
+<span class="font-display-xl text-display-xl">02</span>
+<span class="font-body-lg text-body-lg text-on-surface-variant">Roles</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Staff Roster -->
+<section class="mb-section-gap">
+<div class="flex justify-between items-end mb-stack-md hairline-border-b pb-4">
+<h2 class="font-headline-md text-headline-md uppercase">ROSTER</h2>
+<div class="flex gap-4">
+<button class="font-label-sm text-label-sm uppercase text-on-surface-variant hover:text-on-background transition-colors">Filter</button>
+<button class="font-label-sm text-label-sm uppercase text-on-surface-variant hover:text-on-background transition-colors">Sort</button>
+</div>
+</div>
+<div class="flex flex-col w-full">
+<!-- Roster Header -->
+<div class="grid grid-cols-12 gap-4 py-4 px-4 font-label-sm text-label-sm uppercase text-on-surface-variant tracking-widest hairline-border-b">
+<div class="col-span-4">OPERATOR</div>
+<div class="col-span-3">ROLE</div>
+<div class="col-span-3">CALL TIME</div>
+<div class="col-span-2 text-right">STATUS</div>
+</div>
+<!-- Roster Items -->
+<div class="grid grid-cols-12 gap-4 py-6 px-4 hairline-border-b items-center hover:bg-surface-container transition-colors duration-150">
+<div class="col-span-4 flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-variant rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Black and white minimalist portrait of a security guard looking away. Soft studio lighting. Dark corporate mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbhC-3NAUftSNAscKF0MtgAgF_9ynBL8Yu274JJl_eft9BX64wkLCuaEcB4HNvTRs7JXRXs0mnnKTQCyoGujAWGoiwH6C5WSJB2oLxXgMOBjw6V8-rxdH0GI2zjJSA5JivEPE2-jV9Hlz4xXk1byKcnMhiyBDXtaXqDblf-etPRHeoHtFGibbG-FaNCTC4pEmEvQfE1QkTEjDzovtxnqC14CwWUIWo8-Jqmp0COH6bhwzrtrQrREXj6TocD7EAWAvxxFIrIC2SotA"/>
+</div>
+<span class="font-body-lg text-body-lg">K. Vance</span>
+</div>
+<div class="col-span-3 font-body-md text-body-md text-on-surface-variant">Security Lead</div>
+<div class="col-span-3 font-body-md text-body-md text-on-surface-variant">21:00</div>
+<div class="col-span-2 text-right">
+<span class="inline-block w-2 h-2 rounded-full bg-tertiary-fixed mr-2"></span>
+<span class="font-label-sm text-label-sm uppercase">Confirmed</span>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-4 py-6 px-4 hairline-border-b items-center hover:bg-surface-container transition-colors duration-150">
+<div class="col-span-4 flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-variant rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Black and white minimalist portrait of a sound engineer adjusting equipment. Soft studio lighting. Dark corporate mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAA7lxuYQG7Nqh4LtCGDKgp65w3c1cMA2fUAPvqAH5v8RUOeguSYo_1U6XZyAFb61anMVtGOYVMhZmaAgZwV3qq16WVI9TFyomdkUqgb-DoqmpYcNlvCgWR9AakCbcDJaWVJW1AryxNqg8QSuNyV5ElknfJ_Fxa1_nFE2-CGNvIOWeC5MnE2jUCXif9iqTOhO6uxkUm6uD8GCL7VKypaNE193bUKXVtxPjg1mMNjb4QnU33YIq_aR2Yv5IrV6fTuAKycySVsLE5mQo"/>
+</div>
+<span class="font-body-lg text-body-lg">M. Torres</span>
+</div>
+<div class="col-span-3 font-body-md text-body-md text-on-surface-variant">Audio Tech</div>
+<div class="col-span-3 font-body-md text-body-md text-on-surface-variant">18:00</div>
+<div class="col-span-2 text-right">
+<span class="inline-block w-2 h-2 rounded-full bg-tertiary-fixed mr-2"></span>
+<span class="font-label-sm text-label-sm uppercase">Confirmed</span>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-4 py-6 px-4 hairline-border-b items-center hover:bg-surface-container transition-colors duration-150 opacity-60">
+<div class="col-span-4 flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-variant rounded-full overflow-hidden">
+<span class="w-full h-full flex items-center justify-center font-label-sm text-label-sm">JR</span>
+</div>
+<span class="font-body-lg text-body-lg">J. Reyes</span>
+</div>
+<div class="col-span-3 font-body-md text-body-md text-on-surface-variant">Lighting Asst.</div>
+<div class="col-span-3 font-body-md text-body-md text-on-surface-variant">19:30</div>
+<div class="col-span-2 text-right">
+<span class="inline-block w-2 h-2 rounded-full bg-error mr-2"></span>
+<span class="font-label-sm text-label-sm uppercase text-error">Pending</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-background dark:bg-background text-on-surface-variant dark:text-on-surface-variant font-label-sm text-label-sm uppercase full-width bottom-0 border-t border-outline-variant flat no shadows w-full px-margin-desktop py-stack-md flex justify-between items-center z-50 mt-auto">
+<div class="font-label-sm text-label-sm">©2024 RADICAL MINIMALISM ARCHIVE</div>
+<div class="flex gap-8">
+<a class="text-on-surface-variant hover:text-on-surface instant transition-colors" href="#">Privacy</a>
+<a class="text-on-surface-variant hover:text-on-surface instant transition-colors" href="#">Terms</a>
+<a class="text-on-surface-variant hover:text-on-surface instant transition-colors" href="#">API Status</a>
+</div>
+</footer>
+</body></html>

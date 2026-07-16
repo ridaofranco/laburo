@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LABURO - Master Calendar</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&amp;family=Inter:wght@400&amp;family=Geist:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "outline-variant": "#4c4546",
+                        "on-surface-variant": "#cfc4c5",
+                        "secondary-container": "#454747",
+                        "primary": "#c6c6c6",
+                        "on-tertiary-fixed-variant": "#0033c0",
+                        "on-tertiary": "#00228a",
+                        "tertiary-fixed": "#dde1ff",
+                        "on-secondary-fixed-variant": "#454747",
+                        "on-primary-container": "#757575",
+                        "on-background": "#e5e2e1",
+                        "primary-fixed": "#e2e2e2",
+                        "surface-container-highest": "#353535",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "surface-bright": "#393939",
+                        "on-primary-fixed": "#1b1b1b",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "on-error": "#690005",
+                        "inverse-surface": "#e5e2e1",
+                        "surface-variant": "#353535",
+                        "on-secondary": "#2f3131",
+                        "on-tertiary-fixed": "#001257",
+                        "surface-container-lowest": "#0e0e0e",
+                        "inverse-primary": "#5e5e5e",
+                        "tertiary-container": "#000000",
+                        "surface-container": "#20201f",
+                        "on-primary": "#303030",
+                        "background": "#131313",
+                        "tertiary": "#b9c3ff",
+                        "secondary": "#c6c6c7",
+                        "tertiary-fixed-dim": "#b9c3ff",
+                        "surface-dim": "#131313",
+                        "on-tertiary-container": "#4266ff",
+                        "on-secondary-container": "#b4b5b5",
+                        "surface-tint": "#c6c6c6",
+                        "on-surface": "#e5e2e1",
+                        "outline": "#988e90",
+                        "surface-container-high": "#2a2a2a",
+                        "secondary-fixed": "#e2e2e2",
+                        "primary-container": "#000000",
+                        "error": "#ffb4ab",
+                        "error-container": "#93000a",
+                        "surface-container-low": "#1c1b1b",
+                        "surface": "#131313",
+                        "inverse-on-surface": "#313030",
+                        "on-primary-fixed-variant": "#474747"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "stack-lg": "48px",
+                        "section-gap": "160px",
+                        "stack-sm": "8px",
+                        "container-max": "1440px",
+                        "margin-desktop": "80px",
+                        "stack-md": "24px",
+                        "margin-mobile": "24px",
+                        "sidebar-width": "280px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Syne"],
+                        "headline-lg": ["Syne"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Syne"],
+                        "display-xl": ["Syne"],
+                        "label-sm": ["Geist"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["40px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["64px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "headline-md": ["32px", { "lineHeight": "120%", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-xl": ["120px", { "lineHeight": "110%", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+                        "label-sm": ["12px", { "lineHeight": "140%", "letterSpacing": "0.1em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: theme('colors.background'); color: theme('colors.on-surface'); overflow-x: hidden; }
+        .hairline-border { border-color: #1A1A1A; border-width: 1px; border-style: solid; }
+        .hairline-b { border-bottom: 1px solid #1A1A1A; }
+        .hairline-r { border-right: 1px solid #1A1A1A; }
+        
+        /* Grid definitions for calendar */
+        .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+        
+        /* Smooth transitions for interactive elements */
+        .interactive { transition: all 0.2s ease-in-out; }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row min-h-screen font-body-md">
+<!-- Desktop SideNavBar (Hidden on Mobile) -->
+<nav class="hidden md:flex flex-col fixed left-0 top-0 h-full w-sidebar-width bg-surface-container-lowest/90 backdrop-blur-2xl border-r border-border-glass shadow-2xl py-8 z-40 hairline-r">
+<div class="px-6 mb-12">
+<h1 class="font-display-xl text-display-xl font-bold text-primary tracking-tighter" style="font-size: 48px; line-height: 1;">LABURO</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-2 uppercase tracking-widest">Production Portal</p>
+</div>
+<div class="flex-1 overflow-y-auto mt-4 px-2">
+<!-- Inactive Tab -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-glass transition-all mb-2 rounded group" href="#">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors" data-icon="search">search</span>
+<span class="font-label-sm text-label-sm uppercase">Search</span>
+</a>
+<!-- Inactive Tab -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-glass transition-all mb-2 rounded group" href="#">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors" data-icon="local_offer">local_offer</span>
+<span class="font-label-sm text-label-sm uppercase">Offers</span>
+</a>
+<!-- Inactive Tab -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-glass transition-all mb-2 rounded group" href="#">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors" data-icon="favorite">favorite</span>
+<span class="font-label-sm text-label-sm uppercase">Favorites</span>
+</a>
+<!-- Active Tab -->
+<a class="flex items-center gap-3 px-4 py-3 bg-surface-glass border-l-4 border-primary text-primary bg-surface-container mb-2 rounded translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined text-primary" data-icon="calendar_today" data-weight="fill" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-widest">Events</span>
+</a>
+</div>
+<div class="px-2 mt-auto pt-8 hairline-b border-t-0 border-l-0 border-r-0">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-glass transition-all mb-2 rounded group" href="#">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm uppercase">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-glass transition-all rounded group" href="#">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary" data-icon="logout">logout</span>
+<span class="font-label-sm text-label-sm uppercase">Logout</span>
+</a>
+</div>
+</nav>
+<!-- TopNavBar (Mobile Only) -->
+<header class="md:hidden flex justify-between items-center px-6 py-4 w-full h-16 bg-surface-dim/80 backdrop-blur-xl docked full-width top-0 border-b border-border-glass flat no shadows z-40 fixed">
+<h1 class="font-display-lg text-display-lg tracking-tighter text-primary" style="font-size: 24px;">LABURO</h1>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer" data-icon="settings">settings</span>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-sidebar-width pt-16 md:pt-0 min-h-screen flex flex-col md:flex-row pb-[80px] md:pb-0 relative">
+<!-- Calendar Grid Canvas -->
+<div class="flex-1 flex flex-col h-full border-r border-[#1A1A1A]">
+<!-- Calendar Header -->
+<header class="p-8 md:p-margin-desktop pb-8 flex flex-col md:flex-row md:items-end justify-between gap-6 hairline-b bg-surface-container-lowest">
+<div>
+<h2 class="font-display-xl text-display-xl font-extrabold tracking-tighter text-primary leading-none uppercase">OCTOBER</h2>
+<div class="flex items-center gap-4 mt-2">
+<span class="font-headline-md text-headline-md text-on-surface-variant">2024</span>
+<div class="flex gap-2">
+<button class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center text-on-surface hover:bg-primary hover:text-surface-container-lowest interactive group">
+<span class="material-symbols-outlined text-[16px]" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center text-on-surface hover:bg-primary hover:text-surface-container-lowest interactive group">
+<span class="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="px-6 py-3 border border-outline-variant font-label-sm text-label-sm uppercase tracking-widest text-on-surface hover:border-primary interactive">Filter</button>
+<button class="px-6 py-3 bg-primary text-surface-container-lowest font-label-sm text-label-sm uppercase tracking-widest hover:bg-transparent hover:text-primary border border-primary interactive">New Event</button>
+</div>
+</header>
+<!-- Calendar Days Header -->
+<div class="cal-grid hairline-b bg-surface-container-lowest/50">
+<div class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-center hairline-r">Mon</div>
+<div class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-center hairline-r">Tue</div>
+<div class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-center hairline-r">Wed</div>
+<div class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-center hairline-r">Thu</div>
+<div class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-center hairline-r">Fri</div>
+<div class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-center hairline-r">Sat</div>
+<div class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest text-center">Sun</div>
+</div>
+<!-- Calendar Body -->
+<div class="flex-1 cal-grid bg-surface-container-lowest">
+<!-- Week 1 -->
+<div class="hairline-b hairline-r min-h-[120px] p-2 relative group hover:bg-surface-container/30 transition-colors">
+<span class="font-label-sm text-label-sm text-outline-variant absolute top-2 right-2">30</span>
+</div>
+<div class="hairline-b hairline-r min-h-[120px] p-2 relative group hover:bg-surface-container/30 transition-colors">
+<span class="font-label-sm text-label-sm text-primary absolute top-2 right-2 font-bold">1</span>
+</div>
+<div class="hairline-b hairline-r min-h-[120px] p-2 relative group hover:bg-surface-container/30 transition-colors">
+<span class="font-label-sm text-label-sm text-primary absolute top-2 right-2 font-bold">2</span>
+<div class="mt-8 space-y-1">
+<div class="w-full bg-secondary-container h-1 rounded-full opacity-50"></div>
+<div class="w-3/4 bg-primary h-1 rounded-full"></div>
+</div>
+</div>
+<!-- ... Truncating calendar grid for effort level ... -->
+</div>
+</div>
+<!-- Details Sidebar (Selected Day) -->
+<aside class="w-full md:w-[400px] flex flex-col bg-surface-container-lowest hairline-l min-h-[512px] md:min-h-screen">
+<!-- Sidebar Content Placeholder -->
+<div class="p-8">
+<h3 class="font-headline-md text-headline-md text-primary mb-2">OCT 2</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Select an event to view details.</p>
+</div>
+</aside>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-4 left-4 right-4 rounded-xl bg-surface-container/80 backdrop-blur-lg shadow-lg border border-border-glass z-50 flex justify-around items-center px-4 pb-4 pt-4 h-bottom-nav-height">
+<!-- Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant w-16" href="#">
+<span class="material-symbols-outlined text-[24px] mb-1" data-icon="search">search</span>
+<span class="font-label-sm text-label-sm" style="font-size: 10px;">Search</span>
+</a>
+<!-- Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant w-16" href="#">
+<span class="material-symbols-outlined text-[24px] mb-1" data-icon="local_offer">local_offer</span>
+<span class="font-label-sm text-label-sm" style="font-size: 10px;">Offers</span>
+</a>
+<!-- Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant w-16" href="#">
+<span class="material-symbols-outlined text-[24px] mb-1" data-icon="favorite">favorite</span>
+<span class="font-label-sm text-label-sm" style="font-size: 10px;">Favs</span>
+</a>
+<!-- Active -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-lg px-3 py-2 w-16 scale-90 duration-200" href="#">
+<span class="material-symbols-outlined text-[24px] mb-1" data-icon="event" data-weight="fill" style="font-variation-settings: 'FILL' 1;">event</span>
+<span class="font-label-sm text-label-sm font-bold" style="font-size: 10px;">Events</span>
+</a>
+</nav>
+</body></html>

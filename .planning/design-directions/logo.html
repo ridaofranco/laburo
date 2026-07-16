@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LABURO · laboratorio de logo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Titan+One&family=Fredoka:wght@500;600;700&family=Baloo+2:wght@700;800&family=Lilita+One&family=Bagel+Fat+One&family=Luckiest+Guy&family=Chango&family=Passion+One:wght@700;900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  body{ background:#0A0F1F; color:#DDE5F2; font-family:"Inter",sans-serif; -webkit-font-smoothing:antialiased; padding-bottom:80px;
+    background:
+      radial-gradient(800px 400px at 85% -5%, rgba(76,201,255,.10), transparent 60%),
+      radial-gradient(700px 380px at 0% 5%, rgba(47,128,255,.09), transparent 55%),
+      #0A0F1F;}
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 22px; }
+  header{ padding:46px 22px 10px; max-width:1180px; margin:0 auto;}
+  header .kick{ font-family:"IBM Plex Mono"; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:#4CC9FF;}
+  header h1{ font-family:"Inter"; font-weight:700; font-size:30px; letter-spacing:-.03em; color:#fff; margin:10px 0 8px;}
+  header p{ color:#8A93A6; font-size:15px; max-width:640px;}
+
+  .sec-tag{ font-family:"IBM Plex Mono"; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:#8A93A6; margin:46px 0 4px; }
+  .sec-tag b{ color:#fff; font-weight:500;}
+  .sec-note{ color:#8A93A6; font-size:14px; margin-bottom:20px; }
+
+  .grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+  @media (max-width:780px){ .grid{ grid-template-columns:1fr; } }
+  .tile{ position:relative; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.09); border-radius:16px;
+    padding:34px 26px; min-height:150px; display:flex; align-items:center; justify-content:center; overflow:hidden;}
+  .tile .code{ position:absolute; top:12px; left:14px; font-family:"IBM Plex Mono"; font-size:11px; letter-spacing:.06em; color:#5f6b86;}
+  .tile .fname{ position:absolute; bottom:12px; right:14px; font-family:"IBM Plex Mono"; font-size:10px; letter-spacing:.05em; color:#5f6b86; text-transform:uppercase;}
+  .logo{ font-size:58px; line-height:1; }
+
+  /* ---- tipografías bubble ---- */
+  .f-titan{ font-family:"Titan One"; }
+  .f-fredoka{ font-family:"Fredoka"; font-weight:700; }
+  .f-baloo{ font-family:"Baloo 2"; font-weight:800; }
+  .f-lilita{ font-family:"Lilita One"; }
+  .f-bagel{ font-family:"Bagel Fat One"; }
+  .f-lucky{ font-family:"Luckiest Guy"; }
+  .f-chango{ font-family:"Chango"; }
+  .f-passion{ font-family:"Passion One"; font-weight:900; }
+
+  /* ---- acabados neón ---- */
+  /* T1: glow lleno (letra clara que irradia) */
+  .t-glow{ color:#eaf7ff; text-shadow:0 0 4px #d3f0ff, 0 0 14px #4CC9FF, 0 0 34px #2F80FF, 0 0 66px rgba(47,128,255,.7); }
+  /* T2: tubo de neón (hueco, contorno que brilla) */
+  .t-tube{ color:transparent; -webkit-text-stroke:2px #7ad7ff;
+    text-shadow:0 0 6px #4CC9FF, 0 0 16px #2F80FF, 0 0 42px rgba(47,128,255,.65); }
+  /* T3: degradé + glow suave */
+  .t-grad{ background:linear-gradient(180deg,#ffffff 12%,#7fd3ff 70%,#2F80FF 120%); -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 0 16px rgba(76,201,255,.55)); }
+  /* T4: azul sólido de marca, glow discreto */
+  .t-solid{ color:#2F80FF; text-shadow:0 0 18px rgba(47,128,255,.55); }
+  /* T5: hielo/chrome (para look premium sobrio) */
+  .t-ice{ background:linear-gradient(180deg,#ffffff 0%,#bfe3ff 45%,#5aa0ff 100%); -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 1px 0 rgba(255,255,255,.2)) drop-shadow(0 0 10px rgba(76,201,255,.35)); }
+
+  /* contexto */
+  .ctx{ margin-top:16px; border:1px solid rgba(255,255,255,.09); border-radius:16px; overflow:hidden; }
+  .ctx .bar{ display:flex; align-items:center; gap:16px; padding:16px 22px; border-bottom:1px solid rgba(255,255,255,.08);}
+  .ctx .bar .nav-logo{ font-size:24px; }
+  .ctx .bar .links{ display:flex; gap:18px; margin-left:10px;}
+  .ctx .bar .links span{ font-size:13px; color:#8A93A6;}
+  .ctx .bar .cta{ margin-left:auto; font-size:13px; font-weight:600; color:#fff; background:#2F80FF; padding:8px 15px; border-radius:8px;}
+  .ctx .big{ display:flex; align-items:center; justify-content:center; padding:40px 20px; }
+  .ctx .big .giant{ font-size:clamp(70px,14vw,150px); line-height:.9; }
+  .ctx .cap{ font-family:"IBM Plex Mono"; font-size:11px; color:#5f6b86; padding:0 22px 16px; text-transform:uppercase; letter-spacing:.06em;}
+
+  .foot{ margin:52px auto 0; max-width:1180px; padding:22px 24px; border:1px dashed rgba(255,255,255,.12); border-radius:14px; color:#8A93A6; font-size:14px; line-height:1.6;}
+  .foot b{ color:#DDE5F2;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kick">LABURO · identidad</div>
+  <h1>El logo, como lo querías: bubble + neón</h1>
+  <p>Primero elegí la <b>letra</b> (qué tipografía bubble). Después el <b>acabado</b> (cómo brilla). Abajo lo ves en contexto: chiquito en la barra y gigante como cierre. Decime el código, por ejemplo "F1 con T2".</p>
+</header>
+
+<div class="wrap">
+
+  <div class="sec-tag">Paso 1 · <b>elegí la letra</b> (mismo acabado glow para comparar)</div>
+  <div class="sec-note">Todas con el mismo neón azul para que juzgues solo la forma de la letra.</div>
+  <div class="grid">
+    <div class="tile"><span class="code">F1</span><span class="logo f-titan t-glow">LABURO</span><span class="fname">Titan One</span></div>
+    <div class="tile"><span class="code">F2</span><span class="logo f-fredoka t-glow">LABURO</span><span class="fname">Fredoka</span></div>
+    <div class="tile"><span class="code">F3</span><span class="logo f-baloo t-glow">LABURO</span><span class="fname">Baloo 2</span></div>
+    <div class="tile"><span class="code">F4</span><span class="logo f-lilita t-glow">LABURO</span><span class="fname">Lilita One</span></div>
+    <div class="tile"><span class="code">F5</span><span class="logo f-bagel t-glow">LABURO</span><span class="fname">Bagel Fat One</span></div>
+    <div class="tile"><span class="code">F6</span><span class="logo f-lucky t-glow">LABURO</span><span class="fname">Luckiest Guy</span></div>
+    <div class="tile"><span class="code">F7</span><span class="logo f-chango t-glow">LABURO</span><span class="fname">Chango</span></div>
+    <div class="tile"><span class="code">F8</span><span class="logo f-passion t-glow">LABURO</span><span class="fname">Passion One</span></div>
+  </div>
+
+  <div class="sec-tag">Paso 2 · <b>elegí el acabado</b> (sobre Fredoka de ejemplo)</div>
+  <div class="sec-note">El acabado se puede aplicar a cualquiera de las letras de arriba. Acá van los 5 sobre una sola para comparar el brillo.</div>
+  <div class="grid">
+    <div class="tile"><span class="code">T1</span><span class="logo f-fredoka t-glow">LABURO</span><span class="fname">glow lleno</span></div>
+    <div class="tile"><span class="code">T2</span><span class="logo f-fredoka t-tube">LABURO</span><span class="fname">tubo de neón (hueco)</span></div>
+    <div class="tile"><span class="code">T3</span><span class="logo f-fredoka t-grad">LABURO</span><span class="fname">degradé + glow</span></div>
+    <div class="tile"><span class="code">T4</span><span class="logo f-fredoka t-solid">LABURO</span><span class="fname">azul sólido</span></div>
+    <div class="tile"><span class="code">T5</span><span class="logo f-fredoka t-ice">LABURO</span><span class="fname">hielo / chrome</span></div>
+  </div>
+
+  <div class="sec-tag">Paso 3 · <b>en contexto</b></div>
+  <div class="sec-note">Dos combos de ejemplo para ver cómo aguanta chiquito (barra) y gigante (cierre estilo dirección C).</div>
+
+  <div class="ctx">
+    <div class="bar">
+      <span class="nav-logo f-fredoka t-glow">LABURO</span>
+      <div class="links"><span>Buscar</span><span>Ofertas</span><span>Eventos</span></div>
+      <span class="cta">Nuevo evento</span>
+    </div>
+    <div class="big"><span class="giant f-fredoka t-glow">LABURO</span></div>
+    <div class="cap">combo ejemplo · F2 Fredoka + T1 glow lleno</div>
+  </div>
+
+  <div class="ctx">
+    <div class="bar">
+      <span class="nav-logo f-titan t-tube">LABURO</span>
+      <div class="links"><span>Buscar</span><span>Ofertas</span><span>Eventos</span></div>
+      <span class="cta">Nuevo evento</span>
+    </div>
+    <div class="big"><span class="giant f-titan t-tube">LABURO</span></div>
+    <div class="cap">combo ejemplo · F1 Titan One + T2 tubo de neón</div>
+  </div>
+
+</div>
+
+<div class="foot">
+  <b>Cómo elegir.</b> Decime un código de letra (F1 a F8) y uno de acabado (T1 a T5), ejemplo "F5 con T3". Si ninguna letra es la que tenías en la cabeza, describímela (más redonda, más gorda, más de cartel de neón, con contorno, etc.) y traigo otra tanda. Con el logo definido, lo meto en las direcciones B y C y ahí sí elegís el rumbo con el logo de verdad puesto.
+</div>
+
+</body>
+</html>

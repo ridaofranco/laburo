@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LABURO - Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&amp;family=Inter:wght@400&amp;family=Geist:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed-dim": "#c6c6c7",
+                      "outline-variant": "#4c4546",
+                      "on-surface-variant": "#cfc4c5",
+                      "secondary-container": "#454747",
+                      "primary": "#c6c6c6",
+                      "on-tertiary-fixed-variant": "#0033c0",
+                      "on-tertiary": "#00228a",
+                      "tertiary-fixed": "#dde1ff",
+                      "on-secondary-fixed-variant": "#454747",
+                      "on-primary-container": "#757575",
+                      "on-background": "#e5e2e1",
+                      "primary-fixed": "#e2e2e2",
+                      "surface-container-highest": "#353535",
+                      "on-secondary-fixed": "#1a1c1c",
+                      "surface-bright": "#393939",
+                      "on-primary-fixed": "#1b1b1b",
+                      "on-error-container": "#ffdad6",
+                      "primary-fixed-dim": "#c6c6c6",
+                      "on-error": "#690005",
+                      "inverse-surface": "#e5e2e1",
+                      "surface-variant": "#353535",
+                      "on-secondary": "#2f3131",
+                      "on-tertiary-fixed": "#001257",
+                      "surface-container-lowest": "#0e0e0e",
+                      "inverse-primary": "#5e5e5e",
+                      "tertiary-container": "#000000",
+                      "surface-container": "#20201f",
+                      "on-primary": "#303030",
+                      "background": "#131313",
+                      "tertiary": "#b9c3ff",
+                      "secondary": "#c6c6c7",
+                      "tertiary-fixed-dim": "#b9c3ff",
+                      "surface-dim": "#131313",
+                      "on-tertiary-container": "#4266ff",
+                      "on-secondary-container": "#b4b5b5",
+                      "surface-tint": "#c6c6c6",
+                      "on-surface": "#e5e2e1",
+                      "outline": "#988e90",
+                      "surface-container-high": "#2a2a2a",
+                      "secondary-fixed": "#e2e2e2",
+                      "primary-container": "#000000",
+                      "error": "#ffb4ab",
+                      "error-container": "#93000a",
+                      "surface-container-low": "#1c1b1b",
+                      "surface": "#131313",
+                      "inverse-on-surface": "#313030",
+                      "on-primary-fixed-variant": "#474747"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "32px",
+                      "stack-lg": "48px",
+                      "section-gap": "160px",
+                      "stack-sm": "8px",
+                      "container-max": "1440px",
+                      "margin-desktop": "80px",
+                      "stack-md": "24px",
+                      "margin-mobile": "24px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": [
+                              "Syne"
+                      ],
+                      "headline-lg": [
+                              "Syne"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Syne"
+                      ],
+                      "display-xl": [
+                              "Syne"
+                      ],
+                      "label-sm": [
+                              "Geist"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": [
+                              "40px",
+                              {
+                                      "lineHeight": "110%",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "64px",
+                              {
+                                      "lineHeight": "110%",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "160%",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "160%",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "32px",
+                              {
+                                      "lineHeight": "120%",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-xl": [
+                              "120px",
+                              {
+                                      "lineHeight": "110%",
+                                      "letterSpacing": "-0.04em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "140%",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+      </style>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col items-center justify-center overflow-hidden">
+<!-- TopNav - Minimalist for onboarding -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-center py-stack-md">
+<h1 class="font-headline-md text-headline-md tracking-tighter text-on-surface">LABURO</h1>
+</header>
+<main class="w-full max-w-container-max px-margin-mobile md:px-margin-desktop flex-grow flex items-center justify-center relative">
+<!-- Slide 1 -->
+<section class="slide active flex-col items-center text-center w-full max-w-4xl" id="slide-1">
+<div class="mb-stack-lg relative w-full h-[409px] border border-[#1A1A1A] rounded-xl overflow-hidden bg-surface-container-lowest">
+<div class="absolute inset-0 bg-cover bg-center opacity-60 mix-blend-luminosity" data-alt="A radical minimalist architectural rendering of a pristine, high-end professional workspace. The scene is shot with stark, high-contrast monochrome lighting, emphasizing geometric rigor and negative space. The mood is disciplined and sophisticated, utilizing deep pure blacks and stark pristine whites. The composition feels like a modern corporate gallery exhibit, devoid of unnecessary decorative elements." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB5XJjUSs6wNCvnm2SduEoL4VLecISJey2l0BvWRxcpzieDw21iSPqo-ut8KBnfWlk3UqGJByfEMg9K9OXu21OOlYaejofy77Nu3dW-wjvlwUxo5jxtOUCC8uzj_iP_zefacbEW7UaExt5zgwRHoU-YaZl5w1abgb2KznbnIj1sSBxpc-ZQFOGrh-57zRzYyQPfKkkCsBWCH7aM776mIl4MGYeMRvstjT2n9aHFsSOeFuLCZqB8e7CDXoko1-I9_H_0T60rCyb07N4')"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-[120px] text-on-surface font-light" style="font-variation-settings: 'wght' 200;">person_edit</span>
+</div>
+</div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg mb-stack-md text-on-surface">Completa tu perfil</h2>
+<p class="font-body-md md:font-body-lg text-body-md md:text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                Define tu especialidad y experiencia. Un perfil detallado es tu mejor carta de presentación en la industria.
+            </p>
+</section>
+<!-- Slide 2 -->
+<section class="slide flex-col items-center text-center w-full max-w-4xl" id="slide-2">
+<div class="mb-stack-lg relative w-full h-[409px] border border-[#1A1A1A] rounded-xl overflow-hidden bg-surface-container-lowest">
+<div class="absolute inset-0 bg-cover bg-center opacity-60 mix-blend-luminosity" data-alt="A meticulously curated portfolio gallery layout displayed on a massive, ultra-high-definition screen. The visual style is radical minimalism, focusing on perfect mathematical alignment within a strict 12-column grid. The lighting is cinematic yet stark, casting soft, diffused glows over sharp, monochromatic imagery. The atmosphere is that of a premium, exclusive corporate presentation space." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBcOybnLEtQ3J1sKLCIdqml7SIgmrE7QrFdWlulVlhAmbZs4Czl5DVwM5Q80ph8dBTI4pc4lxfRTXECCjVjty4B6a6Q6nbuf2Ik6mSdTUxvVIlsJbJzHDF9zXZ5JQoxrX3n425OrVL4O0rXSgedYgKKbx7yEuIjo3Mw0K1wV4glK7uFPeVljAbYxGUxkNgJxGSTwT8D1iW9i8weZai8I25oNyxdgb7Qpso3gMPlsLfbuc0MIsdzn0XRtQ2ZehDupzOQYvPTHduetgg')"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-[120px] text-on-surface font-light" style="font-variation-settings: 'wght' 200;">photo_library</span>
+</div>
+</div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg mb-stack-md text-on-surface">Sube tus mejores fotos</h2>
+<p class="font-body-md md:font-body-lg text-body-md md:text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                Muestra tu trabajo. Las imágenes hablan de tu calidad y atención al detalle. Construye tu portafolio.
+            </p>
+</section>
+<!-- Slide 3 -->
+<section class="slide flex-col items-center text-center w-full max-w-4xl" id="slide-3">
+<div class="mb-stack-lg relative w-full h-[409px] border border-[#1A1A1A] rounded-xl overflow-hidden bg-surface-container-lowest">
+<div class="absolute inset-0 bg-cover bg-center opacity-60 mix-blend-luminosity" data-alt="A conceptual representation of incoming opportunities and network connections, visualized as delicate, intersecting geometric lines and nodes suspended in a vast, pitch-black void. The aesthetic is strictly modern corporate and radically minimalist, using only hairline traces of brilliant white light to denote activity. The mood is authoritative, calm, and highly advanced." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuALMmY7UlUxtVhdPjre3AwrTVTtEhBsHqf9QFwSbWvVg0_1qD4GLBxaYH_avCznzzDIcwxlLyMhNdUW6gNyykdfL6bLapy-FNJWHBYslVvNH4pAGqZQKBq7CoxP6B_HOLL4ugD0b2wG3d0xlRkeOfnMP44ATC3RMt5r6EC6LKF4-BHzdisbX5L1VaEfAYK__5j6slh4cGQWBNH-qK0Lwp9R2ShWJTILC3ojMaI8d5eNpMvW7SfJxBNBqIbtkLDdRGkfXsOuNuN8GEo')"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-[120px] text-on-surface font-light" style="font-variation-settings: 'wght' 200;">local_offer</span>
+</div>
+</div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg mb-stack-md text-on-surface">Recibe ofertas</h2>
+<p class="font-body-md md:font-body-lg text-body-md md:text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                Conéctate con producciones y clientes que buscan tu talento. Comienza a trabajar.
+            </p>
+</section>
+</main>
+<!-- Bottom Controls -->
+<footer class="fixed bottom-0 left-0 w-full p-margin-mobile md:p-margin-desktop flex justify-between items-center z-50">
+<div class="flex gap-2" id="indicators">
+<div class="w-12 h-[2px] bg-on-surface transition-all duration-300" id="ind-1"></div>
+<div class="w-12 h-[2px] bg-surface-variant transition-all duration-300" id="ind-2"></div>
+<div class="w-12 h-[2px] bg-surface-variant transition-all duration-300" id="ind-3"></div>
+</div>
+<button class="group relative px-8 py-4 bg-[#F5F5F5] text-[#000000] font-label-sm text-label-sm uppercase tracking-widest transition-all duration-150 overflow-hidden hover:bg-transparent hover:text-[#F5F5F5]" id="nextBtn">
+<span class="relative z-10 flex items-center gap-2">
+                Siguiente
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</span>
+<div class="absolute inset-0 border border-[#F5F5F5] opacity-0 group-hover:opacity-100 transition-opacity duration-150"></div>
+</button>
+</footer>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide');
+            const indicators = [document.getElementById('ind-1'), document.getElementById('ind-2'), document.getElementById('ind-3')];
+            const nextBtn = document.getElementById('nextBtn');
+            let currentSlide = 0;
+
+            function updateUI() {
+                slides.forEach((slide, index) => {
+                    if (index === currentSlide) {
+                        slide.classList.add('active');
+                    } else {
+                        slide.classList.remove('active');
+                    }
+                });
+
+                indicators.forEach((ind, index) => {
+                    if (index === currentSlide) {
+                        ind.classList.remove('bg-surface-variant');
+                        ind.classList.add('bg-on-surface');
+                    } else {
+                        ind.classList.remove('bg-on-surface');
+                        ind.classList.add('bg-surface-variant');
+                    }
+                });
+
+                if (currentSlide === slides.length - 1) {
+                    nextBtn.querySelector('.z-10').innerHTML = 'Comenzar <span class="material-symbols-outlined text-sm">check</span>';
+                } else {
+                    nextBtn.querySelector('.z-10').innerHTML = 'Siguiente <span class="material-symbols-outlined text-sm">arrow_forward</span>';
+                }
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    updateUI();
+                } else {
+                    // Action for completing onboarding
+                    console.log('Onboarding complete');
+                    // window.location.href = '/dashboard';
+                }
+            });
+        });
+    </script>
+</body></html>

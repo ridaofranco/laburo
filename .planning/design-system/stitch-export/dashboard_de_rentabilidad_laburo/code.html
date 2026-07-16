@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OPERATIONS | Analytics Dashboard</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@500&amp;family=Inter:wght@400&amp;family=Syne:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-fixed": "#e2e2e2",
+                        "surface-container-high": "#2a2a2a",
+                        "tertiary-fixed-dim": "#b9c3ff",
+                        "inverse-surface": "#e5e2e1",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "on-primary-fixed-variant": "#474747",
+                        "surface-bright": "#393939",
+                        "error": "#ffb4ab",
+                        "surface-variant": "#353535",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "primary": "#c6c6c6",
+                        "on-secondary-container": "#b4b5b5",
+                        "on-tertiary-container": "#4266ff",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-primary-fixed": "#1b1b1b",
+                        "on-tertiary-fixed": "#001257",
+                        "inverse-primary": "#5e5e5e",
+                        "secondary-container": "#454747",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "primary-container": "#000000",
+                        "outline-variant": "#4c4546",
+                        "surface-container": "#20201f",
+                        "on-background": "#e5e2e1",
+                        "on-surface": "#e5e2e1",
+                        "on-secondary-fixed-variant": "#454747",
+                        "tertiary": "#b9c3ff",
+                        "secondary": "#c6c6c7",
+                        "on-primary": "#303030",
+                        "surface": "#131313",
+                        "secondary-fixed": "#e2e2e2",
+                        "surface-tint": "#c6c6c6",
+                        "on-surface-variant": "#cfc4c5",
+                        "surface-container-highest": "#353535",
+                        "tertiary-fixed": "#dde1ff",
+                        "tertiary-container": "#000000",
+                        "error-container": "#93000a",
+                        "outline": "#988e90",
+                        "background": "#131313",
+                        "surface-dim": "#131313",
+                        "inverse-on-surface": "#313030",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "surface-container-low": "#1c1b1b",
+                        "on-tertiary-fixed-variant": "#0033c0",
+                        "on-tertiary": "#00228a",
+                        "on-secondary": "#2f3131",
+                        "on-primary-container": "#757575"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "margin-desktop": "80px",
+                        "container-max": "1440px",
+                        "stack-sm": "8px",
+                        "stack-md": "24px",
+                        "gutter": "32px",
+                        "section-gap": "160px",
+                        "margin-mobile": "24px",
+                        "stack-lg": "48px"
+                    },
+                    fontFamily: {
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Geist"],
+                        "headline-md": ["Syne"],
+                        "headline-lg-mobile": ["Syne"],
+                        "headline-lg": ["Syne"],
+                        "body-md": ["Inter"],
+                        "display-xl": ["Syne"]
+                    },
+                    fontSize: {
+                        "body-lg": ["18px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "140%", "letterSpacing": "0.1em", "fontWeight": "500" }],
+                        "headline-md": ["32px", { "lineHeight": "120%", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["40px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["64px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "display-xl": ["120px", { "lineHeight": "110%", "letterSpacing": "-0.04em", "fontWeight": "800" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Radical Minimalism / Blueprint Aesthetic Custom Styles */
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, theme('colors.surface-container-high') 1px, transparent 1px),
+                linear-gradient(to bottom, theme('colors.surface-container-high') 1px, transparent 1px);
+        }
+        
+        .hairline-border {
+            border: 1px solid theme('colors.surface-container-high');
+        }
+        
+        .metric-card {
+            transition: border-color 0.15s ease-in-out;
+        }
+        
+        .metric-card:hover {
+            border-color: theme('colors.tertiary');
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: theme('colors.background');
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.surface-container-high');
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.surface-variant');
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg min-h-screen flex selection:bg-tertiary selection:text-tertiary-container">
+<!-- TopNavBar (Mobile Only) -->
+<header class="md:hidden flex justify-between items-center w-full px-margin-mobile py-8 border-b border-outline-variant bg-background sticky top-0 z-50">
+<div class="font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-tighter text-on-background uppercase">
+            EVENT.LOG
+        </div>
+<button class="material-symbols-outlined text-primary cursor-pointer active:opacity-80 transition-opacity">
+            menu
+        </button>
+</header>
+<!-- SideNavBar (Desktop) -->
+<nav class="hidden md:flex fixed left-0 top-0 h-screen w-64 bg-background dark:bg-background border-r border-outline-variant flex-col py-margin-mobile gap-stack-lg z-40">
+<!-- Header Info -->
+<div class="px-6 flex flex-col gap-2">
+<h1 class="font-headline-md text-headline-md text-on-background uppercase tracking-tighter">OPERATIONS</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant tracking-widest">V.01.24</p>
+</div>
+<!-- Main Tabs -->
+<ul class="flex flex-col gap-2 mt-4 flex-1">
+<li class="pl-4 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all duration-150 cursor-pointer py-3">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest">Dashboard</span>
+</div>
+</li>
+<li class="pl-4 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all duration-150 cursor-pointer py-3">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest">Roster</span>
+</div>
+</li>
+<li class="pl-4 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all duration-150 cursor-pointer py-3">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined">event_repeat</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest">Timelines</span>
+</div>
+</li>
+<li class="pl-4 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all duration-150 cursor-pointer py-3">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest">Inventory</span>
+</div>
+</li>
+<li class="text-primary font-bold border-l-2 border-primary pl-4 hover:bg-surface-container transition-all duration-150 cursor-pointer py-3 bg-surface-container-low">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest">Reports</span>
+</div>
+</li>
+</ul>
+<!-- CTA & Footer -->
+<div class="px-6 flex flex-col gap-6 mt-auto">
+<button class="w-full bg-primary-fixed text-primary-container font-label-sm text-label-sm uppercase tracking-widest py-4 hover:bg-transparent hover:text-primary-fixed border border-transparent hover:border-primary-fixed transition-colors duration-150">
+                Quick Dispatch
+            </button>
+<ul class="flex flex-col gap-4 border-t border-surface-container-high pt-6">
+<li class="flex items-center gap-4 text-on-surface-variant hover:text-on-surface transition-all duration-150 cursor-pointer">
+<span class="material-symbols-outlined text-[18px]">help_outline</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest">Support</span>
+</li>
+<li class="flex items-center gap-4 text-on-surface-variant hover:text-on-surface transition-all duration-150 cursor-pointer">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest">Sign Out</span>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Canvas -->
+<main class="flex-1 md:ml-64 relative min-h-screen grid-bg overflow-x-hidden">
+<div class="w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg md:py-section-gap flex flex-col gap-section-gap">
+<!-- Header Section -->
+<section class="flex flex-col gap-stack-md">
+<div class="flex justify-between items-end border-b border-surface-container-high pb-stack-sm">
+<h2 class="font-display-xl text-display-xl text-on-background uppercase tracking-tighter leading-none">Yield<br/>Analysis</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Q3 Financials // 2024</p>
+</div>
+</section>
+<!-- Massive Metrics Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Profit Margin (Massive) -->
+<div class="md:col-span-8 bg-surface-container-lowest hairline-border p-stack-md flex flex-col justify-between metric-card min-h-[400px]">
+<div class="flex justify-between items-start">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Net Profit Margin</span>
+<span class="material-symbols-outlined text-tertiary">trending_up</span>
+</div>
+<div>
+<div class="font-display-xl text-display-xl text-on-background tracking-tighter leading-none">
+                            42.8<span class="text-on-surface-variant">%</span>
+</div>
+<div class="font-body-md text-body-md text-on-surface-variant mt-4 max-w-md">
+                            Aggregated across all active venues and staffing rosters. Reflects a +3.2% optimization index vs previous quarter.
+                        </div>
+</div>
+</div>
+<!-- Projected Expenses -->
+<div class="md:col-span-4 bg-surface-container-lowest hairline-border p-stack-md flex flex-col justify-between metric-card min-h-[400px]">
+<div class="flex justify-between items-start">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Burn Rate Proj.</span>
+<span class="material-symbols-outlined text-on-surface-variant">account_balance_wallet</span>
+</div>
+<div class="w-full h-32 mt-8 border-b border-surface-container-high relative flex items-end justify-between px-2 pb-2">
+<!-- Ultra-minimalist Bar Chart -->
+<div class="w-8 bg-surface-variant h-[40%] hover:bg-tertiary transition-colors cursor-crosshair"></div>
+<div class="w-8 bg-surface-variant h-[60%] hover:bg-tertiary transition-colors cursor-crosshair"></div>
+<div class="w-8 bg-surface-variant h-[50%] hover:bg-tertiary transition-colors cursor-crosshair"></div>
+<div class="w-8 bg-primary h-[85%] hover:bg-tertiary transition-colors cursor-crosshair"></div>
+</div>
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface-variant mt-2 px-2">
+<span>JUL</span>
+<span>AUG</span>
+<span>SEP</span>
+<span class="text-on-background">OCT</span>
+</div>
+<div class="mt-8">
+<div class="font-headline-lg text-headline-lg text-on-background tracking-tighter leading-none">
+                            $1.2M
+                        </div>
+</div>
+</div>
+</section>
+<!-- Staff Reliability Ranking (Swiss Typography Table) -->
+<section class="flex flex-col gap-stack-md">
+<div class="border-b border-surface-container-high pb-stack-sm flex justify-between items-end">
+<h3 class="font-headline-md text-headline-md text-on-background uppercase tracking-tighter">Roster Reliability Index</h3>
+<button class="font-label-sm text-label-sm text-on-background uppercase tracking-widest border border-outline-variant px-4 py-2 hover:bg-on-background hover:text-background transition-colors duration-150">
+                        Export CSV
+                    </button>
+</div>
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[800px]">
+<thead>
+<tr class="border-b border-surface-container-high">
+<th class="py-stack-md pr-stack-md font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-normal w-16">Rank</th>
+<th class="py-stack-md px-stack-md font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-normal">Operative ID</th>
+<th class="py-stack-md px-stack-md font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-normal text-right">Fulfillment Rate</th>
+<th class="py-stack-md pl-stack-md font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-normal text-right">Shifts Logged</th>
+</tr>
+</thead>
+<tbody class="font-body-lg text-body-lg">
+<tr class="border-b border-surface-container-high hover:bg-surface-container-lowest transition-colors group cursor-crosshair">
+<td class="py-stack-md pr-stack-md text-on-surface-variant">01</td>
+<td class="py-stack-md px-stack-md text-on-background font-medium group-hover:text-tertiary transition-colors">STF-8892-ALPHA</td>
+<td class="py-stack-md px-stack-md text-on-background text-right">99.8%</td>
+<td class="py-stack-md pl-stack-md text-on-surface-variant text-right">142</td>
+</tr>
+<tr class="border-b border-surface-container-high hover:bg-surface-container-lowest transition-colors group cursor-crosshair">
+<td class="py-stack-md pr-stack-md text-on-surface-variant">02</td>
+<td class="py-stack-md px-stack-md text-on-background font-medium group-hover:text-tertiary transition-colors">STF-1104-BRAVO</td>
+<td class="py-stack-md px-stack-md text-on-background text-right">98.5%</td>
+<td class="py-stack-md pl-stack-md text-on-surface-variant text-right">128</td>
+</tr>
+<tr class="border-b border-surface-container-high hover:bg-surface-container-lowest transition-colors group cursor-crosshair">
+<td class="py-stack-md pr-stack-md text-on-surface-variant">03</td>
+<td class="py-stack-md px-stack-md text-on-background font-medium group-hover:text-tertiary transition-colors">STF-4421-DELTA</td>
+<td class="py-stack-md px-stack-md text-on-background text-right">97.2%</td>
+<td class="py-stack-md pl-stack-md text-on-surface-variant text-right">105</td>
+</tr>
+<tr class="border-b border-surface-container-high hover:bg-surface-container-lowest transition-colors group cursor-crosshair">
+<td class="py-stack-md pr-stack-md text-on-surface-variant">04</td>
+<td class="py-stack-md px-stack-md text-on-background font-medium group-hover:text-tertiary transition-colors">STF-9099-ECHO</td>
+<td class="py-stack-md px-stack-md text-on-background text-right">95.0%</td>
+<td class="py-stack-md pl-stack-md text-on-surface-variant text-right">98</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+<!-- Footer Component -->
+<footer class="w-full px-margin-mobile md:px-margin-desktop py-stack-md flex flex-col md:flex-row justify-between items-center border-t border-outline-variant bg-background mt-section-gap">
+<div class="font-label-sm text-label-sm text-on-surface-variant mb-4 md:mb-0">
+                ©2024 RADICAL MINIMALISM ARCHIVE
+            </div>
+<div class="flex gap-stack-md">
+<a class="font-label-sm text-label-sm uppercase text-on-surface-variant hover:text-on-surface instant transition-colors" href="#">Privacy</a>
+<a class="font-label-sm text-label-sm uppercase text-on-surface-variant hover:text-on-surface instant transition-colors" href="#">Terms</a>
+<a class="font-label-sm text-label-sm uppercase text-on-surface-variant hover:text-on-surface instant transition-colors" href="#">API Status</a>
+</div>
+</footer>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full bg-background border-t border-outline-variant flex justify-around py-4 z-50">
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-label-sm text-[10px]">Dashboard</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-sm text-[10px]">Roster</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary border-t-2 border-primary -mt-4 pt-4" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-label-sm text-[10px]">Reports</span>
+</a>
+</nav>
+</body></html>

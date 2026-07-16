@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Perfil de Candidato - Sabrina Soler | StaffManager</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Geist:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#1b1b1b",
+                        "surface-tint": "#c6c6c6",
+                        "on-surface": "#e5e2e1",
+                        "secondary-fixed": "#e2e2e2",
+                        "error-container": "#93000a",
+                        "surface-variant": "#353535",
+                        "on-secondary-fixed-variant": "#454747",
+                        "surface-container-highest": "#353535",
+                        "on-primary": "#303030",
+                        "surface-container-low": "#1c1b1b",
+                        "surface-dim": "#131313",
+                        "inverse-surface": "#e5e2e1",
+                        "background": "#131313",
+                        "on-tertiary-fixed": "#001257",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-primary-container": "#757575",
+                        "on-tertiary": "#00228a",
+                        "on-primary-fixed-variant": "#474747",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "outline-variant": "#4c4546",
+                        "on-background": "#e5e2e1",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "surface": "#131313",
+                        "tertiary": "#b9c3ff",
+                        "secondary-container": "#454747",
+                        "surface-container-high": "#2a2a2a",
+                        "primary-fixed": "#e2e2e2",
+                        "inverse-on-surface": "#313030",
+                        "primary": "#c6c6c6",
+                        "secondary": "#c6c6c7",
+                        "surface-container": "#20201f",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "on-secondary": "#2f3131",
+                        "on-error": "#690005",
+                        "tertiary-container": "#000000",
+                        "inverse-primary": "#5e5e5e",
+                        "tertiary-fixed": "#dde1ff",
+                        "primary-container": "#000000",
+                        "surface-bright": "#393939",
+                        "on-tertiary-fixed-variant": "#0033c0",
+                        "on-surface-variant": "#cfc4c5",
+                        "on-tertiary-container": "#4266ff",
+                        "tertiary-fixed-dim": "#b9c3ff",
+                        "on-secondary-container": "#b4b5b5",
+                        "error": "#ffb4ab",
+                        "on-error-container": "#ffdad6",
+                        "outline": "#988e90"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "80px",
+                        "section-gap": "160px",
+                        "stack-sm": "8px",
+                        "container-max": "1440px",
+                        "stack-md": "24px",
+                        "margin-mobile": "24px",
+                        "gutter": "32px",
+                        "stack-lg": "48px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Syne"],
+                        "display-xl": ["Syne"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Syne"],
+                        "label-sm": ["Geist"],
+                        "headline-lg": ["Syne"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["40px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-xl": ["120px", { "lineHeight": "110%", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "headline-md": ["32px", { "lineHeight": "120%", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "140%", "letterSpacing": "0.1em", "fontWeight": "500" }],
+                        "headline-lg": ["64px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #000000; /* Absolute black as requested */
+            color: #e5e2e1;
+        }
+        .hairline-border {
+            border-color: #1a1a1a;
+            border-width: 1px;
+        }
+        .hairline-top {
+            border-top: 1px solid #1a1a1a;
+        }
+        .hairline-bottom {
+            border-bottom: 1px solid #1a1a1a;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased overflow-x-hidden selection:bg-surface-variant selection:text-on-background">
+<!-- TopAppBar (Mobile) -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 bg-background/80 backdrop-blur-md border-b border-outline-variant md:hidden">
+<div class="font-headline-md text-headline-md font-bold text-on-background tracking-tighter">
+            StaffManager
+        </div>
+<div class="flex items-center gap-4 text-on-background">
+<span class="material-symbols-outlined scale-95 transition-transform hover:text-primary transition-colors cursor-pointer" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined scale-95 transition-transform hover:text-primary transition-colors cursor-pointer" data-icon="help_outline">help_outline</span>
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant cursor-pointer">
+<img alt="Admin Avatar" class="w-full h-full object-cover" data-alt="Minimalist professional avatar of an admin user. High contrast black and white photography. Neutral lighting, clean background, sharp focus, corporate chic aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGrtA9Ghr0nkz1zCjRX7ZfYr0U3woP_bickLbnm71hO5G1Gj6ZagogUUN7I8dKFOmEI4GwElmJKBcb5qWgq0vGgN15LsW7cIRfHjlvxEG2O4CfIv5m1GWyBPEV9J8wN7OERfT4dz1t4IyC_SmwIXvN_-Y9_on1vJzo0LZbz0KyahCeBQnYYUw404kByGr8RYuWM4sOPazmokPw5dryN870DaqUoQYMDhDst6lQsR--RSINF9tr55QEiU1Tcu6_4pzAmY6_Sy_2kHU"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar (Desktop) -->
+<nav class="fixed left-0 top-0 h-full flex flex-col p-stack-md h-screen w-64 hidden md:flex border-r border-outline-variant bg-background dark:bg-surface-container-lowest z-40">
+<div class="mb-stack-lg flex flex-col">
+<h1 class="font-headline-md text-headline-md font-bold tracking-tighter text-on-background">StaffManager</h1>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase mt-1">Admin Console</span>
+</div>
+<ul class="flex flex-col gap-2 flex-grow font-body-md text-body-md">
+<li>
+<a class="flex items-center gap-3 p-2 rounded-DEFAULT hover:bg-surface-variant transition-colors duration-150 active:opacity-80 transition-opacity text-on-surface-variant font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-2 rounded-DEFAULT hover:bg-surface-variant transition-colors duration-150 active:opacity-80 transition-opacity text-on-background font-bold border-r-2 border-primary bg-surface-container-low" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                    Candidatos
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-2 rounded-DEFAULT hover:bg-surface-variant transition-colors duration-150 active:opacity-80 transition-opacity text-on-surface-variant font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="post_add">post_add</span>
+                    Ofertas
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-2 rounded-DEFAULT hover:bg-surface-variant transition-colors duration-150 active:opacity-80 transition-opacity text-on-surface-variant font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="event_available">event_available</span>
+                    Eventos
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 p-2 rounded-DEFAULT hover:bg-surface-variant transition-colors duration-150 active:opacity-80 transition-opacity text-on-surface-variant font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                    Ajustes
+                </a>
+</li>
+</ul>
+<div class="mt-auto flex flex-col gap-stack-md pt-stack-md hairline-top">
+<button class="w-full py-3 px-4 bg-primary text-background font-label-sm text-label-sm uppercase font-bold tracking-widest hover:bg-transparent hover:text-primary border border-transparent hover:border-primary transition-all duration-150 rounded-none">
+                Crear Evento
+            </button>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-variant overflow-hidden border border-outline-variant">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Minimalist professional avatar of an admin user. High contrast black and white photography. Neutral lighting, clean background, sharp focus, corporate chic aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiq0x3l0Ekc6M8csf9A1k83zAz1ib9bDsaMWb-zaWUIZS535RThC_xWdxK1zBIYRqLke50h1BKdY_KeHWYJSTB7h1KhRZW4SqcTYLlrJOoR-vja6-pYfZww4CCr0bDdkrchrjFGBDKNAfwA_HJ2NOOUMO5KBqNFz-rYNnBiCYIpohifRO7mIGyWzzRhfyBB4rLxODGK8LBgQV5byv7KSc2Yn6xZUuzFIMg6bSkUvJGSbDECOccupOSRfJqmXFiW1cbSfutA1zuXC8"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-background font-bold">Admin</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">System</span>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-20 md:pt-0 md:ml-64 min-h-screen pb-24 md:pb-0">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg md:py-section-gap">
+<!-- Breadcrumb / Back -->
+<div class="mb-stack-lg flex items-center gap-2">
+<a class="flex items-center gap-2 font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+                    Candidatos
+                </a>
+</div>
+<!-- Profile Header -->
+<section class="mb-section-gap">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-end">
+<div class="lg:col-span-8">
+<h1 class="font-display-xl text-display-xl uppercase tracking-tighter text-on-background mb-stack-sm md:text-[140px] leading-none">
+                            Sabrina<br/>Soler
+                        </h1>
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest flex flex-wrap gap-4 items-center">
+<span>Especialista en Protocolo</span>
+<span class="w-1 h-1 rounded-full bg-surface-variant"></span>
+<span>ID: CD-8942-X</span>
+<span class="w-1 h-1 rounded-full bg-surface-variant"></span>
+<span class="flex items-center gap-1 text-primary"><span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> Disponible</span>
+</div>
+</div>
+<div class="lg:col-span-4 flex lg:justify-end gap-4 mt-stack-md lg:mt-0">
+<button class="px-6 py-4 border border-outline-variant text-on-background font-label-sm text-label-sm uppercase tracking-widest hover:border-primary hover:text-primary transition-colors duration-150">
+                            Rechazar
+                        </button>
+<button class="px-6 py-4 bg-primary text-background border border-primary font-label-sm text-label-sm uppercase tracking-widest font-bold hover:bg-transparent hover:text-primary transition-colors duration-150">
+                            Aprobar
+                        </button>
+</div>
+</div>
+</section>
+<!-- Information Blocks -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-x-gutter gap-y-stack-lg hairline-top pt-stack-lg mb-section-gap">
+<div class="lg:col-span-4 flex flex-col gap-stack-md">
+<h2 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Contacto</h2>
+<ul class="flex flex-col gap-4 font-body-lg text-body-lg text-on-background">
+<li class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant font-light">mail</span>
+                            s.soler@example.com
+                        </li>
+<li class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant font-light">call</span>
+                            +34 600 123 456
+                        </li>
+<li class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant font-light">location_on</span>
+                            Madrid, España
+                        </li>
+</ul>
+</div>
+<div class="lg:col-span-4 flex flex-col gap-stack-md">
+<h2 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Métricas</h2>
+<ul class="flex flex-col gap-4">
+<li class="flex flex-col gap-1">
+<div class="flex justify-between font-label-sm text-label-sm uppercase tracking-widest">
+<span class="text-on-background">Eventos Asignados</span>
+<span class="text-on-surface-variant">14</span>
+</div>
+<div class="w-full h-px bg-surface-variant"></div>
+</li>
+<li class="flex flex-col gap-1">
+<div class="flex justify-between font-label-sm text-label-sm uppercase tracking-widest">
+<span class="text-on-background">Valoración Media</span>
+<span class="text-on-surface-variant">4.8 / 5.0</span>
+</div>
+<div class="w-full h-px bg-surface-variant"></div>
+</li>
+<li class="flex flex-col gap-1">
+<div class="flex justify-between font-label-sm text-label-sm uppercase tracking-widest">
+<span class="text-on-background">Tasa de Asistencia</span>
+<span class="text-on-surface-variant">100%</span>
+</div>
+<div class="w-full h-px bg-surface-variant"></div>
+</li>
+</ul>
+</div>
+<div class="lg:col-span-4 flex flex-col gap-stack-md">
+<h2 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Idiomas</h2>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 border border-outline-variant rounded-full font-label-sm text-label-sm text-on-background uppercase tracking-widest">Español (Nativo)</span>
+<span class="px-3 py-1 border border-outline-variant rounded-full font-label-sm text-label-sm text-on-background uppercase tracking-widest">Inglés (C1)</span>
+<span class="px-3 py-1 border border-outline-variant rounded-full font-label-sm text-label-sm text-on-background uppercase tracking-widest">Francés (B2)</span>
+</div>
+</div>
+</section>
+<!-- CV Viewer -->
+<section class="mb-section-gap">
+<div class="flex justify-between items-end mb-stack-md">
+<h2 class="font-headline-md text-headline-md font-bold tracking-tighter text-on-background">Currículum Vitae</h2>
+<button class="flex items-center gap-2 font-label-sm text-label-sm text-on-background hover:text-primary transition-colors uppercase tracking-widest">
+<span class="material-symbols-outlined text-sm">download</span>
+                        Descargar PDF
+                    </button>
+</div>
+<div class="w-full aspect-[1/1.414] md:aspect-[16/9] lg:aspect-[21/9] bg-[#0a0a0a] border border-[#1a1a1a] relative overflow-hidden group cursor-pointer flex items-center justify-center p-stack-lg">
+<!-- Placeholder for CV content view -->
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#353535 1px, transparent 1px); background-size: 24px 24px;"></div>
+<div class="relative z-10 flex flex-col items-center gap-stack-md opacity-50 group-hover:opacity-100 transition-opacity duration-300">
+<span class="material-symbols-outlined text-6xl text-on-surface-variant" data-icon="description">description</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest border border-outline-variant px-4 py-2 hover:border-primary hover:text-primary transition-colors">Abrir Visor Completo</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 bg-background dark:bg-surface-container-lowest border-t border-outline-variant md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant transition-all duration-150 active:bg-surface-variant w-full h-full" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold transition-all duration-150 active:bg-surface-variant w-full h-full relative" href="#">
+<div class="absolute -top-px left-1/4 right-1/4 h-[2px] bg-primary"></div>
+<span class="material-symbols-outlined" data-icon="person_search" data-weight="fill" style="font-variation-settings: 'FILL' 1;">person_search</span>
+<span class="font-label-sm text-label-sm mt-1">Staff</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant transition-all duration-150 active:bg-surface-variant w-full h-full" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="font-label-sm text-label-sm mt-1">Ofertas</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant transition-all duration-150 active:bg-surface-variant w-full h-full" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-sm text-label-sm mt-1">Eventos</span>
+</a>
+</nav>
+</body></html>

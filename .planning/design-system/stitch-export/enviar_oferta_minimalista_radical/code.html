@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create Proposal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&amp;family=Inter:wght@400&amp;family=Geist:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#000000",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "on-error": "#690005",
+                        "error": "#ffb4ab",
+                        "secondary-fixed": "#e2e2e2",
+                        "on-surface": "#e5e2e1",
+                        "on-primary": "#303030",
+                        "secondary": "#c6c6c7",
+                        "tertiary": "#b9c3ff",
+                        "surface-container-low": "#1c1b1b",
+                        "tertiary-fixed-dim": "#b9c3ff",
+                        "on-tertiary-fixed": "#001257",
+                        "on-tertiary-container": "#4266ff",
+                        "on-background": "#e5e2e1",
+                        "error-container": "#93000a",
+                        "secondary-container": "#454747",
+                        "on-primary-container": "#757575",
+                        "surface": "#131313",
+                        "on-primary-fixed": "#1b1b1b",
+                        "background": "#131313",
+                        "on-tertiary-fixed-variant": "#0033c0",
+                        "on-secondary": "#2f3131",
+                        "on-secondary-container": "#b4b5b5",
+                        "primary-fixed": "#e2e2e2",
+                        "inverse-on-surface": "#313030",
+                        "on-secondary-fixed-variant": "#454747",
+                        "surface-bright": "#393939",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-tertiary": "#00228a",
+                        "on-surface-variant": "#cfc4c5",
+                        "tertiary-fixed": "#dde1ff",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-dim": "#131313",
+                        "surface-container": "#20201f",
+                        "surface-tint": "#c6c6c6",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "primary-container": "#000000",
+                        "primary": "#c6c6c6",
+                        "surface-variant": "#353535",
+                        "inverse-surface": "#e5e2e1",
+                        "on-primary-fixed-variant": "#474747",
+                        "surface-container-highest": "#353535",
+                        "outline": "#988e90",
+                        "outline-variant": "#4c4546",
+                        "inverse-primary": "#5e5e5e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "stack-sm": "8px",
+                        "margin-mobile": "24px",
+                        "margin-desktop": "80px",
+                        "section-gap": "160px",
+                        "gutter": "32px",
+                        "stack-md": "24px",
+                        "stack-lg": "48px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Syne"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Syne"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Geist"],
+                        "display-xl": ["Syne"],
+                        "headline-lg-mobile": ["Syne"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["32px", { "lineHeight": "120%", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "headline-lg": ["64px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "140%", "letterSpacing": "0.1em", "fontWeight": "500" }],
+                        "display-xl": ["120px", { "lineHeight": "110%", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+                        "headline-lg-mobile": ["40px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom input reset for radical minimalism */
+        input:focus, select:focus, textarea:focus {
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: 0.5;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md overflow-x-hidden selection:bg-primary selection:text-on-primary">
+<!-- Minimalist Exit Control -->
+<header class="w-full px-margin-mobile md:px-margin-desktop py-stack-md flex justify-end items-center absolute top-0 z-50">
+<a class="group flex items-center gap-2 cursor-pointer opacity-70 hover:opacity-100 transition-opacity duration-150" href="#">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-background">Discard</span>
+<span class="material-symbols-outlined text-[18px]">close</span>
+</a>
+</header>
+<main class="w-full max-w-container-max mx-auto min-h-screen grid grid-cols-1 md:grid-cols-12 md:gap-gutter px-margin-mobile md:px-margin-desktop py-section-gap items-center">
+<!-- Asymmetric Left Content - High-end Imagery -->
+<section class="hidden md:block md:col-span-4 h-full min-h-[600px] relative overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center grayscale opacity-80 mix-blend-luminosity" data-alt="A stark, high-contrast black and white architectural photograph of brutalist concrete structures forming sharp geometric angles. Deep shadows and bright highlights emphasize the texture and scale. The composition is highly minimalist, structural, and monumental, evoking a sense of corporate power and strict discipline." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAmKKvdBEXIimZArQaTezp5RaqAfjfhzZZIkfvCnX0mkhYDXLJVFVVEBjm7yXhBlr1jinea3bxH9XOkc4Ar77kmWrIha-AZYv1vQP3dpLxIwWWuQltHfPjcV4CZSDAq42ruFEXYSw6Cps0asrwl_LzIqt2nzmOBuw0EcYbZD076SH3LIf0Ql6G_9q9zd6Q_pT8j5J-uT0jpcTawwwy2b03g6VbTm0alxP_zYk6vwaLsEPEm4wR5mCkZ8KtX_8ncIuySS3yXuAap1Co')"></div>
+<div class="absolute inset-0 border border-outline-variant/30 pointer-events-none"></div>
+</section>
+<!-- Right Side - Form Canvas -->
+<section class="col-span-1 md:col-span-6 md:col-start-6 flex flex-col justify-center">
+<div class="mb-stack-lg md:mb-section-gap">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest mb-4 block">New Document</span>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase text-on-background">
+                    Proposal
+                </h1>
+</div>
+<form class="flex flex-col gap-stack-lg" onsubmit="event.preventDefault();">
+<!-- Field: Event Name -->
+<div class="group relative">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest absolute -top-6 left-0 transition-all duration-200" for="eventName">Event Name</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant px-0 py-2 font-body-lg text-body-lg text-on-background placeholder:text-surface-variant focus:border-primary transition-colors duration-200" id="eventName" name="eventName" placeholder="e.g. Milan Fashion Week '25" type="text"/>
+</div>
+<!-- Field: Role -->
+<div class="group relative">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest absolute -top-6 left-0 transition-all duration-200" for="role">Assigned Role</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant px-0 py-2 font-body-lg text-body-lg text-on-background placeholder:text-surface-variant focus:border-primary transition-colors duration-200" id="role" name="role" placeholder="e.g. Lead Coordinator" type="text"/>
+</div>
+<!-- Grid for smaller inputs -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg">
+<!-- Field: Date -->
+<div class="group relative">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest absolute -top-6 left-0 transition-all duration-200" for="date">Execution Date</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant px-0 py-2 font-body-lg text-body-lg text-on-background focus:border-primary transition-colors duration-200" id="date" name="date" type="date"/>
+</div>
+<!-- Field: Duration -->
+<div class="group relative">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest absolute -top-6 left-0 transition-all duration-200" for="duration">Duration (Hours)</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant px-0 py-2 font-body-lg text-body-lg text-on-background placeholder:text-surface-variant focus:border-primary transition-colors duration-200" id="duration" min="1" name="duration" placeholder="00" type="number"/>
+</div>
+</div>
+<!-- Field: Rate -->
+<div class="group relative mt-4">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest absolute -top-6 left-0 transition-all duration-200" for="rate">Proposed Rate (USD)</label>
+<div class="flex items-center border-b border-outline-variant focus-within:border-primary transition-colors duration-200">
+<span class="font-body-lg text-body-lg text-on-surface-variant pr-2">$</span>
+<input class="w-full bg-transparent border-0 px-0 py-2 font-body-lg text-body-lg text-on-background placeholder:text-surface-variant focus:ring-0" id="rate" min="0" name="rate" placeholder="0.00" step="0.01" type="number"/>
+</div>
+</div>
+<!-- Spacer -->
+<div class="h-8"></div>
+<!-- Action Button -->
+<button class="w-full py-6 border-transparent bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-widest hover:bg-transparent hover:border-primary hover:border hover:text-primary transition-all duration-150 flex justify-center items-center gap-4 group" type="submit">
+<span>Enviar Oferta</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</form>
+</section>
+</main>
+</body></html>

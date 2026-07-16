@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestión de Documentación - EVENT.LOG</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@500&amp;family=Inter:wght@400&amp;family=Syne:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#e2e2e2",
+                        "surface-container-high": "#2a2a2a",
+                        "tertiary-fixed-dim": "#b9c3ff",
+                        "inverse-surface": "#e5e2e1",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "on-primary-fixed-variant": "#474747",
+                        "surface-bright": "#393939",
+                        "error": "#ffb4ab",
+                        "surface-variant": "#353535",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "primary": "#c6c6c6",
+                        "on-secondary-container": "#b4b5b5",
+                        "on-tertiary-container": "#4266ff",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-primary-fixed": "#1b1b1b",
+                        "on-tertiary-fixed": "#001257",
+                        "inverse-primary": "#5e5e5e",
+                        "secondary-container": "#454747",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "primary-container": "#000000",
+                        "outline-variant": "#4c4546",
+                        "surface-container": "#20201f",
+                        "on-background": "#e5e2e1",
+                        "on-surface": "#e5e2e1",
+                        "on-secondary-fixed-variant": "#454747",
+                        "tertiary": "#b9c3ff",
+                        "secondary": "#c6c6c7",
+                        "on-primary": "#303030",
+                        "surface": "#131313",
+                        "secondary-fixed": "#e2e2e2",
+                        "surface-tint": "#c6c6c6",
+                        "on-surface-variant": "#cfc4c5",
+                        "surface-container-highest": "#353535",
+                        "tertiary-fixed": "#dde1ff",
+                        "tertiary-container": "#000000",
+                        "error-container": "#93000a",
+                        "outline": "#988e90",
+                        "background": "#131313",
+                        "surface-dim": "#131313",
+                        "inverse-on-surface": "#313030",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "surface-container-low": "#1c1b1b",
+                        "on-tertiary-fixed-variant": "#0033c0",
+                        "on-tertiary": "#00228a",
+                        "on-secondary": "#2f3131",
+                        "on-primary-container": "#757575"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "80px",
+                        "container-max": "1440px",
+                        "stack-sm": "8px",
+                        "stack-md": "24px",
+                        "gutter": "32px",
+                        "section-gap": "160px",
+                        "margin-mobile": "24px",
+                        "stack-lg": "48px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Geist"],
+                        "headline-md": ["Syne"],
+                        "headline-lg-mobile": ["Syne"],
+                        "headline-lg": ["Syne"],
+                        "body-md": ["Inter"],
+                        "display-xl": ["Syne"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "140%", "letterSpacing": "0.1em", "fontWeight": "500" }],
+                        "headline-md": ["32px", { "lineHeight": "120%", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["40px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["64px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "display-xl": ["120px", { "lineHeight": "110%", "letterSpacing": "-0.04em", "fontWeight": "800" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { background-color: #000000; color: #e5e2e1; }
+        .grid-12 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 32px; }
+        .monumental-text { font-family: 'Syne', sans-serif; font-size: 8rem; font-weight: 800; line-height: 1; letter-spacing: -0.05em; text-transform: uppercase; }
+        @media (max-width: 768px) { .monumental-text { font-size: 4rem; } }
+        .hairline-border { border: 1px solid #1A1A1A; }
+        .hairline-bottom { border-bottom: 1px solid #1A1A1A; }
+        .status-approved { color: #81C784; } /* Subtle Green */
+        .status-pending { color: #cfc4c5; } /* Grey */
+        .status-expired { color: #ffb4ab; } /* Error */
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+<!-- TopNavBar Web -->
+<nav class="hidden md:flex flex-col bg-background dark:bg-background docked full-width top-0 border-b border-outline-variant flat no shadows z-50 sticky">
+<div class="flex justify-between items-center w-full px-margin-desktop py-8 max-w-container-max mx-auto">
+<div class="font-headline-lg text-headline-lg font-bold tracking-tighter text-on-background uppercase">
+                EVENT.LOG
+            </div>
+<div class="flex items-center gap-stack-lg">
+<div class="flex items-center gap-stack-md font-headline-md text-headline-md uppercase tracking-tighter">
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-150 cursor-pointer active:opacity-80 transition-opacity" href="#">Staff</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-150 cursor-pointer active:opacity-80 transition-opacity" href="#">Schedule</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-150 cursor-pointer active:opacity-80 transition-opacity" href="#">Venues</a>
+<!-- Active state indication omitted for nav items as this is a sub-page/profile context -->
+</div>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="bg-primary-fixed text-primary-container px-6 py-3 font-label-sm text-label-sm uppercase tracking-widest hover:bg-transparent hover:text-primary-fixed border border-transparent hover:border-primary-fixed transition-all duration-150">Create Event</button>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary dark:text-primary cursor-pointer hover:text-on-surface transition-colors">notifications</span>
+<span class="material-symbols-outlined text-primary dark:text-primary cursor-pointer hover:text-on-surface transition-colors">settings</span>
+</div>
+</div>
+</div>
+</nav>
+<!-- SideNavBar / Mobile TopNav Equivalent logic -->
+<div class="md:hidden flex justify-between items-center p-margin-mobile border-b border-outline-variant sticky top-0 bg-background z-50">
+<div class="font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-tighter text-on-background uppercase">EVENT.LOG</div>
+<span class="material-symbols-outlined text-primary cursor-pointer">menu</span>
+</div>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg md:py-section-gap">
+<!-- Header -->
+<header class="mb-stack-lg md:mb-section-gap">
+<h1 class="monumental-text text-on-surface mb-stack-sm">DIGITAL<br/>WALLET</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Gestión centralizada de credenciales y certificaciones del personal operativo. Mantenga su documentación actualizada para garantizar asignaciones sin interrupciones.</p>
+</header>
+<!-- Documentation Grid (Bento Style) -->
+<div class="grid-12">
+<!-- Document Card: Seguro AP -->
+<div class="col-span-12 md:col-span-6 hairline-border bg-surface-container-lowest p-stack-md hover:border-tertiary-fixed transition-colors duration-300 flex flex-col justify-between min-h-[300px]">
+<div class="flex justify-between items-start mb-stack-lg">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface uppercase tracking-tighter mb-2">Seguro AP</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Accidentes Personales</span>
+</div>
+<span class="material-symbols-outlined text-4xl text-on-surface-variant">health_and_safety</span>
+</div>
+<div>
+<div class="hairline-bottom pb-4 mb-4 flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Estado</span>
+<div class="flex items-center gap-2 status-approved">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-sm text-label-sm uppercase">Aprobado</span>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Vencimiento</span>
+<span class="font-body-md text-body-md text-on-surface">15.10.2024</span>
+</div>
+<button class="w-full mt-6 py-4 hairline-border text-on-surface hover:bg-surface-variant transition-colors font-label-sm text-label-sm uppercase tracking-widest flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">visibility</span> Ver Documento
+                    </button>
+</div>
+</div>
+<!-- Document Card: Carnet de Conducir -->
+<div class="col-span-12 md:col-span-6 hairline-border bg-surface-container-lowest p-stack-md hover:border-tertiary-fixed transition-colors duration-300 flex flex-col justify-between min-h-[300px]">
+<div class="flex justify-between items-start mb-stack-lg">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface uppercase tracking-tighter mb-2">Licencia</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Conducir Cat. B1</span>
+</div>
+<span class="material-symbols-outlined text-4xl text-on-surface-variant">directions_car</span>
+</div>
+<div>
+<div class="hairline-bottom pb-4 mb-4 flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Estado</span>
+<div class="flex items-center gap-2 status-expired">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">error</span>
+<span class="font-label-sm text-label-sm uppercase">Vencido</span>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Vencimiento</span>
+<span class="font-body-md text-body-md status-expired">01.02.2024</span>
+</div>
+<button class="w-full mt-6 py-4 bg-primary-fixed text-primary-container hover:bg-transparent hover:text-primary-fixed border border-transparent hover:border-primary-fixed transition-all duration-150 font-label-sm text-label-sm uppercase tracking-widest flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">upload</span> Actualizar
+                    </button>
+</div>
+</div>
+<!-- Document Card: Certificación RCP -->
+<div class="col-span-12 lg:col-span-8 hairline-border bg-surface-container-lowest p-stack-md hover:border-tertiary-fixed transition-colors duration-300 flex flex-col justify-between min-h-[300px]">
+<div class="flex justify-between items-start mb-stack-lg">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface uppercase tracking-tighter mb-2">Certificación RCP</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Primeros Auxilios Avanzados</span>
+</div>
+<span class="material-symbols-outlined text-4xl text-on-surface-variant">medical_services</span>
+</div>
+<div>
+<div class="hairline-bottom pb-4 mb-4 flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Estado</span>
+<div class="flex items-center gap-2 status-pending">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">pending</span>
+<span class="font-label-sm text-label-sm uppercase">En Revisión</span>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Emitido</span>
+<span class="font-body-md text-body-md text-on-surface">20.03.2024</span>
+</div>
+<div class="mt-6 flex gap-4">
+<button class="flex-1 py-4 hairline-border text-on-surface hover:bg-surface-variant transition-colors font-label-sm text-label-sm uppercase tracking-widest flex items-center justify-center gap-2 opacity-50 cursor-not-allowed">
+<span class="material-symbols-outlined">visibility</span> Ver
+                        </button>
+</div>
+</div>
+</div>
+<!-- Upload Area -->
+<div class="col-span-12 lg:col-span-4 hairline-border bg-surface-container border-dashed border-outline-variant p-stack-md flex flex-col items-center justify-center text-center cursor-pointer hover:bg-surface-container-high transition-colors min-h-[300px]">
+<span class="material-symbols-outlined text-6xl text-on-surface-variant mb-4">cloud_upload</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">NUEVO DOC</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase max-w-[200px]">Arrastre o seleccione PDF / JPG (Max 5MB)</p>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full px-margin-desktop py-stack-md flex justify-between items-center bg-background dark:bg-background full-width bottom-0 border-t border-outline-variant flat no shadows">
+<div class="font-label-sm text-label-sm">
+            ©2024 RADICAL MINIMALISM ARCHIVE
+        </div>
+<div class="flex gap-stack-md font-label-sm text-label-sm uppercase text-on-surface-variant dark:text-on-surface-variant">
+<a class="hover:text-on-surface instant transition-colors" href="#">Privacy</a>
+<a class="hover:text-on-surface instant transition-colors" href="#">Terms</a>
+<a class="hover:text-on-surface instant transition-colors" href="#">API Status</a>
+</div>
+</footer>
+</body></html>

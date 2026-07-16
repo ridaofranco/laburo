@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LABURO - Search Errors</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&amp;family=Inter:wght@400&amp;family=Geist:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#e5e2e1",
+                        "tertiary-fixed": "#dde1ff",
+                        "on-secondary-container": "#b4b5b5",
+                        "surface-container-low": "#1c1b1b",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "surface-container": "#20201f",
+                        "primary-fixed": "#e2e2e2",
+                        "surface-bright": "#393939",
+                        "surface-container-high": "#2a2a2a",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary": "#00228a",
+                        "on-secondary-fixed-variant": "#454747",
+                        "error-container": "#93000a",
+                        "inverse-on-surface": "#313030",
+                        "primary": "#c6c6c6",
+                        "secondary-fixed": "#e2e2e2",
+                        "on-primary-fixed": "#1b1b1b",
+                        "tertiary-fixed-dim": "#b9c3ff",
+                        "background": "#131313",
+                        "secondary-container": "#454747",
+                        "surface-variant": "#353535",
+                        "primary-container": "#000000",
+                        "on-surface-variant": "#cfc4c5",
+                        "surface-container-highest": "#353535",
+                        "surface-tint": "#c6c6c6",
+                        "surface": "#131313",
+                        "secondary": "#c6c6c7",
+                        "on-primary-container": "#757575",
+                        "surface-dim": "#131313",
+                        "on-error": "#690005",
+                        "on-tertiary-fixed": "#001257",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "surface-container-lowest": "#0e0e0e",
+                        "error": "#ffb4ab",
+                        "tertiary-container": "#000000",
+                        "outline": "#988e90",
+                        "on-tertiary-container": "#4266ff",
+                        "tertiary": "#b9c3ff",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "on-primary": "#303030",
+                        "on-background": "#e5e2e1",
+                        "on-tertiary-fixed-variant": "#0033c0",
+                        "on-secondary": "#2f3131",
+                        "inverse-primary": "#5e5e5e",
+                        "on-primary-fixed-variant": "#474747",
+                        "outline-variant": "#4c4546",
+                        "inverse-surface": "#e5e2e1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "margin-desktop": "80px",
+                        "section-gap": "160px",
+                        "stack-sm": "8px",
+                        "stack-lg": "48px",
+                        "stack-md": "24px",
+                        "margin-mobile": "24px",
+                        "gutter": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Syne"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Geist"],
+                        "headline-md": ["Syne"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Syne"],
+                        "display-xl": ["Syne"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["40px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "140%", "letterSpacing": "0.1em", "fontWeight": "500" }],
+                        "headline-md": ["32px", { "lineHeight": "120%", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "headline-lg": ["64px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-xl": ["120px", { "lineHeight": "110%", "letterSpacing": "-0.04em", "fontWeight": "800" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #131313; color: #e5e2e1; }
+        .grid-bg {
+            background-image: linear-gradient(to right, #1A1A1A 1px, transparent 1px),
+                              linear-gradient(to bottom, #1A1A1A 1px, transparent 1px);
+            background-size: 4rem 4rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-body-md antialiased grid-bg relative overflow-hidden">
+<!-- Top Navigation Placeholder (Shell suppressed as per intent logic, but keeping minimal header for context) -->
+<header class="w-full px-margin-desktop py-stack-md flex justify-between items-center z-10 border-b border-outline-variant/30 hidden md:flex">
+<div class="font-headline-md text-headline-md font-bold tracking-tighter text-on-background uppercase">LABURO</div>
+<nav class="flex gap-stack-md">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">RETURN</a>
+</nav>
+</header>
+<!-- Main Content Container: Horizontal Scroll / Snap for the two states to view them side-by-side easily in the demo, or just stack them -->
+<main class="flex-grow flex flex-col md:flex-row w-full h-full relative z-10">
+<!-- NO RESULTS FOUND STATE -->
+<section class="flex-1 min-h-screen md:min-h-0 flex flex-col justify-center items-center p-margin-mobile md:p-margin-desktop border-b md:border-b-0 md:border-r border-outline-variant/30 relative group">
+<div class="absolute inset-0 bg-gradient-to-b from-transparent to-surface-container-low opacity-50 pointer-events-none"></div>
+<div class="max-w-2xl w-full flex flex-col items-start relative z-10">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-stack-md flex items-center gap-2">
+<span class="w-8 h-[1px] bg-on-surface-variant"></span>
+                    Query Empty
+                </span>
+<h1 class="font-display-xl text-display-xl text-on-background mb-stack-lg leading-none break-words">
+                    NO<br/>RESULTS
+                </h1>
+<div class="flex flex-col gap-stack-sm w-full max-w-md">
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+                        The requested parameters yielded zero matches within the current dataset. Adjust your criteria.
+                    </p>
+<div class="mt-stack-lg flex gap-stack-sm w-full">
+<div class="relative flex-grow">
+<input class="w-full bg-transparent border-b border-outline-variant text-on-surface font-body-md py-2 focus:outline-none focus:border-primary transition-colors placeholder:text-on-surface-variant/50" placeholder="Refine search..." type="text"/>
+<span class="material-symbols-outlined absolute right-0 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+</div>
+</div>
+</div>
+<!-- Subtle Minimalist Graphic -->
+<div class="absolute -right-12 -top-12 md:-right-24 md:-top-24 w-64 h-64 md:w-96 md:h-96 border border-outline-variant/20 rounded-full flex items-center justify-center opacity-30 group-hover:scale-105 transition-transform duration-700 ease-out pointer-events-none">
+<div class="w-32 h-32 md:w-48 md:h-48 border border-outline-variant/40 rounded-full flex items-center justify-center">
+<div class="w-16 h-16 md:w-24 md:h-24 bg-surface-container rounded-full relative">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[1px] bg-primary-fixed/50 -rotate-45"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 404 / ERROR STATE -->
+<section class="flex-1 min-h-screen md:min-h-0 flex flex-col justify-center items-center p-margin-mobile md:p-margin-desktop relative group overflow-hidden">
+<div class="absolute inset-0 bg-error-container/5 pointer-events-none"></div>
+<div class="max-w-2xl w-full flex flex-col items-start relative z-10">
+<span class="font-label-sm text-label-sm text-error uppercase tracking-widest mb-stack-md flex items-center gap-2">
+<span class="w-8 h-[1px] bg-error"></span>
+                    System Fault
+                </span>
+<h1 class="font-display-xl text-display-xl text-on-background mb-stack-lg leading-none">
+                    404
+                </h1>
+<div class="flex flex-col gap-stack-md w-full max-w-md">
+<div class="border-l-2 border-error pl-stack-sm py-1">
+<p class="font-headline-md text-headline-md text-on-surface mb-2">
+                            ENDPOINT INVALID
+                        </p>
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+                            The designated vector does not exist or has been structurally relocated. Return to root sequence.
+                        </p>
+</div>
+<button class="mt-stack-md px-8 py-4 bg-primary text-primary-container font-label-sm text-label-sm uppercase tracking-widest hover:bg-transparent hover:text-primary border border-primary transition-all duration-150 w-fit">
+                        INITIALIZE RESET
+                    </button>
+</div>
+<!-- Subtle Minimalist Graphic (Error Variant) -->
+<div class="absolute -right-12 bottom-0 md:-right-24 md:bottom-12 w-64 h-64 md:w-[500px] md:h-[500px] opacity-20 pointer-events-none flex flex-col gap-4">
+<div class="w-full h-[1px] bg-error"></div>
+<div class="w-3/4 h-[1px] bg-error ml-auto"></div>
+<div class="w-1/2 h-[1px] bg-error ml-auto"></div>
+<div class="w-full h-full border border-error/30 transform -skew-x-12 relative mt-8">
+<div class="absolute top-0 right-0 w-8 h-8 bg-error/20"></div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Placeholder -->
+<footer class="w-full px-margin-desktop py-stack-md flex justify-between items-center z-10 border-t border-outline-variant/30 bg-background hidden md:flex">
+<div class="font-label-sm text-label-sm text-on-surface-variant">©2024 LABURO SYSTEMS</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase flex gap-stack-md">
+<span>SYS.STATUS: <span class="text-error">DEGRADED</span></span>
+</div>
+</footer>
+</body></html>

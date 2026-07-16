@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LABURO - Messaging</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@500&amp;family=Inter:wght@400&amp;family=Syne:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "outline-variant": "#4c4546",
+                        "on-surface-variant": "#cfc4c5",
+                        "secondary-container": "#454747",
+                        "primary": "#c6c6c6",
+                        "on-tertiary-fixed-variant": "#0033c0",
+                        "on-tertiary": "#00228a",
+                        "tertiary-fixed": "#dde1ff",
+                        "on-secondary-fixed-variant": "#454747",
+                        "on-primary-container": "#757575",
+                        "on-background": "#e5e2e1",
+                        "primary-fixed": "#e2e2e2",
+                        "surface-container-highest": "#353535",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "surface-bright": "#393939",
+                        "on-primary-fixed": "#1b1b1b",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "on-error": "#690005",
+                        "inverse-surface": "#e5e2e1",
+                        "surface-variant": "#353535",
+                        "on-secondary": "#2f3131",
+                        "on-tertiary-fixed": "#001257",
+                        "surface-container-lowest": "#0e0e0e",
+                        "inverse-primary": "#5e5e5e",
+                        "tertiary-container": "#000000",
+                        "surface-container": "#20201f",
+                        "on-primary": "#303030",
+                        "background": "#131313",
+                        "tertiary": "#b9c3ff",
+                        "secondary": "#c6c6c7",
+                        "tertiary-fixed-dim": "#b9c3ff",
+                        "surface-dim": "#131313",
+                        "on-tertiary-container": "#4266ff",
+                        "on-secondary-container": "#b4b5b5",
+                        "surface-tint": "#c6c6c6",
+                        "on-surface": "#e5e2e1",
+                        "outline": "#988e90",
+                        "surface-container-high": "#2a2a2a",
+                        "secondary-fixed": "#e2e2e2",
+                        "primary-container": "#000000",
+                        "error": "#ffb4ab",
+                        "error-container": "#93000a",
+                        "surface-container-low": "#1c1b1b",
+                        "surface": "#131313",
+                        "inverse-on-surface": "#313030",
+                        "on-primary-fixed-variant": "#474747"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "stack-lg": "48px",
+                        "section-gap": "160px",
+                        "stack-sm": "8px",
+                        "container-max": "1440px",
+                        "margin-desktop": "80px",
+                        "stack-md": "24px",
+                        "margin-mobile": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Syne"],
+                        "headline-lg": ["Syne"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Syne"],
+                        "display-xl": ["Syne"],
+                        "label-sm": ["Geist"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["40px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["64px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "headline-md": ["32px", { "lineHeight": "120%", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-xl": ["120px", { "lineHeight": "110%", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+                        "label-sm": ["12px", { "lineHeight": "140%", "letterSpacing": "0.1em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: theme('colors.background'); color: theme('colors.on-background'); }
+        .sidebar-width { width: 320px; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden antialiased">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full py-8 fixed left-0 top-0 sidebar-width bg-surface-container-lowest/90 backdrop-blur-2xl border-r border-border-glass shadow-2xl z-40" style="border-right-color: #1A1A1A;">
+<div class="px-6 mb-12">
+<h1 class="font-display-lg text-display-lg font-bold text-primary tracking-tighter" style="font-size: 48px;">LABURO</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-2">Production Portal</p>
+</div>
+<div class="flex-1 overflow-y-auto hide-scrollbar">
+<ul class="space-y-2">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-glass hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-md text-label-md">Search</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-glass hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">local_offer</span>
+<span class="font-label-md text-label-md">Offers</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 bg-surface-glass border-l-4 border-primary text-primary active-scale" href="#" style="background-color: rgba(255,255,255,0.05); border-left-color: theme('colors.primary'); transform: translateX(4px); transition: transform 200ms;">
+<span class="material-symbols-outlined">chat</span>
+<span class="font-label-md text-label-md">Messages</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-glass hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-md text-label-md">Events</span>
+</a>
+</li>
+</ul>
+</div>
+<div class="mt-auto px-4 border-t border-border-glass pt-6" style="border-top-color: #1A1A1A;">
+<ul class="space-y-2">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full ml-0 md:ml-[320px] bg-background">
+<!-- Context Header -->
+<header class="flex justify-between items-center px-6 py-4 w-full h-16 bg-surface-dim/80 backdrop-blur-xl border-b border-border-glass z-30 sticky top-0" style="border-bottom-color: #1A1A1A;">
+<div class="flex items-center gap-4">
+<h2 class="font-headline-md text-headline-md text-primary m-0" style="font-size: 24px;">Festival Sur</h2>
+<span class="px-2 py-1 border border-outline-variant rounded font-label-sm text-label-sm text-on-surface-variant">Live</span>
+</div>
+<div class="flex gap-4">
+<button class="text-primary hover:bg-surface-glass transition-colors p-2 rounded-full">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<!-- Chat Interface -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Conversations List -->
+<aside class="w-full md:w-80 border-r border-outline-variant/30 flex flex-col bg-surface-container-lowest">
+<div class="p-4 border-b border-outline-variant/30">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 transform -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container pl-10 pr-4 py-2 border-none rounded-DEFAULT font-body-md text-body-md text-on-surface focus:ring-1 focus:ring-primary focus:outline-none placeholder:text-on-surface-variant" placeholder="Search conversations..." type="text"/>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto hide-scrollbar p-2 space-y-1">
+<!-- Thread 1 -->
+<button class="w-full text-left p-3 rounded-lg bg-surface-container-high border border-outline-variant/50 transition-colors flex gap-3 items-start relative">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center shrink-0 overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A stark, high-contrast monochrome portrait of a female event coordinator looking professional and focused. Radical minimalist style, stark lighting, set against a pure black background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnnlY7QTGkQfeYyagglt4ugDMpchZaS08_n_IEO8NwiJ8khZCjDJpk-trums2a8YL8MrftzhMo6z2oCvx3zLmgAAOgKt_cELEMtKjCw7x3jkWsMFaJ0gdEXpfrv1RUt8R0M8HNGFgiaT_pJVOFmhkoyZSluwASKbobeuUvAx46YaZQxBFCBCpUjE2uBsoX1DY7UoDQfIn3VvhgXENXxkWN-Ch4c5yc3OKQC5o4RomEI00IpAW_YHaf_R5LRWqpbJm7dsQyeaLZ_GM"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-body-md text-body-md font-semibold text-primary truncate">Elena Rostova</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant shrink-0">10:42 AM</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant truncate text-sm">Stage B lighting needs adjustment.</p>
+</div>
+<div class="w-2 h-2 rounded-full bg-tertiary absolute top-4 right-3"></div>
+</button>
+<!-- Thread 2 -->
+<button class="w-full text-left p-3 rounded-lg hover:bg-surface-container transition-colors flex gap-3 items-start border border-transparent">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center shrink-0 overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A high-contrast black and white photograph of a male sound engineer wearing headphones, deep in concentration. Minimalist gallery aesthetic, sharp focus, pure black background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOsQvZ0wW9fkz91hos3akJjV1MuF6-8c20gd5eGmYMFv1qWO0ytvSkTZr-Qr1cIOl4X4ZVSk2iqBJ2qWMuQdEv8KNjH2IAMtxyPfrKoAXjjmRF_WHPagxBqAYFs1jhUhtJ3oS8Xn5T3YOHiqn1H6fJFME7BPdtYxNuA7BqUF6pGiNEQKskMz0o2mGHaGRY_JtUjcLV8GU0vaTMDCNc3e_t7WFFzrIws0Uv4-2MztNsxjgQzwiuWrRETDfhshuevPthIb5TgRKTalk"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-body-md text-body-md font-semibold text-on-surface truncate">Marcus Vance</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant shrink-0">Yesterday</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant truncate text-sm">Soundcheck cleared for main act.</p>
+</div>
+</button>
+<!-- Thread 3 (Group) -->
+<button class="w-full text-left p-3 rounded-lg hover:bg-surface-container transition-colors flex gap-3 items-start border border-transparent">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center shrink-0 border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant">group</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-body-md text-body-md font-semibold text-on-surface truncate">Security Team Alpha</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant shrink-0">Mon</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant truncate text-sm">All gates secure.</p>
+</div>
+</button>
+</div>
+</aside>
+<!-- Active Chat -->
+<section class="flex-1 flex flex-col bg-surface">
+<!-- Chat Header -->
+<div class="p-4 border-b border-outline-variant/30 flex justify-between items-center bg-surface-container-lowest">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A stark, high-contrast monochrome portrait of a female event coordinator looking professional and focused. Radical minimalist style, stark lighting, set against a pure black background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNlTIWByBDm65vFwZ01pnvTnrxLTMzmKxjNGVUdx0e5NoorCEePa8dTdpfv-I9Cj7JmOlYDcoqBuRq6_KbEPhR3u7Y6B72LqVYQusAaPeE24FQb97RTzbaTRaa6RQnirXn_TlmckkaueMlJaY4u0bnRrJU_79ig2exlnxxFODLC3n1D5FAgCLbui8zrGVfO1Ks2u3bIeA0vEYBesB9OCBxwpXAUMDI6z0Se_L047ioxC22oBPpACTkvSDhOHHECY9puOqA3vARDsI"/>
+</div>
+<div>
+<h2 class="font-body-lg text-body-lg font-semibold text-primary">Elena Rostova</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Event Coordinator • Festival Sur</p>
+</div>
+</div>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<!-- Messages Area -->
+<div class="flex-1 overflow-y-auto p-6 space-y-8">
+<!-- Date Divider -->
+<div class="flex justify-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant px-3 py-1 bg-surface-container-low border border-outline-variant/30 rounded-full">Today</span>
+</div>
+<!-- Received Message -->
+<div class="flex gap-4 max-w-[80%]">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant shrink-0 mt-1">
+<img class="w-full h-full object-cover" data-alt="A stark, high-contrast monochrome portrait of a female event coordinator looking professional and focused. Radical minimalist style, stark lighting, set against a pure black background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXyBMIISVaQFUHQJ4BuozrHax6CwE-R0HZAanXwgSdhm-vjOtghmvAP4oEBPp1BWEqPKcixagvW7Jqi_o3WdfeKE1w0HyGMV8LoSX5V-K2BBUgo5UfmnMlpAU1UcGh3xPoXUwUaJxyNz8z1QxziDYiru_LLB3AUUtB0i1CdU-jvl_HlbXAnEGFt1zqNAEzdw8ohpoGKf1yy20Unr_gzoQiZe2SSjLvCa8A24QaW-qmoI6zadIjK_rM4CH07zZUi7uFjW2ETYb2DQM"/>
+</div>
+<div class="space-y-2">
+<div class="bg-surface-container-highest border border-outline-variant/50 rounded-2xl rounded-tl-none p-4 shadow-sm">
+<p class="font-body-md text-body-md text-on-surface">The lighting rig on Stage B is casting shadows near the drum riser. Can we get someone to adjust the spots before 14:00?</p>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block ml-1">10:40 AM</span>
+</div>
+</div>
+<!-- Sent Message -->
+<div class="flex gap-4 max-w-[80%] ml-auto justify-end">
+<div class="space-y-2 flex flex-col items-end">
+<div class="bg-primary text-on-primary rounded-2xl rounded-tr-none p-4 shadow-sm">
+<p class="font-body-md text-body-md">On it. Sending Marco over now.</p>
+</div>
+<div class="flex items-center gap-1 mr-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">10:45 AM</span>
+<span class="material-symbols-outlined text-[16px] text-tertiary">done_all</span>
+</div>
+</div>
+</div>
+<!-- Received Message (Current Focus) -->
+<div class="flex gap-4 max-w-[80%]">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant shrink-0 mt-1">
+<img class="w-full h-full object-cover" data-alt="A stark, high-contrast monochrome portrait of a female event coordinator looking professional and focused. Radical minimalist style, stark lighting, set against a pure black background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUX_eXWeSLc-h5lN2ZECg6MxzucL-WxkZ7kTfzJwX-tktqf6LeYy6pn15_oDRHGDzJKxWp_odawBI7D4tTlL31-XWH2hvC6t1nKqgM7TE2pWp7N7Ig9Q0OGONPV0gPLGRKh8giOu0skFdB_DPsbeSpdiEiUxPiVexChlPJ4ghVv44loYALwTsWK617CtbtJ5xXgQWyZhrF7v4htWQsNZHsKOqoqB2Zw7clvvh-QlP0BnlE63PxrbaOg_GVN8WV4w-fopnDEPJYXM4"/>
+</div>
+<div class="space-y-2">
+<div class="bg-surface-container-highest border border-outline-variant/50 rounded-2xl rounded-tl-none p-4 shadow-sm relative">
+<p class="font-body-md text-body-md text-on-surface">Thanks. Also, confirming the vendor load-in schedule for tomorrow remains unchanged?</p>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block ml-1">10:48 AM</span>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-4 bg-surface-container-lowest border-t border-outline-variant/30">
+<div class="flex items-end gap-3 max-w-4xl mx-auto">
+<button class="p-3 text-on-surface-variant hover:text-primary transition-colors shrink-0">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<div class="flex-1 bg-surface-container border border-outline-variant/50 rounded-xl overflow-hidden focus-within:border-primary transition-colors">
+<textarea class="w-full bg-transparent border-none p-3 font-body-md text-body-md text-on-surface focus:ring-0 resize-none max-h-32" placeholder="Type a message..." rows="1" style="min-height: 48px;"></textarea>
+</div>
+<button class="p-3 bg-primary text-on-primary rounded-xl hover:bg-white transition-colors shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-4 left-4 right-4 rounded-xl bg-surface-container/80 backdrop-blur-lg border border-border-glass shadow-lg z-50 flex justify-around items-center px-4 h-[72px]" style="border-color: #1A1A1A;">
+<a class="flex flex-col items-center justify-center text-on-surface-variant w-16" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-sm text-label-sm mt-1">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant w-16" href="#">
+<span class="material-symbols-outlined">local_offer</span>
+<span class="font-label-sm text-label-sm mt-1">Offers</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-lg px-3 py-1 w-16 active-scale" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat</span>
+<span class="font-label-sm text-label-sm mt-1">Chat</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant w-16" href="#">
+<span class="material-symbols-outlined">event</span>
+<span class="font-label-sm text-label-sm mt-1">Events</span>
+</a>
+</nav>
+<script>
+        // Auto-resize textarea
+        const textarea = document.querySelector('textarea');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    </script>
+</body></html>

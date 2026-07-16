@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LABURO - Buscar Staff</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@500&amp;family=Inter:wght@400&amp;family=Syne:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed": "#dde1ff",
+                      "surface-tint": "#c6c6c6",
+                      "on-background": "#e5e2e1",
+                      "on-primary": "#303030",
+                      "on-error": "#690005",
+                      "inverse-surface": "#e5e2e1",
+                      "primary-fixed-dim": "#c6c6c6",
+                      "tertiary": "#b9c3ff",
+                      "outline-variant": "#4c4546",
+                      "on-primary-fixed-variant": "#474747",
+                      "surface-container": "#20201f",
+                      "inverse-on-surface": "#313030",
+                      "on-secondary": "#2f3131",
+                      "error-container": "#93000a",
+                      "secondary-container": "#454747",
+                      "on-tertiary-container": "#4266ff",
+                      "on-secondary-fixed": "#1a1c1c",
+                      "secondary-fixed": "#e2e2e2",
+                      "surface-container-lowest": "#0e0e0e",
+                      "surface-container-highest": "#353535",
+                      "on-tertiary-fixed-variant": "#0033c0",
+                      "secondary-fixed-dim": "#c6c6c7",
+                      "background": "#131313",
+                      "surface-container-high": "#2a2a2a",
+                      "error": "#ffb4ab",
+                      "primary-container": "#000000",
+                      "on-secondary-fixed-variant": "#454747",
+                      "on-tertiary": "#00228a",
+                      "surface-bright": "#393939",
+                      "primary": "#c6c6c6",
+                      "on-surface": "#e5e2e1",
+                      "surface-container-low": "#1c1b1b",
+                      "tertiary-fixed-dim": "#b9c3ff",
+                      "surface": "#131313",
+                      "secondary": "#c6c6c7",
+                      "surface-dim": "#131313",
+                      "on-secondary-container": "#b4b5b5",
+                      "surface-variant": "#353535",
+                      "outline": "#988e90",
+                      "inverse-primary": "#5e5e5e",
+                      "on-surface-variant": "#cfc4c5",
+                      "on-primary-fixed": "#1b1b1b",
+                      "on-primary-container": "#757575",
+                      "on-tertiary-fixed": "#001257",
+                      "tertiary-container": "#000000",
+                      "primary-fixed": "#e2e2e2",
+                      "on-error-container": "#ffdad6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-lg": "48px",
+                      "margin-desktop": "80px",
+                      "stack-sm": "8px",
+                      "section-gap": "160px",
+                      "container-max": "1440px",
+                      "stack-md": "24px",
+                      "gutter": "32px",
+                      "margin-mobile": "24px"
+              },
+              "fontFamily": {
+                      "label-sm": ["Geist"],
+                      "headline-md": ["Syne"],
+                      "headline-lg": ["Syne"],
+                      "display-xl": ["Syne"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-lg-mobile": ["Syne"]
+              },
+              "fontSize": {
+                      "label-sm": ["12px", { "lineHeight": "140%", "letterSpacing": "0.1em", "fontWeight": "500" }],
+                      "headline-md": ["32px", { "lineHeight": "120%", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                      "headline-lg": ["64px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                      "display-xl": ["120px", { "lineHeight": "110%", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+                      "body-md": ["16px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                      "body-lg": ["18px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                      "headline-lg-mobile": ["40px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Grayscale filter for images to match radical minimalism */
+        .grayscale-img {
+            filter: grayscale(100%);
+            transition: filter 0.3s ease;
+        }
+        .grayscale-img:hover {
+            filter: grayscale(0%);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #131313;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #353535;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4c4546;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex selection:bg-primary selection:text-primary-container font-body-md overflow-x-hidden">
+<!-- SideNavBar Component (Hidden on Mobile) -->
+<nav class="hidden md:flex flex-col bg-background dark:bg-background text-primary dark:text-primary docked left-0 h-screen w-64 border-r border-outline-variant fixed left-0 top-0 py-margin-desktop gap-stack-lg z-50">
+<!-- Header -->
+<div class="px-6 flex flex-col gap-4">
+<h1 class="font-headline-md text-headline-md text-on-background m-0">OPERATIONS</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest m-0">V.01.24</p>
+</div>
+<!-- CTA -->
+<div class="px-6">
+<button class="w-full bg-[#F5F5F5] text-[#000000] font-label-sm text-label-sm uppercase py-3 border border-transparent hover:bg-transparent hover:text-[#F5F5F5] hover:border-[#F5F5F5] transition-all duration-150">
+                Quick Dispatch
+            </button>
+</div>
+<!-- Main Navigation -->
+<ul class="flex-1 flex flex-col gap-2 px-2 mt-4 font-label-sm text-label-sm uppercase tracking-widest">
+<!-- Inactive -->
+<li>
+<a class="flex items-center gap-4 py-3 text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span>Dashboard</span>
+</a>
+</li>
+<!-- Active: Roster logically maps to Staff/Buscar Staff -->
+<li>
+<a class="flex items-center gap-4 py-3 text-primary font-bold border-l-2 border-primary pl-4 bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined icon-fill" data-icon="group">group</span>
+<span>Roster</span>
+</a>
+</li>
+<!-- Inactive -->
+<li>
+<a class="flex items-center gap-4 py-3 text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="event_repeat">event_repeat</span>
+<span>Timelines</span>
+</a>
+</li>
+<!-- Inactive -->
+<li>
+<a class="flex items-center gap-4 py-3 text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span>Inventory</span>
+</a>
+</li>
+<!-- Inactive -->
+<li>
+<a class="flex items-center gap-4 py-3 text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span>Reports</span>
+</a>
+</li>
+</ul>
+<!-- Footer Navigation -->
+<ul class="flex flex-col gap-2 px-2 font-label-sm text-label-sm uppercase tracking-widest border-t border-outline-variant pt-6 mt-auto">
+<li>
+<a class="flex items-center gap-4 py-3 text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span>Support</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 py-3 text-on-surface-variant hover:text-on-surface pl-4 hover:bg-surface-container transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Sign Out</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 w-full flex flex-col min-h-screen">
+<!-- Mobile Top Nav (Visible only on Mobile) -->
+<header class="md:hidden flex justify-between items-center w-full px-margin-mobile py-8 border-b border-outline-variant">
+<h1 class="font-headline-md text-headline-md font-bold tracking-tighter text-on-background uppercase m-0">OPERATIONS</h1>
+<button class="text-on-background">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</header>
+<div class="px-margin-mobile md:px-margin-desktop py-section-gap flex-1 flex flex-col gap-stack-lg max-w-container-max mx-auto w-full">
+<!-- Hero Header -->
+<header class="flex flex-col gap-6 border-b border-outline-variant pb-12">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Reclutamiento / Talento</p>
+<h2 class="font-display-xl text-display-xl tracking-tighter uppercase m-0 leading-none md:text-[120px] text-headline-lg-mobile">BUSCAR STAFF</h2>
+<!-- Search Bar -->
+<div class="relative w-full max-w-2xl mt-8">
+<input class="w-full bg-transparent border-0 border-b border-outline-variant text-on-background font-label-sm text-label-sm py-4 pl-0 pr-12 focus:ring-0 focus:border-primary placeholder-on-surface-variant transition-colors" placeholder="ID DE CANDIDATO, ROL O HABILIDAD" type="text"/>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+</div>
+</header>
+<!-- Minimalist Filters -->
+<section class="flex flex-wrap gap-4 items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase mr-4">Filtros Activos:</span>
+<button class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-full text-label-sm font-label-sm hover:border-primary hover:text-primary transition-colors">
+<span>ROL: DISEÑO</span>
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-full text-label-sm font-label-sm hover:border-primary hover:text-primary transition-colors">
+<span>DISPONIBILIDAD: INMEDIATA</span>
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 text-on-surface-variant text-label-sm font-label-sm hover:text-on-background transition-colors ml-auto border-b border-transparent hover:border-on-background">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+                    MÁS FILTROS
+                </button>
+</section>
+<!-- Staff Grid -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter mt-8">
+<!-- Card 1 -->
+<article class="group border border-[#1A1A1A] bg-[#0A0A0A] overflow-hidden hover:border-[#F5F5F5] transition-colors duration-300 flex flex-col h-full cursor-pointer">
+<div class="aspect-[3/4] w-full overflow-hidden relative border-b border-[#1A1A1A]">
+<img class="w-full h-full object-cover grayscale-img" data-alt="A stark, high-contrast black and white portrait of a young professional creative. Shot against a plain dark gray studio background with harsh, dramatic side lighting. The subject is looking directly at the camera with a serious, confident expression, wearing minimal dark clothing. Aesthetic is architectural and ultra-modern." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdVSWxKAH9-hB0grXVLp87-vjW_2OM7CxLEj70FsZ2NjTU2Wu0KSwycxwHp89Naz8Avlzm0vR4izsP9fslVT2ezu2f983KcbsLBrGbewO8i-gQoC-Bx93vfGElB1fNVQKeIWSs-F9hVrcDHRr5JS8q5gl_H-l2ZLvEnwlUXymwsJCINZDQ8IYVpBZjuBOfPYRtkibRjzyq1tmxsVH_-DrEsXd_4SB-2ey39Ic896OKF0S2aYdUPVJPkhcKIOzUx0vgtIsneDav2iU"/>
+<div class="absolute top-4 right-4 bg-background border border-outline-variant px-2 py-1">
+<span class="font-label-sm text-label-sm text-on-background">98% COINCIDENCIA</span>
+</div>
+</div>
+<div class="p-6 flex flex-col gap-2 flex-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-background text-[24px]">MARIA S.</h3>
+<span class="material-symbols-outlined text-on-surface-variant">arrow_outward</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest border-b border-[#1A1A1A] pb-4 mb-2">DIRECTORA DE ARTE</p>
+<div class="mt-auto pt-4 flex gap-2 flex-wrap">
+<span class="text-[10px] font-label-sm uppercase border border-[#1A1A1A] px-2 py-1 text-on-surface-variant">Figma</span>
+<span class="text-[10px] font-label-sm uppercase border border-[#1A1A1A] px-2 py-1 text-on-surface-variant">Tipografía</span>
+<span class="text-[10px] font-label-sm uppercase border border-[#1A1A1A] px-2 py-1 text-on-surface-variant">Identidad</span>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="group border border-[#1A1A1A] bg-[#0A0A0A] overflow-hidden hover:border-[#F5F5F5] transition-colors duration-300 flex flex-col h-full cursor-pointer">
+<div class="aspect-[3/4] w-full overflow-hidden relative border-b border-[#1A1A1A]">
+<img class="w-full h-full object-cover grayscale-img" data-alt="A moody, high-contrast monochrome profile portrait of a male tech professional. Shot against a solid black background. Minimalist lighting highlighting structural facial features. He wears a plain black turtleneck. The overall aesthetic is severe, precise, and corporate-modern." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmRNUZVhn8biXMTH_1KOT5_61QKhdyhn1eqLT6KQeB9n7-UMIXQA7zEYU2-Y_Bjf1gBQkks9TfQg7oQTBJ9e1HQ_N2b7zHCddhtSTKmOiRXZNtFBCDMBCuhfkhxDjpBjzo5B-gZBL2oLxSXx0shvmAlAjOnSWTM93ubwxgCvymyich_N3lWM0RXcVw-kMo7w59V5mAUkwUlBPkHMnA8mIW6BCEEJ18FBN26ZBzryY5qAdWDg_KAhtmjQhD8z-WeFiqcnHcE2hVNuY"/>
+</div>
+<div class="p-6 flex flex-col gap-2 flex-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-background text-[24px]">ALEJANDRO V.</h3>
+<span class="material-symbols-outlined text-on-surface-variant">arrow_outward</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest border-b border-[#1A1A1A] pb-4 mb-2">DESARROLLADOR FRONTEND</p>
+<div class="mt-auto pt-4 flex gap-2 flex-wrap">
+<span class="text-[10px] font-label-sm uppercase border border-[#1A1A1A] px-2 py-1 text-on-surface-variant">React</span>
+<span class="text-[10px] font-label-sm uppercase border border-[#1A1A1A] px-2 py-1 text-on-surface-variant">Three.js</span>
+</div>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="group border border-[#1A1A1A] bg-[#0A0A0A] overflow-hidden hover:border-[#F5F5F5] transition-colors duration-300 flex flex-col h-full cursor-pointer">
+<div class="aspect-[3/4] w-full overflow-hidden relative border-b border-[#1A1A1A]">
+<img class="w-full h-full object-cover grayscale-img" data-alt="A striking black and white studio portrait of a female UI designer. The lighting is bright and high-key, creating intense contrast against her dark hair and minimal structural clothing. She gazes off-camera. The mood is calm, intellectual, and sophisticated, fitting a radical minimalist gallery vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAq74j-c6yGy8kfWNdh_t6oaQcTrw33IPgGAfIijj6azyUL_dLG3fT-2NC5l8wlSEjgppfsivazfG86Kymq7f_0Q-j7aW1__cZMOqvQ-HzLX6P1S0oBNlzs8GCwSfzT29RT0FtfWTr2heyY9CNAkLocahJYYJxEb0F4G3th_0lVhDxPOdzTqlbTKpHN2vofDrURzoGDlUOgcLcKbDO2gEhE38RGUa5tXiHVQCUCZ5x17BHxaBaiuY6GZeCxosduYb91kf2oPOGHNmY"/>
+</div>
+<div class="p-6 flex flex-col gap-2 flex-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-background text-[24px]">CARLA M.</h3>
+<span class="material-symbols-outlined text-on-surface-variant">arrow_outward</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest border-b border-[#1A1A1A] pb-4 mb-2">UX RESEARCHER</p>
+<div class="mt-auto pt-4 flex gap-2 flex-wrap">
+<span class="text-[10px] font-label-sm uppercase border border-[#1A1A1A] px-2 py-1 text-on-surface-variant">Análisis</span>
+<span class="text-[10px] font-label-sm uppercase border border-[#1A1A1A] px-2 py-1 text-on-surface-variant">Wireframing</span>
+</div>
+</div>
+</article>
+<!-- Card 4 -->
+<article class="group border border-[#1A1A1A] bg-[#0A0A0A] overflow-hidden hover:border-[#F5F5F5] transition-colors duration-300 flex flex-col h-full cursor-pointer">
+<div class="aspect-[3/4] w-full overflow-hidden relative border-b border-[#1A1A1A]">
+<div class="w-full h-full bg-surface-container flex items-center justify-center grayscale-img">
+<span class="material-symbols-outlined text-outline-variant text-[48px]">person_off</span>
+</div>
+</div>
+<div class="p-6 flex flex-col gap-2 flex-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface-variant text-[24px]">PERFIL OCULTO</h3>
+<span class="material-symbols-outlined text-on-surface-variant">lock</span>
+</div>
+<p class="font-label-sm text-label-sm text-outline-variant uppercase tracking-widest border-b border-[#1A1A1A] pb-4 mb-2">AGENCIA CONFIDENCIAL</p>
+<div class="mt-auto pt-4 flex gap-2 flex-wrap">
+<span class="text-[10px] font-label-sm uppercase border border-[#1A1A1A] px-2 py-1 text-outline-variant">Estrategia</span>
+</div>
+</div>
+</article>
+</section>
+<!-- Load More -->
+<div class="flex justify-center mt-12 border-t border-outline-variant pt-12">
+<button class="bg-transparent border border-outline-variant text-on-background px-8 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:border-on-background transition-colors">
+                    CARGAR MÁS RESULTADOS
+                </button>
+</div>
+</div>
+<!-- Footer -->
+<footer class="w-full px-margin-desktop py-stack-md flex justify-between items-center border-t border-outline-variant mt-auto">
+<span class="font-label-sm text-label-sm text-on-surface-variant">©2024 RADICAL MINIMALISM ARCHIVE</span>
+<div class="flex gap-8">
+<a class="font-label-sm text-label-sm uppercase text-on-surface-variant hover:text-on-surface instant transition-colors" href="#">Privacy</a>
+<a class="font-label-sm text-label-sm uppercase text-on-surface-variant hover:text-on-surface instant transition-colors" href="#">Terms</a>
+<a class="font-label-sm text-label-sm uppercase text-on-surface-variant hover:text-on-surface instant transition-colors" href="#">API Status</a>
+</div>
+</footer>
+</main>
+</body></html>

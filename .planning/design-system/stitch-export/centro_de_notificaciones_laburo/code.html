@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LABURO - Notifications</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&amp;family=Inter:wght@400&amp;family=Geist:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "outline-variant": "#4c4546",
+                        "on-surface-variant": "#cfc4c5",
+                        "secondary-container": "#454747",
+                        "primary": "#c6c6c6",
+                        "on-tertiary-fixed-variant": "#0033c0",
+                        "on-tertiary": "#00228a",
+                        "tertiary-fixed": "#dde1ff",
+                        "on-secondary-fixed-variant": "#454747",
+                        "on-primary-container": "#757575",
+                        "on-background": "#e5e2e1",
+                        "primary-fixed": "#e2e2e2",
+                        "surface-container-highest": "#353535",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "surface-bright": "#393939",
+                        "on-primary-fixed": "#1b1b1b",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "on-error": "#690005",
+                        "inverse-surface": "#e5e2e1",
+                        "surface-variant": "#353535",
+                        "on-secondary": "#2f3131",
+                        "on-tertiary-fixed": "#001257",
+                        "surface-container-lowest": "#0e0e0e",
+                        "inverse-primary": "#5e5e5e",
+                        "tertiary-container": "#000000",
+                        "surface-container": "#20201f",
+                        "on-primary": "#303030",
+                        "background": "#131313",
+                        "tertiary": "#b9c3ff",
+                        "secondary": "#c6c6c7",
+                        "tertiary-fixed-dim": "#b9c3ff",
+                        "surface-dim": "#131313",
+                        "on-tertiary-container": "#4266ff",
+                        "on-secondary-container": "#b4b5b5",
+                        "surface-tint": "#c6c6c6",
+                        "on-surface": "#e5e2e1",
+                        "outline": "#988e90",
+                        "surface-container-high": "#2a2a2a",
+                        "secondary-fixed": "#e2e2e2",
+                        "primary-container": "#000000",
+                        "error": "#ffb4ab",
+                        "error-container": "#93000a",
+                        "surface-container-low": "#1c1b1b",
+                        "surface": "#131313",
+                        "inverse-on-surface": "#313030",
+                        "on-primary-fixed-variant": "#474747"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "stack-lg": "48px",
+                        "section-gap": "160px",
+                        "stack-sm": "8px",
+                        "container-max": "1440px",
+                        "margin-desktop": "80px",
+                        "stack-md": "24px",
+                        "margin-mobile": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Syne"],
+                        "headline-lg": ["Syne"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Syne"],
+                        "display-xl": ["Syne"],
+                        "label-sm": ["Geist"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["40px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["64px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "headline-md": ["32px", { "lineHeight": "120%", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-xl": ["120px", { "lineHeight": "110%", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+                        "label-sm": ["12px", { "lineHeight": "140%", "letterSpacing": "0.1em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex flex-col font-body-md text-body-md md:flex-row">
+<!-- TopNavBar (Mobile Only for Intent: Settings/Subpage implies hidden, but Notifications might be a global panel. Suppressing Side/Top based on sub-page intent as requested "full screen") -->
+<!-- Assuming this is a dedicated notifications view or overlay. We'll build it as a full-screen layout to emphasize the radical minimalism requested. -->
+<main class="flex-1 w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-section-gap grid grid-cols-12 gap-gutter relative">
+<!-- Header -->
+<header class="col-span-12 mb-stack-lg border-b border-surface-container-highest pb-stack-md">
+<h1 class="font-display-xl text-display-xl text-on-surface">NOTIFICATIONS</h1>
+</header>
+<!-- Notification List Area -->
+<div class="col-span-12 md:col-span-8 lg:col-span-6 md:col-start-3 lg:col-start-4">
+<div class="flex flex-col">
+<!-- Notification Item 1 -->
+<div class="group relative py-stack-md border-b border-surface-container-highest hover:border-outline-variant transition-colors duration-150 cursor-pointer flex items-start gap-4">
+<div class="mt-2 w-2 h-2 rounded-full bg-on-surface shrink-0"></div>
+<div class="flex-1">
+<div class="flex justify-between items-baseline mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">SYSTEM ALERT</span>
+<span class="font-label-sm text-label-sm text-outline-variant">10:42 AM</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">Candidato aceptó oferta</h2>
+<p class="mt-stack-sm text-on-surface-variant max-w-md">The candidate has officially signed the digital offer letter and completed the initial onboarding steps.</p>
+</div>
+</div>
+<!-- Notification Item 2 -->
+<div class="group relative py-stack-md border-b border-surface-container-highest hover:border-outline-variant transition-colors duration-150 cursor-pointer flex items-start gap-4">
+<div class="mt-2 w-2 h-2 rounded-full bg-on-surface shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex-1">
+<div class="flex justify-between items-baseline mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">SCHEDULE UPDATE</span>
+<span class="font-label-sm text-label-sm text-outline-variant">YESTERDAY</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">Cambio de horario en evento</h2>
+<p class="mt-stack-sm text-on-surface-variant max-w-md">The production meeting schedule has been updated. Please review the new timeline in the Events tab.</p>
+</div>
+</div>
+<!-- Notification Item 3 -->
+<div class="group relative py-stack-md border-b border-surface-container-highest hover:border-outline-variant transition-colors duration-150 cursor-pointer flex items-start gap-4">
+<div class="mt-2 w-2 h-2 rounded-full bg-error shrink-0"></div>
+<div class="flex-1">
+<div class="flex justify-between items-baseline mb-2">
+<span class="font-label-sm text-label-sm text-error uppercase">URGENT ACTION REQUIRED</span>
+<span class="font-label-sm text-label-sm text-outline-variant">OCT 12</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface group-hover:text-error transition-colors">Documentación vencida</h2>
+<p class="mt-stack-sm text-on-surface-variant max-w-md">Critical compliance documents have expired. Immediate renewal is necessary to continue operations.</p>
+</div>
+</div>
+<!-- Notification Item 4 (Read) -->
+<div class="group relative py-stack-md border-b border-surface-container-highest hover:border-outline-variant transition-colors duration-150 cursor-pointer flex items-start gap-4 opacity-50 hover:opacity-100">
+<div class="mt-2 w-2 h-2 rounded-full bg-transparent shrink-0"></div>
+<div class="flex-1">
+<div class="flex justify-between items-baseline mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">GENERAL NOTICE</span>
+<span class="font-label-sm text-label-sm text-outline-variant">OCT 10</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">Maintenance Window</h2>
+<p class="mt-stack-sm text-on-surface-variant max-w-md">Scheduled system maintenance will occur this weekend. Expect brief interruptions.</p>
+</div>
+</div>
+</div>
+<div class="mt-stack-lg flex justify-end">
+<button class="bg-on-surface text-surface py-3 px-6 font-label-sm text-label-sm uppercase hover:bg-transparent hover:text-on-surface hover:border-on-surface border border-transparent transition-all duration-150">
+                    Mark All As Read
+                </button>
+</div>
+</div>
+</main>
+</body></html>

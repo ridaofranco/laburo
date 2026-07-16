@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LABURO - Public Landing Page</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@500&amp;family=Inter:wght@400&amp;family=Syne:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#e5e2e1",
+                        "tertiary-fixed": "#dde1ff",
+                        "on-secondary-container": "#b4b5b5",
+                        "surface-container-low": "#1c1b1b",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "surface-container": "#20201f",
+                        "primary-fixed": "#e2e2e2",
+                        "surface-bright": "#393939",
+                        "surface-container-high": "#2a2a2a",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary": "#00228a",
+                        "on-secondary-fixed-variant": "#454747",
+                        "error-container": "#93000a",
+                        "inverse-on-surface": "#313030",
+                        "primary": "#c6c6c6",
+                        "secondary-fixed": "#e2e2e2",
+                        "on-primary-fixed": "#1b1b1b",
+                        "tertiary-fixed-dim": "#b9c3ff",
+                        "background": "#131313",
+                        "secondary-container": "#454747",
+                        "surface-variant": "#353535",
+                        "primary-container": "#000000",
+                        "on-surface-variant": "#cfc4c5",
+                        "surface-container-highest": "#353535",
+                        "surface-tint": "#c6c6c6",
+                        "surface": "#131313",
+                        "secondary": "#c6c6c7",
+                        "on-primary-container": "#757575",
+                        "surface-dim": "#131313",
+                        "on-error": "#690005",
+                        "on-tertiary-fixed": "#001257",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "surface-container-lowest": "#0e0e0e",
+                        "error": "#ffb4ab",
+                        "tertiary-container": "#000000",
+                        "outline": "#988e90",
+                        "on-tertiary-container": "#4266ff",
+                        "tertiary": "#b9c3ff",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "on-primary": "#303030",
+                        "on-background": "#e5e2e1",
+                        "on-tertiary-fixed-variant": "#0033c0",
+                        "on-secondary": "#2f3131",
+                        "inverse-primary": "#5e5e5e",
+                        "on-primary-fixed-variant": "#474747",
+                        "outline-variant": "#4c4546",
+                        "inverse-surface": "#e5e2e1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "margin-desktop": "80px",
+                        "section-gap": "160px",
+                        "stack-sm": "8px",
+                        "stack-lg": "48px",
+                        "stack-md": "24px",
+                        "margin-mobile": "24px",
+                        "gutter": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Syne"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Geist"],
+                        "headline-md": ["Syne"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Syne"],
+                        "display-xl": ["Syne"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["40px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "140%", "letterSpacing": "0.1em", "fontWeight": "500" }],
+                        "headline-md": ["32px", { "lineHeight": "120%", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "160%", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "headline-lg": ["64px", { "lineHeight": "110%", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-xl": ["120px", { "lineHeight": "110%", "letterSpacing": "-0.04em", "fontWeight": "800" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        .text-outline {
+            color: transparent;
+            -webkit-text-stroke: 1px theme('colors.on-background');
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col relative selection:bg-primary selection:text-primary-container">
+<!-- TopNavBar (Nav suppressed as this is a public landing page acting as a linear entry point, but we keep a simplified header for brand presence) -->
+<header class="fixed top-0 w-full z-50 mix-blend-difference px-margin-mobile md:px-margin-desktop py-8 max-w-container-max mx-auto flex justify-between items-center pointer-events-none">
+<div class="font-headline-lg-mobile md:font-headline-md text-headline-lg-mobile md:text-headline-md font-bold tracking-tighter text-on-background uppercase">LABURO</div>
+<div class="pointer-events-auto">
+<button class="font-label-sm text-label-sm uppercase tracking-widest px-6 py-3 border border-outline-variant hover:bg-surface-container transition-all duration-150">Login</button>
+</div>
+</header>
+<main class="flex-grow">
+<!-- Hero Section -->
+<section class="min-h-screen flex flex-col justify-center px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto relative pt-32 pb-section-gap">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[614px] opacity-30 pointer-events-none z-0">
+<div class="bg-cover bg-center w-full h-full grayscale mix-blend-luminosity" data-alt="A striking architectural photograph of a brutalist concrete structure intersecting with sleek black glass. The lighting is harsh and dramatic, casting deep black shadows against pristine gray concrete. The mood is authoritative and cold, reflecting a radical minimalist aesthetic. High contrast monochrome." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCj5rxcdt_empBlgJYGeBqOLcVGe9OMnQe5pCVnlGfR_AMyrzbFdJ6l_G_UiHm2GTVPQM3hPQlKQ14xTxIHTP0J6BuezPKWBSpMeIWbSEBr0EmMK9y8shn-JHq8OetPeIVWGSFunJKxz7xedmJCXBKreGpQxlhvzsa4PXK7WC2r49pyI_OdB68V4NwbG4_ESaPWOUfvQRSdKrawj5q5i1aFT4tf6Ea-QwFU8wnM_LIf3RS3IIGq2hj-Rvhu_Rfae2SltsJJQ9S0d8k')"></div>
+</div>
+<div class="relative z-10 flex flex-col gap-stack-lg">
+<h1 class="font-display-xl text-display-xl uppercase max-w-5xl leading-none">
+<span class="block">The</span>
+<span class="block text-outline">Standard</span>
+</h1>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter mt-stack-lg">
+<div class="md:col-start-7 md:col-span-6">
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md">
+                            LABURO represents the apex of specialized recruitment. We connect elite talent with extraordinary opportunities, bypassing the noise of traditional networks. Precision, discretion, and absolute rigor.
+                        </p>
+<div class="mt-12">
+<button class="group inline-flex items-center gap-4 bg-primary text-primary-container px-8 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-transparent hover:text-primary border border-primary transition-colors duration-150">
+<span>Initiate Sequence</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- The Network Section (Bento Grid) -->
+<section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-section-gap border-t border-outline-variant">
+<div class="mb-stack-lg flex flex-col md:flex-row md:items-end justify-between gap-stack-md">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase">The Network</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">01 // Elite Staff</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-stack-sm auto-rows-[300px]">
+<!-- Large Card -->
+<div class="md:col-span-8 row-span-2 relative group overflow-hidden border border-outline-variant bg-surface-container-low">
+<div class="absolute inset-0 bg-cover bg-center grayscale opacity-50 group-hover:opacity-80 transition-opacity duration-500" data-alt="A portrait of a highly professional individual in a sharply tailored black suit, standing in a stark, minimalist environment with concrete walls. The lighting is dramatic and directional, creating deep shadows that emphasize structure and discipline. The aesthetic is modern corporate monochrome." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBtXmSYB4t_F81FKq0l8uWy9e0O7N11jzrfCzipHMByuDmgvkvTmPQQRkRqrJW5QCswdROGF4j_HKZk5mJQv6svIRqL3bpHZ90i8cs-5UO4w3CyXGpotllL2jxwnFwctZEBTGid2XHmTCA7-jC9mX2rWdbO_p-_RfdnvqZ_is8yf5JF6Lahn0VbKPYM6VrDwkqqA6AEEJ1gFl0Xe5HGobJ3MEmrWNws6ZKtcPK7h0GMwn8goYKgqHf5mKl3keG3KIIIpL23VwYvvP4')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-8">
+<h3 class="font-headline-md text-headline-md mb-2">Curated Talent</h3>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md">Only the top 1% of applicants enter our network. Rigorous vetting ensures absolute competence.</p>
+</div>
+</div>
+<!-- Small Card 1 -->
+<div class="md:col-span-4 row-span-1 border border-outline-variant bg-surface-container p-8 flex flex-col justify-between hover:border-primary transition-colors duration-300">
+<div class="material-symbols-outlined text-primary text-4xl">verified_user</div>
+<div>
+<h4 class="font-label-sm text-label-sm uppercase mb-2">Verification</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Multi-stage background and competency checks.</p>
+</div>
+</div>
+<!-- Small Card 2 -->
+<div class="md:col-span-4 row-span-1 border border-outline-variant bg-surface-container p-8 flex flex-col justify-between hover:border-primary transition-colors duration-300">
+<div class="material-symbols-outlined text-primary text-4xl">my_location</div>
+<div>
+<h4 class="font-label-sm text-label-sm uppercase mb-2">Deployment</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Rapid integration into high-stakes environments.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- The Process Section -->
+<section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-section-gap border-t border-outline-variant">
+<div class="mb-stack-lg flex flex-col md:flex-row md:items-end justify-between gap-stack-md">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase">The Process</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">02 // Precision Recruitment</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Step 1 -->
+<div class="border-t border-outline-variant pt-8">
+<span class="font-label-sm text-label-sm text-primary mb-4 block">PHASE 01</span>
+<h3 class="font-headline-md text-headline-md mb-4">Identify</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Algorithmic sourcing combined with deep-network intelligence to locate passive, high-value candidates.</p>
+</div>
+<!-- Step 2 -->
+<div class="border-t border-outline-variant pt-8">
+<span class="font-label-sm text-label-sm text-primary mb-4 block">PHASE 02</span>
+<h3 class="font-headline-md text-headline-md mb-4">Assess</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Behavioral modeling and technical stress-testing to guarantee cultural and operational fit under pressure.</p>
+</div>
+<!-- Step 3 -->
+<div class="border-t border-outline-variant pt-8">
+<span class="font-label-sm text-label-sm text-primary mb-4 block">PHASE 03</span>
+<h3 class="font-headline-md text-headline-md mb-4">Execute</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Seamless negotiation and onboarding facilitation, ensuring immediate impact upon deployment.</p>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-section-gap border-t border-outline-variant text-center">
+<h2 class="font-display-xl text-display-xl uppercase mb-stack-lg">Join the Elite</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-12">
+                Access to the LABURO network is strictly controlled. Submit your credentials for review.
+            </p>
+<button class="inline-flex items-center justify-center gap-4 bg-primary text-primary-container px-12 py-6 font-label-sm text-label-sm uppercase tracking-widest hover:bg-transparent hover:text-primary border border-primary transition-colors duration-150">
+                Apply for Entry
+            </button>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full px-margin-mobile md:px-margin-desktop py-stack-md flex flex-col md:flex-row justify-between items-center border-t border-outline-variant bg-background gap-4">
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase">
+            ©2024 LABURO INC.
+        </div>
+<div class="flex gap-8">
+<a class="font-label-sm text-label-sm uppercase text-on-surface-variant hover:text-on-surface transition-colors" href="#">Privacy</a>
+<a class="font-label-sm text-label-sm uppercase text-on-surface-variant hover:text-on-surface transition-colors" href="#">Terms</a>
+<a class="font-label-sm text-label-sm uppercase text-on-surface-variant hover:text-on-surface transition-colors" href="#">Contact</a>
+</div>
+</footer>
+</body></html>
