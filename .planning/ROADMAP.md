@@ -96,13 +96,18 @@ Plans:
   3. Franco gets a one-tap wa.me button with a pre-filled message (offer summary + same link) to reinforce over WhatsApp.
   4. Franco sees honest send feedback (sending / sent / failed), never a silent 250-OK success.
 
-**Plans**: TBD
+**Plans**: 3 plans
 **UI hint**: yes
 
 Plans:
+**Wave 1** *(parallel — no file overlap)*
 
-- [ ] 03-01: Create-offer form + server action (app gig pick/quick-create, role, dates, amount, conditions)
-- [ ] 03-02: Copied `mailer.ts` send with honest state + wa.me link builder
+- [ ] 03-01-PLAN.md — DB write path: `public.staff_app_create_offer` SECURITY DEFINER RPC (atomic gig quick-create + 256-bit hashed token) + `public.staff_app_gigs` view + WR-05 hardening + [BLOCKING] live apply + SQL harness (OFER-01 data)
+- [ ] 03-02-PLAN.md — Send toolkit: install nodemailer + react-email (package gate) + port HITO `mailer.ts` (SMTP-only, honest MailResult) + `OfferEmail` react-email + official WhatsApp glyph + wa.me AR normalization (WR-06) (OFER-02, OFER-03)
+
+**Wave 2** *(blocked on 03-01 + 03-02)*
+
+- [ ] 03-03-PLAN.md — Vertical wire-up: `/staff/[id]/oferta` form (pick/quick-create gig, role, monto, condiciones) + `createAndSendOffer` server action (RPC → link → render → SMTP) + honest sending/sent/failed states + wa.me button + human-verify send (OFER-01 UI, OFER-02, OFER-03)
 
 ### Phase 4: Accept & Close the Loop
 
@@ -117,13 +122,18 @@ Plans:
   3. On accept, crew is created atomically in the APP; a second tap never double-books.
   4. Franco sees each offer's status flip to viewed / accepted / rejected as it happens.
 
-**Plans**: TBD
+**Plans**: 3 plans
 **UI hint**: yes
 
 Plans:
+**Wave 1** *(blocking — orchestrator applies migration live)*
 
-- [ ] 04-01: Public `/o/[token]` page — `get_public_offer` display (safe GET) + viewed tracking + status reflection (ACPT-01, ACPT-02 read side, STAT-01)
-- [ ] 04-02: Accept/decline POST → `accept_offer` creates app crew atomically, idempotent (ACPT-02 write side, ACPT-03)
+- [ ] 04-01-PLAN.md — Migration `staff_app_0009`: 3 `public` anon-callable wrappers (`staff_app_get_public_offer`/`_accept_offer`/`_decline_offer`) + `public.staff_app_offers` security_invoker view + WR-05 + [BLOCKING] live apply + SQL harness (ACPT-01/02/03 + STAT-01 data door; D-01, D-06)
+
+**Wave 2** *(parallel — no file overlap; both depend on 04-01)*
+
+- [ ] 04-02-PLAN.md — Public `/o/[token]` candidate slice: force-dynamic RSC display via `get_public_offer` (safe GET, viewed flip) + server-side state derivation + POST Server Actions accept/decline (2-arg accept, idempotent crew, re-read on failure) + motion (ACPT-01, ACPT-02, ACPT-03; D-01/02/03/04/05)
+- [ ] 04-03-PLAN.md — STAT-01 surface on `/staff/[id]`: per-offer status badge (enviada/vista/aceptada/rechazada/vencida, expiry derived) read from `public.staff_app_offers` (STAT-01; D-06)
 
 ### Phase 5: Status Board, Extras & Real Hire
 
