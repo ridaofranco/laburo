@@ -78,6 +78,8 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
+- **DECISIÓN 2026-07-16 (Franco):** construir Fases 3-4-5 con la app funcionando de punta a punta usando el diseño ACTUAL como placeholder; el reskin premium (Stitch, sistema visual nuevo) se aplica TODO junto DESPUÉS de la Fase 5. No reskinear dos veces. Ver [[franco-diseno-cero-ia]].
+
 - **Phase 2 code-review warnings diferidos (WR-01/02/03/06/07/08, non-blocking, UX/robustez):** WR-01 loop de debounce en search-client si el texto no matchea el canonical del server; WR-02 race de initialFilters (filtro fino en vuelo pisa chip recién tocado); WR-03 cap duro .range(0,49) sin paginación ni count sobre 688; WR-06 waLink/telLink no normalizan teléfonos AR (0 inicial / sin código país); WR-07 "ocultar asignados" no-op silencioso si crew_busy falla; WR-08 callback traga el fallo de PKCE cross-browser (magic link en apps de mail mobile) sin feedback. Abordar en Fase 3 o un pulido dedicado. Los 2 Critical (CR-01 signup DoS, CR-02 traversal en signCv) + WR-04/05 YA corregidos (commit 42ab56e).
 
 - **Straggler intake en HITO (detectado 2026-07-15):** una postulante (14:06Z) cayó en `public.staff_profiles` de HITO post-cutover (página vieja cacheada; el INSERT anon viejo sigue vigente). Copiada a `staff_app` (total 688). PENDIENTE: tras ventana de gracia (~1 semana), revocar la policy de INSERT anon en `public.staff_profiles` de HITO ('contract' del expand-migrate-contract) + delta-check final antes de revocar.
