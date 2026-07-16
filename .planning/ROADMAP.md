@@ -149,14 +149,24 @@ Plans:
   4. Franco can rate staff post-event (1-5 + note).
   5. The app is deployed to production on its own Vercel project with SPF/DKIM verified, and one real person has been found, offered, accepted via the link, and recorded as crew in the app.
 
-**Plans**: TBD
+**Plans**: 6 plans
 **UI hint**: yes
 
 Plans:
+**Wave 1** *(migraciones, [BLOCKING] aplicadas LIVE por el orquestador; parallel, sin overlap de archivos)*
 
-- [ ] 05-01: Offer status board per gig (coverage view) (STAT-02)
-- [ ] 05-02: Favorites + private notes, next-candidate re-filter, post-event rating, expiry/reminder cron (XTRA-01, XTRA-02, XTRA-03, XTRA-04)
-- [ ] 05-03: Vercel deploy + SPF/DKIM verification, then 1 real end-to-end hire in the app (SHIP-01, SHIP-02)
+- [ ] 05-01-PLAN.md — Migración staff_app_0010: board read-surface (staff_nombre/apellido en public.staff_app_offers) + offers.reminded_at + RPC staff_app_offers_due_reminder (sin rotar token, A1) + harness (STAT-02, XTRA-03 data)
+- [ ] 05-02-PLAN.md — Migración staff_app_0011: tablas candidate_notes + staff_ratings + vistas security_invoker + RPCs upsert SECURITY DEFINER (WR-05) + harness (XTRA-01, XTRA-04 data)
+
+**Wave 2** *(bloqueada por Wave 1; parallel, sin overlap de archivos)*
+
+- [ ] 05-03-PLAN.md — Board /tablero: cobertura derivada por gig (offerLabel) + nav header + XTRA-02 re-filtro por gig en la home (.not id in) (STAT-02, XTRA-02)
+- [ ] 05-04-PLAN.md — Favoritos + notas privadas + rating 1-5 en el perfil, producer-only vía RPC, con guardia de aislamiento candidate-facing (XTRA-01, XTRA-04)
+- [ ] 05-05-PLAN.md — Cron de recordatorio: vercel.json + /api/cron/reminders (CRON_SECRET + service-role + due-reminder RPC) + ReminderEmail sin link (A1), no-op honesto sin SMTP (XTRA-03)
+
+**Wave 3** *(bloqueada por Wave 2; FRANCO-GATED)*
+
+- [ ] 05-06-PLAN.md — Deploy a Vercel project propio + SPF/DKIM/DMARC + 05-USER-SETUP.md, luego 1 hire real end-to-end (board "cubierto") (SHIP-01, SHIP-02)
 
 ### Phase 6: HITO Link (optional bridge)
 
@@ -188,5 +198,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Find Staff | 3/4 | In Progress | - |
 | 3. Create & Send Offers | 0/2 | Not started | - |
 | 4. Accept & Close the Loop | 0/2 | Not started | - |
-| 5. Status Board, Extras & Real Hire | 0/3 | Not started | - |
+| 5. Status Board, Extras & Real Hire | 0/6 | Not started | - |
 | 6. HITO Link (optional bridge) | 0/2 | Not started | - |
