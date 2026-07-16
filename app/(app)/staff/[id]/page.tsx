@@ -21,6 +21,8 @@ import { isHttpUrl, classifyCv } from "@/lib/cv";
 import { QuickActions } from "./quick-actions";
 import { CvView } from "./cv-view";
 import { OfferStatusList, type OfferRow } from "./offer-status";
+import { FavoriteNote } from "./favorite-note";
+import { Rating, type RatingGig } from "./rating";
 
 const PROFILE_COLUMNS =
   "id,nombre,apellido,oficios,oficios_otro,provincia,ciudad,experiencia,anios_experiencia,eventos_trabajados,experiencia_detalle,disponibilidad_finde,disponibilidad_viajar,movilidad_propia,disponibilidad_aviso,estado,cv_url,portfolio_url,linkedin_url,telefono,email,situacion_legal,donde_trabajar,pais_residencia,motivacion";
@@ -128,10 +130,61 @@ export default async function ProfilePage({
   // (offer-status.tsx), nunca del enum status.
   const { data: offersData } = await supabase
     .from("staff_app_offers")
-    .select("id,role,gig_title,status,expires_at,sent_at,viewed_at,responded_at")
+    .select("id,role,gig_id,gig_title,status,expires_at,sent_at,viewed_at,responded_at")
     .eq("staff_profile_id", id)
     .order("sent_at", { ascending: false });
   const offers = (offersData ?? []) as OfferRow[];
+
+  // XTRA-01 (D-03): favorito + nota privada del candidato, PRODUCER-ONLY. Lectura
+  // con el CLIENTE AUTENTICADO desde la vista security_invoker (RLS is_org_member
+  // scopea al org de Franco). Puede no existir fila todavía → null. Nada de esto
+  // se filtra a ninguna superficie candidate-facing (Pitfall 2).
+  const { data: noteData } = await supabase
+    .from("staff_app_candidate_notes")
+    .select("is_favorite,note")
+    .eq("staff_profile_id", id)
+    .maybeSingle();
+  const candidateNote = noteData as {
+    is_favorite: boolean | null;
+    note: string | null;
+  } | null;
+
+  // XTRA-04 (D-06): ratings ya cargados por gig, PRODUCER-ONLY, misma RLS.
+  const { data: ratingsData } = await supabase
+    .from("staff_app_staff_ratings")
+    .select("gig_id,score,note")
+    .eq("staff_profile_id", id);
+  const ratings = (ratingsData ?? []) as {
+    gig_id: string | null;
+    score: number | null;
+    note: string | null;
+  }[];
+
+  // Derivación de gigs calificables: las ofertas ACEPTADAS (par gig_id + gig_title
+  // distintos). Tipo LOCAL en page.tsx a propósito — OfferRow (offer-status.tsx) NO
+  // lleva gig_id y NO se toca; el gig_id que va a rateStaff sale del select real de
+  // arriba, nunca undefined. Merge con los ratings existentes para precargar
+  // score/note.
+  type RatableOffer = {
+    gig_id: string | null;
+    gig_title: string | null;
+    status: string | null;
+  };
+  const ratableOffers = (offersData ?? []) as RatableOffer[];
+  const ratingByGig = new Map(ratings.map((r) => [r.gig_id, r]));
+  const ratableGigs: RatingGig[] = [];
+  const seenGigs = new Set<string>();
+  for (const o of ratableOffers) {
+    if (o.status !== "accepted" || !o.gig_id || seenGigs.has(o.gig_id)) continue;
+    seenGigs.add(o.gig_id);
+    const r = ratingByGig.get(o.gig_id);
+    ratableGigs.push({
+      gigId: o.gig_id,
+      gigTitle: (o.gig_title ?? "").trim() || "Gig sin título",
+      score: r?.score ?? null,
+      note: r?.note ?? null,
+    });
+  }
 
   const nombreCompleto =
     [p.nombre, p.apellido].filter(Boolean).join(" ").trim() || "Sin nombre";
@@ -201,12 +254,31 @@ export default async function ProfilePage({
         Crear oferta
       </Link>
 
+      {/* Favorito + nota privada (XTRA-01, D-03): memoria PRODUCER-ONLY de Franco
+          sobre el pool, invisible para el candidato. */}
+      <Section title="Favorito y nota">
+        <FavoriteNote
+          staffProfileId={id}
+          initialFavorite={candidateNote?.is_favorite ?? false}
+          initialNote={candidateNote?.note ?? null}
+        />
+      </Section>
+
       {/* Ofertas (STAT-01): estado de cada oferta enviada al candidato. Se omite
           la sección entera si todavía no hay ninguna (null-safety, molde del
           perfil). El label "vencida" se deriva de now()>expires_at. */}
       {offers.length > 0 && (
         <Section title="Ofertas">
           <OfferStatusList offers={offers} />
+        </Section>
+      )}
+
+      {/* Calificación (XTRA-04, D-06): rating 1-5 + nota por gig ACEPTADO,
+          PRODUCER-ONLY. Se omite la sección si el candidato todavía no aceptó
+          ningún gig (null-safety, molde del perfil). */}
+      {ratableGigs.length > 0 && (
+        <Section title="Calificación">
+          <Rating staffProfileId={id} gigs={ratableGigs} />
         </Section>
       )}
 
