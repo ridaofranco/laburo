@@ -21,6 +21,7 @@
  */
 
 import { createClient } from "@/lib/supabase/server";
+import { AcceptDecline } from "./accept-decline";
 import {
   deriveView,
   TERMINAL_COPY,
@@ -158,7 +159,8 @@ export default async function OfferPage({
           <OfferRow label="Condiciones" value={d.offer?.conditions} />
         </div>
 
-        {/* Aceptar/Rechazar por POST (Server Action) se monta en Task 2 (accept-decline). */}
+        {/* Aceptar/Rechazar por POST (Server Action). Sólo la vista activa lo monta. */}
+        <AcceptDecline token={token} />
 
         <p className="text-label text-fg-subtle text-center">
           Al aceptar quedás confirmado/a para este laburo.
