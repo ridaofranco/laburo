@@ -65,8 +65,10 @@ function gigLabel(g: OfferFormGig): string {
   return [g.title, when, g.venue_name].filter(Boolean).join(" · ");
 }
 
+// Input boxeado al lenguaje Stitch: superficie #131313, borde outline-variant
+// #4c4546 que pasa a off-white en foco, texto #e5e2e1, radio 0. 16px anti-zoom iOS.
 const inputCls =
-  "w-full min-h-[44px] rounded-xl bg-surface-2 border border-border text-fg text-body placeholder:text-fg-muted px-md outline-none focus:ring-[3px] focus:ring-accent/45";
+  "w-full min-h-[44px] rounded-none bg-[#131313] border border-[#4c4546] text-[#e5e2e1] text-[16px] placeholder:text-[#565656] px-4 outline-none focus:border-[#e5e2e1] transition-colors";
 
 function Field({
   label,
@@ -78,10 +80,10 @@ function Field({
   hint?: string;
 }) {
   return (
-    <label className="flex flex-col gap-sm">
-      <span className="text-label font-semibold text-fg-muted">{label}</span>
+    <label className="flex flex-col gap-3">
+      <span className="label-tech text-[11px] text-[#cfc4c5]">{label}</span>
       {children}
-      {hint ? <span className="text-label text-fg-subtle">{hint}</span> : null}
+      {hint ? <span className="text-[12px] text-[#565656]">{hint}</span> : null}
     </label>
   );
 }
@@ -190,27 +192,27 @@ export function OfferForm({
   // el wa.me (Pitfall 7) — no se crea una segunda oferta al reforzar.
   if (result) {
     return (
-      <div className="flex flex-col gap-lg">
+      <div className="flex flex-col gap-8">
         <div
-          className="flex flex-col gap-xs rounded-xl border p-md"
+          className="flex flex-col gap-2 rounded-none border border-[#1A1A1A] bg-[#0A0A0A] p-6"
           style={
             result.mailOk
               ? { borderColor: "#3dd68c66", backgroundColor: "#3dd68c14" }
               : undefined
           }
         >
-          <p className="text-body font-semibold text-fg">
+          <p className="font-[family-name:var(--font-syne)] text-[22px] font-semibold text-[#e5e2e1]">
             {result.mailOk
               ? "Oferta enviada por email"
               : "Oferta creada, pero el email no salió"}
           </p>
-          <p className="text-label text-fg-muted">
+          <p className="text-[14px] text-[#cfc4c5] leading-[1.6]">
             {result.mailOk
               ? "Le llegó la propuesta con el link para confirmar. Reforzá por WhatsApp si querés."
               : "La oferta quedó registrada igual. Mandale el link por WhatsApp así no se pierde."}
           </p>
           {!result.mailOk && result.mailError ? (
-            <p className="text-label text-fg-subtle break-words">
+            <p className="text-[12px] text-[#565656] break-words">
               Detalle: {result.mailError}
             </p>
           ) : null}
@@ -221,30 +223,30 @@ export function OfferForm({
             href={result.waLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-xs min-h-[48px] rounded-xl bg-[#25D366] text-white text-label font-semibold px-md transition-transform active:scale-[0.98]"
+            className="flex items-center justify-center gap-2 min-h-[48px] rounded-none bg-[#25D366] text-white label-tech text-[12px] px-4 transition-transform active:scale-[0.98]"
           >
             <WhatsAppGlyph size={20} className="shrink-0" />
             {result.mailOk ? "Reforzar por WhatsApp" : "Enviar por WhatsApp"}
           </a>
         ) : (
-          <p className="text-label text-fg-subtle">
+          <p className="text-[13px] text-[#565656]">
             Este candidato no tiene teléfono cargado para el WhatsApp.
           </p>
         )}
 
         {/* El link mágico por si Franco quiere copiarlo a mano. */}
-        <div className="flex flex-col gap-xs">
-          <span className="text-label font-semibold text-fg-muted">
+        <div className="flex flex-col gap-2">
+          <span className="label-tech text-[11px] text-[#cfc4c5]">
             Link de la oferta
           </span>
-          <span className="text-label text-fg-subtle break-all">
+          <span className="text-[13px] text-[#565656] break-all">
             {result.link}
           </span>
         </div>
 
         <Link
           href={`/staff/${candidate.id}`}
-          className="inline-flex items-center gap-xs min-h-[44px] text-fg-muted text-label font-semibold"
+          className="inline-flex items-center gap-2 min-h-[44px] label-tech text-[12px] text-[#cfc4c5] hover:text-[#e5e2e1] transition-colors"
         >
           <ArrowLeft size={18} aria-hidden="true" />
           Volver al perfil
@@ -261,7 +263,7 @@ export function OfferForm({
           value={gigChoice}
           onValueChange={(v: string | null) => setGigChoice(v ?? NEW_GIG)}
         >
-          <Select.Trigger className="flex items-center justify-between gap-sm min-h-[44px] rounded-xl bg-surface-2 border border-border text-fg text-body px-md outline-none focus-visible:ring-[3px] focus-visible:ring-accent/45">
+          <Select.Trigger className="flex items-center justify-between gap-3 min-h-[44px] rounded-none bg-[#131313] border border-[#4c4546] text-[#e5e2e1] text-[16px] px-4 outline-none focus-visible:border-[#e5e2e1] transition-colors">
             <Select.Value>
               {(v: string) => {
                 if (v === NEW_GIG) return "Crear gig nuevo";
@@ -274,32 +276,32 @@ export function OfferForm({
                 <ChevronDown
                   size={18}
                   aria-hidden="true"
-                  className="text-fg-muted"
+                  className="text-[#cfc4c5]"
                 />
               }
             />
           </Select.Trigger>
           <Select.Portal>
             <Select.Positioner sideOffset={6} className="z-[60]">
-              <Select.Popup className="max-h-[50vh] overflow-y-auto rounded-xl bg-surface-1 border border-border p-1 shadow-xl outline-none">
+              <Select.Popup className="max-h-[50vh] overflow-y-auto rounded-none bg-[#0A0A0A] border border-[#1A1A1A] p-1 shadow-xl outline-none">
                 <Select.Item
                   value={NEW_GIG}
-                  className="flex items-center justify-between gap-sm min-h-[40px] rounded-lg px-sm text-body text-accent font-semibold cursor-pointer outline-none data-[highlighted]:bg-surface-2"
+                  className="flex items-center justify-between gap-3 min-h-[40px] rounded-none px-3 text-[15px] text-[#b9c3ff] font-semibold cursor-pointer outline-none data-[highlighted]:bg-[#131313]"
                 >
                   <Select.ItemText>Crear gig nuevo</Select.ItemText>
                   <Select.ItemIndicator>
-                    <Check size={16} className="text-accent" />
+                    <Check size={16} className="text-[#b9c3ff]" />
                   </Select.ItemIndicator>
                 </Select.Item>
                 {gigs.map((g) => (
                   <Select.Item
                     key={g.id}
                     value={g.id}
-                    className="flex items-center justify-between gap-sm min-h-[40px] rounded-lg px-sm text-body text-fg cursor-pointer outline-none data-[highlighted]:bg-surface-2"
+                    className="flex items-center justify-between gap-3 min-h-[40px] rounded-none px-3 text-[15px] text-[#e5e2e1] cursor-pointer outline-none data-[highlighted]:bg-[#131313]"
                   >
                     <Select.ItemText>{gigLabel(g)}</Select.ItemText>
                     <Select.ItemIndicator>
-                      <Check size={16} className="text-accent" />
+                      <Check size={16} className="text-[#b9c3ff]" />
                     </Select.ItemIndicator>
                   </Select.Item>
                 ))}
@@ -311,7 +313,7 @@ export function OfferForm({
 
       {/* Quick-create: 3 campos que sólo aparecen para el gig nuevo */}
       {isNewGig && (
-        <div className="flex flex-col gap-lg rounded-xl border border-border bg-surface-1 p-md">
+        <div className="flex flex-col gap-6 rounded-none border border-[#1A1A1A] bg-[#0A0A0A] p-6">
           <Field label="Nombre del gig">
             <input
               type="text"
@@ -372,12 +374,12 @@ export function OfferForm({
           onChange={(e) => setConditions(e.target.value)}
           placeholder="Contale los detalles del laburo"
           rows={4}
-          className="w-full rounded-xl bg-surface-2 border border-border text-fg text-body placeholder:text-fg-muted px-md py-sm outline-none focus:ring-[3px] focus:ring-accent/45"
+          className="w-full rounded-none bg-[#131313] border border-[#4c4546] text-[#e5e2e1] text-[16px] placeholder:text-[#565656] px-4 py-3 outline-none focus:border-[#e5e2e1] transition-colors"
         />
       </Field>
 
       {error ? (
-        <p className="text-label text-destructive" role="alert">
+        <p className="text-[13px] text-[#ffb4ab]" role="alert">
           {error}
         </p>
       ) : null}

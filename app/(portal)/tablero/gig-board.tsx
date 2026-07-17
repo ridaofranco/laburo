@@ -111,17 +111,19 @@ function GigCard({ item }: { item: BoardGig }) {
   const meta = [fecha, venue].filter(Boolean).join(" · ");
 
   return (
-    <li className="rounded-xl bg-surface-1 border border-border overflow-hidden">
+    <li className="bg-[#0A0A0A] border border-[#1A1A1A] overflow-hidden">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="w-full flex items-start gap-sm text-left min-h-[44px] px-md py-sm"
+        className="w-full flex items-start gap-4 text-left min-h-[44px] px-6 py-5 hover:bg-[#131313]/40 transition-colors"
       >
-        <div className="flex-1 min-w-0 flex flex-col gap-xs">
-          <span className="text-body font-semibold text-fg truncate">{titulo}</span>
-          {meta && <span className="text-label text-fg-muted truncate">{meta}</span>}
-          <span className="text-label text-fg-subtle">
+        <div className="flex-1 min-w-0 flex flex-col gap-2">
+          <span className="font-[family-name:var(--font-syne)] text-[22px] md:text-[26px] font-semibold uppercase tracking-tight leading-tight text-[#e5e2e1] truncate">
+            {titulo}
+          </span>
+          {meta && <span className="label-tech text-[11px] text-[#cfc4c5] truncate">{meta}</span>}
+          <span className="label-tech text-[11px] text-[#cfc4c5] mt-1">
             {resumen.cubierto} cubiertos · {resumen.pendiente} pendientes · {resumen.abierto} abiertos
           </span>
         </div>
@@ -129,7 +131,7 @@ function GigCard({ item }: { item: BoardGig }) {
           aria-hidden="true"
           animate={{ rotate: open ? 180 : 0 }}
           transition={{ duration: reduce ? 0 : 0.18 }}
-          className="shrink-0 mt-1 text-fg-muted"
+          className="shrink-0 mt-1 text-[#cfc4c5]"
         >
           <ChevronDown size={18} />
         </motion.span>
@@ -145,20 +147,20 @@ function GigCard({ item }: { item: BoardGig }) {
             transition={{ duration: reduce ? 0 : 0.2 }}
             className="overflow-hidden"
           >
-            <div className="px-md pb-md pt-xs">
+            <div className="px-6 pb-6 pt-2">
               {offers.length === 0 ? (
-                <div className="flex flex-col items-start gap-sm rounded-xl bg-surface-2 border border-border px-md py-sm">
-                  <span className="text-label text-fg-muted">Sin ofertas todavía.</span>
+                <div className="flex flex-col items-start gap-3 bg-[#131313] border border-[#1A1A1A] px-6 py-5">
+                  <span className="label-tech text-[11px] text-[#cfc4c5]">Sin ofertas todavía.</span>
                   <Link
                     href="/buscar"
-                    className="inline-flex items-center gap-xs min-h-[44px] text-accent text-label font-semibold"
+                    className="inline-flex items-center gap-2 min-h-[44px] label-tech text-[12px] text-[#e5e2e1] hover:opacity-70 transition-opacity"
                   >
                     <UserRoundPlus size={16} aria-hidden="true" className="shrink-0" />
                     Buscar staff
                   </Link>
                 </div>
               ) : (
-                <ul className="flex flex-col gap-sm">
+                <ul className="flex flex-col gap-3">
                   {offers.map((o) => {
                     const label = offerLabel(o);
                     const abierto = coberturaDe(label) === "abierto";
@@ -166,17 +168,17 @@ function GigCard({ item }: { item: BoardGig }) {
                     return (
                       <li
                         key={o.id}
-                        className="flex flex-col gap-sm rounded-xl bg-surface-2 border border-border px-md py-sm"
+                        className="flex flex-col gap-3 bg-[#131313] border border-[#1A1A1A] px-6 py-5"
                       >
-                        <div className="flex items-start justify-between gap-sm">
-                          <div className="flex min-w-0 flex-col gap-xs">
-                            <span className="text-body font-semibold text-fg truncate">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex min-w-0 flex-col gap-1">
+                            <span className="text-[16px] font-semibold text-[#e5e2e1] truncate uppercase">
                               {candidato(o)}
                             </span>
-                            {rol && <span className="text-label text-fg-muted truncate">{rol}</span>}
+                            {rol && <span className="label-tech text-[11px] text-[#cfc4c5] truncate">{rol}</span>}
                           </div>
                           <span
-                            className={`shrink-0 rounded-none text-label font-semibold px-sm py-xs ${badgeTone(label)}`}
+                            className={`shrink-0 rounded-none label-tech text-[11px] font-semibold px-3 py-1 ${badgeTone(label)}`}
                           >
                             {label}
                           </span>
@@ -184,7 +186,7 @@ function GigCard({ item }: { item: BoardGig }) {
                         {abierto && (
                           <Link
                             href={`/buscar?gig=${gig.id}`}
-                            className="inline-flex items-center gap-xs min-h-[44px] text-accent text-label font-semibold"
+                            className="inline-flex items-center gap-2 min-h-[44px] label-tech text-[12px] text-[#e5e2e1] hover:opacity-70 transition-opacity"
                           >
                             <UserRoundSearch size={16} aria-hidden="true" className="shrink-0" />
                             Buscar reemplazo
@@ -206,11 +208,11 @@ function GigCard({ item }: { item: BoardGig }) {
 export function GigBoard({ board }: { board: BoardGig[] }) {
   if (board.length === 0) {
     return (
-      <div className="rounded-xl bg-surface-1 border border-border px-md py-lg text-center">
-        <p className="text-body text-fg-muted">Todavía no hay eventos cargados.</p>
+      <div className="border-t border-b border-[#1A1A1A] px-6 py-16 text-center">
+        <p className="text-[16px] text-[#cfc4c5]">Todavía no hay eventos cargados.</p>
         <Link
           href="/buscar"
-          className="mt-sm inline-flex items-center justify-center min-h-[44px] text-accent text-label font-semibold"
+          className="mt-4 inline-flex items-center justify-center min-h-[44px] label-tech text-[12px] text-[#e5e2e1] hover:opacity-70 border-b border-[#1A1A1A] pb-1 transition-opacity"
         >
           Buscar staff
         </Link>
@@ -219,7 +221,7 @@ export function GigBoard({ board }: { board: BoardGig[] }) {
   }
 
   return (
-    <ul className="flex flex-col gap-md">
+    <ul className="flex flex-col gap-6">
       {board.map((item) => (
         <GigCard key={item.gig.id} item={item} />
       ))}

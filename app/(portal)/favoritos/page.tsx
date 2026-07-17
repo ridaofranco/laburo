@@ -1,52 +1,88 @@
 /**
- * Mis Favoritos (porteo FIEL de "Mis Favoritos - Minimalista Radical" de
- * Stitch). Lista de perfiles guardados como favoritos: avatar en grayscale que
- * se colorea al hover, nombre (Syne), rol/tarifa/disponibilidad (Geist) y
- * acciones "VER PERFIL" + eliminar. Estilos exactos de Stitch en valores
- * arbitrarios. Copy tal cual (español, se ajusta después). Contenido de ejemplo
- * estático: el layout del portal ya pone el sidebar y el <main md:pl-[280px]>.
+ * Mis Favoritos (porteo FIEL de "Mis Favoritos - Minimalista Radical" de Stitch)
+ * con DATOS REALES. Lista los candidatos marcados como favoritos (candidate_notes
+ * is_favorite=true) con su perfil real: avatar de INICIALES sobre el tono del
+ * oficio (el pool no tiene fotos, igual que en Buscar), nombre (Syne), oficio
+ * principal (Geist), experiencia y disponibilidad reales, "VER PERFIL" al perfil
+ * y botón de quitar. Server component RLS-scopeado al org del caller.
+ *
+ * El mockup de Stitch mostraba fotos stock + columnas TARIFA/DISP.; acá se
+ * reemplazan por lo que sí existe en el pool: avatar de iniciales, EXPERIENCIA y
+ * DISPONIBILIDAD reales. Estilos exactos de Stitch en valores arbitrarios.
  */
 
-import { ListFilter, X } from "lucide-react";
+import Link from "next/link";
+import { ListFilter } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
+import { oficioColor, initials } from "@/lib/avatar-color";
+import { FavoriteRemoveButton } from "./favorite-remove-button";
 
-interface Favorito {
-  nombre: string;
-  rol: string;
-  tarifa: string;
-  disponibilidad: string;
-  img: string;
-  alt: string;
+interface NoteRow {
+  staff_profile_id: string;
+  note: string | null;
 }
 
-const FAVORITOS: Favorito[] = [
-  {
-    nombre: "ELENA M.",
-    rol: "DIRECTORA DE ARTE",
-    tarifa: "$$$",
-    disponibilidad: "INMEDIATA",
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCLC1Ca7YdvzBFYbK9SrBBGag7502RAsEVtCji4-Di6KLP8ppaTjke5IM8xdSZbqhfxj8iGGm35VYyCOBfsE6-KnxwReTrUoGjhLtywnvy4UMxucsWxqN9SlU9CxyZQNXrBGlayC-RdauGeXGXxKQ-lGTBqyvDTQdpt-H_IcfDN0yCCTuLx1kVk4TZiWI6-yx3WcSGm2lI6kqG3yjz1OH3Fsiq176E6rsNCIA7IBCdEe8s8zTiwUap-K8iulpoRaBaLykTE_QIHBqs",
-    alt: "A stark, high-contrast black and white portrait of a professional lighting technician looking slightly off-camera. The lighting is dramatic, emphasizing structural facial features. The background is pure darkness. The aesthetic is extremely minimalist and corporate, fitting a high-end agency portfolio.",
-  },
-  {
-    nombre: "MARCUS T.",
-    rol: "INGENIERO DE SONIDO",
-    tarifa: "$$",
-    disponibilidad: "1 SEMANA",
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDDK1tFIPD0oBZW9oi02KfHsd1XtAduk6FmvIm2aCV33JtHGo0uCouYqYv_hxOVXU1SrMZXSYk7TC-2IJeWSsVxDTAqgqAHwtOdQnGbLpjtibi-Ye-H8BrDlK_rZW-zQ3GhStp90-65cnvaBPLIl2Wdh15XC3yhzjGBoKRw5WJLwohneoQsoMJ5TcoePPYBVgYPu9Z1WLQe_u_7TP1KdDpcb3Xt3n3Q88MisRReo04-vq88AkNJWJq9cP9RW6v2z6ZyGrq2eNkQwYI",
-    alt: "A moody, high-contrast monochrome photograph of a young sound engineer wearing professional headphones around his neck. He is looking directly at the camera with a neutral, serious expression. The lighting is extremely structured, creating a minimalist, ultra-premium gallery feel against a deep black background.",
-  },
-  {
-    nombre: "DAVID R.",
-    rol: "PRODUCTOR EJECUTIVO",
-    tarifa: "$$$$",
-    disponibilidad: "OCTUBRE",
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuB69rShPUUqf901jRczdXpLyn21A1pQ0HNrSwMi63Yfc7kDC8cYeTHPqqwldJsmBcv_RRAzlXXizOhebxW9Iikm0evEPBSxO3qZPlVOq2e09VAbmuD447box3uu5NtJEnWB7_zbVTS41N-gfs3dCvZKiQ1_s6HVFNENvIftzS7SCVmop4sKyDKaA5mMFbZPFdWvJfCczgGzcKXEDeuTs-1AI5ukxFBQmSaMlgxEzXkz8PY5_WDLJfOgm_KF_2h5K_uQmXLDY90Rv2o",
-    alt: "A striking black and white headshot of an older, experienced event producer with a very clean, structural composition. The framing is tight on his face, showing character lines. The lighting is bright and directional from the left, plunging the right side into deep shadow. Minimalist, premium aesthetic.",
-  },
-];
+interface ProfileRow {
+  id: string;
+  nombre: string | null;
+  apellido: string | null;
+  oficios: string[] | null;
+  provincia: string | null;
+  ciudad: string | null;
+  eventos_trabajados: number | null;
+  anios_experiencia: string | null;
+  disponibilidad_aviso: string | null;
+}
 
-export default function FavoritosPage() {
-  const registros = String(FAVORITOS.length).padStart(2, "0");
+/** Señal de experiencia real, o null si no hay dato. */
+function experiencia(p: ProfileRow): string | null {
+  if (p.eventos_trabajados && p.eventos_trabajados > 0) {
+    return `${p.eventos_trabajados} ${p.eventos_trabajados === 1 ? "EVENTO" : "EVENTOS"}`;
+  }
+  const anios = (p.anios_experiencia ?? "").trim();
+  if (anios) return anios.toUpperCase();
+  return null;
+}
+
+/** Disponibilidad legible (mayúsculas), o null. */
+function disponibilidad(p: ProfileRow): string | null {
+  const d = (p.disponibilidad_aviso ?? "").trim();
+  return d ? d.toUpperCase() : null;
+}
+
+export default async function FavoritosPage() {
+  const supabase = await createClient();
+
+  // 1. Favoritos del org (candidate_notes is_favorite=true), RLS-scopeado.
+  const { data: notesData } = await supabase
+    .from("staff_app_candidate_notes")
+    .select("staff_profile_id,note")
+    .eq("is_favorite", true);
+
+  const notes = (notesData ?? []) as NoteRow[];
+  const noteById = new Map(notes.map((n) => [n.staff_profile_id, n.note]));
+  const ids = notes.map((n) => n.staff_profile_id);
+
+  // 2. Perfiles reales de esos ids (si hay favoritos).
+  let profiles: ProfileRow[] = [];
+  if (ids.length > 0) {
+    const { data: profData } = await supabase
+      .from("staff_app_profiles")
+      .select(
+        "id,nombre,apellido,oficios,provincia,ciudad,eventos_trabajados,anios_experiencia,disponibilidad_aviso",
+      )
+      .in("id", ids);
+    profiles = (profData ?? []) as ProfileRow[];
+    // Orden estable por nombre.
+    profiles.sort((a, b) =>
+      `${a.nombre ?? ""} ${a.apellido ?? ""}`.localeCompare(
+        `${b.nombre ?? ""} ${b.apellido ?? ""}`,
+        "es",
+      ),
+    );
+  }
+
+  const registros = String(profiles.length).padStart(2, "0");
 
   return (
     <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-16 md:py-24">
@@ -61,62 +97,88 @@ export default function FavoritosPage() {
         </div>
       </header>
 
-      {/* List */}
-      <div className="flex flex-col">
-        {FAVORITOS.map((f) => (
-          <div
-            key={f.nombre}
-            className="group flex flex-col md:flex-row md:items-center justify-between py-6 border-b border-[#4c4546] hover:border-b-[#e5e2e1] transition-colors duration-300 gap-6"
+      {profiles.length === 0 ? (
+        // Estado vacío honesto.
+        <div className="border-t border-b border-[#4c4546] py-20 text-center">
+          <p className="text-[16px] text-[#cfc4c5] max-w-[420px] mx-auto">
+            Todavía no marcaste a nadie como favorito. Guardá candidatos desde su
+            perfil para tenerlos a mano acá.
+          </p>
+          <Link
+            href="/buscar"
+            className="mt-6 inline-block label-tech text-[12px] text-[#e5e2e1] hover:opacity-70 border-b border-[#4c4546] pb-1"
           >
-            {/* Perfil */}
-            <div className="flex items-center gap-8">
-              <div className="w-16 h-16 md:w-24 md:h-24 bg-[#20201f] shrink-0 grayscale group-hover:grayscale-0 transition-all duration-500 overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  className="w-full h-full object-cover"
-                  src={f.img}
-                  alt={f.alt}
-                />
-              </div>
-              <div className="flex flex-col">
-                <h2 className="font-[family-name:var(--font-syne)] text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] uppercase text-[#e5e2e1]">
-                  {f.nombre}
-                </h2>
-                <p className="label-tech text-[12px] text-[#cfc4c5] mt-2">
-                  {f.rol}
-                </p>
-              </div>
-            </div>
+            Buscar staff
+          </Link>
+        </div>
+      ) : (
+        <div className="flex flex-col">
+          {profiles.map((p) => {
+            const nombre =
+              [p.nombre, p.apellido].filter(Boolean).join(" ").trim() || "Sin nombre";
+            const primary = p.oficios?.[0] ?? "";
+            const color = oficioColor(primary);
+            const exp = experiencia(p);
+            const disp = disponibilidad(p);
+            const loc = [p.ciudad, p.provincia].filter(Boolean).join(", ");
 
-            {/* Meta + acciones */}
-            <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8 label-tech text-[12px]">
-              <div className="text-[#cfc4c5]">
-                <span className="block mb-1 opacity-50">TARIFA</span>
-                <span>{f.tarifa}</span>
+            return (
+              <div
+                key={p.id}
+                className="group flex flex-col md:flex-row md:items-center justify-between py-6 border-b border-[#4c4546] hover:border-b-[#e5e2e1] transition-colors duration-300 gap-6"
+              >
+                {/* Perfil */}
+                <div className="flex items-center gap-8 min-w-0">
+                  <div
+                    className="w-16 h-16 md:w-24 md:h-24 shrink-0 grid place-items-center overflow-hidden"
+                    style={{ backgroundColor: `${color}14` }}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="font-[family-name:var(--font-syne)] text-[28px] md:text-[40px] font-extrabold leading-none"
+                      style={{ color }}
+                    >
+                      {initials(p.nombre, p.apellido)}
+                    </span>
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <h2 className="font-[family-name:var(--font-syne)] text-[26px] md:text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] uppercase text-[#e5e2e1] break-words">
+                      {nombre}
+                    </h2>
+                    <p className="label-tech text-[12px] text-[#cfc4c5] mt-2">
+                      {primary || (loc ? loc : "Sin oficio cargado")}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Meta + acciones */}
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8 label-tech text-[12px]">
+                  <div className="text-[#cfc4c5]">
+                    <span className="block mb-1 opacity-50">EXPERIENCIA</span>
+                    <span>{exp ?? "SIN DATO"}</span>
+                  </div>
+                  <div className="text-[#cfc4c5]">
+                    <span className="block mb-1 opacity-50">DISP.</span>
+                    <span>{disp ?? "A CONSULTAR"}</span>
+                  </div>
+                  <div className="flex items-center gap-4 mt-4 md:mt-0">
+                    <Link
+                      href={`/staff/${p.id}`}
+                      className="bg-[#e5e2e1] text-[#131313] border border-transparent hover:bg-transparent hover:text-[#e5e2e1] hover:border-[#e5e2e1] transition-all duration-150 label-tech text-[12px] px-6 py-3 tracking-[0.1em]"
+                    >
+                      VER PERFIL
+                    </Link>
+                    <FavoriteRemoveButton
+                      staffProfileId={p.id}
+                      note={noteById.get(p.id) ?? null}
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="text-[#cfc4c5]">
-                <span className="block mb-1 opacity-50">DISP.</span>
-                <span>{f.disponibilidad}</span>
-              </div>
-              <div className="flex items-center gap-4 mt-4 md:mt-0">
-                <button
-                  type="button"
-                  className="bg-[#e5e2e1] text-[#131313] border border-transparent hover:bg-transparent hover:text-[#e5e2e1] hover:border-[#e5e2e1] transition-all duration-150 label-tech text-[12px] px-6 py-3 tracking-[0.1em]"
-                >
-                  VER PERFIL
-                </button>
-                <button
-                  type="button"
-                  aria-label="Eliminar"
-                  className="text-[#4c4546] hover:text-[#ffb4ab] transition-colors duration-150 p-2"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
