@@ -2,35 +2,46 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
 /**
- * Callback de OAuth / magic link.
- *
- * Después de canjear el code por sesión, llama al RPC SECURITY DEFINER
- * public.staff_app_provision_member() con el cliente autenticado normal:
- * la allowlist D-06 vive DENTRO de la función (contra auth.email()), así que
- * un login no autorizado recibe NULL y ninguna fila de members (el gate lo
- * deniega). NO intentar acceder al schema staff_app via PostgREST: no está
- * expuesto y cualquier llamada falla con PGRST106 (probado en 01-03).
+ * Callback de OAuth / magic link, compartido por el login del PRODUCTOR (/login)
+ * y el del STAFF (/acceso-staff). Después de canjear el code por sesión, rutea por
+ * IDENTIDAD:
+ *   1. provision_member (idempotente): si el email está en la allowlist de admins,
+ *      queda como miembro (productor) → /dashboard.
+ *   2. si no es miembro pero su email matchea un perfil de staff (RPC
+ *      staff_app_my_staff_profile, SECURITY DEFINER por email verificado) → /panel-staff.
+ *   3. si no es ni una cosa ni la otra → /acceso-staff (no puede hacer nada; el gate
+ *      de cada lado igual lo frena).
+ * NO se accede al schema staff_app por PostgREST (PGRST106): todo por RPC/vistas.
  */
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/";
-  // Solo destinos internos (evita open-redirect).
-  const safeNext = next.startsWith("/") && !next.startsWith("//") ? next : "/";
 
-  if (code) {
-    const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+  if (!code) return NextResponse.redirect(`${origin}/login`);
 
-    if (!error) {
-      // Provisioning idempotente de la membresía (fallback del seed de 02-01).
-      // Si el email no está en la allowlist, devuelve NULL sin error.
-      await supabase.rpc("staff_app_provision_member");
+  const supabase = await createClient();
+  const { error } = await supabase.auth.exchangeCodeForSession(code);
+  if (error) return NextResponse.redirect(`${origin}/login`);
 
-      return NextResponse.redirect(`${origin}${safeNext}`);
-    }
+  // 1. Productor (miembro del org).
+  const membership = await supabase.rpc("staff_app_provision_member");
+  if (membership.data) {
+    return NextResponse.redirect(`${origin}/dashboard`);
+  }
+  const { data: existing } = await supabase
+    .from("staff_app_my_membership")
+    .select("role")
+    .maybeSingle();
+  if (existing) {
+    return NextResponse.redirect(`${origin}/dashboard`);
   }
 
-  // Error de auth: volver al login.
-  return NextResponse.redirect(`${origin}/login`);
+  // 2. Staff (email matchea un perfil).
+  const { data: staff } = await supabase.rpc("staff_app_my_staff_profile");
+  if (staff) {
+    return NextResponse.redirect(`${origin}/panel-staff`);
+  }
+
+  // 3. Ni miembro ni staff.
+  return NextResponse.redirect(`${origin}/acceso-staff?e=nostaff`);
 }

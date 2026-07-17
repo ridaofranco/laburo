@@ -39,12 +39,14 @@ export async function updateSession(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const publicPrefixes = [
     "/login",
+    "/acceso-staff",
     "/auth/callback",
     "/dev-login",
     "/o",
     "/sumate",
-    // Pantallas del lado staff (standalone, tal cual Stitch). Por ahora públicas
-    // para poder verlas; el gate real llega con el fork "staff con cuenta".
+    // Pantallas del lado staff (standalone, chrome propio). El middleware las deja
+    // pasar y el gate real lo hace cada página con requireStaff() (fork "staff con
+    // cuenta"): sin sesión o sin perfil de staff → redirige a /acceso-staff.
     "/fichaje",
     "/panel-staff",
     "/onboarding-staff",

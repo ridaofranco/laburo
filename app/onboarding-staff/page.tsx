@@ -10,6 +10,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { UserPen, Images, Tag, ArrowRight, Check } from "lucide-react";
 
 interface Slide {
@@ -48,14 +49,17 @@ const SLIDES: Slide[] = [
 ];
 
 export default function OnboardingStaffPage() {
+  const router = useRouter();
   const [current, setCurrent] = useState(0);
   const isLast = current === SLIDES.length - 1;
 
   const handleNext = () => {
     if (!isLast) {
       setCurrent((c) => c + 1);
+      return;
     }
-    // Última slide: acá arrancaría el flujo real (perfil / dashboard del staff).
+    // Última slide: al panel del staff (si no está logueado, el gate lo manda a /acceso-staff).
+    router.push("/panel-staff");
   };
 
   return (
