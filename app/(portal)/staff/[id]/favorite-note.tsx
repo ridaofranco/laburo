@@ -98,7 +98,7 @@ export function FavoriteNote({
         type="button"
         onClick={saveNote}
         disabled={pending}
-        className="flex items-center justify-center gap-xs self-start min-h-[44px] rounded-xl bg-accent box-glow text-fg text-label font-semibold px-md transition-transform active:scale-[0.98] disabled:opacity-60 disabled:pointer-events-none"
+        className="flex items-center justify-center gap-xs self-start min-h-[44px] rounded-none bg-fg text-surface-0 border border-fg label-tech text-[13px] px-md transition-colors hover:bg-transparent hover:text-fg disabled:opacity-60 disabled:pointer-events-none"
       >
         {pending ? "Guardando…" : "Guardar"}
       </button>

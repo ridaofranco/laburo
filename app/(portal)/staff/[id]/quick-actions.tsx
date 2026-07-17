@@ -30,7 +30,7 @@ export function QuickActions({
           href={waLink(telefono, saludo)}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-1 items-center justify-center gap-xs min-h-[48px] rounded-xl bg-accent box-glow text-fg text-label font-semibold px-md transition-transform active:scale-[0.98]"
+          className="flex flex-1 items-center justify-center gap-xs min-h-[48px] rounded-none bg-fg text-surface-0 border border-fg label-tech text-[13px] px-md transition-colors hover:bg-transparent hover:text-fg"
         >
           <WhatsAppGlyph size={18} className="shrink-0" />
           Escribir por WhatsApp

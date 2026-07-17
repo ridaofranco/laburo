@@ -34,10 +34,11 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const publicPaths = ["/login", "/auth/callback", "/dev-login", "/o"];
-  const isPublic = publicPaths.some((p) =>
-    request.nextUrl.pathname.startsWith(p),
-  );
+  // Rutas públicas: el landing "/" (match exacto) + "/sumate" (registro) + las de
+  // auth/oferta. El resto de la app (/buscar, /staff, /tablero) queda gateada.
+  const path = request.nextUrl.pathname;
+  const publicPrefixes = ["/login", "/auth/callback", "/dev-login", "/o", "/sumate"];
+  const isPublic = path === "/" || publicPrefixes.some((p) => path.startsWith(p));
 
   if (!user && !isPublic) {
     const url = request.nextUrl.clone();

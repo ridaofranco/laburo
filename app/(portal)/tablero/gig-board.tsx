@@ -18,7 +18,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { ChevronDown, UserRoundSearch, UserRoundPlus } from "lucide-react";
-import { offerLabel } from "@/app/(app)/staff/[id]/offer-status";
+import { offerLabel } from "@/app/(portal)/staff/[id]/offer-status";
 
 export interface BoardOffer {
   id: string;
@@ -150,7 +150,7 @@ function GigCard({ item }: { item: BoardGig }) {
                 <div className="flex flex-col items-start gap-sm rounded-xl bg-surface-2 border border-border px-md py-sm">
                   <span className="text-label text-fg-muted">Sin ofertas todavía.</span>
                   <Link
-                    href="/"
+                    href="/buscar"
                     className="inline-flex items-center gap-xs min-h-[44px] text-accent text-label font-semibold"
                   >
                     <UserRoundPlus size={16} aria-hidden="true" className="shrink-0" />
@@ -176,14 +176,14 @@ function GigCard({ item }: { item: BoardGig }) {
                             {rol && <span className="text-label text-fg-muted truncate">{rol}</span>}
                           </div>
                           <span
-                            className={`shrink-0 rounded-full text-label font-semibold px-sm py-xs ${badgeTone(label)}`}
+                            className={`shrink-0 rounded-none text-label font-semibold px-sm py-xs ${badgeTone(label)}`}
                           >
                             {label}
                           </span>
                         </div>
                         {abierto && (
                           <Link
-                            href={`/?gig=${gig.id}`}
+                            href={`/buscar?gig=${gig.id}`}
                             className="inline-flex items-center gap-xs min-h-[44px] text-accent text-label font-semibold"
                           >
                             <UserRoundSearch size={16} aria-hidden="true" className="shrink-0" />
@@ -209,7 +209,7 @@ export function GigBoard({ board }: { board: BoardGig[] }) {
       <div className="rounded-xl bg-surface-1 border border-border px-md py-lg text-center">
         <p className="text-body text-fg-muted">Todavía no hay eventos cargados.</p>
         <Link
-          href="/"
+          href="/buscar"
           className="mt-sm inline-flex items-center justify-center min-h-[44px] text-accent text-label font-semibold"
         >
           Buscar staff

@@ -1,34 +1,40 @@
 @import "tailwindcss";
 
 /*
- * LABURO — capa de tokens de marca (D-01 / 02-UI-SPEC.md).
- * Base oscura, azul confianza #2F80FF, glow #4CC9FF SOLO en momentos de marca.
+ * LABURO — sistema "Radical Minimalist" (reskin 2026-07-16).
+ * Negro absoluto + off-white + azul eléctrico #0047FF con cuentagotas.
+ * Syne (headlines) · Inter (cuerpo) · Geist (labels). Radio 0px, sin sombras.
+ * Fuente de verdad: .planning/design-system/DESIGN-SYSTEM.md + DESIGN.md (prosa).
+ *
+ * Nota de estrategia: se conservan los NOMBRES de token del sistema anterior
+ * (surface-0/1/2, accent, fg…) y solo se reasignan los valores, para que los
+ * ~24 componentes adopten el look nuevo sin editarlos uno por uno.
  */
 @theme {
-  /* Superficies (60/30) */
-  --color-surface-0: #0a0f1f; /* fondo app */
-  --color-surface-1: #141b31; /* cards, header, panel */
-  --color-surface-2: #1e2740; /* inputs, chips inactivos, pressed */
-  --color-border: #2a3455;
+  /* Superficies — capas tonales sobre el vacío negro */
+  --color-surface-0: #000000; /* fondo app (Level 0, el vacío) */
+  --color-surface-1: #0a0a0a; /* cards, header, panel (Level 1) */
+  --color-surface-2: #131313; /* inputs, chips inactivos, pressed */
+  --color-border: #1a1a1a;    /* hairline 1px, divisores tipo blueprint */
 
-  /* Acento (10) + glow */
-  --color-accent: #2f80ff; /* azul confianza: solo CTA primario, estados activos, wordmark, links, focus */
-  --color-glow: #4cc9ff; /* SOLO dentro de recetas de sombra, nunca fill ni texto */
+  /* Acento — azul eléctrico, restricción extrema */
+  --color-accent: #0047ff;    /* solo estados activos, foco, borde hover, indicadores de dato */
 
-  /* Sistema */
-  --color-positive: #3dd68c; /* pill "Disponible" */
-  --color-destructive: #f0555c; /* reservado, sin uso en Fase 2 */
+  /* Sistema — indicadores funcionales, no decorativos */
+  --color-positive: #3dd68c;    /* pill "Disponible" */
+  --color-destructive: #f0555c; /* rechazo / vencida */
 
   /* Texto */
-  --color-fg: #f2f5fa;
-  --color-fg-muted: #9aa5c0;
-  --color-fg-subtle: #6b7699;
+  --color-fg: #f5f5f5;        /* off-white, contraste máximo */
+  --color-fg-muted: #8a8a8a;  /* secundario neutro */
+  --color-fg-subtle: #565656; /* terciario / placeholders */
 
-  /* Tipografía: Inter (UI, 400/600) + Baloo 2 700 (lockup de marca únicamente) */
+  /* Tipografía: Syne headlines · Inter body · Geist labels/técnico */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-baloo: var(--font-baloo), var(--font-inter), ui-sans-serif, sans-serif;
+  --font-display: var(--font-syne), var(--font-inter), ui-sans-serif, sans-serif;
+  --font-label: var(--font-geist), var(--font-inter), ui-monospace, monospace;
 
-  /* Escala tipográfica (3 tamaños): heading 20/600, body 16/400, label 14/600 */
+  /* Escala tipográfica funcional (app densa, mobile-first) */
   --text-heading: 20px;
   --text-heading--line-height: 1.25;
   --text-body: 16px;
@@ -36,7 +42,7 @@
   --text-label: 14px;
   --text-label--line-height: 1.4;
 
-  /* Escala de espaciado 8-pt (múltiplos de 4) */
+  /* Espaciado 8-pt (múltiplos de 4) */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
@@ -44,33 +50,59 @@
   --spacing-xl: 32px;
   --spacing-2xl: 48px;
   --spacing-3xl: 64px;
+
+  /* Forma: radio 0px en TODO. Los círculos vienen solo de `rounded-full`
+   * (avatares, radios, switches), que no lee estos tokens. */
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-4xl: 0px;
 }
 
 /*
- * Recetas de glow (UI-SPEC § Glow Effect Spec).
- * SOLO en: wordmark LABURO, hero de login, heading de empty-state,
- * CTA primario y chips de filtro activos. El resto de la UI es plana.
+ * Momentos de marca — reemplazan las viejas recetas de "glow" neón.
+ * El sistema es PLANO: sin sombras. Se conservan los nombres de utility
+ * (`text-glow`, `box-glow`, `font-lockup`) para no tocar los 14 archivos que
+ * los usan; solo cambia lo que hacen.
  */
+
+/* Antes: halo neón. Ahora: off-white puro, sin sombra. */
 @utility text-glow {
-  color: #eaf4ff;
-  text-shadow:
-    0 0 6px rgba(76, 201, 255, 0.55),
-    0 0 18px rgba(47, 128, 255, 0.4),
-    0 0 40px rgba(47, 128, 255, 0.2);
+  color: #f5f5f5;
+  text-shadow: none;
 }
 
+/* Antes: halo azul. Ahora: borde eléctrico 1px interior — el acento activo del sistema. */
 @utility box-glow {
-  box-shadow:
-    0 0 0 1px rgba(47, 128, 255, 0.65),
-    0 0 16px rgba(47, 128, 255, 0.35);
+  box-shadow: inset 0 0 0 1px var(--color-accent);
 }
 
-/* Lockup de marca: Baloo 2 700, solo para la palabra "LABURO" */
+/* Lockup de marca: wordmark "LABURO." en Syne 800, all-caps, tracking apretado. */
 @utility font-lockup {
-  font-family: var(--font-baloo);
+  font-family: var(--font-syne), sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+/* Headlines monumentales del sistema (opt-in donde el screen lo pida). */
+@utility font-display {
+  font-family: var(--font-syne), sans-serif;
   font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.02em;
+}
+
+/* Labels/técnico: Geist en mayúsculas con tracking amplio. */
+@utility label-tech {
+  font-family: var(--font-geist), ui-monospace, monospace;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 html {

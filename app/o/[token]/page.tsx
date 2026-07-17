@@ -67,7 +67,7 @@ function Shell({ children }: { children: React.ReactNode }) {
     <div className="min-h-dvh flex flex-col bg-surface-0">
       <header className="px-md py-md pt-[max(var(--spacing-md),env(safe-area-inset-top))]">
         <span className="font-lockup text-glow text-[24px] select-none">
-          LABURO
+          LABURO.
         </span>
       </header>
       <main className="flex-1 w-full max-w-[440px] mx-auto px-md pb-[max(var(--spacing-2xl),env(safe-area-inset-bottom))]">
@@ -93,8 +93,8 @@ function OfferRow({ label, value }: { label: string; value: string | null | unde
 function TerminalScreen({ view }: { view: TerminalView }) {
   const c = TERMINAL_COPY[view];
   return (
-    <div className="flex flex-col gap-md rounded-2xl bg-surface-1 border border-border p-lg mt-xl">
-      <h1 className="text-heading font-semibold text-fg">{c.title}</h1>
+    <div className="flex flex-col gap-md rounded-none bg-surface-1 border border-border p-lg mt-xl">
+      <h1 className="font-display text-[32px] text-fg">{c.title}</h1>
       <p className="text-body text-fg-muted">{c.body}</p>
     </div>
   );
@@ -139,7 +139,7 @@ export default async function OfferPage({
       <div className="flex flex-col gap-lg pt-md">
         {/* Saludo cálido con el primer nombre del candidato */}
         <header className="flex flex-col gap-xs">
-          <h1 className="text-heading font-semibold text-fg">
+          <h1 className="font-display text-[32px] text-fg">
             {firstName ? `Hola ${firstName}` : "Hola"}
           </h1>
           <p className="text-body text-fg-muted">

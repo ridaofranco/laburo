@@ -111,7 +111,7 @@ export function FiltrosSheet({ open, onOpenChange, initial, onApply }: Props) {
             >
               {/* Encabezado */}
               <div className="flex items-center justify-between px-md pt-md pb-sm">
-                <Dialog.Title className="text-heading font-semibold text-fg">
+                <Dialog.Title className="font-display text-[24px] text-fg">
                   Filtros
                 </Dialog.Title>
                 <Dialog.Close
@@ -247,7 +247,7 @@ export function FiltrosSheet({ open, onOpenChange, initial, onApply }: Props) {
                 <button
                   type="button"
                   onClick={apply}
-                  className="flex-1 min-h-[44px] rounded-xl bg-accent box-glow text-fg text-label font-semibold transition-transform active:scale-[0.98]"
+                  className="flex-1 min-h-[44px] rounded-none bg-fg text-surface-0 border border-fg label-tech text-[13px] transition-colors hover:bg-transparent hover:text-fg"
                 >
                   Aplicar
                 </button>

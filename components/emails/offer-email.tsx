@@ -34,13 +34,13 @@ export interface OfferEmailProps {
   link: string;
 }
 
-// Tokens de marca (espejo de app/globals.css @theme).
-const SURFACE_0 = "#0A0F1F";
-const SURFACE_1 = "#141B31";
-const BORDER = "#2A3455";
-const ACCENT = "#2F80FF";
-const FG = "#F2F5FA";
-const FG_MUTED = "#9AA5C0";
+// Tokens de marca (espejo de app/globals.css @theme — Radical Minimalist).
+const SURFACE_0 = "#000000";
+const SURFACE_1 = "#0A0A0A";
+const BORDER = "#1A1A1A";
+const ACCENT = "#0047FF";
+const FG = "#F5F5F5";
+const FG_MUTED = "#8A8A8A";
 
 const FONT_STACK =
   "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif";
@@ -90,7 +90,7 @@ export function OfferEmail({
             style={{
               backgroundColor: SURFACE_1,
               border: `1px solid ${BORDER}`,
-              borderRadius: "16px",
+              borderRadius: "0",
               padding: "28px 24px",
             }}
           >
@@ -156,7 +156,7 @@ export function OfferEmail({
                   fontWeight: 600,
                   textDecoration: "none",
                   padding: "14px 28px",
-                  borderRadius: "12px",
+                  borderRadius: "0",
                 }}
               >
                 Ver la oferta

@@ -94,24 +94,27 @@ export function SearchClient({ candidates, error, initialFilters }: Props) {
   const fineCount = activeFineFilterCount(initialFilters);
 
   return (
-    <section className="flex flex-col gap-md">
-      {/* Input de búsqueda (focal) */}
-      <div className="relative">
-        <Search
-          size={18}
-          aria-hidden="true"
-          className="absolute left-md top-1/2 -translate-y-1/2 text-fg-muted"
-        />
-        <input
-          type="text"
-          inputMode="search"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Buscá por oficio, nombre o zona…"
-          aria-label="Buscar candidatos"
-          className="w-full h-11 rounded-xl bg-surface-2 border border-border text-fg text-body placeholder:text-fg-muted pl-[42px] pr-md outline-none focus:ring-[3px] focus:ring-accent/45"
-        />
-      </div>
+    <section className="flex flex-col gap-8">
+      {/* Header monumental (porteo de "Buscar Staff" de Stitch) */}
+      <header className="flex flex-col gap-6 border-b border-[#4c4546] pb-10">
+        <p className="label-tech text-[12px] text-[#cfc4c5]">Reclutamiento / Talento</p>
+        <h1 className="font-[family-name:var(--font-syne)] text-[clamp(2.75rem,10vw,120px)] font-extrabold tracking-tight uppercase leading-none text-[#e5e2e1]">
+          Buscar Staff
+        </h1>
+        {/* Search bar underline */}
+        <div className="relative w-full max-w-[640px] mt-4">
+          <input
+            type="text"
+            inputMode="search"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="ID DE CANDIDATO, ROL O HABILIDAD"
+            aria-label="Buscar candidatos"
+            className="w-full bg-transparent border-0 border-b border-[#4c4546] text-[#e5e2e1] label-tech text-[12px] py-4 pl-0 pr-12 outline-none focus:border-[#c6c6c6] placeholder:text-[#cfc4c5] transition-colors"
+          />
+          <Search size={20} aria-hidden="true" className="absolute right-1 top-1/2 -translate-y-1/2 text-[#cfc4c5]" />
+        </div>
+      </header>
 
       {/* Fila: Filtros + chips de oficios (1-tap) */}
       <div className="flex items-center gap-sm">
@@ -119,12 +122,12 @@ export function SearchClient({ candidates, error, initialFilters }: Props) {
           type="button"
           onClick={() => setShowFiltros(true)}
           aria-expanded={showFiltros}
-          className="shrink-0 inline-flex items-center gap-xs min-h-[44px] rounded-full bg-surface-2 border border-border text-fg text-label font-semibold px-md"
+          className="shrink-0 inline-flex items-center gap-xs min-h-[44px] rounded-none bg-surface-2 border border-border text-fg label-tech text-[12px] px-md transition-colors hover:border-accent"
         >
           <SlidersHorizontal size={16} aria-hidden="true" />
           Filtros
           {fineCount > 0 && (
-            <span className="ml-xs grid place-items-center min-w-5 h-5 rounded-full bg-accent text-fg text-[12px] font-semibold px-1">
+            <span className="ml-xs grid place-items-center min-w-5 h-5 rounded-none bg-accent text-fg text-[12px] font-semibold px-1">
               {fineCount}
             </span>
           )}
@@ -142,10 +145,10 @@ export function SearchClient({ candidates, error, initialFilters }: Props) {
                 transition={{ duration: 0.12 }}
                 aria-pressed={active}
                 className={
-                  "shrink-0 min-h-[44px] rounded-full px-md text-label font-semibold whitespace-nowrap transition-colors " +
+                  "shrink-0 min-h-[44px] rounded-none px-md label-tech text-[12px] whitespace-nowrap transition-colors border " +
                   (active
-                    ? "bg-accent text-fg box-glow"
-                    : "bg-surface-2 text-fg")
+                    ? "border-accent text-accent bg-surface-2"
+                    : "border-border bg-surface-2 text-fg-muted hover:border-fg-subtle")
                 }
               >
                 {oficio}
@@ -163,21 +166,18 @@ export function SearchClient({ candidates, error, initialFilters }: Props) {
       ) : candidates.length === 0 ? (
         <EmptyResults onClear={clearAll} />
       ) : (
-        <div className="flex flex-col gap-sm">
-          <p className="text-label font-normal text-fg-subtle">
+        <div className="flex flex-col gap-4">
+          <p className="label-tech text-[12px] text-[#cfc4c5]">
             {candidates.length}{" "}
             {candidates.length === 1 ? "candidato" : "candidatos"}
           </p>
-          <ul className="flex flex-col gap-md">
+          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {candidates.map((c, i) => (
               <motion.li
                 key={c.id}
                 initial={reduce ? false : { opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.2,
-                  delay: reduce ? 0 : Math.min(i, 8) * 0.025,
-                }}
+                transition={{ duration: 0.2, delay: reduce ? 0 : Math.min(i, 8) * 0.025 }}
               >
                 <CandidateCard candidate={c} />
               </motion.li>

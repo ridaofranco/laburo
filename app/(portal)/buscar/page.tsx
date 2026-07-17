@@ -97,15 +97,15 @@ export default async function SearchPage({
   const candidates = (data ?? []) as StaffCard[];
 
   return (
-    <>
+    <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-16 md:py-24">
       {filters.gig && (
-        <div className="mb-md flex items-center justify-between gap-sm rounded-xl bg-surface-2 border border-border px-md py-sm">
-          <span className="text-label text-fg-muted">
+        <div className="mb-8 flex items-center justify-between gap-sm border border-[#1A1A1A] bg-[#0A0A0A] px-4 py-3">
+          <span className="label-tech text-[11px] text-[#cfc4c5]">
             Buscando reemplazo · ocultando a los que ya ofertaste
           </span>
           <Link
-            href="/"
-            className="shrink-0 inline-flex items-center min-h-[44px] text-accent text-label font-semibold"
+            href="/buscar"
+            className="shrink-0 inline-flex items-center min-h-[44px] label-tech text-[11px] text-[#e5e2e1] hover:opacity-70"
           >
             Ver todos
           </Link>
@@ -116,6 +116,6 @@ export default async function SearchPage({
         error={Boolean(error)}
         initialFilters={filters}
       />
-    </>
+    </div>
   );
 }

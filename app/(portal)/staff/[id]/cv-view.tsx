@@ -120,7 +120,7 @@ function BucketCv({ objectKey }: { objectKey: string }) {
             type="button"
             onClick={ver}
             disabled={state === "loading"}
-            className="inline-flex items-center justify-center gap-xs min-h-[44px] rounded-xl bg-accent box-glow text-fg text-label font-semibold px-md transition-transform active:scale-[0.98] disabled:opacity-60"
+            className="inline-flex items-center justify-center gap-xs min-h-[44px] rounded-none bg-fg text-surface-0 border border-fg label-tech text-[13px] px-md transition-colors hover:bg-transparent hover:text-fg disabled:opacity-60"
           >
             <FileText size={16} aria-hidden="true" />
             Ver CV

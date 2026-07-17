@@ -55,10 +55,13 @@ export default async function TableroPage() {
   }));
 
   return (
-    <div className="flex flex-col gap-lg pb-lg">
-      <header className="flex flex-col gap-xs">
-        <h1 className="text-heading font-semibold text-fg">Tablero</h1>
-        <p className="text-label text-fg-muted">
+    <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-12 md:py-20 pb-32 md:pb-20">
+      <header className="flex flex-col gap-4 border-b border-[#1A1A1A] pb-8 mb-10">
+        <p className="label-tech text-[12px] text-[#cfc4c5]">Operaciones</p>
+        <h1 className="font-[family-name:var(--font-syne)] text-[clamp(2.5rem,7vw,72px)] font-extrabold tracking-tight uppercase leading-none text-[#e5e2e1]">
+          Gestión de Eventos
+        </h1>
+        <p className="text-[16px] text-[#cfc4c5] max-w-[560px]">
           Mirá de un vistazo qué roles están cubiertos y cuáles seguís buscando.
         </p>
       </header>

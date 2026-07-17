@@ -99,7 +99,7 @@ export function OfferStatusList({ offers }: { offers: OfferRow[] }) {
               {subline && <span className="text-label text-fg-subtle">{subline}</span>}
             </div>
             <span
-              className={`shrink-0 rounded-full text-label font-semibold px-sm py-xs ${badgeClass(label)}`}
+              className={`shrink-0 rounded-none text-label font-semibold px-sm py-xs ${badgeClass(label)}`}
             >
               {label}
             </span>

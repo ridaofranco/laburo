@@ -17,8 +17,8 @@ export function LoadingResults() {
             <div className="h-4 w-1/2 rounded bg-surface-2" />
           </div>
           <div className="flex gap-xs mt-sm">
-            <div className="h-5 w-20 rounded-full bg-surface-2" />
-            <div className="h-5 w-16 rounded-full bg-surface-2" />
+            <div className="h-5 w-20 rounded-none bg-surface-2" />
+            <div className="h-5 w-16 rounded-none bg-surface-2" />
           </div>
           <div className="h-3 w-1/3 rounded bg-surface-2 mt-sm" />
         </li>
@@ -32,9 +32,9 @@ export function EmptyResults({ onClear }: { onClear: () => void }) {
   return (
     <div className="flex flex-col items-center text-center gap-md py-2xl">
       <span className="font-lockup text-glow text-[20px] select-none opacity-80">
-        LABURO
+        LABURO.
       </span>
-      <h2 className="text-heading font-semibold text-glow">Sin resultados</h2>
+      <h2 className="font-display text-[28px] text-fg">Sin resultados</h2>
       <p className="text-body text-fg-muted max-w-[300px]">
         Probá con otro oficio o sacá algún filtro.
       </p>

@@ -24,7 +24,7 @@ export function AccesoDenegado() {
   return (
     <main className="min-h-dvh flex items-center justify-center px-md">
       <div className="w-full max-w-[360px] flex flex-col items-center text-center gap-md">
-        <h1 className="text-heading font-semibold text-fg">
+        <h1 className="font-display text-[28px] text-fg">
           Esta cuenta no tiene acceso.
         </h1>
         <p className="text-body text-fg-muted">

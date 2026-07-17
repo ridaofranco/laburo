@@ -385,7 +385,7 @@ export function OfferForm({
       <button
         type="submit"
         disabled={submitting}
-        className="flex items-center justify-center gap-xs min-h-[48px] rounded-xl bg-accent box-glow text-fg text-label font-semibold px-md transition-transform active:scale-[0.98] disabled:opacity-60 disabled:pointer-events-none"
+        className="flex items-center justify-center gap-xs min-h-[48px] rounded-none bg-fg text-surface-0 border border-fg label-tech text-[13px] px-md transition-colors hover:bg-transparent hover:text-fg disabled:opacity-60 disabled:pointer-events-none"
       >
         {submitting ? "Enviando…" : "Crear y enviar oferta"}
       </button>

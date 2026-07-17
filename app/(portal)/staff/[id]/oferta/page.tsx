@@ -50,27 +50,27 @@ export default async function OfferPage({
     "Sin nombre";
 
   return (
-    <div className="flex flex-col gap-lg pb-lg">
-      {/* Volver al perfil */}
+    <div className="max-w-[820px] mx-auto w-full px-6 md:px-20 py-12 md:py-20 pb-32 md:pb-20 flex flex-col gap-10">
       <Link
         href={`/staff/${id}`}
-        className="inline-flex items-center gap-xs min-h-[44px] -ml-1 text-fg-muted text-label font-semibold"
+        className="inline-flex items-center gap-2 label-tech text-[11px] text-[#cfc4c5] hover:text-[#e5e2e1] transition-colors"
       >
-        <ChevronLeft size={18} aria-hidden="true" />
+        <ChevronLeft size={16} aria-hidden="true" />
         Volver al perfil
       </Link>
 
-      {/* Encabezado: a quién le estás armando la oferta */}
-      <header className="flex items-center gap-md">
+      <header className="flex items-center gap-4 border-b border-[#1A1A1A] pb-8">
         <span
           aria-hidden="true"
-          className="shrink-0 grid place-items-center w-11 h-11 rounded-full bg-surface-2 text-body font-semibold text-fg"
+          className="shrink-0 grid place-items-center w-12 h-12 rounded-full bg-[#20201f] text-[16px] font-semibold text-[#e5e2e1]"
         >
           {initials(candidate.nombre, candidate.apellido)}
         </span>
-        <div className="flex-1 min-w-0 flex flex-col gap-xs">
-          <h1 className="text-heading font-semibold text-fg">Crear oferta</h1>
-          <p className="text-label text-fg-muted truncate">
+        <div className="flex-1 min-w-0 flex flex-col gap-1">
+          <h1 className="font-[family-name:var(--font-syne)] text-[clamp(2rem,6vw,56px)] font-extrabold tracking-tight uppercase leading-none text-[#e5e2e1]">
+            Enviar Oferta
+          </h1>
+          <p className="label-tech text-[11px] text-[#cfc4c5] truncate">
             Para {nombreCompleto}
           </p>
         </div>

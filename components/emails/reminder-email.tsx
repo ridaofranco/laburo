@@ -38,12 +38,12 @@ export interface ReminderEmailProps {
   expiresText?: string | null;
 }
 
-// Colores de marca (espejo de app/globals.css @theme).
-const SURFACE_0 = "#0A0F1F";
-const SURFACE_1 = "#141B31";
-const BORDER = "#2A3455";
-const FG = "#F2F5FA";
-const FG_MUTED = "#9AA5C0";
+// Colores de marca (espejo de app/globals.css @theme — Radical Minimalist).
+const SURFACE_0 = "#000000";
+const SURFACE_1 = "#0A0A0A";
+const BORDER = "#1A1A1A";
+const FG = "#F5F5F5";
+const FG_MUTED = "#8A8A8A";
 
 const FONT_STACK =
   "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif";
@@ -78,7 +78,7 @@ export function ReminderEmail({
             style={{
               backgroundColor: SURFACE_1,
               border: `1px solid ${BORDER}`,
-              borderRadius: "16px",
+              borderRadius: "0",
               padding: "28px 24px",
             }}
           >

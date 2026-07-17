@@ -34,9 +34,9 @@ function ResultCard({ title, body }: { title: string; body: string }) {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.28, ease: "easeOut" }}
-      className="flex flex-col gap-md rounded-2xl bg-surface-1 border border-border p-lg"
+      className="flex flex-col gap-md rounded-none bg-surface-1 border border-border p-lg"
     >
-      <h2 className="text-heading font-semibold text-fg">{title}</h2>
+      <h2 className="font-display text-[28px] text-fg">{title}</h2>
       <p className="text-body text-fg-muted">{body}</p>
     </motion.div>
   );
@@ -88,7 +88,7 @@ export function AcceptDecline({ token }: { token: string }) {
             body: "Nos vemos ahí. Si tenés alguna duda, escribinos por WhatsApp.",
           })
         }
-        className="flex items-center justify-center gap-xs min-h-[48px] rounded-xl bg-accent box-glow text-fg text-label font-semibold px-md transition-transform active:scale-[0.98] disabled:opacity-60 disabled:pointer-events-none"
+        className="flex items-center justify-center gap-xs min-h-[48px] rounded-none bg-fg text-surface-0 border border-fg label-tech text-[13px] px-md transition-colors hover:bg-transparent hover:text-fg disabled:opacity-60 disabled:pointer-events-none"
       >
         {pending ? "Un momento…" : "Aceptar"}
       </button>

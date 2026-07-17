@@ -1,9 +1,25 @@
 "use client";
 
+/**
+ * Login de LABURO — porteo FIEL de la pantalla Stitch "LABURO - Acceso"
+ * (Minimalista Radical), con la lógica real intacta (magic link + Google OAuth,
+ * shouldCreateUser:false → solo los admin de Franco). Estilos exactos de Stitch
+ * en valores arbitrarios (self-contained): negro absoluto, wordmark Syne, label
+ * Geist, input hairline bottom-border, botón ghost→sólido. Grilla estructural de
+ * fondo (opacity 0.03) como en Stitch. Motion para el fade-in-up con stagger.
+ */
+
 import React, { useState } from "react";
 import { motion } from "motion/react";
+import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
+
+const up = (delay: number) => ({
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] as const, delay },
+});
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
@@ -16,13 +32,9 @@ export function LoginForm() {
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: {
-        redirectTo: callbackUrl(),
-      },
+      options: { redirectTo: callbackUrl() },
     });
-    if (error) {
-      toast.error("No pudimos iniciar sesión. Probá de nuevo.");
-    }
+    if (error) toast.error("No pudimos iniciar sesión. Probá de nuevo.");
   };
 
   const handleMagicLink = async (e: React.FormEvent) => {
@@ -34,9 +46,7 @@ export function LoginForm() {
       email,
       options: {
         emailRedirectTo: callbackUrl(),
-        // Gate LABURO: solo los 2 emails admin ya existen en auth.users. Sin esto,
-        // /login publico permite crear usuarios ilimitados en el proyecto Supabase
-        // COMPARTIDO con HITO y quemar la cuota de mails (login DoS). CR-01.
+        // Gate LABURO: solo los admin ya existen en auth.users (CR-01).
         shouldCreateUser: false,
       },
     });
@@ -50,56 +60,79 @@ export function LoginForm() {
   };
 
   return (
-    <main className="min-h-dvh flex items-center justify-center px-md pb-[env(safe-area-inset-bottom)]">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-[360px] flex flex-col items-center text-center"
+    <main className="relative min-h-dvh flex flex-col items-center justify-center overflow-hidden bg-black text-[#e5e2e1] px-6">
+      {/* Grilla estructural de fondo (motif arquitectónico de Stitch) */}
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 pointer-events-none hidden md:grid grid-cols-12 gap-8 px-20 opacity-[0.04] z-0"
       >
-        {/* Lockup de marca: única pieza con Baloo 2 + glow en esta pantalla */}
-        <h1 className="font-lockup text-glow text-[40px] mb-lg select-none">
-          LABURO
-        </h1>
+        {Array.from({ length: 12 }).map((_, i) => (
+          <div key={i} className="border-r border-[#4c4546] h-full" />
+        ))}
+      </div>
 
-        <button
-          type="button"
-          onClick={handleGoogleLogin}
-          className="w-full min-h-[44px] rounded-xl bg-accent box-glow text-fg text-label font-semibold px-md py-sm transition-transform active:scale-[0.98]"
+      <div className="relative z-10 w-full max-w-[448px] flex flex-col items-center">
+        {/* Wordmark monumental */}
+        <motion.h1
+          {...up(0)}
+          className="font-lockup text-[64px] md:text-[88px] leading-none text-[#e5e2e1] mb-[80px] md:mb-[120px] select-none"
         >
-          Entrar con Google
-        </button>
-
-        <div className="w-full flex items-center gap-md my-lg">
-          <div className="flex-1 border-t border-border" />
-          <span className="text-label text-fg-subtle font-normal">o</span>
-          <div className="flex-1 border-t border-border" />
-        </div>
+          LABURO.
+        </motion.h1>
 
         {magicLinkSent ? (
-          <p className="text-body text-fg-muted">
-            Link enviado a <span className="text-fg">{email}</span>. Revisá tu
-            email.
-          </p>
+          <motion.p {...up(0.1)} className="text-center text-[16px] leading-[1.6] text-[#cfc4c5]">
+            Link enviado a <span className="text-[#e5e2e1]">{email}</span>. Revisá
+            tu email para entrar.
+          </motion.p>
         ) : (
-          <form onSubmit={handleMagicLink} className="w-full flex flex-col gap-sm">
-            <input
-              type="email"
-              placeholder="Tu email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              className="w-full min-h-[44px] rounded-xl bg-surface-2 border border-border text-fg text-body placeholder:text-fg-muted px-md py-sm outline-none focus:ring-[3px] focus:ring-accent/45"
-            />
+          <motion.form
+            {...up(0.2)}
+            onSubmit={handleMagicLink}
+            className="w-full flex flex-col gap-12"
+          >
+            <div className="relative w-full group">
+              <label
+                htmlFor="email"
+                className="block mb-2 font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.1em] text-[#cfc4c5] transition-colors group-focus-within:text-[#e5e2e1]"
+              >
+                Correo Electrónico
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder=" "
+                className="w-full bg-transparent border-0 border-b border-[#4c4546] focus:border-[#e5e2e1] outline-none text-[18px] leading-[1.6] text-[#e5e2e1] py-4 px-0 rounded-none transition-colors duration-300"
+              />
+            </div>
+
             <button
               type="submit"
               disabled={loading}
-              className="w-full min-h-[44px] rounded-xl bg-surface-2 border border-border text-fg text-label font-semibold px-md py-sm transition-transform active:scale-[0.98] disabled:opacity-60"
+              className="w-full border border-[#e5e2e1] bg-transparent text-[#e5e2e1] py-6 px-8 flex items-center justify-center gap-4 hover:bg-[#e5e2e1] hover:text-black transition-colors duration-150 cursor-pointer disabled:opacity-50"
             >
-              {loading ? "Enviando…" : "Mandame un link"}
+              <span className="font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.2em]">
+                {loading ? "Enviando…" : "Acceso"}
+              </span>
+              <ArrowRight size={18} strokeWidth={1.5} />
             </button>
-          </form>
+
+            {/* Opción Google, en el mismo registro minimalista */}
+            <button
+              type="button"
+              onClick={handleGoogleLogin}
+              className="mx-auto font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.1em] text-[#988e90] hover:text-[#e5e2e1] transition-colors"
+            >
+              Acceder con Google
+            </button>
+          </motion.form>
         )}
-      </motion.div>
+      </div>
     </main>
   );
 }
