@@ -18,6 +18,7 @@ import {
   Heart,
   CalendarRange,
   TrendingUp,
+  Wallet,
   Bell,
   Settings,
   LogOut,
@@ -38,6 +39,7 @@ const MAIN: Item[] = [
   { label: "Favoritos", icon: Heart, href: "/favoritos", match: ["/favoritos"] },
   { label: "Calendario", icon: CalendarRange, href: "/calendario", match: ["/calendario"] },
   { label: "Rentabilidad", icon: TrendingUp, href: "/rentabilidad", match: ["/rentabilidad"] },
+  { label: "Pagos", icon: Wallet, href: "/pagos", match: ["/pagos"] },
   { label: "Notificaciones", icon: Bell, href: "/notificaciones", match: ["/notificaciones"] },
 ];
 
