@@ -37,7 +37,19 @@ export async function updateSession(request: NextRequest) {
   // Rutas públicas: el landing "/" (match exacto) + "/sumate" (registro) + las de
   // auth/oferta. El resto de la app (/buscar, /staff, /tablero) queda gateada.
   const path = request.nextUrl.pathname;
-  const publicPrefixes = ["/login", "/auth/callback", "/dev-login", "/o", "/sumate"];
+  const publicPrefixes = [
+    "/login",
+    "/auth/callback",
+    "/dev-login",
+    "/o",
+    "/sumate",
+    // Pantallas del lado staff (standalone, tal cual Stitch). Por ahora públicas
+    // para poder verlas; el gate real llega con el fork "staff con cuenta".
+    "/fichaje",
+    "/panel-staff",
+    "/onboarding-staff",
+    "/editar-perfil-staff",
+  ];
   const isPublic = path === "/" || publicPrefixes.some((p) => path.startsWith(p));
 
   if (!user && !isPublic) {
