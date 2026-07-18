@@ -14,6 +14,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { oficioColor } from "@/lib/avatar-color";
+import { fmtHora } from "@/lib/dates";
 
 export interface CalGig {
   id: string;
@@ -58,13 +59,6 @@ function gigDayKeys(g: CalGig): string[] {
     guard++;
   }
   return keys;
-}
-
-function fmtHora(iso: string | null): string | null {
-  if (!iso) return null;
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
 }
 
 export function CalendarioClient({ gigs }: { gigs: CalGig[] }) {

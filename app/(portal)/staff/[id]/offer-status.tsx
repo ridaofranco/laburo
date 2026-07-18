@@ -15,6 +15,8 @@
  * gig + timestamps de la propia oferta. Copy en voseo, sin em dash.
  */
 
+import { fmtFecha } from "@/lib/dates";
+
 export interface OfferRow {
   id: string;
   role: string | null;
@@ -58,10 +60,7 @@ function badgeClass(label: string): string {
 
 /** Fecha corta legible (es-AR) para el pie de cada fila. null si vacía/inválida. */
 function shortDate(iso: string | null): string | null {
-  if (!iso) return null;
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleDateString("es-AR", { day: "2-digit", month: "short" });
+  return fmtFecha(iso);
 }
 
 /** Pie de la fila: refleja el último hito conocido de la oferta. */

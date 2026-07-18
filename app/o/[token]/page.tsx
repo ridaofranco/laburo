@@ -21,6 +21,7 @@
  */
 
 import { createClient } from "@/lib/supabase/server";
+import { fmtFechaHora } from "@/lib/dates";
 import { AcceptDecline } from "./accept-decline";
 import {
   deriveView,
@@ -32,12 +33,9 @@ import {
 // El flip sent->viewed debe correr por request; nunca servir un RSC cacheado.
 export const dynamic = "force-dynamic";
 
-/** Fecha legible es-AR (Node full-ICU). null si vacía/inválida → se omite la fila. */
+/** Fecha legible es-AR (hora AR, no la del server UTC). null si vacía/inválida. */
 function fmtDate(iso: string | null): string | null {
-  if (!iso) return null;
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleString("es-AR", {
+  return fmtFechaHora(iso, {
     weekday: "long",
     day: "2-digit",
     month: "long",

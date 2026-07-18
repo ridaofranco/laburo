@@ -13,6 +13,7 @@
 
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { fmtFecha } from "@/lib/dates";
 
 interface OfferRow {
   id: string;
@@ -63,7 +64,7 @@ function relative(at: number): string {
   const d = Math.floor(h / 24);
   if (d === 1) return "ayer";
   if (d < 7) return `hace ${d} días`;
-  return new Date(at).toLocaleDateString("es-AR", { day: "2-digit", month: "short" });
+  return fmtFecha(at) ?? "";
 }
 
 /** Deriva el evento más reciente que describe a la oferta. */

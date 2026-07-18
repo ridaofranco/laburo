@@ -12,6 +12,7 @@ import Link from "next/link";
 import { StaffNav } from "@/components/staff-nav";
 import { requireStaff, getMyStaffOffers, offerLabel, type StaffOffer } from "@/lib/staff";
 import { PendingOfferActions } from "./pending-offer-actions";
+import { fmtFecha, fmtHora as fmtHoraTz } from "@/lib/dates";
 
 const SYNE = "font-[family-name:var(--font-syne)]";
 
@@ -22,17 +23,12 @@ const money = new Intl.NumberFormat("es-AR", {
 });
 
 function fmtDia(iso: string | null): string {
-  if (!iso) return "Fecha a confirmar";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "Fecha a confirmar";
-  return d.toLocaleDateString("es-AR", { day: "2-digit", month: "short", year: "numeric" });
+  return fmtFecha(iso, { day: "2-digit", month: "short", year: "numeric" }) ?? "Fecha a confirmar";
 }
 
 function fmtHora(iso: string | null): string | null {
-  if (!iso) return null;
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }) + " hs";
+  const h = fmtHoraTz(iso);
+  return h ? `${h} hs` : null;
 }
 
 export default async function PanelStaffPage() {

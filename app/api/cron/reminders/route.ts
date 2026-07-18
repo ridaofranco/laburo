@@ -38,6 +38,7 @@ import { render } from "@react-email/components";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { sendMail, smtpEnabled } from "@/lib/email/mailer";
 import { ReminderEmail } from "@/components/emails/reminder-email";
+import { fmtFechaHora } from "@/lib/dates";
 
 // Nunca cachear: cada disparo del cron debe ejecutar de verdad.
 export const dynamic = "force-dynamic";
@@ -55,17 +56,9 @@ interface DueOffer {
   expires_at: string | null;
 }
 
-/** Fecha legible para el email (server-side, Node full-ICU). null si inválida. */
+/** Fecha legible para el email (hora AR, no la del server UTC). null si inválida. */
 function formatExpires(iso?: string | null): string | null {
-  if (!iso) return null;
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleString("es-AR", {
-    day: "2-digit",
-    month: "long",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return fmtFechaHora(iso);
 }
 
 export async function GET(request: Request) {

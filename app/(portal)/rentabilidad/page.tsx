@@ -13,6 +13,7 @@ import Link from "next/link";
 import { TrendingUp, Wallet } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { ExportCsvButton, type CsvRow } from "./export-csv-button";
+import { fmtFecha } from "@/lib/dates";
 
 const gridBg: React.CSSProperties = {
   backgroundSize: "40px 40px",
@@ -90,9 +91,7 @@ export default async function RentabilidadPage() {
     nombre: [o.staff_nombre, o.staff_apellido].filter(Boolean).join(" ").trim() || "Sin nombre",
     gig: (o.gig_title ?? "").trim() || "Sin evento",
     monto: o.amount != null ? money.format(Number(o.amount)) : "",
-    fecha: o.responded_at
-      ? new Date(o.responded_at).toLocaleDateString("es-AR")
-      : "",
+    fecha: fmtFecha(o.responded_at, {}) ?? "",
   }));
 
   const sinDatos = total === 0;
@@ -254,9 +253,7 @@ export default async function RentabilidadPage() {
                               {o.amount != null ? money.format(Number(o.amount)) : "—"}
                             </td>
                             <td className="py-6 pl-6 text-[#cfc4c5] text-right">
-                              {o.responded_at
-                                ? new Date(o.responded_at).toLocaleDateString("es-AR")
-                                : "—"}
+                              {fmtFecha(o.responded_at, {}) ?? "—"}
                             </td>
                           </tr>
                         );

@@ -12,6 +12,7 @@
 
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { fmtFecha } from "@/lib/dates";
 
 interface OfferRow {
   id: string;
@@ -37,9 +38,7 @@ function compact(n: number): string {
 }
 
 function fecha(iso: string | null): string {
-  if (!iso) return "—";
-  const d = new Date(iso);
-  return Number.isNaN(d.getTime()) ? "—" : d.toLocaleDateString("es-AR");
+  return fmtFecha(iso, {}) ?? "—";
 }
 
 export default async function PagosPage() {

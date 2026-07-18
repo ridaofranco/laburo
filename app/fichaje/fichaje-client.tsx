@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { MapPin, LogIn, LogOut, CheckCircle2 } from "lucide-react";
 import { checkIn, checkOut } from "./actions";
+import { fmtHora as fmtHoraTz } from "@/lib/dates";
 
 export interface FichajeGig {
   gigId: string;
@@ -25,10 +26,7 @@ export interface FichajeGig {
 const SYNE = "font-[family-name:var(--font-syne)]";
 
 function hora(iso: string | null): string | null {
-  if (!iso) return null;
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
+  return fmtHoraTz(iso);
 }
 
 function getCoords(): Promise<{ lat: number | null; lng: number | null }> {

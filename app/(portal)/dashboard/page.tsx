@@ -9,6 +9,7 @@
 import Link from "next/link";
 import { UserPlus, ArrowRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { fmtFecha } from "@/lib/dates";
 
 interface Gig {
   id: string;
@@ -20,11 +21,8 @@ interface Gig {
 }
 
 function fmtRange(startIso: string | null, endIso: string | null): string {
-  const opt: Intl.DateTimeFormatOptions = { day: "2-digit", month: "short" };
-  const s = startIso ? new Date(startIso) : null;
-  const e = endIso ? new Date(endIso) : null;
-  const sv = s && !Number.isNaN(s.getTime()) ? s.toLocaleDateString("es-AR", opt) : null;
-  const ev = e && !Number.isNaN(e.getTime()) ? e.toLocaleDateString("es-AR", opt) : null;
+  const sv = fmtFecha(startIso);
+  const ev = fmtFecha(endIso);
   if (sv && ev) return `${sv} - ${ev}`;
   return sv ?? ev ?? "Sin fecha";
 }

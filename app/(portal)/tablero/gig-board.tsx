@@ -19,6 +19,7 @@ import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { ChevronDown, UserRoundSearch, UserRoundPlus, Pencil, MapPin } from "lucide-react";
 import { offerLabel } from "@/app/(portal)/staff/[id]/offer-status";
+import { fmtFecha, fmtHora } from "@/lib/dates";
 
 export interface BoardOffer {
   id: string;
@@ -57,12 +58,9 @@ export interface BoardGig {
   attendance: BoardAttendance[];
 }
 
-/** Hora corta es-AR, o null. */
+/** Hora corta es-AR (hora AR), o null. */
 function shortTime(iso: string | null): string | null {
-  if (!iso) return null;
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
+  return fmtHora(iso);
 }
 
 type Cobertura = "cubierto" | "pendiente" | "abierto";
@@ -90,12 +88,9 @@ function badgeTone(label: string): string {
   }
 }
 
-/** Fecha corta legible (es-AR). null si vacía/inválida. */
+/** Fecha corta legible (es-AR, hora AR). null si vacía/inválida. */
 function shortDate(iso: string | null): string | null {
-  if (!iso) return null;
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleDateString("es-AR", { day: "2-digit", month: "short" });
+  return fmtFecha(iso);
 }
 
 /** Nombre visible del candidato de una oferta (staff_nombre + apellido). */

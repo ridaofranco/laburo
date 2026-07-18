@@ -13,6 +13,7 @@ import Link from "next/link";
 import { ChevronLeft, ExternalLink, FilePlus2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { isHttpUrl, classifyCv } from "@/lib/cv";
+import { calcEdad } from "@/lib/dates";
 import { QuickActions } from "./quick-actions";
 import { CvView } from "./cv-view";
 import { OfferStatusList, type OfferRow } from "./offer-status";
@@ -177,17 +178,9 @@ export default async function ProfilePage({
   const estado = (p.estado ?? "").trim();
 
   // Edad derivada de la fecha de nacimiento (null si no hay o es inválida).
-  let edad: number | null = null;
-  if (p.fecha_nacimiento) {
-    const nac = new Date(p.fecha_nacimiento);
-    if (!Number.isNaN(nac.getTime())) {
-      const now = new Date();
-      let e = now.getFullYear() - nac.getFullYear();
-      const m = now.getMonth() - nac.getMonth();
-      if (m < 0 || (m === 0 && now.getDate() < nac.getDate())) e--;
-      if (e > 0 && e < 120) edad = e;
-    }
-  }
+  // calcEdad parsea AAAA-MM-DD como fecha local (evita el corrimiento UTC de
+  // new Date("AAAA-MM-DD") en un server UTC).
+  const edad = calcEdad(p.fecha_nacimiento);
   const expLine = experienceLine(p);
 
   const dispPills: string[] = [];

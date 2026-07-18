@@ -29,6 +29,7 @@ import { createClient } from "@/lib/supabase/server";
 import { sendMail, type MailResult } from "@/lib/email/mailer";
 import { OfferEmail } from "@/components/emails/offer-email";
 import { waLink } from "@/lib/wa";
+import { fmtFechaHora } from "@/lib/dates";
 
 export interface CreateOfferInput {
   staffProfileId: string;
@@ -66,17 +67,9 @@ interface RpcOffer {
   token?: string;
 }
 
-/** Fecha legible para el email (server-side, Node full-ICU). null si vacía/inválida. */
+/** Fecha legible para el email (hora AR, no la del server UTC). null si inválida. */
 function formatWhen(iso?: string | null): string | null {
-  if (!iso) return null;
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleString("es-AR", {
-    day: "2-digit",
-    month: "long",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return fmtFechaHora(iso);
 }
 
 export async function createAndSendOffer(

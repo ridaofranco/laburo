@@ -23,6 +23,7 @@ import { Select } from "@base-ui/react/select";
 import { Check, ChevronDown, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
+import { fmtFecha } from "@/lib/dates";
 import { WhatsAppGlyph } from "@/components/icons/whatsapp-glyph";
 import { createAndSendOffer } from "../offer-actions";
 
@@ -55,13 +56,7 @@ interface SendResult {
 
 /** Etiqueta legible de un gig existente: título · fecha · lugar. */
 function gigLabel(g: OfferFormGig): string {
-  let when: string | null = null;
-  if (g.starts_at) {
-    const d = new Date(g.starts_at);
-    if (!Number.isNaN(d.getTime())) {
-      when = d.toLocaleDateString("es-AR", { day: "2-digit", month: "short" });
-    }
-  }
+  const when = fmtFecha(g.starts_at);
   return [g.title, when, g.venue_name].filter(Boolean).join(" · ");
 }
 
