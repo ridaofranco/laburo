@@ -17,8 +17,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { ChevronDown, UserRoundSearch, UserRoundPlus, Pencil, MapPin } from "lucide-react";
+import { ChevronDown, UserRoundSearch, UserRoundPlus, Pencil, MapPin, CreditCard } from "lucide-react";
+import { toast } from "sonner";
 import { offerLabel } from "@/lib/offers";
+import { createClientCheckout } from "./payment-actions";
 import { fmtFecha, fmtHora } from "@/lib/dates";
 
 export interface BoardOffer {
@@ -42,6 +44,8 @@ export interface BoardGigMeta {
   ends_at: string | null;
   venue_name: string | null;
   status: string | null;
+  client_budget: number | null;
+  client_payment_status: string | null;
 }
 
 export interface BoardAttendance {
@@ -127,6 +131,27 @@ function GigCard({ item }: { item: BoardGig }) {
   const reduce = useReducedMotion();
   const resumen = resumenDe(offers);
   const faltan = Math.max(0, requiredTotal - resumen.cubierto);
+
+  const cobrado = gig.client_payment_status === "paid";
+  const puedeCobrar = (Number(gig.client_budget) || 0) > 0 && !cobrado;
+  const [cobrando, setCobrando] = useState(false);
+  async function cobrar() {
+    if (cobrando) return;
+    setCobrando(true);
+    try {
+      const res = await createClientCheckout(gig.id);
+      if (res.ok && res.url) {
+        window.open(res.url, "_blank", "noopener,noreferrer");
+        toast.success("Link de pago generado. Mandáselo al cliente.");
+      } else {
+        toast.error(res.reason || "No se pudo generar el cobro.");
+      }
+    } catch {
+      toast.error("No se pudo generar el cobro. Probá de nuevo.");
+    } finally {
+      setCobrando(false);
+    }
+  }
   // Abierto por defecto si hay un rol para volver a buscar (necesita atención) o
   // si ya hay gente fichada (para ver el check-in de un vistazo).
   const [open, setOpen] = useState(resumen.abierto > 0 || attendance.length > 0);
@@ -185,6 +210,20 @@ function GigCard({ item }: { item: BoardGig }) {
         >
           <UserRoundSearch size={14} /> Buscar staff
         </Link>
+        {cobrado ? (
+          <span className="inline-flex items-center gap-2 label-tech text-[11px] text-[#3dd68c]">
+            <CreditCard size={14} /> Cobrado
+          </span>
+        ) : puedeCobrar ? (
+          <button
+            type="button"
+            onClick={cobrar}
+            disabled={cobrando}
+            className="inline-flex items-center gap-2 label-tech text-[11px] text-[#b9c3ff] hover:text-[#e5e2e1] transition-colors disabled:opacity-50"
+          >
+            <CreditCard size={14} /> {cobrando ? "Generando…" : "Cobrar al cliente"}
+          </button>
+        ) : null}
       </div>
 
       <AnimatePresence initial={false}>

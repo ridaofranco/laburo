@@ -30,7 +30,7 @@ export default async function TableroPage() {
     await Promise.all([
       supabase
         .from("staff_app_gigs")
-        .select("id,title,starts_at,ends_at,venue_name,status")
+        .select("id,title,starts_at,ends_at,venue_name,status,client_budget,client_payment_status")
         .order("starts_at", { ascending: false }),
       supabase
         .from("staff_app_offers")
