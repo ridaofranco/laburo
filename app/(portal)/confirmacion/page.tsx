@@ -9,16 +9,24 @@
 
 import { ConfirmacionView, type ResumenCell } from "./confirmacion-view";
 
+type Param = string | string[] | undefined;
+
+/** Un query param puede venir repetido (string[]): tomamos el primero. Sin esto
+ * `.trim()` sobre un array tira 500. */
+function one(v: Param): string {
+  return (Array.isArray(v) ? v[0] ?? "" : v ?? "").trim();
+}
+
 export default async function ConfirmacionPage({
   searchParams,
 }: {
-  searchParams: Promise<{ staff?: string; rol?: string; evento?: string }>;
+  searchParams: Promise<{ staff?: Param; rol?: Param; evento?: Param }>;
 }) {
   const sp = await searchParams;
   const resumen: ResumenCell[] = [];
-  const staff = (sp.staff ?? "").trim();
-  const rol = (sp.rol ?? "").trim();
-  const evento = (sp.evento ?? "").trim();
+  const staff = one(sp.staff);
+  const rol = one(sp.rol);
+  const evento = one(sp.evento);
   if (staff) resumen.push({ label: "Staff", value: staff });
   if (rol) resumen.push({ label: "Rol", value: rol });
   if (evento) resumen.push({ label: "Evento", value: evento });
