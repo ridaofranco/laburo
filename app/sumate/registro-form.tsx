@@ -99,6 +99,7 @@ export function RegistroForm() {
       oficios: [...oficiosSel],
       fecha_nacimiento: f.fecha_nacimiento || null,
       experiencia: f.experiencia === "" ? null : f.experiencia === "Sí",
+      consentimiento: consent,
     };
     const fd = new FormData();
     fd.append("payload", JSON.stringify(payload));

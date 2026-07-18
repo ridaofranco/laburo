@@ -13,7 +13,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
-import { classifyCv } from "@/lib/cv";
+import { classifyCv, sniffCvMime } from "@/lib/cv";
 import { getMyStaffProfile } from "@/lib/staff";
 
 const CV_BUCKET = "staff-cvs";
@@ -97,6 +97,11 @@ export async function uploadMyCv(
     return { ok: false, reason: "El archivo es muy grande (máximo 10MB)." };
   }
 
+  // MIME real por magic bytes (no confiamos en file.type).
+  const head = new Uint8Array(await file.slice(0, 12).arrayBuffer());
+  const sniffed = sniffCvMime(head);
+  if (!sniffed) return { ok: false, reason: "El CV tiene que ser un PDF o una imagen." };
+
   // Solo un staff logueado puede subir su CV.
   const profile = await getMyStaffProfile();
   if (!profile) return { ok: false, reason: "No sos staff." };
@@ -106,7 +111,7 @@ export async function uploadMyCv(
   const path = `${profile.id}_${Date.now()}_${safe}`;
   const { error: upErr } = await admin.storage
     .from(CV_BUCKET)
-    .upload(path, file, { contentType: file.type || "application/octet-stream", upsert: false });
+    .upload(path, file, { contentType: sniffed, upsert: false });
   if (upErr) return { ok: false, reason: "No se pudo subir el archivo." };
 
   const supabase = await createClient();
@@ -115,8 +120,18 @@ export async function uploadMyCv(
   });
   const res = data as { ok: boolean; reason?: string } | null;
   if (error || !res?.ok) {
+    // Borrar el huérfano recién subido si el RPC no persistió el cv_url.
+    await admin.storage.from(CV_BUCKET).remove([path]);
     return { ok: false, reason: res?.reason ?? "No se pudo guardar el CV." };
   }
+
+  // Borrar el CV anterior si era un objeto del bucket (no un link de Drive) y es
+  // distinto del nuevo, para no acumular archivos muertos.
+  const prev = classifyCv(profile.cv_url);
+  if (prev.kind === "bucket" && prev.key && prev.key !== path) {
+    await admin.storage.from(CV_BUCKET).remove([prev.key]);
+  }
+
   revalidatePath("/editar-perfil-staff");
   return { ok: true };
 }

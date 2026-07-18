@@ -22,6 +22,36 @@ export type CvClassification =
   | { kind: "drive"; id: string; preview: string; open: string }
   | { kind: "bucket"; key: string };
 
+/**
+ * Detecta el MIME real de un CV por sus magic bytes (primeros ~12 bytes), sin
+ * confiar en file.type (que el cliente puede falsear). Devuelve el MIME si es un
+ * formato permitido (PDF / PNG / JPEG / WebP), o null si no lo reconoce.
+ * Server-side: recibe los primeros bytes del archivo como Uint8Array.
+ */
+export function sniffCvMime(bytes: Uint8Array): string | null {
+  // %PDF
+  if (bytes.length >= 4 && bytes[0] === 0x25 && bytes[1] === 0x50 && bytes[2] === 0x44 && bytes[3] === 0x46) {
+    return "application/pdf";
+  }
+  // PNG \x89PNG
+  if (bytes.length >= 8 && bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47) {
+    return "image/png";
+  }
+  // JPEG \xFF\xD8\xFF
+  if (bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) {
+    return "image/jpeg";
+  }
+  // WebP: "RIFF"...."WEBP"
+  if (
+    bytes.length >= 12 &&
+    bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46 &&
+    bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50
+  ) {
+    return "image/webp";
+  }
+  return null;
+}
+
 /** True si el string es una URL http(s) absoluta (para separar links reales de texto libre). */
 export function isHttpUrl(value: string | null | undefined): boolean {
   if (!value) return false;

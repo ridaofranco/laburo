@@ -10,6 +10,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
+import { sniffCvMime } from "@/lib/cv";
 
 const CV_BUCKET = "staff-cvs";
 
@@ -37,6 +38,7 @@ export interface RegisterInput {
   linkedin_url: string;
   portfolio_url: string;
   motivacion: string;
+  consentimiento: boolean;
 }
 
 export async function registerApplicant(
@@ -53,19 +55,33 @@ export async function registerApplicant(
   if (!input.nombre?.trim() || !input.email?.trim()) {
     return { ok: false, reason: "Nombre y email son obligatorios." };
   }
+  // Consentimiento Ley 25.326 validado también en el servidor: el check del
+  // browser se puede saltear, así que sin consentimiento explícito no se guarda
+  // ningún dato personal.
+  if (input.consentimiento !== true) {
+    return { ok: false, reason: "Necesitás aceptar el tratamiento de datos." };
+  }
 
-  // CV opcional → bucket privado (service-role).
+  // CV opcional → bucket privado (service-role). Validamos el MIME REAL por magic
+  // bytes (no confiamos en file.type) y, si el registro falla después, borramos el
+  // objeto para no dejar CVs huérfanos en el bucket.
+  const admin = createServiceRoleClient();
   let cvUrl: string | null = null;
+  let uploadedPath: string | null = null;
   const file = formData.get("cv");
   if (file instanceof File && file.size > 0) {
     if (file.size > 10 * 1024 * 1024) return { ok: false, reason: "El CV es muy grande (máx 10MB)." };
-    const admin = createServiceRoleClient();
+    const head = new Uint8Array(await file.slice(0, 12).arrayBuffer());
+    const sniffed = sniffCvMime(head);
+    if (!sniffed) return { ok: false, reason: "El CV tiene que ser un PDF o una imagen." };
     const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
     const path = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}_${safe}`;
-    const { error } = await admin.storage
+    const { error: upErr } = await admin.storage
       .from(CV_BUCKET)
-      .upload(path, file, { contentType: file.type || "application/octet-stream", upsert: false });
-    if (!error) cvUrl = `${CV_BUCKET}/${path}`;
+      .upload(path, file, { contentType: sniffed, upsert: false });
+    if (upErr) return { ok: false, reason: "No se pudo subir el CV. Probá de nuevo." };
+    uploadedPath = path;
+    cvUrl = `${CV_BUCKET}/${path}`;
   }
 
   // Mismo RPC que la web. createClient sin sesión = cliente anon (RPC granteado a anon).
@@ -96,6 +112,10 @@ export async function registerApplicant(
     p_linkedin_url: input.linkedin_url.trim() || null,
     p_motivacion: input.motivacion.trim() || null,
   });
-  if (error) return { ok: false, reason: "No se pudo enviar el registro. Probá de nuevo." };
+  if (error) {
+    // No dejar el CV huérfano si el registro no se guardó.
+    if (uploadedPath) await admin.storage.from(CV_BUCKET).remove([uploadedPath]);
+    return { ok: false, reason: "No se pudo enviar el registro. Probá de nuevo." };
+  }
   return { ok: true };
 }
