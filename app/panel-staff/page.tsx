@@ -68,7 +68,7 @@ export default async function PanelStaffPage() {
               <p className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#c6c6c6]">
                 {next ? "Próximo evento" : `Hola, ${nombre}`}
               </p>
-              <h2 className={`${SYNE} text-[40px] md:text-[96px] font-extrabold text-[#e5e2e1] tracking-tighter leading-[1.05]`}>
+              <h2 className={`${SYNE} text-[clamp(2rem,8vw,96px)] font-extrabold text-[#e5e2e1] tracking-tighter leading-[1.02] break-words`}>
                 {next ? (next.gig_title?.trim() || "Evento confirmado") : "Todavía sin eventos"}
               </h2>
               {next ? (

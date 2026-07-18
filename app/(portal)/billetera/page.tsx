@@ -16,7 +16,7 @@ export default function BilleteraPage() {
         <p className="label-tech text-[12px] text-[#cfc4c5] mb-4 tracking-[0.2em]">
           Próximamente
         </p>
-        <h1 className="font-[family-name:var(--font-syne)] text-[48px] md:text-[96px] font-extrabold leading-[1.05] tracking-[-0.04em] uppercase text-[#e5e2e1]">
+        <h1 className="font-[family-name:var(--font-syne)] text-[clamp(2rem,8vw,96px)] font-extrabold leading-[1.02] tracking-[-0.04em] uppercase text-[#e5e2e1] break-words">
           Billetera de
           <br />
           documentos

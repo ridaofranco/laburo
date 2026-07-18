@@ -106,7 +106,7 @@ export default async function RentabilidadPage() {
         {/* Header */}
         <section className="flex flex-col gap-6">
           <div className="flex justify-between items-end border-b border-[#2a2a2a] pb-2 gap-6">
-            <h2 className="font-[family-name:var(--font-syne)] text-[48px] md:text-[120px] font-extrabold text-[#e5e2e1] uppercase tracking-[-0.04em] leading-none">
+            <h2 className="font-[family-name:var(--font-syne)] text-[clamp(1.9rem,8vw,120px)] font-extrabold text-[#e5e2e1] uppercase tracking-[-0.04em] leading-[1.02] break-words">
               Análisis de
               <br />
               Rentabilidad

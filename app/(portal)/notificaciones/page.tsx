@@ -176,7 +176,7 @@ export default async function NotificacionesPage() {
     <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-24 md:py-40 grid grid-cols-12 gap-8 relative">
       {/* Header */}
       <header className="col-span-12 mb-12 border-b border-[#353535] pb-6">
-        <h1 className="font-[family-name:var(--font-syne)] text-[48px] md:text-[120px] font-extrabold leading-[1.1] tracking-[-0.04em] text-[#e5e2e1]">
+        <h1 className="font-[family-name:var(--font-syne)] text-[clamp(1.9rem,8vw,120px)] font-extrabold leading-[1.05] tracking-[-0.04em] text-[#e5e2e1] break-words">
           NOTIFICACIONES
         </h1>
       </header>

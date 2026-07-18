@@ -20,7 +20,7 @@ import { FavoriteNote } from "./favorite-note";
 import { Rating, type RatingGig } from "./rating";
 
 const PROFILE_COLUMNS =
-  "id,nombre,apellido,oficios,oficios_otro,provincia,ciudad,experiencia,anios_experiencia,eventos_trabajados,experiencia_detalle,disponibilidad_finde,disponibilidad_viajar,movilidad_propia,disponibilidad_aviso,estado,cv_url,portfolio_url,linkedin_url,telefono,email,situacion_legal,donde_trabajar,pais_residencia,motivacion";
+  "id,nombre,apellido,oficios,oficios_otro,provincia,ciudad,experiencia,anios_experiencia,eventos_trabajados,experiencia_detalle,disponibilidad_finde,disponibilidad_viajar,movilidad_propia,disponibilidad_aviso,estado,cv_url,portfolio_url,linkedin_url,telefono,email,documento,fecha_nacimiento,situacion_legal,donde_trabajar,pais_residencia,motivacion";
 
 interface Profile {
   id: string;
@@ -44,6 +44,8 @@ interface Profile {
   linkedin_url: string | null;
   telefono: string | null;
   email: string | null;
+  documento: string | null;
+  fecha_nacimiento: string | null;
   situacion_legal: string | null;
   donde_trabajar: string[] | null;
   pais_residencia: string | null;
@@ -172,6 +174,19 @@ export default async function ProfilePage({
   const oficios = (p.oficios ?? []).filter(Boolean);
   const loc = [p.ciudad, p.provincia].filter(Boolean).join(", ");
   const estado = (p.estado ?? "").trim();
+
+  // Edad derivada de la fecha de nacimiento (null si no hay o es inválida).
+  let edad: number | null = null;
+  if (p.fecha_nacimiento) {
+    const nac = new Date(p.fecha_nacimiento);
+    if (!Number.isNaN(nac.getTime())) {
+      const now = new Date();
+      let e = now.getFullYear() - nac.getFullYear();
+      const m = now.getMonth() - nac.getMonth();
+      if (m < 0 || (m === 0 && now.getDate() < nac.getDate())) e--;
+      if (e > 0 && e < 120) edad = e;
+    }
+  }
   const expLine = experienceLine(p);
 
   const dispPills: string[] = [];
@@ -210,7 +225,7 @@ export default async function ProfilePage({
       {/* Header monumental */}
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-[#1A1A1A] pb-10">
         <div className="min-w-0">
-          <h1 className="font-[family-name:var(--font-syne)] text-[clamp(2.5rem,8vw,104px)] font-extrabold leading-[0.9] tracking-tight uppercase text-[#e5e2e1] break-words">
+          <h1 className="font-[family-name:var(--font-syne)] text-[clamp(2rem,6vw,84px)] font-extrabold leading-[0.95] tracking-tight uppercase text-[#e5e2e1] [overflow-wrap:anywhere]">
             {nombreCompleto}
           </h1>
           <div className="flex flex-wrap items-center gap-4 mt-5">
@@ -236,6 +251,18 @@ export default async function ProfilePage({
       <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 mt-12">
         {/* Izquierda */}
         <div className="md:col-span-7 flex flex-col gap-10">
+          {/* Contacto y datos (lo que el productor necesita para contratar) */}
+          {((p.email ?? "").trim() || (p.telefono ?? "").trim() || (p.documento ?? "").trim() || edad) && (
+            <Section title="Contacto y datos">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
+                <InfoRow label="Email" value={p.email} />
+                <InfoRow label="Teléfono / WhatsApp" value={p.telefono} />
+                <InfoRow label="DNI / CUIT / pasaporte" value={p.documento} />
+                <InfoRow label="Edad" value={edad ? `${edad} años` : null} />
+              </div>
+            </Section>
+          )}
+
           {(p.motivacion ?? "").trim() && (
             <Section title="Perfil">
               <p className="text-[16px] leading-[1.7] text-[#e5e2e1] whitespace-pre-line">

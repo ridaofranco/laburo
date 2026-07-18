@@ -12,8 +12,12 @@ import {
   parseSearchParams,
   type RawSearchParams,
 } from "@/lib/search-params";
+import { oficios as OFICIOS_TAXONOMIA } from "@/lib/data/oficios";
 import { SearchClient } from "./search-client";
 import type { StaffCard } from "./candidate-card";
+
+/** Todas las etiquetas de oficio (ES) de la taxonomía real, para el match por texto. */
+const TODOS_OFICIOS = OFICIOS_TAXONOMIA.flatMap((g) => g.items.map((it) => it.es));
 
 const CARD_COLUMNS =
   "id,nombre,apellido,oficios,oficios_otro,provincia,ciudad,experiencia,anios_experiencia,eventos_trabajados";
@@ -35,20 +39,32 @@ export default async function SearchPage({
     query = query.overlaps("oficios", filters.oficios);
   }
 
-  // Texto libre: ilike parametrizado sobre nombre/apellido/experiencia + zona.
-  // filters.q ya viene saneado (sin caracteres que rompan el grammar de .or()).
+  // Texto libre: ilike sobre nombre/apellido/experiencia + zona, Y match contra
+  // la taxonomía de OFICIOS (el placeholder promete "rol o habilidad"). Como
+  // oficios es text[], se busca qué oficios de la taxonomía contienen el texto y
+  // se agregan como `oficios.cs.{"<oficio>"}` al mismo OR → tipear "bartender" o
+  // "sonid" devuelve a esa gente. filters.q ya viene saneado (grammar de .or()).
   if (filters.q) {
     const t = filters.q;
-    query = query.or(
-      [
-        `nombre.ilike.%${t}%`,
-        `apellido.ilike.%${t}%`,
-        `experiencia_detalle.ilike.%${t}%`,
-        `oficios_otro.ilike.%${t}%`,
-        `ciudad.ilike.%${t}%`,
-        `provincia.ilike.%${t}%`,
-      ].join(","),
-    );
+    const orParts = [
+      `nombre.ilike.%${t}%`,
+      `apellido.ilike.%${t}%`,
+      `experiencia_detalle.ilike.%${t}%`,
+      `oficios_otro.ilike.%${t}%`,
+      `ciudad.ilike.%${t}%`,
+      `provincia.ilike.%${t}%`,
+    ];
+    if (t.length >= 3) {
+      // Match sin acentos: "fotograf" encuentra "Fotógrafo/a", "sonid" → "sonido".
+      const norm = (s: string) =>
+        s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const tn = norm(t);
+      const matches = TODOS_OFICIOS.filter(
+        (o) => norm(o).includes(tn) && !/[,{}"\\]/.test(o),
+      ).slice(0, 20);
+      for (const o of matches) orParts.push(`oficios.cs.{"${o}"}`);
+    }
+    query = query.or(orParts.join(","));
   }
 
   if (filters.provincia) query = query.eq("provincia", filters.provincia);
