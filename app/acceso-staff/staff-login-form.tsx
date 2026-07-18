@@ -14,6 +14,7 @@ import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
+import { requestStaffMagicLink } from "./actions";
 
 const up = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -41,22 +42,12 @@ export function StaffLoginForm() {
     e.preventDefault();
     if (!email) return;
     setLoading(true);
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: callbackUrl(),
-        // El staff aún no tiene cuenta: se la creamos al pedir el link.
-        shouldCreateUser: true,
-      },
-    });
+    // El envío pasa por el server: valida el email contra el pool (service-role)
+    // ANTES de mandar el OTP. Respuesta uniforme = sin oráculo de enumeración, así
+    // que mostramos siempre la misma pantalla, esté o no en el pool.
+    await requestStaffMagicLink(email);
     setLoading(false);
-    if (error) {
-      toast.error("No pudimos enviar el link. Probá de nuevo.");
-    } else {
-      setSent(true);
-      toast.success("Revisá tu email para el link de acceso.");
-    }
+    setSent(true);
   };
 
   return (
@@ -86,8 +77,8 @@ export function StaffLoginForm() {
 
         {sent ? (
           <motion.p {...up(0.1)} className="text-center text-[16px] leading-[1.6] text-[#cfc4c5]">
-            Link enviado a <span className="text-[#e5e2e1]">{email}</span>. Revisá
-            tu email para entrar a tu cuenta.
+            Si <span className="text-[#e5e2e1]">{email}</span> está en nuestro pool
+            de staff, te mandamos un link para entrar. Revisá tu casilla.
           </motion.p>
         ) : (
           <motion.form {...up(0.2)} onSubmit={handleMagicLink} className="w-full flex flex-col gap-12">
