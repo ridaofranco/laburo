@@ -20,3 +20,5 @@ npm-debug.log*
 next-env.d.ts
 .vercel
 .stitch/
+
+testsprite_tests/tmp/config.json

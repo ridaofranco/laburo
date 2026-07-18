@@ -45,9 +45,14 @@ export function StaffLoginForm() {
     // El envío pasa por el server: valida el email contra el pool (service-role)
     // ANTES de mandar el OTP. Respuesta uniforme = sin oráculo de enumeración, así
     // que mostramos siempre la misma pantalla, esté o no en el pool.
-    await requestStaffMagicLink(email);
-    setLoading(false);
-    setSent(true);
+    try {
+      await requestStaffMagicLink(email);
+      setSent(true);
+    } catch {
+      toast.error("No pudimos procesar el pedido. Probá de nuevo.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

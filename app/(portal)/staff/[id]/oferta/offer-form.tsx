@@ -115,13 +115,27 @@ export function OfferForm({
     if (submitting) return; // Pitfall 5: no re-entrar mientras hay envío en vuelo.
     setError(null);
 
-    // Validación mínima client-side (la RPC igual re-valida server-side).
+    // Validación client-side: una oferta necesita rol, monto y una fecha, o llega
+    // incompleta al candidato. Conditions queda opcional (es texto extra).
     if (!role.trim()) {
       setError("Poné el rol de la oferta.");
       return;
     }
+    const montoNum = amount.trim() ? Number(amount.replace(/[^\d.]/g, "")) : NaN;
+    if (!(montoNum > 0)) {
+      setError("Poné el monto de la oferta.");
+      return;
+    }
     if (isNewGig && !gigTitle.trim()) {
-      setError("El gig nuevo necesita al menos un nombre.");
+      setError("El evento nuevo necesita un nombre.");
+      return;
+    }
+    if (isNewGig && !gigDate) {
+      setError("Poné la fecha del evento.");
+      return;
+    }
+    if (!isNewGig && !(gigs.find((g) => g.id === gigChoice)?.starts_at)) {
+      setError("El evento elegido no tiene fecha. Editalo o creá uno con fecha.");
       return;
     }
     if (!candidate.email && !candidate.telefono) {

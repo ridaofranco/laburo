@@ -75,7 +75,10 @@ export default async function PanelStaffPage() {
     .filter((o) => o.gig_starts_at != null && ts(o.gig_starts_at) < cutoff)
     .sort((a, b) => ts(b.gig_starts_at) - ts(a.gig_starts_at));
 
-  const next: StaffOffer | null = upcoming[0] ?? accepted[0] ?? null;
+  // Próximo = el confirmado futuro más cercano. Si no hay ninguno a futuro, NO
+  // caemos a un evento pasado (sería mentira rotularlo "Próximo"): el hero muestra
+  // el estado "sin eventos" y los pasados viven en el Historial.
+  const next: StaffOffer | null = upcoming[0] ?? null;
   const agenda = upcoming.filter((o) => o.id !== next?.id); // el resto (el próximo va en el hero)
   const totalGanado = past.reduce((s, o) => s + (Number(o.amount) || 0), 0);
 

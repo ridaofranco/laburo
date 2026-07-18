@@ -1,0 +1,1411 @@
+[
+  {
+    "id": "TC001",
+    "title": "Operator signs in and reaches the dashboard",
+    "description": "An operator can submit valid credentials and land on the dashboard after signing in.",
+    "category": "Operator Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user lands on the dashboard"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Review and accept a staff offer from the magic link",
+    "description": "A prospective staff member can open a public offer link, accept the offer, and see the confirmation state.",
+    "category": "Public Offer Magic-Link",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /o/[token]"
+      },
+      {
+        "type": "action",
+        "description": "Review the offer details"
+      },
+      {
+        "type": "action",
+        "description": "Accept the offer"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an acceptance confirmation is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Land on the operator dashboard after login",
+    "description": "An operator can sign in and reach the authenticated dashboard successfully.",
+    "category": "Operator Portal Navigation",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the dashboard is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Review an offer on the public magic link",
+    "description": "A staff member can open a magic-link offer page and review the offer details without signing in.",
+    "category": "Public Offer Accept/Decline (Magic Link)",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /o/[token]"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the offer details are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Accept a public offer",
+    "description": "A staff member can accept a public offer and see the acceptance confirmation state.",
+    "category": "Public Offer Accept/Decline (Magic Link)",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /o/[token]"
+      },
+      {
+        "type": "action",
+        "description": "Accept the offer"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an acceptance confirmation is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Check in for an assigned gig",
+    "description": "An authenticated staff member can open the check-in screen and confirm attendance for an assigned gig.",
+    "category": "Staff Check-in (Fichaje)",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /fichaje"
+      },
+      {
+        "type": "action",
+        "description": "Confirm check-in for the assigned gig"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the check-in acknowledgement is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Create and send a paid offer to a candidate",
+    "description": "An authenticated operator can create a paid offer from a candidate profile and see the offer marked as sent.",
+    "category": "Candidate Profile and Offer",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /buscar"
+      },
+      {
+        "type": "action",
+        "description": "Open a candidate profile from the results"
+      },
+      {
+        "type": "action",
+        "description": "Open the offer creation flow"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the offer details with valid information"
+      },
+      {
+        "type": "action",
+        "description": "Send the offer"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the offer status is marked as sent"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Create a new gig",
+    "description": "An authenticated operator can create a gig from the board and see it appear after saving.",
+    "category": "Create Gig",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /tablero/nuevo"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the gig details with valid information"
+      },
+      {
+        "type": "action",
+        "description": "Save the new gig"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the created gig is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Operator views the dashboard overview after login",
+    "description": "An authenticated operator can open the dashboard and see the overview content.",
+    "category": "Operator Dashboard and Portal Navigation",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify dashboard overview data is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Decline a public offer",
+    "description": "A staff member can decline a public offer and see the decline confirmation state.",
+    "category": "Public Offer Accept/Decline (Magic Link)",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /o/[token]"
+      },
+      {
+        "type": "action",
+        "description": "Decline the offer"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a decline confirmation is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "Operator creates a gig and sees it on the board",
+    "description": "An operator can create a new gig with staffing details and see it appear in the gig board.",
+    "category": "Create Gig",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to create a new gig"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the gig role field with Event Staff"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the date field with a valid date"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the pay field with a valid amount"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the location field with a valid location"
+      },
+      {
+        "type": "action",
+        "description": "Submit the gig form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new gig appears on the board"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "Navigate from the dashboard to core operator areas",
+    "description": "An authenticated operator can move from the dashboard into the gigs board and candidate search areas.",
+    "category": "Operator Portal Navigation",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to the gigs board"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation link to candidate search"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the candidate search page is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "Search and filter candidates",
+    "description": "An authenticated operator can search and filter the candidate pool and see matching results.",
+    "category": "Search Candidates",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /buscar"
+      },
+      {
+        "type": "action",
+        "description": "Apply role and availability filters"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify matching candidate results are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC014",
+    "title": "Operator sees an error for invalid login credentials",
+    "description": "An operator entering invalid credentials sees a login error and does not access the portal.",
+    "category": "Operator Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with invalid@example.com"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with invalid-password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a login error message is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC015",
+    "title": "Search for a candidate with filters",
+    "description": "An operator can search the candidate pool, refine results with role and availability filters, and see matching candidates.",
+    "category": "Search Candidate Pool",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation option for candidate search"
+      },
+      {
+        "type": "action",
+        "description": "Enter a search term"
+      },
+      {
+        "type": "action",
+        "description": "Apply role and availability filters"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify matching candidates are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC016",
+    "title": "Open a candidate profile from search results",
+    "description": "An authenticated operator can open a candidate profile from the search area and view the candidate details.",
+    "category": "Candidate Profile and Offer",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /buscar"
+      },
+      {
+        "type": "action",
+        "description": "Open a candidate profile from the results"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the candidate profile is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC017",
+    "title": "Operator navigates across the main portal sections",
+    "description": "An authenticated operator can move through the main portal areas and each section loads successfully.",
+    "category": "Operator Dashboard and Portal Navigation",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the calendar section"
+      },
+      {
+        "type": "action",
+        "description": "Click the payments section"
+      },
+      {
+        "type": "action",
+        "description": "Click the wallet section"
+      },
+      {
+        "type": "action",
+        "description": "Click the messages section"
+      },
+      {
+        "type": "action",
+        "description": "Click the notifications section"
+      },
+      {
+        "type": "action",
+        "description": "Click the settings section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the settings section is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC018",
+    "title": "Complete staff onboarding and reach the staff area",
+    "description": "A new staff member can finish onboarding and continue to the staff panel successfully.",
+    "category": "Staff Onboarding and Profile",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /onboarding-staff"
+      },
+      {
+        "type": "action",
+        "description": "Complete the onboarding fields with valid information"
+      },
+      {
+        "type": "action",
+        "description": "Continue from the onboarding flow"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the staff panel is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC019",
+    "title": "Operator marks a new gig as a highlighted event",
+    "description": "An operator can create a gig and optionally mark it as a highlighted event before saving.",
+    "category": "Create Gig",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to create a new gig"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the gig role field with Event Staff"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the date field with a valid date"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the pay field with a valid amount"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the location field with a valid location"
+      },
+      {
+        "type": "action",
+        "description": "Mark the gig as a highlighted event"
+      },
+      {
+        "type": "action",
+        "description": "Submit the gig form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new gig appears on the board"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the highlighted event status is shown"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC020",
+    "title": "Update staff profile details",
+    "description": "A staff member can edit profile information and see the updated profile saved in the staff area.",
+    "category": "Staff Onboarding and Profile",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /editar-perfil-staff"
+      },
+      {
+        "type": "action",
+        "description": "Update the profile fields with valid information"
+      },
+      {
+        "type": "action",
+        "description": "Save the profile changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated staff panel is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC021",
+    "title": "Submit a new staff registration",
+    "description": "A prospective staff member can complete the public join-us form and see a confirmation that the registration was received.",
+    "category": "Public Staff Registration",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sumate"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the personal details fields with valid information"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the role and availability fields with valid information"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a registration confirmation is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC022",
+    "title": "Open the staff panel from the public flow",
+    "description": "A staff member who reaches the staff area can access the staff panel successfully.",
+    "category": "Staff Onboarding and Profile",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /onboarding-staff"
+      },
+      {
+        "type": "action",
+        "description": "Complete the onboarding fields with valid information"
+      },
+      {
+        "type": "action",
+        "description": "Continue from the onboarding flow"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the staff panel is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC023",
+    "title": "Preserve required offer fields validation",
+    "description": "An operator sees validation feedback when attempting to send an offer without completing required details.",
+    "category": "Send Offer to Candidate",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation option for candidate search"
+      },
+      {
+        "type": "action",
+        "description": "Open a candidate profile from the results"
+      },
+      {
+        "type": "action",
+        "description": "Open the offer flow"
+      },
+      {
+        "type": "action",
+        "description": "Submit the offer without completing required fields"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify validation errors are visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC024",
+    "title": "Show no results when filters match nobody",
+    "description": "An operator sees an empty state when the candidate search criteria produce no matches.",
+    "category": "Search Candidate Pool",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the navigation option for candidate search"
+      },
+      {
+        "type": "action",
+        "description": "Enter a search term"
+      },
+      {
+        "type": "action",
+        "description": "Apply filters that exclude all candidates"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty state message is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC025",
+    "title": "See validation when gig details are incomplete",
+    "description": "An authenticated operator sees validation feedback when required gig fields are left incomplete and the gig is not created.",
+    "category": "Create Gig",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /tablero/nuevo"
+      },
+      {
+        "type": "action",
+        "description": "Submit the new gig form without completing required fields"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify gig validation errors are visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC026",
+    "title": "See an invalid or expired offer link state",
+    "description": "A user opening an invalid or expired offer link sees an unavailable state instead of the offer details.",
+    "category": "Public Offer Magic-Link",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /o/[token]"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an invalid or unavailable offer state is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC027",
+    "title": "See the check-in screen without an assigned gig",
+    "description": "An authenticated staff member can open the check-in page and see the empty or unavailable state when no assigned gig is present.",
+    "category": "Staff Check-in (Fichaje)",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /fichaje"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty or unavailable state is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC028",
+    "title": "Handle an invalid or expired magic link",
+    "description": "A visitor sees an error state when opening an invalid or expired offer link.",
+    "category": "Public Offer Accept/Decline (Magic Link)",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /o/[token]"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an invalid link or expired offer message is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC029",
+    "title": "See an empty state when no candidates match",
+    "description": "An authenticated operator sees an empty state when the search filters return no matching candidates.",
+    "category": "Search Candidates",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /buscar"
+      },
+      {
+        "type": "action",
+        "description": "Apply filters that produce no matches"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a no-results state is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC030",
+    "title": "Protected operator route redirects to login when logged out",
+    "description": "Visiting an operator portal route without a session redirects to /login.",
+    "category": "Auth & Access Control",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Ensure no active session (open a fresh context)"
+      },
+      {
+        "type": "action",
+        "description": "Navigate directly to /dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the app redirects to /login or shows the login screen"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC031",
+    "title": "Deep operator link redirects to login when unauthenticated",
+    "description": "Accessing /tablero while not signed in sends the user to the login screen.",
+    "category": "Auth & Access Control",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Ensure no active session"
+      },
+      {
+        "type": "action",
+        "description": "Navigate directly to /tablero"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user is redirected to /login and cannot see the gigs board"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC032",
+    "title": "Login form shows required-field validation",
+    "description": "Submitting the login form with empty fields surfaces validation errors instead of submitting.",
+    "category": "Operator Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Leave email and password empty"
+      },
+      {
+        "type": "action",
+        "description": "Click the login button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify required-field validation messages appear and no navigation happens"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC033",
+    "title": "Public staff registration validates required fields",
+    "description": "Submitting the /sumate form with missing required fields shows validation and blocks submission.",
+    "category": "Public Staff Registration",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sumate"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form without filling required fields"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify validation messages appear for the missing required fields"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC034",
+    "title": "Public staff registration accepts a valid submission",
+    "description": "Filling the /sumate form with valid data submits successfully and shows a confirmation.",
+    "category": "Public Staff Registration",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sumate"
+      },
+      {
+        "type": "action",
+        "description": "Fill all required personal and role/availability fields with valid data"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a success or confirmation state is shown"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC035",
+    "title": "Malformed magic-link token shows an invalid state",
+    "description": "Opening /o with a clearly malformed token shows an invalid/not-found offer state rather than crashing.",
+    "category": "Public Offer (Magic Link)",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /o/not-a-real-token-123"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an invalid or not-found offer message is displayed and the page does not error out"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC036",
+    "title": "Empty magic-link token is handled gracefully",
+    "description": "Opening the offer route with an empty/blank token does not crash the app.",
+    "category": "Public Offer (Magic Link)",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /o/ with an empty token segment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the app shows a safe error/invalid state and remains responsive"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC037",
+    "title": "Theme toggle switches between dark and light",
+    "description": "The dark/light theme toggle changes the visual theme and persists on reload.",
+    "category": "Theming & UI",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Click the theme toggle control"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the theme changes (dark <-> light)"
+      },
+      {
+        "type": "action",
+        "description": "Reload the page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected theme is preserved after reload"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC038",
+    "title": "Unknown route shows a not-found page",
+    "description": "Navigating to a route that does not exist shows a 404/not-found page, not a crash.",
+    "category": "Routing & Errors",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /ruta-que-no-existe-xyz"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a not-found page is displayed and the app stays usable"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC039",
+    "title": "Staff access entry page loads",
+    "description": "The /acceso-staff entry page renders and offers a way for staff to proceed.",
+    "category": "Staff Access & Onboarding",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /acceso-staff"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the staff access screen renders its primary content and an actionable element"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC040",
+    "title": "View gig detail page",
+    "description": "Opening a gig from the board shows its detail view with role, dates and assigned crew.",
+    "category": "Gig Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Authenticate as admin via /dev-login"
+      },
+      {
+        "type": "action",
+        "description": "Go to /tablero and open an existing gig"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the gig detail page renders role, dates and status"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC041",
+    "title": "Edit an existing gig",
+    "description": "An operator can open a gig's edit form, change a field and save it.",
+    "category": "Gig Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Authenticate as admin via /dev-login"
+      },
+      {
+        "type": "action",
+        "description": "Open a gig and go to its edit view"
+      },
+      {
+        "type": "action",
+        "description": "Change a field (e.g. pay or notes) and save"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the change is persisted and reflected on the gig"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC042",
+    "title": "Open the calendar view",
+    "description": "The calendar screen renders gigs/events on a date grid.",
+    "category": "Operator Portal Navigation",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Authenticate as admin via /dev-login"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /calendario"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a calendar with dates renders without error"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC043",
+    "title": "Open the payments view",
+    "description": "The payments screen loads and lists payment records or an empty state.",
+    "category": "Payments & Finance",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Authenticate as admin via /dev-login"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /pagos"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the payments view renders a list or an empty state"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC044",
+    "title": "Open the wallet view",
+    "description": "The wallet screen loads and shows balance/movements or an empty state.",
+    "category": "Payments & Finance",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Authenticate as admin via /dev-login"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /billetera"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the wallet view renders without error"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC045",
+    "title": "Open the profitability view",
+    "description": "The profitability screen renders metrics or an empty state.",
+    "category": "Payments & Finance",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Authenticate as admin via /dev-login"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /rentabilidad"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the profitability view renders without error"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC046",
+    "title": "Open the messages view",
+    "description": "The messages screen loads conversations or an empty state.",
+    "category": "Communication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Authenticate as admin via /dev-login"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /mensajes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the messages view renders without error"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC047",
+    "title": "Open the notifications view",
+    "description": "The notifications screen loads notifications or an empty state.",
+    "category": "Communication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Authenticate as admin via /dev-login"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /notificaciones"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the notifications view renders without error"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC048",
+    "title": "Add and view a favorite candidate",
+    "description": "An operator can mark a candidate as favorite and see it in /favoritos.",
+    "category": "Candidate Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Authenticate as admin via /dev-login"
+      },
+      {
+        "type": "action",
+        "description": "Open a candidate profile and mark it as favorite"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /favoritos"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the favorited candidate appears in the favorites list"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC049",
+    "title": "Open and save settings",
+    "description": "The settings screen loads and a change can be saved.",
+    "category": "Settings",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Authenticate as admin via /dev-login"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /config"
+      },
+      {
+        "type": "action",
+        "description": "Change a setting and save"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the setting is saved / a confirmation is shown"
+      }
+    ],
+    "priority": "Medium"
+  }
+]
