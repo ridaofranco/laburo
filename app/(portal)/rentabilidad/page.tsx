@@ -15,6 +15,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ExportCsvButton, type CsvRow } from "./export-csv-button";
 import { fmtFecha } from "@/lib/dates";
 import { money, moneyCompact } from "@/lib/format";
+import { LoadError } from "@/components/load-error";
 
 const gridBg: React.CSSProperties = {
   backgroundSize: "40px 40px",
@@ -40,7 +41,7 @@ const MES_ABR = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", 
 export default async function RentabilidadPage() {
   const supabase = await createClient();
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("staff_app_offers")
     .select(
       "id,amount,status,sent_at,responded_at,expires_at,gig_title,staff_nombre,staff_apellido",
@@ -105,7 +106,9 @@ export default async function RentabilidadPage() {
           </div>
         </section>
 
-        {sinDatos ? (
+        {error ? (
+          <LoadError what="la rentabilidad" />
+        ) : sinDatos ? (
           <div className="border border-[#2a2a2a] bg-[#0e0e0e] p-12 md:p-20 text-center">
             <p className="text-[16px] text-[#cfc4c5] max-w-[460px] mx-auto">
               Todavía no hay ofertas para analizar. Cuando empieces a enviar

@@ -14,6 +14,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { fmtFecha } from "@/lib/dates";
+import { LoadError } from "@/components/load-error";
 
 interface OfferRow {
   id: string;
@@ -161,7 +162,7 @@ function Dot({ severity }: { severity: Severity }) {
 export default async function NotificacionesPage() {
   const supabase = await createClient();
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("staff_app_offers")
     .select(
       "id,gig_id,staff_nombre,staff_apellido,gig_title,role,status,sent_at,viewed_at,responded_at,expires_at",
@@ -184,7 +185,9 @@ export default async function NotificacionesPage() {
 
       {/* Feed */}
       <div className="col-span-12 md:col-span-8 lg:col-span-6 md:col-start-3 lg:col-start-4">
-        {feed.length === 0 ? (
+        {error ? (
+          <LoadError what="las notificaciones" />
+        ) : feed.length === 0 ? (
           <div className="border-t border-b border-[#353535] py-20 text-center">
             <p className="text-[16px] text-[#cfc4c5] max-w-[420px] mx-auto">
               No hay actividad todavía. Cuando envíes ofertas, acá vas a ver

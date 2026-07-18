@@ -7,17 +7,26 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { CalendarioClient, type CalGig } from "./calendario-client";
+import { LoadError } from "@/components/load-error";
 
 export default async function CalendarioPage() {
   const supabase = await createClient();
 
-  const [{ data: gigsData }, { data: offersData }] = await Promise.all([
+  const [{ data: gigsData, error: gigsError }, { data: offersData }] = await Promise.all([
     supabase
       .from("staff_app_gigs")
       .select("id,title,starts_at,ends_at,venue_name")
       .order("starts_at", { ascending: true }),
     supabase.from("staff_app_offers").select("gig_id,status"),
   ]);
+
+  if (gigsError) {
+    return (
+      <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-16 md:py-24">
+        <LoadError what="el calendario" />
+      </div>
+    );
+  }
 
   const offers = (offersData ?? []) as { gig_id: string | null; status: string | null }[];
   const acceptedByGig = new Map<string, number>();

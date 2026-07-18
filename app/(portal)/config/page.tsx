@@ -49,9 +49,10 @@ export default async function ConfigPage() {
   const email = userData?.user?.email ?? "—";
   const rol = roleLabel(membership?.role ?? null);
   const nombreUsuario = email.split("@")[0] || "Vos";
-  const poolCount = pool.count ?? 0;
-  const gigsCount = gigs.count ?? 0;
-  const offersCount = offers.count ?? 0;
+  // "—" si la query falló (desconocido ≠ cero: no mostramos 0 engañoso).
+  const poolCount = pool.error ? "—" : pool.count ?? 0;
+  const gigsCount = gigs.error ? "—" : gigs.count ?? 0;
+  const offersCount = offers.error ? "—" : offers.count ?? 0;
 
   return (
     <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-16 md:py-24">

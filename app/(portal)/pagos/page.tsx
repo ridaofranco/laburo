@@ -14,6 +14,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { fmtFecha } from "@/lib/dates";
 import { money, moneyCompact } from "@/lib/format";
+import { LoadError } from "@/components/load-error";
 
 interface OfferRow {
   id: string;
@@ -34,7 +35,7 @@ function fecha(iso: string | null): string {
 export default async function PagosPage() {
   const supabase = await createClient();
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("staff_app_offers")
     .select("id,amount,status,responded_at,sent_at,gig_title,staff_nombre,staff_apellido")
     .eq("status", "accepted");
@@ -63,7 +64,11 @@ export default async function PagosPage() {
         </p>
       </div>
 
-      {rows.length === 0 ? (
+      {error ? (
+        <div className="mt-12">
+          <LoadError what="los pagos" />
+        </div>
+      ) : rows.length === 0 ? (
         <div className="border-t border-b border-[#4c4546] py-20 text-center mt-12">
           <p className="text-[16px] text-[#cfc4c5] max-w-[440px] mx-auto">
             Todavía no hay staff confirmado con un monto. Cuando alguien acepte una

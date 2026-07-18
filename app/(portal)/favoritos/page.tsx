@@ -16,6 +16,7 @@ import { ListFilter } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { oficioColor, initials } from "@/lib/avatar-color";
 import { FavoriteRemoveButton } from "./favorite-remove-button";
+import { LoadError } from "@/components/load-error";
 
 interface NoteRow {
   staff_profile_id: string;
@@ -54,7 +55,7 @@ export default async function FavoritosPage() {
   const supabase = await createClient();
 
   // 1. Favoritos del org (candidate_notes is_favorite=true), RLS-scopeado.
-  const { data: notesData } = await supabase
+  const { data: notesData, error } = await supabase
     .from("staff_app_candidate_notes")
     .select("staff_profile_id,note")
     .eq("is_favorite", true);
@@ -97,7 +98,9 @@ export default async function FavoritosPage() {
         </div>
       </header>
 
-      {profiles.length === 0 ? (
+      {error ? (
+        <LoadError what="los favoritos" />
+      ) : profiles.length === 0 ? (
         // Estado vacío honesto.
         <div className="border-t border-b border-[#4c4546] py-20 text-center">
           <p className="text-[16px] text-[#cfc4c5] max-w-[420px] mx-auto">
