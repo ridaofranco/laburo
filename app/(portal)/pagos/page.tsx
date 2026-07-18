@@ -32,6 +32,21 @@ function fecha(iso: string | null): string {
   return fmtFecha(iso, {}) ?? "—";
 }
 
+function estadoCobro(s: string | null): { label: string; cls: string } {
+  if (s === "approved") return { label: "Aprobado", cls: "text-[#3dd68c]" };
+  if (s === "rejected" || s === "cancelled") return { label: "Rechazado", cls: "text-[#ffb4ab]" };
+  if (s === "pending" || s === "in_process") return { label: "Pendiente", cls: "text-[#f5a623]" };
+  return { label: s ?? "—", cls: "text-[#cfc4c5]" };
+}
+
+interface CobroRow {
+  id: string;
+  gig_title: string | null;
+  amount: number | null;
+  status: string | null;
+  created_at: string;
+}
+
 export default async function PagosPage() {
   const supabase = await createClient();
 
@@ -50,6 +65,13 @@ export default async function PagosPage() {
   const totalComprometido = rows.reduce((s, r) => s + (Number(r.amount) || 0), 0);
   const conMonto = rows.filter((r) => r.amount != null && Number(r.amount) > 0).length;
 
+  // Panel de cobros al cliente (cada intento de pago por MercadoPago).
+  const { data: cobrosData } = await supabase
+    .from("staff_app_client_payment_events")
+    .select("id,gig_title,amount,status,created_at")
+    .order("created_at", { ascending: false });
+  const cobros = (cobrosData ?? []) as CobroRow[];
+
   return (
     <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-16 md:py-24">
       {/* Title */}
@@ -63,6 +85,44 @@ export default async function PagosPage() {
           es tu resumen.
         </p>
       </div>
+
+      {/* Panel de cobros al cliente: cada intento de pago por MercadoPago */}
+      {cobros.length > 0 && (
+        <section className="mb-16 border border-[#2a2a2a] bg-[#0e0e0e]">
+          <div className="px-6 py-5 border-b border-[#2a2a2a]">
+            <h3 className="font-[family-name:var(--font-syne)] text-[22px] font-semibold text-[#e5e2e1] uppercase tracking-tight">
+              Cobros al cliente
+            </h3>
+            <p className="text-[13px] text-[#8a8a8a] mt-1">
+              Cada intento de pago por MercadoPago y cómo salió. Se actualiza solo, no tenés que preguntar.
+            </p>
+          </div>
+          <ul className="flex flex-col">
+            {cobros.map((c) => {
+              const e = estadoCobro(c.status);
+              return (
+                <li
+                  key={c.id}
+                  className="flex items-center justify-between gap-4 px-6 py-4 border-b border-[#1A1A1A] last:border-0"
+                >
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-[15px] text-[#e5e2e1] truncate">
+                      {(c.gig_title ?? "").trim() || "Evento"}
+                    </span>
+                    <span className="label-tech text-[11px] text-[#8a8a8a]">{fecha(c.created_at)}</span>
+                  </div>
+                  <div className="flex items-center gap-6 shrink-0">
+                    <span className="text-[15px] text-[#cfc4c5]">
+                      {c.amount != null ? money(Number(c.amount)) : "—"}
+                    </span>
+                    <span className={`label-tech text-[12px] w-[80px] text-right ${e.cls}`}>{e.label}</span>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
 
       {error ? (
         <div className="mt-12">

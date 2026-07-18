@@ -34,13 +34,22 @@ export async function POST(request: Request) {
   try {
     const client = new MercadoPagoConfig({ accessToken });
     const p = await new Payment(client).get({ id: String(paymentId) });
-    const gigId = p.external_reference ?? "";
+    const gigId = p.external_reference || null;
+    const pid = String(p.id ?? paymentId);
+    const admin = createServiceRoleClient();
+
+    // Registrar SIEMPRE el intento (aprobado, rechazado, pendiente...) para el panel.
+    await admin.rpc("staff_app_log_payment_event", {
+      p_gig_id: gigId,
+      p_payment_id: pid,
+      p_status: p.status ?? null,
+      p_status_detail: p.status_detail ?? null,
+      p_amount: p.transaction_amount ?? null,
+    });
+
+    // Marcar el evento cobrado solo si el pago fue aprobado.
     if (p.status === "approved" && gigId) {
-      const admin = createServiceRoleClient();
-      await admin.rpc("staff_app_mark_gig_paid", {
-        p_gig_id: gigId,
-        p_payment_id: String(p.id ?? paymentId),
-      });
+      await admin.rpc("staff_app_mark_gig_paid", { p_gig_id: gigId, p_payment_id: pid });
     }
   } catch {
     // Si falla el fetch, devolvemos 200 igual; MP reintenta la notificación.
