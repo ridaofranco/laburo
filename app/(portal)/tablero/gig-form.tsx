@@ -10,8 +10,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
-import { ArrowLeft, CalendarPlus } from "lucide-react";
-import { createGig, updateGig, setGigDetails } from "./gig-actions";
+import { ArrowLeft, CalendarPlus, Plus, X } from "lucide-react";
+import { createGig, updateGig, setGigDetails, setGigSlots } from "./gig-actions";
 
 export interface GigInitial {
   id: string;
@@ -23,6 +23,7 @@ export interface GigInitial {
   venue_address: string | null;
   venue_lat: number | null;
   venue_lng: number | null;
+  slots?: { role: string; quantity: number }[];
 }
 
 const labelCls = "block mb-2 label-tech text-[11px] uppercase tracking-[0.1em] text-[#cfc4c5]";
@@ -56,6 +57,14 @@ export function GigForm({ initial }: { initial?: GigInitial }) {
     venue: initial?.venue_name ?? "",
     budget: initial?.client_budget != null ? String(initial.client_budget) : "",
   });
+  // Dotación requerida: filas {rol, cantidad} (cantidad como string editable).
+  const [slots, setSlots] = useState<{ role: string; qty: string }[]>(
+    initial?.slots?.map((s) => ({ role: s.role, qty: String(s.quantity) })) ?? [],
+  );
+  const addSlot = () => setSlots((s) => [...s, { role: "", qty: "1" }]);
+  const removeSlot = (i: number) => setSlots((s) => s.filter((_, idx) => idx !== i));
+  const setSlot = (i: number, k: "role" | "qty", v: string) =>
+    setSlots((s) => s.map((row, idx) => (idx === i ? { ...row, [k]: v } : row)));
 
   const set = <K extends keyof typeof f>(k: K, v: string) => setF((p) => ({ ...p, [k]: v }));
 
@@ -92,6 +101,11 @@ export function GigForm({ initial }: { initial?: GigInitial }) {
           venueAddress: initial?.venue_address ?? null,
         });
         if (!det.ok) toast.error(det.reason || "El evento se guardó, pero los datos extra no.");
+        const sl = await setGigSlots(
+          gigId,
+          slots.map((s) => ({ role: s.role, quantity: Number(s.qty.replace(/[^\d]/g, "")) || 0 })),
+        );
+        if (!sl.ok) toast.error(sl.reason || "El evento se guardó, pero la dotación no.");
       }
       toast.success(editing ? "Evento actualizado" : "Evento creado");
       router.push("/tablero");
@@ -156,6 +170,52 @@ export function GigForm({ initial }: { initial?: GigInitial }) {
           <p className="mt-2 text-[13px] text-[#8a8a8a] leading-[1.5]">
             Lo que le cobrás al cliente por este evento. Sirve para calcular tu margen en Rentabilidad (ingreso menos costo del staff). No se comparte con el staff.
           </p>
+        </div>
+        <div>
+          <label className={labelCls}>Dotación requerida (opcional)</label>
+          <p className="mb-4 text-[13px] text-[#8a8a8a] leading-[1.5]">
+            Declará cuántas personas necesitás por rol. El tablero te muestra cuántos puestos te faltan cubrir.
+          </p>
+          <div className="flex flex-col gap-3">
+            {slots.map((row, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <div className="flex-1">
+                  <input
+                    className={inputCls}
+                    value={row.role}
+                    onChange={(e) => setSlot(i, "role", e.target.value)}
+                    placeholder="Rol (ej: Bartender)"
+                    aria-label="Rol del puesto"
+                  />
+                </div>
+                <div className="w-20 shrink-0">
+                  <input
+                    className={`${inputCls} text-center`}
+                    inputMode="numeric"
+                    value={row.qty}
+                    onChange={(e) => setSlot(i, "qty", e.target.value)}
+                    placeholder="Cant."
+                    aria-label="Cantidad"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeSlot(i)}
+                  aria-label="Quitar puesto"
+                  className="shrink-0 text-[#8a8a8a] hover:text-[#ffb4ab] transition-colors p-2"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addSlot}
+              className="inline-flex items-center gap-2 self-start label-tech text-[11px] uppercase tracking-widest text-[#cfc4c5] hover:text-[#e5e2e1] border border-[#4c4546] hover:border-[#c6c6c6] px-4 py-2 transition-colors"
+            >
+              <Plus size={14} /> Agregar puesto
+            </button>
+          </div>
         </div>
 
         <div className="flex items-center justify-end gap-4 border-t border-[#1A1A1A] pt-8">

@@ -28,6 +28,32 @@ export interface GigDetailsInput {
  * predio para geofencing) vía RPC dedicada, sin tocar create/update_gig. Se llama
  * siempre con el set completo (el form es la fuente), así no pisa lo que ya había.
  */
+export interface GigSlot {
+  role: string;
+  quantity: number;
+}
+
+/** Reemplaza la dotación requerida del gig (puestos {rol, cantidad}) vía RPC. */
+export async function setGigSlots(
+  gigId: string,
+  slots: GigSlot[],
+): Promise<{ ok: boolean; reason?: string }> {
+  const supabase = await createClient();
+  const clean = slots
+    .map((s) => ({ role: s.role.trim(), quantity: Math.round(s.quantity) }))
+    .filter((s) => s.role !== "" && s.quantity > 0);
+  const { data, error } = await supabase.rpc("staff_app_set_gig_slots", {
+    p_gig_id: gigId,
+    p_slots: clean,
+  });
+  const res = data as { ok: boolean; reason?: string } | null;
+  if (error || !res?.ok) {
+    return { ok: false, reason: res?.reason ?? error?.message ?? "No se pudieron guardar los puestos." };
+  }
+  revalidatePath("/tablero");
+  return { ok: true };
+}
+
 export async function setGigDetails(
   gigId: string,
   input: GigDetailsInput,

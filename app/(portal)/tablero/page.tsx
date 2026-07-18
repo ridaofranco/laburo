@@ -26,24 +26,34 @@ import {
 export default async function TableroPage() {
   const supabase = await createClient();
 
-  const [{ data: gigsData }, { data: offersData }, { data: attData }] = await Promise.all([
-    supabase
-      .from("staff_app_gigs")
-      .select("id,title,starts_at,ends_at,venue_name,status")
-      .order("starts_at", { ascending: false }),
-    supabase
-      .from("staff_app_offers")
-      .select(
-        "id,gig_id,staff_profile_id,role,status,expires_at,sent_at,responded_at,gig_title,staff_nombre,staff_apellido",
-      ),
-    supabase
-      .from("staff_app_attendance")
-      .select("gig_id,staff_nombre,staff_apellido,check_in_at,check_out_at"),
-  ]);
+  const [{ data: gigsData }, { data: offersData }, { data: attData }, { data: slotsData }] =
+    await Promise.all([
+      supabase
+        .from("staff_app_gigs")
+        .select("id,title,starts_at,ends_at,venue_name,status")
+        .order("starts_at", { ascending: false }),
+      supabase
+        .from("staff_app_offers")
+        .select(
+          "id,gig_id,staff_profile_id,role,status,expires_at,sent_at,responded_at,gig_title,staff_nombre,staff_apellido",
+        ),
+      supabase
+        .from("staff_app_attendance")
+        .select("gig_id,staff_nombre,staff_apellido,check_in_at,check_out_at"),
+      supabase.from("staff_app_gig_slots").select("gig_id,role,quantity"),
+    ]);
 
   const gigs = (gigsData ?? []) as BoardGigMeta[];
   const offers = (offersData ?? []) as BoardOffer[];
   const attendance = (attData ?? []) as BoardAttendance[];
+  const slots = (slotsData ?? []) as { gig_id: string; role: string; quantity: number }[];
+
+  // Dotación requerida por gig (suma de cantidades).
+  const requiredByGig = new Map<string, number>();
+  for (const s of slots) {
+    if (!s.gig_id) continue;
+    requiredByGig.set(s.gig_id, (requiredByGig.get(s.gig_id) ?? 0) + (Number(s.quantity) || 0));
+  }
 
   // Left-join en memoria: agrupar ofertas por gig_id (Map).
   const byGig = new Map<string, BoardOffer[]>();
@@ -69,6 +79,7 @@ export default async function TableroPage() {
     gig,
     offers: byGig.get(gig.id) ?? [],
     attendance: attByGig.get(gig.id) ?? [],
+    requiredTotal: requiredByGig.get(gig.id) ?? 0,
   }));
 
   return (

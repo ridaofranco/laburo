@@ -23,5 +23,15 @@ export default async function EditarEventoPage({
     .maybeSingle();
 
   if (!data) redirect("/tablero");
-  return <GigForm initial={data as GigInitial} />;
+
+  const { data: slotsData } = await supabase
+    .from("staff_app_gig_slots")
+    .select("role,quantity")
+    .eq("gig_id", gigId);
+
+  return (
+    <GigForm
+      initial={{ ...data, slots: (slotsData ?? []) as { role: string; quantity: number }[] } as GigInitial}
+    />
+  );
 }

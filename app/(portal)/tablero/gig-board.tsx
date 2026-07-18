@@ -56,6 +56,7 @@ export interface BoardGig {
   gig: BoardGigMeta;
   offers: BoardOffer[];
   attendance: BoardAttendance[];
+  requiredTotal: number; // dotación requerida (suma de gig_slots), 0 si no se declaró
 }
 
 /** Hora corta es-AR (hora AR), o null. */
@@ -111,9 +112,10 @@ function resumenDe(offers: BoardOffer[]): Resumen {
 }
 
 function GigCard({ item }: { item: BoardGig }) {
-  const { gig, offers, attendance } = item;
+  const { gig, offers, attendance, requiredTotal } = item;
   const reduce = useReducedMotion();
   const resumen = resumenDe(offers);
+  const faltan = Math.max(0, requiredTotal - resumen.cubierto);
   // Abierto por defecto si hay un rol para volver a buscar (necesita atención) o
   // si ya hay gente fichada (para ver el check-in de un vistazo).
   const [open, setOpen] = useState(resumen.abierto > 0 || attendance.length > 0);
@@ -136,9 +138,17 @@ function GigCard({ item }: { item: BoardGig }) {
             {titulo}
           </span>
           {meta && <span className="label-tech text-[11px] text-[#cfc4c5] truncate">{meta}</span>}
-          <span className="label-tech text-[11px] text-[#cfc4c5] mt-1">
-            {resumen.cubierto} cubiertos · {resumen.pendiente} pendientes · {resumen.abierto} abiertos
-          </span>
+          {requiredTotal > 0 ? (
+            <span className={`label-tech text-[11px] mt-1 ${faltan > 0 ? "text-[#f5a623]" : "text-[#3dd68c]"}`}>
+              {resumen.cubierto} de {requiredTotal} cubiertos
+              {faltan > 0 ? ` · faltan ${faltan}` : " · completo"}
+              {resumen.pendiente > 0 ? ` · ${resumen.pendiente} pendientes` : ""}
+            </span>
+          ) : (
+            <span className="label-tech text-[11px] text-[#cfc4c5] mt-1">
+              {resumen.cubierto} cubiertos · {resumen.pendiente} pendientes · {resumen.abierto} abiertos
+            </span>
+          )}
         </div>
         <motion.span
           aria-hidden="true"
