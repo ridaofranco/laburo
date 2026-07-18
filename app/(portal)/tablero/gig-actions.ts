@@ -16,6 +16,39 @@ export interface GigInput {
   venue: string;
 }
 
+export interface GigDetailsInput {
+  clientBudget: number | null;
+  venueLat: number | null;
+  venueLng: number | null;
+  venueAddress: string | null;
+}
+
+/**
+ * Setea los "extras" del gig (ingreso del cliente para el margen + ubicación del
+ * predio para geofencing) vía RPC dedicada, sin tocar create/update_gig. Se llama
+ * siempre con el set completo (el form es la fuente), así no pisa lo que ya había.
+ */
+export async function setGigDetails(
+  gigId: string,
+  input: GigDetailsInput,
+): Promise<{ ok: boolean; reason?: string }> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("staff_app_set_gig_details", {
+    p_gig_id: gigId,
+    p_client_budget: input.clientBudget,
+    p_venue_lat: input.venueLat,
+    p_venue_lng: input.venueLng,
+    p_venue_address: input.venueAddress,
+  });
+  const res = data as { ok: boolean; reason?: string } | null;
+  if (error || !res?.ok) {
+    return { ok: false, reason: res?.reason ?? error?.message ?? "No se pudieron guardar los datos del evento." };
+  }
+  revalidatePath("/tablero");
+  revalidatePath("/rentabilidad");
+  return { ok: true };
+}
+
 export async function createGig(
   input: GigInput,
 ): Promise<{ ok: boolean; reason?: string; gigId?: string }> {

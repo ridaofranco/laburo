@@ -18,7 +18,7 @@ export default async function EditarEventoPage({
   const supabase = await createClient();
   const { data } = await supabase
     .from("staff_app_gigs")
-    .select("id,title,starts_at,ends_at,venue_name")
+    .select("id,title,starts_at,ends_at,venue_name,client_budget,venue_address,venue_lat,venue_lng")
     .eq("id", gigId)
     .maybeSingle();
 

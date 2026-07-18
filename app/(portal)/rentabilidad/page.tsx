@@ -54,6 +54,16 @@ export default async function RentabilidadPage() {
   const tasaAceptacion = total > 0 ? Math.round((acceptedCount / total) * 100) : null;
   const montoComprometido = accepted.reduce((sum, o) => sum + (Number(o.amount) || 0), 0);
 
+  // Margen = lo que le cobrás al cliente (suma de client_budget de los gigs)
+  // menos el costo del staff confirmado (monto comprometido). Tu ganancia.
+  const { data: gigsData } = await supabase.from("staff_app_gigs").select("client_budget");
+  const totalIngreso = (gigsData ?? []).reduce(
+    (s, g) => s + (Number((g as { client_budget: number | null }).client_budget) || 0),
+    0,
+  );
+  const tieneIngreso = totalIngreso > 0;
+  const margen = totalIngreso - montoComprometido;
+
   // Ofertas por mes: últimos 4 meses (incluye el actual), por sent_at.
   const now = new Date();
   const buckets: { label: string; count: number }[] = [];
@@ -187,6 +197,38 @@ export default async function RentabilidadPage() {
                 </div>
               </div>
             </section>
+
+            {/* Margen real: ingreso del cliente menos costo del staff */}
+            {tieneIngreso ? (
+              <section className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+                <div className="bg-[#0e0e0e] border border-[#2a2a2a] p-6">
+                  <span className="label-tech text-[12px] text-[#cfc4c5] block mb-4">Ingreso del cliente</span>
+                  <div className="font-[family-name:var(--font-syne)] text-[40px] md:text-[56px] font-bold text-[#e5e2e1] tracking-[-0.02em] leading-none">
+                    {moneyCompact(totalIngreso)}
+                  </div>
+                </div>
+                <div className="bg-[#0e0e0e] border border-[#2a2a2a] p-6">
+                  <span className="label-tech text-[12px] text-[#cfc4c5] block mb-4">Costo del staff</span>
+                  <div className="font-[family-name:var(--font-syne)] text-[40px] md:text-[56px] font-bold text-[#cfc4c5] tracking-[-0.02em] leading-none">
+                    {moneyCompact(montoComprometido)}
+                  </div>
+                </div>
+                <div className={`bg-[#0e0e0e] border p-6 ${margen >= 0 ? "border-[#3dd68c]/40" : "border-[#ffb4ab]/40"}`}>
+                  <span className="label-tech text-[12px] text-[#cfc4c5] block mb-4">Tu margen</span>
+                  <div className={`font-[family-name:var(--font-syne)] text-[40px] md:text-[56px] font-bold tracking-[-0.02em] leading-none ${margen >= 0 ? "text-[#3dd68c]" : "text-[#ffb4ab]"}`}>
+                    {moneyCompact(margen)}
+                  </div>
+                </div>
+              </section>
+            ) : (
+              <section className="mt-8 border border-[#2a2a2a] bg-[#0e0e0e] p-6">
+                <p className="text-[15px] text-[#cfc4c5] leading-[1.6] max-w-[560px]">
+                  Cargá el <span className="text-[#e5e2e1]">ingreso del cliente</span> en cada evento
+                  (desde el tablero, al crear o editar) y acá te calculo tu margen real: lo que cobrás
+                  menos el costo del staff.
+                </p>
+              </section>
+            )}
 
             {/* Tabla staff confirmado */}
             <section className="flex flex-col gap-6">

@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
 import { ArrowLeft, CalendarPlus } from "lucide-react";
-import { createGig, updateGig } from "./gig-actions";
+import { createGig, updateGig, setGigDetails } from "./gig-actions";
 
 export interface GigInitial {
   id: string;
@@ -19,6 +19,10 @@ export interface GigInitial {
   starts_at: string | null;
   ends_at: string | null;
   venue_name: string | null;
+  client_budget: number | null;
+  venue_address: string | null;
+  venue_lat: number | null;
+  venue_lng: number | null;
 }
 
 const labelCls = "block mb-2 label-tech text-[11px] uppercase tracking-[0.1em] text-[#cfc4c5]";
@@ -50,6 +54,7 @@ export function GigForm({ initial }: { initial?: GigInitial }) {
     startsAt: toLocalInput(initial?.starts_at ?? null),
     endsAt: toLocalInput(initial?.ends_at ?? null),
     venue: initial?.venue_name ?? "",
+    budget: initial?.client_budget != null ? String(initial.client_budget) : "",
   });
 
   const set = <K extends keyof typeof f>(k: K, v: string) => setF((p) => ({ ...p, [k]: v }));
@@ -70,13 +75,27 @@ export function GigForm({ initial }: { initial?: GigInitial }) {
     };
     try {
       const res = editing ? await updateGig(initial!.id, payload) : await createGig(payload);
-      if (res.ok) {
-        toast.success(editing ? "Evento actualizado" : "Evento creado");
-        router.push("/tablero");
-        router.refresh();
-      } else {
+      if (!res.ok) {
         toast.error(res.reason || "No se pudo guardar");
+        return;
       }
+      // Extras del gig (ingreso del cliente + ubicación). El monto se limpia a
+      // número; la ubicación se preserva de lo que ya había (el geocode la setea
+      // en su paso). Un fallo acá no tumba el guardado del evento, solo avisa.
+      const gigId = editing ? initial!.id : (res as { gigId?: string }).gigId;
+      const budgetNum = f.budget.trim() ? Number(f.budget.replace(/[^\d.]/g, "")) : null;
+      if (gigId) {
+        const det = await setGigDetails(gigId, {
+          clientBudget: budgetNum != null && !Number.isNaN(budgetNum) ? budgetNum : null,
+          venueLat: initial?.venue_lat ?? null,
+          venueLng: initial?.venue_lng ?? null,
+          venueAddress: initial?.venue_address ?? null,
+        });
+        if (!det.ok) toast.error(det.reason || "El evento se guardó, pero los datos extra no.");
+      }
+      toast.success(editing ? "Evento actualizado" : "Evento creado");
+      router.push("/tablero");
+      router.refresh();
     } catch {
       toast.error("No se pudo guardar. Probá de nuevo.");
     } finally {
@@ -123,6 +142,20 @@ export function GigForm({ initial }: { initial?: GigInitial }) {
         <div>
           <label htmlFor="gig-venue" className={labelCls}>Lugar</label>
           <input id="gig-venue" className={inputCls} value={f.venue} onChange={(e) => set("venue", e.target.value)} placeholder="Ej: Salón Central, CABA" />
+        </div>
+        <div>
+          <label htmlFor="gig-budget" className={labelCls}>Ingreso del cliente (opcional)</label>
+          <input
+            id="gig-budget"
+            inputMode="numeric"
+            className={inputCls}
+            value={f.budget}
+            onChange={(e) => set("budget", e.target.value)}
+            placeholder="Ej: 800000"
+          />
+          <p className="mt-2 text-[13px] text-[#8a8a8a] leading-[1.5]">
+            Lo que le cobrás al cliente por este evento. Sirve para calcular tu margen en Rentabilidad (ingreso menos costo del staff). No se comparte con el staff.
+          </p>
         </div>
 
         <div className="flex items-center justify-end gap-4 border-t border-[#1A1A1A] pt-8">
