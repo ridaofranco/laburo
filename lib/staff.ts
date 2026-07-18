@@ -14,11 +14,15 @@ export interface StaffProfile {
   apellido: string | null;
   email: string | null;
   telefono: string | null;
+  documento: string | null;
+  fecha_nacimiento: string | null;
   oficios: string[] | null;
   oficios_otro: string | null;
   provincia: string | null;
   ciudad: string | null;
   pais_residencia: string | null;
+  donde_trabajar: string[] | null;
+  situacion_legal: string | null;
   disponibilidad_aviso: string | null;
   disponibilidad_finde: boolean | null;
   disponibilidad_viajar: boolean | null;
