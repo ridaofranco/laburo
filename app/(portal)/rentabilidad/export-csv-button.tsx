@@ -15,7 +15,10 @@ export interface CsvRow {
 
 function toCsv(rows: CsvRow[]): string {
   const header = ["Staff", "Evento", "Monto", "Fecha"];
-  const esc = (v: string) => `"${v.replace(/"/g, '""')}"`;
+  // Anti CSV formula-injection: si el valor arranca con = + - @ (o tab/CR), Excel
+  // y Sheets lo ejecutan como fórmula. Prefijamos un apóstrofo para neutralizarlo.
+  const deFormula = (v: string) => (/^[=+\-@\t\r]/.test(v) ? `'${v}` : v);
+  const esc = (v: string) => `"${deFormula(v).replace(/"/g, '""')}"`;
   const lines = [
     header.map(esc).join(","),
     ...rows.map((r) => [r.nombre, r.gig, r.monto, r.fecha].map(esc).join(",")),

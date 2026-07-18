@@ -16,6 +16,7 @@
  */
 
 import { fmtFecha } from "@/lib/dates";
+import { offerLabel } from "@/lib/offers";
 
 export interface OfferRow {
   id: string;
@@ -26,20 +27,6 @@ export interface OfferRow {
   sent_at: string | null;
   viewed_at: string | null;
   responded_at: string | null;
-}
-
-/**
- * Etiqueta visible derivada del estado de la oferta. MISMO orden que la página
- * pública (D-06): accepted → "Aceptada", declined → "Rechazada",
- * now() > expires_at → "Vencida" (DERIVADO, nunca del valor 'expired' del enum),
- * viewed → "Vista", si no "Enviada".
- */
-export function offerLabel(o: { status: string | null; expires_at: string | null }): string {
-  if (o.status === "accepted") return "Aceptada";
-  if (o.status === "declined") return "Rechazada";
-  if (o.expires_at && new Date(o.expires_at).getTime() <= Date.now()) return "Vencida";
-  if (o.status === "viewed") return "Vista";
-  return "Enviada";
 }
 
 /** Clases del badge por etiqueta: verde aceptada, ámbar vencida, apagado rechazada, gris enviada/vista. */

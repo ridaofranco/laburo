@@ -83,11 +83,3 @@ export async function requireStaff(): Promise<StaffProfile> {
   return profile;
 }
 
-/** "Aceptada" | "Vencida" | "Vista" | "Enviada" | "Rechazada" — misma regla que el productor. */
-export function offerLabel(o: { status: string | null; expires_at: string | null }): string {
-  if (o.status === "accepted") return "Aceptada";
-  if (o.status === "declined") return "Rechazada";
-  if (o.expires_at && new Date(o.expires_at).getTime() <= Date.now()) return "Vencida";
-  if (o.status === "viewed") return "Vista";
-  return "Enviada";
-}

@@ -18,7 +18,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { ChevronDown, UserRoundSearch, UserRoundPlus, Pencil, MapPin } from "lucide-react";
-import { offerLabel } from "@/app/(portal)/staff/[id]/offer-status";
+import { offerLabel } from "@/lib/offers";
 import { fmtFecha, fmtHora } from "@/lib/dates";
 
 export interface BoardOffer {

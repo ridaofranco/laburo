@@ -13,6 +13,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { fmtFecha } from "@/lib/dates";
+import { money, moneyCompact } from "@/lib/format";
 
 interface OfferRow {
   id: string;
@@ -25,17 +26,6 @@ interface OfferRow {
   staff_apellido: string | null;
 }
 
-const money = new Intl.NumberFormat("es-AR", {
-  style: "currency",
-  currency: "ARS",
-  maximumFractionDigits: 0,
-});
-
-function compact(n: number): string {
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 10_000) return `$${Math.round(n / 1000)}K`;
-  return money.format(n);
-}
 
 function fecha(iso: string | null): string {
   return fmtFecha(iso, {}) ?? "—";
@@ -95,7 +85,7 @@ export default async function PagosPage() {
                 Total comprometido
               </span>
               <span className="font-[family-name:var(--font-syne)] text-[64px] md:text-[120px] font-extrabold text-[#c6c6c6] leading-[1.1] tracking-[-0.04em]">
-                {compact(totalComprometido)}
+                {moneyCompact(totalComprometido)}
               </span>
             </div>
             <div className="flex flex-col gap-2 p-6 border border-[#4c4546] bg-[#131313]">
@@ -146,7 +136,7 @@ export default async function PagosPage() {
                     </div>
                     <div className="col-span-2 text-left md:text-right text-[18px] text-[#e5e2e1]">
                       {r.amount != null && Number(r.amount) > 0
-                        ? money.format(Number(r.amount))
+                        ? money(Number(r.amount))
                         : "A convenir"}
                     </div>
                   </div>

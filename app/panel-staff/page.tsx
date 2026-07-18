@@ -10,17 +10,14 @@ export const dynamic = "force-dynamic";
 
 import Link from "next/link";
 import { StaffNav } from "@/components/staff-nav";
-import { requireStaff, getMyStaffOffers, offerLabel, type StaffOffer } from "@/lib/staff";
+import { requireStaff, getMyStaffOffers, type StaffOffer } from "@/lib/staff";
+import { offerLabel } from "@/lib/offers";
 import { PendingOfferActions } from "./pending-offer-actions";
 import { fmtFecha, fmtHora as fmtHoraTz } from "@/lib/dates";
+import { money } from "@/lib/format";
 
 const SYNE = "font-[family-name:var(--font-syne)]";
 
-const money = new Intl.NumberFormat("es-AR", {
-  style: "currency",
-  currency: "ARS",
-  maximumFractionDigits: 0,
-});
 
 function fmtDia(iso: string | null): string {
   return fmtFecha(iso, { day: "2-digit", month: "short", year: "numeric" }) ?? "Fecha a confirmar";
@@ -173,7 +170,7 @@ export default async function PanelStaffPage() {
                         {p.role?.trim() || "Rol a confirmar"}
                         {p.gig_venue?.trim() ? ` • ${p.gig_venue}` : ""}
                         {p.amount != null && Number(p.amount) > 0
-                          ? ` • ${money.format(Number(p.amount))}`
+                          ? ` • ${money(Number(p.amount))}`
                           : ""}
                       </span>
                     </div>

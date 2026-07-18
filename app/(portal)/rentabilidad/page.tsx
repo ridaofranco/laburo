@@ -14,6 +14,7 @@ import { TrendingUp, Wallet } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { ExportCsvButton, type CsvRow } from "./export-csv-button";
 import { fmtFecha } from "@/lib/dates";
+import { money, moneyCompact } from "@/lib/format";
 
 const gridBg: React.CSSProperties = {
   backgroundSize: "40px 40px",
@@ -35,18 +36,6 @@ interface OfferRow {
 
 const MES_ABR = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
 
-const money = new Intl.NumberFormat("es-AR", {
-  style: "currency",
-  currency: "ARS",
-  maximumFractionDigits: 0,
-});
-
-/** Formato compacto para el número monumental ($1.2M, $840K, $12.500). */
-function compactMoney(n: number): string {
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 10_000) return `$${Math.round(n / 1000)}K`;
-  return money.format(n);
-}
 
 export default async function RentabilidadPage() {
   const supabase = await createClient();
@@ -90,7 +79,7 @@ export default async function RentabilidadPage() {
   const csvRows: CsvRow[] = roster.map((o) => ({
     nombre: [o.staff_nombre, o.staff_apellido].filter(Boolean).join(" ").trim() || "Sin nombre",
     gig: (o.gig_title ?? "").trim() || "Sin evento",
-    monto: o.amount != null ? money.format(Number(o.amount)) : "",
+    monto: o.amount != null ? money(Number(o.amount)) : "",
     fecha: fmtFecha(o.responded_at, {}) ?? "",
   }));
 
@@ -190,7 +179,7 @@ export default async function RentabilidadPage() {
                     Monto comprometido
                   </span>
                   <div className="font-[family-name:var(--font-syne)] text-[48px] md:text-[64px] font-bold text-[#e5e2e1] tracking-[-0.02em] leading-none">
-                    {compactMoney(montoComprometido)}
+                    {moneyCompact(montoComprometido)}
                   </div>
                 </div>
               </div>
@@ -250,7 +239,7 @@ export default async function RentabilidadPage() {
                               {(o.gig_title ?? "").trim() || "Sin evento"}
                             </td>
                             <td className="py-6 px-6 text-[#e5e2e1] text-right">
-                              {o.amount != null ? money.format(Number(o.amount)) : "—"}
+                              {o.amount != null ? money(Number(o.amount)) : "—"}
                             </td>
                             <td className="py-6 pl-6 text-[#cfc4c5] text-right">
                               {fmtFecha(o.responded_at, {}) ?? "—"}
