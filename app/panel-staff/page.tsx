@@ -9,11 +9,17 @@
 export const dynamic = "force-dynamic";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { StaffNav } from "@/components/staff-nav";
 import { requireStaff, getMyStaffOffers, offerLabel, type StaffOffer } from "@/lib/staff";
+import { PendingOfferActions } from "./pending-offer-actions";
 
 const SYNE = "font-[family-name:var(--font-syne)]";
+
+const money = new Intl.NumberFormat("es-AR", {
+  style: "currency",
+  currency: "ARS",
+  maximumFractionDigits: 0,
+});
 
 function fmtDia(iso: string | null): string {
   if (!iso) return "Fecha a confirmar";
@@ -170,14 +176,12 @@ export default async function PanelStaffPage() {
                       <span className="text-[16px] text-[#cfc4c5]">
                         {p.role?.trim() || "Rol a confirmar"}
                         {p.gig_venue?.trim() ? ` • ${p.gig_venue}` : ""}
+                        {p.amount != null && Number(p.amount) > 0
+                          ? ` • ${money.format(Number(p.amount))}`
+                          : ""}
                       </span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className="label-tech text-[11px] uppercase tracking-widest text-[#cfc4c5] border border-[#1A1A1A] px-4 py-2">
-                        Revisá tu email / WhatsApp
-                      </span>
-                      <ArrowRight size={20} className="text-[#4c4546]" />
-                    </div>
+                    <PendingOfferActions offerId={p.id} />
                   </div>
                 ))}
               </div>

@@ -12,18 +12,21 @@
  * la cobertura NO se calculan acá: las deriva el client reusando offerLabel().
  */
 
+import Link from "next/link";
+import { CalendarPlus } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import {
   GigBoard,
   type BoardGig,
   type BoardGigMeta,
   type BoardOffer,
+  type BoardAttendance,
 } from "./gig-board";
 
 export default async function TableroPage() {
   const supabase = await createClient();
 
-  const [{ data: gigsData }, { data: offersData }] = await Promise.all([
+  const [{ data: gigsData }, { data: offersData }, { data: attData }] = await Promise.all([
     supabase
       .from("staff_app_gigs")
       .select("id,title,starts_at,ends_at,venue_name,status")
@@ -33,10 +36,14 @@ export default async function TableroPage() {
       .select(
         "id,gig_id,staff_profile_id,role,status,expires_at,sent_at,responded_at,gig_title,staff_nombre,staff_apellido",
       ),
+    supabase
+      .from("staff_app_attendance")
+      .select("gig_id,staff_nombre,staff_apellido,check_in_at,check_out_at"),
   ]);
 
   const gigs = (gigsData ?? []) as BoardGigMeta[];
   const offers = (offersData ?? []) as BoardOffer[];
+  const attendance = (attData ?? []) as BoardAttendance[];
 
   // Left-join en memoria: agrupar ofertas por gig_id (Map).
   const byGig = new Map<string, BoardOffer[]>();
@@ -47,22 +54,42 @@ export default async function TableroPage() {
     else byGig.set(o.gig_id, [o]);
   }
 
+  // Asistencia por gig.
+  const attByGig = new Map<string, BoardAttendance[]>();
+  for (const a of attendance) {
+    if (!a.gig_id) continue;
+    const list = attByGig.get(a.gig_id);
+    if (list) list.push(a);
+    else attByGig.set(a.gig_id, [a]);
+  }
+
   // Gigs ya vienen ordenados (próximos primero) por la query; los sin ofertas
   // quedan con offers vacío y el board los muestra como "sin ofertas todavía".
   const board: BoardGig[] = gigs.map((gig) => ({
     gig,
     offers: byGig.get(gig.id) ?? [],
+    attendance: attByGig.get(gig.id) ?? [],
   }));
 
   return (
     <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-12 md:py-20 pb-32 md:pb-20">
       <header className="flex flex-col gap-4 border-b border-[#1A1A1A] pb-8 mb-10">
         <p className="label-tech text-[12px] text-[#cfc4c5]">Operaciones</p>
-        <h1 className="font-[family-name:var(--font-syne)] text-[clamp(2.5rem,7vw,72px)] font-extrabold tracking-tight uppercase leading-none text-[#e5e2e1]">
-          Gestión de Eventos
-        </h1>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <h1 className="font-[family-name:var(--font-syne)] text-[clamp(2.5rem,7vw,72px)] font-extrabold tracking-tight uppercase leading-none text-[#e5e2e1]">
+            Gestión de Eventos
+          </h1>
+          <Link
+            href="/tablero/nuevo"
+            className="shrink-0 inline-flex items-center justify-center gap-3 bg-[#e5e2e1] text-black label-tech text-[12px] uppercase tracking-widest px-8 py-4 border border-[#e5e2e1] hover:bg-transparent hover:text-[#e5e2e1] transition-colors w-full md:w-auto"
+          >
+            <CalendarPlus size={16} />
+            Nuevo evento
+          </Link>
+        </div>
         <p className="text-[16px] text-[#cfc4c5] max-w-[560px]">
-          Mirá de un vistazo qué roles están cubiertos y cuáles seguís buscando.
+          Creá tus eventos, buscales el staff y seguí quién confirmó y quién ya
+          fichó en el lugar.
         </p>
       </header>
       <GigBoard board={board} />

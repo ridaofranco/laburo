@@ -17,7 +17,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { ChevronDown, UserRoundSearch, UserRoundPlus } from "lucide-react";
+import { ChevronDown, UserRoundSearch, UserRoundPlus, Pencil, MapPin } from "lucide-react";
 import { offerLabel } from "@/app/(portal)/staff/[id]/offer-status";
 
 export interface BoardOffer {
@@ -43,9 +43,26 @@ export interface BoardGigMeta {
   status: string | null;
 }
 
+export interface BoardAttendance {
+  gig_id: string | null;
+  staff_nombre: string | null;
+  staff_apellido: string | null;
+  check_in_at: string | null;
+  check_out_at: string | null;
+}
+
 export interface BoardGig {
   gig: BoardGigMeta;
   offers: BoardOffer[];
+  attendance: BoardAttendance[];
+}
+
+/** Hora corta es-AR, o null. */
+function shortTime(iso: string | null): string | null {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
 }
 
 type Cobertura = "cubierto" | "pendiente" | "abierto";
@@ -99,11 +116,12 @@ function resumenDe(offers: BoardOffer[]): Resumen {
 }
 
 function GigCard({ item }: { item: BoardGig }) {
-  const { gig, offers } = item;
+  const { gig, offers, attendance } = item;
   const reduce = useReducedMotion();
   const resumen = resumenDe(offers);
-  // Abierto por defecto si hay algún rol para volver a buscar (necesita atención).
-  const [open, setOpen] = useState(resumen.abierto > 0);
+  // Abierto por defecto si hay un rol para volver a buscar (necesita atención) o
+  // si ya hay gente fichada (para ver el check-in de un vistazo).
+  const [open, setOpen] = useState(resumen.abierto > 0 || attendance.length > 0);
 
   const titulo = (gig.title ?? "").trim() || "Gig sin título";
   const fecha = shortDate(gig.starts_at);
@@ -136,6 +154,22 @@ function GigCard({ item }: { item: BoardGig }) {
           <ChevronDown size={18} />
         </motion.span>
       </button>
+
+      {/* Acciones del evento (fuera del toggle: no anidar interactivos) */}
+      <div className="flex items-center gap-4 px-6 pb-4 -mt-1">
+        <Link
+          href={`/tablero/${gig.id}/editar`}
+          className="inline-flex items-center gap-2 label-tech text-[11px] text-[#cfc4c5] hover:text-[#e5e2e1] transition-colors"
+        >
+          <Pencil size={14} /> Editar
+        </Link>
+        <Link
+          href={`/buscar?gig=${gig.id}`}
+          className="inline-flex items-center gap-2 label-tech text-[11px] text-[#cfc4c5] hover:text-[#e5e2e1] transition-colors"
+        >
+          <UserRoundSearch size={14} /> Buscar staff
+        </Link>
+      </div>
 
       <AnimatePresence initial={false}>
         {open && (
@@ -196,6 +230,37 @@ function GigCard({ item }: { item: BoardGig }) {
                     );
                   })}
                 </ul>
+              )}
+
+              {/* Asistencia (check-ins reales del staff) */}
+              {attendance.length > 0 && (
+                <div className="mt-4 border-t border-[#1A1A1A] pt-4">
+                  <div className="flex items-center gap-2 label-tech text-[11px] text-[#cfc4c5] mb-3">
+                    <MapPin size={14} /> Fichaje en el lugar
+                  </div>
+                  <ul className="flex flex-col gap-2">
+                    {attendance.map((a, i) => {
+                      const nombre =
+                        [a.staff_nombre, a.staff_apellido].filter(Boolean).join(" ").trim() ||
+                        "Staff";
+                      const entrada = shortTime(a.check_in_at);
+                      const salida = shortTime(a.check_out_at);
+                      return (
+                        <li
+                          key={i}
+                          className="flex items-center justify-between gap-3 bg-[#131313] border border-[#1A1A1A] px-4 py-3"
+                        >
+                          <span className="text-[15px] text-[#e5e2e1] uppercase truncate">{nombre}</span>
+                          <span className="shrink-0 label-tech text-[11px] text-[#cfc4c5]">
+                            <span className="text-[#3dd68c]">↓ {entrada ?? "—"}</span>
+                            <span className="mx-2 opacity-40">|</span>
+                            <span>↑ {salida ?? "—"}</span>
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
               )}
             </div>
           </motion.div>
