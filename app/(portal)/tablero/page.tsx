@@ -39,7 +39,7 @@ export default async function TableroPage() {
         ),
       supabase
         .from("staff_app_attendance")
-        .select("gig_id,staff_nombre,staff_apellido,check_in_at,check_out_at"),
+        .select("gig_id,staff_nombre,staff_apellido,check_in_at,check_out_at,check_in_distance_m"),
       supabase.from("staff_app_gig_slots").select("gig_id,role,quantity"),
     ]);
 

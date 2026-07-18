@@ -50,6 +50,17 @@ export interface BoardAttendance {
   staff_apellido: string | null;
   check_in_at: string | null;
   check_out_at: string | null;
+  check_in_distance_m: number | null;
+}
+
+// Radio "en el lugar": más lejos que esto, el fichaje se marca como sospechoso.
+const GEOFENCE_M = 300;
+
+/** Etiqueta de distancia al predio, o null si no hay dato (gig sin ubicación). */
+function distanciaFichaje(m: number | null): { text: string; lejos: boolean } | null {
+  if (m == null || Number.isNaN(m)) return null;
+  const txt = m >= 1000 ? `${(m / 1000).toFixed(1)} km` : `${Math.round(m)} m`;
+  return { text: txt, lejos: m > GEOFENCE_M };
 }
 
 export interface BoardGig {
@@ -250,12 +261,22 @@ function GigCard({ item }: { item: BoardGig }) {
                         "Staff";
                       const entrada = shortTime(a.check_in_at);
                       const salida = shortTime(a.check_out_at);
+                      const dist = a.check_in_at ? distanciaFichaje(a.check_in_distance_m) : null;
                       return (
                         <li
                           key={i}
                           className="flex items-center justify-between gap-3 bg-[#131313] border border-[#1A1A1A] px-4 py-3"
                         >
-                          <span className="text-[15px] text-[#e5e2e1] uppercase truncate">{nombre}</span>
+                          <div className="flex flex-col min-w-0">
+                            <span className="text-[15px] text-[#e5e2e1] uppercase truncate">{nombre}</span>
+                            {dist && (
+                              <span
+                                className={`label-tech text-[10px] ${dist.lejos ? "text-[#f5a623]" : "text-[#3dd68c]"}`}
+                              >
+                                {dist.lejos ? `lejos del predio (${dist.text})` : `en el lugar (${dist.text})`}
+                              </span>
+                            )}
+                          </div>
                           <span className="shrink-0 label-tech text-[11px] text-[#cfc4c5]">
                             <span className="text-[#3dd68c]">↓ {entrada ?? "—"}</span>
                             <span className="mx-2 opacity-40">|</span>

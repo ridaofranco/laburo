@@ -28,6 +28,38 @@ export interface GigDetailsInput {
  * predio para geofencing) vía RPC dedicada, sin tocar create/update_gig. Se llama
  * siempre con el set completo (el form es la fuente), así no pisa lo que ya había.
  */
+/**
+ * Geocodifica una dirección a lat/lng con Nominatim (OpenStreetMap, gratis). Uso
+ * bajo volumen (el productor carga eventos de a poco), dentro de la policy de OSM
+ * (User-Agent + poca frecuencia). Devuelve null si no encuentra o falla; el que
+ * llama guarda la dirección igual y el geofencing simplemente no aplica.
+ */
+export async function geocodeAddress(
+  address: string,
+): Promise<{ lat: number; lng: number } | null> {
+  const q = (address ?? "").trim();
+  if (q.length < 4) return null;
+  try {
+    const r = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(q)}`,
+      {
+        headers: { "User-Agent": "LABURO/1.0 (staff app; contacto rrhh@somosder.com.ar)" },
+        signal: AbortSignal.timeout(8000),
+      },
+    );
+    if (!r.ok) return null;
+    const data = (await r.json()) as Array<{ lat?: string; lon?: string }>;
+    const hit = Array.isArray(data) ? data[0] : null;
+    if (!hit) return null;
+    const lat = Number(hit.lat);
+    const lng = Number(hit.lon);
+    if (Number.isNaN(lat) || Number.isNaN(lng)) return null;
+    return { lat, lng };
+  } catch {
+    return null;
+  }
+}
+
 export interface GigSlot {
   role: string;
   quantity: number;

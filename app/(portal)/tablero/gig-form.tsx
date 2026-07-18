@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
 import { ArrowLeft, CalendarPlus, Plus, X } from "lucide-react";
-import { createGig, updateGig, setGigDetails, setGigSlots } from "./gig-actions";
+import { createGig, updateGig, setGigDetails, setGigSlots, geocodeAddress } from "./gig-actions";
 
 export interface GigInitial {
   id: string;
@@ -55,6 +55,7 @@ export function GigForm({ initial }: { initial?: GigInitial }) {
     startsAt: toLocalInput(initial?.starts_at ?? null),
     endsAt: toLocalInput(initial?.ends_at ?? null),
     venue: initial?.venue_name ?? "",
+    address: initial?.venue_address ?? "",
     budget: initial?.client_budget != null ? String(initial.client_budget) : "",
   });
   // Dotación requerida: filas {rol, cantidad} (cantidad como string editable).
@@ -94,13 +95,19 @@ export function GigForm({ initial }: { initial?: GigInitial }) {
       const gigId = editing ? initial!.id : (res as { gigId?: string }).gigId;
       const budgetNum = f.budget.trim() ? Number(f.budget.replace(/[^\d.]/g, "")) : null;
       if (gigId) {
+        // Geocodifico la dirección para el geofencing del fichaje (OSM, gratis).
+        const addr = f.address.trim();
+        const geo = addr ? await geocodeAddress(addr) : null;
         const det = await setGigDetails(gigId, {
           clientBudget: budgetNum != null && !Number.isNaN(budgetNum) ? budgetNum : null,
-          venueLat: initial?.venue_lat ?? null,
-          venueLng: initial?.venue_lng ?? null,
-          venueAddress: initial?.venue_address ?? null,
+          venueLat: geo?.lat ?? null,
+          venueLng: geo?.lng ?? null,
+          venueAddress: addr || null,
         });
         if (!det.ok) toast.error(det.reason || "El evento se guardó, pero los datos extra no.");
+        else if (addr && !geo) {
+          toast.error("Guardé la dirección, pero no pude ubicarla en el mapa. Revisá que esté completa (calle, número, ciudad).");
+        }
         const sl = await setGigSlots(
           gigId,
           slots.map((s) => ({ role: s.role, quantity: Number(s.qty.replace(/[^\d]/g, "")) || 0 })),
@@ -156,6 +163,13 @@ export function GigForm({ initial }: { initial?: GigInitial }) {
         <div>
           <label htmlFor="gig-venue" className={labelCls}>Lugar</label>
           <input id="gig-venue" className={inputCls} value={f.venue} onChange={(e) => set("venue", e.target.value)} placeholder="Ej: Salón Central, CABA" />
+        </div>
+        <div>
+          <label htmlFor="gig-address" className={labelCls}>Dirección del predio (opcional, para el fichaje por GPS)</label>
+          <input id="gig-address" className={inputCls} value={f.address} onChange={(e) => set("address", e.target.value)} placeholder="Ej: Av. Corrientes 1234, CABA" />
+          <p className="mt-2 text-[13px] text-[#8a8a8a] leading-[1.5]">
+            Si la cargás, cuando el staff fiche te aviso si lo hizo cerca del lugar o lejos. Poné calle, número y ciudad.
+          </p>
         </div>
         <div>
           <label htmlFor="gig-budget" className={labelCls}>Ingreso del cliente (opcional)</label>
