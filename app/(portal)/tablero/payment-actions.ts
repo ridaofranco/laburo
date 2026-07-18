@@ -64,14 +64,17 @@ export async function createClientCheckout(
     return { ok: false, reason: "No se pudo generar el link de pago. Probá de nuevo." };
   }
 
-  const isProd = process.env.NODE_ENV === "production";
-  const url = isProd ? created.init_point : created.sandbox_init_point;
+  // Money-safe: usamos el checkout SANDBOX (tarjetas de prueba, cero plata real)
+  // salvo que estemos en prod Y MP_SANDBOX no esté prendido. Para probar en prod
+  // sin cobrar de verdad, seteá MP_SANDBOX=true; para cobrar real, sacalo.
+  const sandbox = process.env.NODE_ENV !== "production" || process.env.MP_SANDBOX === "true";
+  const url = sandbox ? created.sandbox_init_point : created.init_point;
   if (!created.id || !url) {
     return {
       ok: false,
-      reason: isProd
-        ? "MercadoPago no devolvió el link."
-        : "Sandbox no disponible con estas credenciales. Para probar sin plata real necesito credenciales de PRUEBA (TEST-).",
+      reason: sandbox
+        ? "El checkout de prueba no está disponible. Necesito credenciales de PRUEBA (TEST-) de MercadoPago."
+        : "MercadoPago no devolvió el link.",
     };
   }
 
