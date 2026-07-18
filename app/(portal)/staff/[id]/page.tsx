@@ -31,7 +31,7 @@ interface Profile {
   provincia: string | null;
   ciudad: string | null;
   experiencia: boolean | null;
-  anios_experiencia: number | null;
+  anios_experiencia: string | null;
   eventos_trabajados: number | null;
   experiencia_detalle: string | null;
   disponibilidad_finde: boolean | null;
@@ -79,8 +79,9 @@ function experienceLine(p: Profile): string | null {
   if (p.eventos_trabajados && p.eventos_trabajados > 0) {
     parts.push(`${p.eventos_trabajados} ${p.eventos_trabajados === 1 ? "evento" : "eventos"}`);
   }
-  if (p.anios_experiencia && p.anios_experiencia > 0) {
-    parts.push(`${p.anios_experiencia} ${p.anios_experiencia === 1 ? "año" : "años"} de experiencia`);
+  const anios = (p.anios_experiencia ?? "").trim();
+  if (anios) {
+    parts.push(`${anios} ${anios === "1" ? "año" : "años"} de experiencia`);
   }
   if (parts.length) return parts.join(" · ");
   if (p.experiencia === true) return "Con experiencia";

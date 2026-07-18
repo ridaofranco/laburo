@@ -12,7 +12,10 @@ export interface StaffCard {
   provincia: string | null;
   ciudad: string | null;
   experiencia: boolean | null;
-  anios_experiencia: number | null;
+  // anios_experiencia es TEXT en la DB: rangos como "0–1","3–5","10+" (los que
+  // escribe el form real). Antes tipado como number → "3–5" > 0 = NaN, el chip
+  // no se mostraba nunca para los registrados por el formulario nuevo.
+  anios_experiencia: string | null;
   eventos_trabajados: number | null;
 }
 
@@ -21,9 +24,8 @@ function experienceLabel(c: StaffCard): string | null {
   if (c.eventos_trabajados && c.eventos_trabajados > 0) {
     return `${c.eventos_trabajados} ${c.eventos_trabajados === 1 ? "evento" : "eventos"}`;
   }
-  if (c.anios_experiencia && c.anios_experiencia > 0) {
-    return `${c.anios_experiencia} ${c.anios_experiencia === 1 ? "año" : "años"}`;
-  }
+  const anios = (c.anios_experiencia ?? "").trim();
+  if (anios) return `${anios} ${anios === "1" ? "año" : "años"}`;
   if (c.experiencia === true) return "Con experiencia";
   return null;
 }

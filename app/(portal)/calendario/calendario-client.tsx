@@ -179,7 +179,7 @@ export function CalendarioClient({ gigs }: { gigs: CalGig[] }) {
               Hoy
             </button>
             <Link
-              href="/buscar"
+              href="/tablero/nuevo"
               className="px-6 py-3 bg-[#c6c6c6] text-[#0e0e0e] label-tech text-[12px] hover:bg-transparent hover:text-[#c6c6c6] border border-[#c6c6c6] transition-all duration-200"
             >
               Nuevo evento
