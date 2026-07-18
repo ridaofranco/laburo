@@ -14,71 +14,21 @@ import { toast } from "sonner";
 import { Save, FileText, Upload, ExternalLink, ChevronDown, Sparkles } from "lucide-react";
 import { oficios } from "@/lib/data/oficios";
 import { paises, provinciasAr } from "@/lib/data/paises";
-import { useCvAutofill } from "@/components/staff-form-shared";
+import {
+  useCvAutofill,
+  WORK_REGIONS,
+  LEGAL_OPTS,
+  AVISO_OPTS,
+  YEARS_OPTS,
+  labelCls,
+  inputCls,
+  selectCls,
+  sectionTitle,
+  Section,
+  Check,
+} from "@/components/staff-form-shared";
 import { updateMyStaffProfile, uploadMyCv, signMyStaffCv } from "./actions";
 import type { StaffProfile } from "@/lib/staff";
-
-const WORK_REGIONS = [
-  "En mi país de residencia",
-  "Argentina",
-  "Resto de LATAM",
-  "España / Europa",
-  "EEUU / Canadá",
-  "Medio Oriente",
-  "Cualquier país — dispuesto/a a viajar",
-];
-const LEGAL_OPTS = [
-  "Ciudadano/a o residente con permiso",
-  "Tengo permiso de trabajo",
-  "Necesitaría sponsor / visa",
-  "No estoy seguro/a",
-];
-const AVISO_OPTS = [
-  "Disponibilidad inmediata",
-  "Con 24–48 hs de aviso",
-  "Con 1 semana de aviso",
-  "A coordinar",
-];
-const YEARS_OPTS = ["0–1", "1–3", "3–5", "5–10", "10+"];
-
-const labelCls = "block mb-2 label-tech text-[11px] uppercase tracking-[0.1em] text-[#cfc4c5]";
-const inputCls =
-  "w-full bg-transparent border-0 border-b border-[#4c4546] focus:border-[#e5e2e1] outline-none text-[16px] text-[#e5e2e1] py-3 px-0 rounded-none transition-colors placeholder:text-[#565656] [color-scheme:dark]";
-const selectCls = `${inputCls} appearance-none`;
-const sectionTitle = "font-[family-name:var(--font-syne)] text-[22px] font-semibold text-[#c6c6c6] uppercase tracking-tight";
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="flex flex-col gap-6 border-t border-[#1A1A1A] pt-8">
-      <h2 className={sectionTitle}>{title}</h2>
-      {children}
-    </section>
-  );
-}
-
-function Check({
-  label,
-  checked,
-  onChange,
-}: {
-  label: string;
-  checked: boolean;
-  onChange: (v: boolean) => void;
-}) {
-  return (
-    <label className="flex items-center gap-3 border border-[#4c4546] px-4 py-3 cursor-pointer hover:border-[#c6c6c6] transition-colors">
-      <span
-        className={`w-5 h-5 border grid place-items-center text-[11px] shrink-0 ${
-          checked ? "bg-[#c6c6c6] border-[#c6c6c6] text-black" : "border-[#4c4546]"
-        }`}
-      >
-        {checked ? "✓" : ""}
-      </span>
-      <input type="checkbox" className="sr-only" checked={checked} onChange={(e) => onChange(e.target.checked)} />
-      <span className="text-[14px] text-[#e5e2e1]">{label}</span>
-    </label>
-  );
-}
 
 export function EditProfileForm({ profile }: { profile: StaffProfile }) {
   const router = useRouter();
@@ -244,28 +194,28 @@ export function EditProfileForm({ profile }: { profile: StaffProfile }) {
       <Section title="Tus datos">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <label className={labelCls}>Nombre</label>
-            <input className={inputCls} value={f.nombre} onChange={(e) => set("nombre", e.target.value)} />
+            <label htmlFor="ep-nombre" className={labelCls}>Nombre</label>
+            <input id="ep-nombre" className={inputCls} value={f.nombre} onChange={(e) => set("nombre", e.target.value)} />
           </div>
           <div>
-            <label className={labelCls}>Apellido</label>
-            <input className={inputCls} value={f.apellido} onChange={(e) => set("apellido", e.target.value)} />
+            <label htmlFor="ep-apellido" className={labelCls}>Apellido</label>
+            <input id="ep-apellido" className={inputCls} value={f.apellido} onChange={(e) => set("apellido", e.target.value)} />
           </div>
           <div>
-            <label className={labelCls}>Teléfono / WhatsApp</label>
-            <input className={inputCls} value={f.telefono} onChange={(e) => set("telefono", e.target.value)} placeholder="+54 11 5555 5555" />
+            <label htmlFor="ep-telefono" className={labelCls}>Teléfono / WhatsApp</label>
+            <input id="ep-telefono" className={inputCls} value={f.telefono} onChange={(e) => set("telefono", e.target.value)} placeholder="+54 11 5555 5555" />
           </div>
           <div>
-            <label className={labelCls}>DNI / CUIT / pasaporte</label>
-            <input className={inputCls} value={f.documento} onChange={(e) => set("documento", e.target.value)} />
+            <label htmlFor="ep-documento" className={labelCls}>DNI / CUIT / pasaporte</label>
+            <input id="ep-documento" className={inputCls} value={f.documento} onChange={(e) => set("documento", e.target.value)} />
           </div>
           <div>
-            <label className={labelCls}>Fecha de nacimiento</label>
-            <input type="date" className={inputCls} value={f.fecha_nacimiento} onChange={(e) => set("fecha_nacimiento", e.target.value)} />
+            <label htmlFor="ep-fecha-nac" className={labelCls}>Fecha de nacimiento</label>
+            <input id="ep-fecha-nac" type="date" className={inputCls} value={f.fecha_nacimiento} onChange={(e) => set("fecha_nacimiento", e.target.value)} />
           </div>
           <div>
-            <label className={labelCls}>País de residencia</label>
-            <select className={selectCls} value={f.pais_residencia} onChange={(e) => set("pais_residencia", e.target.value)}>
+            <label htmlFor="ep-pais" className={labelCls}>País de residencia</label>
+            <select id="ep-pais" className={selectCls} value={f.pais_residencia} onChange={(e) => set("pais_residencia", e.target.value)}>
               <option value="">Elegí…</option>
               {paises.map((p) => <option key={p} value={p}>{p}</option>)}
             </select>
@@ -277,19 +227,19 @@ export function EditProfileForm({ profile }: { profile: StaffProfile }) {
       <Section title="Dónde estás">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <label className={labelCls}>Provincia / Estado</label>
+            <label htmlFor="ep-provincia" className={labelCls}>Provincia / Estado</label>
             {esArgentina ? (
-              <select className={selectCls} value={f.provincia} onChange={(e) => set("provincia", e.target.value)}>
+              <select id="ep-provincia" className={selectCls} value={f.provincia} onChange={(e) => set("provincia", e.target.value)}>
                 <option value="">Elegí…</option>
                 {provinciasAr.map((p) => <option key={p} value={p}>{p}</option>)}
               </select>
             ) : (
-              <input className={inputCls} value={f.provincia} onChange={(e) => set("provincia", e.target.value)} />
+              <input id="ep-provincia" className={inputCls} value={f.provincia} onChange={(e) => set("provincia", e.target.value)} />
             )}
           </div>
           <div>
-            <label className={labelCls}>Ciudad</label>
-            <input className={inputCls} value={f.ciudad} onChange={(e) => set("ciudad", e.target.value)} />
+            <label htmlFor="ep-ciudad" className={labelCls}>Ciudad</label>
+            <input id="ep-ciudad" className={inputCls} value={f.ciudad} onChange={(e) => set("ciudad", e.target.value)} />
           </div>
         </div>
       </Section>
@@ -302,8 +252,8 @@ export function EditProfileForm({ profile }: { profile: StaffProfile }) {
           ))}
         </div>
         <div>
-          <label className={labelCls}>Situación para trabajar</label>
-          <select className={selectCls} value={f.situacion_legal} onChange={(e) => set("situacion_legal", e.target.value)}>
+          <label htmlFor="ep-situacion" className={labelCls}>Situación para trabajar</label>
+          <select id="ep-situacion" className={selectCls} value={f.situacion_legal} onChange={(e) => set("situacion_legal", e.target.value)}>
             <option value="">Elegí…</option>
             {LEGAL_OPTS.map((o) => <option key={o} value={o}>{o}</option>)}
           </select>
@@ -312,7 +262,7 @@ export function EditProfileForm({ profile }: { profile: StaffProfile }) {
 
       {/* Oficios */}
       <Section title="Puestos a los que aplicás">
-        <p className="label-tech text-[11px] text-[#565656] -mt-2">Marcá todos los que apliquen.</p>
+        <p className="label-tech text-[11px] text-[#8a8a8a] -mt-2">Marcá todos los que apliquen.</p>
         <div className="border border-[#1A1A1A]">
           {oficios.map((g) => {
             const count = g.items.filter((it) => oficiosSel.has(it.es)).length;
@@ -334,8 +284,8 @@ export function EditProfileForm({ profile }: { profile: StaffProfile }) {
           })}
         </div>
         <div>
-          <label className={labelCls}>Otro (especificá)</label>
-          <input className={inputCls} value={f.oficios_otro} onChange={(e) => set("oficios_otro", e.target.value)} />
+          <label htmlFor="ep-oficios-otro" className={labelCls}>Otro (especificá)</label>
+          <input id="ep-oficios-otro" className={inputCls} value={f.oficios_otro} onChange={(e) => set("oficios_otro", e.target.value)} />
         </div>
       </Section>
 
@@ -343,24 +293,24 @@ export function EditProfileForm({ profile }: { profile: StaffProfile }) {
       <Section title="Experiencia y disponibilidad">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <label className={labelCls}>¿Tenés experiencia en eventos?</label>
-            <select className={selectCls} value={f.experiencia} onChange={(e) => set("experiencia", e.target.value)}>
+            <label htmlFor="ep-experiencia" className={labelCls}>¿Tenés experiencia en eventos?</label>
+            <select id="ep-experiencia" className={selectCls} value={f.experiencia} onChange={(e) => set("experiencia", e.target.value)}>
               <option value="">Elegí…</option>
               <option value="Sí">Sí</option>
               <option value="No">No</option>
             </select>
           </div>
           <div>
-            <label className={labelCls}>Años de experiencia</label>
-            <select className={selectCls} value={f.anios_experiencia} onChange={(e) => set("anios_experiencia", e.target.value)}>
+            <label htmlFor="ep-anios" className={labelCls}>Años de experiencia</label>
+            <select id="ep-anios" className={selectCls} value={f.anios_experiencia} onChange={(e) => set("anios_experiencia", e.target.value)}>
               <option value="">Elegí…</option>
               {YEARS_OPTS.map((y) => <option key={y} value={y}>{y}</option>)}
             </select>
           </div>
         </div>
         <div>
-          <label className={labelCls}>Contanos tu experiencia</label>
-          <textarea className={`${inputCls} resize-none`} rows={3} value={f.experiencia_detalle} onChange={(e) => set("experiencia_detalle", e.target.value)} placeholder="Eventos, roles, marcas con las que trabajaste…" />
+          <label htmlFor="ep-exp-detalle" className={labelCls}>Contanos tu experiencia</label>
+          <textarea id="ep-exp-detalle" className={`${inputCls} resize-none`} rows={3} value={f.experiencia_detalle} onChange={(e) => set("experiencia_detalle", e.target.value)} placeholder="Eventos, roles, marcas con las que trabajaste…" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <Check label="Disponible fines de semana" checked={f.disponibilidad_finde} onChange={(v) => set("disponibilidad_finde", v)} />
@@ -368,8 +318,8 @@ export function EditProfileForm({ profile }: { profile: StaffProfile }) {
           <Check label="Movilidad propia" checked={f.movilidad_propia} onChange={(v) => set("movilidad_propia", v)} />
         </div>
         <div>
-          <label className={labelCls}>¿Con cuánta anticipación podés tomar un trabajo?</label>
-          <select className={selectCls} value={f.disponibilidad_aviso} onChange={(e) => set("disponibilidad_aviso", e.target.value)}>
+          <label htmlFor="ep-aviso" className={labelCls}>¿Con cuánta anticipación podés tomar un trabajo?</label>
+          <select id="ep-aviso" className={selectCls} value={f.disponibilidad_aviso} onChange={(e) => set("disponibilidad_aviso", e.target.value)}>
             <option value="">Elegí…</option>
             {AVISO_OPTS.map((o) => <option key={o} value={o}>{o}</option>)}
           </select>
@@ -380,17 +330,17 @@ export function EditProfileForm({ profile }: { profile: StaffProfile }) {
       <Section title="Links">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <label className={labelCls}>LinkedIn</label>
-            <input className={inputCls} value={f.linkedin_url} onChange={(e) => set("linkedin_url", e.target.value)} placeholder="https://" />
+            <label htmlFor="ep-linkedin" className={labelCls}>LinkedIn</label>
+            <input id="ep-linkedin" className={inputCls} value={f.linkedin_url} onChange={(e) => set("linkedin_url", e.target.value)} placeholder="https://" />
           </div>
           <div>
-            <label className={labelCls}>Portfolio</label>
-            <input className={inputCls} value={f.portfolio_url} onChange={(e) => set("portfolio_url", e.target.value)} placeholder="https://" />
+            <label htmlFor="ep-portfolio" className={labelCls}>Portfolio</label>
+            <input id="ep-portfolio" className={inputCls} value={f.portfolio_url} onChange={(e) => set("portfolio_url", e.target.value)} placeholder="https://" />
           </div>
         </div>
         <div>
-          <label className={labelCls}>Sobre vos</label>
-          <textarea className={`${inputCls} resize-none`} rows={3} value={f.motivacion} onChange={(e) => set("motivacion", e.target.value)} />
+          <label htmlFor="ep-motivacion" className={labelCls}>Sobre vos</label>
+          <textarea id="ep-motivacion" className={`${inputCls} resize-none`} rows={3} value={f.motivacion} onChange={(e) => set("motivacion", e.target.value)} />
         </div>
       </Section>
 

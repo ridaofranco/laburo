@@ -35,7 +35,7 @@ export const YEARS_OPTS = ["0–1", "1–3", "3–5", "5–10", "10+"];
 export const labelCls =
   "block mb-2 label-tech text-[11px] uppercase tracking-[0.1em] text-[#cfc4c5]";
 export const inputCls =
-  "w-full bg-transparent border-0 border-b border-[#4c4546] focus:border-[#e5e2e1] outline-none text-[16px] text-[#e5e2e1] py-3 px-0 rounded-none transition-colors placeholder:text-[#565656] [color-scheme:dark]";
+  "w-full bg-transparent border-0 border-b border-[#4c4546] focus:border-[#e5e2e1] outline-none text-[16px] text-[#e5e2e1] py-3 px-0 rounded-none transition-colors placeholder:text-[#8a8a8a] [color-scheme:dark]";
 export const selectCls = `${inputCls} appearance-none`;
 export const sectionTitle =
   "font-[family-name:var(--font-syne)] text-[22px] font-semibold text-[#c6c6c6] uppercase tracking-tight";
@@ -59,15 +59,16 @@ export function Check({
   onChange: (v: boolean) => void;
 }) {
   return (
-    <label className="flex items-center gap-3 border border-[#4c4546] px-4 py-3 cursor-pointer hover:border-[#c6c6c6] transition-colors">
+    <label className="flex items-center gap-3 border border-[#4c4546] px-4 py-3 cursor-pointer hover:border-[#c6c6c6] transition-colors has-[:focus-visible]:border-[#c6c6c6]">
+      {/* input primero + peer para que el foco del teclado marque el recuadro visible */}
+      <input type="checkbox" className="peer sr-only" checked={checked} onChange={(e) => onChange(e.target.checked)} />
       <span
-        className={`w-5 h-5 border grid place-items-center text-[11px] shrink-0 ${
+        className={`w-5 h-5 border grid place-items-center text-[11px] shrink-0 peer-focus-visible:ring-2 peer-focus-visible:ring-[#c6c6c6] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-black ${
           checked ? "bg-[#c6c6c6] border-[#c6c6c6] text-black" : "border-[#4c4546]"
         }`}
       >
         {checked ? "✓" : ""}
       </span>
-      <input type="checkbox" className="sr-only" checked={checked} onChange={(e) => onChange(e.target.checked)} />
       <span className="text-[14px] text-[#e5e2e1]">{label}</span>
     </label>
   );

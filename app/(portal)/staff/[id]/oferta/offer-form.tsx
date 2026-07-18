@@ -63,7 +63,7 @@ function gigLabel(g: OfferFormGig): string {
 // Input boxeado al lenguaje Stitch: superficie #131313, borde outline-variant
 // #4c4546 que pasa a off-white en foco, texto #e5e2e1, radio 0. 16px anti-zoom iOS.
 const inputCls =
-  "w-full min-h-[44px] rounded-none bg-[#131313] border border-[#4c4546] text-[#e5e2e1] text-[16px] placeholder:text-[#565656] px-4 outline-none focus:border-[#e5e2e1] transition-colors";
+  "w-full min-h-[44px] rounded-none bg-[#131313] border border-[#4c4546] text-[#e5e2e1] text-[16px] placeholder:text-[#8a8a8a] px-4 outline-none focus:border-[#e5e2e1] transition-colors";
 
 function Field({
   label,
@@ -78,7 +78,7 @@ function Field({
     <label className="flex flex-col gap-3">
       <span className="label-tech text-[11px] text-[#cfc4c5]">{label}</span>
       {children}
-      {hint ? <span className="text-[12px] text-[#565656]">{hint}</span> : null}
+      {hint ? <span className="text-[12px] text-[#8a8a8a]">{hint}</span> : null}
     </label>
   );
 }
@@ -207,7 +207,7 @@ export function OfferForm({
               : "La oferta quedó registrada igual. Mandale el link por WhatsApp así no se pierde."}
           </p>
           {!result.mailOk && result.mailError ? (
-            <p className="text-[12px] text-[#565656] break-words">
+            <p className="text-[12px] text-[#8a8a8a] break-words">
               Detalle: {result.mailError}
             </p>
           ) : null}
@@ -224,7 +224,7 @@ export function OfferForm({
             {result.mailOk ? "Reforzar por WhatsApp" : "Enviar por WhatsApp"}
           </a>
         ) : (
-          <p className="text-[13px] text-[#565656]">
+          <p className="text-[13px] text-[#8a8a8a]">
             Este candidato no tiene teléfono cargado para el WhatsApp.
           </p>
         )}
@@ -234,7 +234,7 @@ export function OfferForm({
           <span className="label-tech text-[11px] text-[#cfc4c5]">
             Link de la oferta
           </span>
-          <span className="text-[13px] text-[#565656] break-all">
+          <span className="text-[13px] text-[#8a8a8a] break-all">
             {result.link}
           </span>
         </div>
@@ -369,7 +369,7 @@ export function OfferForm({
           onChange={(e) => setConditions(e.target.value)}
           placeholder="Contale los detalles del laburo"
           rows={4}
-          className="w-full rounded-none bg-[#131313] border border-[#4c4546] text-[#e5e2e1] text-[16px] placeholder:text-[#565656] px-4 py-3 outline-none focus:border-[#e5e2e1] transition-colors"
+          className="w-full rounded-none bg-[#131313] border border-[#4c4546] text-[#e5e2e1] text-[16px] placeholder:text-[#8a8a8a] px-4 py-3 outline-none focus:border-[#e5e2e1] transition-colors"
         />
       </Field>
 

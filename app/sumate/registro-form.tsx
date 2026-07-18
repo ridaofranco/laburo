@@ -215,7 +215,7 @@ export function RegistroForm() {
 
         {/* Oficios */}
         <Section title="Puestos a los que aplicás">
-          <p className="label-tech text-[11px] text-[#565656] -mt-2">Marcá todos los que apliquen.</p>
+          <p className="label-tech text-[11px] text-[#8a8a8a] -mt-2">Marcá todos los que apliquen.</p>
           <OficiosPicker oficios={oficios} selected={oficiosSel} onToggle={(v) => toggle(oficiosSel, setOficiosSel, v)} />
           <div><label className={labelCls}>Otro (especificá)</label><input className={inputCls} value={f.oficios_otro} onChange={(e) => set("oficios_otro", e.target.value)} /></div>
         </Section>

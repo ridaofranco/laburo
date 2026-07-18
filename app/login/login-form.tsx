@@ -133,7 +133,7 @@ export function LoginForm() {
 
             <a
               href="/acceso-staff"
-              className="mx-auto font-[family-name:var(--font-geist)] text-[11px] uppercase tracking-[0.1em] text-[#565656] hover:text-[#cfc4c5] transition-colors"
+              className="mx-auto font-[family-name:var(--font-geist)] text-[11px] uppercase tracking-[0.1em] text-[#8a8a8a] hover:text-[#cfc4c5] transition-colors"
             >
               ¿Trabajás en eventos? Entrá como staff
             </a>

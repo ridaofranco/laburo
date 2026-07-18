@@ -100,7 +100,7 @@ export function StaffLoginForm() {
                 placeholder=" "
                 className="w-full bg-transparent border-0 border-b border-[#4c4546] focus:border-[#e5e2e1] outline-none text-[18px] leading-[1.6] text-[#e5e2e1] py-4 px-0 rounded-none transition-colors duration-300"
               />
-              <p className="mt-3 text-[13px] text-[#565656] leading-[1.5]">
+              <p className="mt-3 text-[13px] text-[#8a8a8a] leading-[1.5]">
                 Usá el mismo email con el que te postulaste. Te mandamos un link
                 para entrar, sin contraseña.
               </p>
@@ -127,7 +127,7 @@ export function StaffLoginForm() {
 
             <a
               href="/login"
-              className="mx-auto font-[family-name:var(--font-geist)] text-[11px] uppercase tracking-[0.1em] text-[#565656] hover:text-[#cfc4c5] transition-colors"
+              className="mx-auto font-[family-name:var(--font-geist)] text-[11px] uppercase tracking-[0.1em] text-[#8a8a8a] hover:text-[#cfc4c5] transition-colors"
             >
               ¿Sos productor? Ingresá acá
             </a>

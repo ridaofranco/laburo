@@ -23,7 +23,7 @@ export interface GigInitial {
 
 const labelCls = "block mb-2 label-tech text-[11px] uppercase tracking-[0.1em] text-[#cfc4c5]";
 const inputCls =
-  "w-full bg-transparent border-0 border-b border-[#4c4546] focus:border-[#e5e2e1] outline-none text-[16px] text-[#e5e2e1] py-3 px-0 rounded-none transition-colors placeholder:text-[#565656] [color-scheme:dark]";
+  "w-full bg-transparent border-0 border-b border-[#4c4546] focus:border-[#e5e2e1] outline-none text-[16px] text-[#e5e2e1] py-3 px-0 rounded-none transition-colors placeholder:text-[#8a8a8a] [color-scheme:dark]";
 
 /** ISO -> valor para <input datetime-local> en hora local. */
 function toLocalInput(iso: string | null): string {
@@ -68,14 +68,19 @@ export function GigForm({ initial }: { initial?: GigInitial }) {
       endsAt: fromLocalInput(f.endsAt),
       venue: f.venue.trim(),
     };
-    const res = editing ? await updateGig(initial!.id, payload) : await createGig(payload);
-    setSaving(false);
-    if (res.ok) {
-      toast.success(editing ? "Evento actualizado" : "Evento creado");
-      router.push("/tablero");
-      router.refresh();
-    } else {
-      toast.error(res.reason || "No se pudo guardar");
+    try {
+      const res = editing ? await updateGig(initial!.id, payload) : await createGig(payload);
+      if (res.ok) {
+        toast.success(editing ? "Evento actualizado" : "Evento creado");
+        router.push("/tablero");
+        router.refresh();
+      } else {
+        toast.error(res.reason || "No se pudo guardar");
+      }
+    } catch {
+      toast.error("No se pudo guardar. Probá de nuevo.");
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -102,22 +107,22 @@ export function GigForm({ initial }: { initial?: GigInitial }) {
 
       <form onSubmit={onSubmit} className="flex flex-col gap-10">
         <div>
-          <label className={labelCls}>Nombre del evento</label>
-          <input className={inputCls} value={f.title} onChange={(e) => set("title", e.target.value)} placeholder="Ej: Fiesta de fin de año" autoFocus />
+          <label htmlFor="gig-title" className={labelCls}>Nombre del evento</label>
+          <input id="gig-title" className={inputCls} value={f.title} onChange={(e) => set("title", e.target.value)} placeholder="Ej: Fiesta de fin de año" autoFocus />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <label className={labelCls}>Arranca</label>
-            <input type="datetime-local" className={inputCls} value={f.startsAt} onChange={(e) => set("startsAt", e.target.value)} />
+            <label htmlFor="gig-starts" className={labelCls}>Arranca</label>
+            <input id="gig-starts" type="datetime-local" className={inputCls} value={f.startsAt} onChange={(e) => set("startsAt", e.target.value)} />
           </div>
           <div>
-            <label className={labelCls}>Termina (opcional)</label>
-            <input type="datetime-local" className={inputCls} value={f.endsAt} onChange={(e) => set("endsAt", e.target.value)} />
+            <label htmlFor="gig-ends" className={labelCls}>Termina (opcional)</label>
+            <input id="gig-ends" type="datetime-local" className={inputCls} value={f.endsAt} onChange={(e) => set("endsAt", e.target.value)} />
           </div>
         </div>
         <div>
-          <label className={labelCls}>Lugar</label>
-          <input className={inputCls} value={f.venue} onChange={(e) => set("venue", e.target.value)} placeholder="Ej: Salón Central, CABA" />
+          <label htmlFor="gig-venue" className={labelCls}>Lugar</label>
+          <input id="gig-venue" className={inputCls} value={f.venue} onChange={(e) => set("venue", e.target.value)} placeholder="Ej: Salón Central, CABA" />
         </div>
 
         <div className="flex items-center justify-end gap-4 border-t border-[#1A1A1A] pt-8">
