@@ -19,18 +19,23 @@ export function PendingOfferActions({ offerId }: { offerId: string }) {
   async function run(kind: "accept" | "decline") {
     if (busy) return;
     setBusy(kind);
-    const res =
-      kind === "accept" ? await acceptMyOffer(offerId) : await declineMyOffer(offerId);
-    setBusy(null);
-    if (res.ok) {
-      toast.success(kind === "accept" ? "Confirmaste el evento" : "Oferta rechazada");
-      router.refresh();
-    } else {
-      toast.error(
-        res.reason === "invalid_or_expired"
-          ? "La oferta ya no está disponible."
-          : res.reason || "No se pudo procesar.",
-      );
+    try {
+      const res =
+        kind === "accept" ? await acceptMyOffer(offerId) : await declineMyOffer(offerId);
+      if (res.ok) {
+        toast.success(kind === "accept" ? "Confirmaste el evento" : "Oferta rechazada");
+        router.refresh();
+      } else {
+        toast.error(
+          res.reason === "invalid_or_expired"
+            ? "La oferta ya no está disponible."
+            : res.reason || "No se pudo procesar.",
+        );
+      }
+    } catch {
+      toast.error("No se pudo procesar. Probá de nuevo.");
+    } finally {
+      setBusy(null);
     }
   }
 

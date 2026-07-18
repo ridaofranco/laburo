@@ -166,36 +166,41 @@ export function EditProfileForm({ profile }: { profile: StaffProfile }) {
       return;
     }
     setSaving(true);
-    const res = await updateMyStaffProfile({
-      nombre: f.nombre.trim(),
-      apellido: f.apellido.trim(),
-      telefono: f.telefono.trim(),
-      documento: f.documento.trim(),
-      fecha_nacimiento: f.fecha_nacimiento || null,
-      pais_residencia: f.pais_residencia.trim(),
-      provincia: f.provincia.trim(),
-      ciudad: f.ciudad.trim(),
-      donde_trabajar: [...regionsSel],
-      situacion_legal: f.situacion_legal.trim(),
-      oficios: [...oficiosSel],
-      oficios_otro: f.oficios_otro.trim(),
-      experiencia: f.experiencia === "" ? null : f.experiencia === "Sí",
-      anios_experiencia: f.anios_experiencia.trim(),
-      experiencia_detalle: f.experiencia_detalle.trim(),
-      disponibilidad_finde: f.disponibilidad_finde,
-      disponibilidad_viajar: f.disponibilidad_viajar,
-      movilidad_propia: f.movilidad_propia,
-      disponibilidad_aviso: f.disponibilidad_aviso.trim(),
-      linkedin_url: f.linkedin_url.trim(),
-      portfolio_url: f.portfolio_url.trim(),
-      motivacion: f.motivacion.trim(),
-    });
-    setSaving(false);
-    if (res.ok) {
-      toast.success("Perfil actualizado");
-      router.refresh();
-    } else {
-      toast.error(res.reason || "No se pudo guardar");
+    try {
+      const res = await updateMyStaffProfile({
+        nombre: f.nombre.trim(),
+        apellido: f.apellido.trim(),
+        telefono: f.telefono.trim(),
+        documento: f.documento.trim(),
+        fecha_nacimiento: f.fecha_nacimiento || null,
+        pais_residencia: f.pais_residencia.trim(),
+        provincia: f.provincia.trim(),
+        ciudad: f.ciudad.trim(),
+        donde_trabajar: [...regionsSel],
+        situacion_legal: f.situacion_legal.trim(),
+        oficios: [...oficiosSel],
+        oficios_otro: f.oficios_otro.trim(),
+        experiencia: f.experiencia === "" ? null : f.experiencia === "Sí",
+        anios_experiencia: f.anios_experiencia.trim(),
+        experiencia_detalle: f.experiencia_detalle.trim(),
+        disponibilidad_finde: f.disponibilidad_finde,
+        disponibilidad_viajar: f.disponibilidad_viajar,
+        movilidad_propia: f.movilidad_propia,
+        disponibilidad_aviso: f.disponibilidad_aviso.trim(),
+        linkedin_url: f.linkedin_url.trim(),
+        portfolio_url: f.portfolio_url.trim(),
+        motivacion: f.motivacion.trim(),
+      });
+      if (res.ok) {
+        toast.success("Perfil actualizado");
+        router.refresh();
+      } else {
+        toast.error(res.reason || "No se pudo guardar");
+      }
+    } catch {
+      toast.error("No se pudo guardar. Probá de nuevo.");
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -426,14 +431,19 @@ function CvSection({ cvUrl }: { cvUrl: string | null }) {
     setUploading(true);
     const fd = new FormData();
     fd.append("cv", file);
-    const res = await uploadMyCv(fd);
-    setUploading(false);
-    e.target.value = "";
-    if (res.ok) {
-      toast.success("CV actualizado");
-      startTransition(() => router.refresh());
-    } else {
-      toast.error(res.reason || "No se pudo subir el CV.");
+    try {
+      const res = await uploadMyCv(fd);
+      if (res.ok) {
+        toast.success("CV actualizado");
+        startTransition(() => router.refresh());
+      } else {
+        toast.error(res.reason || "No se pudo subir el CV.");
+      }
+    } catch {
+      toast.error("No se pudo subir el CV. Probá de nuevo.");
+    } finally {
+      setUploading(false);
+      e.target.value = "";
     }
   }
 

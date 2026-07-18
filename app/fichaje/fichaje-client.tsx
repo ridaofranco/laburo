@@ -52,32 +52,42 @@ function GigCard({ gig }: { gig: FichajeGig }) {
   async function doCheckIn() {
     if (busy) return;
     setBusy(true);
-    const { lat, lng } = await getCoords();
-    const res = await checkIn(gig.gigId, lat, lng);
-    setBusy(false);
-    if (res.ok) {
-      toast.success("Entrada registrada");
-      router.refresh();
-    } else {
-      toast.error(
-        res.reason === "not_confirmed"
-          ? "No figurás confirmado en este evento."
-          : res.reason || "No se pudo fichar.",
-      );
+    try {
+      const { lat, lng } = await getCoords();
+      const res = await checkIn(gig.gigId, lat, lng);
+      if (res.ok) {
+        toast.success("Entrada registrada");
+        router.refresh();
+      } else {
+        toast.error(
+          res.reason === "not_confirmed"
+            ? "No figurás confirmado en este evento."
+            : res.reason || "No se pudo fichar.",
+        );
+      }
+    } catch {
+      toast.error("No se pudo fichar. Probá de nuevo.");
+    } finally {
+      setBusy(false);
     }
   }
 
   async function doCheckOut() {
     if (busy) return;
     setBusy(true);
-    const { lat, lng } = await getCoords();
-    const res = await checkOut(gig.gigId, lat, lng);
-    setBusy(false);
-    if (res.ok) {
-      toast.success("Salida registrada");
-      router.refresh();
-    } else {
-      toast.error(res.reason || "No se pudo fichar la salida.");
+    try {
+      const { lat, lng } = await getCoords();
+      const res = await checkOut(gig.gigId, lat, lng);
+      if (res.ok) {
+        toast.success("Salida registrada");
+        router.refresh();
+      } else {
+        toast.error(res.reason || "No se pudo fichar la salida.");
+      }
+    } catch {
+      toast.error("No se pudo fichar. Probá de nuevo.");
+    } finally {
+      setBusy(false);
     }
   }
 

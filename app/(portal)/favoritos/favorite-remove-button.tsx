@@ -29,14 +29,18 @@ export function FavoriteRemoveButton({
   function remove() {
     setError(false);
     startTransition(async () => {
-      const res = await setCandidateNote({
-        staffProfileId,
-        isFavorite: false,
-        note,
-      });
-      if (res.ok) {
-        router.refresh();
-      } else {
+      try {
+        const res = await setCandidateNote({
+          staffProfileId,
+          isFavorite: false,
+          note,
+        });
+        if (res.ok) {
+          router.refresh();
+        } else {
+          setError(true);
+        }
+      } catch {
         setError(true);
       }
     });

@@ -105,10 +105,15 @@ export function RegistroForm() {
     fd.append("payload", JSON.stringify(payload));
     const file = cvRef.current?.files?.[0];
     if (file) fd.append("cv", file);
-    const res = await registerApplicant(fd);
-    setSending(false);
-    if (res.ok) setDone(true);
-    else toast.error(res.reason || "No se pudo enviar.");
+    try {
+      const res = await registerApplicant(fd);
+      if (res.ok) setDone(true);
+      else toast.error(res.reason || "No se pudo enviar.");
+    } catch {
+      toast.error("No se pudo enviar. Probá de nuevo.");
+    } finally {
+      setSending(false);
+    }
   }
 
   if (done) {
