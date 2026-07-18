@@ -8,12 +8,13 @@
  * server actions self-scoped. Misma taxonomía (oficios/paises) que la web.
  */
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Save, FileText, Upload, ExternalLink, ChevronDown } from "lucide-react";
+import { Save, FileText, Upload, ExternalLink, ChevronDown, Sparkles } from "lucide-react";
 import { oficios } from "@/lib/data/oficios";
 import { paises, provinciasAr } from "@/lib/data/paises";
+import { useCvAutofill } from "@/components/staff-form-shared";
 import { updateMyStaffProfile, uploadMyCv, signMyStaffCv } from "./actions";
 import type { StaffProfile } from "@/lib/staff";
 
@@ -120,6 +121,43 @@ export function EditProfileForm({ profile }: { profile: StaffProfile }) {
 
   const esArgentina = f.pais_residencia === "Argentina";
 
+  const afRef = useRef<HTMLInputElement>(null);
+  const { status: afStatus, run: runAutofill } = useCvAutofill();
+  async function autofill() {
+    const file = afRef.current?.files?.[0];
+    if (!file) {
+      toast.error("Elegí un CV primero.");
+      return;
+    }
+    const all = oficios.flatMap((g) => g.items.map((it) => it.es));
+    const d = await runAutofill(file, all);
+    if (!d) {
+      toast.error(afStatus === "nokey" ? "El autollenado no está configurado todavía." : "No pudimos leer el CV.");
+      return;
+    }
+    setF((p) => ({
+      ...p,
+      nombre: d.nombre || p.nombre,
+      apellido: d.apellido || p.apellido,
+      telefono: d.telefono || p.telefono,
+      ciudad: d.ciudad || p.ciudad,
+      pais_residencia: d.pais && paises.includes(d.pais) ? d.pais : p.pais_residencia,
+      linkedin_url: d.linkedin_url || p.linkedin_url,
+      portfolio_url: d.portfolio_url || p.portfolio_url,
+      anios_experiencia: d.anios_experiencia && ["0–1", "1–3", "3–5", "5–10", "10+"].includes(d.anios_experiencia) ? d.anios_experiencia : p.anios_experiencia,
+      experiencia_detalle: d.experiencia_detalle || p.experiencia_detalle,
+      experiencia: d.experiencia_detalle ? "Sí" : p.experiencia,
+    }));
+    if (Array.isArray(d.oficios) && d.oficios.length) {
+      setOficiosSel((prev) => {
+        const n = new Set(prev);
+        d.oficios!.forEach((o) => n.add(o));
+        return n;
+      });
+    }
+    toast.success("Listo. Revisá los datos.");
+  }
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (saving) return;
@@ -176,6 +214,26 @@ export function EditProfileForm({ profile }: { profile: StaffProfile }) {
 
       {/* CV */}
       <CvSection cvUrl={profile.cv_url} />
+
+      {/* Autollenado con IA */}
+      <section className="border border-[#b9c3ff]/30 bg-[#b9c3ff]/[0.05] p-6 flex flex-col gap-4">
+        <div className="flex items-center gap-3">
+          <Sparkles size={20} className="text-[#b9c3ff]" />
+          <h2 className={sectionTitle}>Autocompletar con tu CV</h2>
+        </div>
+        <p className="text-[14px] text-[#cfc4c5] -mt-2">
+          Subí un CV (PDF o imagen) y la IA completa los campos que pueda. Revisá antes de guardar.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <input ref={afRef} type="file" accept=".pdf,image/*"
+            className="text-[14px] text-[#cfc4c5] file:mr-3 file:border file:border-[#4c4546] file:bg-transparent file:text-[#e5e2e1] file:px-4 file:py-2 file:label-tech file:text-[11px] file:uppercase" />
+          <button type="button" onClick={autofill} disabled={afStatus === "loading"}
+            className="inline-flex shrink-0 items-center justify-center gap-2 border border-[#b9c3ff]/50 text-[#b9c3ff] label-tech text-[11px] uppercase tracking-wide px-5 py-2.5 hover:bg-[#b9c3ff] hover:text-black transition-colors disabled:opacity-60">
+            <Sparkles size={14} />
+            {afStatus === "loading" ? "Leyendo…" : "Autocompletar"}
+          </button>
+        </div>
+      </section>
 
       {/* Datos */}
       <Section title="Tus datos">

@@ -44,6 +44,7 @@ export async function updateSession(request: NextRequest) {
     "/dev-login",
     "/o",
     "/sumate",
+    "/api/parse-cv",
     // Pantallas del lado staff (standalone, chrome propio). El middleware las deja
     // pasar y el gate real lo hace cada página con requireStaff() (fork "staff con
     // cuenta"): sin sesión o sin perfil de staff → redirige a /acceso-staff.
