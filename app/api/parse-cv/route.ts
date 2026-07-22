@@ -17,7 +17,9 @@
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
-const MODEL = "gemini-2.5-flash";
+// gemini-2.5-flash quedó deprecado para cuentas nuevas (404). Usamos el alias
+// estable "latest" del flash actual: gratis, apto tier free, sin deprecarse.
+const MODEL = "gemini-flash-latest";
 
 // Un CV en el form se capa a 10MB; en base64 infla ~33% → ~13.3MB. Dejamos 16MB
 // de margen para el JSON entero (data + claves). Más que eso = cortamos.
