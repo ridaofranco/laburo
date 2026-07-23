@@ -4,19 +4,24 @@ import nodemailer from "nodemailer";
 // ─────────────────────────────────────────────────────────────────────────
 // Mailer central de LABURO (portado de HITO — lib/email/mailer.ts).
 //
-// D-02: envío por el SMTP Ferozo propio de SOMOS DER. CERO ESP pago, así que
-// la rama Resend de HITO queda DESACTIVADA (no se instala, no se cablea): esto
-// es SMTP-only. Si en el futuro se quisiera Resend, se re-porta esa rama.
+// Estrategia de envío en cascada (de más a menos confiable):
+//   1. RESEND  → API HTTP (~300ms), entregabilidad alta, da error real.
+//                Tier free (100/día) = cero costo, respeta la regla no-pagar.
+//   2. SMTP    → nodemailer/Ferozo propio de SOMOS DER. Funciona, pero lento
+//                (15-25s) y con entregabilidad de hosting compartido.
+//   3. nada    → no se envía; el caller cae al fallback de wa.me (link mágico).
 //
 // Contrato honesto (D-02): sendMail() SIEMPRE devuelve un MailResult y NUNCA
-// tira. Un fallo del SMTP de Ferozo (lento/caído) surface como { ok:false } —
-// nunca un 250-OK silencioso. Con el SMTP sin configurar, smtpEnabled() es
-// false y sendMail() devuelve { ok:false, channel:"none" } en vez de fingir
-// éxito. El caller (03-03) DEBE chequear result.ok y ofrecer el wa.me de
-// fallback cuando el mail falla.
+// tira. Un fallo surface como { ok:false } — nunca un 250-OK silencioso. Sin
+// ninguna vía configurada, emailEnabled() es false y sendMail() devuelve
+// { ok:false, channel:"none" } en vez de fingir éxito. El caller (03-03) DEBE
+// chequear result.ok y ofrecer el wa.me de fallback cuando el mail falla.
+//
+// ACTIVAR RESEND: cargar RESEND_API_KEY (+ opcional RESEND_FROM) en el env de
+// Vercel. Sin esas vars, el comportamiento es idéntico al SMTP-only de antes.
 // ─────────────────────────────────────────────────────────────────────────
 
-export type MailChannel = "smtp" | "none";
+export type MailChannel = "resend" | "smtp" | "none";
 
 export interface MailResult {
   ok: boolean;
@@ -50,13 +55,31 @@ function fromAddress(): string {
   return process.env.MAIL_FROM_ADDRESS || smtpUser();
 }
 
+/** Header "Nombre <email>" para el SMTP (Ferozo). */
 function fromHeader(): string {
   return `"${process.env.MAIL_FROM_NAME || "SOMOS DER"}" <${fromAddress()}>`;
+}
+
+/**
+ * Remitente para Resend. Acepta RESEND_FROM en dos formatos:
+ *   - completo:  "SOMOS DER <no-reply@tudominio.com>"  → se usa tal cual.
+ *   - solo mail: "no-reply@tudominio.com"              → se envuelve con el nombre.
+ * Debe ser un dominio verificado en Resend, si no la API rechaza el envío.
+ */
+function resendFrom(): string {
+  const raw = process.env.RESEND_FROM || fromAddress();
+  if (raw.includes("<")) return raw; // ya viene "Nombre <mail>"
+  return `${process.env.MAIL_FROM_NAME || "SOMOS DER"} <${raw}>`;
 }
 
 /** Dirección de respuesta. Si MAIL_REPLY_TO no está seteada, no se agrega. */
 function replyToAddress(): string | undefined {
   return process.env.MAIL_REPLY_TO || undefined;
+}
+
+/** ¿Está Resend configurado? (API key + algún remitente). */
+export function resendEnabled(): boolean {
+  return !!(process.env.RESEND_API_KEY && (process.env.RESEND_FROM || fromAddress()));
 }
 
 /** ¿Está el SMTP configurado? (para degradar con honestidad si falta). */
@@ -68,9 +91,9 @@ export function smtpEnabled(): boolean {
   );
 }
 
-/** ¿Hay alguna vía de envío configurada? (hoy sólo SMTP). */
+/** ¿Hay alguna vía de envío configurada? (Resend o SMTP). */
 export function emailEnabled(): boolean {
-  return smtpEnabled();
+  return resendEnabled() || smtpEnabled();
 }
 
 export function adminEmail(): string {
@@ -79,6 +102,36 @@ export function adminEmail(): string {
 
 const errMsg = (e: unknown): string =>
   e instanceof Error ? e.message : String(e);
+
+// ─── Resend (vía API HTTP, sin dependencia extra) ─────────────────────────
+
+async function sendViaResend(opts: MailOptions): Promise<void> {
+  const replyTo = replyToAddress();
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: resendFrom(),
+      to: opts.to,
+      subject: opts.subject,
+      html: opts.html,
+      ...(replyTo ? { reply_to: replyTo } : {}),
+      attachments: opts.attachments?.map((a) => ({
+        filename: a.filename,
+        content: a.content.toString("base64"),
+      })),
+    }),
+    // Resend es rápido; cortamos a los 15s para no colgar la acción.
+    signal: AbortSignal.timeout(15000),
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`Resend ${res.status}: ${body.slice(0, 300)}`);
+  }
+}
 
 // ─── SMTP (nodemailer / Ferozo) ───────────────────────────────────────────
 
@@ -110,9 +163,24 @@ async function sendViaSmtp(opts: MailOptions): Promise<void> {
   });
 }
 
-// ─── Envío honesto (nunca tira) ────────────────────────────────────────────
+// ─── Envío en cascada (nunca tira) ─────────────────────────────────────────
 
 export async function sendMail(opts: MailOptions): Promise<MailResult> {
+  // Resend no soporta imágenes inline por CID como SMTP. Si el mail trae un
+  // attachment con cid (p.ej. un QR inline), va por SMTP sí o sí.
+  const hasCidAttachment = !!opts.attachments?.some((a) => a.cid);
+
+  let resendError: string | undefined;
+  if (resendEnabled() && !hasCidAttachment) {
+    try {
+      await sendViaResend(opts);
+      return { ok: true, channel: "resend" };
+    } catch (e) {
+      resendError = errMsg(e);
+      console.error("[mailer] resend failed, probando SMTP:", resendError);
+    }
+  }
+
   if (smtpEnabled()) {
     try {
       await sendViaSmtp(opts);
@@ -120,13 +188,13 @@ export async function sendMail(opts: MailOptions): Promise<MailResult> {
     } catch (e) {
       const smtpError = errMsg(e);
       console.error("[mailer] smtp failed:", smtpError);
-      return { ok: false, channel: "smtp", error: smtpError };
+      return { ok: false, channel: "smtp", error: resendError ?? smtpError };
     }
   }
 
   return {
     ok: false,
     channel: "none",
-    error: "No hay ninguna vía de envío de email configurada.",
+    error: resendError ?? "No hay ninguna vía de envío de email configurada.",
   };
 }
