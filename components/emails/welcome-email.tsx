@@ -12,7 +12,7 @@
  * pidió: no es "quedaste en una lista, esperá", es "ya sos parte, entrá".
  *
  * NO LLEVA CREDENCIAL: el link es la pantalla pública /acceso-staff, donde la
- * persona pide su propio código con su mail. Así este mail no transporta ningún
+ * persona pide su propio link con su mail. Así este mail no transporta ningún
  * acceso accionable (si se filtra o se reenvía, no abre nada), y el gate de
  * /acceso-staff sigue siendo el que valida contra el pool.
  *
@@ -125,9 +125,9 @@ export function WelcomeEmail({ firstName, link }: WelcomeEmailProps) {
               }}
             >
               Entrá con este mismo mail para revisarlo y completar lo que falte.
-              No hace falta contraseña: pedís un código y te llega al instante.
-              Cuanto más completo esté tu perfil, más fácil es que te llamemos
-              para el evento que te corresponde.
+              No hace falta contraseña: ponés tu mail y te mandamos un link para
+              entrar. Cuanto más completo esté tu perfil, más fácil es que te
+              llamemos para el evento que te corresponde.
             </Text>
 
             <Section style={{ marginTop: "24px" }}>

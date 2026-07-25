@@ -24,11 +24,11 @@
 --   * El SMTP de Ferozo de LABURO no es para envíos masivos (470/día en el peor
 --     caso, entregabilidad de hosting compartido). 699 de una golpea el límite y
 --     además quema reputación.
---   * El código de acceso lo manda Supabase Auth, y el tope de mails del tier
+--   * El link de acceso lo manda Supabase Auth, y el tope de mails del tier
 --     free es DEL PROYECTO ENTERO (se comprobó en vivo: tres pedidos con mails
 --     distintos dieron over_email_send_rate_limit). Si los 699 entran a pedir su
---     código el mismo día, la mitad no puede entrar. En tandas, la demanda de
---     códigos se reparte en días.
+--     link el mismo día, la mitad no puede entrar. En tandas, la demanda de
+--     links se reparte en días.
 --
 -- SEGURIDAD (mismo patrón que 0010, que es el que ya corre en producción):
 --   * SECURITY DEFINER con search_path fijo (el barrido del 25/7 dejó las 16

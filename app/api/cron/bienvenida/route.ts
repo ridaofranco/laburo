@@ -17,11 +17,11 @@
  * EN TANDAS, no los 699 de una. Dos límites reales, los dos gratis:
  *   1. El SMTP de Ferozo de LABURO no es para masivos (lento, entregabilidad de
  *      hosting compartido). 699 de una golpea el límite y quema reputación.
- *   2. El código de acceso lo manda SUPABASE AUTH, y el tope de mails del tier
+ *   2. El link de acceso lo manda SUPABASE AUTH, y el tope de mails del tier
  *      free es DEL PROYECTO ENTERO, compartido con PASE (se comprobó en vivo:
  *      tres pedidos con mails distintos dieron over_email_send_rate_limit). Si
- *      los 699 entran a pedir su código el mismo día, buena parte no puede
- *      entrar. Repartiendo en tandas diarias, la demanda de códigos se reparte.
+ *      los 699 entran a pedir su link el mismo día, buena parte no puede
+ *      entrar. Repartiendo en tandas diarias, la demanda de links se reparte.
  *      ⚠️ Igual conviene tener el SMTP propio cargado en Supabase Auth antes de
  *      arrancar: con eso el tope pasa a ser el nuestro y no el compartido.
  *
