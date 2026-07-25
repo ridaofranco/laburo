@@ -25,6 +25,7 @@ import crypto from "node:crypto";
 import { NextResponse } from "next/server";
 import { MercadoPagoConfig, Payment } from "mercadopago";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
+import { alerta } from "@/lib/alerta";
 
 export const runtime = "nodejs";
 
@@ -131,6 +132,12 @@ export async function POST(request: Request) {
         console.error(
           `[mp/webhook] PAGO INSUFICIENTE, no marco cobrado → gig=${gigId} pago=${pid} pagado=${pagado} esperado=${esperado}`,
         );
+        await alerta({
+          titulo: "Un cliente pagó de menos y el evento NO quedó cobrado",
+          plata: true,
+          datos: { evento: gigId, pago: pid, pagó: pagado, esperaba: esperado },
+          detalle: "Revisá si el presupuesto cambió después de mandar el link de pago.",
+        });
         return NextResponse.json({ ok: true, warning: "monto_insuficiente" });
       }
 
@@ -141,11 +148,14 @@ export async function POST(request: Request) {
       if (paidError) throw paidError;
     }
   } catch (e) {
-    console.error(
-      "[mp/webhook] fallo procesando el pago",
-      paymentId,
-      e instanceof Error ? e.message : String(e),
-    );
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error("[mp/webhook] fallo procesando el pago", paymentId, msg);
+    await alerta({
+      titulo: "Falló el webhook de MercadoPago (un pago puede quedar sin registrar)",
+      plata: true,
+      datos: { pago: String(paymentId) },
+      detalle: msg,
+    });
     // 500 → MercadoPago reintenta la notificación más tarde. NO devolver 200 acá:
     // sería dar por procesado un pago que no se registró.
     return NextResponse.json({ ok: false }, { status: 500 });

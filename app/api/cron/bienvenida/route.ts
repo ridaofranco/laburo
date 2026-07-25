@@ -49,6 +49,7 @@ import { sendMail, emailEnabled } from "@/lib/email/mailer";
 import { WelcomeEmail } from "@/components/emails/welcome-email";
 import { siteUrl } from "@/lib/site";
 import { bajaHeaders, bajaReady, bajaUrl } from "@/lib/baja";
+import { alerta } from "@/lib/alerta";
 
 // Nunca cachear: cada disparo del cron debe ejecutar de verdad.
 export const dynamic = "force-dynamic";
@@ -117,6 +118,10 @@ export async function GET(request: Request) {
     // 500 y no 200: con 200 Vercel Cron marca la ejecución como exitosa y una RPC
     // rota queda invisible en el dashboard durante meses.
     console.error("[cron/bienvenida] rpc failed:", error.message);
+    await alerta({
+      titulo: "La tanda de bienvenida se rompió",
+      detalle: error.message,
+    });
     return Response.json({ ok: false, error: error.message }, { status: 500 });
   }
 

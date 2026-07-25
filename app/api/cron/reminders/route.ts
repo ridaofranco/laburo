@@ -41,6 +41,7 @@ import { ReminderEmail } from "@/components/emails/reminder-email";
 import { ShiftReminderEmail } from "@/components/emails/shift-reminder-email";
 import { fmtFechaHora } from "@/lib/dates";
 import { siteUrl } from "@/lib/site";
+import { alerta } from "@/lib/alerta";
 
 // Nunca cachear: cada disparo del cron debe ejecutar de verdad.
 export const dynamic = "force-dynamic";
@@ -83,6 +84,10 @@ export async function GET(request: Request) {
     // roto queda invisible en el dashboard durante meses. El scheduler no se
     // "rompe" por un 500, solo lo reporta como fallido, que es la verdad.
     console.error("[cron/reminders] rpc failed:", error.message);
+    await alerta({
+      titulo: "El cron de recordatorios se rompió (nadie va a recibir su aviso)",
+      detalle: error.message,
+    });
     return Response.json({ ok: false, error: error.message }, { status: 500 });
   }
 
