@@ -71,7 +71,10 @@ export async function acceptOffer(token: string): Promise<OfferActionResult> {
     p_user_agent: ua,
   });
 
-  if ((data as RpcAck | null)?.ok) return { ok: true };
+  if ((data as RpcAck | null)?.ok) {
+    await avisarRespuesta(token, true);
+    return { ok: true };
+  }
   return { ok: false, view: await freshTerminalView(supabase, token) };
 }
 
@@ -83,6 +86,135 @@ export async function declineOffer(token: string): Promise<OfferActionResult> {
     p_token: token,
   });
 
-  if ((data as RpcAck | null)?.ok) return { ok: true };
+  if ((data as RpcAck | null)?.ok) {
+    await avisarRespuesta(token, false);
+    return { ok: true };
+  }
   return { ok: false, view: await freshTerminalView(supabase, token) };
+}
+
+/**
+ * Los DOS mails que salen cuando alguien responde una propuesta:
+ *   1. Si aceptó, la confirmación a la persona ("quedaste en el equipo") con los
+ *      cinco datos que necesita y hoy no tenía juntos en ningún lado: evento, rol,
+ *      cuándo, dónde y cuánto se paga. Antes de esto aceptaba y no recibía NADA.
+ *   2. El aviso a Franco, acepte o rechace, con la línea que de verdad sirve:
+ *      cuántos roles del evento quedan por cubrir.
+ *
+ * NUNCA TIRA, y eso es lo importante: si el mail falla, la aceptación ya está
+ * hecha en la base y no se puede deshacer. Un error de SMTP no puede convertirse en
+ * "no pude aceptar" para alguien que sí aceptó.
+ *
+ * SE AWAITEA a propósito, no es fire-and-forget: en Vercel la función se congela
+ * cuando el handler devuelve, y ese es justo el bug por el que ENTRÁ nunca mandó
+ * los mails de sus entradas. El mailer tiene sus propios timeouts cortos.
+ */
+async function avisarRespuesta(token: string, accepted: boolean): Promise<void> {
+  try {
+    const { createServiceRoleClient } = await import("@/lib/supabase/admin");
+    const { sendMail, emailEnabled, adminEmail } = await import("@/lib/email/mailer");
+    if (!emailEnabled()) return;
+
+    const admin = createServiceRoleClient();
+    const { data, error } = await admin.rpc("staff_app_offer_notice", { p_token: token });
+    if (error) {
+      console.error("[offer-actions] no pude leer los datos para el aviso:", error.message);
+      return;
+    }
+    const row = (Array.isArray(data) ? data[0] : data) as
+      | {
+          gig_id: string;
+          staff_email: string | null;
+          first_name: string | null;
+          role: string | null;
+          amount: number | null;
+          conditions: string | null;
+          gig_title: string | null;
+          starts_at: string | null;
+          ends_at: string | null;
+          venue_name: string | null;
+          staff_nombre: string | null;
+          staff_apellido: string | null;
+          slots_total: number | null;
+          crew_total: number | null;
+        }
+      | null
+      | undefined;
+    if (!row) return;
+
+    const { fmtFechaHora } = await import("@/lib/dates");
+    const { createElement } = await import("react");
+    const { render } = await import("@react-email/components");
+    const { siteUrl } = await import("@/lib/site");
+
+    const inicio = fmtFechaHora(row.starts_at, {
+      weekday: "long",
+      day: "2-digit",
+      month: "long",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    const fin = fmtFechaHora(row.ends_at, { hour: "2-digit", minute: "2-digit" });
+    const whenText = inicio && fin ? `${inicio} a ${fin}` : inicio;
+    const amountText =
+      row.amount != null && !Number.isNaN(Number(row.amount))
+        ? `$${Number(row.amount).toLocaleString("es-AR")}`
+        : null;
+    const gigTitle = row.gig_title ?? "";
+    const role = row.role ?? "";
+    const nombreCompleto = [row.staff_nombre, row.staff_apellido].filter(Boolean).join(" ");
+
+    // 1. Confirmación a la persona (solo si aceptó y tenemos su mail).
+    if (accepted && row.staff_email) {
+      const { HiredEmail } = await import("@/components/emails/hired-email");
+      const html = await render(
+        createElement(HiredEmail, {
+          firstName: row.first_name ?? "",
+          gigTitle,
+          role,
+          whenText,
+          venue: row.venue_name,
+          amountText,
+          conditions: row.conditions,
+          link: siteUrl("/panel-staff"),
+        }),
+      );
+      const res = await sendMail({
+        to: row.staff_email,
+        subject: `Confirmado: ${role}${gigTitle ? ` en ${gigTitle}` : ""}`,
+        html,
+      });
+      if (!res.ok) console.error("[offer-actions] no salió la confirmación al staff:", res.error);
+    }
+
+    // 2. Aviso interno, acepte o rechace.
+    const to = adminEmail();
+    if (to) {
+      const { OfferAnswerEmail } = await import("@/components/emails/offer-answer-email");
+      const html = await render(
+        createElement(OfferAnswerEmail, {
+          accepted,
+          staffName: nombreCompleto,
+          gigTitle,
+          role,
+          amountText,
+          slotsTotal: row.slots_total,
+          crewTotal: row.crew_total,
+          // /tablero es el board con los eventos y su equipo. NO existe una ruta
+          // /tablero/[gigId] (solo /editar), así que linkear ahí daría 404.
+          link: siteUrl("/tablero"),
+        }),
+      );
+      const res = await sendMail({
+        to,
+        subject: `${nombreCompleto || "Alguien"} ${accepted ? "aceptó" : "rechazó"}: ${role}${gigTitle ? ` en ${gigTitle}` : ""}`,
+        html,
+      });
+      if (!res.ok) console.error("[offer-actions] no salió el aviso interno:", res.error);
+    }
+  } catch (e) {
+    // Defensa en profundidad: la respuesta a la oferta ya está registrada, los
+    // mails son secundarios. Que nunca tire.
+    console.error("[offer-actions] aviso de respuesta falló:", e instanceof Error ? e.message : String(e));
+  }
 }
