@@ -1,0 +1,78 @@
+<!--
+  PLANTILLA DEL MAIL DE ACCESO DE LABURO (Supabase Auth → "Magic Link").
+
+  ══ CÓMO SE APLICA (2 minutos, lo hace Franco) ══
+  1. Panel de Supabase, proyecto luillpzfqzbpoqkgvjuw
+  2. Authentication → Emails → pestaña "Magic Link"
+  3. Subject heading:  Entrá a LABURO
+  4. Message body: borrar lo que hay y pegar TODO este archivo (desde <div hasta
+     el último </div>, no hace falta el comentario de arriba)
+  5. Save. Mandate un link a vos mismo desde laburo.somosder.ar/acceso-staff y
+     confirmá que llega con marca.
+  ⚠️ En la MISMA visita conviene cargar el SMTP propio (Authentication → Emails →
+     SMTP Settings), que es el otro paso que bloquea la tanda a los 699.
+
+  ══ POR QUÉ ══
+  Hasta ahora este mail era la plantilla POR DEFECTO de Supabase: decía "Magic
+  Link" en inglés, con un "Log In" azul y sin logo ni marca. Es EL MAIL QUE ABRE LA
+  PUERTA, el que van a recibir las 699 personas de la tanda: quien recibe la
+  bienvenida linda y después eso, piensa que es phishing y no entra.
+
+  ══ NOTAS TÉCNICAS ══
+  · {{ .ConfirmationURL }} es la variable de Supabase; NO tocarla ni envolverla en
+    ningún tracking, o el link deja de validar.
+  · Todo el estilo va inline: los clientes de correo descartan el CSS externo.
+  · Sin imágenes remotas a propósito. El wordmark es texto: Gmail bloquea imágenes
+    por defecto y un mail de acceso no puede depender de eso para verse serio.
+  · Fondo oscuro con el azul de LABURO, igual que los otros mails de la app.
+-->
+<div style="margin:0;padding:0;background-color:#000000;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+  <div style="max-width:480px;margin:0 auto;padding:32px 20px;">
+
+    <!-- Wordmark en texto (nada de imágenes remotas en un mail de acceso) -->
+    <div style="padding:0 0 22px 0;">
+      <span style="font-size:22px;font-weight:800;letter-spacing:-0.5px;color:#F5F5F5;">LABURO.</span>
+      <span style="display:block;margin-top:6px;font-size:10px;letter-spacing:2.5px;color:#8A8A8A;text-transform:uppercase;">Staff para eventos · SOMOS DER</span>
+    </div>
+
+    <div style="background-color:#0A0A0A;border:1px solid #1A1A1A;padding:28px 24px;">
+      <p style="margin:0 0 10px 0;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#0047FF;">
+        Tu acceso
+      </p>
+
+      <h1 style="margin:0 0 14px 0;font-size:22px;line-height:1.25;font-weight:700;color:#F5F5F5;">
+        Entrá a LABURO
+      </h1>
+
+      <p style="margin:0 0 12px 0;font-size:15px;line-height:1.6;color:#CFCBCA;">
+        Tocá el botón y entrás derecho a tu perfil. No hace falta contraseña.
+      </p>
+
+      <div style="margin:22px 0 6px 0;">
+        <a href="{{ .ConfirmationURL }}"
+           style="display:inline-block;background-color:#0047FF;color:#FFFFFF;font-size:16px;font-weight:600;text-decoration:none;padding:14px 28px;">
+          Entrar a LABURO
+        </a>
+      </div>
+
+      <p style="margin:18px 0 0 0;font-size:13px;line-height:1.6;color:#8A8A8A;">
+        El link sirve una sola vez y vence en una hora. Si ya venció, pedí otro
+        desde la pantalla de acceso, que es gratis y sale al instante.
+      </p>
+
+      <p style="margin:14px 0 0 0;font-size:13px;line-height:1.6;color:#8A8A8A;">
+        Si el botón no abre, copiá y pegá esta dirección en el navegador:<br>
+        <span style="color:#CFCBCA;word-break:break-all;">{{ .ConfirmationURL }}</span>
+      </p>
+    </div>
+
+    <p style="margin:18px 0 0 0;font-size:12px;line-height:1.6;color:#8A8A8A;text-align:center;">
+      Si no pediste este acceso, ignorá el mail: sin tocar el botón no pasa nada.
+    </p>
+
+    <p style="margin:10px 0 0 0;font-size:12px;line-height:1.6;color:#8A8A8A;text-align:center;">
+      SOMOS DER · Staff para eventos
+    </p>
+
+  </div>
+</div>
