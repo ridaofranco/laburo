@@ -15,6 +15,7 @@
  */
 
 import { NextResponse } from "next/server";
+import { clientIpFrom, rateLimitOr429 } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 // gemini-2.5-flash quedó deprecado para cuentas nuevas (404). Usamos el alias
@@ -37,6 +38,17 @@ const ALLOWED_MIME = new Set([
 const GEMINI_TIMEOUT_MS = 20_000;
 
 export async function POST(request: Request) {
+  // FRENO DE ABUSO: esta ruta es pública (el formulario /sumate la usa sin cuenta)
+  // y cada llamada gasta cuota de Gemini. Sin freno, un script con un PDF en un
+  // loop deja el autollenado muerto para todos los que se anotan de verdad.
+  // 6 por minuto y 30 por hora por IP: una persona sube su CV una vez, dos si se
+  // equivocó de archivo.
+  const ip = clientIpFrom(request);
+  const frenado =
+    rateLimitOr429(`parse-cv:${ip}`, 6, 60_000) ??
+    rateLimitOr429(`parse-cv:hora:${ip}`, 30, 3_600_000);
+  if (frenado) return frenado;
+
   const KEY = process.env.GEMINI_API_KEY;
   if (!KEY) return NextResponse.json({ error: "no_key" }, { status: 500 });
 

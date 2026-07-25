@@ -16,6 +16,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { SITE_URL } from "@/lib/site";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -23,6 +24,18 @@ export async function requestStaffMagicLink(email: string): Promise<{ ok: boolea
   const clean = (email || "").trim().toLowerCase();
   // Respuesta uniforme siempre (no revelamos validez del email ni pertenencia al pool).
   if (!clean || !EMAIL_RE.test(clean)) return { ok: true };
+
+  // FRENO DE ABUSO. Cada pedido válido manda un mail por Supabase Auth, y ese tope
+  // es del PROYECTO ENTERO, compartido con PASE: un script pidiendo acceso mil
+  // veces deja sin poder entrar a las 699 personas de la tanda de bienvenida.
+  // 5 por minuto por IP (una persona real necesita uno, dos si se equivocó) y 20
+  // por hora por dirección, para el caso de varias personas en la misma oficina.
+  // La respuesta sigue siendo la misma de siempre: al que abusa no se le dice ni
+  // que existe un límite, ni si el mail estaba en el pool.
+  const ip = await clientIp();
+  if (!rateLimit(`staff-link:ip:${ip}`, 5, 60_000).ok) return { ok: true };
+  if (!rateLimit(`staff-link:ip-hora:${ip}`, 20, 3_600_000).ok) return { ok: true };
+  if (!rateLimit(`staff-link:mail:${clean}`, 3, 600_000).ok) return { ok: true };
 
   // ¿Está en el pool? (service-role; la RPC no está granteada a anon/authenticated)
   const admin = createServiceRoleClient();
