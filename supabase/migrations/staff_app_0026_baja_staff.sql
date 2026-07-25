@@ -45,12 +45,19 @@ COMMENT ON COLUMN staff_app.staff_profiles.baja_motivo IS
 --     nombre, tipo y orden: CREATE OR REPLACE lo exige y el frontend depende de
 --     ellas). Lo único que cambia es el WHERE.
 -- ---------------------------------------------------------------------------
+-- ⚠️ LA LISTA DE COLUMNAS TIENE QUE SER LA DE LA 0015, NO LA DE LA 0007.
+-- La 0015 le agregó `documento` y `fecha_nacimiento` al final (los necesita la
+-- pantalla del perfil). Postgres NO permite quitar columnas con CREATE OR REPLACE
+-- VIEW: si acá va la lista vieja, esta migración FALLA con un error y la baja
+-- queda a medio aplicar. Al agregar una columna nueva en el futuro, va SIEMPRE al
+-- final y sin reordenar las que ya están.
 CREATE OR REPLACE VIEW public.staff_app_profiles WITH (security_invoker = true) AS
   SELECT id, nombre, apellido, oficios, oficios_otro, provincia, ciudad,
          experiencia, anios_experiencia, eventos_trabajados, experiencia_detalle,
          disponibilidad_finde, disponibilidad_viajar, movilidad_propia, disponibilidad_aviso,
          estado, cv_url, portfolio_url, linkedin_url, telefono, email,
-         situacion_legal, donde_trabajar, pais_residencia, motivacion, organization_id
+         situacion_legal, donde_trabajar, pais_residencia, motivacion, organization_id,
+         documento, fecha_nacimiento
   FROM staff_app.staff_profiles
   WHERE baja_at IS NULL;
 

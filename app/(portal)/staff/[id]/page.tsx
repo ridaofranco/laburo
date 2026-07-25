@@ -16,15 +16,19 @@ import { isHttpUrl, classifyCv } from "@/lib/cv";
 import { calcEdad } from "@/lib/dates";
 import { QuickActions } from "./quick-actions";
 import { CvView } from "./cv-view";
+import { CvFicha } from "./cv-ficha";
+import { normalizarCv } from "@/lib/cv-ficha";
 import { OfferStatusList, type OfferRow } from "./offer-status";
 import { FavoriteNote } from "./favorite-note";
 import { Rating, type RatingGig } from "./rating";
 
 const PROFILE_COLUMNS =
-  "id,nombre,apellido,oficios,oficios_otro,provincia,ciudad,experiencia,anios_experiencia,eventos_trabajados,experiencia_detalle,disponibilidad_finde,disponibilidad_viajar,movilidad_propia,disponibilidad_aviso,estado,cv_url,portfolio_url,linkedin_url,telefono,email,documento,fecha_nacimiento,situacion_legal,donde_trabajar,pais_residencia,motivacion";
+  "id,nombre,apellido,oficios,oficios_otro,provincia,ciudad,experiencia,anios_experiencia,eventos_trabajados,experiencia_detalle,disponibilidad_finde,disponibilidad_viajar,movilidad_propia,disponibilidad_aviso,estado,cv_url,portfolio_url,linkedin_url,telefono,email,documento,fecha_nacimiento,situacion_legal,donde_trabajar,pais_residencia,motivacion,cv_data";
 
 interface Profile {
   id: string;
+  /** Ficha estructurada que Gemini extrajo del CV (0024). Puede no estar. */
+  cv_data?: unknown;
   nombre: string | null;
   apellido: string | null;
   oficios: string[] | null;
@@ -196,6 +200,9 @@ export default async function ProfilePage({
   );
   const hasLinks = isHttpUrl(p.portfolio_url) || isHttpUrl(p.linkedin_url);
   const cv = classifyCv(p.cv_url);
+  // La ficha del CV, tolerante a las variantes que devolvió la extracción (ver
+  // lib/cv-ficha.ts): si no se entiende nada, hayAlgo=false y queda el PDF.
+  const ficha = normalizarCv(p.cv_data);
 
   // Métricas derivadas
   const eventosCount = p.eventos_trabajados ?? 0;
@@ -298,7 +305,31 @@ export default async function ProfilePage({
             </Section>
           )}
 
-          {cv.kind !== "none" && (
+          {/* EL CV, ESCRITO. Antes acá iba directo el visor de PDF, o sea el
+              archivo que la persona subió a Drive, con su teléfono y su mail
+              adentro. La ficha estructurada (extraída con Gemini en julio, y que
+              la app nunca había leído) es lo que corresponde mostrar: se lee de
+              un saque y no expone el contacto. El PDF queda abajo, a un click,
+              para el que necesite ver el original. */}
+          {ficha.hayAlgo && (
+            <Section title="CV">
+              <CvFicha data={ficha} />
+              {cv.kind !== "none" && (
+                <details className="group">
+                  <summary className="cursor-pointer text-label font-normal text-fg-muted hover:text-fg">
+                    Ver el CV original (PDF)
+                  </summary>
+                  <div className="pt-4">
+                    <CvView classification={cv} />
+                  </div>
+                </details>
+              )}
+            </Section>
+          )}
+
+          {/* Sin ficha estructurada (18 de los 688 no se pudieron leer) queda el
+              PDF como estaba: nadie pierde nada. */}
+          {!ficha.hayAlgo && cv.kind !== "none" && (
             <Section title="CV">
               <CvView classification={cv} />
             </Section>
