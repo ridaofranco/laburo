@@ -188,7 +188,14 @@ export async function sendMail(opts: MailOptions): Promise<MailResult> {
     } catch (e) {
       const smtpError = errMsg(e);
       console.error("[mailer] smtp failed:", smtpError);
-      return { ok: false, channel: "smtp", error: resendError ?? smtpError };
+      // Reportamos los dos errores, empezando por el del canal que devolvemos.
+      // Antes devolvíamos `resendError ?? smtpError`, o sea channel:"smtp" con el
+      // mensaje de Resend, y se debuggeaba el canal equivocado.
+      return {
+        ok: false,
+        channel: "smtp",
+        error: resendError ? `smtp: ${smtpError} | resend: ${resendError}` : smtpError,
+      };
     }
   }
 
