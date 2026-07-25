@@ -89,7 +89,11 @@ export async function registerApplicant(
   const { error } = await supabase.rpc("staff_app_register_applicant", {
     p_nombre: input.nombre.trim(),
     p_apellido: input.apellido.trim() || null,
-    p_email: input.email.trim(),
+    // lowercase: toda la resolución de identidad del staff hace
+    // `where lower(email) = ... order by created_at asc limit 1`. Sin normalizar
+    // acá, "Franco@Gmail.com" y "franco@gmail.com" crean dos fichas y las ofertas
+    // le llegan a la vieja, o sea el staff nunca las ve. Mismo bug que ENTRA ya cerró.
+    p_email: input.email.trim().toLowerCase(),
     p_telefono: input.telefono.trim() || null,
     p_documento: input.documento.trim() || null,
     p_fecha_nacimiento: input.fecha_nacimiento,
