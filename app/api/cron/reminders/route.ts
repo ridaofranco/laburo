@@ -77,9 +77,11 @@ export async function GET(request: Request) {
   });
 
   if (error) {
-    // No romper el scheduler: log honesto + 200 con el error.
+    // 500 (no 200): con 200 Vercel Cron marca la ejecución como exitosa y un RPC
+    // roto queda invisible en el dashboard durante meses. El scheduler no se
+    // "rompe" por un 500, solo lo reporta como fallido, que es la verdad.
     console.error("[cron/reminders] rpc failed:", error.message);
-    return Response.json({ ok: false, error: error.message });
+    return Response.json({ ok: false, error: error.message }, { status: 500 });
   }
 
   const offers = (data as DueOffer[] | null) ?? [];
