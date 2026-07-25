@@ -30,6 +30,7 @@ import { sendMail, type MailResult } from "@/lib/email/mailer";
 import { OfferEmail } from "@/components/emails/offer-email";
 import { waLink } from "@/lib/wa";
 import { fmtFechaHora } from "@/lib/dates";
+import { siteUrl } from "@/lib/site";
 
 export interface CreateOfferInput {
   staffProfileId: string;
@@ -105,7 +106,7 @@ export async function createAndSendOffer(
   }
 
   // 3. Link mágico + mensaje wa.me. El raw token SÓLO se usa acá para el link.
-  const link = `${process.env.SITE_URL ?? ""}/o/${res.token}`;
+  const link = siteUrl(`/o/${res.token}`);
   const firstName = input.firstName.trim();
   const saludo = firstName ? `Hola ${firstName}, ` : "Hola, ";
   const enGig = input.gigTitle?.trim() ? ` en ${input.gigTitle.trim()}` : "";

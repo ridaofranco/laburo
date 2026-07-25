@@ -15,6 +15,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
+import { SITE_URL } from "@/lib/site";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -31,7 +32,7 @@ export async function requestStaffMagicLink(email: string): Promise<{ ok: boolea
   if (error || inPool !== true) return { ok: true };
 
   // Recién acá mandamos el OTP (y recién acá se puede crear la cuenta).
-  const origin = process.env.SITE_URL || "https://laburo-henna.vercel.app";
+  const origin = SITE_URL;
   const supabase = await createClient();
   await supabase.auth.signInWithOtp({
     email: clean,

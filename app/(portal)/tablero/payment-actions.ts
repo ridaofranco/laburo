@@ -15,8 +15,7 @@
 import { revalidatePath } from "next/cache";
 import { MercadoPagoConfig, Preference } from "mercadopago";
 import { createClient } from "@/lib/supabase/server";
-
-const SITE = process.env.SITE_URL || "https://laburo-henna.vercel.app";
+import { SITE_URL as SITE } from "@/lib/site";
 
 export async function createClientCheckout(
   gigId: string,
