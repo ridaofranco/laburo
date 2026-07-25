@@ -46,6 +46,17 @@ export async function updateSession(request: NextRequest) {
     "/sumate",
     "/api/parse-cv",
     "/api/mp/webhook",
+    // Crons de Vercel: llegan SIN sesión (no hay usuario), así que sin esto el
+    // middleware los redirigía a /login y el cron "corría" con un 307 a una
+    // pantalla de login, sin ejecutar nada y sin fallar ruidosamente. Dejarlos
+    // pasar acá es seguro: cada route valida el bearer CRON_SECRET fail-closed y
+    // devuelve 401 si no coincide.
+    "/api/cron",
+    // Baja del pool ("no quiero formar parte"): la persona llega desde el pie de
+    // un mail, sin cuenta y sin sesión. El gate es el token HMAC del link, que
+    // valida la propia página/route (lib/baja.ts), no el middleware.
+    "/baja",
+    "/api/baja",
     // Pantallas del lado staff (standalone, chrome propio). El middleware las deja
     // pasar y el gate real lo hace cada página con requireStaff() (fork "staff con
     // cuenta"): sin sesión o sin perfil de staff → redirige a /acceso-staff.

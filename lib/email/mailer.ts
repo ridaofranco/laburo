@@ -41,6 +41,13 @@ export interface MailOptions {
   subject: string;
   html: string;
   attachments?: MailAttachment[];
+  /**
+   * Headers extra. Se usa para List-Unsubscribe / List-Unsubscribe-Post (RFC
+   * 8058) en los envíos a muchas personas: Gmail lee un envío masivo sin vía de
+   * baja y castiga la reputación del dominio. Lo soportan los dos canales
+   * (Resend por el campo `headers` de su API, nodemailer nativo).
+   */
+  headers?: Record<string, string>;
 }
 
 // ─── Helpers de configuración ────────────────────────────────────────────
@@ -119,6 +126,7 @@ async function sendViaResend(opts: MailOptions): Promise<void> {
       subject: opts.subject,
       html: opts.html,
       ...(replyTo ? { reply_to: replyTo } : {}),
+      ...(opts.headers ? { headers: opts.headers } : {}),
       attachments: opts.attachments?.map((a) => ({
         filename: a.filename,
         content: a.content.toString("base64"),

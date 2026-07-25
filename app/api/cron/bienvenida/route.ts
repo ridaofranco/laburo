@@ -48,6 +48,7 @@ import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { sendMail, emailEnabled } from "@/lib/email/mailer";
 import { WelcomeEmail } from "@/components/emails/welcome-email";
 import { siteUrl } from "@/lib/site";
+import { bajaHeaders, bajaReady, bajaUrl } from "@/lib/baja";
 
 // Nunca cachear: cada disparo del cron debe ejecutar de verdad.
 export const dynamic = "force-dynamic";
@@ -137,12 +138,16 @@ export async function GET(request: Request) {
         createElement(WelcomeEmail, {
           firstName: (row.first_name ?? "").split(/\s+/)[0] ?? "",
           link,
+          bajaLink: bajaReady() ? bajaUrl(row.profile_id) : undefined,
         }),
       );
       const result = await sendMail({
         to,
         subject: "Bienvenido/a a LABURO · SOMOS DER",
         html,
+        // List-Unsubscribe + one-click: Gmail muestra su propio botón de baja y
+        // deja de leer la tanda como masivo sin salida.
+        headers: bajaHeaders(row.profile_id),
       });
       if (result.ok) sent += 1;
       else failed += 1;

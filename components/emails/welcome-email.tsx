@@ -36,6 +36,13 @@ import {
 export interface WelcomeEmailProps {
   firstName: string;
   link: string;
+  /**
+   * Link de baja del pool ("no quiero formar parte"). Va al pie, en chico pero
+   * legible y sin vueltas. No está escondido a propósito: el que puede irse en un
+   * click no nos marca como spam, y no tiene sentido tener en la base a alguien
+   * que no quiere que lo llamemos.
+   */
+  bajaLink?: string;
 }
 
 // Tokens de marca (espejo de app/globals.css @theme — Radical Minimalist).
@@ -49,7 +56,7 @@ const FG_MUTED = "#8A8A8A";
 const FONT_STACK =
   "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif";
 
-export function WelcomeEmail({ firstName, link }: WelcomeEmailProps) {
+export function WelcomeEmail({ firstName, link, bajaLink }: WelcomeEmailProps) {
   const saludo = firstName?.trim() ? `Hola ${firstName.trim()}` : "Hola";
 
   return (
@@ -172,6 +179,23 @@ export function WelcomeEmail({ firstName, link }: WelcomeEmailProps) {
           >
             SOMOS DER · Staff para eventos
           </Text>
+
+          {bajaLink ? (
+            <Text
+              style={{
+                margin: "8px 0 0 0",
+                textAlign: "center",
+                fontSize: "12px",
+                lineHeight: 1.6,
+                color: FG_MUTED,
+              }}
+            >
+              Si no querés formar parte, te sacamos en un click:{" "}
+              <a href={bajaLink} style={{ color: FG_MUTED, textDecoration: "underline" }}>
+                darme de baja
+              </a>
+            </Text>
+          ) : null}
         </Container>
       </Body>
     </Html>
