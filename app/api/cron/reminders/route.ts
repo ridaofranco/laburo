@@ -38,7 +38,9 @@ import { render } from "@react-email/components";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { sendMail, smtpEnabled } from "@/lib/email/mailer";
 import { ReminderEmail } from "@/components/emails/reminder-email";
+import { ShiftReminderEmail } from "@/components/emails/shift-reminder-email";
 import { fmtFechaHora } from "@/lib/dates";
+import { siteUrl } from "@/lib/site";
 
 // Nunca cachear: cada disparo del cron debe ejecutar de verdad.
 export const dynamic = "force-dynamic";
@@ -126,6 +128,84 @@ export async function GET(request: Request) {
     }
   }
 
+  // ─────────────────────────────────────────────────────────────────────────
+  // SEGUNDO TRABAJO DE ESTE MISMO CRON: el recordatorio del día antes al equipo
+  // confirmado ("mañana trabajás"), que es el mail que baja el "no vino nadie".
+  //
+  // POR QUÉ ACÁ Y NO EN UN CRON PROPIO: Vercel Hobby permite solo 2 crons por
+  // proyecto, y LABURO ya usa uno para esto y el otro para la tanda de bienvenida.
+  // Este trabajo corre en la misma pasada diaria. Es aditivo: si su RPC falla, el
+  // recordatorio de propuestas de arriba ya salió y no se pierde.
+  // ─────────────────────────────────────────────────────────────────────────
+  let turnosDue = 0;
+  let turnosSent = 0;
+  let turnosFailed = 0;
+  let turnosError: string | null = null;
+
+  try {
+    const { data: crew, error: crewError } = await supabase.rpc("staff_app_crew_due_reminder", {
+      p_within_hours: 30,
+    });
+    if (crewError) throw new Error(crewError.message);
+
+    const filas = (crew as Array<{
+      crew_id: string;
+      email: string | null;
+      first_name: string | null;
+      role: string | null;
+      gig_title: string | null;
+      starts_at: string | null;
+      ends_at: string | null;
+      venue_name: string | null;
+    }> | null) ?? [];
+    turnosDue = filas.length;
+
+    for (const fila of filas) {
+      const to = fila.email?.trim();
+      if (!to) continue;
+      try {
+        const inicio = fmtFechaHora(fila.starts_at, {
+          weekday: "long",
+          day: "2-digit",
+          month: "long",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        const fin = fmtFechaHora(fila.ends_at, { hour: "2-digit", minute: "2-digit" });
+        // La ventana es de 30 h, así que puede caer un evento de HOY: el mail se
+        // adapta en vez de decirle "mañana" a alguien que trabaja en 3 horas.
+        const esHoy = fila.starts_at
+          ? new Date(fila.starts_at).toDateString() === new Date().toDateString()
+          : false;
+        const html = await render(
+          createElement(ShiftReminderEmail, {
+            firstName: fila.first_name ?? "",
+            gigTitle: fila.gig_title ?? "",
+            role: fila.role ?? "",
+            whenText: inicio && fin ? `${inicio} a ${fin}` : inicio,
+            venue: fila.venue_name,
+            esHoy,
+            link: siteUrl("/panel-staff"),
+          }),
+        );
+        const r = await sendMail({
+          to,
+          subject: `${esHoy ? "Hoy" : "Mañana"}: ${fila.role ?? "tu turno"}${fila.gig_title ? ` en ${fila.gig_title}` : ""}`,
+          html,
+        });
+        if (r.ok) turnosSent += 1;
+        else turnosFailed += 1;
+      } catch (e) {
+        console.error("[cron/reminders] recordatorio de turno falló para", fila.crew_id, e instanceof Error ? e.message : String(e));
+        turnosFailed += 1;
+      }
+    }
+  } catch (e) {
+    // No tumba la respuesta: el trabajo de arriba ya se hizo. Queda reportado.
+    turnosError = e instanceof Error ? e.message : String(e);
+    console.error("[cron/reminders] el recordatorio de turnos falló entero:", turnosError);
+  }
+
   // 4. Resumen honesto (D-05): sin SMTP → sent=0, smtp=false, no-op limpio.
   return Response.json({
     ok: true,
@@ -134,5 +214,6 @@ export async function GET(request: Request) {
     failed,
     skipped,
     smtp: smtpEnabled(),
+    turnos: { due: turnosDue, sent: turnosSent, failed: turnosFailed, error: turnosError },
   });
 }
