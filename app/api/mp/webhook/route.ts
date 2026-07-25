@@ -93,8 +93,47 @@ export async function POST(request: Request) {
     });
     if (logError) throw logError;
 
-    // Marcar el evento cobrado solo si el pago fue aprobado.
+    // Marcar el evento cobrado solo si el pago fue aprobado Y por el monto que
+    // corresponde.
+    //
+    // POR QUÉ EL MONTO: el link de pago se genera con el presupuesto del evento
+    // en ese momento, pero el presupuesto puede cambiar después (se agrega gente,
+    // se suma un día). Si el cliente paga el link viejo, MercadoPago avisa
+    // "approved" igual y el evento quedaba dado por cobrado por menos plata.
+    // ENTRÁ tenía exactamente este agujero (se emitían tickets sin verificar
+    // cuánto se había cobrado) y se cerró; acá se cierra antes de que pase.
     if (p.status === "approved" && gigId) {
+      const pagado = Number(p.transaction_amount ?? 0);
+
+      // Cuánto tendría que haber pagado. Se lee con service-role de la vista que
+      // ya usa la pantalla que genera el link.
+      const { data: gig, error: gigError } = await admin
+        .from("staff_app_gigs")
+        .select("client_budget")
+        .eq("id", gigId)
+        .maybeSingle();
+
+      const esperado = Number((gig as { client_budget: number | null } | null)?.client_budget ?? 0);
+
+      // FAIL-OPEN A PROPÓSITO en la lectura: si no pudimos averiguar el monto
+      // esperado, marcamos cobrado igual. Un pago real sin registrar es peor que
+      // un pago de menos registrado, y el evento queda en los logs para revisar.
+      if (gigError || !(esperado > 0)) {
+        console.warn(
+          "[mp/webhook] no pude verificar el monto esperado del gig",
+          gigId,
+          gigError?.message ?? "sin client_budget",
+        );
+      } else if (pagado + 1 < esperado) {
+        // Tolerancia de $1 por redondeos. Pagó de menos: NO se marca cobrado.
+        // Devolvemos 200 (no 500) porque reintentar la notificación no va a
+        // cambiar el monto: esto lo tiene que resolver una persona.
+        console.error(
+          `[mp/webhook] PAGO INSUFICIENTE, no marco cobrado → gig=${gigId} pago=${pid} pagado=${pagado} esperado=${esperado}`,
+        );
+        return NextResponse.json({ ok: true, warning: "monto_insuficiente" });
+      }
+
       const { error: paidError } = await admin.rpc("staff_app_mark_gig_paid", {
         p_gig_id: gigId,
         p_payment_id: pid,
