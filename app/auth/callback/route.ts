@@ -17,11 +17,20 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
 
-  if (!code) return NextResponse.redirect(`${origin}/login`);
-
   const supabase = await createClient();
-  const { error } = await supabase.auth.exchangeCodeForSession(code);
-  if (error) return NextResponse.redirect(`${origin}/login`);
+
+  if (code) {
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (error) return NextResponse.redirect(`${origin}/login`);
+  } else {
+    // Sin `code` pero con sesión: es alguien que acaba de entrar con MAIL Y
+    // CONTRASEÑA (26/7). Ahí la sesión ya la creó signInWithPassword y no hay
+    // nada que canjear, pero el ruteo por identidad de abajo sigue haciendo
+    // falta, porque es el que sabe si mandarlo a /dashboard o a /panel-staff.
+    // Sin esta rama, entrar con contraseña terminaba SIEMPRE en /login.
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.redirect(`${origin}/login`);
+  }
 
   // 1. Productor (miembro del org).
   const membership = await supabase.rpc("staff_app_provision_member");

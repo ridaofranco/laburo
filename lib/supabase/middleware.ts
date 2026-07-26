@@ -57,6 +57,14 @@ export async function updateSession(request: NextRequest) {
     // valida la propia página/route (lib/baja.ts), no el middleware.
     "/baja",
     "/api/baja",
+    // ⚠️ CREAR O CAMBIAR LA CONTRASEÑA. Va acá SÍ O SÍ: la persona llega desde el
+    // link del mail SIN sesión todavía (la sesión se crea recién al canjear el
+    // code en /definir-contrasena/confirmar). Sin esta línea el middleware la
+    // mandaría a /login y NADIE podría definir su contraseña, que es exactamente
+    // el bug que tuvo muerto meses al cron de recordatorios.
+    // Dejarlo pasar es seguro: el gate real es el code de Supabase, que se canjea
+    // en el route handler, y la acción de guardar exige sesión.
+    "/definir-contrasena",
     // Pantallas del lado staff (standalone, chrome propio). El middleware las deja
     // pasar y el gate real lo hace cada página con requireStaff() (fork "staff con
     // cuenta"): sin sesión o sin perfil de staff → redirige a /acceso-staff.

@@ -14,7 +14,22 @@ import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
-import { requestStaffMagicLink } from "./actions";
+import { requestStaffMagicLink, requestPasswordSetup, signInWithPassword } from "./actions";
+
+/**
+ * ⭐ ACCESO CON CONTRASEÑA (decisión de Franco, 26/7).
+ *
+ * Antes esta pantalla era solo "poné tu mail y te mandamos un link". El link lo
+ * mandaba Supabase con su plantilla por defecto: en inglés, sin marca y sin
+ * logo. Franco: "es horrible y me quita credibilidad". Y el problema real es más
+ * grave que lo estético: quien recibe la bienvenida linda de LABURO y después
+ * ESO, piensa que es phishing y no entra.
+ *
+ * Ahora la puerta principal es mail + contraseña, y el link por mail queda como
+ * salida para el que no se la acuerda. Se mantienen las dos a propósito: el
+ * staff entra dos o tres veces al año, y una contraseña que no se usa nunca se
+ * olvida siempre. Sacar el link sería garantizar que media tanda quede afuera.
+ */
 
 const up = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -22,12 +37,58 @@ const up = (delay: number) => ({
   transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] as const, delay },
 });
 
+/** Qué está mostrando la pantalla. */
+type Vista = "clave" | "link" | "mandado" | "clave-mandada";
+
 export function StaffLoginForm() {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [vista, setVista] = useState<Vista>("clave");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const callbackUrl = () => `${window.location.origin}/auth/callback`;
+
+  /** Entrar con mail y contraseña. */
+  const handlePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const r = await signInWithPassword(email, password);
+      if (!r.ok) {
+        setError(r.error ?? "No pudimos entrar.");
+        return;
+      }
+      // El ruteo por identidad (staff → /panel-staff, productor → /dashboard) lo
+      // hace /auth/callback, así que se pasa por ahí en vez de adivinar acá.
+      window.location.href = "/auth/callback?from=password";
+    } catch {
+      setError("No pudimos entrar. Probá de nuevo.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /** Pedir el mail para crear la contraseña (o cambiarla si se la olvidó). */
+  const handleCrearClave = async () => {
+    if (!email) {
+      setError("Escribí tu email y volvé a tocar acá.");
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      await requestPasswordSetup(email);
+      setVista("clave-mandada");
+    } catch {
+      setError("No pudimos procesar el pedido. Probá de nuevo.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleGoogle = async () => {
     const supabase = createClient();
@@ -80,13 +141,23 @@ export function StaffLoginForm() {
           Portal de Staff
         </motion.p>
 
-        {sent ? (
+        {vista === "mandado" || sent ? (
           <motion.p {...up(0.1)} className="text-center text-[16px] leading-[1.6] text-[#cfc4c5]">
             Si <span className="text-[#e5e2e1]">{email}</span> está en nuestro pool
             de staff, te mandamos un link para entrar. Revisá tu casilla.
           </motion.p>
+        ) : vista === "clave-mandada" ? (
+          <motion.p {...up(0.1)} className="text-center text-[16px] leading-[1.6] text-[#cfc4c5]">
+            Si <span className="text-[#e5e2e1]">{email}</span> está en nuestro pool
+            de staff, te mandamos un link para crear tu contraseña. Revisá tu
+            casilla, y si no lo ves, mirá en spam.
+          </motion.p>
         ) : (
-          <motion.form {...up(0.2)} onSubmit={handleMagicLink} className="w-full flex flex-col gap-12">
+          <motion.form
+            {...up(0.2)}
+            onSubmit={vista === "clave" ? handlePassword : handleMagicLink}
+            className="w-full flex flex-col gap-10"
+          >
             <div className="relative w-full group">
               <label
                 htmlFor="email"
@@ -106,10 +177,47 @@ export function StaffLoginForm() {
                 className="w-full bg-transparent border-0 border-b border-[#4c4546] focus:border-[#e5e2e1] outline-none text-[18px] leading-[1.6] text-[#e5e2e1] py-4 px-0 rounded-none transition-colors duration-300"
               />
               <p className="mt-3 text-[13px] text-[#8a8a8a] leading-[1.5]">
-                Usá el mismo email con el que te postulaste. Te mandamos un link
-                para entrar, sin contraseña.
+                Usá el mismo email con el que te postulaste.
               </p>
             </div>
+
+            {vista === "clave" ? (
+              <div className="relative w-full group">
+                <label
+                  htmlFor="password"
+                  className="block mb-2 font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.1em] text-[#cfc4c5] transition-colors group-focus-within:text-[#e5e2e1]"
+                >
+                  Tu contraseña
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-transparent border-0 border-b border-[#4c4546] focus:border-[#e5e2e1] outline-none text-[18px] leading-[1.6] text-[#e5e2e1] py-4 px-0 rounded-none transition-colors duration-300"
+                />
+                <button
+                  type="button"
+                  onClick={handleCrearClave}
+                  disabled={loading}
+                  className="mt-3 font-[family-name:var(--font-geist)] text-[13px] text-[#988e90] hover:text-[#e5e2e1] transition-colors underline underline-offset-4 disabled:opacity-50"
+                >
+                  Es mi primera vez, o no me acuerdo la contraseña
+                </button>
+              </div>
+            ) : (
+              <p className="text-[13px] text-[#8a8a8a] leading-[1.5] -mt-4">
+                Te mandamos un link para entrar, sin contraseña. Sirve para esta
+                vez nada más.
+              </p>
+            )}
+
+            {error ? (
+              <p role="alert" className="text-[14px] leading-[1.5] text-[#ff8a8a]">{error}</p>
+            ) : null}
 
             <button
               type="submit"
@@ -117,9 +225,19 @@ export function StaffLoginForm() {
               className="w-full border border-[#e5e2e1] bg-transparent text-[#e5e2e1] py-6 px-8 flex items-center justify-center gap-4 hover:bg-[#e5e2e1] hover:text-black transition-colors duration-150 cursor-pointer disabled:opacity-50"
             >
               <span className="font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.2em]">
-                {loading ? "Enviando…" : "Entrar"}
+                {loading ? "Un segundo…" : vista === "clave" ? "Entrar" : "Mandame el link"}
               </span>
               <ArrowRight size={18} strokeWidth={1.5} />
+            </button>
+
+            {/* La salida para el que no se acuerda nada. El staff entra dos o tres
+                veces al año: sin esto, media tanda queda afuera. */}
+            <button
+              type="button"
+              onClick={() => { setVista(vista === "clave" ? "link" : "clave"); setError(null); }}
+              className="mx-auto font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.1em] text-[#988e90] hover:text-[#e5e2e1] transition-colors"
+            >
+              {vista === "clave" ? "Entrar con un link a mi mail" : "Entrar con mi contraseña"}
             </button>
 
             <button

@@ -1,0 +1,97 @@
+<!--
+  PLANTILLA DEL MAIL PARA CREAR O CAMBIAR LA CONTRASEÑA
+  (Supabase Auth → pestaña "Reset Password").
+
+  ══ CÓMO SE APLICA (2 minutos, lo hace Franco) ══
+  1. Panel de Supabase, proyecto luillpzfqzbpoqkgvjuw
+  2. Authentication → Emails → pestaña "Reset Password"
+  3. Subject heading:  Creá tu contraseña de LABURO
+  4. Message body: borrar lo que hay y pegar TODO este archivo (desde <div hasta
+     el último </div>, el comentario de arriba no hace falta)
+  5. Save.
+  ⚠️ EN LA MISMA VISITA hay que dejar cargado el SMTP propio (Authentication →
+     Emails → SMTP Settings). Es lo que hace que el mail salga DESDE
+     laburo.staff@somosder.com y no desde una casilla de Supabase. Sin eso, el
+     diseño mejora pero el remitente sigue siendo ajeno, que era la mitad del
+     problema que planteó Franco.
+
+  ══ POR QUÉ EXISTE ══
+  Franco, 26/7: "no quiero que llegue eso del magic link, prefiero que entren y
+  que creen su contraseña... es horrible y me quita credibilidad". Este es el
+  mail que abre la puerta de LABURO para las 699 personas del pool. La plantilla
+  por defecto de Supabase dice "Reset Password" en inglés, sin marca y sin logo:
+  quien recibe la bienvenida linda de LABURO y después ESO, piensa que es
+  phishing y no entra.
+
+  ══ SIRVE PARA LOS DOS CASOS ══
+  El mismo mail se usa la primera vez (crear la contraseña) y cuando alguien se
+  la olvidó. Por eso el texto dice "creá o cambiá": no se puede saber cuál de los
+  dos es desde la plantilla, y prometer uno solo confundiría a la mitad.
+
+  ══ NOTAS TÉCNICAS ══
+  · {{ .ConfirmationURL }} es la variable de Supabase; NO tocarla ni envolverla en
+    ningún tracking, o el link deja de validar.
+  · Todo el estilo va inline: los clientes de correo descartan el CSS externo.
+  · Sin imágenes remotas a propósito. El wordmark es texto: Gmail bloquea imágenes
+    por defecto y un mail de acceso no puede depender de eso para verse serio.
+  · Fondo oscuro con el azul de LABURO, igual que el resto de los mails de la app.
+-->
+<div style="margin:0;padding:0;background-color:#000000;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+  <div style="max-width:480px;margin:0 auto;padding:32px 20px;">
+
+    <!-- Wordmark en texto (nada de imágenes remotas en un mail de acceso) -->
+    <div style="padding:0 0 22px 0;">
+      <span style="font-size:22px;font-weight:800;letter-spacing:-0.5px;color:#F5F5F5;">LABURO.</span>
+      <span style="display:block;margin-top:6px;font-size:10px;letter-spacing:2.5px;color:#8A8A8A;text-transform:uppercase;">Staff para eventos · SOMOS DER</span>
+    </div>
+
+    <div style="background-color:#0A0A0A;border:1px solid #1A1A1A;padding:28px 24px;">
+      <p style="margin:0 0 10px 0;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#0047FF;">
+        Tu contraseña
+      </p>
+
+      <h1 style="margin:0 0 14px 0;font-size:22px;line-height:1.25;font-weight:700;color:#F5F5F5;">
+        Creá tu contraseña de LABURO
+      </h1>
+
+      <p style="margin:0 0 12px 0;font-size:15px;line-height:1.6;color:#CFCBCA;">
+        Tocá el botón y elegí la contraseña con la que vas a entrar de acá en
+        adelante. Es un minuto y lo hacés una sola vez.
+      </p>
+
+      <div style="margin:22px 0 6px 0;">
+        <a href="{{ .ConfirmationURL }}"
+           style="display:inline-block;background-color:#0047FF;color:#FFFFFF;font-size:16px;font-weight:600;text-decoration:none;padding:14px 28px;">
+          Crear mi contraseña
+        </a>
+      </div>
+
+      <p style="margin:18px 0 0 0;font-size:13px;line-height:1.6;color:#8A8A8A;">
+        El link sirve una sola vez y vence en una hora. Si ya venció, pedí otro
+        desde la pantalla de acceso: es gratis y sale al instante.
+      </p>
+
+      <p style="margin:14px 0 0 0;font-size:13px;line-height:1.6;color:#8A8A8A;">
+        Si el botón no abre, copiá y pegá esta dirección en el navegador:<br>
+        <span style="color:#CFCBCA;word-break:break-all;">{{ .ConfirmationURL }}</span>
+      </p>
+    </div>
+
+    <p style="margin:18px 0 0 0;font-size:12px;line-height:1.6;color:#8A8A8A;text-align:center;">
+      Si no pediste esto, ignorá el mail: sin tocar el botón, tu contraseña no
+      cambia.
+    </p>
+
+    <p style="margin:14px 0 0 0;text-align:center;">
+      <a href="https://wa.me/5491171540675?text=Hola%2C%20tengo%20un%20problema%20para%20entrar%20a%20LABURO."
+         style="display:inline-block;background-color:#25D366;color:#FFFFFF;font-size:13px;font-weight:600;text-decoration:none;padding:10px 18px;border-radius:10px;">
+        ¿No podés entrar? Escribinos
+      </a>
+    </p>
+
+    <p style="margin:12px 0 0 0;font-size:12px;line-height:1.6;color:#8A8A8A;text-align:center;">
+      SOMOS DER · Staff para eventos
+    </p>
+
+  </div>
+</div>

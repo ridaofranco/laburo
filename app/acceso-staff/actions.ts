@@ -56,3 +56,104 @@ export async function requestStaffMagicLink(email: string): Promise<{ ok: boolea
   });
   return { ok: true };
 }
+
+/**
+ * ⭐ PEDIR EL LINK PARA CREAR O CAMBIAR LA CONTRASEÑA (decisión de Franco, 26/7).
+ *
+ * ── POR QUÉ EXISTE ──
+ * Hasta ahora al staff le llegaba el magic link con la plantilla POR DEFECTO de
+ * Supabase: en inglés, sin marca y sin logo. Franco: "es horrible y me quita
+ * credibilidad". Y tiene razón en algo más grave que lo estético: quien recibe
+ * la bienvenida linda de LABURO y después ESO, piensa que es phishing y no entra.
+ * Son las 699 personas del pool.
+ *
+ * La decisión fue: que cada uno tenga su contraseña, y que el mail para
+ * definirla salga con nuestro diseño y desde nuestra casilla.
+ *
+ * ── EL DETALLE QUE DEFINE ESTA FUNCIÓN ──
+ * `resetPasswordForEmail` SOLO manda el mail si la cuenta ya existe en
+ * auth.users, y **las 699 no tienen cuenta**: hoy se les crea recién cuando
+ * piden su primer magic link. Si llamáramos directo al reset, a la persona no le
+ * llegaría nada y no habría forma de saber por qué.
+ *
+ * Por eso acá se crea la cuenta primero, en el momento en que la persona la pide
+ * (que es lo que eligió Franco: nadie recibe una contraseña por mail y no se
+ * crean 699 cuentas de golpe). Se crea con `email_confirm: true` porque el mail
+ * ya se está por verificar con el propio link que sale a continuación.
+ *
+ * ── SEGURIDAD, IGUAL QUE EL MAGIC LINK ──
+ * · Solo se le manda a quien está en el pool (RPC service-role).
+ * · Respuesta SIEMPRE uniforme: no se puede averiguar quién es staff ni qué mail
+ *   existe. Ni siquiera se dice si la cuenta ya estaba creada.
+ * · Mismo freno de abuso: cada pedido manda un mail y ese tope es del proyecto
+ *   entero, compartido con PASE.
+ */
+export async function requestPasswordSetup(email: string): Promise<{ ok: boolean }> {
+  const clean = (email || "").trim().toLowerCase();
+  if (!clean || !EMAIL_RE.test(clean)) return { ok: true };
+
+  const ip = await clientIp();
+  if (!rateLimit(`staff-pass:ip:${ip}`, 5, 60_000).ok) return { ok: true };
+  if (!rateLimit(`staff-pass:ip-hora:${ip}`, 20, 3_600_000).ok) return { ok: true };
+  if (!rateLimit(`staff-pass:mail:${clean}`, 3, 600_000).ok) return { ok: true };
+
+  const admin = createServiceRoleClient();
+  const { data: inPool, error } = await admin.rpc("staff_app_email_in_pool", {
+    p_email: clean,
+  });
+  if (error || inPool !== true) return { ok: true };
+
+  // Si todavía no tiene cuenta, se la creamos. Si ya la tiene, createUser
+  // devuelve error y seguimos igual: lo único que importa es que exista antes
+  // del reset. No se mira el motivo del error a propósito, para no convertir
+  // esto en un oráculo de "este mail ya tenía cuenta".
+  await admin.auth.admin
+    .createUser({ email: clean, email_confirm: true })
+    .catch(() => undefined);
+
+  // Y ahora sí, el mail para definir la contraseña. Sale con la plantilla
+  // "Reset Password" del panel de Supabase, que está en el repo en
+  // supabase/email-templates/definir-contrasena.html, y desde nuestro SMTP.
+  const supabase = await createClient();
+  await supabase.auth.resetPasswordForEmail(clean, {
+    redirectTo: `${SITE_URL}/definir-contrasena`,
+  });
+
+  return { ok: true };
+}
+
+/**
+ * Entrar con mail y contraseña.
+ *
+ * A diferencia de las de arriba, ACÁ SÍ se devuelve el error: la persona está
+ * escribiendo su propia contraseña y necesita saber si se equivocó. No hay
+ * oráculo que proteger, porque para llegar hasta acá ya sabe que la cuenta
+ * existe (fue ella quien la creó).
+ *
+ * El mensaje no distingue entre "no existe" y "contraseña equivocada" igual, que
+ * es lo estándar: si no, sirve para averiguar qué mails están registrados.
+ */
+export async function signInWithPassword(
+  email: string,
+  password: string,
+): Promise<{ ok: boolean; error?: string }> {
+  const clean = (email || "").trim().toLowerCase();
+  if (!clean || !password) return { ok: false, error: "Completá tu email y tu contraseña." };
+
+  const ip = await clientIp();
+  // Más ajustado que el del mail: acá se prueban contraseñas, así que el freno
+  // es lo único que separa una cuenta de un ataque de fuerza bruta.
+  if (!rateLimit(`staff-signin:ip:${ip}`, 10, 60_000).ok) {
+    return { ok: false, error: "Demasiados intentos. Esperá un minuto y probá de nuevo." };
+  }
+  if (!rateLimit(`staff-signin:mail:${clean}`, 8, 600_000).ok) {
+    return { ok: false, error: "Demasiados intentos con este email. Esperá unos minutos." };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithPassword({ email: clean, password });
+  if (error) {
+    return { ok: false, error: "El email o la contraseña no coinciden." };
+  }
+  return { ok: true };
+}
