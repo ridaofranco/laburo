@@ -229,7 +229,7 @@ export function OfferEmail({
               }}
             >
               Mirá los detalles y confirmá desde el botón. Si tenés alguna duda,
-              respondé este mail o escribinos por WhatsApp.
+              respondé este mail y lo vemos.
             </Text>
           </Section>
           <PieWhatsApp mensaje="Hola, te escribo por la propuesta de trabajo que me mandaron." />

@@ -18,6 +18,9 @@
  * inventados, para no confundirlo con uno real si queda en la bandeja.
  */
 import fs from 'fs';
+// Si se pide PREVIEW_DIR y no existe, se crea: antes fallaban los 7 con ENOENT y
+// parecía un problema de los mails.
+if (process.env.PREVIEW_DIR) fs.mkdirSync(process.env.PREVIEW_DIR, { recursive: true });
 // Cargo .env.local a mano (dotenv no esta instalado en este repo).
 for (const linea of fs.readFileSync(new URL('../.env.local', import.meta.url), 'utf8').split(/\r?\n/)) {
   const m = linea.match(/^([A-Z_][A-Z0-9_]*)=(.*)$/);
@@ -29,12 +32,13 @@ import { createElement } from 'react';
 import * as React from 'react';
 globalThis.React = React;
 
-import { WelcomeEmail } from './components/emails/welcome-email.tsx';
-import { OfferEmail } from './components/emails/offer-email.tsx';
-import { ReminderEmail } from './components/emails/reminder-email.tsx';
-import { HiredEmail } from './components/emails/hired-email.tsx';
-import { ShiftReminderEmail } from './components/emails/shift-reminder-email.tsx';
-import { OfferAnswerEmail } from './components/emails/offer-answer-email.tsx';
+import { WelcomeEmail } from '../components/emails/welcome-email.tsx';
+import { WelcomeLegacyEmail } from '../components/emails/welcome-legacy-email.tsx';
+import { OfferEmail } from '../components/emails/offer-email.tsx';
+import { ReminderEmail } from '../components/emails/reminder-email.tsx';
+import { HiredEmail } from '../components/emails/hired-email.tsx';
+import { ShiftReminderEmail } from '../components/emails/shift-reminder-email.tsx';
+import { OfferAnswerEmail } from '../components/emails/offer-answer-email.tsx';
 
 const PARA = 'ridaofrancorg@gmail.com';
 const LINK = 'https://laburo.somosder.ar/o/PREVIEW-no-es-un-link-real';
@@ -48,9 +52,18 @@ const transporter = nodemailer.createTransport({
 
 const mails = [
   {
-    n: 'Bienvenida (la que reciben las 699)',
+    n: 'Bienvenida CORTA: el que se registra hoy en la web',
     subject: 'Bienvenido/a a LABURO · SOMOS DER',
     el: () => createElement(WelcomeEmail, { firstName: 'Franco', link: 'https://laburo.somosder.ar/acceso-staff' }),
+  },
+  {
+    n: 'Bienvenida LARGA: los que ya se habían postulado (la tanda a los 699)',
+    subject: 'Te queríamos contar algo: se llama LABURO',
+    el: () => createElement(WelcomeLegacyEmail, {
+      firstName: 'Franco',
+      link: 'https://laburo.somosder.ar/acceso-staff',
+      bajaLink: 'https://laburo.somosder.ar/baja?p=demo&t=demo',
+    }),
   },
   {
     n: 'Propuesta de trabajo',

@@ -148,7 +148,7 @@ export function HiredEmail({
               Se reemplaza sin drama si hay tiempo.
             </Text>
           </Section>
-          <PieWhatsApp mensaje="Hola, te escribo porque quedé en el equipo de un evento." />
+          <PieWhatsApp mensaje="Hola, te escribo porque quedé confirmado/a para un evento." />
         </Container>
       </Body>
     </Html>

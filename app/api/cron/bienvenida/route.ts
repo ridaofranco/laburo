@@ -46,7 +46,11 @@ import { createElement } from "react";
 import { render } from "@react-email/components";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { sendMail, emailEnabled } from "@/lib/email/mailer";
-import { WelcomeEmail } from "@/components/emails/welcome-email";
+// La tanda usa el mail LARGO: el que se postuló hace meses no espera nada
+// nuestro y necesita que le expliquemos de dónde salió LABURO y por qué su dato
+// está ahí. El corto (welcome-email) es para el que se registra HOY en la web,
+// que ya sabe lo que hizo. Decisión de Franco (26/7).
+import { WelcomeLegacyEmail } from "@/components/emails/welcome-legacy-email";
 import { siteUrl } from "@/lib/site";
 import { bajaHeaders, bajaReady, bajaUrl } from "@/lib/baja";
 import { alerta } from "@/lib/alerta";
@@ -140,7 +144,7 @@ export async function GET(request: Request) {
     }
     try {
       const html = await render(
-        createElement(WelcomeEmail, {
+        createElement(WelcomeLegacyEmail, {
           firstName: (row.first_name ?? "").split(/\s+/)[0] ?? "",
           link,
           bajaLink: bajaReady() ? bajaUrl(row.profile_id) : undefined,
