@@ -169,8 +169,7 @@ export function ReminderEmail({
                   }}
                 >
                   Confirmá desde el botón. Si ya tenías abierto el mail de la
-                  propuesta, ese link también sigue andando. Cualquier duda,
-                  respondé este mail y lo vemos juntos.
+                  propuesta, ese link también sigue andando.
                 </Text>
               </>
             ) : (
@@ -182,8 +181,7 @@ export function ReminderEmail({
                   color: FG_MUTED,
                 }}
               >
-                Revisá el email de la propuesta que te mandamos y confirmá desde
-                ahí, o respondé este mail y lo vemos juntos.
+                Revisá el email de la propuesta que te mandamos y confirmá desde ahí.
               </Text>
             )}
           </Section>

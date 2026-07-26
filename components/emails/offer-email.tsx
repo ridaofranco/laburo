@@ -230,8 +230,7 @@ export function OfferEmail({
                 color: FG_MUTED,
               }}
             >
-              Mirá los detalles y confirmá desde el botón. Si tenés alguna duda,
-              respondé este mail y lo vemos.
+              Mirá los detalles y confirmá desde el botón de arriba.
             </Text>
           </Section>
           <PieWhatsApp mensaje="Hola, te escribo por la propuesta de trabajo que me mandaron." />

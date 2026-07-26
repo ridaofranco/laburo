@@ -146,11 +146,11 @@ export function HiredEmail({
             </Section>
 
             <Text style={{ margin: "22px 0 0 0", fontSize: "13px", lineHeight: 1.5, color: FG_MUTED }}>
-              Si te surge algo y no vas a poder ir, avisanos lo antes posible respondiendo este mail.
+              Si te surge algo y no vas a poder ir, avisanos por WhatsApp lo antes posible.
               Se reemplaza sin drama si hay tiempo.
             </Text>
           </Section>
-          <PieWhatsApp mensaje="Hola, te escribo porque quedé confirmado/a para un evento." />
+          <PieWhatsApp mensaje="Hola, quedé confirmado/a para un evento y te quería consultar algo." />
         </Container>
       </Body>
     </Html>

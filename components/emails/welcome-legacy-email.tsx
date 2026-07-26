@@ -45,7 +45,6 @@ import {
   Text,
 } from "@react-email/components";
 import { Encabezado } from "./encabezado";
-import { PieWhatsApp } from "./pie-whatsapp";
 
 export interface WelcomeLegacyEmailProps {
   firstName: string;
@@ -173,8 +172,8 @@ export function WelcomeLegacyEmail({ firstName, link, bajaLink }: WelcomeLegacyE
 
             <Text style={{ ...P, marginTop: "22px" }}>
               Estamos empezando a mostrarlo, así que cualquier cosa que veas y te falte,
-              decínosla. Respondé este mail y lo leemos. Lo que nos digas ahora es lo que le va
-              a servir al que entre después.
+              contanos: respondé este mail y lo leemos. Lo que nos digas ahora es lo que le
+              va a servir al que entre después.
             </Text>
 
             <Text style={P_MUT}>
@@ -207,8 +206,6 @@ export function WelcomeLegacyEmail({ firstName, link, bajaLink }: WelcomeLegacyE
               el navegador: {link}
             </Text>
           </Section>
-
-          <PieWhatsApp mensaje="Hola, te escribo por mi perfil de LABURO." />
 
           {bajaLink ? (
             <Text

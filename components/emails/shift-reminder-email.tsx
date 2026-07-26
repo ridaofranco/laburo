@@ -133,7 +133,7 @@ export function ShiftReminderEmail({
             </Section>
 
             <Text style={{ margin: "22px 0 0 0", fontSize: "13px", lineHeight: 1.5, color: FG_MUTED }}>
-              Si pasó algo y no vas a llegar, avisanos ahora mismo respondiendo este mail.
+              Si pasó algo y no vas a llegar, avisanos ahora mismo por WhatsApp.
               A tiempo se reemplaza sin drama.
             </Text>
           </Section>
