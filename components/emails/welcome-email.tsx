@@ -9,7 +9,16 @@
  * Pieza 2 del plan de LABURO: una base que se mantiene viva en vez de envejecer.
  *
  * Copy en voseo argentino, SIN em dash (regla dura de Franco), y con el marco que
- * pidió: no es "quedaste en una lista, esperá", es "ya sos parte, entrá".
+ * pidió: no es "quedaste en una lista, esperá", es "tu perfil ya está, entrá".
+ *
+ * ⚠️⚠️ NO ESCRIBIR QUE LA PERSONA ES "PARTE DEL EQUIPO DE SOMOS DER".
+ * Decisión de Franco del 26/7 por riesgo legal, y tiene razón: quien está en
+ * LABURO NO es empleado ni integrante del equipo, es alguien que quedó en la
+ * base y que puede recibir propuestas para eventos puntuales. Dejar por escrito
+ * "ya sos parte del equipo" en un mail es exactamente la frase que después se
+ * usa para reclamar una relación laboral que no existe. El mail tiene que ser
+ * cálido igual, pero sobre lo que de verdad pasó: el perfil está creado y desde
+ * ahí llegan propuestas.
  *
  * NO LLEVA CREDENCIAL: el link es la pantalla pública /acceso-staff, donde la
  * persona pide su propio link con su mail. Así este mail no transporta ningún
@@ -108,7 +117,7 @@ export function WelcomeEmail({ firstName, link, bajaLink }: WelcomeEmailProps) {
                 color: FG,
               }}
             >
-              {saludo}, ya sos parte
+              {saludo}, tu perfil ya está en LABURO
             </Heading>
 
             <Text
@@ -119,9 +128,10 @@ export function WelcomeEmail({ firstName, link, bajaLink }: WelcomeEmailProps) {
                 color: FG,
               }}
             >
-              Sos parte del equipo de SOMOS DER. Armamos LABURO para gestionar
-              el staff de nuestros eventos, y tu perfil ya está creado ahí con
-              los datos que nos dejaste.
+              Armamos LABURO para organizar el staff de nuestros eventos, y tu
+              perfil ya está creado ahí con los datos que nos dejaste. Desde
+              ahora te pueden llegar propuestas para trabajar en los eventos que
+              vayan con lo tuyo.
             </Text>
 
             <Text

@@ -69,7 +69,14 @@ export function HiredEmail({
   conditions,
   link,
 }: HiredEmailProps) {
-  const saludo = firstName?.trim() ? `${firstName.trim()}, quedaste en el equipo` : "Quedaste en el equipo";
+  // ⚠️ El "equipo" es SIEMPRE el del evento puntual, nunca el de SOMOS DER.
+  // Aceptar una propuesta te confirma para ESE evento y nada más. Decir "quedaste
+  // en el equipo" a secas suena a incorporación permanente, que es justo lo que
+  // no pasa y lo que puede traer un problema legal (decisión de Franco, 26/7).
+  const evento = gigTitle?.trim();
+  const saludo = firstName?.trim()
+    ? `${firstName.trim()}, quedaste confirmado/a${evento ? ` para ${evento}` : ""}`
+    : `Quedaste confirmado/a${evento ? ` para ${evento}` : ""}`;
 
   return (
     <Html lang="es">
