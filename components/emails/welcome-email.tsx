@@ -41,6 +41,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import { Encabezado } from "./encabezado";
 import { PieWhatsApp } from "./pie-whatsapp";
 
 export interface WelcomeEmailProps {
@@ -87,6 +88,7 @@ export function WelcomeEmail({ firstName, link, bajaLink }: WelcomeEmailProps) {
             padding: "32px 20px",
           }}
         >
+          <Encabezado />
           <Section
             style={{
               backgroundColor: SURFACE_1,

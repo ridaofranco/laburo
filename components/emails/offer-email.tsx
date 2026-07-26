@@ -23,6 +23,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import { Encabezado } from "./encabezado";
 import { PieWhatsApp } from "./pie-whatsapp";
 
 export interface OfferEmailProps {
@@ -102,6 +103,7 @@ export function OfferEmail({
             padding: "32px 20px",
           }}
         >
+          <Encabezado />
           <Section
             style={{
               backgroundColor: SURFACE_1,

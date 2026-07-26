@@ -21,6 +21,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import { Encabezado } from "./encabezado";
 import { PieWhatsApp } from "./pie-whatsapp";
 
 export interface ShiftReminderEmailProps {
@@ -62,6 +63,7 @@ export function ShiftReminderEmail({
     <Html lang="es">
       <Body style={{ margin: 0, padding: 0, backgroundColor: SURFACE_0, color: FG, fontFamily: FONT_STACK }}>
         <Container style={{ maxWidth: "480px", margin: "0 auto", padding: "32px 20px" }}>
+          <Encabezado />
           <Section
             style={{
               backgroundColor: SURFACE_1,
