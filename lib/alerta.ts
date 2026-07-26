@@ -38,10 +38,65 @@ import "server-only";
 const PRODUCTO = "LABURO";
 const VENTANA_REPETICION_MS = 10 * 60 * 1000;
 
+/**
+ * ── Y TAMBIÉN POR MAIL (pedido de Franco, 26/7) ──
+ * Telegram sirve para enterarse EN EL MOMENTO; el mail sirve para que quede. Un
+ * aviso de Telegram se lee y se pierde entre mensajes: el mail se puede buscar
+ * dentro de tres semanas, reenviar y usar como registro de cuándo pasó qué.
+ *
+ * Va a `MAIL_ADMIN_TO` (que acepta varias direcciones separadas por coma, así que
+ * puede ir a `alertas@` y a la tuya a la vez).
+ *
+ * Los dos canales son independientes: si Telegram falla igual sale el mail y al
+ * revés. Y los dos respetan el mismo anti-repetición, así una falla en loop no
+ * manda cincuenta mails.
+ */
+
 const ultimoAviso = new Map<string, number>();
 
-function habilitado(): boolean {
+function telegramHabilitado(): boolean {
   return !!(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID);
+}
+
+/** Hay alguna vía para avisar: Telegram, mail, o las dos. */
+function habilitado(): boolean {
+  return telegramHabilitado() || !!process.env.MAIL_ADMIN_TO;
+}
+
+/**
+ * El mismo aviso, por mail. NUNCA tira y nunca bloquea el de Telegram.
+ * Devuelve true si salió, para que el caller sepa que el aviso llegó por algún lado.
+ */
+async function mandarMail(opts: AlertaOpts, filas: string): Promise<boolean> {
+  try {
+    const to = (process.env.MAIL_ADMIN_TO || "").trim();
+    if (!to) return false;
+    const { sendMail, emailEnabled } = await import("@/lib/email/mailer");
+    if (!emailEnabled()) return false;
+
+    const cuerpo =
+      `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;` +
+      `background:#0d0d0d;color:#e9e6e4;padding:24px">` +
+      `<p style="margin:0 0 6px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;` +
+      `color:${opts.plata ? "#ffcc00" : "#ff5c5c"}">${esc(PRODUCTO)} · algo se rompió</p>` +
+      `<h1 style="margin:0 0 14px;font-size:20px;line-height:1.3">${esc(opts.titulo)}</h1>` +
+      (filas ? `<p style="margin:0 0 14px;font-size:14px;line-height:1.7;color:#cfcbca">${filas.replace(/\n/g, "<br>")}</p>` : "") +
+      (opts.detalle
+        ? `<pre style="background:#000;border:1px solid #1a1a1a;padding:12px;font-size:12px;` +
+          `white-space:pre-wrap;color:#cfe8d4;margin:0">${esc(String(opts.detalle).slice(0, 1200))}</pre>`
+        : "") +
+      `</div>`;
+
+    const r = await sendMail({
+      to,
+      subject: `${opts.plata ? "💸" : "🔴"} ${PRODUCTO}: ${opts.titulo}`,
+      html: cuerpo,
+    });
+    return !!r.ok;
+  } catch (e) {
+    console.error("[alerta] no se pudo avisar por mail:", e instanceof Error ? e.message : String(e));
+    return false;
+  }
 }
 
 /** Escapa lo mínimo para el modo HTML de Telegram. */
@@ -92,26 +147,43 @@ export async function alerta(opts: AlertaOpts): Promise<boolean> {
       (filas ? `\n${filas}\n` : "") +
       (opts.detalle ? `\n<pre>${esc(String(opts.detalle).slice(0, 600))}</pre>` : "");
 
-    const r = await fetch(
-      `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: process.env.TELEGRAM_CHAT_ID,
-          text: texto,
-          parse_mode: "HTML",
-          disable_web_page_preview: true,
-        }),
-        // Un aviso no puede demorar un cobro ni un envío de mail.
-        signal: AbortSignal.timeout(3000),
-      },
-    );
-    if (!r.ok) {
-      console.error("[alerta] Telegram respondió", r.status);
-      return false;
-    }
-    return true;
+    // Los dos canales arrancan juntos, pero SIEMPRE se esperan los dos antes de
+    // devolver. Si se dejara el mail sin await, en serverless la función se congela
+    // al terminar y el mail no sale nunca: es exactamente el bug por el que ENTRÁ
+    // no mandaba las entradas.
+    const porMail = mandarMail(opts, filas);
+
+    const porTelegram = (async (): Promise<boolean> => {
+      // Si Telegram no está configurado, no se le pega: sin token la llamada tira y
+      // el aviso quedaría contando como fallido aunque el mail haya salido bien.
+      if (!telegramHabilitado()) return false;
+      try {
+        const r = await fetch(
+          `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              chat_id: process.env.TELEGRAM_CHAT_ID,
+              text: texto,
+              parse_mode: "HTML",
+              disable_web_page_preview: true,
+            }),
+            // Un aviso no puede demorar un cobro ni un envío de mail.
+            signal: AbortSignal.timeout(3000),
+          },
+        );
+        if (!r.ok) console.error("[alerta] Telegram respondió", r.status);
+        return r.ok;
+      } catch (e) {
+        console.error("[alerta] Telegram falló:", e instanceof Error ? e.message : String(e));
+        return false;
+      }
+    })();
+
+    const [mailOk, tgOk] = await Promise.all([porMail, porTelegram]);
+    // Alcanza con que UNO haya salido: el aviso llegó.
+    return mailOk || tgOk;
   } catch (e) {
     // Si el aviso falla, se traga: el problema real ya está logueado por el caller.
     console.error("[alerta] no se pudo avisar:", e instanceof Error ? e.message : String(e));
