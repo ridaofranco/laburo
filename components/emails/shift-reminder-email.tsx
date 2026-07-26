@@ -21,6 +21,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import { PieWhatsApp } from "./pie-whatsapp";
 
 export interface ShiftReminderEmailProps {
   firstName: string;
@@ -134,18 +135,7 @@ export function ShiftReminderEmail({
               A tiempo se reemplaza sin drama.
             </Text>
           </Section>
-
-          <Text
-            style={{
-              margin: "20px 0 0 0",
-              textAlign: "center",
-              fontSize: "12px",
-              lineHeight: 1.6,
-              color: FG_MUTED,
-            }}
-          >
-            SOMOS DER · Staff para eventos
-          </Text>
+          <PieWhatsApp mensaje="Hola, te escribo por el evento en el que trabajo." />
         </Container>
       </Body>
     </Html>

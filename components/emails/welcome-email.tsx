@@ -32,6 +32,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import { PieWhatsApp } from "./pie-whatsapp";
 
 export interface WelcomeEmailProps {
   firstName: string;
@@ -167,18 +168,7 @@ export function WelcomeEmail({ firstName, link, bajaLink }: WelcomeEmailProps) {
               {link}
             </Text>
           </Section>
-
-          <Text
-            style={{
-              margin: "20px 0 0 0",
-              textAlign: "center",
-              fontSize: "12px",
-              lineHeight: 1.6,
-              color: FG_MUTED,
-            }}
-          >
-            SOMOS DER · Staff para eventos
-          </Text>
+          <PieWhatsApp mensaje="Hola, te escribo por mi perfil de LABURO." />
 
           {bajaLink ? (
             <Text

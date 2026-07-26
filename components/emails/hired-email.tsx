@@ -24,6 +24,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import { PieWhatsApp } from "./pie-whatsapp";
 
 export interface HiredEmailProps {
   firstName: string;
@@ -140,18 +141,7 @@ export function HiredEmail({
               Se reemplaza sin drama si hay tiempo.
             </Text>
           </Section>
-
-          <Text
-            style={{
-              margin: "20px 0 0 0",
-              textAlign: "center",
-              fontSize: "12px",
-              lineHeight: 1.6,
-              color: FG_MUTED,
-            }}
-          >
-            SOMOS DER · Staff para eventos
-          </Text>
+          <PieWhatsApp mensaje="Hola, te escribo porque quedé en el equipo de un evento." />
         </Container>
       </Body>
     </Html>

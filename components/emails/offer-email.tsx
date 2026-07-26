@@ -23,6 +23,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import { PieWhatsApp } from "./pie-whatsapp";
 
 export interface OfferEmailProps {
   firstName: string;
@@ -231,18 +232,7 @@ export function OfferEmail({
               respondé este mail o escribinos por WhatsApp.
             </Text>
           </Section>
-
-          <Text
-            style={{
-              margin: "20px 0 0 0",
-              textAlign: "center",
-              fontSize: "12px",
-              lineHeight: 1.6,
-              color: FG_MUTED,
-            }}
-          >
-            SOMOS DER · Staff para eventos
-          </Text>
+          <PieWhatsApp mensaje="Hola, te escribo por la propuesta de trabajo que me mandaron." />
         </Container>
       </Body>
     </Html>

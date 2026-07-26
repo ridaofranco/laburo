@@ -39,6 +39,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import { PieWhatsApp } from "./pie-whatsapp";
 
 export interface ReminderEmailProps {
   firstName: string;
@@ -184,18 +185,7 @@ export function ReminderEmail({
               </Text>
             )}
           </Section>
-
-          <Text
-            style={{
-              margin: "20px 0 0 0",
-              textAlign: "center",
-              fontSize: "12px",
-              lineHeight: 1.6,
-              color: FG_MUTED,
-            }}
-          >
-            SOMOS DER · Staff para eventos
-          </Text>
+          <PieWhatsApp mensaje="Hola, te escribo por la propuesta de trabajo que está por vencer." />
         </Container>
       </Body>
     </Html>
