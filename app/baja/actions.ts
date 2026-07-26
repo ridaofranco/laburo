@@ -16,6 +16,7 @@
 import { redirect } from "next/navigation";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { bajaTokenOk } from "@/lib/baja";
+import { alerta } from "@/lib/alerta";
 
 async function setBaja(
   profileId: string,
@@ -33,6 +34,15 @@ async function setBaja(
   if (error) {
     console.error("[baja] rpc failed:", error.message);
     return false;
+  }
+  // Aviso solo cuando es una BAJA de verdad (no cuando alguien vuelve al pool).
+  if (data === true && baja) {
+    await alerta({
+      titulo: "Alguien pidió la baja del pool",
+      datos: { ficha: profileId, motivo: motivo?.trim() || "(no dejó motivo)" },
+      detalle: "Si se repite en pocos días, mirá qué mail salió último.",
+      clave: "baja-pool",
+    });
   }
   return data === true;
 }

@@ -103,8 +103,34 @@ export function emailEnabled(): boolean {
   return resendEnabled() || smtpEnabled();
 }
 
+/**
+ * A dónde van los avisos internos (alguien aceptó una propuesta, alguien se dio de
+ * baja, un cron se rompió).
+ *
+ * ── ACEPTA VARIAS DIRECCIONES, separadas por coma ──
+ * Franco preguntó si el aviso debería llegarle a él y también al productor del
+ * evento. La respuesta corta: sí, y con esto alcanza hoy. `MAIL_ADMIN_TO` puede
+ * ser una sola dirección o varias:
+ *
+ *     MAIL_ADMIN_TO=franco@somosder.ar,ludmila@somosder.com.ar
+ *
+ * ── POR QUÉ ASÍ Y NO "AL PRODUCTOR DEL EVENTO" ──
+ * Porque hoy **ese dato no existe**: los eventos pertenecen a la organización, no a
+ * una persona (`staff_app.gigs` no tiene ni `created_by` ni dueño). Mandarlo "al
+ * productor del evento" requiere agregar esa columna, y recién tiene sentido cuando
+ * haya más de un productor cargando eventos. Mientras el equipo sea el de casa,
+ * una lista de direcciones hace exactamente lo mismo sin inventar estructura.
+ */
 export function adminEmail(): string {
-  return process.env.MAIL_ADMIN_TO || process.env.MAIL_FROM_ADDRESS || "";
+  return (process.env.MAIL_ADMIN_TO || process.env.MAIL_FROM_ADDRESS || "").trim();
+}
+
+/** Las direcciones de arriba, ya separadas y limpias. */
+export function adminEmails(): string[] {
+  return adminEmail()
+    .split(",")
+    .map((x) => x.trim())
+    .filter(Boolean);
 }
 
 const errMsg = (e: unknown): string =>
@@ -122,7 +148,12 @@ async function sendViaResend(opts: MailOptions): Promise<void> {
     },
     body: JSON.stringify({
       from: resendFrom(),
-      to: opts.to,
+      // Varias direcciones tienen que ir como ARRAY: Resend no parte un string
+      // separado por comas, lo toma como una sola dirección inválida y rechaza el
+      // envío entero. Pasa con MAIL_ADMIN_TO cuando tiene más de una.
+      to: opts.to.includes(",")
+        ? opts.to.split(",").map((x) => x.trim()).filter(Boolean)
+        : opts.to,
       subject: opts.subject,
       html: opts.html,
       ...(replyTo ? { reply_to: replyTo } : {}),

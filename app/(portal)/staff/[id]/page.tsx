@@ -18,6 +18,7 @@ import { QuickActions } from "./quick-actions";
 import { CvView } from "./cv-view";
 import { CvFicha } from "./cv-ficha";
 import { normalizarCv } from "@/lib/cv-ficha";
+import { permisos } from "@/lib/permisos";
 import { OfferStatusList, type OfferRow } from "./offer-status";
 import { FavoriteNote } from "./favorite-note";
 import { Rating, type RatingGig } from "./rating";
@@ -203,6 +204,9 @@ export default async function ProfilePage({
   // La ficha del CV, tolerante a las variantes que devolvió la extracción (ver
   // lib/cv-ficha.ts): si no se entiende nada, hayAlgo=false y queda el PDF.
   const ficha = normalizarCv(p.cv_data);
+  // Quién está mirando decide si ve el contacto. Fail-closed: si no se puede
+  // averiguar el rol, NO se muestra (ver lib/permisos.ts).
+  const { verContacto } = await permisos();
 
   // Métricas derivadas
   const eventosCount = p.eventos_trabajados ?? 0;
@@ -252,8 +256,14 @@ export default async function ProfilePage({
       <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 mt-12">
         {/* Izquierda */}
         <div className="md:col-span-7 flex flex-col gap-10">
-          {/* Contacto y datos (lo que el productor necesita para contratar) */}
-          {((p.email ?? "").trim() || (p.telefono ?? "").trim() || (p.documento ?? "").trim() || edad) && (
+          {/* ⭐ CONTACTO: solo para los roles de la casa (lib/permisos.ts).
+              El modelo de LABURO es de intermediación: la ficha se ve, el contacto
+              no, y a la persona se llega a través de SOMOS DER. Hasta hoy eso estaba
+              garantizado por el ACCESO y no por el producto, así que el día que
+              alguien de afuera entre, el contacto quedaba a la vista y la comisión
+              se podía saltear. El default ahora es NO mostrarlo. */}
+          {verContacto &&
+            ((p.email ?? "").trim() || (p.telefono ?? "").trim() || (p.documento ?? "").trim() || edad) && (
             <Section title="Contacto y datos">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
                 <InfoRow label="Email" value={p.email} />
@@ -261,6 +271,17 @@ export default async function ProfilePage({
                 <InfoRow label="DNI / CUIT / pasaporte" value={p.documento} />
                 <InfoRow label="Edad" value={edad ? `${edad} años` : null} />
               </div>
+            </Section>
+          )}
+
+          {/* Y si NO puede verlo, se le dice por qué en vez de dejar un hueco: es la
+              regla del modelo broker, no un dato que falte. */}
+          {!verContacto && (
+            <Section title="Contacto">
+              <p className="text-body text-fg-muted">
+                El contacto de esta persona se coordina por SOMOS DER. En la ficha se
+                muestran su experiencia y su formación; el teléfono y el mail no.
+              </p>
             </Section>
           )}
 
@@ -314,7 +335,10 @@ export default async function ProfilePage({
           {ficha.hayAlgo && (
             <Section title="CV">
               <CvFicha data={ficha} />
-              {cv.kind !== "none" && (
+              {/* El PDF original tiene el teléfono y el mail ADENTRO del archivo,
+                  así que también va detrás del permiso: si no, la ficha oculta el
+                  contacto y el botón de al lado lo muestra. */}
+              {verContacto && cv.kind !== "none" && (
                 <details className="group">
                   <summary className="cursor-pointer text-label font-normal text-fg-muted hover:text-fg">
                     Ver el CV original (PDF)
@@ -329,7 +353,7 @@ export default async function ProfilePage({
 
           {/* Sin ficha estructurada (18 de los 688 no se pudieron leer) queda el
               PDF como estaba: nadie pierde nada. */}
-          {!ficha.hayAlgo && cv.kind !== "none" && (
+          {!ficha.hayAlgo && verContacto && cv.kind !== "none" && (
             <Section title="CV">
               <CvView classification={cv} />
             </Section>
@@ -409,7 +433,7 @@ export default async function ProfilePage({
       </div>
 
       {/* Acciones rápidas (sticky, sólo si hay teléfono) */}
-      {(p.telefono ?? "").trim() && (
+      {verContacto && (p.telefono ?? "").trim() && (
         <QuickActions telefono={p.telefono!.trim()} nombre={p.nombre} />
       )}
     </div>

@@ -20,6 +20,7 @@
 import { NextResponse } from "next/server";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { bajaTokenOk } from "@/lib/baja";
+import { alerta } from "@/lib/alerta";
 
 export const dynamic = "force-dynamic";
 
@@ -58,6 +59,18 @@ export async function POST(request: Request) {
   // le muestra un error a la persona. Si data es false, queda en los logs.
   if (data !== true) {
     console.warn("[api/baja] token válido pero la ficha no existe:", p);
+  } else {
+    // AVISO DE BAJA. Una sola baja no dice nada; varias en pocos días son la señal
+    // más honesta que vamos a tener sobre el último mail que salió. Sin este aviso
+    // quedaba registrado en la base y nadie lo miraba.
+    // Se usa la MISMA clave de anti-repetición para todas, así una tanda de bajas
+    // manda un aviso y no cincuenta.
+    await alerta({
+      titulo: "Alguien pidió la baja del pool",
+      datos: { ficha: p },
+      detalle: "Si se repite en pocos días, mirá qué mail salió último. El motivo que dejó la persona está en baja_motivo.",
+      clave: "baja-pool",
+    });
   }
   return NextResponse.json({ ok: true });
 }
