@@ -7,12 +7,20 @@
  * la card, fg para el texto), 100% self-contained: los clientes de email ignoran
  * el CSS externo.
  *
- * DECISIÓN A1 (BLOQUEADA): este recordatorio NO trae link mágico ni ninguna
- * credencial de acceso. El link original de la oferta sigue vigente (el RPC
- * 05-01 no rota ni reconstruye la credencial, ni persiste el raw), así que acá
- * deliberadamente NO recibimos ni renderizamos ningún acceso accionable nuevo.
- * Sólo nudgeamos al candidato a volver al email original de la propuesta o a
- * responder este mail (mitigación T-5-23).
+ * ⭐ CAMBIO 26/7/2026 (pedido de Franco): AHORA SÍ TRAE BOTÓN.
+ * Antes decía "revisá el email de la propuesta que te mandamos". Franco:
+ * "pedirle que busque un mail viejo es una fricción que cuesta respuestas".
+ * El mail que te apura a contestar era justo el que no te dejaba contestar.
+ *
+ * La decisión A1 original NO era un descuido: el link original es irrecuperable
+ * a propósito (de la oferta solo se guarda el sha256, el token crudo aparece una
+ * vez y se va en el mail). Eso no se aflojó. La migración 0030 agrega un SEGUNDO
+ * token válido en paralelo: el recordatorio genera el suyo y **el link del mail
+ * original sigue funcionando**, que era la condición que puso Franco.
+ *
+ * Si por lo que sea no llega `link`, el mail cae al texto de antes y sale igual:
+ * un recordatorio sin botón es peor que uno con botón, pero mucho mejor que
+ * ninguno.
  *
  * Los datos del candidato (firstName / gigTitle / role / expiresText) vienen del
  * pool y los escapa react-email por default en los children. NUNCA inyectamos
@@ -24,6 +32,7 @@
 
 import {
   Body,
+  Button,
   Container,
   Heading,
   Html,
@@ -36,6 +45,12 @@ export interface ReminderEmailProps {
   gigTitle: string;
   role: string;
   expiresText?: string | null;
+  /**
+   * Link a la propuesta. Es el SEGUNDO token (migración 0030), no el original:
+   * el original no se puede reconstruir porque solo se guarda su hash. Los dos
+   * valen a la vez, así que el mail viejo tampoco se rompe.
+   */
+  link?: string | null;
 }
 
 // Colores de marca (espejo de app/globals.css @theme — Radical Minimalist).
@@ -44,6 +59,8 @@ const SURFACE_1 = "#0A0A0A";
 const BORDER = "#1A1A1A";
 const FG = "#F5F5F5";
 const FG_MUTED = "#8A8A8A";
+// El azul de LABURO, el mismo botón que la propuesta (offer-email.tsx).
+const ACCENT = "#0047FF";
 
 const FONT_STACK =
   "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif";
@@ -53,6 +70,7 @@ export function ReminderEmail({
   gigTitle,
   role,
   expiresText,
+  link,
 }: ReminderEmailProps) {
   const gigLine = `${role} · ${gigTitle}`;
 
@@ -119,17 +137,52 @@ export function ReminderEmail({
               </Text>
             ) : null}
 
-            <Text
-              style={{
-                margin: "20px 0 0 0",
-                fontSize: "15px",
-                lineHeight: 1.6,
-                color: FG_MUTED,
-              }}
-            >
-              Revisá el email de la propuesta que te mandamos y confirmá desde
-              ahí, o respondé este mail y lo vemos juntos.
-            </Text>
+            {link ? (
+              <>
+                <Section style={{ marginTop: "24px" }}>
+                  <Button
+                    href={link}
+                    style={{
+                      display: "inline-block",
+                      backgroundColor: ACCENT,
+                      color: "#FFFFFF",
+                      fontSize: "16px",
+                      fontWeight: 600,
+                      textDecoration: "none",
+                      padding: "14px 28px",
+                      borderRadius: "0",
+                    }}
+                  >
+                    Ver la propuesta
+                  </Button>
+                </Section>
+
+                <Text
+                  style={{
+                    margin: "24px 0 0 0",
+                    fontSize: "13px",
+                    lineHeight: 1.5,
+                    color: FG_MUTED,
+                  }}
+                >
+                  Confirmá desde el botón. Si ya tenías abierto el mail de la
+                  propuesta, ese link también sigue andando. Cualquier duda,
+                  respondé este mail y lo vemos juntos.
+                </Text>
+              </>
+            ) : (
+              <Text
+                style={{
+                  margin: "20px 0 0 0",
+                  fontSize: "15px",
+                  lineHeight: 1.6,
+                  color: FG_MUTED,
+                }}
+              >
+                Revisá el email de la propuesta que te mandamos y confirmá desde
+                ahí, o respondé este mail y lo vemos juntos.
+              </Text>
+            )}
           </Section>
 
           <Text

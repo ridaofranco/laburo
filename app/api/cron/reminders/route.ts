@@ -57,6 +57,13 @@ interface DueOffer {
   gig_title: string | null;
   role: string | null;
   expires_at: string | null;
+  /**
+   * El token del recordatorio, que lo agrega la migración 0030 para que el mail
+   * pueda llevar botón. Opcional a propósito: si la migración todavía no está
+   * aplicada, el RPC no devuelve esta columna y el mail sale sin botón, como
+   * salía antes. No rompe.
+   */
+  token?: string | null;
 }
 
 /** Fecha legible para el email (hora AR, no la del server UTC). null si inválida. */
@@ -112,6 +119,12 @@ export async function GET(request: Request) {
           gigTitle: offer.gig_title ?? "",
           role: offer.role ?? "",
           expiresText: formatExpires(offer.expires_at),
+          // El token del recordatorio (migración 0030). NO es el original: ese no
+          // se puede reconstruir porque de él solo se guarda el sha256. Los dos
+          // links valen a la vez, así que el mail viejo tampoco se rompe.
+          // Si la 0030 todavía no está aplicada, el RPC no devuelve `token` y el
+          // mail sale sin botón, como salía antes: no rompe nada.
+          link: offer.token ? siteUrl(`o/${offer.token}`) : null,
         }),
       );
       const gig = offer.gig_title?.trim();

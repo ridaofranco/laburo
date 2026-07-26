@@ -66,7 +66,22 @@ interface RpcOffer {
   offer_id?: string;
   gig_id?: string;
   token?: string;
+  /** Lo agrega la migración 0030, para poder decir hasta cuándo hay tiempo. */
+  expires_at?: string;
 }
+
+/**
+ * CUÁNDO SE COBRA, la tercera pregunta que se hace cualquiera antes de aceptar.
+ *
+ * ⚠️ ESTE TEXTO LO TIENE QUE CONFIRMAR FRANCO. A diferencia del lugar y del
+ * plazo, que salen de la base, la política de pago no está en ningún lado del
+ * sistema: es algo que se sabe y se dice por WhatsApp. Está redactado a
+ * propósito SIN prometer una cantidad de días, porque una promesa de pago que
+ * no se cumple es la forma más rápida de perder a la gente buena. Si la práctica
+ * real es "a los X días del evento", esto se cambia por esa frase, que es mucho
+ * mejor: lo que la gente quiere es una fecha.
+ */
+const PAGO_TEXTO = "El pago se coordina con SOMOS DER una vez terminado el evento.";
 
 /** Fecha legible para el email (hora AR, no la del server UTC). null si inválida. */
 function formatWhen(iso?: string | null): string | null {
@@ -126,6 +141,11 @@ export async function createAndSendOffer(
         conditions: input.conditions ?? null,
         whenText: formatWhen(input.gigStartsAt),
         link,
+        // Los tres datos que faltaban (26/7). El lugar ya lo teníamos acá, solo
+        // que no se lo mandábamos: quedaba del otro lado del link.
+        venue: input.gigVenue?.trim() || null,
+        expiresText: formatWhen(res.expires_at),
+        paymentText: PAGO_TEXTO,
       }),
     );
     mail = await sendMail({

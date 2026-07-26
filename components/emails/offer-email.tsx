@@ -32,6 +32,18 @@ export interface OfferEmailProps {
   conditions?: string | null;
   whenText?: string | null;
   link: string;
+  /**
+   * ⭐ LOS TRES DATOS QUE FALTABAN (pedido de Franco, 26/7).
+   *
+   * El mail contaba el rol, el evento y cuánto se paga, pero no las tres cosas
+   * que cualquiera se pregunta antes de decir que sí: dónde es, hasta cuándo
+   * tengo para contestar, y cuándo cobro. El lugar existía en el sistema pero
+   * vivía solo del otro lado del link, así que para saber si le quedaba cerca
+   * había que entrar.
+   */
+  venue?: string | null;
+  expiresText?: string | null;
+  paymentText?: string | null;
 }
 
 // Tokens de marca (espejo de app/globals.css @theme — Radical Minimalist).
@@ -65,6 +77,9 @@ export function OfferEmail({
   conditions,
   whenText,
   link,
+  venue,
+  expiresText,
+  paymentText,
 }: OfferEmailProps) {
   const gigLine = `${role} · ${gigTitle}${whenText ? ` · ${whenText}` : ""}`;
 
@@ -118,7 +133,48 @@ export function OfferEmail({
               {gigLine}
             </Text>
 
+            {/* Los datos duros, uno abajo del otro, para que se lean de un vistazo
+                en el celular sin tener que abrir el link. */}
+            {venue ? (
+              <Text
+                style={{
+                  margin: "0 0 8px 0",
+                  fontSize: "16px",
+                  lineHeight: 1.5,
+                  color: FG,
+                }}
+              >
+                Dónde: {venue}
+              </Text>
+            ) : null}
+
             {amount != null ? (
+              <Text
+                style={{
+                  margin: "0 0 8px 0",
+                  fontSize: "16px",
+                  lineHeight: 1.5,
+                  color: FG,
+                }}
+              >
+                Pago (informativo): {formatAmount(amount)}
+              </Text>
+            ) : null}
+
+            {paymentText ? (
+              <Text
+                style={{
+                  margin: "0 0 8px 0",
+                  fontSize: "15px",
+                  lineHeight: 1.5,
+                  color: FG_MUTED,
+                }}
+              >
+                {paymentText}
+              </Text>
+            ) : null}
+
+            {expiresText ? (
               <Text
                 style={{
                   margin: "0 0 12px 0",
@@ -127,7 +183,7 @@ export function OfferEmail({
                   color: FG,
                 }}
               >
-                Pago (informativo): {formatAmount(amount)}
+                Tenés tiempo de contestar hasta el {expiresText}
               </Text>
             ) : null}
 
