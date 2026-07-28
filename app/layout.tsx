@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Syne, Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 // Inter — cuerpo/UI (Radical Minimalist: neutral, legible en bloques densos).
@@ -26,6 +27,9 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
+  // Sin metadataBase, la OG image de la landing saldría como path relativo y
+  // WhatsApp/Slack/X no la levantan. SITE_URL ya es la fuente única del dominio.
+  metadataBase: new URL(SITE_URL),
   title: "LABURO.",
   description: "Encontrá y contratá staff para tus eventos.",
 };

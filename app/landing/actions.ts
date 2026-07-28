@@ -1,0 +1,127 @@
+"use server";
+
+/**
+ * Lead de productor desde la landing publica ("/").
+ *
+ * EL PROBLEMA QUE RESUELVE: la landing anterior mandaba al productor nuevo a
+ * "Buscar staff" -> /login, y el login esta gateado por membresia (D-06). O sea:
+ * un productor interesado no podia ni dejar sus datos. Este action es la puerta
+ * de entrada comercial: sin cuenta, sin login, un formulario corto que llega por
+ * mail a las casillas internas (MAIL_ADMIN_TO) por la misma cascada Resend->SMTP
+ * que ya usan las ofertas.
+ *
+ * POR QUE MAIL Y NO UNA TABLA: hoy no existe tabla de leads y crearla exige una
+ * migracion en produccion. El mail interno ya es el canal de "avisos que quedan"
+ * del producto (ver lib/alerta.ts) y alcanza para el volumen actual. Si algun
+ * dia hay que listar leads en el portal, se agrega la tabla y este action pasa a
+ * escribirla ademas de avisar.
+ */
+
+import { rateLimit, clientIp } from "@/lib/rate-limit";
+import { sendMail, adminEmail, emailEnabled } from "@/lib/email/mailer";
+import { alerta } from "@/lib/alerta";
+
+export interface LeadResult {
+  ok: boolean;
+  reason?: string;
+}
+
+/** Escape minimo para meter input del visitante en el HTML del mail. */
+const esc = (v: string): string =>
+  v
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export async function enviarLeadProductor(formData: FormData): Promise<LeadResult> {
+  // Honeypot: campo invisible que un humano nunca completa. Si viene con algo,
+  // respondemos "ok" sin mandar nada, para no darle al bot una senal de error.
+  if (String(formData.get("sitio") || "").trim() !== "") return { ok: true };
+
+  const nombre = String(formData.get("nombre") || "").trim().slice(0, 120);
+  const email = String(formData.get("email") || "").trim().slice(0, 200);
+  const telefono = String(formData.get("telefono") || "").trim().slice(0, 60);
+  const empresa = String(formData.get("empresa") || "").trim().slice(0, 160);
+  const mensaje = String(formData.get("mensaje") || "").trim().slice(0, 2000);
+
+  if (!nombre || !email || !mensaje) {
+    return { ok: false, reason: "Completá tu nombre, tu email y qué necesitás." };
+  }
+  if (!EMAIL_RE.test(email)) {
+    return { ok: false, reason: "Ese email no parece válido. Revisalo." };
+  }
+
+  // Freno de abuso: esto manda mails con cuota compartida del dia (ver
+  // lib/rate-limit.ts). 3 consultas por IP cada 10 minutos es de sobra para un
+  // humano y corta un script.
+  const ip = await clientIp();
+  const rl = rateLimit(`lead-productor:${ip}`, 3, 10 * 60_000);
+  if (!rl.ok) {
+    return {
+      ok: false,
+      reason: "Demasiadas consultas seguidas. Probá de nuevo en unos minutos.",
+    };
+  }
+
+  const to = adminEmail();
+  if (!to || !emailEnabled()) {
+    console.error("[lead-productor] sin via de mail configurada (MAIL_ADMIN_TO / Resend / SMTP)");
+    await alerta({
+      titulo: "Un productor dejó una consulta y no hay mail configurado",
+      detalle: `nombre=${nombre} email=${email} tel=${telefono} empresa=${empresa} :: ${mensaje.slice(0, 400)}`,
+      clave: "lead-productor-sin-mail",
+    });
+    return {
+      ok: false,
+      reason: "No pudimos enviar tu consulta. Probá de nuevo en unos minutos.",
+    };
+  }
+
+  const fila = (label: string, valor: string) =>
+    valor
+      ? `<tr><td style="padding:6px 16px 6px 0;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8a8a;vertical-align:top;white-space:nowrap">${label}</td>` +
+        `<td style="padding:6px 0;font-size:14px;line-height:1.6;color:#e9e6e4">${esc(valor)}</td></tr>`
+      : "";
+
+  const html =
+    `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:#0d0d0d;color:#e9e6e4;padding:24px">` +
+    `<p style="margin:0 0 6px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#0047ff">LABURO · landing</p>` +
+    `<h1 style="margin:0 0 16px;font-size:20px;line-height:1.3">Nuevo productor interesado: ${esc(nombre)}</h1>` +
+    `<table style="border-collapse:collapse">` +
+    fila("Nombre", nombre) +
+    fila("Email", email) +
+    fila("Teléfono", telefono) +
+    fila("Empresa", empresa) +
+    `</table>` +
+    `<p style="margin:16px 0 4px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8a8a">Qué necesita</p>` +
+    `<p style="margin:0;font-size:14px;line-height:1.7;color:#e9e6e4;white-space:pre-wrap">${esc(mensaje)}</p>` +
+    `<p style="margin:20px 0 0;font-size:12px;color:#8a8a8a">Respondele directo a ${esc(email)}.</p>` +
+    `</div>`;
+
+  const r = await sendMail({
+    to,
+    subject: `LABURO: consulta de productor · ${nombre}`,
+    html,
+  });
+
+  if (!r.ok) {
+    console.error("[lead-productor] fallo el envio:", r.error);
+    // Que Franco se entere: un lead comercial perdido es exactamente el tipo de
+    // falla silenciosa que lib/alerta.ts existe para evitar.
+    await alerta({
+      titulo: "Se perdió una consulta de productor de la landing",
+      detalle: r.error,
+      datos: { nombre, email, telefono, empresa },
+      clave: "lead-productor-envio",
+    });
+    return {
+      ok: false,
+      reason: "No pudimos enviar tu consulta. Probá de nuevo en unos minutos.",
+    };
+  }
+
+  return { ok: true };
+}
