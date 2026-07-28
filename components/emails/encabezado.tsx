@@ -35,11 +35,14 @@ const BASE = "https://laburo.somosder.ar";
 export function Encabezado({ bajada = "Staff para eventos · SOMOS DER" }: { bajada?: string }) {
   return (
     <Section style={{ padding: "0 0 20px 0" }}>
+      {/* Placa negra horneada en el PNG: Gmail en modo oscuro invierte los colores
+          del mail pero no toca las imágenes, así que el wordmark blanco suelto
+          desaparecía sobre el fondo invertido. Con la placa se ve siempre. */}
       <Img
-        src={`${BASE}/brand/laburo-wordmark.png`}
+        src={`${BASE}/brand/laburo-wordmark-mail.png`}
         alt="LABURO"
-        width="118"
-        height="21"
+        width="150"
+        height="37"
         style={{ display: "block", border: 0, outline: "none" }}
       />
       <Text
