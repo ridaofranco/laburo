@@ -1,0 +1,44 @@
+# Config de Auth del proyecto remoto (luillpzfqzbpoqkgvjuw).
+#
+# ⚠️ LECCIÓN DEL 28/7: `supabase config push` APLICA DEFAULTS para todo lo que
+# no esté declarado acá (pisó site_url, redirects, MFA y confirmaciones con
+# valores de localhost). Por eso este archivo declara TODO lo que el proyecto
+# tiene configurado en Auth, espejando el panel. Si se cambia algo en el panel,
+# reflejarlo acá antes de volver a pushear.
+project_id = "luillpzfqzbpoqkgvjuw"
+
+[auth]
+enabled = true
+site_url = "https://hito-by-der.vercel.app"
+additional_redirect_urls = [
+  "https://laburo.somosder.ar/**",
+  "https://pase.somosder.ar/**",
+  "https://laburo-henna.vercel.app/**",
+  "https://laburo.somosder.ar",
+]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+
+[auth.mfa]
+max_enrolled_factors = 10
+
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = true
+secure_password_change = false
+max_frequency = "1s"
+otp_length = 8
+otp_expiry = 3600
+
+[auth.email.template.recovery]
+subject = "Creá tu contraseña de LABURO"
+content_path = "./supabase/email-templates/definir-contrasena.html"
+
+[auth.email.template.magic_link]
+subject = "Entrá a LABURO"
+content_path = "./supabase/email-templates/magic-link.html"
