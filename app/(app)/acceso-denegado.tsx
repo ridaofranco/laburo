@@ -28,7 +28,8 @@ export function AccesoDenegado() {
           Esta cuenta no tiene acceso.
         </h1>
         <p className="text-body text-fg-muted">
-          Entrá con la cuenta autorizada o pedile a Franco que te habilite.
+          Esta cuenta no está habilitada para el panel. Si creés que es un error,
+          escribinos a hola@laburo.somosder.ar.
         </p>
         <button
           type="button"

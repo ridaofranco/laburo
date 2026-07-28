@@ -102,14 +102,11 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         {/* Hero metric */}
         <article className="col-span-1 md:col-span-8 bg-[#0A0A0A] border border-[#1A1A1A] p-8 md:p-16 flex flex-col justify-between min-h-[400px] relative overflow-hidden">
-          <div
-            className="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-luminosity"
-            style={{
-              backgroundImage:
-                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBtKntEOgeMyPh3dKzg4ELpDKMzym3FInHLQt0F6noVmBACk6zIVB5a1j3alWQW0vTvWpzEweRkWljZqLBDTOk7z9_mIOrH2hOnYe4NaSRJkInGNmFEHmB-R_lAFLKAI4sFAEhuMQqOy3Gocl9tHTh_ASN8BIZgymQ1-QwjLXEKXsSbA3bRCLoRBiuS3aZIt0cSBBrsmDiwP_RwLjNLx0EZiatC2FcID8SayiBPTaI2TJgblxcxYDDRg5OJLK3l8t7homsLgCVVV4Q')",
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] to-transparent" />
+          {/* Antes acá había una captura de un mock de Stitch como imagen de fondo
+              (servida desde googleusercontent): en el celular se veía como una
+              pantalla ajena superpuesta y rompía todo. Un degradado limpio de la
+              marca hace el mismo trabajo sin ruido. */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#141414] via-[#0A0A0A] to-[#0A0A0A]" />
           <div className="relative z-10">
             <p className="label-tech text-[12px] text-[#cfc4c5] flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#e5e2e1] animate-pulse" />

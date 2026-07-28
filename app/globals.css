@@ -112,3 +112,22 @@ html {
 body {
   min-height: 100dvh;
 }
+
+/* ────────────────────────────────────────────────────────────────────────────
+   CORRECCIÓN MÓVIL DE LA TIPOGRAFÍA DEL PORTAL (28/7, pedido de Franco).
+   Las pantallas del portal se diseñaron desktop-first con tamaños absolutos
+   (40/64/80/120px) y en un teléfono los títulos ocupaban media pantalla:
+   "RESUMEN DE OPERACIONES" a 40px partía en 3 renglones gigantes.
+   En vez de tocar 7 archivos clase por clase, se achican acá los tamaños
+   arbitrarios SOLO por debajo de 768px; en desktop no cambia nada porque
+   los md: siguen mandando. Si un título nuevo usa otro tamaño absoluto
+   grande, agregarlo a esta lista.
+   ──────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .text-\[120px\] { font-size: 56px !important; }
+  .text-\[80px\]  { font-size: 48px !important; }
+  .text-\[64px\]  { font-size: 32px !important; }
+  .text-\[48px\]  { font-size: 28px !important; }
+  .text-\[40px\]  { font-size: 26px !important; line-height: 1.15 !important; }
+  .text-\[32px\]  { font-size: 21px !important; }
+}

@@ -83,11 +83,11 @@ export default function OnboardingStaffPage() {
                 active ? "flex opacity-100" : "hidden opacity-0"
               } flex-col items-center text-center w-full max-w-4xl transition-opacity duration-500 ease-in-out`}
             >
-              <div className="mb-12 relative w-full h-[409px] border border-[#1A1A1A] overflow-hidden bg-[#0e0e0e]">
-                <div
-                  className="absolute inset-0 bg-cover bg-center opacity-60 mix-blend-luminosity"
-                  style={{ backgroundImage: `url('${slide.image}')` }}
-                />
+              {/* Sin la imagen mock de Stitch (googleusercontent): quedaba una foto
+                  ajena de fondo y en móvil ocupaba media pantalla. Panel más bajo,
+                  degradado propio, el ícono manda. */}
+              <div className="mb-12 relative w-full h-[220px] md:h-[320px] border border-[#1A1A1A] overflow-hidden bg-[#0e0e0e]">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#161616] via-[#0e0e0e] to-[#0e0e0e]" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <slide.Icon
                     className="w-[120px] h-[120px] text-[#e5e2e1]"
