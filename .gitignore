@@ -22,3 +22,4 @@ next-env.d.ts
 .stitch/
 
 testsprite_tests/tmp/config.json
+supabase/.temp/
