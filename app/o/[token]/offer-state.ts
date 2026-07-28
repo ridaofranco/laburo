@@ -61,22 +61,55 @@ export function deriveView(data: unknown): OfferView {
  * comparte entre el render server-side y el client component así el candidato
  * ve el mismo mensaje venga de un GET a una oferta ya resuelta o del fallo de
  * un POST re-leído.
+ *
+ * Fix UX 28/7: el texto ya NO dice "escribinos por WhatsApp" (antes lo repetía
+ * en las 4 vistas sin ningún link real). El canal ahora es un botón wa.me
+ * (WhatsAppCta) con mensaje precargado por caso: una acción, un canal. La vista
+ * "aceptada" además ofrece el portal de staff (portal: true).
  */
-export const TERMINAL_COPY: Record<TerminalView, { title: string; body: string }> = {
+export const TERMINAL_COPY: Record<
+  TerminalView,
+  {
+    title: string;
+    body: string;
+    wa: { label: string; mensaje: string };
+    portal?: boolean;
+  }
+> = {
   aceptada: {
     title: "Ya confirmaste esta propuesta",
-    body: "Nos vemos ahí. Si tenés alguna duda, escribinos por WhatsApp.",
+    body: "Quedás confirmado/a para este laburo. Nos vemos ahí.",
+    wa: {
+      label: "Coordinar por WhatsApp",
+      mensaje:
+        "Hola, confirmé una propuesta de LABURO y quiero coordinar los detalles.",
+    },
+    portal: true,
   },
   rechazada: {
     title: "Ya rechazaste esta propuesta",
-    body: "Si fue un error o cambiaste de idea, escribinos por WhatsApp y lo vemos.",
+    body: "Gracias por avisar. Si fue un error o cambiaste de idea, todavía estás a tiempo.",
+    wa: {
+      label: "Avisar por WhatsApp",
+      mensaje:
+        "Hola, rechacé una propuesta de LABURO pero me interesa revisarla.",
+    },
   },
   vencida: {
     title: "Este link venció",
-    body: "Si seguís interesado/a, escribinos por WhatsApp y vemos de reprogramar.",
+    body: "Esta propuesta ya no está activa. Si el laburo te interesa, vemos de reprogramar.",
+    wa: {
+      label: "Escribinos por WhatsApp",
+      mensaje:
+        "Hola, me llegó una propuesta de LABURO pero el link venció. Sigo interesado/a.",
+    },
   },
   invalida: {
     title: "Este link no es válido",
-    body: "Puede que lo hayan copiado mal. Si tenías una propuesta, escribinos por WhatsApp.",
+    body: "Puede que lo hayan copiado mal. Probá abrirlo de nuevo desde el mail que te llegó.",
+    wa: {
+      label: "Escribinos por WhatsApp",
+      mensaje: "Hola, tengo un problema con el link de una propuesta de LABURO.",
+    },
   },
 };

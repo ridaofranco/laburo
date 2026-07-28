@@ -23,6 +23,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { fmtFechaHora } from "@/lib/dates";
 import { AcceptDecline } from "./accept-decline";
+import { WhatsAppCta, PortalStaffLink } from "./wa-cta";
 import {
   deriveView,
   TERMINAL_COPY,
@@ -87,13 +88,17 @@ function OfferRow({ label, value }: { label: string; value: string | null | unde
   );
 }
 
-/** Pantalla de estado terminal (aceptada/rechazada/vencida/inválida): sin botones. */
+/** Pantalla de estado terminal (aceptada/rechazada/vencida/inválida): sin form,
+ *  pero con un camino real (fix UX 28/7): botón wa.me con mensaje precargado por
+ *  caso, y el portal de staff si ya confirmó. */
 function TerminalScreen({ view }: { view: TerminalView }) {
   const c = TERMINAL_COPY[view];
   return (
     <div className="flex flex-col gap-md rounded-none bg-surface-1 border border-border p-lg mt-xl">
       <h1 className="font-display text-[32px] text-fg">{c.title}</h1>
       <p className="text-body text-fg-muted">{c.body}</p>
+      <WhatsAppCta label={c.wa.label} mensaje={c.wa.mensaje} />
+      {c.portal && <PortalStaffLink />}
     </div>
   );
 }
@@ -158,7 +163,7 @@ export default async function OfferPage({
         </div>
 
         {/* Aceptar/Rechazar por POST (Server Action). Sólo la vista activa lo monta. */}
-        <AcceptDecline token={token} />
+        <AcceptDecline token={token} gigTitle={d.gig?.title ?? null} />
 
         <p className="text-label text-fg-subtle text-center">
           Al aceptar quedás confirmado/a para este laburo.
