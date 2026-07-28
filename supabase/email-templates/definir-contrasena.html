@@ -32,17 +32,20 @@
   · {{ .ConfirmationURL }} es la variable de Supabase; NO tocarla ni envolverla en
     ningún tracking, o el link deja de validar.
   · Todo el estilo va inline: los clientes de correo descartan el CSS externo.
-  · Sin imágenes remotas a propósito. El wordmark es texto: Gmail bloquea imágenes
-    por defecto y un mail de acceso no puede depender de eso para verse serio.
+  · El wordmark va como IMAGEN remota (laburo.somosder.ar/brand/laburo-wordmark.png),
+    igual que en los mails de ENTRÁ y PASE: es la regla de marca de Franco. Gmail
+    proxea las imágenes remotas así que se muestra; el alt cubre si se bloquea.
   · Fondo oscuro con el azul de LABURO, igual que el resto de los mails de la app.
 -->
 <div style="margin:0;padding:0;background-color:#000000;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
   <div style="max-width:480px;margin:0 auto;padding:32px 20px;">
 
-    <!-- Wordmark en texto (nada de imágenes remotas en un mail de acceso) -->
+    <!-- Wordmark: la IMAGEN real (regla de Franco: el logo va siempre como en los
+         mails de ENTRÁ y PASE). Gmail proxea las imágenes remotas, así que se ve.
+         El alt="LABURO" cubre al cliente raro que las bloquee. -->
     <div style="padding:0 0 22px 0;">
-      <span style="font-size:22px;font-weight:800;letter-spacing:-0.5px;color:#F5F5F5;">LABURO.</span>
-      <span style="display:block;margin-top:6px;font-size:10px;letter-spacing:2.5px;color:#8A8A8A;text-transform:uppercase;">Staff para eventos · SOMOS DER</span>
+      <img src="https://laburo.somosder.ar/brand/laburo-wordmark.png" alt="LABURO" width="118" height="21" style="display:block;border:0;outline:none;">
+      <span style="display:block;margin-top:8px;font-size:10px;letter-spacing:2.5px;color:#8A8A8A;text-transform:uppercase;">Staff para eventos · SOMOS DER</span>
     </div>
 
     <div style="background-color:#0A0A0A;border:1px solid #1A1A1A;padding:28px 24px;">
