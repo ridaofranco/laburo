@@ -40,6 +40,31 @@ const up = (delay: number) => ({
 /** Qué está mostrando la pantalla. */
 type Vista = "clave" | "link" | "mandado" | "clave-mandada";
 
+/**
+ * El camino del que NO tiene ficha (decisión de Franco, 28/7): el registro de
+ * staff está abierto a cualquiera, así que esta pantalla nunca puede ser un
+ * callejón sin salida. El mensaje de resultado sigue siendo SIEMPRE el mismo
+ * (sin oráculo de enumeración: no se revela qué mails están en el pool), pero
+ * ahora le muestra la salida al que todavía no se registró: /sumate.
+ */
+function InvitacionSumate() {
+  return (
+    <div className="mt-12 pt-10 border-t border-[#4c4546]/60 w-full flex flex-col items-center gap-6">
+      <p className="text-center text-[14px] leading-[1.6] text-[#988e90]">
+        ¿Todavía no te sumaste? Registrate con este mismo email y quedás en el
+        pool de staff.
+      </p>
+      <a
+        href="/sumate"
+        className="border border-[#e5e2e1] text-[#e5e2e1] px-8 py-4 flex items-center gap-3 hover:bg-[#e5e2e1] hover:text-black transition-colors duration-150 font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.2em]"
+      >
+        Registrate acá
+        <ArrowRight size={16} strokeWidth={1.5} />
+      </a>
+    </div>
+  );
+}
+
 export function StaffLoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -142,16 +167,23 @@ export function StaffLoginForm() {
         </motion.p>
 
         {vista === "mandado" || sent ? (
-          <motion.p {...up(0.1)} className="text-center text-[16px] leading-[1.6] text-[#cfc4c5]">
-            Si <span className="text-[#e5e2e1]">{email}</span> está en nuestro pool
-            de staff, te mandamos un link para entrar. Revisá tu casilla.
-          </motion.p>
+          <motion.div {...up(0.1)} className="w-full flex flex-col items-center">
+            <p className="text-center text-[16px] leading-[1.6] text-[#cfc4c5]">
+              Si <span className="text-[#e5e2e1]">{email}</span> está registrado
+              en nuestro pool de staff, te mandamos un link para entrar. Revisá
+              tu casilla, y si no lo ves, mirá en spam.
+            </p>
+            <InvitacionSumate />
+          </motion.div>
         ) : vista === "clave-mandada" ? (
-          <motion.p {...up(0.1)} className="text-center text-[16px] leading-[1.6] text-[#cfc4c5]">
-            Si <span className="text-[#e5e2e1]">{email}</span> está en nuestro pool
-            de staff, te mandamos un link para crear tu contraseña. Revisá tu
-            casilla, y si no lo ves, mirá en spam.
-          </motion.p>
+          <motion.div {...up(0.1)} className="w-full flex flex-col items-center">
+            <p className="text-center text-[16px] leading-[1.6] text-[#cfc4c5]">
+              Si <span className="text-[#e5e2e1]">{email}</span> está registrado
+              en nuestro pool de staff, te mandamos un link para crear tu
+              contraseña. Revisá tu casilla, y si no lo ves, mirá en spam.
+            </p>
+            <InvitacionSumate />
+          </motion.div>
         ) : (
           <motion.form
             {...up(0.2)}
@@ -247,6 +279,21 @@ export function StaffLoginForm() {
             >
               Entrar con Google
             </button>
+
+            {/* Registro abierto (decisión de Franco, 28/7): el que cae acá sin
+                ficha tiene que ver su camino ANTES de pedir nada. /sumate está
+                abierto a cualquiera que quiera trabajar en eventos. */}
+            <div className="pt-8 border-t border-[#4c4546]/60 flex flex-col items-center gap-3">
+              <p className="text-[13px] text-[#8a8a8a] leading-[1.5]">
+                ¿Primera vez en LABURO?
+              </p>
+              <a
+                href="/sumate"
+                className="font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.15em] text-[#e5e2e1] border-b border-[#4c4546] pb-1 hover:border-[#e5e2e1] transition-colors"
+              >
+                Sumate al pool de staff
+              </a>
+            </div>
 
             <a
               href="/login"
