@@ -40,6 +40,7 @@ import { HiredEmail } from '../components/emails/hired-email.tsx';
 import { ShiftReminderEmail } from '../components/emails/shift-reminder-email.tsx';
 import { OfferAnswerEmail } from '../components/emails/offer-answer-email.tsx';
 import { PagoListoEmail } from '../components/emails/pago-listo-email.tsx';
+import { QuienFichoEmail } from '../components/emails/quien-ficho-email.tsx';
 
 const PARA = 'ridaofrancorg@gmail.com';
 const LINK = 'https://laburo.somosder.ar/o/PREVIEW-no-es-un-link-real';
@@ -113,6 +114,21 @@ const mails = [
       firstName: 'Franco', gigTitle: 'Campus Party 2026', role: 'Acreditación',
       amountText: '$ 45.000',
       paymentText: 'El pago se coordina con SOMOS DER dentro de los 10 días hábiles de realizado el trabajo.',
+    }),
+  },
+  {
+    n: 'INTERNO: quién fichó (resumen post-evento del geofencing)',
+    subject: 'Quién fichó · Campus Party 2026 (2 de 3)',
+    el: () => createElement(QuienFichoEmail, {
+      gigTitle: 'Campus Party 2026',
+      whenText: 'sábado 12 de septiembre, 09:00',
+      venue: 'La Rural, Av. Sarmiento 2704, CABA',
+      ficharon: [
+        { nombre: 'Ana Gómez', role: 'Acreditación', entrada: '08:41', salida: '18:12', distanciaM: 35 },
+        { nombre: 'Julián Paredes', role: 'Control de accesos', entrada: '09:15', salida: null, distanciaM: 1800 },
+      ],
+      sinFichar: [{ nombre: 'Micaela Duarte', role: 'Acreditación' }],
+      link: 'https://laburo.somosder.ar/tablero',
     }),
   },
   {
