@@ -73,15 +73,13 @@ interface RpcOffer {
 /**
  * CUÁNDO SE COBRA, la tercera pregunta que se hace cualquiera antes de aceptar.
  *
- * ⚠️ ESTE TEXTO LO TIENE QUE CONFIRMAR FRANCO. A diferencia del lugar y del
- * plazo, que salen de la base, la política de pago no está en ningún lado del
- * sistema: es algo que se sabe y se dice por WhatsApp. Está redactado a
- * propósito SIN prometer una cantidad de días, porque una promesa de pago que
- * no se cumple es la forma más rápida de perder a la gente buena. Si la práctica
- * real es "a los X días del evento", esto se cambia por esa frase, que es mucho
- * mejor: lo que la gente quiere es una fecha.
+ * POLÍTICA DEFINIDA POR FRANCO (29/7/2026): el pago se determina dentro de los
+ * 10 días hábiles de realizado el trabajo. Es la fecha que la gente quiere ver.
+ * Si la política cambia, se cambia SOLO acá: este es el único lugar del sistema
+ * donde vive.
  */
-const PAGO_TEXTO = "El pago se coordina con SOMOS DER una vez terminado el evento.";
+const PAGO_TEXTO =
+  "El pago se coordina con SOMOS DER dentro de los 10 días hábiles de realizado el trabajo.";
 
 /** Fecha legible para el email (hora AR, no la del server UTC). null si inválida. */
 function formatWhen(iso?: string | null): string | null {

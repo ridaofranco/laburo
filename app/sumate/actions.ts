@@ -8,9 +8,15 @@
  * Un solo producto, dos aristas: el registro entra igual desde la web o desde acá.
  */
 
+import { createElement } from "react";
+import { render } from "@react-email/components";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { sniffCvMime } from "@/lib/cv";
+import { sendMail } from "@/lib/email/mailer";
+import { WelcomeEmail } from "@/components/emails/welcome-email";
+import { siteUrl } from "@/lib/site";
+import { bajaHeaders, bajaReady, bajaUrl } from "@/lib/baja";
 
 const CV_BUCKET = "staff-cvs";
 
@@ -86,7 +92,7 @@ export async function registerApplicant(
 
   // Mismo RPC que la web. createClient sin sesión = cliente anon (RPC granteado a anon).
   const supabase = await createClient();
-  const { error } = await supabase.rpc("staff_app_register_applicant", {
+  const { data, error } = await supabase.rpc("staff_app_register_applicant", {
     p_nombre: input.nombre.trim(),
     p_apellido: input.apellido.trim() || null,
     // lowercase: toda la resolución de identidad del staff hace
@@ -121,5 +127,50 @@ export async function registerApplicant(
     if (uploadedPath) await admin.storage.from(CV_BUCKET).remove([uploadedPath]);
     return { ok: false, reason: "No se pudo enviar el registro. Probá de nuevo." };
   }
+
+  // Bienvenida en el momento (decisión de Franco, 29/7): el que se registra hoy
+  // recibe el welcome CORTO al toque (el largo de la tanda es para las fichas
+  // viejas). Se AWAITEA (fire-and-forget en serverless = el mail no sale nunca,
+  // el mismo bug que tuvo muda a ENTRÁ), pero un fallo del mail NUNCA voltea el
+  // registro: la ficha ya está guardada, y si el welcome no salió la ficha queda
+  // con bienvenida_enviada_at en NULL y la tanda del cron la agarra después como
+  // red de seguridad. Solo estampamos la marca cuando el envío salió ok.
+  const profileId =
+    data && typeof data === "object" && "id" in data ? String(data.id) : null;
+  try {
+    const firstName = input.nombre.trim().split(/\s+/)[0] ?? "";
+    const html = await render(
+      createElement(WelcomeEmail, {
+        firstName,
+        link: siteUrl("/acceso-staff"),
+        bajaLink:
+          profileId && bajaReady() ? bajaUrl(profileId) : undefined,
+      }),
+    );
+    const result = await sendMail({
+      to: input.email.trim().toLowerCase(),
+      subject: "Bienvenido/a a LABURO · SOMOS DER",
+      html,
+      headers: profileId ? bajaHeaders(profileId) : undefined,
+    });
+    if (result.ok && profileId) {
+      const { error: markErr } = await admin.rpc("staff_app_mark_bienvenida", {
+        p_profile_id: profileId,
+      });
+      if (markErr) {
+        // La marca falló pero el mail salió: como mucho, la tanda le manda el
+        // largo más adelante. Lo dejamos en los logs para verlo venir.
+        console.error("[sumate] mark_bienvenida failed:", markErr.message);
+      }
+    } else if (!result.ok) {
+      console.error("[sumate] welcome no salió:", result.error ?? result.channel);
+    }
+  } catch (e) {
+    console.error(
+      "[sumate] welcome render/send failed:",
+      e instanceof Error ? e.message : String(e),
+    );
+  }
+
   return { ok: true };
 }
