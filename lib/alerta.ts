@@ -120,6 +120,13 @@ export interface AlertaOpts {
   clave?: string;
   /** true = es plata o alguien quedó sin lo que pagó. Cambia el ícono. */
   plata?: boolean;
+  /**
+   * true = solo Telegram, sin el mail espejo. Para cuando el caller ya manda su
+   * PROPIO mail sobre el mismo hecho (ej: el aviso de baja del pool, que tiene
+   * un mail dedicado con nombre y motivo): sin esto llegarían dos mails por el
+   * mismo evento, el dedicado y el genérico de "algo se rompió".
+   */
+  sinMail?: boolean;
 }
 
 /**
@@ -151,7 +158,7 @@ export async function alerta(opts: AlertaOpts): Promise<boolean> {
     // devolver. Si se dejara el mail sin await, en serverless la función se congela
     // al terminar y el mail no sale nunca: es exactamente el bug por el que ENTRÁ
     // no mandaba las entradas.
-    const porMail = mandarMail(opts, filas);
+    const porMail = opts.sinMail ? Promise.resolve(false) : mandarMail(opts, filas);
 
     const porTelegram = (async (): Promise<boolean> => {
       // Si Telegram no está configurado, no se le pega: sin token la llamada tira y

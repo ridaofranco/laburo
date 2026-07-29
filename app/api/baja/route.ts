@@ -21,6 +21,7 @@ import { NextResponse } from "next/server";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { bajaTokenOk } from "@/lib/baja";
 import { alerta } from "@/lib/alerta";
+import { avisoBajaAdmin, leerFichaParaAviso } from "@/lib/baja-aviso";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +45,9 @@ export async function POST(request: Request) {
   }
 
   const supabase = createServiceRoleClient();
+  // El nombre se lee ANTES de la baja: apenas la RPC marca baja_at, la ficha
+  // desaparece de la vista y ya no hay de dónde sacarlo (ver lib/baja-aviso).
+  const ficha = await leerFichaParaAviso(supabase, p);
   const { data, error } = await supabase.rpc("staff_app_set_baja", {
     p_id: p,
     p_motivo: null,
@@ -60,16 +64,18 @@ export async function POST(request: Request) {
   if (data !== true) {
     console.warn("[api/baja] token válido pero la ficha no existe:", p);
   } else {
-    // AVISO DE BAJA. Una sola baja no dice nada; varias en pocos días son la señal
-    // más honesta que vamos a tener sobre el último mail que salió. Sin este aviso
-    // quedaba registrado en la base y nadie lo miraba.
-    // Se usa la MISMA clave de anti-repetición para todas, así una tanda de bajas
-    // manda un aviso y no cincuenta.
+    // AVISO DE BAJA: mail dedicado al admin, uno POR baja, con el nombre (el
+    // one-click no trae motivo: el cliente de correo pega el POST sin pantalla).
+    // Sin dedupe a propósito: varias bajas en pocos días son la señal más honesta
+    // sobre el último mail que salió, y cada una es un dato. Telegram va aparte
+    // por alerta, sinMail para no duplicar con el mail genérico.
+    await avisoBajaAdmin({ profileId: p, ficha, motivo: null, origen: "one-click" });
     await alerta({
       titulo: "Alguien pidió la baja del pool",
       datos: { ficha: p },
-      detalle: "Si se repite en pocos días, mirá qué mail salió último. El motivo que dejó la persona está en baja_motivo.",
+      detalle: "El detalle con nombre salió por mail a MAIL_ADMIN_TO. Vino por el one-click del cliente de correo (sin motivo).",
       clave: "baja-pool",
+      sinMail: true,
     });
   }
   return NextResponse.json({ ok: true });

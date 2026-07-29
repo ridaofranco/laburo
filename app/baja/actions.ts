@@ -17,6 +17,7 @@ import { redirect } from "next/navigation";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { bajaTokenOk } from "@/lib/baja";
 import { alerta } from "@/lib/alerta";
+import { avisoBajaAdmin, leerFichaParaAviso } from "@/lib/baja-aviso";
 
 async function setBaja(
   profileId: string,
@@ -26,6 +27,9 @@ async function setBaja(
 ): Promise<boolean> {
   if (!bajaTokenOk(profileId, token)) return false;
   const supabase = createServiceRoleClient();
+  // El nombre se lee ANTES de la baja: apenas la RPC marca baja_at, la ficha
+  // desaparece de la vista y ya no hay de dónde sacarlo (ver lib/baja-aviso).
+  const ficha = baja ? await leerFichaParaAviso(supabase, profileId) : null;
   const { data, error } = await supabase.rpc("staff_app_set_baja", {
     p_id: profileId,
     p_motivo: motivo?.trim() ? motivo.trim() : null,
@@ -37,11 +41,21 @@ async function setBaja(
   }
   // Aviso solo cuando es una BAJA de verdad (no cuando alguien vuelve al pool).
   if (data === true && baja) {
+    // Mail dedicado al admin, uno POR baja, con nombre y motivo (sin dedupe:
+    // cada baja es un dato). Telegram va aparte por alerta, sinMail para no
+    // mandar el mail genérico de "algo se rompió" encima del dedicado.
+    await avisoBajaAdmin({
+      profileId,
+      ficha,
+      motivo,
+      origen: "formulario",
+    });
     await alerta({
       titulo: "Alguien pidió la baja del pool",
       datos: { ficha: profileId, motivo: motivo?.trim() || "(no dejó motivo)" },
-      detalle: "Si se repite en pocos días, mirá qué mail salió último.",
+      detalle: "El detalle con nombre y motivo salió por mail a MAIL_ADMIN_TO.",
       clave: "baja-pool",
+      sinMail: true,
     });
   }
   return data === true;
