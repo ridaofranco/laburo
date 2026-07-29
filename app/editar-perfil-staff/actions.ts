@@ -80,6 +80,33 @@ export async function updateMyStaffProfile(
   if (error || !res?.ok) {
     return { ok: false, reason: res?.reason ?? error?.message ?? "No se pudo guardar." };
   }
+
+  // La persona acaba de GUARDAR su perfil: eso es confirmarlo. Se estampa
+  // perfil_confirmado_at (migración 0034) para que el recordatorio de perfil
+  // incompleto no la persiga. TOLERANTE a propósito: hasta que la 0034 se
+  // aplique la RPC no existe y esto solo loguea; el guardado ya salió bien y
+  // un fallo acá jamás lo convierte en error.
+  try {
+    const profile = await getMyStaffProfile();
+    if (profile) {
+      const admin = createServiceRoleClient();
+      const { error: markErr } = await admin.rpc("staff_app_mark_perfil_confirmado", {
+        p_profile_id: profile.id,
+      });
+      if (markErr) {
+        console.error(
+          "[perfil] mark_perfil_confirmado failed (¿falta aplicar la 0034?):",
+          markErr.message,
+        );
+      }
+    }
+  } catch (e) {
+    console.error(
+      "[perfil] mark_perfil_confirmado threw:",
+      e instanceof Error ? e.message : String(e),
+    );
+  }
+
   revalidatePath("/editar-perfil-staff");
   revalidatePath("/panel-staff");
   return { ok: true };

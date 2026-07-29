@@ -41,6 +41,7 @@ import { ShiftReminderEmail } from '../components/emails/shift-reminder-email.ts
 import { OfferAnswerEmail } from '../components/emails/offer-answer-email.tsx';
 import { PagoListoEmail } from '../components/emails/pago-listo-email.tsx';
 import { QuienFichoEmail } from '../components/emails/quien-ficho-email.tsx';
+import { PerfilReminderEmail } from '../components/emails/perfil-reminder-email.tsx';
 
 const PARA = 'ridaofrancorg@gmail.com';
 const LINK = 'https://laburo.somosder.ar/o/PREVIEW-no-es-un-link-real';
@@ -114,6 +115,15 @@ const mails = [
       firstName: 'Franco', gigTitle: 'Campus Party 2026', role: 'Acreditación',
       amountText: '$ 45.000',
       paymentText: 'El pago se coordina con SOMOS DER dentro de los 10 días hábiles de realizado el trabajo.',
+    }),
+  },
+  {
+    n: 'Recordatorio de perfil incompleto (uno solo, días después de la bienvenida)',
+    subject: 'Tu perfil de LABURO sigue sin revisar',
+    el: () => createElement(PerfilReminderEmail, {
+      firstName: 'Franco',
+      link: 'https://laburo.somosder.ar/acceso-staff',
+      bajaLink: 'https://laburo.somosder.ar/baja?p=demo&t=demo',
     }),
   },
   {

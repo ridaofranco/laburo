@@ -172,5 +172,29 @@ export async function registerApplicant(
     );
   }
 
+  // El que se registra por /sumate llenó el formulario ENTERO: su perfil ya
+  // está confirmado. Sin esta marca, el recordatorio de perfil incompleto
+  // (migración 0034) lo nagearía a los pocos días de registrarse. TOLERANTE:
+  // hasta que la 0034 se aplique la RPC no existe y esto solo loguea; el
+  // registro ya está guardado y un fallo acá jamás lo voltea.
+  if (profileId) {
+    try {
+      const { error: confErr } = await admin.rpc("staff_app_mark_perfil_confirmado", {
+        p_profile_id: profileId,
+      });
+      if (confErr) {
+        console.error(
+          "[sumate] mark_perfil_confirmado failed (¿falta aplicar la 0034?):",
+          confErr.message,
+        );
+      }
+    } catch (e) {
+      console.error(
+        "[sumate] mark_perfil_confirmado threw:",
+        e instanceof Error ? e.message : String(e),
+      );
+    }
+  }
+
   return { ok: true };
 }
