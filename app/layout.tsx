@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Inter, Syne, Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
@@ -55,6 +56,11 @@ export default function RootLayout({
           {children}
           <Toaster theme="dark" position="top-center" />
         </ThemeProvider>
+        {/* Vercel Analytics: LABURO no medía nada. Componente oficial: sin env
+            vars, sin PII; en dev y en build es un no-op, solo reporta corriendo
+            en Vercel. Falta un click de Franco: habilitar Analytics en el
+            dashboard (proyecto laburo → pestaña Analytics → Enable). */}
+        <Analytics />
       </body>
     </html>
   );
