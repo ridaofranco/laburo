@@ -31,6 +31,7 @@ import { OfferEmail } from "@/components/emails/offer-email";
 import { waLink } from "@/lib/wa";
 import { fmtFechaHora } from "@/lib/dates";
 import { siteUrl } from "@/lib/site";
+import { PAGO_TEXTO } from "@/lib/pago";
 
 export interface CreateOfferInput {
   staffProfileId: string;
@@ -70,16 +71,8 @@ interface RpcOffer {
   expires_at?: string;
 }
 
-/**
- * CUÁNDO SE COBRA, la tercera pregunta que se hace cualquiera antes de aceptar.
- *
- * POLÍTICA DEFINIDA POR FRANCO (29/7/2026): el pago se determina dentro de los
- * 10 días hábiles de realizado el trabajo. Es la fecha que la gente quiere ver.
- * Si la política cambia, se cambia SOLO acá: este es el único lugar del sistema
- * donde vive.
- */
-const PAGO_TEXTO =
-  "El pago se coordina con SOMOS DER dentro de los 10 días hábiles de realizado el trabajo.";
+// PAGO_TEXTO (cuándo se cobra) ahora vive en lib/pago.ts: lo comparte con el
+// mail "Tu pago está listo". Sigue habiendo UN solo lugar donde cambiarlo.
 
 /** Fecha legible para el email (hora AR, no la del server UTC). null si inválida. */
 function formatWhen(iso?: string | null): string | null {

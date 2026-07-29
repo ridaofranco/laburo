@@ -39,6 +39,7 @@ import { ReminderEmail } from '../components/emails/reminder-email.tsx';
 import { HiredEmail } from '../components/emails/hired-email.tsx';
 import { ShiftReminderEmail } from '../components/emails/shift-reminder-email.tsx';
 import { OfferAnswerEmail } from '../components/emails/offer-answer-email.tsx';
+import { PagoListoEmail } from '../components/emails/pago-listo-email.tsx';
 
 const PARA = 'ridaofrancorg@gmail.com';
 const LINK = 'https://laburo.somosder.ar/o/PREVIEW-no-es-un-link-real';
@@ -74,7 +75,8 @@ const mails = [
       whenText: 'sábado 12 de septiembre, 09:00', link: LINK,
       venue: 'La Rural, Av. Sarmiento 2704, CABA',
       expiresText: 'miércoles 30 de julio, 18:00',
-      paymentText: 'El pago se coordina con SOMOS DER una vez terminado el evento.',
+      // La política real (PAGO_TEXTO de lib/pago.ts), no la frase vieja.
+      paymentText: 'El pago se coordina con SOMOS DER dentro de los 10 días hábiles de realizado el trabajo.',
     }),
   },
   {
@@ -102,6 +104,15 @@ const mails = [
       firstName: 'Franco', gigTitle: 'Campus Party 2026', role: 'Acreditación',
       whenText: 'mañana sábado, 09:00', venue: 'La Rural, CABA',
       link: 'https://laburo.somosder.ar/panel-staff',
+    }),
+  },
+  {
+    n: 'Tu pago está listo (cierre del ciclo laburo hecho, pago coordinado)',
+    subject: 'Tu pago está listo · Campus Party 2026',
+    el: () => createElement(PagoListoEmail, {
+      firstName: 'Franco', gigTitle: 'Campus Party 2026', role: 'Acreditación',
+      amountText: '$ 45.000',
+      paymentText: 'El pago se coordina con SOMOS DER dentro de los 10 días hábiles de realizado el trabajo.',
     }),
   },
   {

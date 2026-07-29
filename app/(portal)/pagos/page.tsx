@@ -15,6 +15,7 @@ import { createClient } from "@/lib/supabase/server";
 import { fmtFecha } from "@/lib/dates";
 import { money, moneyCompact } from "@/lib/format";
 import { LoadError } from "@/components/load-error";
+import { PagoListoBoton } from "./pago-listo-boton";
 
 interface OfferRow {
   id: string;
@@ -64,6 +65,20 @@ export default async function PagosPage() {
 
   const totalComprometido = rows.reduce((s, r) => s + (Number(r.amount) || 0), 0);
   const conMonto = rows.filter((r) => r.amount != null && Number(r.amount) > 0).length;
+
+  // Estado "pago avisado" por oferta (offers.pago_listo_at, migración 0032).
+  // QUERY APARTE Y TOLERANTE a propósito: hasta que la 0032 se aplique, la
+  // columna no existe en la vista y este select falla. Si fuera parte del select
+  // principal, tiraría abajo TODA la pantalla de pagos; así, solo faltan los
+  // estados y el botón contesta honesto al apretar.
+  const avisadoPor = new Map<string, boolean>();
+  const { data: avisosData } = await supabase
+    .from("staff_app_offers")
+    .select("id,pago_listo_at")
+    .eq("status", "accepted");
+  for (const a of (avisosData ?? []) as Array<{ id: string; pago_listo_at: string | null }>) {
+    avisadoPor.set(a.id, !!a.pago_listo_at);
+  }
 
   // Panel de cobros al cliente (cada intento de pago por MercadoPago).
   const { data: cobrosData } = await supabase
@@ -177,9 +192,10 @@ export default async function PagosPage() {
             <div className="flex flex-col gap-0">
               <div className="hidden md:grid grid-cols-12 gap-4 pb-4 border-b border-[#4c4546] text-[#cfc4c5] label-tech text-[12px]">
                 <div className="col-span-2">Confirmado</div>
-                <div className="col-span-4">Staff</div>
-                <div className="col-span-4">Evento</div>
+                <div className="col-span-3">Staff</div>
+                <div className="col-span-3">Evento</div>
                 <div className="col-span-2 text-right">Monto</div>
+                <div className="col-span-2 text-right">Aviso de pago</div>
               </div>
               {rows.map((r) => {
                 const nombre =
@@ -193,16 +209,22 @@ export default async function PagosPage() {
                     <div className="col-span-2 text-[15px] text-[#cfc4c5]">
                       {fecha(r.responded_at)}
                     </div>
-                    <div className="col-span-4 text-[18px] text-[#c6c6c6] uppercase font-[family-name:var(--font-syne)] font-semibold">
+                    <div className="col-span-3 text-[18px] text-[#c6c6c6] uppercase font-[family-name:var(--font-syne)] font-semibold">
                       {nombre}
                     </div>
-                    <div className="col-span-4 text-[16px] text-[#cfc4c5]">
+                    <div className="col-span-3 text-[16px] text-[#cfc4c5]">
                       {(r.gig_title ?? "").trim() || "Sin evento"}
                     </div>
                     <div className="col-span-2 text-left md:text-right text-[18px] text-[#e5e2e1]">
                       {r.amount != null && Number(r.amount) > 0
                         ? money(Number(r.amount))
                         : "A convenir"}
+                    </div>
+                    <div className="col-span-2 text-left md:text-right">
+                      <PagoListoBoton
+                        offerId={r.id}
+                        yaAvisado={avisadoPor.get(r.id) ?? false}
+                      />
                     </div>
                   </div>
                 );
