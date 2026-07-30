@@ -76,6 +76,11 @@ export async function updateSession(request: NextRequest) {
     // esta línea el middleware mandaría a /login a cualquiera que llegue desde
     // Google — o sea, a todo el tráfico que el blog existe para captar.
     "/blog",
+    // El matcher del middleware solo excluye imágenes y .js, así que /robots.txt
+    // y /sitemap.xml pasan por acá: sin esta línea, Googlebot pide el sitemap y
+    // se come un 307 a /login.
+    "/robots.txt",
+    "/sitemap.xml",
   ];
   const isPublic = path === "/" || publicPrefixes.some((p) => path.startsWith(p));
 
