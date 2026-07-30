@@ -27,6 +27,7 @@ import { Reveal } from "./landing/reveal";
 import { LeadForm } from "./landing/lead-form";
 import { WhatsAppGlyph } from "@/components/icons/whatsapp-glyph";
 import { waLink } from "@/lib/wa";
+import { PAGO_TEXTO } from "@/lib/pago";
 
 const DESCRIPCION =
   "Staff para eventos con perfil y CV a la vista: más de 680 mozos, barras, seguridad, sonido y producción. Contanos qué necesita tu evento, sin planillas ni cadenas de WhatsApp. Y si trabajás en eventos, sumate al pool.";
@@ -364,6 +365,17 @@ export default function LandingPage() {
                   encaje con tus roles y tu zona, te llega una oferta con pago
                   y fechas, y la aceptás con un click. Quedás confirmado/a para
                   ese evento.
+                </p>
+                {/* CUANDO SE COBRA, arriba y no despues de aceptar (diagnostico
+                 * de conversion 2026-07-30, L5). Es la pregunta numero uno de
+                 * cualquiera que trabaja en eventos y el argumento mas fuerte
+                 * del lado oferta, y hasta ahora solo aparecia en el mail de la
+                 * oferta, o sea despues de que la persona ya estaba adentro.
+                 * El plazo se lee de lib/pago.ts: un solo lugar en todo el
+                 * sistema, asi la landing no se despega de lo que dice el mail. */}
+                <p className="text-[15px] leading-[1.7] text-[#cfc4c5] border-l-2 border-[#0047ff] pl-5">
+                  Cargar tu perfil es gratis. {PAGO_TEXTO} El monto está escrito
+                  en la oferta, antes de que aceptes.
                 </p>
                 <Link
                   href="/sumate"
