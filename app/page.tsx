@@ -175,8 +175,16 @@ export default function LandingPage() {
       </header>
 
       <main>
-        {/* ── Hero ── */}
-        <section className="min-h-dvh flex flex-col justify-end pb-20 md:pb-28 pt-40 relative overflow-hidden">
+        {/* ── Hero ──
+         *
+         * MOVIL: contenido arrancando arriba, no abajo (diagnostico de conversion
+         * 2026-07-30, L6). Antes era `justify-end pt-40`: 160px de aire muerto
+         * arriba MAS el anclaje al piso, y los dos CTA quedaban tapados por la
+         * barra de Safari en un iPhone 13 (el area visible real ronda los 664px,
+         * no los 844 del viewport). Con `justify-start pt-28` el boton primario
+         * queda entero arriba del pliegue. En md+ se mantiene el hero monumental
+         * anclado al piso, que ahi entra sin problema. */}
+        <section className="min-h-dvh flex flex-col justify-start md:justify-end pb-20 md:pb-28 pt-28 md:pt-40 relative overflow-hidden">
           {/* Grilla estructural de fondo (patron de /login) */}
           <div
             aria-hidden="true"
@@ -198,7 +206,7 @@ export default function LandingPage() {
               </h1>
             </Reveal>
 
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-14 md:mt-20 md:items-end">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-10 md:mt-20 md:items-end">
               <Reveal delay={0.1} className="md:col-span-5">
                 <p className="font-[family-name:var(--font-syne)] font-extrabold text-[clamp(48px,7vw,88px)] leading-none text-[#0047ff]">
                   +680
