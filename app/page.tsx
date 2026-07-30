@@ -196,7 +196,10 @@ export default function LandingPage() {
           </div>
 
           <div className={`${WRAP} relative z-10`}>
-            <Reveal>
+            {/* Los tres bloques del hero van con visibleDeArranque: sin JS, el
+             * resto de la landing se cae pero el hero (titulo, cifra del pool,
+             * parrafo y los dos CTA) se sirve visible. */}
+            <Reveal visibleDeArranque>
               <Eyebrow>Staff para eventos // por SOMOS DER</Eyebrow>
               <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.85] text-[clamp(64px,15vw,180px)] mt-6">
                 <span className="block">Staff</span>
@@ -207,7 +210,7 @@ export default function LandingPage() {
             </Reveal>
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-10 md:mt-20 md:items-end">
-              <Reveal delay={0.1} className="md:col-span-5">
+              <Reveal visibleDeArranque delay={0.1} className="md:col-span-5">
                 <p className="font-[family-name:var(--font-syne)] font-extrabold text-[clamp(48px,7vw,88px)] leading-none text-[#0047ff]">
                   +680
                 </p>
@@ -215,7 +218,11 @@ export default function LandingPage() {
                   Postulantes con perfil y CV en el pool
                 </p>
               </Reveal>
-              <Reveal delay={0.2} className="md:col-span-7 lg:col-start-7 lg:col-span-6">
+              <Reveal
+                visibleDeArranque
+                delay={0.2}
+                className="md:col-span-7 lg:col-start-7 lg:col-span-6"
+              >
                 <p className="text-[18px] md:text-[21px] leading-[1.6] text-[#8a8a8a] max-w-[560px]">
                   Mozos, barras, seguridad, sonido y producción con datos reales
                   a la vista. Contanos qué necesita tu evento y te acercamos una
