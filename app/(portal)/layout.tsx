@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { orgActual } from "@/lib/org";
 import { AccesoDenegado } from "../(app)/acceso-denegado";
 import { PortalNav } from "./portal-nav";
 
@@ -21,12 +22,11 @@ export default async function PortalLayout({
 
   if (!user) redirect("/login");
 
-  const { data: membership } = await supabase
-    .from("staff_app_my_membership")
-    .select("role")
-    .maybeSingle();
-
-  if (!membership) return <AccesoDenegado />;
+  // Membresía vía orgActual(): soporta que el usuario pertenezca a más de una
+  // productora (acompañamiento de aliadas, Fase 2). Antes era un .maybeSingle()
+  // que con dos membresías tiraba PGRST116 y dejaba el portal entero sin cargar.
+  const org = await orgActual();
+  if (!org) return <AccesoDenegado />;
 
   return (
     <div className="min-h-dvh bg-black text-[#e5e2e1]">

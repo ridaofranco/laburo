@@ -1,5 +1,5 @@
 import "server-only";
-import { createClient } from "@/lib/supabase/server";
+import { orgActual } from "@/lib/org";
 
 /**
  * QUIÉN PUEDE VER EL CONTACTO DE ALGUIEN DEL POOL.
@@ -49,12 +49,11 @@ export interface Permisos {
  */
 export async function permisos(): Promise<Permisos> {
   try {
-    const supabase = await createClient();
-    const { data } = await supabase
-      .from("staff_app_my_membership")
-      .select("role")
-      .maybeSingle();
-    const rol = ((data as { role?: string } | null)?.role ?? "").toLowerCase() || null;
+    // orgActual() ya es fail-closed y aguanta que el usuario sea miembro de más
+    // de una organización (antes esto era un .maybeSingle() que reventaba con
+    // PGRST116 en cuanto había dos membresías).
+    const org = await orgActual();
+    const rol = org?.rol ?? null;
     return { rol, verContacto: !!rol && ROLES_INTERNOS.has(rol) };
   } catch {
     return { rol: null, verContacto: false };

@@ -19,6 +19,7 @@
  */
 
 import { createClient } from "@/lib/supabase/server";
+import { exigirOrg } from "@/lib/org";
 
 export interface RateStaffInput {
   staffProfileId: string;
@@ -43,11 +44,9 @@ export async function rateStaff(
   const supabase = await createClient();
 
   // 1. Gate de membresía (T-5-17) — molde de notes-actions.ts.
-  const { data: membership } = await supabase
-    .from("staff_app_my_membership")
-    .select("role")
-    .maybeSingle();
-  if (!membership) throw new Error("forbidden");
+  // exigirOrg(): mismo gate, pero aguanta que el usuario sea miembro de más de
+  // una productora (el .maybeSingle() de antes tiraba PGRST116 con dos filas).
+  await exigirOrg();
 
   // 2. Validación de score server-side (T-5-18): entero 1..5, sin tocar el RPC.
   if (

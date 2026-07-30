@@ -25,7 +25,7 @@
 
 import { createElement } from "react";
 import { render } from "@react-email/components";
-import { createClient } from "@/lib/supabase/server";
+import { exigirOrg } from "@/lib/org";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { sendMail, type MailResult } from "@/lib/email/mailer";
 import { PagoListoEmail } from "@/components/emails/pago-listo-email";
@@ -52,19 +52,34 @@ interface RpcPagoListo {
 }
 
 export async function avisarPagoListo(offerId: string): Promise<PagoListoResult> {
-  // 1. Gate de membresía (molde de offer-actions/cv-actions).
-  const supabase = await createClient();
-  const { data: membership } = await supabase
-    .from("staff_app_my_membership")
-    .select("role")
-    .maybeSingle();
-  if (!membership) throw new Error("forbidden");
+  // 1. Gate de membresía (molde de offer-actions/cv-actions), ahora devolviendo
+  //    CUÁL es la organización del que hace clic.
+  const org = await exigirOrg();
 
   // 2. Estampar exactly-once + traer los datos del mail (service-role).
+  //
+  //    ⚠️ p_org NO es cosmético, es un arreglo de seguridad. Esta RPC corre con
+  //    service_role (se saltea la RLS) y antes filtraba la propuesta por la
+  //    organización escrita a mano adentro de la función. O sea que el gate de
+  //    arriba solo comprobaba "¿sos miembro de ALGUNA productora?", y con dos
+  //    productoras en la base eso alcanzaba para que un admin de la productora B
+  //    marcara como pagada una propuesta DE DER. Ahora la organización viaja
+  //    desde la membresía del que hizo clic.
   const admin = createServiceRoleClient();
-  const { data, error } = await admin.rpc("staff_app_marcar_pago_listo", {
+  let { data, error } = await admin.rpc("staff_app_marcar_pago_listo", {
     p_offer_id: offerId,
+    p_org: org.organizationId,
   });
+
+  // Retro-compatibilidad de despliegue: si la 0038 todavía no está aplicada, la
+  // RPC no conoce p_org y PostgREST contesta PGRST202. Se reintenta con la firma
+  // vieja, que resuelve sola a la organización por defecto. Este bloque se puede
+  // borrar una vez aplicada la 0038.
+  if (error && /p_org|schema cache|PGRST202/i.test(error.message)) {
+    ({ data, error } = await admin.rpc("staff_app_marcar_pago_listo", {
+      p_offer_id: offerId,
+    }));
+  }
 
   if (error) {
     // El caso más probable hoy: la 0032 no está aplicada y la RPC no existe.

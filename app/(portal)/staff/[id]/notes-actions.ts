@@ -18,6 +18,7 @@
  */
 
 import { createClient } from "@/lib/supabase/server";
+import { exigirOrg } from "@/lib/org";
 
 export interface SetCandidateNoteInput {
   staffProfileId: string;
@@ -41,11 +42,9 @@ export async function setCandidateNote(
   const supabase = await createClient();
 
   // 1. Gate de membresía (T-5-17) — molde de offer-actions.ts.
-  const { data: membership } = await supabase
-    .from("staff_app_my_membership")
-    .select("role")
-    .maybeSingle();
-  if (!membership) throw new Error("forbidden");
+  // exigirOrg(): mismo gate, pero aguanta que el usuario sea miembro de más de
+  // una productora (el .maybeSingle() de antes tiraba PGRST116 con dos filas).
+  await exigirOrg();
 
   // 2. Persistir vía RPC con el cliente autenticado. Nota vacía → null.
   const note = (input.note ?? "").trim() || null;

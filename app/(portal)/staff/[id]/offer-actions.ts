@@ -26,6 +26,7 @@
 import { createElement } from "react";
 import { render } from "@react-email/components";
 import { createClient } from "@/lib/supabase/server";
+import { exigirOrg } from "@/lib/org";
 import { sendMail, type MailResult } from "@/lib/email/mailer";
 import { OfferEmail } from "@/components/emails/offer-email";
 import { waLink } from "@/lib/wa";
@@ -85,11 +86,9 @@ export async function createAndSendOffer(
   const supabase = await createClient();
 
   // 1. Gate de membresía (T-3-09) — molde de cv-actions.ts.
-  const { data: membership } = await supabase
-    .from("staff_app_my_membership")
-    .select("role")
-    .maybeSingle();
-  if (!membership) throw new Error("forbidden");
+  // exigirOrg(): mismo gate, pero aguanta que el usuario sea miembro de más de
+  // una productora (el .maybeSingle() de antes tiraba PGRST116 con dos filas).
+  await exigirOrg();
 
   // 2. Crear oferta (+ gig quick si hace falta), atómico → raw token una vez.
   const { data, error } = await supabase.rpc("staff_app_create_offer", {

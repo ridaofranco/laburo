@@ -16,7 +16,7 @@
  * las storage policies del bucket compartido.
  */
 
-import { createClient } from "@/lib/supabase/server";
+import { exigirOrg } from "@/lib/org";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 
 const CV_BUCKET = "staff-cvs";
@@ -29,15 +29,10 @@ const SIGNED_URL_TTL_SECONDS = 60;
  * @throws Error("forbidden") si el caller no es miembro.
  */
 export async function signCv(objectKey: string): Promise<string | null> {
-  const supabase = await createClient();
-
   // 1. Gate de membresía (D-06): la vista devuelve 0 filas para no-miembros.
-  const { data: membership } = await supabase
-    .from("staff_app_my_membership")
-    .select("role")
-    .maybeSingle();
-
-  if (!membership) throw new Error("forbidden");
+  // exigirOrg(): mismo gate, pero aguanta que el usuario sea miembro de más de
+  // una productora (el .maybeSingle() de antes tiraba PGRST116 con dos filas).
+  await exigirOrg();
 
   // 1b. Validar la object key (CR-02): esta action es un endpoint invocable, un
   // miembro podria pasar `../<otro-bucket>/archivo` y firmar cualquier objeto de

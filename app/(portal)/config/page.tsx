@@ -18,6 +18,7 @@
 import Link from "next/link";
 import { Building2, Gauge, ShieldCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { orgActual } from "@/lib/org";
 import { initials } from "@/lib/avatar-color";
 
 function roleLabel(role: string | null): string {
@@ -38,16 +39,22 @@ function roleLabel(role: string | null): string {
 export default async function ConfigPage() {
   const supabase = await createClient();
 
-  const [{ data: userData }, { data: membership }, pool, gigs, offers] = await Promise.all([
+  const [{ data: userData }, org, pool, gigs, offers] = await Promise.all([
     supabase.auth.getUser(),
-    supabase.from("staff_app_my_membership").select("role").maybeSingle(),
+    orgActual(),
     supabase.from("staff_app_profiles").select("*", { count: "exact", head: true }),
     supabase.from("staff_app_gigs").select("*", { count: "exact", head: true }),
     supabase.from("staff_app_offers").select("*", { count: "exact", head: true }),
   ]);
 
   const email = userData?.user?.email ?? "—";
-  const rol = roleLabel(membership?.role ?? null);
+  const rol = roleLabel(org?.rol ?? null);
+  // El nombre de la productora sale de la base, no de un literal. Con una sola
+  // organización sigue diciendo SOMOS DER; con dos, cada uno ve la suya.
+  const orgNombre = org?.nombre?.trim() || "SOMOS DER";
+  // La marca grande: la última palabra del nombre ("SOMOS DER" → "DER"), que es
+  // exactamente lo que se veía antes escrito a mano.
+  const orgSigla = (orgNombre.split(/\s+/).pop() || orgNombre).toUpperCase();
   const nombreUsuario = email.split("@")[0] || "Vos";
   // "—" si la query falló (desconocido ≠ cero: no mostramos 0 engañoso).
   const poolCount = pool.error ? "—" : pool.count ?? 0;
@@ -86,7 +93,7 @@ export default async function ConfigPage() {
               {/* Logo/monograma */}
               <div className="w-32 h-32 shrink-0 border border-[#4c4546] grid place-items-center bg-[#131313]">
                 <span className="font-[family-name:var(--font-syne)] text-[40px] font-extrabold text-[#e5e2e1] tracking-tight">
-                  DER
+                  {orgSigla}
                 </span>
               </div>
 
@@ -97,7 +104,7 @@ export default async function ConfigPage() {
                     Nombre de la agencia
                   </p>
                   <p className="text-[18px] text-[#e5e2e1] border-b border-[#4c4546] pb-2">
-                    SOMOS DER
+                    {orgNombre}
                   </p>
                 </div>
                 <div>
@@ -124,7 +131,7 @@ export default async function ConfigPage() {
                       Mercado v1
                     </p>
                     <p className="text-[16px] text-[#e5e2e1] border-b border-[#4c4546] pb-2">
-                      Interno (SOMOS DER)
+                      Interno ({orgNombre})
                     </p>
                   </div>
                 </div>
