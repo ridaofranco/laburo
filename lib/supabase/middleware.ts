@@ -72,6 +72,10 @@ export async function updateSession(request: NextRequest) {
     "/panel-staff",
     "/onboarding-staff",
     "/editar-perfil-staff",
+    // Blog público (/blog y /blog/<slug>): contenido estático, sin sesión. Sin
+    // esta línea el middleware mandaría a /login a cualquiera que llegue desde
+    // Google — o sea, a todo el tráfico que el blog existe para captar.
+    "/blog",
   ];
   const isPublic = path === "/" || publicPrefixes.some((p) => path.startsWith(p));
 

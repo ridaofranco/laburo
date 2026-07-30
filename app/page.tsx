@@ -335,6 +335,13 @@ export default function LandingPage() {
             </span>
           </div>
           <div className="flex flex-wrap gap-x-10 gap-y-3">
+            {/* Entrada discreta al blog: no compite con los dos CTA de arriba. */}
+            <Link
+              href="/blog"
+              className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
+            >
+              Blog
+            </Link>
             <a
               href="https://somosder.ar"
               target="_blank"

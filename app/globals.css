@@ -131,3 +131,127 @@ body {
   .text-\[40px\]  { font-size: 26px !important; line-height: 1.15 !important; }
   .text-\[32px\]  { font-size: 21px !important; }
 }
+
+/* ────────────────────────────────────────────────────────────────────────────
+   BLOG — tipografía de lectura larga.
+   El cuerpo de cada post entra como HTML ya renderizado desde el .md, así que
+   no se le pueden poner clases de Tailwind a cada <h2>/<p>/<li>. Se estila acá,
+   una sola vez, con el mismo criterio que el `.prose-der` de somosder-web pero
+   con los tokens de LABURO (Syne en los títulos, off-white, acento #0047ff).
+   ──────────────────────────────────────────────────────────────────────────── */
+.prose-laburo {
+  color: #8a8a8a;
+  font-size: 17px;
+  line-height: 1.75;
+}
+.prose-laburo > :first-child {
+  margin-top: 0;
+}
+.prose-laburo h2 {
+  font-family: var(--font-syne), sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #f5f5f5;
+  font-size: 26px;
+  line-height: 1.15;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+}
+.prose-laburo h3 {
+  font-family: var(--font-syne), sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #f5f5f5;
+  font-size: 20px;
+  line-height: 1.3;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+}
+.prose-laburo p {
+  margin: 1.15rem 0;
+}
+.prose-laburo ul,
+.prose-laburo ol {
+  margin: 1.25rem 0;
+  padding-left: 1.35rem;
+}
+.prose-laburo li {
+  margin: 0.5rem 0;
+}
+.prose-laburo ul li {
+  list-style: disc;
+}
+.prose-laburo ol li {
+  list-style: decimal;
+}
+.prose-laburo li::marker {
+  color: #0047ff;
+}
+.prose-laburo strong {
+  color: #f5f5f5;
+  font-weight: 600;
+}
+.prose-laburo a {
+  color: #f5f5f5;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: #0047ff;
+}
+.prose-laburo a:hover {
+  color: #0047ff;
+}
+.prose-laburo blockquote {
+  border-left: 2px solid #0047ff;
+  padding-left: 1.25rem;
+  margin: 2rem 0;
+  color: #f5f5f5;
+}
+.prose-laburo blockquote p {
+  margin: 0.5rem 0;
+}
+.prose-laburo hr {
+  border: 0;
+  border-top: 1px solid #1a1a1a;
+  margin: 3rem 0;
+}
+.prose-laburo table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  font-size: 15px;
+}
+.prose-laburo th,
+.prose-laburo td {
+  border: 1px solid #1a1a1a;
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+.prose-laburo th {
+  color: #f5f5f5;
+  font-family: var(--font-geist), ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+}
+
+@media (min-width: 768px) {
+  .prose-laburo {
+    font-size: 18px;
+  }
+  .prose-laburo h2 {
+    font-size: 34px;
+  }
+  .prose-laburo h3 {
+    font-size: 23px;
+  }
+}
+
+/* El <details> de las FAQ: sacamos el triangulito nativo, el "+" lo ponemos
+   nosotros (mismo patrón que el Faq.astro de somosder-web). */
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-item summary::marker {
+  content: "";
+}
