@@ -140,16 +140,37 @@ const CIFRAS = [
 export default function LandingPage() {
   return (
     <div className="min-h-dvh bg-black text-[#f5f5f5] selection:bg-[#0047ff] selection:text-white">
-      {/* Header minimalista, mismo patron que la landing anterior */}
+      {/* Header minimalista, mismo patron que la landing anterior.
+       *
+       * EL BOTON PRIMARIO ES COMERCIAL, NO EL LOGIN (diagnostico de conversion
+       * 2026-07-30, L3): antes el unico boton del header era "Ingresar" -> /login,
+       * y /login usa shouldCreateUser:false (login-form.tsx), asi que el productor
+       * nuevo que ponia su mail ahi NUNCA recibia el link y se quedaba esperando.
+       * En movil ese boton era uno de los dos elementos que entran arriba del
+       * pliegue: el lugar mas caro de la pantalla para la accion menos rentable.
+       * Ahora el relleno se lo lleva "Necesito staff" -> #productores (el
+       * formulario que si guarda el lead) y "Ingresar" baja a link de texto. */}
       <header className="fixed top-0 inset-x-0 z-50 mix-blend-difference">
-        <div className={`${WRAP} py-8 flex items-center justify-between`}>
-          <span className="font-lockup text-[26px] text-white">LABURO.</span>
-          <Link
-            href="/login"
-            className="label-tech text-[11px] tracking-[0.2em] px-7 py-3 border border-white text-white hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
-          >
-            Ingresar
-          </Link>
+        <div className={`${WRAP} py-6 md:py-8 flex items-center justify-between gap-4`}>
+          {/* 18px en movil: con "Necesito staff" + "Ingresar" al lado, el
+           * wordmark a 26px desbordaba el ancho de 390px. */}
+          <span className="font-lockup text-[18px] md:text-[26px] text-white">
+            LABURO.
+          </span>
+          <div className="flex items-center gap-3 md:gap-8 shrink-0">
+            <Link
+              href="/login"
+              className="label-tech text-[10px] md:text-[11px] tracking-[0.1em] md:tracking-[0.2em] text-white/70 hover:text-[#0047ff] transition-colors duration-300"
+            >
+              Ingresar
+            </Link>
+            <a
+              href="#productores"
+              className="label-tech text-[10px] md:text-[11px] tracking-[0.08em] md:tracking-[0.2em] whitespace-nowrap bg-white text-black px-4 md:px-7 py-3 hover:bg-[#0047ff] hover:text-white transition-colors duration-300"
+            >
+              Necesito staff
+            </a>
+          </div>
         </div>
       </header>
 
