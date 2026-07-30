@@ -25,6 +25,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Reveal } from "./landing/reveal";
 import { LeadForm } from "./landing/lead-form";
+import { WhatsAppGlyph } from "@/components/icons/whatsapp-glyph";
+import { waLink } from "@/lib/wa";
 
 const DESCRIPCION =
   "Staff para eventos con perfil y CV a la vista: más de 680 mozos, barras, seguridad, sonido y producción. Contanos qué necesita tu evento, sin planillas ni cadenas de WhatsApp. Y si trabajás en eventos, sumate al pool.";
@@ -67,6 +69,43 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
     <span className="label-tech text-[11px] tracking-[0.3em] text-[#0047ff] block">
       {children}
     </span>
+  );
+}
+
+/**
+ * El WhatsApp de SOMOS DER (el mismo de la web, de los mails y de la ruta /o).
+ * La landing no tenía NINGÚN link de WhatsApp: el productor apurado que no
+ * quiere llenar un formulario no tenía por dónde entrar.
+ */
+const WA_NUMERO = "5491171540675";
+const WA_MENSAJE =
+  "Hola, los encontré por LABURO. Necesito staff para un evento y quería consultarles.";
+const WA_HREF = waLink(WA_NUMERO, WA_MENSAJE);
+
+/**
+ * Link a WhatsApp, discreto a propósito: el CTA principal sigue siendo el
+ * formulario (deja el lead guardado y trazable). Esto es la salida para el que
+ * prefiere escribir. Glifo OFICIAL de WhatsApp (regla dura de marca).
+ */
+function WhatsAppLink({
+  children,
+  className = "",
+  size = 15,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  size?: number;
+}) {
+  return (
+    <a
+      href={WA_HREF}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`inline-flex items-center gap-2 label-tech transition-colors duration-300 ${className}`}
+    >
+      <WhatsAppGlyph size={size} className="shrink-0" />
+      {children}
+    </a>
   );
 }
 
@@ -314,6 +353,17 @@ export default function LandingPage() {
                   Sin registro, sin llamadas en frío. Dejás tu consulta y te
                   escribimos por mail para coordinar.
                 </p>
+                <div className="mt-8 pt-8 border-t border-[#1a1a1a] max-w-[420px]">
+                  <p className="text-[15px] leading-[1.7] text-[#8a8a8a]">
+                    ¿Es para ya? Escribinos directo:
+                  </p>
+                  <WhatsAppLink
+                    size={17}
+                    className="mt-3 text-[13px] tracking-[0.14em] text-[#25D366] hover:opacity-70"
+                  >
+                    11 7154-0675
+                  </WhatsAppLink>
+                </div>
               </Reveal>
               <Reveal delay={0.15} className="md:col-span-7">
                 <LeadForm />
@@ -334,7 +384,10 @@ export default function LandingPage() {
               © 2026 LABURO · SOMOS DER. Todos los derechos reservados.
             </span>
           </div>
-          <div className="flex flex-wrap gap-x-10 gap-y-3">
+          <div className="flex flex-wrap items-center gap-x-10 gap-y-3">
+            <WhatsAppLink className="text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#25D366]">
+              WhatsApp
+            </WhatsAppLink>
             {/* Entrada discreta al blog: no compite con los dos CTA de arriba. */}
             <Link
               href="/blog"
