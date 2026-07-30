@@ -115,6 +115,12 @@ SECURITY DEFINER
 SET search_path = staff_app, public, pg_temp
 AS $$
 DECLARE
+  -- ⚠️ DEUDA CONOCIDA (anotada 30/7): la org va escrita a mano, que es justo el
+  -- patrón que las migraciones 0035-0038 (rama desharcodear-org) sacaron de 36
+  -- funciones. Se deja así porque HOY es correcto: estos leads entran por la
+  -- landing pública de LABURO, que es la de SOMOS DER. Pero al aplicar las
+  -- 0035-0038, ESTA FUNCIÓN Y staff_app_marcar_lead_estado TIENEN QUE PASAR A
+  -- staff_app.resolve_org(), o el marketplace multi-productora nace con la fuga.
   v_org uuid := 'aa29aa2f-4d34-4e53-b62c-7397e8a4d123';   -- org fija SOMOS DER, nunca de input
   v_id  uuid;
 BEGIN
@@ -164,6 +170,7 @@ SECURITY DEFINER
 SET search_path = staff_app, public, pg_temp
 AS $$
 DECLARE
+  -- ⚠️ Misma deuda que arriba: pasar a staff_app.resolve_org() al aplicar 0035-0038.
   v_org uuid := 'aa29aa2f-4d34-4e53-b62c-7397e8a4d123';
 BEGIN
   IF NOT staff_app.is_org_writer(v_org) THEN
