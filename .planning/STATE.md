@@ -95,6 +95,12 @@ Recent decisions affecting current work:
 - **Ferozo SMTP deliverability untested**: no mail-tester/Postmaster data yet; Phase 5 SPF/DKIM verification is the first real test, not an assumption.
 - **Web-form PII/consent gap (Ley 25.326)**: ✅ RESOLVED in 01-03 — consent notice now names SOMOS DER (DER) as data controller, states access/rectify/delete rights, and gives rrhh@somosder.com.ar; deployed to production.
 
+## Quick Tasks Completed
+
+| Fecha | Slug | Qué resolvió | Estado |
+|-------|------|--------------|--------|
+| 2026-07-31 | [cron-unico-diario](quick/20260731-cron-unico-diario/SUMMARY.md) | `vercel.json` agendaba 1 de las 4 rutas de cron, así que `bienvenida`, `quien-ficho` y `recordatorio-perfil` no las llamaba nadie y sus mails no salían nunca. Se agregó `/api/cron/diario`, que corre las 4 en secuencia con presupuesto de tiempo y aislamiento de fallas. El plan Hobby topea en 2 crons, por eso un orquestador y no cuatro entradas. | complete ✓ |
+
 ## Deferred Items
 
 Items acknowledged and carried forward from previous milestone close:
