@@ -7,8 +7,14 @@
  * aplique, la RPC no existe y esta acción devuelve {ok:false} con un mensaje
  * honesto: el botón avisa que falta la migración, no rompe la pantalla.
  *
+ * ⚠️ ES UNA PANTALLA DE PLATAFORMA, NO DE PRODUCTORA (31/7). Los leads son las
+ * consultas comerciales que entran por la landing pública de LABURO: son de
+ * SOMOS DER, la dueña del producto, no de una productora cliente. Por eso el
+ * gate es exigirPlataforma() y no exigirOrg(). Sacar el ítem del menú es
+ * cosmético; ESTE es el gate que cuenta.
+ *
  * Molde de pago-actions.ts:
- *  1. Gate de membresía con exigirOrg() (lib/org.ts).
+ *  1. Gate de plataforma con exigirPlataforma() (lib/org.ts).
  *  2. RPC con el MISMO cliente autenticado (no service-role): la 0039 la grantea
  *     a `authenticated` y adentro vuelve a chequear is_org_writer con el JWT
  *     real. O sea, el permiso lo decide Postgres, no esta función.
@@ -22,7 +28,7 @@
  */
 
 import { revalidatePath } from "next/cache";
-import { exigirOrg } from "@/lib/org";
+import { exigirPlataforma } from "@/lib/org";
 import { createClient } from "@/lib/supabase/server";
 
 export type LeadEstado = "nuevo" | "contactado" | "descartado";
@@ -36,7 +42,9 @@ export async function marcarLeadEstado(
   leadId: string,
   estado: LeadEstado,
 ): Promise<LeadEstadoResult> {
-  await exigirOrg(); // tira "forbidden" si el caller no es miembro de ninguna org
+  // Tira "forbidden" si el caller no es miembro de ninguna org, y también si su
+  // org no es la dueña del producto.
+  await exigirPlataforma();
   const supabase = await createClient();
 
   const { data, error } = await supabase.rpc("staff_app_marcar_lead_estado", {

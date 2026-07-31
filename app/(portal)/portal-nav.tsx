@@ -32,13 +32,16 @@ type Item = {
   icon: React.ComponentType<{ size?: number; className?: string }>;
   href?: string;
   match?: string[]; // rutas que marcan este ítem como activo
+  /** Pantalla de la plataforma (SOMOS DER), no del producto de una productora. */
+  soloPlataforma?: boolean;
 };
 
 const MAIN: Item[] = [
   { label: "Dashboard", icon: LayoutGrid, href: "/dashboard", match: ["/dashboard"] },
   // Leads arriba de todo lo operativo: es la plata que entra por la landing y no
-  // sirve de nada guardarla si nadie la mira.
-  { label: "Leads", icon: Inbox, href: "/leads", match: ["/leads"] },
+  // sirve de nada guardarla si nadie la mira. Es de PLATAFORMA: solo lo ve la
+  // org dueña del producto (se filtra abajo, en el componente).
+  { label: "Leads", icon: Inbox, href: "/leads", match: ["/leads"], soloPlataforma: true },
   { label: "Buscar", icon: Search, href: "/buscar", match: ["/buscar", "/staff"] },
   { label: "Eventos", icon: CalendarDays, href: "/tablero", match: ["/tablero"] },
   { label: "Favoritos", icon: Heart, href: "/favoritos", match: ["/favoritos"] },
@@ -48,16 +51,33 @@ const MAIN: Item[] = [
   { label: "Notificaciones", icon: Bell, href: "/notificaciones", match: ["/notificaciones"] },
 ];
 
-// En el bottom-nav mobile mostramos solo los primeros (los demás quedan en el sidebar desktop).
-const MOBILE = MAIN.slice(0, 5);
-
 function isActive(item: Item, pathname: string) {
   return (item.match ?? []).some((m) => pathname === m || pathname.startsWith(m + "/"));
 }
 
-export function PortalNav() {
+export function PortalNav({
+  esPlataforma = false,
+  orgNombre = null,
+}: {
+  esPlataforma?: boolean;
+  orgNombre?: string | null;
+}) {
   const pathname = usePathname();
   const router = useRouter();
+
+  // Los ítems que ve el que mira. Una productora cliente no ve las pantallas de
+  // plataforma. Esto es cosmético: el gate real está en la página y en la
+  // server action de cada una.
+  const items = esPlataforma ? MAIN : MAIN.filter((i) => !i.soloPlataforma);
+  // El bottom-nav mobile son los primeros cinco. Se corta acá adentro, sobre la
+  // lista YA filtrada: si se calculara a nivel de módulo (como estaba), el
+  // mobile quedaría desalineado con el sidebar y le ofrecería Leads a alguien
+  // que no lo tiene en el sidebar.
+  const mobile = items.slice(0, 5);
+
+  // De quién es este panel. Antes había acá una etiqueta genérica en inglés,
+  // resto del mockup de Stitch: la barra lateral no decía de quién era el panel.
+  const bajada = orgNombre?.trim() || "Panel de productora";
 
   const soon = (label: string) => toast(`${label}: próximamente`);
 
@@ -74,11 +94,11 @@ export function PortalNav() {
       <nav className="hidden md:flex flex-col h-screen py-8 fixed left-0 top-0 w-[280px] bg-[#0e0e0e]/90 backdrop-blur-2xl border-r border-[#1c1b1b] shadow-2xl z-40">
         <div className="px-8 mb-16">
           <LaburoWordmark className="h-[28px] w-auto" />
-          <p className="label-tech text-[12px] text-[#cfc4c5] mt-2">Production Portal</p>
+          <p className="label-tech text-[12px] text-[#cfc4c5] mt-2">{bajada}</p>
         </div>
 
         <ul className="flex flex-col gap-2 flex-1 w-full">
-          {MAIN.map((item) => {
+          {items.map((item) => {
             const active = isActive(item, pathname);
             const cls = active
               ? "flex items-center gap-4 px-8 py-4 bg-[#1c1b1b] border-l-2 border-[#e5e2e1] text-[#e5e2e1] translate-x-1 transition-all duration-200"
@@ -129,7 +149,7 @@ export function PortalNav() {
       {/* Bottom nav mobile */}
       <nav className="md:hidden fixed bottom-4 left-4 right-4 bg-[#20201f]/90 backdrop-blur-xl border border-[#1c1b1b] shadow-2xl z-50 overflow-hidden">
         <ul className="flex justify-around items-center h-[72px] px-2">
-          {MOBILE.map((item) => {
+          {mobile.map((item) => {
             const active = isActive(item, pathname);
             const cls = active
               ? "flex flex-col items-center justify-center bg-[#e5e2e1] text-black w-[90%] h-[90%] scale-95 duration-200"

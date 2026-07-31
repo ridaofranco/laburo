@@ -28,6 +28,13 @@ import { createClient } from "@/lib/supabase/server";
  * que sigue existiendo y funcionando. Así el orden de aplicación no importa y
  * nada se cae en el medio. El fallback se puede borrar una vez aplicada la 0035
  * (está anotado en PLAN-DESHARCODEAR-ORG.md).
+ *
+ * ── LO MISMO VALE PARA LA 0044 (es_plataforma) ──────────────────────────────
+ * Si el deploy llega antes que la migración 0044, la columna no existe, el
+ * select nuevo falla y se cae al mismo fallback, que devuelve `esPlataforma:
+ * false`. O sea: el portal sigue cargando y NADIE ve las pantallas de
+ * plataforma. El error cae del lado seguro (fail closed). Cuando la 0044
+ * aterrice, SOMOS DER las recupera sola, sin deploy.
  */
 
 export interface OrgActual {
@@ -39,6 +46,13 @@ export interface OrgActual {
   nombre: string | null;
   /** Slug público, para URLs por productora. */
   slug: string | null;
+  /**
+   * ¿Esta organización es la DUEÑA del producto (migración 0044)?
+   * Decide si el que mira ve las pantallas de plataforma, como /leads. Es una
+   * decisión de producto, no un rol: adentro de una org los roles siguen siendo
+   * owner y writer.
+   */
+  esPlataforma: boolean;
 }
 
 interface FilaMyOrgs {
@@ -46,6 +60,7 @@ interface FilaMyOrgs {
   role: string | null;
   org_name: string | null;
   org_slug: string | null;
+  es_plataforma: boolean | null;
 }
 
 /**
@@ -63,7 +78,7 @@ export async function orgActual(): Promise<OrgActual | null> {
     // primero. limit(1) es lo que evita el PGRST116 de maybeSingle().
     const { data, error } = await supabase
       .from("staff_app_my_orgs")
-      .select("organization_id, role, org_name, org_slug")
+      .select("organization_id, role, org_name, org_slug, es_plataforma")
       .order("created_at", { ascending: true })
       .limit(1)
       .maybeSingle();
@@ -76,10 +91,11 @@ export async function orgActual(): Promise<OrgActual | null> {
         rol: (fila.role ?? "").toLowerCase() || null,
         nombre: fila.org_name ?? null,
         slug: fila.org_slug ?? null,
+        esPlataforma: fila.es_plataforma === true,
       };
     }
 
-    // Fallback: la 0035 todavía no está aplicada.
+    // Fallback: la 0035 (o la 0044) todavía no está aplicada.
     const { data: vieja } = await supabase
       .from("staff_app_my_membership")
       .select("organization_id, role")
@@ -92,6 +108,9 @@ export async function orgActual(): Promise<OrgActual | null> {
       rol: (fila.role ?? "").toLowerCase() || null,
       nombre: null,
       slug: null,
+      // Fail closed: sin la 0044 no hay forma de saber quién es la plataforma,
+      // así que nadie lo es y nadie ve sus pantallas.
+      esPlataforma: false,
     };
   } catch {
     return null;
@@ -106,5 +125,20 @@ export async function orgActual(): Promise<OrgActual | null> {
 export async function exigirOrg(): Promise<OrgActual> {
   const org = await orgActual();
   if (!org) throw new Error("forbidden");
+  return org;
+}
+
+/**
+ * Gate de PLATAFORMA para server actions: además de ser miembro de una org, esa
+ * org tiene que ser la dueña del producto (migración 0044).
+ *
+ * Lo usan las acciones de las pantallas de plataforma, hoy /leads. Esconder el
+ * ítem del menú NO es seguridad: el gate real es este, del lado del servidor.
+ * Mismo contrato que exigirOrg (devuelve la org o tira "forbidden"), así los
+ * consumidores no cambian de forma.
+ */
+export async function exigirPlataforma(): Promise<OrgActual> {
+  const org = await exigirOrg();
+  if (!org.esPlataforma) throw new Error("forbidden");
   return org;
 }

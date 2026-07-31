@@ -12,6 +12,11 @@
  * Server component, RLS-scopeado al org del caller (la vista
  * staff_app_producer_leads es security_invoker).
  *
+ * ⚠️ SOLO PARA LA ORG DUEÑA DEL PRODUCTO (31/7, migración 0044). Estos leads son
+ * de la plataforma, no de una productora cliente: una productora que entra al
+ * portal no tiene por qué ver las consultas comerciales de LABURO. Si no es la
+ * plataforma, 404.
+ *
  * ⚠️ TOLERA QUE FALTE LA MIGRACIÓN 0039: mientras no esté aplicada, la vista no
  * existe y la query devuelve error. En vez de un 500, la pantalla lo dice con
  * todas las letras y explica qué hacer. Los leads mientras tanto siguen
@@ -19,7 +24,9 @@
  */
 
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { orgActual } from "@/lib/org";
 import { fmtFechaHora } from "@/lib/dates";
 import { waLink } from "@/lib/wa";
 import { WhatsAppGlyph } from "@/components/icons/whatsapp-glyph";
@@ -50,6 +57,14 @@ function esEstado(v: string | null): LeadEstado {
 }
 
 export default async function LeadsPage() {
+  // PANTALLA DE PLATAFORMA: solo la org dueña del producto (migración 0044).
+  // Se devuelve 404 y no un cartel de "no tenés permiso" porque el punto es que
+  // esta pantalla no forme parte del producto que ve una productora cliente: un
+  // cartel de permiso le confirmaría que la ruta existe. El gate que de verdad
+  // protege la mutación está en lead-actions.ts (exigirPlataforma).
+  const org = await orgActual();
+  if (!org?.esPlataforma) notFound();
+
   const supabase = await createClient();
 
   const { data, error } = await supabase

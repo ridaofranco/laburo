@@ -30,7 +30,11 @@ export default async function PortalLayout({
 
   return (
     <div className="min-h-dvh bg-black text-[#e5e2e1]">
-      <PortalNav />
+      {/* El nav necesita saber DE QUIÉN es este panel (para decirlo en la barra
+          lateral) y si el que mira es la plataforma (para no ofrecerle pantallas
+          que no son de su producto). Filtrar el menú es cosmético: el gate de
+          verdad vive en la página y en la server action. */}
+      <PortalNav esPlataforma={org.esPlataforma} orgNombre={org.nombre} />
       <main className="flex-1 flex flex-col min-h-dvh w-full md:pl-[280px] pb-32 md:pb-0">
         {children}
       </main>
