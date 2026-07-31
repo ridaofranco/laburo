@@ -90,6 +90,8 @@ La demanda de staff de un evento es un pico: necesitás mucha gente unas pocas h
 
 Lo que hace que ese modelo funcione no es la velocidad para conseguir gente. Es **tener a quién volver a llamar**: perfiles que ya conocés, con experiencia verificable, y una confirmación por escrito de que cada persona va a estar. Es exactamente el problema que resuelve LABURO.
 
+Este reparto de roles no sale de un manual. Es cómo arma el staff [SOMOS DER](https://somosder.ar), la productora que construyó LABURO y que la usa para sus propios eventos. La familia de accesos y acreditación, que es la que más suele quedarse corta, la resolvemos con [PASE](https://pase.somosder.ar).
+
 ## Armá el staff de tu próximo evento
 
 En LABURO hay más de 680 postulantes con perfil y CV cargados, filtrables por rol, zona y disponibilidad. Contanos fecha, lugar y qué roles necesitás en un formulario de dos minutos, sin crear ninguna cuenta: [pedí tu staff](/).

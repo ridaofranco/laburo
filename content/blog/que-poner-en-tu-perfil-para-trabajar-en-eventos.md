@@ -88,6 +88,8 @@ Cargá bien el email y el teléfono o WhatsApp. Y revisá el correo no deseado l
 4. **No cargar años ni cantidad de eventos.** Tu tarjeta arranca con la señal más débil.
 5. **No contestar.** Rechazar una propuesta no te penaliza. No contestar es lo que hace que dejen de llegarte.
 
+Quien lee tu perfil del otro lado es una productora como [SOMOS DER](https://somosder.ar), que busca por rol, zona y disponibilidad. Por eso esos tres campos pesan más que cualquier texto de presentación.
+
 ## Cargá tu perfil
 
 Es gratis y toma unos minutos: subís tu CV, elegís los puestos a los que aplicás, marcás tu zona y tu disponibilidad, y quedás en el pool. Cuando haya un evento que necesite tu rol en tu zona, te llega una propuesta por mail con el rol, las fechas, los horarios y el pago antes de que aceptes: [sumate a LABURO](/sumate).

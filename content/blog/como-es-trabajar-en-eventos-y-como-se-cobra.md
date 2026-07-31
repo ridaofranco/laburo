@@ -83,6 +83,8 @@ Preferimos decirlo antes:
 
 Lo que sí es cierto, y es lo único que realmente controlás: **a la gente que llega a horario, hace bien su trabajo y avisa cuando no puede, se la vuelve a llamar.** En un rubro donde la mayoría de los problemas son de gente que no aparece, ser confiable es la mejor carta que tenés.
 
+Del otro lado de estas contrataciones hay una productora concreta: [SOMOS DER](https://somosder.ar), que produce eventos en Buenos Aires y arma su staff con LABURO. Los plazos y las formas de pago que aparecen en esta nota son los que maneja de verdad, no un promedio del mercado.
+
 ## Sumate al pool
 
 Cargá tu perfil, subí tu CV, elegí tus oficios y tu disponibilidad. Es gratis y toma unos minutos: [sumate a LABURO](/sumate).

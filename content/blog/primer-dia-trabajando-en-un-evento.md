@@ -107,6 +107,8 @@ Pero lo que sí controlás es todo lo que hace que te vuelvan a llamar, y es má
 
 En un rubro donde la mayoría de los problemas son de gente que no aparece, ser confiable es la mejor carta que tenés.
 
+Todo esto pasa en cualquier productora seria. Lo escribimos desde [SOMOS DER](https://somosder.ar), que produce eventos y contrata staff eventual todas las semanas, así que es lo que vas a encontrar del otro lado el día que te toque.
+
 ## Sumate al pool
 
 Cargá tu perfil, subí tu CV, elegí tus puestos y tu disponibilidad. Es gratis y toma unos minutos: [sumate a LABURO](/sumate).

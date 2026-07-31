@@ -95,6 +95,8 @@ Esa es la diferencia entre liquidar con datos y liquidar de memoria.
 - ¿Chequeé que nadie esté confirmado en dos eventos que se pisan?
 - ¿Tengo cómo registrar las horas reales?
 
+Este esquema de turnos es el que arma [SOMOS DER](https://somosder.ar) para eventos de varios días. Si el evento tiene acreditación, el pico de personal se concentra en la apertura de puertas, y ahí conviene medirlo con datos reales de ingreso: es lo que muestra [PASE](https://pase.somosder.ar).
+
 ## Armá los turnos de tu próximo evento
 
 En LABURO declarás la dotación por rol, mandás propuestas con horario y pago adentro, y ves en un tablero cuántos puestos están cubiertos y cuántos faltan, evento por evento. Contanos fecha, lugar y roles en un formulario de dos minutos, sin crear cuenta: [pedí tu staff](/).

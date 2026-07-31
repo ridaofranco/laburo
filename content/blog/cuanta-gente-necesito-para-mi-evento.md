@@ -102,6 +102,8 @@ Esa distinción es la parte que más plata ahorra. Una propuesta **enviada** no 
 - ¿Tengo la dotación escrita por rol y cantidad?
 - ¿Sé cuántos de esos lugares están confirmados de verdad?
 
+Los números de arriba son los que usa [SOMOS DER](https://somosder.ar) al presupuestar, después de 40 eventos y más de 150.000 asistentes. Si el cuello de botella te da en la puerta, antes de sumar gente conviene mirar el sistema de acreditación: con [PASE](https://pase.somosder.ar) una fila que pedía cuatro personas se resuelve con dos.
+
 ## Armá la dotación de tu próximo evento
 
 En LABURO declarás cuántas personas necesitás por rol, buscás sobre más de 680 perfiles con experiencia y CV cargados, filtrás por zona y disponibilidad, y ves en un tablero cuántos lugares están cubiertos y cuántos faltan. Contanos fecha, lugar y roles en un formulario de dos minutos, sin crear ninguna cuenta: [pedí tu staff](/).

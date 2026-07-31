@@ -82,6 +82,8 @@ Eso sirve para dos cosas: para que la liquidación no se arme de memoria, y para
 - ¿La convocatoria es antes de la hora en que realmente los necesito?
 - ¿La gente sabe a quién y cómo avisar si no llega?
 
+El plan B de arriba es el que usa [SOMOS DER](https://somosder.ar) cuando pasa, que pasa. La diferencia entre un reemplazo en dos horas y un puesto vacío toda la noche casi nunca es la suerte: es tener a quién llamar antes de necesitarlo.
+
 ## Cubrí tu evento con la cobertura a la vista
 
 En LABURO declarás la dotación por rol, mandás propuestas con pago, fechas y horarios que se aceptan con un click, y ves en un tablero cuántos lugares están cubiertos y cuántos faltan, con más de 680 perfiles para cubrir el hueco. Contanos qué necesita tu evento en un formulario de dos minutos, sin crear cuenta: [pedí tu staff](/).

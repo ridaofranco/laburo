@@ -81,6 +81,8 @@ Nadie miente. Simplemente **no hay una sola versión de la verdad**, y el día d
 - ¿Tengo reemplazos identificados para los roles críticos?
 - ¿Cómo voy a registrar quién estuvo y cuánto?
 
+Este filtro es el que aplica [SOMOS DER](https://somosder.ar) antes de confirmar a alguien. Sirve igual si contratás por tu cuenta: lo que cambia el resultado no es el currículum, es tener referencias verificables y una confirmación por escrito.
+
 ## Contratá staff con las condiciones a la vista
 
 En LABURO buscás sobre más de 680 perfiles reales con experiencia y CV cargados, filtrás por rol, zona y disponibilidad, y cada persona recibe una oferta con pago, fechas y horarios que acepta con un click. Contanos qué necesita tu evento en un formulario de dos minutos, sin crear cuenta: [pedí tu staff](/).

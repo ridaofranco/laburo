@@ -88,6 +88,8 @@ Una sola, y no la negocies: **el monto tiene que estar escrito antes de que acep
 
 En LABURO la propuesta llega por mail con un link propio e incluye el rol, la fecha, el lugar, los horarios y el pago. Aceptás o rechazás con eso a la vista, y el link vence, así que conviene contestar rápido. El pago se coordina con SOMOS DER dentro de los 10 días hábiles de realizado el trabajo.
 
+La demanda que se describe acá es la que ve [SOMOS DER](https://somosder.ar) al armar el equipo de cada evento. Los puestos que mejor se pagan son casi siempre los que resuelven un problema puntual bajo presión: la puerta, el sonido y la coordinación.
+
 ## Sumate al pool
 
 Cargá tu perfil, subí tu CV, elegí de la lista los puestos que sabés hacer y marcá tu zona y tu disponibilidad. Es gratis y toma unos minutos: [sumate a LABURO](/sumate).

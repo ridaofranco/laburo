@@ -88,6 +88,8 @@ Estas tres no te las contesta ningún software, y conviene tenerlas resueltas an
 
 Si de alguien no podés abrir esa carpeta, esa persona no debería estar en tu grilla.
 
+Esta es la carpeta que arma [SOMOS DER](https://somosder.ar) antes de cada evento. No es un consejo teórico: es lo que hay que poder mostrar si aparece una inspección o si alguien se lastima trabajando.
+
 ## Contratá con la carpeta armada de entrada
 
 En LABURO cada persona del pool se registró con sus datos, su documento y su consentimiento, y cada confirmación queda escrita con rol, horario, monto y plazo de pago. Contanos qué necesita tu evento en un formulario de dos minutos, sin crear cuenta: [pedí tu staff](/).
