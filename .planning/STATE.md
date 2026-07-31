@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-07-13, after architecture revision)
 Phase: 2 (Find Staff) — EXECUTING
 Plan: 4 of 4
 Status: Phase complete — ready for verification
-Last activity: 2026-07-15
+Last activity: 2026-07-31 - Quick task 260731-pe7: marketplace movimiento 2, la puerta de entrada del proveedor por link mágico (código completo, migración 0042 sin aplicar)
 
 Progress (Phase 2 plans): [████████··] 3/4
 
@@ -100,6 +100,7 @@ Recent decisions affecting current work:
 | Fecha | Slug | Qué resolvió | Estado |
 |-------|------|--------------|--------|
 | 2026-07-31 | [cron-unico-diario](quick/20260731-cron-unico-diario/SUMMARY.md) | `vercel.json` agendaba 1 de las 4 rutas de cron, así que `bienvenida`, `quien-ficho` y `recordatorio-perfil` no las llamaba nadie y sus mails no salían nunca. Se agregó `/api/cron/diario`, que corre las 4 en secuencia con presupuesto de tiempo y aislamiento de fallas. El plan Hobby topea en 2 crons, por eso un orquestador y no cuatro entradas. | complete ✓ |
+| 2026-07-31 | [260731-pe7-movimiento-2-del-marketplace-puerta-de-e](quick/260731-pe7-movimiento-2-del-marketplace-puerta-de-e/260731-pe7-SUMMARY.md) | Marketplace de 3 lados, movimiento 2: la puerta de entrada del proveedor. El movimiento 1 dejó el perfil creado pero al proveedor sin forma de entrar. Migración `0042` (token hasheado en `marketplace_profiles` + 6 RPCs `SECURITY DEFINER`) y la ruta pública `/acceso-proveedor/[token]`: entra sin cuenta, completa su perfil, carga sus servicios con zonas y se publica solo. `is_verified`, `slug` y `rating` quedan fuera de su alcance a propósito. Commits `b8419e9`, `749b8dc`, `b5cc8bd`. **La migración quedó escrita y SIN aplicar: la aplica Franco.** | código completo, falta aplicar la migración |
 
 ## Deferred Items
 
