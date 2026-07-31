@@ -20,6 +20,7 @@ import {
   TrendingUp,
   Wallet,
   Bell,
+  Inbox,
   Settings,
   LogOut,
 } from "lucide-react";
@@ -34,6 +35,9 @@ type Item = {
 
 const MAIN: Item[] = [
   { label: "Dashboard", icon: LayoutGrid, href: "/dashboard", match: ["/dashboard"] },
+  // Leads arriba de todo lo operativo: es la plata que entra por la landing y no
+  // sirve de nada guardarla si nadie la mira.
+  { label: "Leads", icon: Inbox, href: "/leads", match: ["/leads"] },
   { label: "Buscar", icon: Search, href: "/buscar", match: ["/buscar", "/staff"] },
   { label: "Eventos", icon: CalendarDays, href: "/tablero", match: ["/tablero"] },
   { label: "Favoritos", icon: Heart, href: "/favoritos", match: ["/favoritos"] },

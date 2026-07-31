@@ -13,7 +13,7 @@ faqs:
   - q: "¿Qué tengo que llevar a mi primer día trabajando en un evento?"
     a: "Tu documento, el celular cargado (el fichaje de entrada y salida se hace desde el teléfono) y la propuesta a mano para tener el horario y el lugar. Si hay algo particular —vestimenta, herramientas, calzado específico—, va escrito en el campo de condiciones de la propuesta que aceptaste: leelo antes de salir. Y si el evento termina de madrugada, resolvé la vuelta antes de ir."
   - q: "¿Cómo funciona el fichaje de entrada y salida en un evento?"
-    a: "En los eventos donde está habilitado, entrás a tu panel de staff desde el celular y registrás tu entrada al llegar y tu salida al terminar. En ese momento se toma tu ubicación para dejar constancia; si no le das permiso de ubicación al navegador, el fichaje se registra igual. Tus horarios quedan guardados y después se ven en tu historial, con las horas fichadas de cada evento."
+    a: "En los eventos donde está habilitado, entrás a tu panel de staff desde el celular y registrás tu entrada al llegar y tu salida al terminar. Para que quede registrado necesitás darle permiso de ubicación al navegador: sin ubicación el fichaje no se puede completar. Si estás lejos del predio igual podés fichar, pero queda registrada la distancia. Tus horarios quedan guardados y después se ven en tu historial, con las horas fichadas de cada evento."
   - q: "¿A qué hora tengo que llegar a trabajar en un evento?"
     a: "Al horario de convocatoria que dice tu propuesta, que casi nunca es el horario en que abre el evento: se convoca antes justamente para que todo esté listo cuando llega el público. Llegar al horario de convocatoria, no unos minutos después, es lo que más pesa en si te vuelven a llamar."
   - q: "¿Cuándo cobro mi primer trabajo en un evento?"
@@ -70,7 +70,7 @@ Si es un lugar que no conocés, miralo la noche anterior. Los predios de eventos
 
 En los eventos donde está habilitado, tu horario no depende de la memoria de nadie: lo registrás vos.
 
-Funciona así: entrás a tu panel de staff desde el celular, y **al llegar tocás entrada**. En ese momento se toma tu ubicación para dejar constancia de que estabas ahí. Si no le das permiso de ubicación al navegador, **el fichaje se registra igual**.
+Funciona así: entrás a tu panel de staff desde el celular, y **al llegar tocás entrada**. En ese momento se toma tu ubicación para dejar constancia de que estabas ahí, así que **necesitás darle permiso de ubicación al navegador: sin eso el fichaje no se puede completar**. Si estás lejos del predio igual podés fichar, pero queda registrada la distancia.
 
 Al terminar, **tocás salida**. Eso cierra tu jornada y deja tu horario real cargado.
 

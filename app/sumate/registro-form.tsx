@@ -17,6 +17,7 @@ import {
   WORK_REGIONS, LEGAL_OPTS, AVISO_OPTS, YEARS_OPTS,
   labelCls, inputCls, selectCls, Section, Check, OficiosPicker, useCvAutofill,
 } from "@/components/staff-form-shared";
+import { PAGO_TEXTO } from "@/lib/pago";
 import { registerApplicant } from "./actions";
 
 const SYNE = "font-[family-name:var(--font-syne)]";
@@ -147,6 +148,27 @@ export function RegistroForm() {
           Cargá tus datos y sumate al pool de staff de SOMOS DER. Subí tu CV y la
           IA completa lo que puede.
         </p>
+        {/* QUE ES OBLIGATORIO DE VERDAD (diagnostico de conversion 2026-07-30,
+         * L4). El form tiene ~21 campos y 64 checkboxes de oficios, y los
+         * obligatorios son tres: nombre, email y el consentimiento (validado en
+         * el servidor, actions.ts). El usuario veia dos asteriscos perdidos en una
+         * pagina larguisima y asumia que le pedian todo. El consentimiento se
+         * nombra porque el servidor lo rechaza sin el: prometer "solo nombre y
+         * email" a secas seria mentira. Y "lo completas despues desde tu perfil"
+         * es real: /editar-perfil-staff edita todo esto, oficios incluidos, y se
+         * llega desde /panel-staff. */}
+        <p className="text-[15px] text-[#cfc4c5] mt-4 max-w-[560px] leading-[1.6]">
+          Solo son obligatorios tu nombre y tu email, más el permiso de datos del
+          final que pide la ley. El resto lo podés completar después desde tu
+          perfil, cuando tengas tiempo.
+        </p>
+        {/* CUANDO SE COBRA, antes de pedirle los datos (L5). Plazo leido de
+         * lib/pago.ts, el unico lugar del sistema donde vive, asi esto no se
+         * despega de lo que dice el mail de la oferta. */}
+        <p className="text-[15px] text-[#cfc4c5] mt-6 max-w-[560px] leading-[1.7] border-l-2 border-[#0047ff] pl-5">
+          Cargar tu perfil es gratis. {PAGO_TEXTO} El monto está escrito en la
+          oferta, antes de que aceptes.
+        </p>
       </header>
 
       <form onSubmit={onSubmit} className="flex flex-col gap-12">
@@ -215,7 +237,13 @@ export function RegistroForm() {
 
         {/* Oficios */}
         <Section title="Puestos a los que aplicás">
-          <p className="label-tech text-[11px] text-[#8a8a8a] -mt-2">Marcá todos los que apliquen.</p>
+          {/* L4: los oficios son OPCIONALES de verdad. registerApplicant manda
+           * p_oficios en null si no hay ninguno marcado y el registro entra
+           * igual, asi que decirlo no es una promesa vacia. */}
+          <p className="text-[13px] text-[#8a8a8a] -mt-2 leading-[1.6] max-w-[560px]">
+            Marcá los que sepas hacer. Si no marcás ninguno, igual entrás al pool
+            y lo completás después.
+          </p>
           <OficiosPicker oficios={oficios} selected={oficiosSel} onToggle={(v) => toggle(oficiosSel, setOficiosSel, v)} />
           <div><label className={labelCls}>Otro (especificá)</label><input className={inputCls} value={f.oficios_otro} onChange={(e) => set("oficios_otro", e.target.value)} /></div>
         </Section>

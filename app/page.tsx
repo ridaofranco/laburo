@@ -25,6 +25,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Reveal } from "./landing/reveal";
 import { LeadForm } from "./landing/lead-form";
+import { WhatsAppGlyph } from "@/components/icons/whatsapp-glyph";
+import { waLink } from "@/lib/wa";
+import { PAGO_TEXTO } from "@/lib/pago";
 
 const DESCRIPCION =
   "Staff para eventos con perfil y CV a la vista: más de 680 mozos, barras, seguridad, sonido y producción. Contanos qué necesita tu evento, sin planillas ni cadenas de WhatsApp. Y si trabajás en eventos, sumate al pool.";
@@ -70,6 +73,43 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
   );
 }
 
+/**
+ * El WhatsApp de SOMOS DER (el mismo de la web, de los mails y de la ruta /o).
+ * La landing no tenía NINGÚN link de WhatsApp: el productor apurado que no
+ * quiere llenar un formulario no tenía por dónde entrar.
+ */
+const WA_NUMERO = "5491171540675";
+const WA_MENSAJE =
+  "Hola, los encontré por LABURO. Necesito staff para un evento y quería consultarles.";
+const WA_HREF = waLink(WA_NUMERO, WA_MENSAJE);
+
+/**
+ * Link a WhatsApp, discreto a propósito: el CTA principal sigue siendo el
+ * formulario (deja el lead guardado y trazable). Esto es la salida para el que
+ * prefiere escribir. Glifo OFICIAL de WhatsApp (regla dura de marca).
+ */
+function WhatsAppLink({
+  children,
+  className = "",
+  size = 15,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  size?: number;
+}) {
+  return (
+    <a
+      href={WA_HREF}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`inline-flex items-center gap-2 label-tech transition-colors duration-300 ${className}`}
+    >
+      <WhatsAppGlyph size={size} className="shrink-0" />
+      {children}
+    </a>
+  );
+}
+
 const PASOS = [
   {
     n: "PASO 01",
@@ -101,22 +141,51 @@ const CIFRAS = [
 export default function LandingPage() {
   return (
     <div className="min-h-dvh bg-black text-[#f5f5f5] selection:bg-[#0047ff] selection:text-white">
-      {/* Header minimalista, mismo patron que la landing anterior */}
+      {/* Header minimalista, mismo patron que la landing anterior.
+       *
+       * EL BOTON PRIMARIO ES COMERCIAL, NO EL LOGIN (diagnostico de conversion
+       * 2026-07-30, L3): antes el unico boton del header era "Ingresar" -> /login,
+       * y /login usa shouldCreateUser:false (login-form.tsx), asi que el productor
+       * nuevo que ponia su mail ahi NUNCA recibia el link y se quedaba esperando.
+       * En movil ese boton era uno de los dos elementos que entran arriba del
+       * pliegue: el lugar mas caro de la pantalla para la accion menos rentable.
+       * Ahora el relleno se lo lleva "Necesito staff" -> #productores (el
+       * formulario que si guarda el lead) y "Ingresar" baja a link de texto. */}
       <header className="fixed top-0 inset-x-0 z-50 mix-blend-difference">
-        <div className={`${WRAP} py-8 flex items-center justify-between`}>
-          <span className="font-lockup text-[26px] text-white">LABURO.</span>
-          <Link
-            href="/login"
-            className="label-tech text-[11px] tracking-[0.2em] px-7 py-3 border border-white text-white hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
-          >
-            Ingresar
-          </Link>
+        <div className={`${WRAP} py-6 md:py-8 flex items-center justify-between gap-4`}>
+          {/* 18px en movil: con "Necesito staff" + "Ingresar" al lado, el
+           * wordmark a 26px desbordaba el ancho de 390px. */}
+          <span className="font-lockup text-[18px] md:text-[26px] text-white">
+            LABURO.
+          </span>
+          <div className="flex items-center gap-3 md:gap-8 shrink-0">
+            <Link
+              href="/login"
+              className="label-tech text-[10px] md:text-[11px] tracking-[0.1em] md:tracking-[0.2em] text-white/70 hover:text-[#0047ff] transition-colors duration-300"
+            >
+              Ingresar
+            </Link>
+            <a
+              href="#productores"
+              className="label-tech text-[10px] md:text-[11px] tracking-[0.08em] md:tracking-[0.2em] whitespace-nowrap bg-white text-black px-4 md:px-7 py-3 hover:bg-[#0047ff] hover:text-white transition-colors duration-300"
+            >
+              Necesito staff
+            </a>
+          </div>
         </div>
       </header>
 
       <main>
-        {/* ── Hero ── */}
-        <section className="min-h-dvh flex flex-col justify-end pb-20 md:pb-28 pt-40 relative overflow-hidden">
+        {/* ── Hero ──
+         *
+         * MOVIL: contenido arrancando arriba, no abajo (diagnostico de conversion
+         * 2026-07-30, L6). Antes era `justify-end pt-40`: 160px de aire muerto
+         * arriba MAS el anclaje al piso, y los dos CTA quedaban tapados por la
+         * barra de Safari en un iPhone 13 (el area visible real ronda los 664px,
+         * no los 844 del viewport). Con `justify-start pt-28` el boton primario
+         * queda entero arriba del pliegue. En md+ se mantiene el hero monumental
+         * anclado al piso, que ahi entra sin problema. */}
+        <section className="min-h-dvh flex flex-col justify-start md:justify-end pb-20 md:pb-28 pt-28 md:pt-40 relative overflow-hidden">
           {/* Grilla estructural de fondo (patron de /login) */}
           <div
             aria-hidden="true"
@@ -128,7 +197,10 @@ export default function LandingPage() {
           </div>
 
           <div className={`${WRAP} relative z-10`}>
-            <Reveal>
+            {/* Los tres bloques del hero van con visibleDeArranque: sin JS, el
+             * resto de la landing se cae pero el hero (titulo, cifra del pool,
+             * parrafo y los dos CTA) se sirve visible. */}
+            <Reveal visibleDeArranque>
               <Eyebrow>Staff para eventos // por SOMOS DER</Eyebrow>
               <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.85] text-[clamp(64px,15vw,180px)] mt-6">
                 <span className="block">Staff</span>
@@ -138,8 +210,8 @@ export default function LandingPage() {
               </h1>
             </Reveal>
 
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-14 md:mt-20 md:items-end">
-              <Reveal delay={0.1} className="md:col-span-5">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-10 md:mt-20 md:items-end">
+              <Reveal visibleDeArranque delay={0.1} className="md:col-span-5">
                 <p className="font-[family-name:var(--font-syne)] font-extrabold text-[clamp(48px,7vw,88px)] leading-none text-[#0047ff]">
                   +680
                 </p>
@@ -147,7 +219,11 @@ export default function LandingPage() {
                   Postulantes con perfil y CV en el pool
                 </p>
               </Reveal>
-              <Reveal delay={0.2} className="md:col-span-7 lg:col-start-7 lg:col-span-6">
+              <Reveal
+                visibleDeArranque
+                delay={0.2}
+                className="md:col-span-7 lg:col-start-7 lg:col-span-6"
+              >
                 <p className="text-[18px] md:text-[21px] leading-[1.6] text-[#8a8a8a] max-w-[560px]">
                   Mozos, barras, seguridad, sonido y producción con datos reales
                   a la vista. Contanos qué necesita tu evento y te acercamos una
@@ -290,6 +366,17 @@ export default function LandingPage() {
                   y fechas, y la aceptás con un click. Quedás confirmado/a para
                   ese evento.
                 </p>
+                {/* CUANDO SE COBRA, arriba y no despues de aceptar (diagnostico
+                 * de conversion 2026-07-30, L5). Es la pregunta numero uno de
+                 * cualquiera que trabaja en eventos y el argumento mas fuerte
+                 * del lado oferta, y hasta ahora solo aparecia en el mail de la
+                 * oferta, o sea despues de que la persona ya estaba adentro.
+                 * El plazo se lee de lib/pago.ts: un solo lugar en todo el
+                 * sistema, asi la landing no se despega de lo que dice el mail. */}
+                <p className="text-[15px] leading-[1.7] text-[#cfc4c5] border-l-2 border-[#0047ff] pl-5">
+                  Cargar tu perfil es gratis. {PAGO_TEXTO} El monto está escrito
+                  en la oferta, antes de que aceptes.
+                </p>
                 <Link
                   href="/sumate"
                   className="mt-auto self-start inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-9 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
@@ -314,6 +401,17 @@ export default function LandingPage() {
                   Sin registro, sin llamadas en frío. Dejás tu consulta y te
                   escribimos por mail para coordinar.
                 </p>
+                <div className="mt-8 pt-8 border-t border-[#1a1a1a] max-w-[420px]">
+                  <p className="text-[15px] leading-[1.7] text-[#8a8a8a]">
+                    ¿Es para ya? Escribinos directo:
+                  </p>
+                  <WhatsAppLink
+                    size={17}
+                    className="mt-3 text-[13px] tracking-[0.14em] text-[#25D366] hover:opacity-70"
+                  >
+                    11 7154-0675
+                  </WhatsAppLink>
+                </div>
               </Reveal>
               <Reveal delay={0.15} className="md:col-span-7">
                 <LeadForm />
@@ -334,7 +432,10 @@ export default function LandingPage() {
               © 2026 LABURO · SOMOS DER. Todos los derechos reservados.
             </span>
           </div>
-          <div className="flex flex-wrap gap-x-10 gap-y-3">
+          <div className="flex flex-wrap items-center gap-x-10 gap-y-3">
+            <WhatsAppLink className="text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#25D366]">
+              WhatsApp
+            </WhatsAppLink>
             {/* Entrada discreta al blog: no compite con los dos CTA de arriba. */}
             <Link
               href="/blog"
