@@ -52,6 +52,16 @@ export async function updateSession(request: NextRequest) {
     // pasar acá es seguro: cada route valida el bearer CRON_SECRET fail-closed y
     // devuelve 401 si no coincide.
     "/api/cron",
+    // Puerta de entrada del proveedor (marketplace, movimiento 2). El proveedor
+    // llega desde un link que le pasó la productora, SIN cuenta y sin sesión: si
+    // el middleware lo mandara a /login, no podría entrar nunca. El gate real es
+    // el token, que validan adentro las RPCs SECURITY DEFINER de la 0042 (hash,
+    // vencimiento, tipo proveedor y activo), no esta lista.
+    // ⚠️ El prefijo va ENTERO. Esta lista se evalúa con startsWith, así que un
+    // prefijo corto tipo "/p", "/pr" o "/prov" abriría "/pagos" y "/panel-staff"
+    // al mundo sin sesión, y además "/prov" chocaría con el "/proveedores" del
+    // directorio cuando exista.
+    "/acceso-proveedor",
     // Baja del pool ("no quiero formar parte"): la persona llega desde el pie de
     // un mail, sin cuenta y sin sesión. El gate es el token HMAC del link, que
     // valida la propia página/route (lib/baja.ts), no el middleware.
