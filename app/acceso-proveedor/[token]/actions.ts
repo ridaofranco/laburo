@@ -113,3 +113,85 @@ export async function guardarPerfil(
 
   return resolver(data, error);
 }
+
+/** Un servicio, tal como lo carga el proveedor desde el teléfono. */
+export interface ServicioInput {
+  servicio_id: string | null; // null = alta, con valor = edición
+  categoria: string;
+  titulo: string;
+  descripcion: string;
+  precio_desde: number | null;
+  moneda: string;
+  unidad: string;
+  provincias: string[];
+}
+
+/**
+ * Alta o edición de un servicio (RPC staff_app_proveedor_guardar_servicio).
+ *
+ * Ojo con el orden de los parámetros de la RPC: en Postgres los que tienen
+ * DEFAULT van después de los que no, así que p_servicio_id va cuarto. Acá se
+ * llama por nombre, así que el orden no importa, pero la firma sí.
+ *
+ * El cliente NUNCA manda un profile_id: la RPC lo resuelve del token y filtra
+ * por él, así que un servicio_id de otro perfil no modifica nada y vuelve como
+ * servicio_no_encontrado.
+ */
+export async function guardarServicio(
+  token: string,
+  servicio: ServicioInput,
+): Promise<ResultadoAccion> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.rpc("staff_app_proveedor_guardar_servicio", {
+    p_token: token,
+    p_categoria: servicio.categoria,
+    p_titulo: servicio.titulo,
+    p_servicio_id: servicio.servicio_id,
+    p_descripcion: servicio.descripcion,
+    p_precio_desde: servicio.precio_desde,
+    p_moneda: servicio.moneda || "ARS",
+    p_unidad: servicio.unidad,
+    p_provincias: servicio.provincias,
+  });
+
+  return resolver(data, error);
+}
+
+/** Baja de un servicio (RPC staff_app_proveedor_borrar_servicio). */
+export async function borrarServicio(
+  token: string,
+  servicioId: string,
+): Promise<ResultadoAccion> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.rpc("staff_app_proveedor_borrar_servicio", {
+    p_token: token,
+    p_servicio_id: servicioId,
+  });
+
+  return resolver(data, error);
+}
+
+/**
+ * Publicarse o despublicarse (RPC staff_app_proveedor_publicar).
+ *
+ * Cuando la RPC devuelve faltan_datos, el array `faltan` sube tal cual hasta la
+ * pantalla para que liste QUÉ falta, en castellano y accionable, en vez de un
+ * "no se pudo" que no le dice nada al proveedor. Esta acción sólo mueve
+ * is_public: la verificación la activa DER y no se toca desde ningún lado del
+ * flujo por token.
+ */
+export async function publicar(
+  token: string,
+  quierePublicarse: boolean,
+): Promise<ResultadoAccion> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.rpc("staff_app_proveedor_publicar", {
+    p_token: token,
+    p_publicar: quierePublicarse,
+  });
+
+  return resolver(data, error);
+}

@@ -28,6 +28,8 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { PerfilForm } from "./perfil-form";
+import { Servicios } from "./servicios";
+import { Publicar } from "./publicar";
 import { WhatsAppCta } from "./wa-cta";
 import { TERMINAL_COPY, type PerfilProveedor } from "./estados";
 
@@ -104,7 +106,7 @@ export default async function AccesoProveedorPage({
     );
   }
 
-  const { perfil } = data as PerfilProveedor;
+  const { perfil, servicios } = data as PerfilProveedor;
   const nombre = (perfil.display_name ?? "").trim();
 
   return (
@@ -144,11 +146,25 @@ export default async function AccesoProveedorPage({
           </p>
         </div>
 
+        {/* Los tres bloques van en el orden en que el proveedor los usa: primero
+            quién es, después qué hace, y al final publicarse. Una columna, cada
+            bloque con su título, para que en el teléfono se entienda solo. */}
         <Bloque
           titulo="Mis datos"
           bajada="Lo que ve la productora cuando te encuentra."
         >
           <PerfilForm token={token} perfil={perfil} />
+        </Bloque>
+
+        <Bloque
+          titulo="Mis servicios"
+          bajada="Qué prestás y en qué provincias trabajás."
+        >
+          <Servicios token={token} servicios={servicios ?? []} />
+        </Bloque>
+
+        <Bloque titulo="Publicarme">
+          <Publicar token={token} publicado={perfil.is_public} />
         </Bloque>
       </div>
     </Shell>
