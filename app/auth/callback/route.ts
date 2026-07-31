@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { orgActual } from "@/lib/org";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -37,10 +38,13 @@ export async function GET(request: Request) {
   if (membership.data) {
     return NextResponse.redirect(`${origin}/dashboard`);
   }
-  const { data: existing } = await supabase
-    .from("staff_app_my_membership")
-    .select("role")
-    .maybeSingle();
+  // ⚠️ NO leer staff_app_my_membership con .maybeSingle() acá: PostgREST tira
+  // PGRST116 apenas el usuario pertenece a más de una organización, y entonces
+  // el login del productor se cae con un error crudo en vez de entrar. Es la
+  // puerta de entrada de la app: es el peor lugar posible para ese bug.
+  // orgActual() pide las orgs ordenadas, se queda con la primera, y trae el
+  // fallback a la vista vieja por si este deploy sale antes que la 0035.
+  const existing = await orgActual();
   if (existing) {
     return NextResponse.redirect(`${origin}/dashboard`);
   }

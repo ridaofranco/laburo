@@ -139,13 +139,18 @@ BEGIN
 END;
 $$;
 
+-- ⚠️ 25 TIPOS, NO 24. La función nueva suma p_org_slug al final, así que la
+-- firma del REVOKE/GRANT tiene que llevar un `text` MÁS que la del DROP de
+-- arriba. Con 24 esto apuntaba a la función que el DROP acababa de borrar y
+-- Postgres cortaba la migración entera con 42883 (encontrado al aplicarla,
+-- 31/7/2026). El texto del último `text` es p_org_slug.
 REVOKE ALL ON FUNCTION public.staff_app_register_applicant(
   text, text, text, text, text, date, text, text, text, text[], text, text[], text,
-  boolean, text, text, boolean, boolean, boolean, text, text, text, text, text
+  boolean, text, text, boolean, boolean, boolean, text, text, text, text, text, text
 ) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.staff_app_register_applicant(
   text, text, text, text, text, date, text, text, text, text[], text, text[], text,
-  boolean, text, text, boolean, boolean, boolean, text, text, text, text, text
+  boolean, text, text, boolean, boolean, boolean, text, text, text, text, text, text
 ) TO anon, authenticated;
 
 COMMENT ON FUNCTION public.staff_app_register_applicant IS
