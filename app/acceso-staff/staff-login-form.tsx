@@ -41,26 +41,69 @@ const up = (delay: number) => ({
 type Vista = "clave" | "link" | "mandado" | "clave-mandada";
 
 /**
- * El camino del que NO tiene ficha (decisión de Franco, 28/7): el registro de
- * staff está abierto a cualquiera, así que esta pantalla nunca puede ser un
- * callejón sin salida. El mensaje de resultado sigue siendo SIEMPRE el mismo
- * (sin oráculo de enumeración: no se revela qué mails están en el pool), pero
- * ahora le muestra la salida al que todavía no se registró: /sumate.
+ * El camino del que NO tiene ficha (decisión de Franco, 28/7; ampliada el 31/7).
+ * El registro de staff está abierto a cualquiera, así que esta pantalla nunca
+ * puede ser un callejón sin salida.
+ *
+ * Desde el 31/7 la salida principal está ARRIBA del formulario (ver
+ * SalidaSumate): el que llega sin ficha la ve sin scrollear, antes de intentar
+ * entrar y frustrarse. Esta invitación se queda para el momento de después de
+ * mandar el pedido, que es cuando el que no está en el pool más la necesita.
+ *
+ * Lo que no cambia, y no puede cambiar: el mensaje es SIEMPRE el mismo, esté o
+ * no el mail en el pool. Sin oráculo de enumeración. Este texto está escrito
+ * para servirle igual a los dos, así que no dice ni sugiere que a alguien le
+ * falte la ficha.
  */
 function InvitacionSumate() {
   return (
     <div className="mt-12 pt-10 border-t border-[#4c4546]/60 w-full flex flex-col items-center gap-6">
       <p className="text-center text-[14px] leading-[1.6] text-[#988e90]">
-        ¿Todavía no te sumaste? Registrate con este mismo email y quedás en el
-        pool de staff.
+        ¿Todavía no te sumaste? Registrate con este mismo email. Alcanza con
+        adjuntar tu CV y quedás en el pool de staff.
       </p>
       <a
         href="/sumate"
         className="border border-[#e5e2e1] text-[#e5e2e1] px-8 py-4 flex items-center gap-3 hover:bg-[#e5e2e1] hover:text-black transition-colors duration-150 font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.2em]"
       >
-        Registrate acá
+        Sumate con tu CV
         <ArrowRight size={16} strokeWidth={1.5} />
       </a>
+    </div>
+  );
+}
+
+/**
+ * La salida protagonista, arriba de todo (decisión de Franco, 31/7). Antes vivía
+ * al pie, después del submit, de los dos botones de cambio de modo y del de
+ * Google: el que caía acá sin ficha no la veía nunca. No hace ninguna consulta,
+ * no toca actions.ts y su texto es idéntico para el que está en el pool y para
+ * el que no: es una invitación abierta, no una respuesta sobre un mail.
+ */
+function SalidaSumate() {
+  return (
+    <div className="w-full flex flex-col items-center gap-4 mb-10">
+      <p className="text-center text-[14px] leading-[1.6] text-[#cfc4c5]">
+        ¿Primera vez acá? Sumate al pool con tu CV. No hace falta que llenes
+        nada, solo adjuntarlo.
+      </p>
+      <a
+        href="/sumate"
+        className="w-full border border-[#e5e2e1] text-[#e5e2e1] px-8 py-4 flex items-center justify-center gap-3 hover:bg-[#e5e2e1] hover:text-black transition-colors duration-150 font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.2em]"
+      >
+        Sumate con tu CV
+        <ArrowRight size={16} strokeWidth={1.5} />
+      </a>
+      <div className="w-full flex items-center gap-4 pt-1" aria-hidden="true">
+        <span className="h-px flex-1 bg-[#4c4546]/60" />
+        <span className="font-[family-name:var(--font-geist)] text-[11px] uppercase tracking-[0.2em] text-[#8a8a8a]">
+          o
+        </span>
+        <span className="h-px flex-1 bg-[#4c4546]/60" />
+      </div>
+      <p className="text-center text-[13px] leading-[1.5] text-[#8a8a8a]">
+        ¿Ya estás en el pool? Entrá con tu cuenta.
+      </p>
     </div>
   );
 }
@@ -74,6 +117,9 @@ export function StaffLoginForm() {
   const [error, setError] = useState<string | null>(null);
 
   const callbackUrl = () => `${window.location.origin}/auth/callback`;
+
+  /** Las dos vistas donde todavía hay un formulario para llenar. */
+  const enFormulario = !sent && vista !== "mandado" && vista !== "clave-mandada";
 
   /** Entrar con mail y contraseña. */
   const handlePassword = async (e: React.FormEvent) => {
@@ -161,10 +207,21 @@ export function StaffLoginForm() {
         </motion.h1>
         <motion.p
           {...up(0.05)}
-          className="label-tech text-[12px] uppercase tracking-[0.3em] text-[#cfc4c5] mb-[64px] md:mb-[96px]"
+          className={`label-tech text-[12px] uppercase tracking-[0.3em] text-[#cfc4c5] ${
+            // Con la salida a /sumate arriba, el aire de siempre empujaba el campo
+            // de email fuera de la pantalla en 390px. Se achica solo donde hay
+            // formulario; en las pantallas de resultado queda como estaba.
+            enFormulario ? "mb-10 md:mb-16" : "mb-[64px] md:mb-[96px]"
+          }`}
         >
           Portal de Staff
         </motion.p>
+
+        {enFormulario ? (
+          <motion.div {...up(0.12)} className="w-full">
+            <SalidaSumate />
+          </motion.div>
+        ) : null}
 
         {vista === "mandado" || sent ? (
           <motion.div {...up(0.1)} className="w-full flex flex-col items-center">
@@ -280,21 +337,9 @@ export function StaffLoginForm() {
               Entrar con Google
             </button>
 
-            {/* Registro abierto (decisión de Franco, 28/7): el que cae acá sin
-                ficha tiene que ver su camino ANTES de pedir nada. /sumate está
-                abierto a cualquiera que quiera trabajar en eventos. */}
-            <div className="pt-8 border-t border-[#4c4546]/60 flex flex-col items-center gap-3">
-              <p className="text-[13px] text-[#8a8a8a] leading-[1.5]">
-                ¿Primera vez en LABURO?
-              </p>
-              <a
-                href="/sumate"
-                className="font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.15em] text-[#e5e2e1] border-b border-[#4c4546] pb-1 hover:border-[#e5e2e1] transition-colors"
-              >
-                Sumate al pool de staff
-              </a>
-            </div>
-
+            {/* La salida a /sumate ya no vive acá abajo: subió arriba del
+                formulario (SalidaSumate), que es donde el que llega sin ficha la
+                ve sin scrollear. */}
             <a
               href="/login"
               className="mx-auto font-[family-name:var(--font-geist)] text-[11px] uppercase tracking-[0.1em] text-[#8a8a8a] hover:text-[#cfc4c5] transition-colors"
