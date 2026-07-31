@@ -74,9 +74,16 @@ interface WelcomeRow {
 
 export async function GET(request: Request) {
   // 1. Auth fail-closed: sin CRON_SECRET o header que no coincida EXACTO → 401.
-  const secret = process.env.CRON_SECRET;
+  // Acepta CRON_SECRET (el que inyecta Vercel en su propio cron) o
+  // CF_CRON_SECRET (el del despachador de Cloudflare, que pasó a ser el
+  // disparador real el 31/7/2026, porque el plan Hobby de Vercel solo permite
+  // UNA corrida por día). Se SUMA una clave, no se reemplaza: la vieja quedó
+  // marcada Sensitive y es ilegible hasta con token, y la regla de Franco es
+  // que ninguna clave se rota ni se borra.
+  // Sigue siendo fail-closed: sin ninguna de las dos cargadas, 401.
+  const aceptados = [process.env.CRON_SECRET, process.env.CF_CRON_SECRET].filter(Boolean);
   const auth = request.headers.get("authorization");
-  if (!secret || auth !== `Bearer ${secret}`) {
+  if (!aceptados.length || !aceptados.some((s) => auth === `Bearer ${s}`)) {
     return new Response("Unauthorized", { status: 401 });
   }
 
