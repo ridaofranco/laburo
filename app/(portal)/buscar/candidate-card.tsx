@@ -58,7 +58,7 @@ export function CandidateCard({ candidate }: { candidate: StaffCard }) {
       >
         <span
           aria-hidden="true"
-          className="font-[family-name:var(--font-syne)] text-[72px] font-extrabold leading-none"
+          className="t-stat-sm"
           style={{ color }}
         >
           {initials(c.nombre, c.apellido)}

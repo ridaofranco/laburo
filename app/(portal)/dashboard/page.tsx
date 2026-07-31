@@ -85,7 +85,7 @@ export default async function DashboardPage() {
           <p className="label-tech text-[12px] text-[#cfc4c5] mb-4 tracking-[0.2em] font-bold">
             Dashboard Cliente
           </p>
-          <h2 className="font-[family-name:var(--font-syne)] text-[40px] md:text-[64px] font-bold leading-[1.05] tracking-tight uppercase text-[#e5e2e1]">
+          <h2 className="t-display uppercase text-[#e5e2e1]">
             Resumen de Operaciones
           </h2>
         </div>
@@ -114,10 +114,10 @@ export default async function DashboardPage() {
             </p>
           </div>
           <div className="relative z-10 mt-16">
-            <h3 className="font-[family-name:var(--font-syne)] text-[80px] md:text-[120px] font-extrabold tracking-tight text-[#e5e2e1] leading-none mb-4">
+            <h3 className="t-stat text-[#e5e2e1] mb-4">
               {confirmedNext}
             </h3>
-            <p className="font-[family-name:var(--font-syne)] text-[32px] font-semibold text-[#e5e2e1] max-w-[440px] leading-tight">
+            <p className="t-section text-[#e5e2e1] max-w-[440px]">
               {confirmedNext === 1 ? "persona confirmada" : "personas confirmadas"} para el despliegue inicial.
             </p>
           </div>
@@ -130,7 +130,7 @@ export default async function DashboardPage() {
               Estado General
             </h4>
             <div className="flex items-baseline gap-4">
-              <span className="font-[family-name:var(--font-syne)] text-[40px] font-bold text-[#e5e2e1]">
+              <span className="t-stat-sm text-[#e5e2e1]">
                 {activeCount}
               </span>
               <span className="text-[16px] text-[#cfc4c5]">
@@ -150,7 +150,7 @@ export default async function DashboardPage() {
       {/* Eventos activos */}
       <section className="mt-24 md:mt-32">
         <header className="mb-6">
-          <h3 className="font-[family-name:var(--font-syne)] text-[32px] font-semibold text-[#e5e2e1]">
+          <h3 className="t-section text-[#e5e2e1]">
             Eventos Activos
           </h3>
         </header>
@@ -174,7 +174,7 @@ export default async function DashboardPage() {
                     <p className="label-tech text-[12px] text-[#cfc4c5] mb-2">
                       {fmtRange(g.starts_at, g.ends_at)}
                     </p>
-                    <h4 className="font-[family-name:var(--font-syne)] text-[32px] font-semibold text-[#e5e2e1] uppercase tracking-tight">
+                    <h4 className="t-section text-[#e5e2e1] uppercase">
                       {g.title?.trim() || "Gig sin título"}
                     </h4>
                     {g.venue_name?.trim() && (

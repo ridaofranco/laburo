@@ -67,7 +67,7 @@ export default async function OfferPage({
           {initials(candidate.nombre, candidate.apellido)}
         </span>
         <div className="flex-1 min-w-0 flex flex-col gap-1">
-          <h1 className="font-[family-name:var(--font-syne)] text-[clamp(2rem,6vw,56px)] font-extrabold tracking-tight uppercase leading-none text-[#e5e2e1]">
+          <h1 className="t-display uppercase text-[#e5e2e1]">
             Enviar Oferta
           </h1>
           <p className="label-tech text-[11px] text-[#cfc4c5] truncate">

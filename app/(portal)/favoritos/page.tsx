@@ -89,7 +89,7 @@ export default async function FavoritosPage() {
     <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-16 md:py-24">
       {/* Header */}
       <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#4c4546] pb-8">
-        <h1 className="font-[family-name:var(--font-syne)] text-[clamp(2.2rem,9vw,120px)] font-extrabold leading-[1.05] tracking-[-0.04em] uppercase text-[#e5e2e1] break-words">
+        <h1 className="t-display uppercase text-[#e5e2e1] break-words">
           FAVORITOS
         </h1>
         <div className="flex items-center gap-4 text-[#cfc4c5] label-tech text-[12px]">
@@ -138,14 +138,14 @@ export default async function FavoritosPage() {
                   >
                     <span
                       aria-hidden="true"
-                      className="font-[family-name:var(--font-syne)] text-[28px] md:text-[40px] font-extrabold leading-none"
+                      className="t-stat-sm"
                       style={{ color }}
                     >
                       {initials(p.nombre, p.apellido)}
                     </span>
                   </div>
                   <div className="flex flex-col min-w-0">
-                    <h2 className="font-[family-name:var(--font-syne)] text-[26px] md:text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] uppercase text-[#e5e2e1] break-words">
+                    <h2 className="t-section uppercase text-[#e5e2e1] break-words">
                       {nombre}
                     </h2>
                     <p className="label-tech text-[12px] text-[#cfc4c5] mt-2">

@@ -137,7 +137,7 @@ export function GigForm({ initial }: { initial?: GigInitial }) {
         <p className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#cfc4c5] mb-3">
           {editing ? "Editar evento" : "Nuevo evento"}
         </p>
-        <h1 className="font-[family-name:var(--font-syne)] text-[40px] md:text-[64px] font-extrabold text-[#e5e2e1] tracking-tight leading-none uppercase">
+        <h1 className="t-display text-[#e5e2e1] uppercase">
           {editing ? "Editar" : "Crear evento"}
         </h1>
         <p className="text-[15px] text-[#cfc4c5] mt-4 max-w-[520px] leading-[1.6]">

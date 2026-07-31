@@ -94,7 +94,7 @@ export default function OnboardingStaffPage() {
                   />
                 </div>
               </div>
-              <h2 className="font-[family-name:var(--font-syne)] text-[40px] md:text-[64px] font-bold leading-[1.1] tracking-tight mb-6 text-[#e5e2e1]">
+              <h2 className="t-display mb-6 text-[#e5e2e1]">
                 {slide.title}
               </h2>
               <p className="text-[16px] md:text-[18px] leading-[1.6] text-[#cfc4c5] max-w-2xl mx-auto">

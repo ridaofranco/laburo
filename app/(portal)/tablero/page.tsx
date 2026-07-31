@@ -87,7 +87,7 @@ export default async function TableroPage() {
       <header className="flex flex-col gap-4 border-b border-[#1A1A1A] pb-8 mb-10">
         <p className="label-tech text-[12px] text-[#cfc4c5]">Operaciones</p>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <h1 className="font-[family-name:var(--font-syne)] text-[clamp(2.5rem,7vw,72px)] font-extrabold tracking-tight uppercase leading-none text-[#e5e2e1]">
+          <h1 className="t-display uppercase text-[#e5e2e1]">
             Gestión de Eventos
           </h1>
           <Link

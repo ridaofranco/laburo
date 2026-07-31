@@ -10,7 +10,6 @@ import { StaffNav } from "@/components/staff-nav";
 import { requireStaff } from "@/lib/staff";
 import { EditProfileForm } from "./edit-profile-form";
 
-const SYNE = "font-[family-name:var(--font-syne)]";
 
 export default async function EditarPerfilStaffPage() {
   const profile = await requireStaff();
@@ -24,7 +23,7 @@ export default async function EditarPerfilStaffPage() {
             <p className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#c6c6c6] mb-3">
               Tu perfil
             </p>
-            <h1 className={`${SYNE} text-[40px] md:text-[72px] font-extrabold text-[#e5e2e1] tracking-tight leading-none uppercase`}>
+            <h1 className="t-display text-[#e5e2e1] uppercase">
               Editar perfil
             </h1>
             <p className="text-[16px] text-[#cfc4c5] mt-4 max-w-[560px] leading-[1.6]">

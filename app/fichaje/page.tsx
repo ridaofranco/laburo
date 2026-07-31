@@ -11,7 +11,6 @@ import { StaffNav } from "@/components/staff-nav";
 import { requireStaff, getMyStaffOffers } from "@/lib/staff";
 import { FichajeClient, type FichajeGig } from "./fichaje-client";
 
-const SYNE = "font-[family-name:var(--font-syne)]";
 
 export default async function FichajePage() {
   await requireStaff();
@@ -43,7 +42,7 @@ export default async function FichajePage() {
             <p className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#c6c6c6] mb-3">
               Fichaje
             </p>
-            <h1 className={`${SYNE} text-[40px] md:text-[72px] font-extrabold text-[#e5e2e1] tracking-tight leading-none uppercase`}>
+            <h1 className="t-display text-[#e5e2e1] uppercase">
               Entrada y salida
             </h1>
             <p className="text-[16px] text-[#cfc4c5] mt-4 max-w-[560px] leading-[1.6]">

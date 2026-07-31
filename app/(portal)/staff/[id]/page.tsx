@@ -230,7 +230,7 @@ export default async function ProfilePage({
       {/* Header monumental */}
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-[#1A1A1A] pb-10">
         <div className="min-w-0">
-          <h1 className="font-[family-name:var(--font-syne)] text-[clamp(2rem,6vw,84px)] font-extrabold leading-[0.95] tracking-tight uppercase text-[#e5e2e1] [overflow-wrap:anywhere]">
+          <h1 className="t-display uppercase text-[#e5e2e1] [overflow-wrap:anywhere]">
             {nombreCompleto}
           </h1>
           <div className="flex flex-wrap items-center gap-4 mt-5">
@@ -386,7 +386,7 @@ export default async function ProfilePage({
             <h2 className="label-tech text-[12px] text-[#cfc4c5]">Métricas</h2>
             <div className="grid grid-cols-2 gap-2">
               <div className="bg-[#0A0A0A] border border-[#1A1A1A] p-6 flex flex-col gap-1">
-                <span className="font-[family-name:var(--font-syne)] text-[40px] font-bold leading-none text-[#e5e2e1]">
+                <span className="t-stat-sm text-[#e5e2e1]">
                   {eventosCount}
                 </span>
                 <span className="label-tech text-[11px] text-[#cfc4c5]">
@@ -394,7 +394,7 @@ export default async function ProfilePage({
                 </span>
               </div>
               <div className="bg-[#0A0A0A] border border-[#1A1A1A] p-6 flex flex-col gap-1">
-                <span className="font-[family-name:var(--font-syne)] text-[40px] font-bold leading-none text-[#e5e2e1]">
+                <span className="t-stat-sm text-[#e5e2e1]">
                   {avgRating ? avgRating.toFixed(1) : "—"}
                 </span>
                 <span className="label-tech text-[11px] text-[#cfc4c5]">Rating</span>

@@ -91,7 +91,7 @@ export default async function PagosPage() {
     <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-16 md:py-24">
       {/* Title */}
       <div className="mb-8">
-        <h2 className="font-[family-name:var(--font-syne)] text-[40px] md:text-[64px] font-bold text-[#c6c6c6] leading-[1.1] tracking-[-0.02em]">
+        <h2 className="t-display text-[#c6c6c6]">
           Pagos
         </h2>
         <p className="text-[16px] text-[#cfc4c5] mt-4 max-w-[620px] leading-[1.6]">
@@ -105,7 +105,7 @@ export default async function PagosPage() {
       {cobros.length > 0 && (
         <section className="mb-16 border border-[#2a2a2a] bg-[#0e0e0e]">
           <div className="px-6 py-5 border-b border-[#2a2a2a]">
-            <h3 className="font-[family-name:var(--font-syne)] text-[22px] font-semibold text-[#e5e2e1] uppercase tracking-tight">
+            <h3 className="t-section text-[#e5e2e1] uppercase">
               Cobros al cliente
             </h3>
             <p className="text-[13px] text-[#8a8a8a] mt-1">
@@ -164,7 +164,7 @@ export default async function PagosPage() {
               <span className="label-tech text-[12px] text-[#cfc4c5]">
                 Total comprometido
               </span>
-              <span className="font-[family-name:var(--font-syne)] text-[64px] md:text-[120px] font-extrabold text-[#c6c6c6] leading-[1.1] tracking-[-0.04em]">
+              <span className="t-stat text-[#c6c6c6]">
                 {moneyCompact(totalComprometido)}
               </span>
             </div>
@@ -172,7 +172,7 @@ export default async function PagosPage() {
               <span className="label-tech text-[12px] text-[#cfc4c5]">
                 Staff confirmado
               </span>
-              <span className="font-[family-name:var(--font-syne)] text-[64px] md:text-[120px] font-extrabold text-[#c6c6c6] leading-[1.1] tracking-[-0.04em]">
+              <span className="t-stat text-[#c6c6c6]">
                 {rows.length}
               </span>
               <span className="text-[13px] text-[#cfc4c5]">
@@ -184,7 +184,7 @@ export default async function PagosPage() {
           {/* Detalle real */}
           <section>
             <div className="flex items-baseline justify-between border-b border-[#4c4546] pb-6 mb-8">
-              <h3 className="font-[family-name:var(--font-syne)] text-[28px] md:text-[32px] font-semibold text-[#c6c6c6] leading-[1.2] tracking-[-0.01em]">
+              <h3 className="t-section text-[#c6c6c6]">
                 Detalle por confirmación
               </h3>
               <span className="label-tech text-[12px] text-[#cfc4c5]">Informativo</span>

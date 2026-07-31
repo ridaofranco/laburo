@@ -19,7 +19,6 @@ import { PendingOfferActions } from "./pending-offer-actions";
 import { fmtFecha, fmtHora as fmtHoraTz } from "@/lib/dates";
 import { money } from "@/lib/format";
 
-const SYNE = "font-[family-name:var(--font-syne)]";
 
 
 function fmtDia(iso: string | null): string {
@@ -98,7 +97,7 @@ export default async function PanelStaffPage() {
               <p className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#c6c6c6]">
                 {next ? "Próximo evento" : `Hola, ${nombre}`}
               </p>
-              <h2 className={`${SYNE} text-[clamp(2rem,8vw,96px)] font-extrabold text-[#e5e2e1] tracking-tighter leading-[1.02] break-words`}>
+              <h2 className="t-display text-[#e5e2e1] break-words">
                 {next ? (next.gig_title?.trim() || "Evento confirmado") : "Todavía sin eventos"}
               </h2>
               {next ? (
@@ -162,7 +161,7 @@ export default async function PanelStaffPage() {
           {agenda.length > 0 && (
             <section className="flex flex-col gap-6">
               <div className="flex justify-between items-end border-b border-[#1A1A1A] pb-4">
-                <h3 className={`${SYNE} text-[28px] md:text-[56px] font-bold text-[#e5e2e1] tracking-tight`}>
+                <h3 className="t-section text-[#e5e2e1]">
                   Mi agenda
                 </h3>
                 <span className="label-tech text-[12px] text-[#cfc4c5] uppercase tracking-widest">
@@ -208,7 +207,7 @@ export default async function PanelStaffPage() {
           {/* Stats reales */}
           <section className="grid grid-cols-1 md:grid-cols-2 gap-0 border-y border-[#4c4546]/20 py-12 my-4">
             <div className="flex flex-col gap-4 items-center justify-center border-b md:border-b-0 md:border-r border-[#1A1A1A] pb-10 md:pb-0">
-              <span className={`${SYNE} text-[80px] md:text-[120px] font-extrabold text-[#c6c6c6] leading-none`}>
+              <span className="t-stat text-[#c6c6c6]">
                 {eventosRealizados}
               </span>
               <span className="label-tech text-[12px] uppercase text-[#cfc4c5] tracking-widest">
@@ -216,7 +215,7 @@ export default async function PanelStaffPage() {
               </span>
             </div>
             <div className="flex flex-col gap-4 items-center justify-center pt-10 md:pt-0">
-              <span className={`${SYNE} text-[80px] md:text-[120px] font-extrabold text-[#c6c6c6] leading-none`}>
+              <span className="t-stat text-[#c6c6c6]">
                 {confirmados}
               </span>
               <span className="label-tech text-[12px] uppercase text-[#cfc4c5] tracking-widest">
@@ -228,7 +227,7 @@ export default async function PanelStaffPage() {
           {/* Propuestas pendientes reales */}
           <section className="flex flex-col gap-6 mt-6">
             <div className="flex justify-between items-end border-b border-[#1A1A1A] pb-4">
-              <h3 className={`${SYNE} text-[28px] md:text-[56px] font-bold text-[#e5e2e1] tracking-tight`}>
+              <h3 className="t-section text-[#e5e2e1]">
                 Propuestas pendientes
               </h3>
               {pending.length > 0 && (
@@ -281,7 +280,7 @@ export default async function PanelStaffPage() {
               <details className="group">
                 <summary className="flex justify-between items-end border-b border-[#1A1A1A] pb-4 cursor-pointer list-none">
                   <div className="flex flex-col gap-1">
-                    <h3 className={`${SYNE} text-[28px] md:text-[56px] font-bold text-[#e5e2e1] tracking-tight`}>
+                    <h3 className="t-section text-[#e5e2e1]">
                       Historial
                     </h3>
                     {totalGanado > 0 ? (

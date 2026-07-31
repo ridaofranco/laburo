@@ -30,7 +30,6 @@ import {
 import { PAGO_TEXTO } from "@/lib/pago";
 import { registerApplicant } from "./actions";
 
-const SYNE = "font-[family-name:var(--font-syne)]";
 
 /** Catálogo plano de oficios: es lo que se le pasa al parser y la allowlist del payload. */
 const ALL_OFICIOS = oficios.flatMap((g) => g.items.map((it) => it.es));
@@ -165,7 +164,7 @@ export function RegistroRapido({
           Sumate al pool
         </p>
         <h1
-          className={`${SYNE} text-[40px] md:text-[64px] font-extrabold text-[#e5e2e1] uppercase tracking-tight leading-[0.95]`}
+          className="t-display text-[#e5e2e1] uppercase"
         >
           Sumate con tu CV
         </h1>

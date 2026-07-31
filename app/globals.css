@@ -92,6 +92,62 @@
   letter-spacing: -0.02em;
 }
 
+/* ────────────────────────────────────────────────────────────────────────────
+   ESCALA TIPOGRÁFICA DEL PRODUCTO (31/7).
+   Las pantallas del portal y del staff se portearon una por una desde mockups
+   de Stitch, cada una con su tamaño absoluto (40/48/56/64/72/80/120px). Sin una
+   escala común, cada pantalla nueva inventaba el suyo y en un teléfono de 390px
+   el título se comía media pantalla. Antes de esto el único control era un
+   bloque de emergencia con !important, o sea un parche sobre el síntoma.
+
+   Se usa clamp() y no media queries porque el proyecto ya trabajaba así en 23
+   títulos y porque una escala fluida es mobile-first de verdad, sin escalones.
+   Cada utility ya trae familia, peso, line-height y letter-spacing: el
+   consumidor solo pone color, márgenes y `uppercase` (eso lo decide cada
+   pantalla, no la escala).
+
+   FRONTERA, y es trabajo pendiente declarado: `app/page.tsx` (la landing
+   comercial) y `app/blog/**` quedan FUERA. Son superficies de marketing, ya
+   usan clamp responsable y no son de lo que se quejó Franco. Cuando se
+   unifiquen, entran acá.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Título de pantalla. */
+@utility t-display {
+  font-family: var(--font-syne), sans-serif;
+  font-weight: 700;
+  font-size: clamp(34px, 6vw, 56px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+/* El número héroe de un bento (la cifra grande que la pantalla viene a contar). */
+@utility t-stat {
+  font-family: var(--font-syne), sans-serif;
+  font-weight: 800;
+  font-size: clamp(44px, 9vw, 80px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+/* Número secundario, el que acompaña al héroe. */
+@utility t-stat-sm {
+  font-family: var(--font-syne), sans-serif;
+  font-weight: 700;
+  font-size: clamp(28px, 5vw, 44px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+/* Cabecera de card o de sección. */
+@utility t-section {
+  font-family: var(--font-syne), sans-serif;
+  font-weight: 600;
+  font-size: clamp(20px, 3vw, 28px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
 /* Labels/técnico: Geist en mayúsculas con tracking amplio. */
 @utility label-tech {
   font-family: var(--font-geist), ui-monospace, monospace;
@@ -108,24 +164,13 @@ body {
   min-height: 100dvh;
 }
 
-/* ────────────────────────────────────────────────────────────────────────────
-   CORRECCIÓN MÓVIL DE LA TIPOGRAFÍA DEL PORTAL (28/7, pedido de Franco).
-   Las pantallas del portal se diseñaron desktop-first con tamaños absolutos
-   (40/64/80/120px) y en un teléfono los títulos ocupaban media pantalla:
-   "RESUMEN DE OPERACIONES" a 40px partía en 3 renglones gigantes.
-   En vez de tocar 7 archivos clase por clase, se achican acá los tamaños
-   arbitrarios SOLO por debajo de 768px; en desktop no cambia nada porque
-   los md: siguen mandando. Si un título nuevo usa otro tamaño absoluto
-   grande, agregarlo a esta lista.
-   ──────────────────────────────────────────────────────────────────────────── */
-@media (max-width: 767px) {
-  .text-\[120px\] { font-size: 56px !important; }
-  .text-\[80px\]  { font-size: 48px !important; }
-  .text-\[64px\]  { font-size: 32px !important; }
-  .text-\[48px\]  { font-size: 28px !important; }
-  .text-\[40px\]  { font-size: 26px !important; line-height: 1.15 !important; }
-  .text-\[32px\]  { font-size: 21px !important; }
-}
+/* El bloque de emergencia del 28/7 que achicaba con !important los tamaños
+   arbitrarios (120/80/64/48/40/32px) por debajo de 768px vivía acá. Se borró el
+   31/7: era un parche sobre el síntoma, y ahora no hay nada que parchear porque
+   los títulos del producto salen de la escala fluida de arriba. Los pocos
+   text-[32px] que quedan viven en pantallas públicas de un solo título
+   (`/baja`, `/o/[token]`, `/acceso-proveedor`), y 32px en un teléfono es un
+   título razonable, no uno de los monstruos de 120px que motivaron el parche. */
 
 /* ────────────────────────────────────────────────────────────────────────────
    BLOG — tipografía de lectura larga.

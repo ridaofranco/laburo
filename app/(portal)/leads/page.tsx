@@ -65,7 +65,7 @@ export default async function LeadsPage() {
   return (
     <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-16 md:py-24">
       <div className="mb-10">
-        <h2 className="font-[family-name:var(--font-syne)] text-[40px] md:text-[64px] font-bold text-[#c6c6c6] leading-[1.1] tracking-[-0.02em]">
+        <h2 className="t-display text-[#c6c6c6]">
           Leads
         </h2>
         <p className="text-[16px] text-[#cfc4c5] mt-4 max-w-[620px] leading-[1.6]">

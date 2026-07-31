@@ -65,7 +65,7 @@ export default async function ConfigPage() {
     <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-16 md:py-24">
       {/* Header */}
       <div className="mb-12">
-        <h2 className="font-[family-name:var(--font-syne)] text-[40px] md:text-[64px] font-bold leading-[1.1] tracking-tight text-[#e5e2e1] mb-2">
+        <h2 className="t-display text-[#e5e2e1] mb-2">
           Ajustes
         </h2>
         <p className="text-[18px] leading-[1.6] text-[#cfc4c5] max-w-[672px]">
@@ -80,7 +80,7 @@ export default async function ConfigPage() {
         <section className="lg:col-span-8 flex flex-col gap-6">
           <div className="border border-[#1A1A1A] bg-[#0A0A0A] p-6 lg:p-10">
             <div className="flex items-center justify-between mb-8 pb-2 border-b border-[#1A1A1A]">
-              <h3 className="font-[family-name:var(--font-syne)] text-[28px] md:text-[32px] font-semibold text-[#e5e2e1] flex items-center gap-3 leading-tight">
+              <h3 className="t-section text-[#e5e2e1] flex items-center gap-3">
                 <Building2 size={24} className="shrink-0" />
                 Perfil de la agencia
               </h3>
@@ -92,7 +92,7 @@ export default async function ConfigPage() {
             <div className="flex flex-col md:flex-row gap-6 md:gap-12 items-start">
               {/* Logo/monograma */}
               <div className="w-32 h-32 shrink-0 border border-[#4c4546] grid place-items-center bg-[#131313]">
-                <span className="font-[family-name:var(--font-syne)] text-[40px] font-extrabold text-[#e5e2e1] tracking-tight">
+                <span className="t-stat-sm text-[#e5e2e1]">
                   {orgSigla}
                 </span>
               </div>
@@ -144,7 +144,7 @@ export default async function ConfigPage() {
         <section className="lg:col-span-4 flex flex-col gap-6">
           <div className="border border-[#1A1A1A] bg-[#0A0A0A] p-6 lg:p-10 h-full flex flex-col">
             <div className="flex items-center justify-between mb-8 pb-2 border-b border-[#1A1A1A]">
-              <h3 className="font-[family-name:var(--font-syne)] text-[28px] md:text-[32px] font-semibold text-[#e5e2e1] flex items-center gap-3 leading-tight">
+              <h3 className="t-section text-[#e5e2e1] flex items-center gap-3">
                 <Gauge size={24} className="shrink-0" />
                 Cuenta
               </h3>
@@ -204,7 +204,7 @@ export default async function ConfigPage() {
         <section className="lg:col-span-12 mt-6">
           <div className="border border-[#1A1A1A] bg-[#0A0A0A] p-6 lg:p-10">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 pb-2 border-b border-[#1A1A1A] gap-4">
-              <h3 className="font-[family-name:var(--font-syne)] text-[28px] md:text-[32px] font-semibold text-[#e5e2e1] flex items-center gap-3 leading-tight">
+              <h3 className="t-section text-[#e5e2e1] flex items-center gap-3">
                 <ShieldCheck size={24} className="shrink-0" />
                 Acceso del equipo
               </h3>

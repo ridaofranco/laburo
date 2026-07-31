@@ -16,7 +16,6 @@ import { CheckCircle2 } from "lucide-react";
 import { RegistroRapido } from "./registro-rapido";
 import { RegistroForm } from "./registro-form";
 
-const SYNE = "font-[family-name:var(--font-syne)]";
 
 type Modo = "rapido" | "completo";
 
@@ -26,7 +25,7 @@ export function RegistroListo({ modo }: { modo: Modo }) {
     <div className="max-w-[720px] mx-auto w-full px-6 md:px-20 py-24 text-center">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
         <CheckCircle2 size={64} className="text-[#3dd68c] mx-auto mb-8" strokeWidth={1.5} />
-        <h1 className={`${SYNE} text-[40px] md:text-[64px] font-extrabold text-[#e5e2e1] uppercase tracking-tight leading-none`}>
+        <h1 className="t-display text-[#e5e2e1] uppercase">
           Quedaste registrado/a
         </h1>
         <p className="text-[18px] text-[#cfc4c5] mt-6 max-w-[460px] mx-auto leading-[1.6]">

@@ -98,7 +98,7 @@ export function SearchClient({ candidates, error, initialFilters }: Props) {
       {/* Header monumental (porteo de "Buscar Staff" de Stitch) */}
       <header className="flex flex-col gap-6 border-b border-[#4c4546] pb-10">
         <p className="label-tech text-[12px] text-[#cfc4c5]">Reclutamiento / Talento</p>
-        <h1 className="font-[family-name:var(--font-syne)] text-[clamp(2.75rem,10vw,120px)] font-extrabold tracking-tight uppercase leading-none text-[#e5e2e1]">
+        <h1 className="t-display uppercase text-[#e5e2e1]">
           Buscar Staff
         </h1>
         {/* Search bar underline */}

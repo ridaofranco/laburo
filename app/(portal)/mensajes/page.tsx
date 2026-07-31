@@ -16,7 +16,7 @@ export default function MensajesPage() {
         <p className="label-tech text-[12px] text-[#cfc4c5] mb-4 tracking-[0.2em]">
           Próximamente
         </p>
-        <h1 className="font-[family-name:var(--font-syne)] text-[clamp(2.2rem,9vw,96px)] font-extrabold leading-[1.05] tracking-[-0.04em] uppercase text-[#e5e2e1] break-words">
+        <h1 className="t-display uppercase text-[#e5e2e1] break-words">
           Mensajes
         </h1>
       </header>

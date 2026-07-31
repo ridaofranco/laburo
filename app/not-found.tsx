@@ -13,7 +13,7 @@ export default function NotFound() {
       <p className="label-tech text-[12px] uppercase tracking-[0.3em] text-[#8a8a8a] mb-6">
         Error 404
       </p>
-      <h1 className="font-[family-name:var(--font-syne)] text-[clamp(4rem,20vw,180px)] font-extrabold leading-none tracking-tighter">
+      <h1 className="t-stat">
         404
       </h1>
       <p className="text-[18px] text-[#cfc4c5] mt-6 max-w-[420px] leading-[1.6]">

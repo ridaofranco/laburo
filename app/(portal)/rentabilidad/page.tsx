@@ -105,7 +105,7 @@ export default async function RentabilidadPage() {
         {/* Header */}
         <section className="flex flex-col gap-6">
           <div className="flex justify-between items-end border-b border-[#2a2a2a] pb-2 gap-6">
-            <h2 className="font-[family-name:var(--font-syne)] text-[clamp(1.9rem,8vw,120px)] font-extrabold text-[#e5e2e1] uppercase tracking-[-0.04em] leading-[1.02] break-words">
+            <h2 className="t-display text-[#e5e2e1] uppercase break-words">
               Análisis de
               <br />
               Rentabilidad
@@ -145,7 +145,7 @@ export default async function RentabilidadPage() {
                   <TrendingUp size={24} className="text-[#b9c3ff] shrink-0" />
                 </div>
                 <div>
-                  <div className="font-[family-name:var(--font-syne)] text-[80px] md:text-[120px] font-extrabold text-[#e5e2e1] tracking-[-0.04em] leading-none">
+                  <div className="t-stat text-[#e5e2e1]">
                     {tasaAceptacion ?? 0}
                     <span className="text-[#cfc4c5]">%</span>
                   </div>
@@ -191,7 +191,7 @@ export default async function RentabilidadPage() {
                   <span className="label-tech text-[11px] text-[#cfc4c5] block mb-1">
                     Monto comprometido
                   </span>
-                  <div className="font-[family-name:var(--font-syne)] text-[48px] md:text-[64px] font-bold text-[#e5e2e1] tracking-[-0.02em] leading-none">
+                  <div className="t-stat-sm text-[#e5e2e1]">
                     {moneyCompact(montoComprometido)}
                   </div>
                 </div>
@@ -203,19 +203,19 @@ export default async function RentabilidadPage() {
               <section className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
                 <div className="bg-[#0e0e0e] border border-[#2a2a2a] p-6">
                   <span className="label-tech text-[12px] text-[#cfc4c5] block mb-4">Ingreso del cliente</span>
-                  <div className="font-[family-name:var(--font-syne)] text-[40px] md:text-[56px] font-bold text-[#e5e2e1] tracking-[-0.02em] leading-none">
+                  <div className="t-stat-sm text-[#e5e2e1]">
                     {moneyCompact(totalIngreso)}
                   </div>
                 </div>
                 <div className="bg-[#0e0e0e] border border-[#2a2a2a] p-6">
                   <span className="label-tech text-[12px] text-[#cfc4c5] block mb-4">Costo del staff</span>
-                  <div className="font-[family-name:var(--font-syne)] text-[40px] md:text-[56px] font-bold text-[#cfc4c5] tracking-[-0.02em] leading-none">
+                  <div className="t-stat-sm text-[#cfc4c5]">
                     {moneyCompact(montoComprometido)}
                   </div>
                 </div>
                 <div className={`bg-[#0e0e0e] border p-6 ${margen >= 0 ? "border-[#3dd68c]/40" : "border-[#ffb4ab]/40"}`}>
                   <span className="label-tech text-[12px] text-[#cfc4c5] block mb-4">Tu margen</span>
-                  <div className={`font-[family-name:var(--font-syne)] text-[40px] md:text-[56px] font-bold tracking-[-0.02em] leading-none ${margen >= 0 ? "text-[#3dd68c]" : "text-[#ffb4ab]"}`}>
+                  <div className={`t-stat-sm ${margen >= 0 ? "text-[#3dd68c]" : "text-[#ffb4ab]"}`}>
                     {moneyCompact(margen)}
                   </div>
                 </div>
@@ -233,7 +233,7 @@ export default async function RentabilidadPage() {
             {/* Tabla staff confirmado */}
             <section className="flex flex-col gap-6">
               <div className="border-b border-[#2a2a2a] pb-2 flex justify-between items-end gap-4">
-                <h3 className="font-[family-name:var(--font-syne)] text-[24px] md:text-[32px] font-semibold text-[#e5e2e1] uppercase tracking-[-0.01em]">
+                <h3 className="t-section text-[#e5e2e1] uppercase">
                   Staff confirmado
                 </h3>
                 <ExportCsvButton rows={csvRows} />

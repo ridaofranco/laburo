@@ -34,7 +34,7 @@ export function ConfirmacionView({ resumen }: { resumen: ResumenCell[] }) {
         <motion.h1
           {...fadeUp}
           transition={{ duration: 1, delay: 0.1 }}
-          className={`font-[family-name:var(--font-syne)] text-[40px] md:text-[120px] font-bold md:font-extrabold text-center uppercase text-[#e5e2e1] tracking-tighter leading-[1.1] ${
+          className={`t-display text-center uppercase text-[#e5e2e1] ${
             tieneResumen ? "mb-[80px] md:mb-[160px]" : "mb-12"
           }`}
         >
@@ -55,7 +55,7 @@ export function ConfirmacionView({ resumen }: { resumen: ResumenCell[] }) {
                 <span className="label-tech text-[12px] text-[#cfc4c5] uppercase tracking-widest">
                   {cell.label}
                 </span>
-                <span className="font-[family-name:var(--font-syne)] text-[32px] font-semibold text-[#e5e2e1] leading-[1.2] tracking-tight">
+                <span className="t-section text-[#e5e2e1]">
                   {cell.value}
                 </span>
               </div>

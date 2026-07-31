@@ -137,11 +137,11 @@ export function CalendarioClient({ gigs }: { gigs: CalGig[] }) {
         {/* Header */}
         <header className="p-8 md:p-20 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#1A1A1A] bg-[#0e0e0e]">
           <div>
-            <h2 className="font-[family-name:var(--font-syne)] text-[40px] md:text-[64px] font-bold tracking-tighter text-[#c6c6c6] leading-none uppercase">
+            <h2 className="t-display text-[#c6c6c6] uppercase">
               {MESES[view.m]}
             </h2>
             <div className="flex items-center gap-4 mt-2">
-              <span className="font-[family-name:var(--font-syne)] text-[32px] font-semibold text-[#cfc4c5] tracking-tight">
+              <span className="t-section text-[#cfc4c5]">
                 {view.y}
               </span>
               <div className="flex gap-2">
@@ -247,7 +247,7 @@ export function CalendarioClient({ gigs }: { gigs: CalGig[] }) {
       {/* Aside de detalle */}
       <aside className="w-full md:w-[400px] flex flex-col bg-[#0e0e0e] border-l border-[#1A1A1A] min-h-[512px] md:min-h-dvh">
         <div className="p-8">
-          <h3 className="font-[family-name:var(--font-syne)] text-[32px] font-semibold text-[#c6c6c6] mb-2 uppercase">
+          <h3 className="t-section text-[#c6c6c6] mb-2 uppercase">
             {selectedDate
               ? `${selectedDate.getDate()} ${MESES[selectedDate.getMonth()].slice(0, 3)}`
               : "Sin día"}

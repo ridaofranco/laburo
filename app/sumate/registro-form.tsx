@@ -139,7 +139,7 @@ export function RegistroForm({
       </button>
       <header className="mb-10">
         <p className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#cfc4c5] mb-3">Sumate al pool</p>
-        <h1 className={`${SYNE} text-[44px] md:text-[80px] font-extrabold text-[#e5e2e1] uppercase tracking-tight leading-[0.95]`}>
+        <h1 className="t-display text-[#e5e2e1] uppercase">
           Trabajá en eventos
         </h1>
         <p className="text-[16px] text-[#cfc4c5] mt-4 max-w-[560px] leading-[1.6]">
