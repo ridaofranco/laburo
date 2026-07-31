@@ -25,6 +25,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { LaburoWordmark } from "@/components/laburo-wordmark";
 
 type Item = {
   label: string;
@@ -72,9 +73,7 @@ export function PortalNav() {
       {/* Sidebar desktop */}
       <nav className="hidden md:flex flex-col h-screen py-8 fixed left-0 top-0 w-[280px] bg-[#0e0e0e]/90 backdrop-blur-2xl border-r border-[#1c1b1b] shadow-2xl z-40">
         <div className="px-8 mb-16">
-          <span className="font-[family-name:var(--font-syne)] text-[32px] font-semibold leading-none tracking-tight uppercase text-[#e5e2e1]">
-            Laburo.
-          </span>
+          <LaburoWordmark className="h-[28px] w-auto" />
           <p className="label-tech text-[12px] text-[#cfc4c5] mt-2">Production Portal</p>
         </div>
 

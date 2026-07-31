@@ -19,6 +19,7 @@
 import Link from "next/link";
 import { bajaTokenOk } from "@/lib/baja";
 import { darDeBaja, volverAlPool } from "./actions";
+import { LaburoWordmark } from "@/components/laburo-wordmark";
 
 export const dynamic = "force-dynamic";
 
@@ -32,9 +33,7 @@ function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-dvh flex flex-col bg-surface-0">
       <header className="px-md py-md pt-[max(var(--spacing-md),env(safe-area-inset-top))]">
-        <span className="font-lockup text-glow text-[24px] select-none">
-          LABURO.
-        </span>
+        <LaburoWordmark className="h-[24px] w-auto" />
       </header>
       <main className="flex-1 w-full max-w-[440px] mx-auto px-md pb-[max(var(--spacing-2xl),env(safe-area-inset-bottom))]">
         {children}

@@ -65,9 +65,13 @@
 
 /*
  * Momentos de marca — reemplazan las viejas recetas de "glow" neón.
- * El sistema es PLANO: sin sombras. Se conservan los nombres de utility
- * (`text-glow`, `box-glow`, `font-lockup`) para no tocar los 14 archivos que
- * los usan; solo cambia lo que hacen.
+ * El sistema es PLANO: sin sombras. Se conservan los nombres `text-glow` y
+ * `box-glow` para no tocar los archivos que los usan; solo cambia lo que hacen.
+ *
+ * `font-lockup` ya no existe (31/7). Dibujaba el wordmark "LABURO." con Syne,
+ * y la regla dura de marca es que el wordmark va como imagen real. Ahora sale
+ * del PNG oficial vía `components/laburo-wordmark.tsx`, así que la utility se
+ * quedó sin un solo consumidor.
  */
 
 /* Antes: halo neón. Ahora: off-white puro, sin sombra. */
@@ -79,15 +83,6 @@
 /* Antes: halo azul. Ahora: borde eléctrico 1px interior — el acento activo del sistema. */
 @utility box-glow {
   box-shadow: inset 0 0 0 1px var(--color-accent);
-}
-
-/* Lockup de marca: wordmark "LABURO." en Syne 800, all-caps, tracking apretado. */
-@utility font-lockup {
-  font-family: var(--font-syne), sans-serif;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  line-height: 1;
 }
 
 /* Headlines monumentales del sistema (opt-in donde el screen lo pida). */

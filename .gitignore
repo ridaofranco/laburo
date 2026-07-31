@@ -10,6 +10,8 @@ source-b-applicants.csv
 # Next.js scaffold
 /node_modules
 /.next/
+# Build de verificación (NEXT_DIST_DIR), para no pisar el `next dev` que esté vivo
+/.next-verify/
 /out/
 /build
 /coverage

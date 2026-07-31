@@ -26,6 +26,7 @@ import Link from "next/link";
 import { Reveal } from "./landing/reveal";
 import { LeadForm } from "./landing/lead-form";
 import { WhatsAppGlyph } from "@/components/icons/whatsapp-glyph";
+import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { waLink } from "@/lib/wa";
 import { PAGO_TEXTO } from "@/lib/pago";
 
@@ -154,10 +155,9 @@ export default function LandingPage() {
       <header className="fixed top-0 inset-x-0 z-50 mix-blend-difference">
         <div className={`${WRAP} py-6 md:py-8 flex items-center justify-between gap-4`}>
           {/* 18px en movil: con "Necesito staff" + "Ingresar" al lado, el
-           * wordmark a 26px desbordaba el ancho de 390px. */}
-          <span className="font-lockup text-[18px] md:text-[26px] text-white">
-            LABURO.
-          </span>
+           * wordmark a 26px desbordaba el ancho de 390px. El header padre tiene
+           * mix-blend-difference y el blend sigue funcionando sobre la imagen. */}
+          <LaburoWordmark className="h-[18px] md:h-[26px] w-auto" priority />
           <div className="flex items-center gap-3 md:gap-8 shrink-0">
             <Link
               href="/login"
@@ -427,7 +427,7 @@ export default function LandingPage() {
           className={`${WRAP} py-14 flex flex-col md:flex-row justify-between items-start md:items-center gap-8`}
         >
           <div className="flex flex-col gap-3">
-            <span className="font-lockup text-[22px]">LABURO.</span>
+            <LaburoWordmark className="h-[22px] w-auto" />
             <span className="label-tech text-[10px] tracking-[0.25em] text-[#8a8a8a]">
               © 2026 LABURO · SOMOS DER. Todos los derechos reservados.
             </span>

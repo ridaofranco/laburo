@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { guardarContrasena } from "./actions";
+import { LaburoWordmark } from "@/components/laburo-wordmark";
 
 const up = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -65,11 +66,8 @@ export function DefinirContrasenaForm() {
       </div>
 
       <div className="relative z-10 w-full max-w-[448px] flex flex-col items-center">
-        <motion.h1
-          {...up(0)}
-          className="font-lockup text-[64px] md:text-[88px] leading-none text-[#e5e2e1] mb-4 select-none"
-        >
-          LABURO.
+        <motion.h1 {...up(0)} className="mb-4">
+          <LaburoWordmark className="h-[64px] md:h-[88px] w-auto" priority />
         </motion.h1>
         <motion.p
           {...up(0.05)}

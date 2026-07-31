@@ -12,6 +12,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { UserPen, Images, Tag, ArrowRight, Check } from "lucide-react";
+import { LaburoWordmark } from "@/components/laburo-wordmark";
 
 interface Slide {
   id: number;
@@ -66,9 +67,7 @@ export default function OnboardingStaffPage() {
     <div className="min-h-dvh bg-black text-[#e5e2e1] flex flex-col items-center justify-center overflow-hidden relative">
       {/* TopNav minimalista */}
       <header className="fixed top-0 left-0 w-full z-50 flex justify-center py-6">
-        <h1 className="font-[family-name:var(--font-syne)] text-[32px] font-semibold tracking-tight text-[#e5e2e1]">
-          LABURO
-        </h1>
+        <LaburoWordmark className="h-[26px] w-auto" />
       </header>
 
       {/* Slides */}

@@ -3,6 +3,8 @@
  * Copy exacta del contrato. Sin em dash en copy visible (regla dura de Franco).
  */
 
+import { LaburoWordmark } from "@/components/laburo-wordmark";
+
 /** Loading: 3-5 skeleton cards con shimmer (estáticas bajo reduced-motion). */
 export function LoadingResults() {
   return (
@@ -31,9 +33,7 @@ export function LoadingResults() {
 export function EmptyResults({ onClear }: { onClear: () => void }) {
   return (
     <div className="flex flex-col items-center text-center gap-md py-2xl">
-      <span className="font-lockup text-glow text-[20px] select-none opacity-80">
-        LABURO.
-      </span>
+      <LaburoWordmark className="h-[20px] w-auto opacity-80" />
       <h2 className="font-display text-[28px] text-fg">Sin resultados</h2>
       <p className="text-body text-fg-muted max-w-[300px]">
         Probá con otro oficio o sacá algún filtro.

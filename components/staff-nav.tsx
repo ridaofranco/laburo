@@ -11,8 +11,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { CalendarDays, MapPin, UserRound, LogOut } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-
-const SYNE = "font-[family-name:var(--font-syne)]";
+import { LaburoWordmark } from "@/components/laburo-wordmark";
 
 const ITEMS = [
   { href: "/panel-staff", label: "Mis eventos", icon: CalendarDays },
@@ -38,7 +37,7 @@ export function StaffNav() {
       {/* SideNav desktop */}
       <nav className="hidden md:flex flex-col h-screen py-8 fixed left-0 top-0 w-[280px] bg-[#0e0e0e]/90 backdrop-blur-2xl border-r border-[#1A1A1A] shadow-2xl z-40">
         <div className="px-6 mb-12">
-          <h1 className={`${SYNE} text-[24px] font-bold text-[#c6c6c6] tracking-tighter`}>LABURO.</h1>
+          <LaburoWordmark className="h-[22px] w-auto" />
           <p className="label-tech text-[12px] text-[#cfc4c5] uppercase mt-1">Portal de Staff</p>
         </div>
         <div className="flex-1 flex flex-col gap-2">
@@ -75,7 +74,7 @@ export function StaffNav() {
 
       {/* TopNav mobile */}
       <header className="md:hidden flex justify-between items-center px-6 py-4 w-full h-16 bg-[#131313]/80 backdrop-blur-xl border-b border-[#1A1A1A] top-0 z-40 fixed">
-        <h1 className={`${SYNE} text-[24px] tracking-tighter text-[#c6c6c6]`}>LABURO.</h1>
+        <LaburoWordmark className="h-[22px] w-auto" />
         <button
           type="button"
           onClick={logout}

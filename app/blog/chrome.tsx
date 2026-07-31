@@ -1,11 +1,16 @@
 import Link from "next/link";
+import { LaburoWordmark } from "@/components/laburo-wordmark";
 
 /**
  * Chrome compartido del blog (header + footer), calcado del de la landing para
  * que el blog no parezca un sitio aparte.
  *
  * Regla de marca dura: LABURO va con WORDMARK solo, sin símbolo. Nada de logo,
- * ícono ni monograma acá.
+ * ícono ni monograma acá, y el wordmark es siempre el PNG oficial.
+ *
+ * El "LABURO" del BlogCta más abajo NO es el lockup: es un eyebrow en
+ * `label-tech` (Geist con tracking amplio) que etiqueta la sección, así que se
+ * queda como texto.
  */
 
 export const WRAP = "max-w-[1440px] mx-auto w-full px-6 md:px-20";
@@ -14,8 +19,8 @@ export function BlogHeader() {
   return (
     <header className="border-b border-[#1a1a1a]">
       <div className={`${WRAP} py-6 flex items-center justify-between`}>
-        <Link href="/" className="font-lockup text-[22px] text-[#f5f5f5]">
-          LABURO.
+        <Link href="/">
+          <LaburoWordmark className="h-[22px] w-auto" />
         </Link>
         <nav className="flex items-center gap-6 md:gap-10">
           <Link
@@ -43,8 +48,8 @@ export function BlogFooter() {
         className={`${WRAP} py-14 flex flex-col md:flex-row justify-between items-start md:items-center gap-8`}
       >
         <div className="flex flex-col gap-3">
-          <Link href="/" className="font-lockup text-[22px]">
-            LABURO.
+          <Link href="/">
+            <LaburoWordmark className="h-[22px] w-auto" />
           </Link>
           <span className="label-tech text-[10px] tracking-[0.25em] text-[#8a8a8a]">
             © 2026 LABURO · SOMOS DER. Todos los derechos reservados.

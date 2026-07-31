@@ -15,6 +15,7 @@ import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 import { requestStaffMagicLink, requestPasswordSetup, signInWithPassword } from "./actions";
+import { LaburoWordmark } from "@/components/laburo-wordmark";
 
 /**
  * ⭐ ACCESO CON CONTRASEÑA (decisión de Franco, 26/7).
@@ -199,11 +200,8 @@ export function StaffLoginForm() {
       </div>
 
       <div className="relative z-10 w-full max-w-[448px] flex flex-col items-center">
-        <motion.h1
-          {...up(0)}
-          className="font-lockup text-[64px] md:text-[88px] leading-none text-[#e5e2e1] mb-4 select-none"
-        >
-          LABURO.
+        <motion.h1 {...up(0)} className="mb-4">
+          <LaburoWordmark className="h-[64px] md:h-[88px] w-auto" priority />
         </motion.h1>
         <motion.p
           {...up(0.05)}
