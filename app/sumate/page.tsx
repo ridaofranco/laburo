@@ -1,11 +1,12 @@
 /**
- * /sumate — registro nativo de staff en la plataforma (arista "registro para
- * trabajar"). Público (middleware). Mismo formulario y mismo pool que somosder.ar.
+ * /sumate, registro nativo de staff en la plataforma (arista "registro para
+ * trabajar"). Público (middleware). Mismo pool que somosder.ar. Abre en el
+ * camino corto (alcanza con el CV); el formulario largo queda a un click.
  */
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import { RegistroForm } from "./registro-form";
+import { SumateClient } from "./sumate-client";
 
 export const metadata: Metadata = {
   title: "LABURO. | Sumate al pool",
@@ -19,7 +20,7 @@ export default function SumatePage() {
           LABURO.
         </Link>
       </header>
-      <RegistroForm />
+      <SumateClient />
     </div>
   );
 }

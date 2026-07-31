@@ -1,16 +1,17 @@
 "use client";
 
 /**
- * Registro nativo de staff (/sumate) — MISMO formulario que somosder.ar
- * (StaffRegistro): CV + autollenado con IA arriba, 6 secciones, consentimiento
- * Ley 25.326. Escribe al mismo pool vía la server action registerApplicant.
+ * Registro nativo de staff (/sumate), camino LARGO: el mismo formulario que
+ * somosder.ar (StaffRegistro), con CV + autollenado con IA arriba, 6 secciones y
+ * consentimiento Ley 25.326. Escribe al mismo pool vía la server action
+ * registerApplicant. Es el camino opcional: /sumate abre en el corto (solo el
+ * CV) y acá se llega a un click, para el que prefiere escribir todo.
+ * La pantalla de éxito vive en sumate-client.tsx, compartida por los dos.
  */
 
 import { useRef, useState } from "react";
-import Link from "next/link";
-import { motion } from "motion/react";
 import { toast } from "sonner";
-import { Sparkles, Upload, CheckCircle2 } from "lucide-react";
+import { Sparkles, Upload, ArrowLeft } from "lucide-react";
 import { oficios } from "@/lib/data/oficios";
 import { paises, provinciasAr } from "@/lib/data/paises";
 import {
@@ -22,9 +23,14 @@ import { registerApplicant } from "./actions";
 
 const SYNE = "font-[family-name:var(--font-syne)]";
 
-export function RegistroForm() {
+export function RegistroForm({
+  onDone,
+  onVolver,
+}: {
+  onDone: () => void;
+  onVolver: () => void;
+}) {
   const [sending, setSending] = useState(false);
-  const [done, setDone] = useState(false);
   const [consent, setConsent] = useState(false);
   const [oficiosSel, setOficiosSel] = useState<Set<string>>(new Set());
   const [regionsSel, setRegionsSel] = useState<Set<string>>(new Set());
@@ -101,6 +107,10 @@ export function RegistroForm() {
       fecha_nacimiento: f.fecha_nacimiento || null,
       experiencia: f.experiencia === "" ? null : f.experiencia === "Sí",
       consentimiento: consent,
+      // El servidor usa esto para decidir si estampa perfil_confirmado_at: por
+      // este camino la persona vio todos los campos, así que la ficha queda
+      // confirmada y el recordatorio de la 0034 no la persigue.
+      modo: "completo",
     };
     const fd = new FormData();
     fd.append("payload", JSON.stringify(payload));
@@ -108,7 +118,7 @@ export function RegistroForm() {
     if (file) fd.append("cv", file);
     try {
       const res = await registerApplicant(fd);
-      if (res.ok) setDone(true);
+      if (res.ok) onDone();
       else toast.error(res.reason || "No se pudo enviar.");
     } catch {
       toast.error("No se pudo enviar. Probá de nuevo.");
@@ -117,28 +127,16 @@ export function RegistroForm() {
     }
   }
 
-  if (done) {
-    return (
-      <div className="max-w-[720px] mx-auto w-full px-6 md:px-20 py-24 text-center">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-          <CheckCircle2 size={64} className="text-[#3dd68c] mx-auto mb-8" strokeWidth={1.5} />
-          <h1 className={`${SYNE} text-[40px] md:text-[64px] font-extrabold text-[#e5e2e1] uppercase tracking-tight leading-none`}>
-            Quedaste registrado/a
-          </h1>
-          <p className="text-[18px] text-[#cfc4c5] mt-6 max-w-[460px] mx-auto leading-[1.6]">
-            Te sumaste al pool de SOMOS DER. Cuando haya un evento que encaje con
-            tu perfil, te llega la oferta. Podés entrar a tu cuenta con este mismo email.
-          </p>
-          <Link href="/acceso-staff" className="mt-8 inline-block label-tech text-[12px] text-[#e5e2e1] hover:opacity-70 border-b border-[#4c4546] pb-1 uppercase tracking-widest">
-            Entrar a mi cuenta
-          </Link>
-        </motion.div>
-      </div>
-    );
-  }
-
   return (
     <div className="max-w-[820px] mx-auto w-full px-6 md:px-20 py-12 md:py-20">
+      <button
+        type="button"
+        onClick={onVolver}
+        className="mb-8 flex items-center gap-2 font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.1em] text-[#988e90] hover:text-[#e5e2e1] transition-colors"
+      >
+        <ArrowLeft size={14} />
+        Volver al registro con CV
+      </button>
       <header className="mb-10">
         <p className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#cfc4c5] mb-3">Sumate al pool</p>
         <h1 className={`${SYNE} text-[44px] md:text-[80px] font-extrabold text-[#e5e2e1] uppercase tracking-tight leading-[0.95]`}>
