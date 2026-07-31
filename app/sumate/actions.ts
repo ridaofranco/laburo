@@ -10,6 +10,7 @@
 
 import { createElement } from "react";
 import { render } from "@react-email/components";
+import { oficios } from "@/lib/data/oficios";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { sniffCvMime } from "@/lib/cv";
@@ -20,31 +21,57 @@ import { bajaHeaders, bajaReady, bajaUrl } from "@/lib/baja";
 
 const CV_BUCKET = "staff-cvs";
 
+/**
+ * Catálogo cerrado de oficios, aplanado una sola vez. En la vía corta (registro
+ * con el CV) el array de oficios lo arma un modelo de lenguaje leyendo el PDF,
+ * o sea es salida de IA y no input elegido por la persona: solo pasan al RPC los
+ * valores que existen en el catálogo. En el formulario largo salen de checkboxes
+ * y el filtro es un no-op.
+ */
+const OFICIOS_VALIDOS = new Set(oficios.flatMap((g) => g.items.map((it) => it.es)));
+
+/** Texto seguro: la clave puede no venir en el payload corto. */
+function txt(v: unknown): string {
+  return typeof v === "string" ? v.trim() : "";
+}
+
+/** Array de strings seguro: idem, y descarta lo que no sea texto. */
+function arr(v: unknown): string[] {
+  return Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : [];
+}
+
+/**
+ * Todo opcional salvo lo que el servidor exige (nombre, email, consentimiento).
+ * El registro corto manda un payload con tres o cuatro claves, así que asumir
+ * que están todas era un TypeError esperando: se leen siempre con txt()/arr().
+ */
 export interface RegisterInput {
-  nombre: string;
-  apellido: string;
-  email: string;
-  telefono: string;
-  documento: string;
-  fecha_nacimiento: string | null;
-  pais_residencia: string;
-  provincia: string;
-  ciudad: string;
-  donde_trabajar: string[];
-  situacion_legal: string;
-  oficios: string[];
-  oficios_otro: string;
-  experiencia: boolean | null;
-  anios_experiencia: string;
-  experiencia_detalle: string;
-  disponibilidad_finde: boolean;
-  disponibilidad_viajar: boolean;
-  movilidad_propia: boolean;
-  disponibilidad_aviso: string;
-  linkedin_url: string;
-  portfolio_url: string;
-  motivacion: string;
-  consentimiento: boolean;
+  nombre?: string;
+  apellido?: string;
+  email?: string;
+  telefono?: string;
+  documento?: string;
+  fecha_nacimiento?: string | null;
+  pais_residencia?: string;
+  provincia?: string;
+  ciudad?: string;
+  donde_trabajar?: string[];
+  situacion_legal?: string;
+  oficios?: string[];
+  oficios_otro?: string;
+  experiencia?: boolean | null;
+  anios_experiencia?: string;
+  experiencia_detalle?: string;
+  disponibilidad_finde?: boolean;
+  disponibilidad_viajar?: boolean;
+  movilidad_propia?: boolean;
+  disponibilidad_aviso?: string;
+  linkedin_url?: string;
+  portfolio_url?: string;
+  motivacion?: string;
+  consentimiento?: boolean;
+  /** Por dónde entró la ficha. Decide el gate del perfil confirmado (ver abajo). */
+  modo?: "rapido" | "completo";
 }
 
 export async function registerApplicant(
@@ -54,11 +81,19 @@ export async function registerApplicant(
   if (typeof raw !== "string") return { ok: false, reason: "Datos inválidos." };
   let input: RegisterInput;
   try {
-    input = JSON.parse(raw);
+    const parsed: unknown = JSON.parse(raw);
+    // "null", "3" o "[]" parsean bien y después revientan al leer una clave.
+    // Un payload que no es un objeto es un payload inválido, no un 500.
+    if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+      return { ok: false, reason: "Datos inválidos." };
+    }
+    input = parsed as RegisterInput;
   } catch {
     return { ok: false, reason: "Datos inválidos." };
   }
-  if (!input.nombre?.trim() || !input.email?.trim()) {
+  const nombre = txt(input.nombre);
+  const email = txt(input.email);
+  if (!nombre || !email) {
     return { ok: false, reason: "Nombre y email son obligatorios." };
   }
   // Consentimiento Ley 25.326 validado también en el servidor: el check del
@@ -90,37 +125,40 @@ export async function registerApplicant(
     cvUrl = `${CV_BUCKET}/${path}`;
   }
 
+  const oficiosSel = arr(input.oficios).filter((o) => OFICIOS_VALIDOS.has(o));
+  const dondeTrabajar = arr(input.donde_trabajar);
+
   // Mismo RPC que la web. createClient sin sesión = cliente anon (RPC granteado a anon).
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("staff_app_register_applicant", {
-    p_nombre: input.nombre.trim(),
-    p_apellido: input.apellido.trim() || null,
+    p_nombre: nombre,
+    p_apellido: txt(input.apellido) || null,
     // lowercase: toda la resolución de identidad del staff hace
     // `where lower(email) = ... order by created_at asc limit 1`. Sin normalizar
     // acá, "Franco@Gmail.com" y "franco@gmail.com" crean dos fichas y las ofertas
     // le llegan a la vieja, o sea el staff nunca las ve. Mismo bug que ENTRA ya cerró.
-    p_email: input.email.trim().toLowerCase(),
-    p_telefono: input.telefono.trim() || null,
-    p_documento: input.documento.trim() || null,
-    p_fecha_nacimiento: input.fecha_nacimiento,
-    p_pais_residencia: input.pais_residencia.trim() || null,
-    p_provincia: input.provincia.trim() || null,
-    p_ciudad: input.ciudad.trim() || null,
-    p_donde_trabajar: input.donde_trabajar.length ? input.donde_trabajar : null,
-    p_situacion_legal: input.situacion_legal.trim() || null,
-    p_oficios: input.oficios.length ? input.oficios : null,
-    p_oficios_otro: input.oficios_otro.trim() || null,
-    p_experiencia: input.experiencia,
-    p_anios_experiencia: input.anios_experiencia.trim() || null,
-    p_experiencia_detalle: input.experiencia_detalle.trim() || null,
-    p_disponibilidad_finde: input.disponibilidad_finde,
-    p_disponibilidad_viajar: input.disponibilidad_viajar,
-    p_movilidad_propia: input.movilidad_propia,
-    p_disponibilidad_aviso: input.disponibilidad_aviso.trim() || null,
+    p_email: email.toLowerCase(),
+    p_telefono: txt(input.telefono) || null,
+    p_documento: txt(input.documento) || null,
+    p_fecha_nacimiento: txt(input.fecha_nacimiento) || null,
+    p_pais_residencia: txt(input.pais_residencia) || null,
+    p_provincia: txt(input.provincia) || null,
+    p_ciudad: txt(input.ciudad) || null,
+    p_donde_trabajar: dondeTrabajar.length ? dondeTrabajar : null,
+    p_situacion_legal: txt(input.situacion_legal) || null,
+    p_oficios: oficiosSel.length ? oficiosSel : null,
+    p_oficios_otro: txt(input.oficios_otro) || null,
+    p_experiencia: typeof input.experiencia === "boolean" ? input.experiencia : null,
+    p_anios_experiencia: txt(input.anios_experiencia) || null,
+    p_experiencia_detalle: txt(input.experiencia_detalle) || null,
+    p_disponibilidad_finde: input.disponibilidad_finde === true,
+    p_disponibilidad_viajar: input.disponibilidad_viajar === true,
+    p_movilidad_propia: input.movilidad_propia === true,
+    p_disponibilidad_aviso: txt(input.disponibilidad_aviso) || null,
     p_cv_url: cvUrl,
-    p_portfolio_url: input.portfolio_url.trim() || null,
-    p_linkedin_url: input.linkedin_url.trim() || null,
-    p_motivacion: input.motivacion.trim() || null,
+    p_portfolio_url: txt(input.portfolio_url) || null,
+    p_linkedin_url: txt(input.linkedin_url) || null,
+    p_motivacion: txt(input.motivacion) || null,
   });
   if (error) {
     // No dejar el CV huérfano si el registro no se guardó.
@@ -138,7 +176,7 @@ export async function registerApplicant(
   const profileId =
     data && typeof data === "object" && "id" in data ? String(data.id) : null;
   try {
-    const firstName = input.nombre.trim().split(/\s+/)[0] ?? "";
+    const firstName = nombre.split(/\s+/)[0] ?? "";
     const html = await render(
       createElement(WelcomeEmail, {
         firstName,
@@ -148,7 +186,7 @@ export async function registerApplicant(
       }),
     );
     const result = await sendMail({
-      to: input.email.trim().toLowerCase(),
+      to: email.toLowerCase(),
       subject: "Bienvenido/a a LABURO · SOMOS DER",
       html,
       headers: profileId ? bajaHeaders(profileId) : undefined,
@@ -172,12 +210,23 @@ export async function registerApplicant(
     );
   }
 
-  // El que se registra por /sumate llenó el formulario ENTERO: su perfil ya
-  // está confirmado. Sin esta marca, el recordatorio de perfil incompleto
-  // (migración 0034) lo nagearía a los pocos días de registrarse. TOLERANTE:
-  // hasta que la 0034 se aplique la RPC no existe y esto solo loguea; el
-  // registro ya está guardado y un fallo acá jamás lo voltea.
-  if (profileId) {
+  // La marca de perfil confirmado se estampa SOLO cuando la persona mandó el
+  // formulario largo, que es donde vio (y pudo llenar) todos los campos. El que
+  // entra por la vía corta del CV queda con perfil_confirmado_at en NULL a
+  // propósito: su ficha está a medias, y ese NULL es justo lo que hace que el
+  // recordatorio de la migración 0034 la agarre a los 5 días y la invite a
+  // completarla. Si estampáramos la marca ahí, esas fichas quedarían a medias
+  // para siempre y nadie las iría a buscar nunca.
+  //
+  // El gate es por `modo`, nada más: modo ausente o desconocido cae en "rápido",
+  // porque equivocarse mandando un recordatorio de más es barato y equivocarse
+  // abandonando una ficha es para siempre.
+  //
+  // TOLERANTE: hasta que la 0034 se aplique la RPC no existe y esto solo loguea;
+  // el registro ya está guardado y un fallo acá jamás lo voltea.
+  const modo = input.modo === "completo" ? "completo" : "rapido";
+  const perfilCompleto = modo === "completo";
+  if (profileId && perfilCompleto) {
     try {
       const { error: confErr } = await admin.rpc("staff_app_mark_perfil_confirmado", {
         p_profile_id: profileId,
