@@ -1,9 +1,14 @@
 /**
- * Dashboard del productor (porteo FIEL de "Dashboard Productor - LABURO" de
- * Stitch) con DATOS REALES: cuenta de eventos activos, personas confirmadas del
- * próximo evento (ofertas aceptadas), y lista de eventos activos con su staff
- * asignado. Estilos exactos de Stitch en valores arbitrarios. Copy tal cual
- * (español, se ajusta después). Server component, RLS-scopeado al org del caller.
+ * Dashboard de la productora, con DATOS REALES: cuenta de eventos activos,
+ * personas confirmadas del próximo evento (ofertas aceptadas), y lista de
+ * eventos activos con su staff asignado. Server component, RLS-scopeado al org
+ * del caller.
+ *
+ * EL COPY HABLA EN LA VOZ DE ELLA (31/7). El porteo de Stitch traía un eyebrow
+ * y un título escritos desde una agencia mirando a su cliente, no desde la
+ * productora mirando su propia operación. Esta es la primera pantalla que ve al
+ * entrar, y era una de las razones por las que el portal no se reconocía como
+ * el producto de la productora.
  */
 
 import Link from "next/link";
@@ -83,10 +88,10 @@ export default async function DashboardPage() {
       <header className="mb-12 border-b border-[#1A1A1A] pb-6 flex flex-col md:flex-row md:items-end justify-between gap-8">
         <div>
           <p className="label-tech text-[12px] text-[#cfc4c5] mb-4 tracking-[0.2em] font-bold">
-            Dashboard Cliente
+            Tu operación
           </p>
           <h2 className="t-display uppercase text-[#e5e2e1]">
-            Resumen de Operaciones
+            Tus eventos
           </h2>
         </div>
         <Link
@@ -118,7 +123,7 @@ export default async function DashboardPage() {
               {confirmedNext}
             </h3>
             <p className="t-section text-[#e5e2e1] max-w-[440px]">
-              {confirmedNext === 1 ? "persona confirmada" : "personas confirmadas"} para el despliegue inicial.
+              {confirmedNext === 1 ? "persona confirmada" : "personas confirmadas"} para tu próximo evento.
             </p>
           </div>
         </article>

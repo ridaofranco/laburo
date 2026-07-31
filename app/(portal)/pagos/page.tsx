@@ -1,13 +1,24 @@
 /**
- * Pagos (informativo) — DATOS REALES. Decisión v1 cerrada: "pagos solo
- * informativos": LABURO NO procesa plata (cero-costo, sin MercadoPago), así que
- * esta pantalla es la referencia de lo que Franco tiene comprometido con el staff
- * que ya confirmó. Deriva de las ofertas aceptadas (staff_app_offers, RLS): monto
- * por persona/evento + total comprometido. Sin botones falsos "Aprobar/Liquidar"
- * (implicaban un sistema de pago que no existe). Server component. Estilos Stitch.
+ * Pagos, con DATOS REALES. Es la referencia de lo que la productora tiene
+ * comprometido con el staff que ya le confirmó, más los cobros que le hizo a su
+ * cliente. Deriva de las ofertas aceptadas (staff_app_offers, RLS): monto por
+ * persona y evento, y el total comprometido. Sin botones falsos de
+ * "Aprobar/Liquidar", que implicaban un sistema de pago que no existe.
  *
- * El mockup de Stitch traía totales inventados ($42,500 / $128,400) y filas
- * falsas ("Main Stage Rigging", "VFX Studio"): reemplazados por lo real.
+ * ── DOS PLATA DISTINTAS, Y AHORA SE VEN SEPARADAS (31/7) ────────────────────
+ * La pantalla mezclaba sin distinguir lo que a la productora le ENTRA (los
+ * cobros a su cliente por MercadoPago) con lo que le SALE (lo comprometido con
+ * el staff). Ahora son dos secciones con su encabezado y su bajada.
+ *
+ * LABURO no procesa el pago al staff: eso lo coordina y lo paga ella como
+ * siempre, y esta pantalla es su resumen. El cobro al cliente sí pasa por
+ * MercadoPago y ya funciona (tablero/payment-actions.ts y api/mp/webhook): esta
+ * pantalla solo lo muestra, no lo toca.
+ *
+ * El cobro de plataforma (LABURO le cobra a la productora) NO existe todavía:
+ * queda para cuando esté definido el precio. No hay UI preparada, a propósito.
+ *
+ * Server component.
  */
 
 import Link from "next/link";
@@ -95,24 +106,26 @@ export default async function PagosPage() {
           Pagos
         </h2>
         <p className="text-[16px] text-[#cfc4c5] mt-4 max-w-[620px] leading-[1.6]">
-          Referencia informativa de lo que tenés comprometido con el staff que ya
-          confirmó. LABURO no procesa pagos: coordinás y pagás como siempre, esto
-          es tu resumen.
+          Tu plata en dos columnas: lo que cobrás de tus clientes y lo que le
+          debés al staff que ya confirmó. LABURO no procesa el pago al staff:
+          coordinás y pagás como siempre, esto es tu resumen.
         </p>
       </div>
 
-      {/* Panel de cobros al cliente: cada intento de pago por MercadoPago */}
+      {/* ── LO QUE COBRÁS: la plata que ENTRA. Cada intento de pago por
+          MercadoPago de tu cliente y cómo salió. ── */}
       {cobros.length > 0 && (
-        <section className="mb-16 border border-[#2a2a2a] bg-[#0e0e0e]">
-          <div className="px-6 py-5 border-b border-[#2a2a2a]">
+        <section className="mb-16">
+          <div className="border-b border-[#4c4546] pb-6 mb-8">
             <h3 className="t-section text-[#e5e2e1] uppercase">
-              Cobros al cliente
+              Lo que cobrás
             </h3>
-            <p className="text-[13px] text-[#8a8a8a] mt-1">
-              Cada intento de pago por MercadoPago y cómo salió. Se actualiza solo, no tenés que preguntar.
+            <p className="text-[15px] text-[#cfc4c5] mt-2 max-w-[620px] leading-[1.6]">
+              Lo que te pagan tus clientes por MercadoPago. Cada intento y cómo
+              salió, se actualiza solo, no tenés que preguntar.
             </p>
           </div>
-          <ul className="flex flex-col">
+          <ul className="flex flex-col border border-[#2a2a2a] bg-[#0e0e0e]">
             {cobros.map((c) => {
               const e = estadoCobro(c.status);
               return (
@@ -158,8 +171,19 @@ export default async function PagosPage() {
         </div>
       ) : (
         <>
+          {/* ── LO QUE LE DEBÉS AL STAFF: la plata que SALE. ── */}
+          <div className="border-b border-[#4c4546] pb-6 mb-8 mt-4">
+            <h3 className="t-section text-[#e5e2e1] uppercase">
+              Lo que le debés al staff
+            </h3>
+            <p className="text-[15px] text-[#cfc4c5] mt-2 max-w-[620px] leading-[1.6]">
+              Lo que te comprometiste a pagarle a la gente que ya aceptó tu
+              oferta. Esto sale de tu bolsillo, no pasa por LABURO.
+            </p>
+          </div>
+
           {/* Totales reales */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24 mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
             <div className="flex flex-col gap-2 p-6 border border-[#4c4546] bg-[#131313]">
               <span className="label-tech text-[12px] text-[#cfc4c5]">
                 Total comprometido

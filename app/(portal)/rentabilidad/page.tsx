@@ -1,10 +1,19 @@
 /**
- * Dashboard de Rentabilidad (porteo FIEL del "Yield Analysis" de Stitch) con
- * DATOS REALES y HONESTOS. La estética blueprint/minimalismo radical se conserva
- * (grilla de fondo, bento, mini bar-chart de divs, tabla suiza), pero cada número
- * sale de las ofertas reales del org (RLS-scopeado): tasa de aceptación, monto
- * comprometido, ofertas por mes y la tabla de staff confirmado. Nada inventado:
- * sin ofertas, muestra estado vacío. El bar-chart es real (ofertas/mes).
+ * Rentabilidad: cuánto gana la productora con sus eventos. DATOS REALES y
+ * HONESTOS, cada número sale de las ofertas y los eventos del org
+ * (RLS-scopeado). Nada inventado: sin ofertas, muestra estado vacío. El
+ * bar-chart es real (ofertas/mes).
+ *
+ * ── POR QUÉ EL MARGEN ES LO PRIMERO Y MÁS GRANDE (31/7) ─────────────────────
+ * Esta pantalla era el "Yield Analysis" de Stitch: la métrica dominante, a
+ * 120px, era la TASA DE ACEPTACIÓN de ofertas. Eso es una métrica de
+ * reclutamiento y no contesta lo que una productora viene a preguntar acá, que
+ * es cuánto gana. Se reordenó el bento: el margen pasa a ser el número héroe,
+ * con el ingreso y el costo al lado como cifras de apoyo, y la tasa de
+ * aceptación y las ofertas por mes bajan a métricas secundarias.
+ *
+ * No cambió ni una query ni un cálculo: los números ya eran reales. Es
+ * reordenamiento y copy.
  *
  * Server component. El layout del portal ya pone el sidebar + <main>.
  */
@@ -106,14 +115,18 @@ export default async function RentabilidadPage() {
         <section className="flex flex-col gap-6">
           <div className="flex justify-between items-end border-b border-[#2a2a2a] pb-2 gap-6">
             <h2 className="t-display text-[#e5e2e1] uppercase break-words">
-              Análisis de
+              Tu
               <br />
               Rentabilidad
             </h2>
             <p className="label-tech text-[12px] text-[#cfc4c5] mb-2 shrink-0">
-              Ofertas y confirmaciones
+              Ingreso, costo y margen
             </p>
           </div>
+          <p className="text-[16px] leading-[1.6] text-[#cfc4c5] max-w-[560px]">
+            Cuánto ganás con tus eventos: lo que le cobrás al cliente menos lo
+            que te cuesta el staff.
+          </p>
         </section>
 
         {error ? (
@@ -122,8 +135,8 @@ export default async function RentabilidadPage() {
           <div className="border border-[#2a2a2a] bg-[#0e0e0e] p-12 md:p-20 text-center">
             <p className="text-[16px] text-[#cfc4c5] max-w-[460px] mx-auto">
               Todavía no hay ofertas para analizar. Cuando empieces a enviar
-              ofertas y a confirmar staff, acá vas a ver la tasa de aceptación, el
-              monto comprometido y el ranking de tu equipo.
+              ofertas y a confirmar staff, acá vas a ver tu margen, lo que te
+              cuesta el equipo y la tasa de aceptación de tus ofertas.
             </p>
             <Link
               href="/buscar"
@@ -134,22 +147,79 @@ export default async function RentabilidadPage() {
           </div>
         ) : (
           <>
-            {/* Bento de métricas reales */}
-            <section className="grid grid-cols-1 md:grid-cols-12 gap-8">
-              {/* Tasa de aceptación (grande) */}
-              <div className="md:col-span-8 bg-[#0e0e0e] border border-[#2a2a2a] p-6 flex flex-col justify-between min-h-[400px] hover:border-[#b9c3ff] transition-colors duration-150">
+            {/* ── LO QUE GANÁS. Es el bloque grande porque es la pregunta que
+                trae a la productora a esta pantalla. Con el ingreso y el costo
+                al lado como cifras de apoyo. ── */}
+            {tieneIngreso ? (
+              <section className="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <div
+                  className={`md:col-span-8 bg-[#0e0e0e] border p-6 flex flex-col justify-between min-h-[400px] transition-colors duration-150 ${
+                    margen >= 0 ? "border-[#3dd68c]/40" : "border-[#ffb4ab]/40"
+                  }`}
+                >
+                  <div className="flex justify-between items-start">
+                    <span className="label-tech text-[12px] text-[#cfc4c5]">Tu margen</span>
+                    <TrendingUp size={24} className="text-[#b9c3ff] shrink-0" />
+                  </div>
+                  <div>
+                    <div className={`t-stat ${margen >= 0 ? "text-[#3dd68c]" : "text-[#ffb4ab]"}`}>
+                      {moneyCompact(margen)}
+                    </div>
+                    <div className="text-[16px] leading-[1.6] text-[#cfc4c5] mt-4 max-w-[448px]">
+                      {margen >= 0
+                        ? "Lo que te queda después de pagarle al staff que ya confirmó."
+                        : "Hoy estás poniendo plata: el staff confirmado cuesta más de lo que cargaste como ingreso."}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="md:col-span-4 flex flex-col gap-8">
+                  <div className="bg-[#0e0e0e] border border-[#2a2a2a] p-6 flex-1 flex flex-col justify-between">
+                    <span className="label-tech text-[12px] text-[#cfc4c5] block mb-4">
+                      Lo que cobrás al cliente
+                    </span>
+                    <div className="t-stat-sm text-[#e5e2e1]">{moneyCompact(totalIngreso)}</div>
+                  </div>
+                  <div className="bg-[#0e0e0e] border border-[#2a2a2a] p-6 flex-1 flex flex-col justify-between">
+                    <span className="label-tech text-[12px] text-[#cfc4c5] block mb-4">
+                      Lo que te cuesta el staff
+                    </span>
+                    <div className="t-stat-sm text-[#cfc4c5]">{moneyCompact(montoComprometido)}</div>
+                  </div>
+                </div>
+              </section>
+            ) : (
+              // Estado vacío honesto, tal cual estaba: ya hablaba en la voz
+              // correcta y explica exactamente qué hacer para desbloquearlo.
+              <section className="border border-[#2a2a2a] bg-[#0e0e0e] p-6">
+                <p className="text-[15px] text-[#cfc4c5] leading-[1.6] max-w-[560px]">
+                  Cargá el <span className="text-[#e5e2e1]">ingreso del cliente</span> en cada evento
+                  (desde el tablero, al crear o editar) y acá te calculo tu margen real: lo que cobrás
+                  menos el costo del staff.
+                </p>
+                <p className="text-[15px] text-[#cfc4c5] leading-[1.6] max-w-[560px] mt-4">
+                  Mientras tanto, lo que ya tenés comprometido con el staff son{" "}
+                  <span className="text-[#e5e2e1]">{moneyCompact(montoComprometido)}</span>.
+                </p>
+              </section>
+            )}
+
+            {/* ── Métricas secundarias: cómo viene el reclutamiento. Bajaron de
+                tamaño a propósito: son de reclutamiento, no contestan cuánto
+                gana. ── */}
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-[#0e0e0e] border border-[#2a2a2a] p-6 flex flex-col justify-between">
                 <div className="flex justify-between items-start">
                   <span className="label-tech text-[12px] text-[#cfc4c5]">
                     Tasa de aceptación
                   </span>
-                  <TrendingUp size={24} className="text-[#b9c3ff] shrink-0" />
                 </div>
-                <div>
-                  <div className="t-stat text-[#e5e2e1]">
+                <div className="mt-8">
+                  <div className="t-stat-sm text-[#e5e2e1]">
                     {tasaAceptacion ?? 0}
                     <span className="text-[#cfc4c5]">%</span>
                   </div>
-                  <div className="text-[16px] leading-[1.6] text-[#cfc4c5] mt-4 max-w-[448px]">
+                  <div className="text-[15px] leading-[1.6] text-[#cfc4c5] mt-3 max-w-[448px]">
                     {acceptedCount} de {total}{" "}
                     {total === 1 ? "oferta enviada fue aceptada" : "ofertas enviadas fueron aceptadas"}.
                     El resto sigue abierta, vista o vencida.
@@ -157,8 +227,7 @@ export default async function RentabilidadPage() {
                 </div>
               </div>
 
-              {/* Monto comprometido + ofertas/mes */}
-              <div className="md:col-span-4 bg-[#0e0e0e] border border-[#2a2a2a] p-6 flex flex-col justify-between min-h-[400px] hover:border-[#b9c3ff] transition-colors duration-150">
+              <div className="bg-[#0e0e0e] border border-[#2a2a2a] p-6 flex flex-col justify-between">
                 <div className="flex justify-between items-start">
                   <span className="label-tech text-[12px] text-[#cfc4c5]">
                     Ofertas por mes
@@ -187,48 +256,8 @@ export default async function RentabilidadPage() {
                     </span>
                   ))}
                 </div>
-                <div className="mt-8">
-                  <span className="label-tech text-[11px] text-[#cfc4c5] block mb-1">
-                    Monto comprometido
-                  </span>
-                  <div className="t-stat-sm text-[#e5e2e1]">
-                    {moneyCompact(montoComprometido)}
-                  </div>
-                </div>
               </div>
             </section>
-
-            {/* Margen real: ingreso del cliente menos costo del staff */}
-            {tieneIngreso ? (
-              <section className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-                <div className="bg-[#0e0e0e] border border-[#2a2a2a] p-6">
-                  <span className="label-tech text-[12px] text-[#cfc4c5] block mb-4">Ingreso del cliente</span>
-                  <div className="t-stat-sm text-[#e5e2e1]">
-                    {moneyCompact(totalIngreso)}
-                  </div>
-                </div>
-                <div className="bg-[#0e0e0e] border border-[#2a2a2a] p-6">
-                  <span className="label-tech text-[12px] text-[#cfc4c5] block mb-4">Costo del staff</span>
-                  <div className="t-stat-sm text-[#cfc4c5]">
-                    {moneyCompact(montoComprometido)}
-                  </div>
-                </div>
-                <div className={`bg-[#0e0e0e] border p-6 ${margen >= 0 ? "border-[#3dd68c]/40" : "border-[#ffb4ab]/40"}`}>
-                  <span className="label-tech text-[12px] text-[#cfc4c5] block mb-4">Tu margen</span>
-                  <div className={`t-stat-sm ${margen >= 0 ? "text-[#3dd68c]" : "text-[#ffb4ab]"}`}>
-                    {moneyCompact(margen)}
-                  </div>
-                </div>
-              </section>
-            ) : (
-              <section className="mt-8 border border-[#2a2a2a] bg-[#0e0e0e] p-6">
-                <p className="text-[15px] text-[#cfc4c5] leading-[1.6] max-w-[560px]">
-                  Cargá el <span className="text-[#e5e2e1]">ingreso del cliente</span> en cada evento
-                  (desde el tablero, al crear o editar) y acá te calculo tu margen real: lo que cobrás
-                  menos el costo del staff.
-                </p>
-              </section>
-            )}
 
             {/* Tabla staff confirmado */}
             <section className="flex flex-col gap-6">
@@ -304,7 +333,7 @@ export default async function RentabilidadPage() {
       {/* Footer */}
       <footer className="w-full px-6 md:px-20 py-6 flex flex-col md:flex-row justify-between items-center border-t border-[#4c4546] bg-[#131313] mt-24 md:mt-40">
         <div className="label-tech text-[12px] text-[#cfc4c5] mb-4 md:mb-0 normal-case tracking-[0.1em]">
-          LABURO // Análisis de operaciones
+          LABURO // Tu rentabilidad
         </div>
         <div className="flex gap-6">
           <Link
