@@ -116,7 +116,11 @@ export async function requestPasswordSetup(email: string): Promise<{ ok: boolean
   // supabase/email-templates/definir-contrasena.html, y desde nuestro SMTP.
   const supabase = await createClient();
   await supabase.auth.resetPasswordForEmail(clean, {
-    redirectTo: `${SITE_URL}/definir-contrasena`,
+    // A /confirmar, NO a la página: el canje del `code` por sesión escribe
+    // cookies y solo puede hacerlo el route handler. Apuntando a la página, el
+    // code nunca se canjeaba, no había sesión, y guardarContrasena respondía
+    // "el link venció o ya se usó" al 100% de la gente.
+    redirectTo: `${SITE_URL}/definir-contrasena/confirmar`,
   });
 
   return { ok: true };
