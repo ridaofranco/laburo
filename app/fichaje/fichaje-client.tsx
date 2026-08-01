@@ -43,6 +43,36 @@ function getCoords(): Promise<{ lat: number | null; lng: number | null }> {
   });
 }
 
+/**
+ * Traduce el motivo que devuelve la RPC a algo que una persona pueda leer y,
+ * sobre todo, RESOLVER.
+ *
+ * Hasta el 1/8 el fallback era `res.reason` crudo, así que en una pantalla de
+ * celular, arriba de un escenario, aparecía la palabra "no_coords". Ni decía qué
+ * pasaba ni qué hacer. Ese caso puntual ya no existe (la 0049 permite fichar sin
+ * ubicación), pero el fallback crudo seguía tapando cualquier motivo futuro.
+ *
+ * Regla: cada motivo dice QUÉ pasó y QUÉ hacer. Y lo desconocido nunca se
+ * muestra tal cual, se muestra como algo accionable.
+ */
+function motivoLegible(reason: string | undefined, salida: boolean): string {
+  switch (reason) {
+    case "not_confirmed":
+      return "No figurás confirmado en este evento. Avisale a la productora.";
+    case "not_authenticated":
+    case "not_staff":
+      return "Se cerró tu sesión. Entrá de nuevo y probá otra vez.";
+    case "no_check_in_or_already_out":
+      return "No tenés una entrada abierta en este evento.";
+    case "bad_coords":
+      return "Tu teléfono mandó una ubicación imposible. Cerrá y abrí la app, y probá de nuevo.";
+    default:
+      return salida
+        ? "No se pudo fichar la salida. Probá de nuevo, y si sigue igual avisanos por WhatsApp."
+        : "No se pudo fichar. Probá de nuevo, y si sigue igual avisanos por WhatsApp.";
+  }
+}
+
 function GigCard({ gig }: { gig: FichajeGig }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -56,14 +86,16 @@ function GigCard({ gig }: { gig: FichajeGig }) {
       const { lat, lng } = await getCoords();
       const res = await checkIn(gig.gigId, lat, lng);
       if (res.ok) {
-        toast.success("Entrada registrada");
+        // Fichó igual sin ubicación (0049). Se avisa para que no se lleve la
+        // sorpresa después, pero NO es un error: la entrada quedó registrada.
+        toast.success(
+          lat === null
+            ? "Entrada registrada, sin ubicación"
+            : "Entrada registrada",
+        );
         router.refresh();
       } else {
-        toast.error(
-          res.reason === "not_confirmed"
-            ? "No figurás confirmado en este evento."
-            : res.reason || "No se pudo fichar.",
-        );
+        toast.error(motivoLegible(res.reason, false));
       }
     } catch {
       toast.error("No se pudo fichar. Probá de nuevo.");
@@ -79,10 +111,12 @@ function GigCard({ gig }: { gig: FichajeGig }) {
       const { lat, lng } = await getCoords();
       const res = await checkOut(gig.gigId, lat, lng);
       if (res.ok) {
-        toast.success("Salida registrada");
+        toast.success(
+          lat === null ? "Salida registrada, sin ubicación" : "Salida registrada",
+        );
         router.refresh();
       } else {
-        toast.error(res.reason || "No se pudo fichar la salida.");
+        toast.error(motivoLegible(res.reason, true));
       }
     } catch {
       toast.error("No se pudo fichar. Probá de nuevo.");
