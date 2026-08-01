@@ -69,7 +69,7 @@ export function RegistroRapido({
     : afStatus === "ok"
       ? "Listo, leímos tu CV. Revisá que esté bien y enviá."
       : parserFallo
-        ? "No pudimos leer el CV. Escribí tu nombre y tu mail, el CV se sube igual."
+        ? "No pudimos leer el CV automáticamente, pero se sube igual. Escribí tu nombre y tu mail y ya quedás anotado."
         : file
           ? `Adjuntaste ${file.name}.`
           : "";
@@ -107,10 +107,18 @@ export function RegistroRapido({
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (sending) return;
-    if (!file) {
-      toast.error("Adjuntá tu CV para seguir.");
-      return;
-    }
+    // ⭐ EL CV YA NO ES OBLIGATORIO (1/8).
+    //
+    // Antes, sin archivo adjunto el alta se cortaba acá. Eso ataba la única vía
+    // corta de registro a que la persona tuviera el CV a mano Y a que un
+    // servicio de IA externo estuviera disponible. El 1/8 Gemini empezó a
+    // devolver 403 en TODO el ecosistema (verificado: mismo error en
+    // somosder.ar), y con eso la puerta de entrada quedaba en manos de Google.
+    //
+    // Ahora el CV se sube si está y si no, no. La persona queda en el pool con
+    // nombre y mail, y carga el CV después desde su perfil (esa pantalla ya
+    // existe: /editar-perfil-staff, CvSection). Es más engorroso, y es
+    // infinitamente mejor que no poder anotarse.
     const nom = nombreVisible.trim();
     if (!nom || !email.trim()) {
       toast.error("Nos falta tu nombre y tu email.");
@@ -146,7 +154,8 @@ export function RegistroRapido({
     };
     const fd = new FormData();
     fd.append("payload", JSON.stringify(payload));
-    fd.append("cv", file);
+    // Solo si adjuntó algo. El server action ya trata el CV como opcional.
+    if (file) fd.append("cv", file);
     try {
       const res = await registerApplicant(fd);
       if (res.ok) onDone();
@@ -175,8 +184,9 @@ export function RegistroRapido({
           Sumate con tu CV
         </h1>
         <p className="text-[16px] text-[#cfc4c5] mt-4 leading-[1.6]">
-          No hace falta que llenes nada. Adjuntá tu CV (o sacale una foto), leemos
-          tus datos y quedás en el pool de staff de SOMOS DER.
+          Adjuntá tu CV (o sacale una foto) y leemos tus datos solos. Si no lo
+          tenés a mano, escribí tu nombre y tu mail y listo: quedás en el pool de
+          staff de SOMOS DER y el CV lo cargás después desde tu perfil.
         </p>
         <p className="text-[14px] text-[#cfc4c5] mt-5 leading-[1.7] border-l-2 border-[#0047ff] pl-4">
           Cargar tu perfil es gratis. {PAGO_TEXTO} El monto está escrito en la
@@ -195,7 +205,7 @@ export function RegistroRapido({
             className="flex items-center gap-3 label-tech text-[12px] uppercase tracking-[0.1em] text-[#e5e2e1]"
           >
             <FileUp size={18} className="text-[#b9c3ff]" />
-            Tu CV, en PDF o foto
+            Tu CV, en PDF o foto (opcional)
           </label>
           <input
             id="cv-rapido"
@@ -216,8 +226,13 @@ export function RegistroRapido({
           </p>
         </section>
 
-        {/* Lo que el CV trajo. Solo se pide lo que falta, nunca más que eso. */}
-        {file ? (
+        {/* Nombre y mail. Se muestran SIEMPRE, no solo cuando hay CV adjunto:
+            antes esta sección aparecía recién al adjuntar, así que el que no
+            tenía CV a mano se quedaba mirando una pantalla sin ningún campo
+            para llenar. Si el CV se leyó bien, esto colapsa solo a la línea
+            "Te registramos como X" con su "Corregir". Se sigue pidiendo lo que
+            falta y nunca más que eso. */}
+        {
           <section className="flex flex-col gap-6">
             {!mostrarNombre && !mostrarEmail ? (
               <div className="flex flex-col gap-3">
@@ -289,7 +304,7 @@ export function RegistroRapido({
               </div>
             ) : null}
           </section>
-        ) : null}
+        }
 
         {/* Ley 25.326: un solo click, al lado del botón. El servidor lo exige, no
             se puede sacar ni esconder. Texto idéntico al del formulario largo. */}

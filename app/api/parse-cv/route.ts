@@ -119,7 +119,24 @@ export async function POST(request: Request) {
   } finally {
     clearTimeout(timer);
   }
-  if (!r.ok) return NextResponse.json({ error: "gemini", status: r.status }, { status: 502 });
+  if (!r.ok) {
+    // EL MOTIVO REAL, EN LOS LOGS. Hacia afuera se sigue devolviendo solo
+    // {error:"gemini", status} a propósito: el detalle de Google puede incluir
+    // el nombre del proyecto o de la key, y esta ruta es pública.
+    //
+    // Sin esto, un 403 (clave sin permiso, API deshabilitada, key con
+    // restricción de IP) y un 429 (cuota agotada) se ven idénticos desde acá, y
+    // se diagnostican adivinando. Pasó el 1/8: Gemini devolvía 403 en LABURO Y
+    // en somosder.ar y no había forma de saber por qué sin leer el cuerpo.
+    let detalle = "";
+    try {
+      detalle = (await r.text()).slice(0, 500);
+    } catch {
+      detalle = "(sin cuerpo)";
+    }
+    console.error(`[parse-cv] Gemini ${r.status}:`, detalle);
+    return NextResponse.json({ error: "gemini", status: r.status }, { status: 502 });
+  }
 
   const g = await r.json();
   const text = g?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
