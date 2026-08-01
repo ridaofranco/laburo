@@ -53,6 +53,13 @@ export interface StaffOffer {
   gig_venue: string | null;
   check_in_at: string | null;
   check_out_at: string | null;
+  /**
+   * Cuándo se le avisó que el pago quedó coordinado (0032). NULL = todavía no.
+   * Lo expone el RPC desde la 0051: antes este dato solo lo veía la productora
+   * en /pagos, así que la única forma que tenía la persona de saber si le habían
+   * pagado era escribir por WhatsApp.
+   */
+  pago_listo_at: string | null;
 }
 
 /** Perfil de staff del caller, o null si no hay sesión / no es staff. */

@@ -18,6 +18,7 @@ import { offerLabel } from "@/lib/offers";
 import { PendingOfferActions } from "./pending-offer-actions";
 import { fmtFecha, fmtHora as fmtHoraTz } from "@/lib/dates";
 import { money } from "@/lib/format";
+import { PAGO_TEXTO } from "@/lib/pago";
 
 
 
@@ -80,6 +81,17 @@ export default async function PanelStaffPage() {
   const next: StaffOffer | null = upcoming[0] ?? null;
   const agenda = upcoming.filter((o) => o.id !== next?.id); // el resto (el próximo va en el hero)
   const totalGanado = past.reduce((s, o) => s + (Number(o.amount) || 0), 0);
+
+  // ── EL ESTADO DEL PAGO (0051) ──
+  // Hasta hoy el historial le decía cuánto GANÓ y nunca si le PAGARON, así que
+  // la única forma de saberlo era escribir por WhatsApp. Con el pago a 10 días
+  // hábiles, esa pregunta se repite en cada evento y con cada persona.
+  // No se inventa un estado nuevo: pago_listo_at es el mismo dato que la
+  // productora estampa cuando coordina el pago (0032).
+  const aCobrar = past.filter(
+    (o) => o.pago_listo_at == null && Number(o.amount) > 0,
+  );
+  const totalACobrar = aCobrar.reduce((s, o) => s + (Number(o.amount) || 0), 0);
 
   const nombre = (profile.nombre ?? "").trim() || "Hola";
   const eventosRealizados = profile.eventos_trabajados ?? 0;
@@ -204,6 +216,31 @@ export default async function PanelStaffPage() {
             </section>
           )}
 
+          {/* Mis pagos: solo aparece si hay algo por cobrar. Si está todo
+              coordinado, no se muestra nada (un cartel que dice "no debés nada"
+              es ruido). */}
+          {totalACobrar > 0 && (
+            <section className="border border-[#4c4546]/40 p-6 md:p-8 flex flex-col gap-3">
+              <div className="flex flex-wrap items-baseline justify-between gap-3">
+                <h3 className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#c6c6c6]">
+                  Tus pagos
+                </h3>
+                <span className="label-tech text-[12px] uppercase tracking-widest text-[#cfc4c5]">
+                  {aCobrar.length}{" "}
+                  {aCobrar.length === 1 ? "evento por cobrar" : "eventos por cobrar"}
+                </span>
+              </div>
+              <p className="text-[22px] md:text-[26px] text-[#e5e2e1] font-semibold">
+                {money(totalACobrar)} a cobrar
+              </p>
+              <p className="text-[15px] text-[#cfc4c5] leading-[1.6] max-w-[640px]">
+                {PAGO_TEXTO} Cuando lo coordinemos, te avisamos por mail y acá lo
+                vas a ver como pago coordinado. Si pasó el plazo y seguís viendo
+                esto, escribinos.
+              </p>
+            </section>
+          )}
+
           {/* Stats reales */}
           <section className="grid grid-cols-1 md:grid-cols-2 gap-0 border-y border-[#4c4546]/20 py-12 my-4">
             <div className="flex flex-col gap-4 items-center justify-center border-b md:border-b-0 md:border-r border-[#1A1A1A] pb-10 md:pb-0">
@@ -321,9 +358,19 @@ export default async function PanelStaffPage() {
                           </span>
                         </div>
                         {o.amount != null && Number(o.amount) > 0 && (
-                          <span className="text-[16px] text-[#c6c6c6] font-semibold shrink-0">
-                            {money(Number(o.amount))}
-                          </span>
+                          <div className="flex flex-col items-start md:items-end shrink-0">
+                            <span className="text-[16px] text-[#c6c6c6] font-semibold">
+                              {money(Number(o.amount))}
+                            </span>
+                            {/* El estado del pago, evento por evento (0051). */}
+                            <span
+                              className={`label-tech text-[11px] uppercase tracking-widest mt-1 ${
+                                o.pago_listo_at ? "text-[#7fae7f]" : "text-[#cfc4c5]"
+                              }`}
+                            >
+                              {o.pago_listo_at ? "Pago coordinado" : "A cobrar"}
+                            </span>
+                          </div>
                         )}
                       </div>
                     );
