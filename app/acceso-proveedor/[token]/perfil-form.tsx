@@ -160,13 +160,21 @@ export function PerfilForm({
         </span>
       </Campo>
 
-      <Campo label="Sitio web">
+      {/* type="text" y no type="url" a propósito: el validador nativo del
+          navegador exige el esquema y por eso rechazaba "somosder.ar", que es
+          como lo escribe cualquier persona. El https:// lo completa el servidor
+          con normalizarWebsite. inputMode="url" se queda, que es el teclado
+          correcto en el teléfono. */}
+      <Campo
+        label="Sitio web"
+        ayuda="Podés escribirlo como te salga, nosotros lo completamos."
+      >
         <input
-          type="url"
+          type="text"
           inputMode="url"
           value={f.website}
           onChange={(e) => set("website", e.target.value)}
-          placeholder="https://tucatering.com.ar"
+          placeholder="tucatering.com.ar"
           maxLength={300}
           className={inputCls}
         />

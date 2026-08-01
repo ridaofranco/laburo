@@ -27,6 +27,7 @@
  */
 
 import { createClient } from "@/lib/supabase/server";
+import { normalizarWebsite } from "@/lib/format";
 
 export type ResultadoAccion =
   | { ok: true }
@@ -105,7 +106,12 @@ export async function guardarPerfil(
     p_headline: datos.headline,
     p_bio: datos.bio,
     p_telefono: datos.telefono,
-    p_website: datos.website,
+    // El esquema lo completamos nosotros. El proveedor escribe "somosder.ar",
+    // que es como lo escribe cualquiera, y antes eso se rechazaba por no traer
+    // el https:// adelante. Va en el SERVIDOR y no solo en el form porque el
+    // form se puede saltear, y un website sin esquema guardado en la base se
+    // rompe después, en el momento de mostrarlo como enlace.
+    p_website: normalizarWebsite(datos.website),
     p_instagram: datos.instagram,
     p_ciudad: datos.ciudad,
     p_provincia: datos.provincia,

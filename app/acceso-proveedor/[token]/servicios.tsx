@@ -25,6 +25,7 @@ import { Dialog } from "@base-ui/react/dialog";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Plus, Pencil, Trash2, X, MapPin } from "lucide-react";
 import { toast } from "sonner";
+import { formatArsInput, parseArs } from "@/lib/format";
 import { PROVINCIAS } from "@/lib/provincias";
 import { CATEGORIAS_PROVEEDOR, UNIDADES_SERVICIO } from "@/lib/categorias-proveedor";
 import { borrarServicio, guardarServicio } from "./actions";
@@ -68,7 +69,10 @@ function aDraft(s: ServicioProveedor): Draft {
     categoriaOtra: enCatalogo ? "" : s.categoria,
     titulo: s.titulo ?? "",
     descripcion: s.descripcion ?? "",
-    precio_desde: s.precio_desde == null ? "" : String(s.precio_desde),
+    // Al abrir para editar, el precio se muestra ya formateado en argentino.
+    // Con String() pelado, un servicio de 15000 volvía al input como "15000" y
+    // la persona veía algo distinto de lo que la ficha mostraba abajo.
+    precio_desde: s.precio_desde == null ? "" : formatArsInput(String(s.precio_desde).replace(".", ",")),
     unidad: s.unidad ?? "",
     provincias: s.provincias ?? [],
   };
@@ -132,12 +136,16 @@ export function Servicios({
       return;
     }
 
-    const precioTexto = draft.precio_desde.trim().replace(",", ".");
-    const precio = precioTexto === "" ? null : Number(precioTexto);
-    if (precio != null && (Number.isNaN(precio) || precio < 0)) {
-      toast.error("Revisá el precio: tiene que ser un número, y no puede ser negativo.");
+    // Antes acá había `.replace(",", ".")` y `Number()`, que leía "15.000"
+    // como 15 (el punto es separador de MILES en argentino, no decimal) y
+    // encima, cuando no podía, avisaba "no puede ser negativo": le echaba la
+    // culpa a la persona de un número que había escrito bien.
+    const resultado = parseArs(draft.precio_desde);
+    if (!resultado.ok) {
+      toast.error("No pude leer el precio. Escribilo así: 15.000 o 15.000,50");
       return;
     }
+    const precio = resultado.valor;
 
     startTransition(async () => {
       try {
@@ -380,8 +388,11 @@ export function Servicios({
                         type="text"
                         inputMode="decimal"
                         value={draft.precio_desde}
-                        onChange={(e) => set("precio_desde", e.target.value)}
-                        placeholder="15000"
+                        // Se formatea mientras escribe: tecleás 15000 y ves
+                        // 15.000. formatArsInput es idempotente a propósito, si
+                        // no lo fuera el input pelearía contra cada tecla.
+                        onChange={(e) => set("precio_desde", formatArsInput(e.target.value))}
+                        placeholder="15.000"
                         className={`${inputCls} flex-1`}
                       />
                       <select
