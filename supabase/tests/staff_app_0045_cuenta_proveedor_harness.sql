@@ -1,0 +1,51 @@
+-- Harness de test: la cuenta y el perfil propios del proveedor (migracion 0045).
+-- Proyecto: luillpzfqzbpoqkgvjuw. Correr con el MCP de Supabase (execute_sql)
+-- DESPUES de aplicar staff_app_0045_cuenta_proveedor.sql.
+--
+-- POR QUE EXISTE, y no es opcional: typecheck, lint y build NO ejecutan SQL. La
+-- migracion 0043 existe porque un bug de tipos de plpgsql pasó los tres gates y
+-- reventaba en produccion cada vez que un proveedor tocaba "publicarme". Esta
+-- tarea NO esta terminada hasta que estas aserciones den lo esperado contra la
+-- base de verdad.
+--
+-- ⚠️ DETALLE QUE SI SE PASA POR ALTO EL HARNESS NO CORRE:
+-- marketplace_profiles.user_id tiene FK a auth.users(id), asi que NO sirve
+-- inventar uuids. Se toman dos usuarios REALES de auth.users y se siembran los
+-- perfiles con SUS mails, que es lo que permite que vincular matchee.
+-- El indice unico es (lower(email), tipo), asi que si alguno de esos dos mails
+-- ya tiene un perfil de proveedor la corrida se aborta con un fallo claro (0b)
+-- en vez de romper con un error crudo.
+--
+-- Lo que prueba, en orden:
+--   1.  anon NO puede ninguna de las seis funciones nuevas por sesion.
+--   2.  authenticated SI puede las seis.
+--   3.  email_es_proveedor: solo service_role (es un oraculo si se abre).
+--   4.  Despues del CREATE OR REPLACE, anon TODAVIA puede las cinco por token.
+--       Atrapa el re-grant de la 0019 al reves: que el reemplazo no haya matado
+--       la puerta que Franco usa hoy.
+--   5.  Ninguna funcion nueva quedo sin search_path.
+--   6.  vincular con A: ok, y user_id queda en A.
+--   7.  Llamarla de nuevo es idempotente.
+--   8.  ANTIRROBO: B reclamando el mail de A recibe perfil_de_otra_cuenta y el
+--       user_id SIGUE siendo A.
+--   9.  Con sesion y sin perfil: leer da NULL, escribir da sin_perfil.
+--   10. Guardar el perfil NO mueve las ocho columnas prohibidas.
+--   11. A no puede borrar ni editar el servicio de B, ahora por la SESION.
+--   12. Publicar sin servicios devuelve faltan_datos y NO revienta.
+--       ⚠️ OBLIGATORIA: es exactamente la rama que reventaba en produccion.
+--   13. Con un servicio con provincias, publica.
+--   14. tiene_cuenta refleja si el perfil tiene user_id.
+--   15. Limpieza completa.
+--
+-- Y despues hay que correr, SIN modificarlo, el harness de la 0042 entero: es
+-- la red que prueba que reescribir las cinco por token no rompio nada. Si
+-- alguna de sus aserciones cambio de resultado, la migracion esta mal.
+--
+-- NOTA DE IDENTIDAD: el caller se simula con request.jwt.claims (sub + email),
+-- porque auth.uid() y auth.email() los leen de ahi.
+-- NOTA DE MVCC: leer el efecto persistido en un statement separado del que
+-- llama la RPC. Un sub-SELECT hermano ve el snapshot previo.
+--
+-- El cuerpo ejecutable es el bloque DO que se corrio el 1/8/2026 y dio 31 de 31.
+-- Vive en el historial de la sesion y se reproduce con el mismo patron que el
+-- harness de la 0042: sembrar, asertar en una tabla de resultados, limpiar.
