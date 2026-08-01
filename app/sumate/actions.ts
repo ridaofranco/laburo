@@ -163,6 +163,10 @@ export async function registerApplicant(
   if (error) {
     // No dejar el CV huérfano si el registro no se guardó.
     if (uploadedPath) await admin.storage.from(CV_BUCKET).remove([uploadedPath]);
+    // El motivo REAL queda en los logs de Vercel. Sin esto, el bug del teléfono
+    // obligatorio (0046) estuvo días volteando altas y el mensaje genérico no
+    // le daba una pista a nadie.
+    console.error("[sumate] register RPC failed:", error.message);
     return { ok: false, reason: "No se pudo enviar el registro. Probá de nuevo." };
   }
 

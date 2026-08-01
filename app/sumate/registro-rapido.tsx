@@ -46,6 +46,7 @@ export function RegistroRapido({
   const [parsed, setParsed] = useState<CvParsed | null>(null);
   const [nombreVisible, setNombreVisible] = useState("");
   const [email, setEmail] = useState("");
+  const [telefono, setTelefono] = useState("");
   const [editar, setEditar] = useState(false);
   const [consent, setConsent] = useState(false);
   const [sending, setSending] = useState(false);
@@ -56,6 +57,10 @@ export function RegistroRapido({
   const faltaEmail = !email.trim();
   const mostrarNombre = editar || faltaNombre;
   const mostrarEmail = editar || faltaEmail;
+  // El teléfono NUNCA bloquea el alta (es opcional acá y en el RPC desde la
+  // 0046), pero las ofertas se mueven por WhatsApp: si el CV no lo trajo, se
+  // ofrece el campo para que lo deje ahora.
+  const mostrarTelefono = editar || !telefono.trim();
   const parserFallo = afStatus === "error" || afStatus === "nokey";
 
   /** Lo que se anuncia por aria-live cada vez que cambia el estado de lectura. */
@@ -96,6 +101,7 @@ export function RegistroRapido({
     const nom = [d.nombre, d.apellido].filter(Boolean).join(" ").trim();
     if (nom) setNombreVisible(nom);
     if (d.email) setEmail(d.email);
+    if (d.telefono) setTelefono(d.telefono);
   }
 
   async function onSubmit(e: React.FormEvent) {
@@ -123,7 +129,7 @@ export function RegistroRapido({
       nombre: primero,
       apellido: resto.join(" "),
       email: email.trim(),
-      telefono: d?.telefono ?? "",
+      telefono: telefono.trim(),
       ciudad: d?.ciudad ?? "",
       pais_residencia: d?.pais && paises.includes(d.pais) ? d.pais : "",
       linkedin_url: d?.linkedin_url ?? "",
@@ -263,6 +269,25 @@ export function RegistroRapido({
                 ) : null}
               </div>
             )}
+            {mostrarTelefono ? (
+              <div>
+                <label className={labelCls} htmlFor="telefono-rapido">
+                  WhatsApp (opcional)
+                </label>
+                <input
+                  id="telefono-rapido"
+                  type="tel"
+                  className={inputCls}
+                  value={telefono}
+                  onChange={(ev) => setTelefono(ev.target.value)}
+                  autoComplete="tel"
+                  placeholder="+54 11 5555 5555"
+                />
+                <p className="text-[12px] text-[#988e90] mt-2 leading-[1.5]">
+                  Si lo dejás, las ofertas te llegan también por WhatsApp.
+                </p>
+              </div>
+            ) : null}
           </section>
         ) : null}
 
