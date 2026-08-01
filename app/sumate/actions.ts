@@ -18,8 +18,81 @@ import { sendMail } from "@/lib/email/mailer";
 import { WelcomeEmail } from "@/components/emails/welcome-email";
 import { siteUrl } from "@/lib/site";
 import { bajaHeaders, bajaReady, bajaUrl } from "@/lib/baja";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 const CV_BUCKET = "staff-cvs";
+
+/**
+ * ⭐ LA CUENTA SE CREA AL REGISTRARSE, Y EL LINK PARA ELEGIR LA CONTRASEÑA VIAJA
+ * DENTRO DEL MAIL DE BIENVENIDA (decisión de Franco, 1/8).
+ *
+ * ── EL PROBLEMA QUE RESUELVE ──
+ * Hasta hoy la persona se registraba, recibía "Entrar a LABURO", tocaba el
+ * botón, y caía en una pantalla que le pedía una contraseña que no tenía (su
+ * cuenta ni siquiera existía todavía). La salida era un texto gris chico. Una
+ * trabajadora real leyó eso como "esto es otra cosa donde me tengo que anotar",
+ * volvió a /sumate y se registró de nuevo. Ese es el camino que el mail de
+ * bienvenida estaba generando, no una excepción.
+ *
+ * ── POR QUÉ generateLink Y NO resetPasswordForEmail ──
+ * `resetPasswordForEmail` manda SU PROPIO mail. Eso serían dos mails para la
+ * misma persona en el mismo minuto, uno nuestro y uno de Supabase, y el segundo
+ * es el que Franco ya había señalado como "parece phishing". `generateLink`
+ * DEVUELVE el token sin mandar nada, así que el link viaja adentro de nuestro
+ * mail, con nuestra marca. Un mail, un click.
+ *
+ * ── POR QUÉ NO SE MANDA UNA CONTRASEÑA ARMADA POR NOSOTROS ──
+ * Era la idea original y el resultado para la persona sería el mismo, pero una
+ * contraseña escrita en un mail queda en su casilla para siempre, la ve
+ * cualquiera que le mire el teléfono, y cuando la pierda no hay de dónde
+ * recuperarla. Con el link, la elige ella y nunca viaja.
+ *
+ * ── QUÉ PASA SI ESTO FALLA ──
+ * Devuelve null y el mail sale con el link viejo a /acceso-staff. Un problema de
+ * auth NUNCA puede voltear un registro que ya está guardado.
+ *
+ * OJO: esto crea la cuenta de a UNA, en el momento en que la persona se anota.
+ * NO contradice la decisión del 26/7 de no crear de golpe las cuentas de la
+ * tanda vieja: esa sigue entrando por el botón de /acceso-staff.
+ */
+async function linkParaElegirContrasena(
+  admin: ReturnType<typeof createServiceRoleClient>,
+  email: string,
+): Promise<string | null> {
+  try {
+    // Si ya tiene cuenta, createUser falla y seguimos igual: lo único que
+    // importa es que exista antes de generar el link.
+    await admin.auth.admin
+      .createUser({ email, email_confirm: true })
+      .catch(() => undefined);
+
+    const { data, error } = await admin.auth.admin.generateLink({
+      type: "recovery",
+      email,
+    });
+    if (error) {
+      console.error("[sumate] generateLink falló:", error.message);
+      return null;
+    }
+    const hashed = data?.properties?.hashed_token;
+    if (!hashed) {
+      console.error("[sumate] generateLink no devolvió hashed_token");
+      return null;
+    }
+    // Apunta al canje (route handler), NO a la pantalla: el canje escribe las
+    // cookies de sesión y un Server Component no puede. Es exactamente el bug
+    // que dejaba a todo el mundo con "el link venció" (arreglado el 1/8).
+    return siteUrl(
+      `/definir-contrasena/confirmar?token_hash=${encodeURIComponent(hashed)}&type=recovery`,
+    );
+  } catch (e) {
+    console.error(
+      "[sumate] linkParaElegirContrasena threw:",
+      e instanceof Error ? e.message : String(e),
+    );
+    return null;
+  }
+}
 
 /**
  * Catálogo cerrado de oficios, aplanado una sola vez. En la vía corta (registro
@@ -103,6 +176,30 @@ export async function registerApplicant(
     return { ok: false, reason: "Necesitás aceptar el tratamiento de datos." };
   }
 
+  // ── FRENO DE ABUSO ──
+  // Esta acción es pública y hace tres cosas caras: escribe una ficha, sube un
+  // archivo de hasta 10MB al bucket, y MANDA UN MAIL. O sea que un script puede
+  // llenar el pool de basura y, peor, hacer que LABURO le mande bienvenidas a
+  // casillas ajenas hasta quemar la cuota de envío, que es compartida con el
+  // resto de los productos. /acceso-staff ya tenía este freno desde el Lote 2;
+  // /sumate quedó sin él.
+  //
+  // Los números salen del uso real: una persona se registra UNA vez, dos si se
+  // equivocó y volvió a empezar. El límite por hora existe para el caso legítimo
+  // de varias personas anotándose desde el mismo lugar (un evento, un locutorio).
+  const ip = await clientIp();
+  if (!rateLimit(`sumate:ip:${ip}`, 3, 60_000).ok) {
+    return { ok: false, reason: "Esperá un minuto y volvé a intentar." };
+  }
+  if (!rateLimit(`sumate:ip-hora:${ip}`, 15, 3_600_000).ok) {
+    return { ok: false, reason: "Demasiados registros desde esta conexión. Probá más tarde." };
+  }
+  // Y por dirección de mail, para que el mismo email no dispare una bienvenida
+  // atrás de otra aunque cambien de IP.
+  if (!rateLimit(`sumate:mail:${email.toLowerCase()}`, 3, 600_000).ok) {
+    return { ok: false, reason: "Ya recibimos tu registro. Revisá tu casilla, incluido el spam." };
+  }
+
   // CV opcional → bucket privado (service-role). Validamos el MIME REAL por magic
   // bytes (no confiamos en file.type) y, si el registro falla después, borramos el
   // objeto para no dejar CVs huérfanos en el bucket.
@@ -181,10 +278,18 @@ export async function registerApplicant(
     data && typeof data === "object" && "id" in data ? String(data.id) : null;
   try {
     const firstName = nombre.split(/\s+/)[0] ?? "";
+
+    // El link para ELEGIR la contraseña, generado acá y metido adentro de
+    // nuestro mail (ver linkParaElegirContrasena). Si falla, el mail sale con el
+    // link de siempre a /acceso-staff y la persona entra por el camino largo:
+    // peor experiencia, pero nunca una puerta cerrada.
+    const claveLink = await linkParaElegirContrasena(admin, email.toLowerCase());
+
     const html = await render(
       createElement(WelcomeEmail, {
         firstName,
-        link: siteUrl("/acceso-staff"),
+        link: claveLink ?? siteUrl("/acceso-staff"),
+        conLinkDeClave: claveLink !== null,
         bajaLink:
           profileId && bajaReady() ? bajaUrl(profileId) : undefined,
       }),

@@ -20,10 +20,25 @@
  * cálido igual, pero sobre lo que de verdad pasó: el perfil está creado y desde
  * ahí llegan propuestas.
  *
- * NO LLEVA CREDENCIAL: el link es la pantalla pública /acceso-staff, donde la
- * persona pide su propio link con su mail. Así este mail no transporta ningún
- * acceso accionable (si se filtra o se reenvía, no abre nada), y el gate de
- * /acceso-staff sigue siendo el que valida contra el pool.
+ * ⭐ DOS VERSIONES, SEGÚN `conLinkDeClave` (1/8):
+ *
+ * · SIN link de clave (la tanda del cron, las fichas viejas): el link es la
+ *   pantalla pública /acceso-staff. Este mail no transporta ningún acceso
+ *   accionable, si se filtra o se reenvía no abre nada, y el gate de
+ *   /acceso-staff sigue siendo el que valida contra el pool.
+ *
+ * · CON link de clave (el que se acaba de registrar): el link SÍ es una
+ *   credencial de un solo uso y vida corta, generada por generateLink para ese
+ *   mail. Se acepta a propósito, porque es el mismo nivel de riesgo que
+ *   cualquier "recuperar contraseña" del mundo, y a cambio elimina el paso donde
+ *   se perdía la gente. Nunca viaja una contraseña, solo el permiso de elegir
+ *   una. Si el link se genera mal, se cae solo a la versión sin credencial.
+ *
+ * ⚠️ EL COPY Y EL LINK TIENEN QUE CONTAR LA MISMA HISTORIA. Hasta el 1/8 este
+ * mail decía "no hace falta contraseña" y mandaba a una pantalla que pedía una:
+ * una trabajadora real leyó eso como que LABURO era otra cosa donde había que
+ * anotarse, y se registró dos veces. Si mañana cambia la pantalla de acceso,
+ * este texto cambia con ella.
  *
  * El nombre viene del pool y react-email lo escapa por default en los children.
  * Nunca inyectamos HTML crudo sobre datos del pool.
@@ -48,6 +63,18 @@ export interface WelcomeEmailProps {
   firstName: string;
   link: string;
   /**
+   * ⭐ true = `link` es el link personal para ELEGIR la contraseña (lo genera el
+   * registro con generateLink). false = es la pantalla pública /acceso-staff,
+   * que es a donde cae la tanda del cron y cualquier caso donde no se haya
+   * podido generar el link.
+   *
+   * Define el texto Y el botón, y por eso existe: hasta el 1/8 este mail
+   * prometía "no hace falta contraseña" mientras la pantalla pedía una. Esa
+   * contradicción es la que hizo que una trabajadora real se registrara dos
+   * veces. El copy no puede describir un flujo distinto del que el link abre.
+   */
+  conLinkDeClave?: boolean;
+  /**
    * Link de baja del pool ("no quiero formar parte"). Va al pie, en chico pero
    * legible y sin vueltas. No está escondido a propósito: el que puede irse en un
    * click no nos marca como spam, y no tiene sentido tener en la base a alguien
@@ -67,7 +94,12 @@ const FG_MUTED = "#8A8A8A";
 const FONT_STACK =
   "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif";
 
-export function WelcomeEmail({ firstName, link, bajaLink }: WelcomeEmailProps) {
+export function WelcomeEmail({
+  firstName,
+  link,
+  conLinkDeClave = false,
+  bajaLink,
+}: WelcomeEmailProps) {
   const saludo = firstName?.trim() ? `Hola ${firstName.trim()}` : "Hola";
 
   return (
@@ -144,10 +176,9 @@ export function WelcomeEmail({ firstName, link, bajaLink }: WelcomeEmailProps) {
                 color: FG_MUTED,
               }}
             >
-              Entrá con este mismo mail para revisarlo y completar lo que falte.
-              No hace falta contraseña: ponés tu mail y te mandamos un link para
-              entrar. Cuanto más completo esté tu perfil, más fácil es que te
-              llamemos para el evento que te corresponde.
+              {conLinkDeClave
+                ? "Para entrar a verlo, elegí tu contraseña acá abajo. Es una sola vez: después entrás siempre con este mismo mail y esa clave. Cuanto más completo esté tu perfil, más fácil es que te llamemos para el evento que te corresponde."
+                : "Entrá con este mismo mail para revisarlo y completar lo que falte. La primera vez tenés que crear tu contraseña, y para eso está el botón que dice que es tu primera vez. Cuanto más completo esté tu perfil, más fácil es que te llamemos para el evento que te corresponde."}
             </Text>
 
             <Section style={{ marginTop: "24px" }}>
@@ -164,9 +195,24 @@ export function WelcomeEmail({ firstName, link, bajaLink }: WelcomeEmailProps) {
                   borderRadius: "0",
                 }}
               >
-                Entrar a LABURO
+                {conLinkDeClave ? "Elegir mi contraseña" : "Entrar a LABURO"}
               </Button>
             </Section>
+
+            {conLinkDeClave && (
+              <Text
+                style={{
+                  margin: "18px 0 0 0",
+                  fontSize: "14px",
+                  lineHeight: 1.5,
+                  color: FG_MUTED,
+                }}
+              >
+                Este link es tuyo y por seguridad dura poco. Si ya venció, entrá
+                a laburo.somosder.ar/acceso-staff, poné este mismo mail y tocá
+                donde dice que es tu primera vez.
+              </Text>
+            )}
 
             <Text
               style={{

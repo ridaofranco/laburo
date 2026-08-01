@@ -22,18 +22,41 @@ import { createClient } from "@/lib/supabase/server";
  */
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
-  const code = searchParams.get("code");
 
   // Supabase avisa acá cuando el link venció o ya se usó.
   const errorCode = searchParams.get("error_code") || searchParams.get("error");
   if (errorCode) {
     return NextResponse.redirect(`${origin}/acceso-staff?motivo=link_vencido`);
   }
+
+  const supabase = await createClient();
+
+  // ── DOS FORMATOS DE LINK, PORQUE HAY DOS CAMINOS PARA LLEGAR ACÁ ──
+  //
+  // `code`       → lo pone resetPasswordForEmail, o sea el botón "es mi primera
+  //                vez / no me acuerdo la contraseña" de /acceso-staff.
+  // `token_hash` → lo genera admin.generateLink en el registro, que es el link
+  //                que ahora viaja DENTRO de nuestro mail de bienvenida.
+  //
+  // Se aceptan los dos a propósito y no se migra uno al otro: los mails ya
+  // enviados siguen circulando en casillas reales y tienen que seguir andando.
+  const tokenHash = searchParams.get("token_hash");
+  if (tokenHash) {
+    const { error } = await supabase.auth.verifyOtp({
+      token_hash: tokenHash,
+      type: "recovery",
+    });
+    if (error) {
+      return NextResponse.redirect(`${origin}/acceso-staff?motivo=link_vencido`);
+    }
+    return NextResponse.redirect(`${origin}/definir-contrasena`);
+  }
+
+  const code = searchParams.get("code");
   if (!code) {
     return NextResponse.redirect(`${origin}/acceso-staff?motivo=link_invalido`);
   }
 
-  const supabase = await createClient();
   const { error } = await supabase.auth.exchangeCodeForSession(code);
   if (error) {
     return NextResponse.redirect(`${origin}/acceso-staff?motivo=link_vencido`);
