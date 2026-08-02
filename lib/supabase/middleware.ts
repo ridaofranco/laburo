@@ -82,6 +82,13 @@ export async function updateSession(request: NextRequest) {
     "/panel-staff",
     "/onboarding-staff",
     "/editar-perfil-staff",
+    // Marketplace del lado de la persona (0052). Va en esta lista por el mismo
+    // motivo que sus hermanas: sin esto, el middleware manda a /login, que es la
+    // puerta del PRODUCTOR, y el staff termina en una pantalla que no es la
+    // suya. El gate real lo hace la página con requireStaff(), que redirige a
+    // /acceso-staff, y los RPC de la 0052 no le contestan a nadie que no tenga
+    // ficha en el pool.
+    "/trabajos",
     // Blog público (/blog y /blog/<slug>): contenido estático, sin sesión. Sin
     // esta línea el middleware mandaría a /login a cualquiera que llegue desde
     // Google — o sea, a todo el tráfico que el blog existe para captar.

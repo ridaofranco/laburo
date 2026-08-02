@@ -9,12 +9,17 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { CalendarDays, MapPin, UserRound, LogOut } from "lucide-react";
+import { CalendarDays, MapPin, UserRound, LogOut, Search } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 
+// "Buscar trabajo" va SEGUNDO, no último (0052): es lo único de este menú donde
+// la persona puede hacer que algo pase por su cuenta. El resto es mirar lo que
+// ya le pasó. Hasta hoy el portal de staff era una sala de espera con tres
+// pantallas y ninguna forma de levantar la mano.
 const ITEMS = [
   { href: "/panel-staff", label: "Mis eventos", icon: CalendarDays },
+  { href: "/trabajos", label: "Buscar trabajo", icon: Search },
   { href: "/fichaje", label: "Fichaje", icon: MapPin },
   { href: "/editar-perfil-staff", label: "Mi perfil", icon: UserRound },
 ];

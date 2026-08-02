@@ -17,7 +17,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { ChevronDown, UserRoundSearch, UserRoundPlus, Pencil, MapPin, CreditCard } from "lucide-react";
+import { ChevronDown, UserRoundSearch, UserRoundPlus, Pencil, MapPin, CreditCard, Megaphone } from "lucide-react";
 import { toast } from "sonner";
 import { offerLabel } from "@/lib/offers";
 import { createClientCheckout } from "./payment-actions";
@@ -209,6 +209,15 @@ function GigCard({ item }: { item: BoardGig }) {
           className="inline-flex items-center gap-2 label-tech text-[11px] text-[#cfc4c5] hover:text-[#e5e2e1] transition-colors"
         >
           <UserRoundSearch size={14} /> Buscar staff
+        </Link>
+        {/* Las dos formas de llenar un evento, una al lado de la otra (0052):
+            "Buscar staff" es ir a buscar de a uno, "Publicar búsqueda" es que
+            se postulen solos. La segunda no existía. */}
+        <Link
+          href={`/tablero/${gig.id}/busquedas`}
+          className="inline-flex items-center gap-2 label-tech text-[11px] text-[#cfc4c5] hover:text-[#e5e2e1] transition-colors"
+        >
+          <Megaphone size={14} /> Publicar búsqueda
         </Link>
         {cobrado ? (
           <span className="inline-flex items-center gap-2 label-tech text-[11px] text-[#3dd68c]">
