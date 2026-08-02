@@ -98,6 +98,20 @@ export async function updateSession(request: NextRequest) {
     // esta línea el middleware mandaría a /login a cualquiera que llegue desde
     // Google — o sea, a todo el tráfico que el blog existe para captar.
     "/blog",
+    // LA VIDRIERA DE PROVEEDORES (Fase 4, migración 0059). Es la puerta del
+    // cliente final: alguien que organiza su casamiento y que no tiene ni va a
+    // tener cuenta. Sin esta línea la fase entera es inalcanzable, que es
+    // exactamente lo que pasó al probarla la primera vez (307 a /login).
+    //
+    // ⚠️ NO confundir con "/proveedores", que es la pantalla de la productora y
+    // tiene que seguir gateada. Son dos rutas distintas a propósito: la de
+    // adentro trae favoritos y notas internas de cada productora, la de afuera
+    // no trae nada de eso ni el mail del proveedor.
+    //
+    // Dejarla pasar es seguro: las RPC `staff_app_vidriera_*` son SECURITY
+    // DEFINER, solo miran proveedores publicados, no devuelven datos de
+    // contacto, y la de consultar tiene el freno de abuso adentro.
+    "/servicios",
     // El matcher del middleware solo excluye imágenes y .js, así que /robots.txt
     // y /sitemap.xml pasan por acá: sin esta línea, Googlebot pide el sitemap y
     // se come un 307 a /login.

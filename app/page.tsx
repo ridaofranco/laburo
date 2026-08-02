@@ -436,6 +436,20 @@ export default function LandingPage() {
             <WhatsAppLink className="text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#25D366]">
               WhatsApp
             </WhatsAppLink>
+            {/* La vidriera de proveedores (Fase 4).
+             *
+             * Va en el footer y NO como un tercer camino arriba, a propósito y
+             * por ahora: al 2/8 el directorio está vacío, y mandar tráfico
+             * desde el lugar más caro de la landing a un empty state quema a la
+             * primera persona que entra. En cuanto Franco publique los primeros
+             * diez proveedores, esto sube a la sección "Dos caminos", que pasa a
+             * ser tres: productores, staff y quien arma su propia fiesta. */}
+            <Link
+              href="/servicios"
+              className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
+            >
+              Proveedores
+            </Link>
             {/* Entrada discreta al blog: no compite con los dos CTA de arriba. */}
             <Link
               href="/blog"
