@@ -23,6 +23,7 @@ import {
   Inbox,
   Settings,
   LogOut,
+  Truck,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
@@ -43,6 +44,10 @@ const MAIN: Item[] = [
   // org dueña del producto (se filtra abajo, en el componente).
   { label: "Leads", icon: Inbox, href: "/leads", match: ["/leads"], soloPlataforma: true },
   { label: "Buscar", icon: Search, href: "/buscar", match: ["/buscar", "/staff"] },
+  // Fase 3 (2/8): "si a la productora le faltan proveedores, que puedan
+  // tenerlos". Va PEGADO a Buscar porque son la misma pregunta con distinta
+  // respuesta: me falta gente / me falta un servicio.
+  { label: "Proveedores", icon: Truck, href: "/proveedores", match: ["/proveedores"] },
   { label: "Eventos", icon: CalendarDays, href: "/tablero", match: ["/tablero"] },
   { label: "Favoritos", icon: Heart, href: "/favoritos", match: ["/favoritos"] },
   { label: "Calendario", icon: CalendarRange, href: "/calendario", match: ["/calendario"] },
