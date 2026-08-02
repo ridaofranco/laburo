@@ -28,6 +28,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { normalizarWebsite } from "@/lib/format";
+import type { CampoFormulario } from "@/lib/formulario-consulta";
 
 export type ResultadoAccion =
   | { ok: true }
@@ -50,6 +51,19 @@ const MENSAJES: Record<string, string> = {
   demasiadas_provincias: "Elegiste demasiadas provincias. Dejá las que trabajás de verdad.",
   servicio_no_encontrado: "Ese servicio ya no está. Actualizá la pantalla.",
   faltan_datos: "Te falta completar algo antes de publicarte.",
+  // Formulario de consulta (0058). Los códigos los devuelve
+  // staff_app.validar_campos_formulario, que es la validación que manda.
+  demasiados_campos:
+    "Son demasiadas preguntas. Cuantas más ponés, menos gente termina de completarlo.",
+  campo_sin_texto: "Hay una pregunta sin texto. Escribila o borrala.",
+  campo_muy_largo: "Hay una pregunta demasiado larga. Hacela más corta.",
+  campo_repetido: "Hay dos preguntas iguales. Dejá una sola.",
+  campo_sin_id: "Se rompió una pregunta. Actualizá la pantalla y probá de nuevo.",
+  tipo_invalido: "Una de las preguntas quedó con un tipo que no existe.",
+  pocas_opciones: "Una pregunta de elegir de una lista necesita al menos dos opciones.",
+  demasiadas_opciones: "Una de las preguntas tiene demasiadas opciones.",
+  opciones_invalidas: "Se rompieron las opciones de una pregunta. Probá de nuevo.",
+  campos_invalidos: "El formulario quedó mal armado. Actualizá la pantalla.",
 };
 
 function traducir(reason: string | undefined): string {
@@ -197,6 +211,30 @@ export async function publicar(
   const { data, error } = await supabase.rpc("staff_app_proveedor_publicar", {
     p_token: token,
     p_publicar: quierePublicarse,
+  });
+
+  return resolver(data, error);
+}
+
+/**
+ * Guardar el formulario con el que recibe consultas (RPC
+ * staff_app_proveedor_guardar_formulario, migración 0058).
+ *
+ * Un array vacío NO es un error: significa "volvé a usar el template de SOMOS
+ * DER". Es la forma de deshacer sin tener que borrar campo por campo, y es el
+ * estado en el que arranca todo el mundo.
+ */
+export async function guardarFormulario(
+  token: string,
+  campos: CampoFormulario[],
+  intro: string,
+): Promise<ResultadoAccion> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.rpc("staff_app_proveedor_guardar_formulario", {
+    p_token: token,
+    p_campos: campos,
+    p_intro: intro.trim() || null,
   });
 
   return resolver(data, error);

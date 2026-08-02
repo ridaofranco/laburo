@@ -42,6 +42,18 @@ export interface MailOptions {
   html: string;
   attachments?: MailAttachment[];
   /**
+   * A dónde contesta el que recibe, cuando NO somos nosotros.
+   *
+   * Existe por la consulta a proveedores (0058): el mail sale de SOMOS DER pero
+   * la respuesta tiene que ir a la productora que preguntó, no a nuestra casilla.
+   * Sin esto el proveedor aprieta responder y le escribe a un buzón que no es el
+   * de la persona que quiere contratarlo, que es la forma más silenciosa de
+   * perder un negocio.
+   *
+   * Si no se pasa, se sigue usando MAIL_REPLY_TO como siempre.
+   */
+  replyTo?: string;
+  /**
    * Headers extra. Se usa para List-Unsubscribe / List-Unsubscribe-Post (RFC
    * 8058) en los envíos a muchas personas: Gmail lee un envío masivo sin vía de
    * baja y castiga la reputación del dominio. Lo soportan los dos canales
@@ -139,7 +151,8 @@ const errMsg = (e: unknown): string =>
 // ─── Resend (vía API HTTP, sin dependencia extra) ─────────────────────────
 
 async function sendViaResend(opts: MailOptions): Promise<void> {
-  const replyTo = replyToAddress();
+  // El del mensaje gana sobre el del entorno: es un dato del envío, no config.
+  const replyTo = opts.replyTo || replyToAddress();
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -194,11 +207,13 @@ function transporter(): nodemailer.Transporter {
 }
 
 async function sendViaSmtp(opts: MailOptions): Promise<void> {
-  const replyTo = replyToAddress();
+  // Mismo criterio que Resend: el replyTo del mensaje pisa al del entorno. Va
+  // explícito y no colgado del spread de `opts` para que se lea de una.
+  const replyTo = opts.replyTo || replyToAddress();
   await transporter().sendMail({
     from: fromHeader(),
-    ...(replyTo ? { replyTo } : {}),
     ...opts,
+    ...(replyTo ? { replyTo } : {}),
   });
 }
 

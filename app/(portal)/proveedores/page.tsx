@@ -7,12 +7,15 @@
  *
  * La búsqueda cruza organizaciones: un proveedor publicado lo ve cualquier
  * productora. Lo privado de cada una (nota, favorito) no cruza.
+ *
+ * Desde el 2/8 el contacto NO es por WhatsApp: se completa el formulario del
+ * proveedor y le llega la consulta a su mail (decisión de Franco, migración 0058).
  */
 
 export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
-import { buscarProveedores, getCategorias } from "./actions";
+import { buscarProveedores, getCategorias, getMiEmail } from "./actions";
 import { ProveedoresClient } from "./proveedores-client";
 
 export const metadata: Metadata = {
@@ -31,9 +34,10 @@ export default async function ProveedoresPage({
     provincia: sp.prov ?? "",
   };
 
-  const [proveedores, categorias] = await Promise.all([
+  const [proveedores, categorias, miEmail] = await Promise.all([
     buscarProveedores(filtros),
     getCategorias(),
+    getMiEmail(),
   ]);
 
   return (
@@ -51,7 +55,8 @@ export default async function ProveedoresPage({
         </h1>
         <p className="text-[16px] text-[#cfc4c5] leading-[1.6] max-w-[640px] mt-1">
           Sonido, catering, fotos, seguridad, lo que te falte para el evento.
-          Escribiles directo por WhatsApp o por mail.
+          Completás su formulario y le llega la consulta a su mail, con todo lo
+          que necesita para cotizarte.
         </p>
       </header>
 
@@ -59,6 +64,7 @@ export default async function ProveedoresPage({
         proveedores={proveedores}
         categorias={categorias}
         filtros={filtros}
+        miEmail={miEmail ?? ""}
       />
     </div>
   );

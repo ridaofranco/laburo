@@ -30,9 +30,11 @@ import { createClient } from "@/lib/supabase/server";
 import { PerfilForm } from "./perfil-form";
 import { Servicios } from "./servicios";
 import { Publicar } from "./publicar";
+import { Formulario } from "./formulario";
 import { WhatsAppCta } from "./wa-cta";
 import { TERMINAL_COPY, type PerfilProveedor } from "./estados";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
+import type { CampoFormulario } from "@/lib/formulario-consulta";
 
 // La RPC estampa el último uso del link: nunca servir esto cacheado.
 export const dynamic = "force-dynamic";
@@ -93,9 +95,13 @@ export default async function AccesoProveedorPage({
   const { token } = await params;
   const supabase = await createClient();
 
-  const { data } = await supabase.rpc("staff_app_proveedor_perfil", {
-    p_token: token,
-  });
+  // Dos lecturas, las dos por token y las dos validadas adentro de su RPC. Van
+  // en paralelo porque son independientes: el formulario de consulta (0058) se
+  // guarda en su propia tabla y no cuelga del perfil.
+  const [{ data }, { data: dataForm }] = await Promise.all([
+    supabase.rpc("staff_app_proveedor_perfil", { p_token: token }),
+    supabase.rpc("staff_app_proveedor_formulario", { p_token: token }),
+  ]);
 
   if (!data) {
     return (
@@ -108,6 +114,10 @@ export default async function AccesoProveedorPage({
   const { perfil, servicios } = data as PerfilProveedor;
   const nombre = (perfil.display_name ?? "").trim();
 
+  // Sin fila propia, `campos` viene vacío y eso significa "usa el template de
+  // SOMOS DER". No hay backfill ni estado intermedio: la ausencia ya lo dice.
+  const form = (dataForm ?? null) as { campos?: CampoFormulario[]; intro?: string | null } | null;
+
   return (
     <Shell>
       <div className="flex flex-col gap-lg pt-md">
@@ -117,7 +127,8 @@ export default async function AccesoProveedorPage({
           </h1>
           <p className="text-body text-fg-muted">
             Este es tu perfil de proveedor. Completalo, cargá los servicios que
-            prestás y publicate para que las productoras te encuentren.
+            prestás y publicate para que las productoras te encuentren. Cuando
+            alguien te quiera contratar, la consulta te llega a tu mail.
           </p>
         </header>
 
@@ -160,6 +171,20 @@ export default async function AccesoProveedorPage({
           bajada="Qué prestás y en qué provincias trabajás."
         >
           <Servicios token={token} servicios={servicios ?? []} />
+        </Bloque>
+
+        {/* Va DESPUÉS de los servicios y ANTES de publicarse a propósito: es lo
+            último que define cómo te llegan los pedidos, y lo primero que
+            conviene tener listo el día que te publicás. */}
+        <Bloque
+          titulo="Cómo quiero que me consulten"
+          bajada="Lo que le vamos a preguntar a quien te pida un presupuesto. Te llega a tu mail ya completo."
+        >
+          <Formulario
+            token={token}
+            camposIniciales={form?.campos ?? []}
+            introInicial={form?.intro ?? null}
+          />
         </Bloque>
 
         <Bloque titulo="Publicarme">
