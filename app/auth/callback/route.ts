@@ -22,7 +22,10 @@ export async function GET(request: Request) {
 
   if (code) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (error) return NextResponse.redirect(`${origin}/login`);
+    // 1/8: antes rebotaba a /login MUDO. El canje falla casi siempre por lo
+    // mismo (el link ya se usó o venció) y no decírselo a la persona es lo que
+    // convierte un caso normal en "no me deja entrar".
+    if (error) return NextResponse.redirect(`${origin}/login?motivo=link_vencido`);
   } else {
     // Sin `code` pero con sesión: es alguien que acaba de entrar con MAIL Y
     // CONTRASEÑA (26/7). Ahí la sesión ya la creó signInWithPassword y no hay
@@ -30,7 +33,7 @@ export async function GET(request: Request) {
     // falta, porque es el que sabe si mandarlo a /dashboard o a /panel-staff.
     // Sin esta rama, entrar con contraseña terminaba SIEMPRE en /login.
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return NextResponse.redirect(`${origin}/login`);
+    if (!user) return NextResponse.redirect(`${origin}/login?motivo=sin_sesion`);
   }
 
   // 1. Productor (miembro del org).

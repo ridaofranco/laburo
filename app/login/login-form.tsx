@@ -9,13 +9,14 @@
  * fondo (opacity 0.03) como en Stitch. Motion para el fade-in-up con stagger.
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
+import { GoogleLogo } from "@/components/google-logo";
 
 const up = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -23,10 +24,31 @@ const up = (delay: number) => ({
   transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] as const, delay },
 });
 
+/**
+ * POR QUÉ VOLVISTE A ESTA PANTALLA (1/8), igual que en /acceso-staff.
+ *
+ * /auth/callback devuelve al productor acá cuando el canje del link falla o
+ * cuando no hay sesión, y hasta hoy lo hacía MUDO: volvías al login y no pasaba
+ * nada. Es el mismo problema que tenía el lado del staff, y no se puede arreglar
+ * en una puerta sola.
+ */
+const MOTIVOS: Record<string, string> = {
+  link_vencido:
+    "Ese link de acceso ya se usó o venció. Pedí uno nuevo escribiendo tu mail acá abajo.",
+  sin_sesion:
+    "Se cerró tu sesión antes de terminar de entrar. Probá de nuevo desde acá.",
+};
+
 export function LoginForm() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
+  const [rebote, setRebote] = useState<string | null>(null);
+
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    setRebote(MOTIVOS[p.get("motivo") ?? ""] ?? null);
+  }, []);
 
   const callbackUrl = () => `${window.location.origin}/auth/callback`;
 
@@ -83,6 +105,17 @@ export function LoginForm() {
         >
           <LaburoWordmark className="h-[64px] md:h-[88px] w-auto" priority />
         </motion.h1>
+
+        {rebote ? (
+          <motion.div {...up(0.08)} className="w-full">
+            <div
+              role="status"
+              className="w-full mb-8 border-l-2 border-[#0047ff] bg-[#0e0e0e] px-5 py-4"
+            >
+              <p className="text-[14px] leading-[1.6] text-[#e5e2e1]">{rebote}</p>
+            </div>
+          </motion.div>
+        ) : null}
 
         {magicLinkSent ? (
           <motion.div {...up(0.1)} className="w-full flex flex-col items-center">
@@ -142,13 +175,29 @@ export function LoginForm() {
               <ArrowRight size={18} strokeWidth={1.5} />
             </button>
 
-            {/* Opción Google, en el mismo registro minimalista */}
+            {/* ⭐ GOOGLE ES UN BOTÓN ACÁ TAMBIÉN (1/8).
+                El 1/8 se arregló el botón de Google del lado del STAFF y este
+                quedó como estaba: texto gris de 12px, sin logo, indistinguible
+                del "¿Trabajás en eventos?" de abajo. Franco lo marcó textual:
+                "lo que hacés para empleados no lo hacés para productores".
+                Tenía razón, y por eso el logo ahora es un componente
+                compartido (components/google-logo.tsx) en vez de una copia. */}
+            <div className="w-full flex items-center gap-4" aria-hidden="true">
+              <span className="h-px flex-1 bg-[#4c4546]/60" />
+              <span className="font-[family-name:var(--font-geist)] text-[11px] uppercase tracking-[0.2em] text-[#8a8a8a]">
+                o
+              </span>
+              <span className="h-px flex-1 bg-[#4c4546]/60" />
+            </div>
             <button
               type="button"
               onClick={handleGoogleLogin}
-              className="mx-auto font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.1em] text-[#988e90] hover:text-[#e5e2e1] transition-colors"
+              className="w-full border border-[#4c4546] bg-transparent text-[#e5e2e1] py-5 px-8 flex items-center justify-center gap-3 hover:border-[#e5e2e1] transition-colors duration-150 cursor-pointer"
             >
-              Acceder con Google
+              <GoogleLogo />
+              <span className="font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.2em]">
+                Entrar con Google
+              </span>
             </button>
 
             {/* El camino del productor SIN cuenta (decisión de Franco, 28/7):

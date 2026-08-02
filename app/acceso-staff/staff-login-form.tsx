@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 import { requestStaffMagicLink, requestPasswordSetup, signInWithPassword } from "./actions";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
+import { GoogleLogo } from "@/components/google-logo";
 
 /**
  * ⭐⭐ POR QUÉ TE REBOTARON A ESTA PANTALLA (1/8).
@@ -69,17 +70,20 @@ const up = (delay: number) => ({
 });
 
 /** Qué está mostrando la pantalla. */
-type Vista = "clave" | "link" | "mandado" | "clave-mandada";
+// "link" se fue el 1/8: el link magico ya no es una vista propia de la
+// pantalla principal, se pide desde "clave-mandada".
+type Vista = "clave" | "mandado" | "clave-mandada";
 
 /**
  * El camino del que NO tiene ficha (decisión de Franco, 28/7; ampliada el 31/7).
  * El registro de staff está abierto a cualquiera, así que esta pantalla nunca
  * puede ser un callejón sin salida.
  *
- * Desde el 31/7 la salida principal está ARRIBA del formulario (ver
- * SalidaSumate): el que llega sin ficha la ve sin scrollear, antes de intentar
- * entrar y frustrarse. Esta invitación se queda para el momento de después de
- * mandar el pedido, que es cuando el que no está en el pool más la necesita.
+ * Desde el 1/8 la salida principal está AL PIE del formulario, separada por una
+ * línea (estuvo arriba entre el 31/7 y el 1/8, y arriba competía con el propio
+ * acto de entrar). Esta invitación es la del final del camino: aparece después
+ * de mandar el pedido, que es cuando el que no está en el pool más la necesita,
+ * porque ya se dio cuenta de que el mail no le va a llegar.
  *
  * Lo que no cambia, y no puede cambiar: el mensaje es SIEMPRE el mismo, esté o
  * no el mail en el pool. Sin oráculo de enumeración. Este texto está escrito
@@ -104,13 +108,6 @@ function InvitacionSumate() {
   );
 }
 
-/**
- * La salida protagonista, arriba de todo (decisión de Franco, 31/7). Antes vivía
- * al pie, después del submit, de los dos botones de cambio de modo y del de
- * Google: el que caía acá sin ficha no la veía nunca. No hace ninguna consulta,
- * no toca actions.ts y su texto es idéntico para el que está en el pool y para
- * el que no: es una invitación abierta, no una respuesta sobre un mail.
- */
 /** El cartel que explica por qué la persona volvió a esta pantalla. */
 function Rebote({ texto }: { texto: string }) {
   return (
@@ -123,64 +120,30 @@ function Rebote({ texto }: { texto: string }) {
   );
 }
 
-/** Logo oficial de Google, en SVG, para el botón de entrar con Google. */
-function GoogleLogo() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
-      <path
-        fill="#EA4335"
-        d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
-      />
-      <path
-        fill="#4285F4"
-        d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
-      />
-      <path
-        fill="#FBBC05"
-        d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"
-      />
-      <path
-        fill="#34A853"
-        d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
-      />
-    </svg>
-  );
-}
-
-function SalidaSumate() {
-  return (
-    <div className="w-full flex flex-col items-center gap-4 mb-10">
-      <p className="text-center text-[14px] leading-[1.6] text-[#cfc4c5]">
-        ¿Primera vez acá? Sumate al pool con tu CV. No hace falta que llenes
-        nada, solo adjuntarlo.
-      </p>
-      <a
-        href="/sumate"
-        className="w-full border border-[#e5e2e1] text-[#e5e2e1] px-8 py-4 flex items-center justify-center gap-3 hover:bg-[#e5e2e1] hover:text-black transition-colors duration-150 font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.2em]"
-      >
-        Sumate con tu CV
-        <ArrowRight size={16} strokeWidth={1.5} />
-      </a>
-      <div className="w-full flex items-center gap-4 pt-1" aria-hidden="true">
-        <span className="h-px flex-1 bg-[#4c4546]/60" />
-        <span className="font-[family-name:var(--font-geist)] text-[11px] uppercase tracking-[0.2em] text-[#8a8a8a]">
-          o
-        </span>
-        <span className="h-px flex-1 bg-[#4c4546]/60" />
-      </div>
-      <p className="text-center text-[13px] leading-[1.5] text-[#8a8a8a]">
-        ¿Ya estás en el pool? Entrá con tu cuenta.
-      </p>
-    </div>
-  );
-}
+/**
+ * ⚠️ ACÁ VIVÍA `SalidaSumate`, Y SE FUE (1/8).
+ *
+ * Era el bloque "¿Primera vez acá? Sumate al pool con tu CV" con su botón
+ * grande, puesto ARRIBA del formulario el 31/7 porque el que llegaba sin ficha
+ * no encontraba la salida.
+ *
+ * Resolvía ese problema y creaba uno peor: lo primero que veías en una pantalla
+ * de ENTRAR era un botón de REGISTRARTE. Sumado al resto, quedaban OCHO caminos
+ * en la misma pantalla (registrarse arriba, mail, contraseña, primera vez,
+ * entrar, link al mail, Google, productor, y registrarse otra vez abajo).
+ * Franco, textual: "el link de ingresar es un kilombo". Tenía razón.
+ *
+ * La invitación a /sumate ahora vive AL PIE, separada por una línea, donde se
+ * lee como lo que es: lo que hacés si no podés entrar. Y al que de verdad le
+ * falta la ficha ya no hay que adivinarle desde arriba: entra con Google o con
+ * el link, y el cartel de `?e=nostaff` se lo dice con todas las letras.
+ */
 
 export function StaffLoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [vista, setVista] = useState<Vista>("clave");
   const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   /** El "por qué volviste acá", leído de la URL (ver MOTIVOS). */
   const [rebote, setRebote] = useState<string | null>(null);
@@ -198,7 +161,7 @@ export function StaffLoginForm() {
   const callbackUrl = () => `${window.location.origin}/auth/callback`;
 
   /** Las dos vistas donde todavía hay un formulario para llenar. */
-  const enFormulario = !sent && vista !== "mandado" && vista !== "clave-mandada";
+  const enFormulario = vista !== "mandado" && vista !== "clave-mandada";
 
   /** Entrar con mail y contraseña. */
   const handlePassword = async (e: React.FormEvent) => {
@@ -249,16 +212,21 @@ export function StaffLoginForm() {
     if (error) toast.error("No pudimos iniciar sesión. Probá de nuevo.");
   };
 
-  const handleMagicLink = async (e: React.FormEvent) => {
-    e.preventDefault();
+  /**
+   * El link mágico. Ya no tiene botón propio en la pantalla principal: se pide
+   * desde la pantalla de "ya te mandamos el mail de la contraseña", que es
+   * cuando de verdad hace falta. Antes competía de igual a igual con la
+   * contraseña y para la persona son la misma cosa ("mandame algo al mail").
+   *
+   * El envío pasa por el server: valida el email contra el pool (service-role)
+   * ANTES de mandar el OTP. Respuesta uniforme = sin oráculo de enumeración.
+   */
+  const pedirLinkMagico = async () => {
     if (!email) return;
     setLoading(true);
-    // El envío pasa por el server: valida el email contra el pool (service-role)
-    // ANTES de mandar el OTP. Respuesta uniforme = sin oráculo de enumeración, así
-    // que mostramos siempre la misma pantalla, esté o no en el pool.
     try {
       await requestStaffMagicLink(email);
-      setSent(true);
+      setVista("mandado");
     } catch {
       toast.error("No pudimos procesar el pedido. Probá de nuevo.");
     } finally {
@@ -302,13 +270,7 @@ export function StaffLoginForm() {
           </motion.div>
         ) : null}
 
-        {enFormulario ? (
-          <motion.div {...up(0.12)} className="w-full">
-            <SalidaSumate />
-          </motion.div>
-        ) : null}
-
-        {vista === "mandado" || sent ? (
+        {vista === "mandado" ? (
           <motion.div {...up(0.1)} className="w-full flex flex-col items-center">
             <p className="text-center text-[16px] leading-[1.6] text-[#cfc4c5]">
               Si <span className="text-[#e5e2e1]">{email}</span> está registrado
@@ -324,12 +286,26 @@ export function StaffLoginForm() {
               en nuestro pool de staff, te mandamos un link para crear tu
               contraseña. Revisá tu casilla, y si no lo ves, mirá en spam.
             </p>
+            {/* El link mágico VIVE ACÁ y no en la pantalla principal (1/8).
+                Antes competía de igual a igual con la contraseña allá arriba, y
+                para la persona son la misma cosa: "mandame algo al mail". Tener
+                las dos a la vista era una de las razones por las que esa
+                pantalla no se entendía. Acá abajo aparece cuando de verdad hace
+                falta: el mail de la contraseña no llegó. */}
+            <button
+              type="button"
+              onClick={pedirLinkMagico}
+              disabled={loading}
+              className="mt-6 font-[family-name:var(--font-geist)] text-[13px] text-[#988e90] hover:text-[#e5e2e1] transition-colors underline underline-offset-4 disabled:opacity-50"
+            >
+              ¿No te llegó? Mandame un link para entrar sin contraseña
+            </button>
             <InvitacionSumate />
           </motion.div>
         ) : (
           <motion.form
             {...up(0.2)}
-            onSubmit={vista === "clave" ? handlePassword : handleMagicLink}
+            onSubmit={handlePassword}
             className="w-full flex flex-col gap-10"
           >
             <div className="relative w-full group">
@@ -379,15 +355,10 @@ export function StaffLoginForm() {
                   disabled={loading}
                   className="mt-3 font-[family-name:var(--font-geist)] text-[13px] text-[#988e90] hover:text-[#e5e2e1] transition-colors underline underline-offset-4 disabled:opacity-50"
                 >
-                  Es mi primera vez, o no me acuerdo la contraseña
+                  No tengo contraseña, o me la olvidé
                 </button>
               </div>
-            ) : (
-              <p className="text-[13px] text-[#8a8a8a] leading-[1.5] -mt-4">
-                Te mandamos un link para entrar, sin contraseña. Sirve para esta
-                vez nada más.
-              </p>
-            )}
+            ) : null}
 
             {error ? (
               <p role="alert" className="text-[14px] leading-[1.5] text-[#ff8a8a]">{error}</p>
@@ -396,33 +367,16 @@ export function StaffLoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full border border-[#e5e2e1] bg-transparent text-[#e5e2e1] py-6 px-8 flex items-center justify-center gap-4 hover:bg-[#e5e2e1] hover:text-black transition-colors duration-150 cursor-pointer disabled:opacity-50"
+              className="w-full border border-[#e5e2e1] bg-[#e5e2e1] text-black py-6 px-8 flex items-center justify-center gap-4 hover:bg-transparent hover:text-[#e5e2e1] transition-colors duration-150 cursor-pointer disabled:opacity-50"
             >
               <span className="font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.2em]">
-                {loading ? "Un segundo…" : vista === "clave" ? "Entrar" : "Mandame el link"}
+                {loading ? "Un segundo…" : "Entrar"}
               </span>
               <ArrowRight size={18} strokeWidth={1.5} />
             </button>
 
-            {/* La salida para el que no se acuerda nada. El staff entra dos o tres
-                veces al año: sin esto, media tanda queda afuera. */}
-            <button
-              type="button"
-              onClick={() => { setVista(vista === "clave" ? "link" : "clave"); setError(null); }}
-              className="mx-auto font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.1em] text-[#988e90] hover:text-[#e5e2e1] transition-colors"
-            >
-              {vista === "clave" ? "Entrar con un link a mi mail" : "Entrar con mi contraseña"}
-            </button>
-
-            {/* ⭐ GOOGLE ES UN BOTÓN, NO LETRA CHICA (1/8).
-                Estaba, y andaba, pero se veía EXACTAMENTE igual que los otros
-                dos links grises del pie ("Entrar con un link a mi mail" y "¿Sos
-                productor?"): 12px, gris, sin logo, apilado al fondo. Franco,
-                que conoce la app, preguntó por qué LABURO no tenía login con
-                Google. Si el dueño no lo encuentra, nadie lo encuentra.
-                Va con el LOGO OFICIAL, como manda la regla de marca: la gente
-                reconoce el logo, no la palabra. */}
-            <div className="w-full flex items-center gap-4 py-1" aria-hidden="true">
+            {/* La SEGUNDA forma de entrar, y la última. Con logo oficial. */}
+            <div className="w-full flex items-center gap-4" aria-hidden="true">
               <span className="h-px flex-1 bg-[#4c4546]/60" />
               <span className="font-[family-name:var(--font-geist)] text-[11px] uppercase tracking-[0.2em] text-[#8a8a8a]">
                 o
@@ -440,15 +394,29 @@ export function StaffLoginForm() {
               </span>
             </button>
 
-            {/* La salida a /sumate ya no vive acá abajo: subió arriba del
-                formulario (SalidaSumate), que es donde el que llega sin ficha la
-                ve sin scrollear. */}
-            <a
-              href="/login"
-              className="mx-auto font-[family-name:var(--font-geist)] text-[11px] uppercase tracking-[0.1em] text-[#8a8a8a] hover:text-[#cfc4c5] transition-colors"
-            >
-              ¿Sos productor? Ingresá acá
-            </a>
+            {/* ── EL PIE: LO QUE NO ES ENTRAR ──
+                Separado por una línea de verdad, para que se lea como otra cosa
+                y no como una tercera forma de entrar. Acá abajo va el que
+                todavía no está anotado y el productor que se equivocó de
+                puerta. */}
+            <div className="w-full border-t border-[#4c4546]/60 pt-8 flex flex-col items-center gap-4">
+              <p className="text-center text-[14px] leading-[1.6] text-[#988e90]">
+                ¿Todavía no estás en el pool?
+              </p>
+              <a
+                href="/sumate"
+                className="w-full border border-[#4c4546] text-[#cfc4c5] px-8 py-4 flex items-center justify-center gap-3 hover:border-[#e5e2e1] hover:text-[#e5e2e1] transition-colors duration-150 font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.2em]"
+              >
+                Sumate al pool
+                <ArrowRight size={16} strokeWidth={1.5} />
+              </a>
+              <a
+                href="/login"
+                className="mt-2 font-[family-name:var(--font-geist)] text-[11px] uppercase tracking-[0.1em] text-[#6f6f6f] hover:text-[#cfc4c5] transition-colors"
+              >
+                ¿Sos productor? Ingresá acá
+              </a>
+            </div>
           </motion.form>
         )}
       </div>
