@@ -200,20 +200,22 @@ export function LoginForm() {
               </span>
             </button>
 
-            {/* El camino del productor SIN cuenta (decisión de Franco, 28/7):
-                las cuentas de productor no se autocrean; el que quiere trabajar
-                con LABURO manda una consulta por el form de la landing
-                (#productores) y se lo contacta por mail. */}
+            {/* ⭐ EL CAMINO DEL PRODUCTOR SIN CUENTA, REESCRITO EL 2/8.
+                Hasta hoy decia "contanos que necesitas y te contactamos": las
+                cuentas no se autocreaban (decision del 28/7) y habia que
+                esperar a que Franco escribiera. El 2/8 Franco lo cambio:
+                "que quede abierto, ya esta, sino no tiene sentido". Ahora se
+                crea la cuenta sola desde /registrar-productora. */}
             <div className="pt-8 border-t border-[#4c4546]/60 flex flex-col items-center gap-3 text-center">
               <p className="text-[13px] text-[#8a8a8a] leading-[1.5] max-w-[360px]">
-                ¿Buscás staff para tu evento y todavía no tenés cuenta? Contanos
-                qué necesitás y te contactamos.
+                ¿Buscás staff para tu evento y todavía no tenés cuenta? Creala
+                ahora, es gratis.
               </p>
               <Link
-                href="/#productores"
+                href="/registrar-productora"
                 className="font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.15em] text-[#e5e2e1] border-b border-[#4c4546] pb-1 hover:border-[#e5e2e1] transition-colors"
               >
-                Dejar mi consulta
+                Crear la cuenta de mi productora
               </Link>
             </div>
 

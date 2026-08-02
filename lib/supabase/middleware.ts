@@ -40,6 +40,11 @@ export async function updateSession(request: NextRequest) {
   const publicPrefixes = [
     "/login",
     "/acceso-staff",
+    // Alta abierta de productora (Fase 2, 2/8). Publica por definicion: la
+    // productora que llega todavia no tiene cuenta. El gate no existe a
+    // proposito (decision de Franco: "que quede abierto"), y el freno de abuso
+    // vive en el server action.
+    "/registrar-productora",
     "/auth/callback",
     "/dev-login",
     "/o",
