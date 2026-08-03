@@ -38,10 +38,21 @@ export function DefinirContrasenaForm() {
         return;
       }
       setListo(true);
-      // Ya quedó con sesión iniciada, así que va derecho a su panel. No se le
-      // pide iniciar sesión de nuevo con la contraseña recién creada: sería
-      // pedirle que la escriba dos veces seguidas sin motivo.
-      setTimeout(() => { window.location.href = "/panel-staff"; }, 1200);
+      // Ya quedó con sesión iniciada, así que no se le pide entrar de nuevo con
+      // la contraseña recién creada: sería escribirla dos veces sin motivo.
+      //
+      // ⚠️ VA A /auth/callback Y NO A UN PANEL (arreglado el 3/8). Acá decía
+      // "/panel-staff" escrito a mano, y esta pantalla la comparten el staff
+      // (/sumate) y la PRODUCTORA (/registrar-productora): la productora
+      // terminaba en el panel de los empleados y, peor, se salteaba el único
+      // lugar donde corre `staff_app_provision_member`, así que nunca se volvía
+      // dueña de su propia productora. Se registraba, elegía la clave, y la app
+      // le decía "esta cuenta no tiene acceso".
+      //
+      // /auth/callback es el que sabe quién es cada uno: productora → su panel,
+      // staff → el suyo. Toda pantalla compartida por dos actores tiene que
+      // salir por ahí, nunca adivinar.
+      setTimeout(() => { window.location.href = "/auth/callback?from=clave"; }, 1200);
     } catch {
       setError("No pudimos guardar la contraseña. Probá de nuevo.");
     } finally {

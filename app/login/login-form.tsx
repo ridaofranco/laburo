@@ -15,6 +15,7 @@ import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
+import { signInWithPassword } from "@/lib/auth-password";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { GoogleLogo } from "@/components/google-logo";
 
@@ -41,9 +42,11 @@ const MOTIVOS: Record<string, string> = {
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
   const [rebote, setRebote] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
@@ -61,9 +64,37 @@ export function LoginForm() {
     if (error) toast.error("No pudimos iniciar sesión. Probá de nuevo.");
   };
 
-  const handleMagicLink = async (e: React.FormEvent) => {
+  /**
+   * ⭐ UNA SOLA PUERTA, DOS FORMAS DE PASAR (3/8).
+   *
+   * Hasta hoy esta pantalla no tenía campo de contraseña: solo Google y magic
+   * link. Y el mail de bienvenida de la productora le decía textual *"después
+   * entrás siempre con este mismo mail y esa clave"*. O sea que la clave que
+   * acababa de elegir no se podía usar en ningún lado, porque
+   * `signInWithPassword` vivía únicamente del lado del staff.
+   *
+   * Con contraseña escrita, entra con ella. Vacía, sigue mandando el link como
+   * siempre: el que nunca definió una no perdió su camino.
+   */
+  const handleEntrar = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
+    setError(null);
+
+    if (password) {
+      setLoading(true);
+      const r = await signInWithPassword(email, password);
+      setLoading(false);
+      if (!r.ok) {
+        setError(r.error ?? "No pudimos entrar.");
+        return;
+      }
+      // Igual que en /acceso-staff: el ruteo por identidad lo hace
+      // /auth/callback, no se adivina acá.
+      window.location.href = "/auth/callback?from=password";
+      return;
+    }
+
     setLoading(true);
     const supabase = createClient();
     await supabase.auth.signInWithOtp({
@@ -141,7 +172,7 @@ export function LoginForm() {
         ) : (
           <motion.form
             {...up(0.2)}
-            onSubmit={handleMagicLink}
+            onSubmit={handleEntrar}
             className="w-full flex flex-col gap-12"
           >
             <div className="relative w-full group">
@@ -164,13 +195,46 @@ export function LoginForm() {
               />
             </div>
 
+            <div className="relative w-full group">
+              <label
+                htmlFor="password"
+                className="block mb-2 font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.1em] text-[#cfc4c5] transition-colors group-focus-within:text-[#e5e2e1]"
+              >
+                Contraseña
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder=" "
+                className="w-full bg-transparent border-0 border-b border-[#4c4546] focus:border-[#e5e2e1] outline-none text-[18px] leading-[1.6] text-[#e5e2e1] py-4 px-0 rounded-none transition-colors duration-300"
+              />
+              {/* No es obligatoria a propósito: el que entra siempre con Google o
+                  con el link nunca definió una, y pedírsela lo dejaría afuera. */}
+              <p className="mt-3 text-[13px] text-[#8a8a8a] leading-[1.5]">
+                Si todavía no tenés una, dejala vacía y te mandamos un link para
+                entrar.
+              </p>
+            </div>
+
+            {error ? (
+              <p role="alert" className="text-[14px] leading-[1.5] text-[#ff8a8a]">
+                {error}
+              </p>
+            ) : null}
+
             <button
               type="submit"
               disabled={loading}
               className="w-full border border-[#e5e2e1] bg-transparent text-[#e5e2e1] py-6 px-8 flex items-center justify-center gap-4 hover:bg-[#e5e2e1] hover:text-black transition-colors duration-150 cursor-pointer disabled:opacity-50"
             >
               <span className="font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.2em]">
-                {loading ? "Enviando…" : "Acceso"}
+                {loading
+                  ? password ? "Entrando…" : "Enviando…"
+                  : password ? "Entrar" : "Mandarme un link"}
               </span>
               <ArrowRight size={18} strokeWidth={1.5} />
             </button>

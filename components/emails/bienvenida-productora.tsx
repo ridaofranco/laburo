@@ -103,7 +103,7 @@ export function BienvenidaProductora({
             >
               {conLinkDeClave
                 ? "Para entrar, elegí tu contraseña acá abajo. Es una sola vez: después entrás siempre con este mismo mail y esa clave."
-                : "Para entrar, andá a laburo.somosder.ar y creá tu contraseña con el botón que dice que es tu primera vez."}
+                : "Para entrar, andá a laburo.somosder.ar/login y escribí este mismo mail. Dejá la contraseña vacía y te mandamos un link para entrar."}
             </Text>
 
             <Section style={{ marginTop: "24px" }}>
@@ -129,7 +129,8 @@ export function BienvenidaProductora({
                 style={{ margin: "18px 0 0 0", fontSize: "14px", lineHeight: 1.5, color: FG_MUTED }}
               >
                 Este link es tuyo y por seguridad dura poco. Si ya venció, entrá a
-                laburo.somosder.ar y tocá donde dice que es tu primera vez.
+                laburo.somosder.ar/login con este mismo mail y la contraseña
+                vacía: te mandamos uno nuevo.
               </Text>
             ) : null}
 

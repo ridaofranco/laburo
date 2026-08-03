@@ -17,6 +17,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { SITE_URL } from "@/lib/site";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { signInWithPassword as entrarConContrasena } from "@/lib/auth-password";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -141,23 +142,9 @@ export async function signInWithPassword(
   email: string,
   password: string,
 ): Promise<{ ok: boolean; error?: string }> {
-  const clean = (email || "").trim().toLowerCase();
-  if (!clean || !password) return { ok: false, error: "Completá tu email y tu contraseña." };
-
-  const ip = await clientIp();
-  // Más ajustado que el del mail: acá se prueban contraseñas, así que el freno
-  // es lo único que separa una cuenta de un ataque de fuerza bruta.
-  if (!rateLimit(`staff-signin:ip:${ip}`, 10, 60_000).ok) {
-    return { ok: false, error: "Demasiados intentos. Esperá un minuto y probá de nuevo." };
-  }
-  if (!rateLimit(`staff-signin:mail:${clean}`, 8, 600_000).ok) {
-    return { ok: false, error: "Demasiados intentos con este email. Esperá unos minutos." };
-  }
-
-  const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email: clean, password });
-  if (error) {
-    return { ok: false, error: "El email o la contraseña no coinciden." };
-  }
-  return { ok: true };
+  // La implementación se mudó a lib/auth-password.ts el 3/8 para que la use
+  // TAMBIÉN el login del productor. No tenía nada específico del staff, y
+  // mientras vivió acá el productor no podía entrar con la contraseña que el
+  // mail de bienvenida le decía que iba a usar siempre.
+  return entrarConContrasena(email, password);
 }
