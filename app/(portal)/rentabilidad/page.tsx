@@ -19,8 +19,10 @@
  */
 
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { TrendingUp, Wallet } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { orgActual } from "@/lib/org";
 import { ExportCsvButton, type CsvRow } from "./export-csv-button";
 import { fmtFecha } from "@/lib/dates";
 import { money, moneyCompact } from "@/lib/format";
@@ -48,6 +50,21 @@ const MES_ABR = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", 
 
 
 export default async function RentabilidadPage() {
+  // ⚠️ PANTALLA DE PLATAFORMA (3/8). Franco: "eso es interno mío". El margen no
+  // forma parte del producto que se le entrega a una productora cliente.
+  //
+  // Ojo con el diagnóstico, porque es la parte que se malinterpreta: acá NUNCA
+  // hubo fuga de datos entre organizaciones. `staff_app_offers` y
+  // `staff_app_gigs` son vistas `security_invoker=true`, así que la RLS corre
+  // como el que mira y cada productora solo veía SUS propias filas. Lo que
+  // estaba mal era que la pantalla existiera del lado del cliente.
+  //
+  // 404 y no "no tenés permiso", igual que /leads: un cartel de permiso le
+  // confirmaría que la ruta existe. Esconder el ítem del menú no es seguridad;
+  // el gate es este, del lado del servidor.
+  const org = await orgActual();
+  if (!org?.esPlataforma) notFound();
+
   const supabase = await createClient();
 
   const { data, error } = await supabase

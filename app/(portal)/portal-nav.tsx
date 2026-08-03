@@ -51,7 +51,18 @@ const MAIN: Item[] = [
   { label: "Eventos", icon: CalendarDays, href: "/tablero", match: ["/tablero"] },
   { label: "Favoritos", icon: Heart, href: "/favoritos", match: ["/favoritos"] },
   { label: "Calendario", icon: CalendarRange, href: "/calendario", match: ["/calendario"] },
-  { label: "Rentabilidad", icon: TrendingUp, href: "/rentabilidad", match: ["/rentabilidad"] },
+  // PLATAFORMA (3/8, Franco: "eso es interno mío"). El margen es el número más
+  // sensible del producto y no forma parte de lo que se le entrega a una
+  // productora cliente. Los datos ya estaban bien aislados (las vistas son
+  // security_invoker, cada org ve solo sus filas), pero la PANTALLA no tenía por
+  // qué existir del lado del cliente. Mismo trato que Leads.
+  {
+    label: "Rentabilidad",
+    icon: TrendingUp,
+    href: "/rentabilidad",
+    match: ["/rentabilidad"],
+    soloPlataforma: true,
+  },
   { label: "Pagos", icon: Wallet, href: "/pagos", match: ["/pagos"] },
   { label: "Notificaciones", icon: Bell, href: "/notificaciones", match: ["/notificaciones"] },
 ];
@@ -98,7 +109,7 @@ export function PortalNav({
       {/* Sidebar desktop */}
       <nav className="hidden md:flex flex-col h-screen py-8 fixed left-0 top-0 w-[280px] bg-[#0e0e0e]/90 backdrop-blur-2xl border-r border-[#1c1b1b] shadow-2xl z-40">
         <div className="px-8 mb-16">
-          <LaburoWordmark className="h-[28px] w-auto" />
+          <LaburoWordmark className="h-[14px] w-auto" />
           <p className="label-tech text-[12px] text-[#cfc4c5] mt-2">{bajada}</p>
         </div>
 

@@ -74,11 +74,29 @@ export async function orgActual(): Promise<OrgActual | null> {
   try {
     const supabase = await createClient();
 
-    // Camino nuevo (migración 0035): todas mis organizaciones, la más antigua
-    // primero. limit(1) es lo que evita el PGRST116 de maybeSingle().
+    // Camino nuevo (migración 0035): todas mis organizaciones. limit(1) es lo
+    // que evita el PGRST116 de maybeSingle().
+    //
+    // ⚠️ LA PLATAFORMA GANA SIEMPRE (3/8). Antes esto ordenaba SOLO por
+    // `created_at` ascendente, o sea "la organización más vieja". Con una sola
+    // organización por persona daba igual, pero apenas alguien pertenece a dos
+    // el criterio es arbitrario y elige mal.
+    //
+    // Pasó de verdad, hoy: Franco entró con un tercer mail
+    // (fraannqiitoo@gmail.com), el alta automática le creó `somos-der-2` con
+    // es_plataforma=false, y esa membresía quedó siendo la única. Resultado: el
+    // dueño del producto entrando a su propia app como si fuera un cliente,
+    // sin Leads y sin Rentabilidad. Sumarlo a mano a la org buena tampoco lo
+    // arreglaba, porque esa membresía sería MÁS NUEVA y perdía el desempate.
+    //
+    // Con `es_plataforma` primero, pertenecer a la plataforma alcanza para
+    // trabajar como la plataforma, sin importar en qué orden se dieron de alta.
+    // `created_at` queda como desempate entre organizaciones del mismo tipo,
+    // que es el comportamiento que ya existía.
     const { data, error } = await supabase
       .from("staff_app_my_orgs")
       .select("organization_id, role, org_name, org_slug, es_plataforma")
+      .order("es_plataforma", { ascending: false, nullsFirst: false })
       .order("created_at", { ascending: true })
       .limit(1)
       .maybeSingle();
