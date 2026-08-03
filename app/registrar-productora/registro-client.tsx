@@ -52,7 +52,7 @@ export function RegistroProductoraClient() {
     <main className="relative min-h-dvh flex flex-col items-center justify-center bg-black text-[#e5e2e1] px-6">
       <div className="relative z-10 w-full max-w-[448px] flex flex-col items-center">
         <motion.div {...up(0)} className="mb-4">
-          <LaburoWordmark className="h-[56px] md:h-[72px] w-auto" priority />
+          <LaburoWordmark className="h-[29px] md:h-[37px] w-auto" priority />
         </motion.div>
         <motion.p
           {...up(0.05)}

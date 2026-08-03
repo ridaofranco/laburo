@@ -18,7 +18,7 @@ export default function SumatePage() {
     <div className="min-h-dvh bg-[#131313] text-[#e5e2e1]">
       <header className="px-6 md:px-20 py-6 border-b border-[#1A1A1A]">
         <Link href="/">
-          <LaburoWordmark className="h-[22px] w-auto" />
+          <LaburoWordmark className="h-[11px] w-auto" />
         </Link>
       </header>
       <SumateClient />

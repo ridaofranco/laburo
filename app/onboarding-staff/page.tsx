@@ -67,7 +67,7 @@ export default function OnboardingStaffPage() {
     <div className="min-h-dvh bg-black text-[#e5e2e1] flex flex-col items-center justify-center overflow-hidden relative">
       {/* TopNav minimalista */}
       <header className="fixed top-0 left-0 w-full z-50 flex justify-center py-6">
-        <LaburoWordmark className="h-[26px] w-auto" />
+        <LaburoWordmark className="h-[13px] w-auto" />
       </header>
 
       {/* Slides */}

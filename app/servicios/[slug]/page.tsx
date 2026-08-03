@@ -71,7 +71,7 @@ export default async function FichaProveedorPage({ params }: Props) {
       <header className="border-b border-[#1a1a1a]">
         <div className={`${WRAP} py-6 flex items-center justify-between gap-4`}>
           <Link href="/" aria-label="LABURO, ir al inicio">
-            <LaburoWordmark className="h-[18px] md:h-[24px] w-auto" priority />
+            <LaburoWordmark className="h-[9px] md:h-[12px] w-auto" priority />
           </Link>
           <Link
             href="/servicios"

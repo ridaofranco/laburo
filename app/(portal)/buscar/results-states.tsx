@@ -33,7 +33,7 @@ export function LoadingResults() {
 export function EmptyResults({ onClear }: { onClear: () => void }) {
   return (
     <div className="flex flex-col items-center text-center gap-md py-2xl">
-      <LaburoWordmark className="h-[20px] w-auto opacity-80" />
+      <LaburoWordmark className="h-[10px] w-auto opacity-80" />
       <h2 className="font-display text-[28px] text-fg">Sin resultados</h2>
       <p className="text-body text-fg-muted max-w-[300px]">
         Probá con otro oficio o sacá algún filtro.

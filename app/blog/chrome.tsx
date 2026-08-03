@@ -20,7 +20,7 @@ export function BlogHeader() {
     <header className="border-b border-[#1a1a1a]">
       <div className={`${WRAP} py-6 flex items-center justify-between`}>
         <Link href="/">
-          <LaburoWordmark className="h-[22px] w-auto" />
+          <LaburoWordmark className="h-[11px] w-auto" />
         </Link>
         <nav className="flex items-center gap-6 md:gap-10">
           <Link
@@ -49,7 +49,7 @@ export function BlogFooter() {
       >
         <div className="flex flex-col gap-3">
           <Link href="/">
-            <LaburoWordmark className="h-[22px] w-auto" />
+            <LaburoWordmark className="h-[11px] w-auto" />
           </Link>
           <span className="label-tech text-[10px] tracking-[0.25em] text-[#8a8a8a]">
             © 2026 LABURO · SOMOS DER. Todos los derechos reservados.

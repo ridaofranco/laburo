@@ -158,7 +158,7 @@ export default function LandingPage() {
           {/* 18px en movil: con "Necesito staff" + "Ingresar" al lado, el
            * wordmark a 26px desbordaba el ancho de 390px. El header padre tiene
            * mix-blend-difference y el blend sigue funcionando sobre la imagen. */}
-          <LaburoWordmark className="h-[18px] md:h-[26px] w-auto" priority />
+          <LaburoWordmark className="h-[9px] md:h-[13px] w-auto" priority />
           <div className="flex items-center gap-3 md:gap-8 shrink-0">
             <Link
               href="/login"
@@ -427,8 +427,16 @@ export default function LandingPage() {
         <div
           className={`${WRAP} py-14 flex flex-col md:flex-row justify-between items-start md:items-center gap-8`}
         >
-          <div className="flex flex-col gap-3">
-            <LaburoWordmark className="h-[22px] w-auto" />
+          {/* EL LOGO DEL FOOTER (3/8). Franco: "el footer tiene horrible el
+           * logo". La causa estaba en el PNG, no acá: tenía casi la mitad de la
+           * caja en relleno transparente, así que el h-[22px] de antes dibujaba
+           * letras de ~11px, exactamente el mismo tamaño que la línea de
+           * copyright de abajo, y con 5px de aire fantasma que agrandaba el gap
+           * sin que se viera por qué. Con el PNG ya recortado, 20px son 20px de
+           * letra: el doble que antes, y se lee como marca y no como pie legal.
+           * El gap baja a 2 porque el aire falso ya no está. */}
+          <div className="flex flex-col gap-2">
+            <LaburoWordmark className="h-[20px] w-auto" />
             <span className="label-tech text-[10px] tracking-[0.25em] text-[#8a8a8a]">
               © 2026 LABURO · SOMOS DER. Todos los derechos reservados.
             </span>
