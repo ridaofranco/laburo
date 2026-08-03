@@ -16,6 +16,7 @@ import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 import { signInWithPassword } from "@/lib/auth-password";
+import { enviarLinkDeAcceso } from "./actions";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { GoogleLogo } from "@/components/google-logo";
 
@@ -96,15 +97,20 @@ export function LoginForm() {
     }
 
     setLoading(true);
-    const supabase = createClient();
-    await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: callbackUrl(),
-        // Gate LABURO: solo los admin ya existen en auth.users (CR-01).
-        shouldCreateUser: false,
-      },
-    });
+    // ⭐ EL LINK LO MANDA EL SERVIDOR (3/8), no el navegador.
+    //
+    // Antes acá vivía `supabase.auth.signInWithOtp()`. Ese camino usa PKCE, que
+    // deja una llave privada en una cookie de ESTE navegador y después la exige
+    // para terminar de entrar. Cuando abrías el mail en el celu, el visor
+    // interno de Gmail es otro navegador, la llave no estaba, y la app te decía
+    // "el link venció" aunque el link estuviera perfecto. Peor: para entonces
+    // Supabase ya había quemado el token, así que al segundo intento el error
+    // se volvía verdadero. Los logs de producción y el detalle completo están
+    // en lib/auth-link.ts.
+    //
+    // La acción genera el link con token_hash y lo manda en NUESTRO mail. El
+    // gate (que la cuenta exista) vive adentro, igual que antes.
+    await enviarLinkDeAcceso(email);
     setLoading(false);
     // Respuesta SIEMPRE uniforme (decisión de Franco, 28/7): con
     // shouldCreateUser:false, Supabase devuelve error cuando la cuenta no
@@ -134,7 +140,7 @@ export function LoginForm() {
           {...up(0)}
           className="mb-[80px] md:mb-[120px]"
         >
-          <LaburoWordmark className="h-[64px] md:h-[88px] w-auto" priority />
+          <LaburoWordmark className="h-[33px] md:h-[45px] w-auto" priority />
         </motion.h1>
 
         {rebote ? (

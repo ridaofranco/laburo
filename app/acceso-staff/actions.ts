@@ -13,11 +13,16 @@
  *     pool: sin oráculo de enumeración, nadie puede averiguar quién es staff.
  */
 
+import { createElement } from "react";
+import { render } from "@react-email/components";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { SITE_URL } from "@/lib/site";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { signInWithPassword as entrarConContrasena } from "@/lib/auth-password";
+import { linkMagicoParaEntrar } from "@/lib/auth-link";
+import { sendMail } from "@/lib/email/mailer";
+import { LinkDeAccesoEmail } from "@/components/emails/link-de-acceso-email";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -45,16 +50,38 @@ export async function requestStaffMagicLink(email: string): Promise<{ ok: boolea
   });
   if (error || inPool !== true) return { ok: true };
 
-  // Recién acá mandamos el OTP (y recién acá se puede crear la cuenta).
-  const origin = SITE_URL;
-  const supabase = await createClient();
-  await supabase.auth.signInWithOtp({
-    email: clean,
-    options: {
-      emailRedirectTo: `${origin}/auth/callback`,
-      shouldCreateUser: true,
-    },
-  });
+  // Recién acá mandamos el link (y recién acá se puede crear la cuenta).
+  //
+  // ⭐ 3/8: ESTO YA NO PASA POR signInWithOtp. Ese camino usa PKCE, que guarda
+  // una llave privada en una cookie del navegador que pidió el link y después la
+  // exige para terminar de entrar. Cuando la persona abre el mail en el celu, el
+  // visor interno de Gmail es OTRO navegador, la llave no está, y le decía "el
+  // link venció" con el link intacto. Y para entonces el token de un solo uso ya
+  // estaba quemado, así que al segundo intento el error se volvía verdadero. El
+  // detalle completo, con los logs de producción, está en lib/auth-link.ts.
+  //
+  // De paso el mail deja de ser la plantilla por defecto de Supabase, en inglés
+  // y sin marca, que Franco marcó como "es horrible y me quita credibilidad" y
+  // que hace que gente del pool lo tome por phishing y no entre.
+  try {
+    const link = await linkMagicoParaEntrar(admin, clean, "acceso-staff", true);
+    if (!link) return { ok: true };
+
+    const html = await render(createElement(LinkDeAccesoEmail, { link }));
+    const res = await sendMail({
+      to: clean,
+      subject: "Tu link para entrar a LABURO",
+      html,
+    });
+    if (!res.ok) {
+      console.error("[acceso-staff] mail no salió:", res.error ?? res.channel);
+    }
+  } catch (e) {
+    console.error(
+      "[acceso-staff] link de acceso falló:",
+      e instanceof Error ? e.message : String(e),
+    );
+  }
   return { ok: true };
 }
 

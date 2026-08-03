@@ -17,10 +17,28 @@ import { createClient } from "@/lib/supabase/server";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
+  const tokenHash = searchParams.get("token_hash");
 
   const supabase = await createClient();
 
-  if (code) {
+  if (tokenHash) {
+    // ── EL CAMINO BUENO (3/8) ────────────────────────────────────────────────
+    // `token_hash` + verifyOtp NO necesita el `code_verifier` que PKCE guarda en
+    // una cookie del navegador que pidió el link. Por eso funciona cuando el
+    // mail lo abre el visor interno de Gmail, que es otro navegador, que es
+    // exactamente donde se moría el login. El detalle completo del bug, con los
+    // logs de producción, está en lib/auth-link.ts.
+    const tipo = searchParams.get("type");
+    const { error } = await supabase.auth.verifyOtp({
+      token_hash: tokenHash,
+      type: tipo === "recovery" ? "recovery" : "magiclink",
+    });
+    if (error) return NextResponse.redirect(`${origin}/login?motivo=link_vencido`);
+  } else if (code) {
+    // ── EL CAMINO VIEJO, que se mantiene A PROPÓSITO ─────────────────────────
+    // Los links PKCE que ya salieron siguen circulando en casillas reales y
+    // tienen que seguir andando. Mismo criterio que /definir-contrasena/confirmar.
+    // Van a dejar de aparecer solos cuando venzan.
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     // 1/8: antes rebotaba a /login MUDO. El canje falla casi siempre por lo
     // mismo (el link ya se usó o venció) y no decírselo a la persona es lo que
