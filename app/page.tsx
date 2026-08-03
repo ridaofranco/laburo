@@ -10,9 +10,10 @@
  * Decisiones de venta (diagnostico 2026-07-28):
  * - DOS caminos separados: productor -> formulario de lead SIN login (antes el
  *   CTA "Buscar staff" chocaba contra el login gateado) y trabajador -> /sumate.
- * - Numero real del pool en el hero: 687 postulantes verificados en la base
- *   (.planning/REQUIREMENTS.md DATA-02). Se publica "+680" para que la cifra
- *   no quede vieja ni prometa de mas.
+ * - Numero real del pool en el hero, redondeado hacia abajo. Al 2/8/2026 son
+ *   1016 personas activas medidas contra produccion (antes decia "+680" sobre
+ *   los 687 de julio, y habia quedado corto por mas de 300). Se publica "+1000"
+ *   para que la cifra no quede vieja ni prometa de mas.
  * - Prueba social con las cifras OFICIALES de SOMOS DER: +100 eventos,
  *   +150.000 asistentes, 6 paises. Nunca otra cifra de asistentes.
  * - Meta description + OG image 1200x630 (public/brand/laburo-og.png, del
@@ -31,7 +32,7 @@ import { waLink } from "@/lib/wa";
 import { PAGO_TEXTO } from "@/lib/pago";
 
 const DESCRIPCION =
-  "Staff para eventos con perfil y CV a la vista: más de 680 mozos, barras, seguridad, sonido y producción. Contanos qué necesita tu evento, sin planillas ni cadenas de WhatsApp. Y si trabajás en eventos, sumate al pool.";
+  "Staff para eventos con perfil y CV a la vista: más de 1000 mozos, barras, seguridad, sonido y producción. Contanos qué necesita tu evento, sin planillas ni cadenas de WhatsApp. Y si trabajás en eventos, sumate al pool.";
 
 export const metadata: Metadata = {
   title: "LABURO. Staff real para eventos",
@@ -133,7 +134,7 @@ const PASOS = [
 ];
 
 const CIFRAS = [
-  { valor: "+680", label: "Postulantes con perfil en el pool" },
+  { valor: "+1000", label: "Postulantes con perfil en el pool" },
   { valor: "+100", label: "Eventos operados" },
   { valor: "+150.000", label: "Asistentes" },
   { valor: "6", label: "Países" },
@@ -213,7 +214,7 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-10 md:mt-20 md:items-end">
               <Reveal visibleDeArranque delay={0.1} className="md:col-span-5">
                 <p className="font-[family-name:var(--font-syne)] font-extrabold text-[clamp(48px,7vw,88px)] leading-none text-[#0047ff]">
-                  +680
+                  +1000
                 </p>
                 <p className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] mt-3">
                   Postulantes con perfil y CV en el pool
