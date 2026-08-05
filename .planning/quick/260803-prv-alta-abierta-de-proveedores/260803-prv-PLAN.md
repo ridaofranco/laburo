@@ -2,7 +2,7 @@
 slug: 260803-prv-alta-abierta-de-proveedores
 fecha: 2026-08-03
 tipo: quick
-status: planificado, sin ejecutar
+status: ejecutado 2026-08-05
 ---
 
 # Alta abierta de proveedores (que se carguen solos)

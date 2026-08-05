@@ -323,23 +323,33 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ── Dos caminos ── */}
+        {/* ── Tres caminos ──
+         *
+         * Paso de dos a tres el 5/8, cuando se construyo el alta abierta de
+         * proveedores. Hasta entonces Proveedores vivia SOLO como un link chico
+         * en el pie, a proposito: el directorio estaba vacio (un unico perfil de
+         * prueba, despublicado) y mandar trafico desde el lugar mas caro de la
+         * landing a un empty state quema a la primera persona que entra.
+         *
+         * Lo que cambio no es el criterio, es el hecho: ahora el proveedor se
+         * anota solo desde /registrar-proveedor, asi que esta tarjeta ya no
+         * apunta a una vidriera vacia, apunta a la puerta que la llena. */}
         <section id="caminos" className="border-t border-[#1a1a1a]">
           <div className={`${WRAP} py-24 md:py-36`}>
             <Reveal>
-              <Eyebrow>03 // Dos caminos</Eyebrow>
+              <Eyebrow>03 // Tres caminos</Eyebrow>
               <h2 className="font-[family-name:var(--font-syne)] font-bold uppercase tracking-tighter text-[clamp(40px,8vw,96px)] leading-none mt-4">
                 ¿De qué lado
                 <br />
                 del evento estás?
               </h2>
             </Reveal>
-            <div className="grid grid-cols-1 md:grid-cols-2 border border-[#1a1a1a] mt-16 md:mt-24">
-              <Reveal className="p-10 md:p-14 flex flex-col gap-6 border-b md:border-b-0 md:border-r border-[#1a1a1a]">
+            <div className="grid grid-cols-1 md:grid-cols-3 border border-[#1a1a1a] mt-16 md:mt-24">
+              <Reveal className="p-8 md:p-9 lg:p-12 flex flex-col gap-6 border-b md:border-b-0 md:border-r border-[#1a1a1a]">
                 <span className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a]">
                   Productores
                 </span>
-                <h3 className="font-[family-name:var(--font-syne)] text-[30px] md:text-[38px] font-bold uppercase tracking-tight leading-[1.05]">
+                <h3 className="font-[family-name:var(--font-syne)] text-[28px] lg:text-[34px] font-bold uppercase tracking-tight leading-[1.05]">
                   Necesitás staff
                 </h3>
                 <p className="text-[16px] md:text-[17px] leading-[1.7] text-[#8a8a8a]">
@@ -354,11 +364,14 @@ export default function LandingPage() {
                   Dejar mi consulta
                 </a>
               </Reveal>
-              <Reveal delay={0.12} className="p-10 md:p-14 flex flex-col gap-6">
+              <Reveal
+                delay={0.12}
+                className="p-8 md:p-9 lg:p-12 flex flex-col gap-6 border-b md:border-b-0 md:border-r border-[#1a1a1a]"
+              >
                 <span className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a]">
                   Staff
                 </span>
-                <h3 className="font-[family-name:var(--font-syne)] text-[30px] md:text-[38px] font-bold uppercase tracking-tight leading-[1.05]">
+                <h3 className="font-[family-name:var(--font-syne)] text-[28px] lg:text-[34px] font-bold uppercase tracking-tight leading-[1.05]">
                   Trabajás en eventos
                 </h3>
                 <p className="text-[16px] md:text-[17px] leading-[1.7] text-[#8a8a8a]">
@@ -383,6 +396,32 @@ export default function LandingPage() {
                   className="mt-auto self-start inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-9 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
                 >
                   Sumate al pool
+                </Link>
+              </Reveal>
+              <Reveal delay={0.24} className="p-8 md:p-9 lg:p-12 flex flex-col gap-6">
+                <span className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a]">
+                  Proveedores
+                </span>
+                <h3 className="font-[family-name:var(--font-syne)] text-[28px] lg:text-[34px] font-bold uppercase tracking-tight leading-[1.05]">
+                  Prestás un servicio
+                </h3>
+                <p className="text-[16px] md:text-[17px] leading-[1.7] text-[#8a8a8a]">
+                  Sonido, catering, seguridad, estructuras, lo que sea. Publicá
+                  lo que hacés y dónde trabajás, y las productoras te encuentran
+                  cuando arman un evento.
+                </p>
+                {/* Mismo criterio que el "cuando se cobra" del staff: la duda
+                 * numero uno del proveedor es si esto le cuesta algo y si tiene
+                 * que crear otra cuenta mas. Se contesta acá, no despues. */}
+                <p className="text-[15px] leading-[1.7] text-[#cfc4c5] border-l-2 border-[#0047ff] pl-5">
+                  Estar en el directorio es gratis y no hace falta crear una
+                  cuenta. Editás o te sacás cuando quieras.
+                </p>
+                <Link
+                  href="/registrar-proveedor"
+                  className="mt-auto self-start inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-9 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
+                >
+                  Publicar mis servicios
                 </Link>
               </Reveal>
             </div>
@@ -441,14 +480,10 @@ export default function LandingPage() {
             <WhatsAppLink className="text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#25D366]">
               WhatsApp
             </WhatsAppLink>
-            {/* La vidriera de proveedores (Fase 4).
-             *
-             * Va en el footer y NO como un tercer camino arriba, a propósito y
-             * por ahora: al 2/8 el directorio está vacío, y mandar tráfico
-             * desde el lugar más caro de la landing a un empty state quema a la
-             * primera persona que entra. En cuanto Franco publique los primeros
-             * diez proveedores, esto sube a la sección "Dos caminos", que pasa a
-             * ser tres: productores, staff y quien arma su propia fiesta. */}
+            {/* La vidriera de proveedores (Fase 4). Desde el 5/8 Proveedores
+             * TAMBIÉN es el tercer camino de la sección de arriba: este link se
+             * queda porque el de arriba lleva a publicarse y este a mirar el
+             * directorio, que no es lo mismo. */}
             <Link
               href="/servicios"
               className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"

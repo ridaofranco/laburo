@@ -45,6 +45,11 @@ export async function updateSession(request: NextRequest) {
     // proposito (decision de Franco: "que quede abierto"), y el freno de abuso
     // vive en el server action.
     "/registrar-productora",
+    // Alta abierta de proveedor (3/8). Publica por la misma razon: el proveedor
+    // que llega no tiene cuenta y NUNCA la va a tener, entra siempre por link
+    // magico. El freno de abuso vive en el server action, y la RPC esta
+    // granteada solo a service_role.
+    "/registrar-proveedor",
     "/auth/callback",
     "/dev-login",
     "/o",

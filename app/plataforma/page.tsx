@@ -10,6 +10,7 @@
 export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
+import Link from "next/link";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import {
   getResumen,
@@ -67,6 +68,14 @@ export default async function PlataformaPage() {
             pantalla es la contracara: acá ves todo lo que se publicó y podés
             bajar lo que esté mal.
           </p>
+          {/* Los proveedores se moderan aparte porque no son búsquedas: viven en
+           * marketplace_profiles y se bajan con otra RPC (0061). */}
+          <Link
+            href="/plataforma/proveedores"
+            className="label-tech text-[11px] tracking-[0.2em] text-[#cfc4c5] hover:text-[#0047ff] border-b border-[#4c4546] hover:border-[#0047ff] pb-1 transition-colors mt-3"
+          >
+            Moderar proveedores del directorio
+          </Link>
         </header>
 
         <PlataformaClient

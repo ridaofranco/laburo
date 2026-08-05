@@ -123,3 +123,67 @@ export async function moderar(
   revalidatePath("/plataforma");
   return { ok: true };
 }
+
+/**
+ * ── PROVEEDORES ────────────────────────────────────────────────────────────
+ * El control de la alta abierta (0060). El proveedor se publica solo y al
+ * toque; esto es lo que permite sacarlo. Sin esto, el aviso que llega cuando
+ * alguien se registra sería un aviso sin botón.
+ */
+
+export interface ProveedorPlataforma {
+  id: string;
+  nombre: string;
+  slug: string | null;
+  email: string;
+  headline: string | null;
+  bio: string | null;
+  ciudad: string | null;
+  provincia: string | null;
+  is_public: boolean;
+  activo: boolean;
+  origen: string | null;
+  created_at: string;
+  moderado_at: string | null;
+  moderado_motivo: string | null;
+  servicios: number;
+  consultas: number;
+}
+
+export async function getProveedores(): Promise<ProveedorPlataforma[]> {
+  const supabase = await createClient();
+  const { data } = await supabase.rpc("staff_app_plataforma_proveedores");
+  return (data as ProveedorPlataforma[] | null) ?? [];
+}
+
+export async function moderarProveedor(
+  profileId: string,
+  bajar: boolean,
+  motivo?: string,
+): Promise<{ ok: boolean; error?: string }> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("staff_app_plataforma_moderar_proveedor", {
+    p_profile_id: profileId,
+    p_bajar: bajar,
+    p_motivo: motivo?.trim() || null,
+  });
+  if (error) {
+    console.error("[plataforma] moderarProveedor falló:", error.message);
+    return { ok: false, error: "No se pudo. Probá de nuevo." };
+  }
+  const r = data as { ok?: boolean; reason?: string } | null;
+  if (!r?.ok) {
+    return {
+      ok: false,
+      error:
+        r?.reason === "falta_motivo"
+          ? "Escribí por qué lo bajás."
+          : r?.reason === "sin_permiso"
+            ? "No sos administrador de la plataforma."
+            : "No se pudo. Probá de nuevo.",
+    };
+  }
+  revalidatePath("/plataforma/proveedores");
+  revalidatePath("/servicios");
+  return { ok: true };
+}

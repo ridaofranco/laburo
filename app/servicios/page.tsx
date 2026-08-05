@@ -91,12 +91,23 @@ export default async function ServiciosPage({ searchParams }: Props) {
           <Link href="/" aria-label="LABURO, ir al inicio">
             <LaburoWordmark className="h-[18px] md:h-[24px] w-auto" priority />
           </Link>
-          <Link
-            href="/sumate"
-            className="label-tech text-[10px] md:text-[11px] tracking-[0.2em] text-white/70 hover:text-[#0047ff] transition-colors duration-300"
-          >
-            Trabajo en eventos
-          </Link>
+          {/* La primera de las dos puertas del alta abierta (decision 2 de
+           * Franco, 3/8). Va acá arriba porque el que llega a la vidriera es
+           * justo el publico: o busca un proveedor, o es uno. */}
+          <div className="flex items-center gap-5 md:gap-7">
+            <Link
+              href="/registrar-proveedor"
+              className="label-tech text-[10px] md:text-[11px] tracking-[0.2em] text-white hover:text-[#0047ff] transition-colors duration-300"
+            >
+              ¿Sos proveedor? Sumate gratis
+            </Link>
+            <Link
+              href="/sumate"
+              className="label-tech text-[10px] md:text-[11px] tracking-[0.2em] text-white/70 hover:text-[#0047ff] transition-colors duration-300"
+            >
+              Trabajo en eventos
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -156,6 +167,19 @@ export default async function ServiciosPage({ searchParams }: Props) {
                     className="inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-8 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
                   >
                     Ver todos
+                  </Link>
+                ) : null}
+                {/* El que mira un directorio vacio es, muchas veces, alguien
+                 * que podria estar adentro. Antes del alta abierta esto no se
+                 * podia ofrecer porque no habia puerta; ahora sí, y es el lugar
+                 * mas barato de todo el sitio para conseguir el primer
+                 * proveedor de verdad. */}
+                {!hayFiltros ? (
+                  <Link
+                    href="/registrar-proveedor"
+                    className="inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-8 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
+                  >
+                    Sos proveedor, publicate
                   </Link>
                 ) : null}
                 <a
