@@ -14,6 +14,12 @@
  *
  * No lleva placa ni fondo: el PNG es transparente. No usar `unoptimized`.
  *
+ * ⚠️ TRAMPA (mordió el footer de la landing y el header de /plataforma): si el
+ * contenedor es una COLUMNA flex sin `items-start` ni `items-center`, el
+ * `align-items: stretch` por defecto estira el wordmark a todo el ancho de la
+ * columna y lo deja aplastado. El `w-auto` no lo frena, porque el stretch actúa
+ * sobre el eje cruzado igual. En columnas flex va siempre `items-start`.
+ *
  * DOS SITIOS QUE NO PASAN POR ACÁ, a propósito:
  *  - `app/blog/chrome.tsx` (el eyebrow en `label-tech`): dice LABURO como
  *    etiqueta de sección, no como lockup de marca.

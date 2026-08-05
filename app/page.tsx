@@ -427,7 +427,11 @@ export default function LandingPage() {
         <div
           className={`${WRAP} py-14 flex flex-col md:flex-row justify-between items-start md:items-center gap-8`}
         >
-          <div className="flex flex-col gap-3">
+          {/* items-start es obligatorio: en una columna flex el align-items por
+           * defecto es stretch, y el wordmark (que no tiene ancho fijo) se
+           * estiraba al ancho de la línea de copyright de abajo. Se dibujaba a
+           * 474x22 cuando por proporción le tocaban 123x22. */}
+          <div className="flex flex-col items-start gap-3">
             <LaburoWordmark className="h-[22px] w-auto" />
             <span className="label-tech text-[10px] tracking-[0.25em] text-[#8a8a8a]">
               © 2026 LABURO · SOMOS DER. Todos los derechos reservados.
