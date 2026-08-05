@@ -28,6 +28,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { normalizarWebsite } from "@/lib/format";
+import { rpcDe, type Acceso } from "@/lib/proveedor-acceso";
 import type { CampoFormulario } from "@/lib/formulario-consulta";
 
 export type ResultadoAccion =
@@ -109,13 +110,14 @@ export interface DatosPerfilInput {
 
 /** Guardar los datos del perfil (RPC staff_app_proveedor_guardar_perfil). */
 export async function guardarPerfil(
-  token: string,
+  acceso: Acceso,
   datos: DatosPerfilInput,
 ): Promise<ResultadoAccion> {
   const supabase = await createClient();
+  const r = rpcDe(acceso, "guardar_perfil");
 
-  const { data, error } = await supabase.rpc("staff_app_proveedor_guardar_perfil", {
-    p_token: token,
+  const { data, error } = await supabase.rpc(r.nombre, {
+    ...r.identidad,
     p_display_name: datos.display_name,
     p_headline: datos.headline,
     p_bio: datos.bio,
@@ -158,13 +160,14 @@ export interface ServicioInput {
  * servicio_no_encontrado.
  */
 export async function guardarServicio(
-  token: string,
+  acceso: Acceso,
   servicio: ServicioInput,
 ): Promise<ResultadoAccion> {
   const supabase = await createClient();
+  const r = rpcDe(acceso, "guardar_servicio");
 
-  const { data, error } = await supabase.rpc("staff_app_proveedor_guardar_servicio", {
-    p_token: token,
+  const { data, error } = await supabase.rpc(r.nombre, {
+    ...r.identidad,
     p_categoria: servicio.categoria,
     p_titulo: servicio.titulo,
     p_servicio_id: servicio.servicio_id,
@@ -180,13 +183,14 @@ export async function guardarServicio(
 
 /** Baja de un servicio (RPC staff_app_proveedor_borrar_servicio). */
 export async function borrarServicio(
-  token: string,
+  acceso: Acceso,
   servicioId: string,
 ): Promise<ResultadoAccion> {
   const supabase = await createClient();
+  const r = rpcDe(acceso, "borrar_servicio");
 
-  const { data, error } = await supabase.rpc("staff_app_proveedor_borrar_servicio", {
-    p_token: token,
+  const { data, error } = await supabase.rpc(r.nombre, {
+    ...r.identidad,
     p_servicio_id: servicioId,
   });
 
@@ -203,13 +207,14 @@ export async function borrarServicio(
  * flujo por token.
  */
 export async function publicar(
-  token: string,
+  acceso: Acceso,
   quierePublicarse: boolean,
 ): Promise<ResultadoAccion> {
   const supabase = await createClient();
+  const r = rpcDe(acceso, "publicar");
 
-  const { data, error } = await supabase.rpc("staff_app_proveedor_publicar", {
-    p_token: token,
+  const { data, error } = await supabase.rpc(r.nombre, {
+    ...r.identidad,
     p_publicar: quierePublicarse,
   });
 
@@ -225,14 +230,15 @@ export async function publicar(
  * estado en el que arranca todo el mundo.
  */
 export async function guardarFormulario(
-  token: string,
+  acceso: Acceso,
   campos: CampoFormulario[],
   intro: string,
 ): Promise<ResultadoAccion> {
   const supabase = await createClient();
+  const r = rpcDe(acceso, "guardar_formulario");
 
-  const { data, error } = await supabase.rpc("staff_app_proveedor_guardar_formulario", {
-    p_token: token,
+  const { data, error } = await supabase.rpc(r.nombre, {
+    ...r.identidad,
     p_campos: campos,
     p_intro: intro.trim() || null,
   });

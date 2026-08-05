@@ -161,7 +161,7 @@ export default function LandingPage() {
           <LaburoWordmark className="h-[18px] md:h-[26px] w-auto" priority />
           <div className="flex items-center gap-3 md:gap-8 shrink-0">
             <Link
-              href="/login"
+              href="/entrar"
               className="label-tech text-[10px] md:text-[11px] tracking-[0.1em] md:tracking-[0.2em] text-white/70 hover:text-[#0047ff] transition-colors duration-300"
             >
               Ingresar
@@ -512,7 +512,7 @@ export default function LandingPage() {
               Sumate al pool
             </Link>
             <Link
-              href="/login"
+              href="/entrar"
               className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
             >
               Ingresar

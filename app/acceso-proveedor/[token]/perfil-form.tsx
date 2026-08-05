@@ -19,6 +19,7 @@
  */
 
 import { useState, useTransition } from "react";
+import type { Acceso } from "@/lib/proveedor-acceso";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Check } from "lucide-react";
@@ -50,10 +51,10 @@ function Campo({
 }
 
 export function PerfilForm({
-  token,
+  acceso,
   perfil,
 }: {
-  token: string;
+  acceso: Acceso;
   perfil: DatosProveedor;
 }) {
   const router = useRouter();
@@ -83,7 +84,7 @@ export function PerfilForm({
     }
     startTransition(async () => {
       try {
-        const res = await guardarPerfil(token, f);
+        const res = await guardarPerfil(acceso, f);
         if (res.ok) {
           setGuardado(true);
           toast.success("Listo, guardamos tus datos.");

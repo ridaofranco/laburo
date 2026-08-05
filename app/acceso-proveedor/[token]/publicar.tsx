@@ -19,6 +19,7 @@
  */
 
 import { useState, useTransition } from "react";
+import type { Acceso } from "@/lib/proveedor-acceso";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Check, AlertCircle } from "lucide-react";
@@ -27,10 +28,10 @@ import { publicar } from "./actions";
 import { textoFalta } from "./estados";
 
 export function Publicar({
-  token,
+  acceso,
   publicado,
 }: {
-  token: string;
+  acceso: Acceso;
   publicado: boolean;
 }) {
   const router = useRouter();
@@ -43,7 +44,7 @@ export function Publicar({
     if (pending) return;
     startTransition(async () => {
       try {
-        const res = await publicar(token, quiere);
+        const res = await publicar(acceso, quiere);
         if (res.ok) {
           setFaltan([]);
           setRecienPublicado(quiere);

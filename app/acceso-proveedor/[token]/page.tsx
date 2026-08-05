@@ -27,10 +27,7 @@
  */
 
 import { createClient } from "@/lib/supabase/server";
-import { PerfilForm } from "./perfil-form";
-import { Servicios } from "./servicios";
-import { Publicar } from "./publicar";
-import { Formulario } from "./formulario";
+import { PanelProveedor } from "@/components/proveedor/panel-proveedor";
 import { WhatsAppCta } from "./wa-cta";
 import { TERMINAL_COPY, type PerfilProveedor } from "./estados";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
@@ -54,26 +51,6 @@ function Shell({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** Bloque de la página, con su título. El proveedor los recorre en orden. */
-function Bloque({
-  titulo,
-  bajada,
-  children,
-}: {
-  titulo: string;
-  bajada?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="flex flex-col gap-md rounded-2xl bg-surface-1 border border-border p-lg">
-      <div className="flex flex-col gap-xs">
-        <h2 className="font-display text-[24px] text-fg">{titulo}</h2>
-        {bajada && <p className="text-label text-fg-muted">{bajada}</p>}
-      </div>
-      {children}
-    </section>
-  );
-}
 
 /** Pantalla sin acceso: sin formulario, sin datos, pero con una salida real. */
 function SinAcceso() {
@@ -111,86 +88,15 @@ export default async function AccesoProveedorPage({
     );
   }
 
-  const { perfil, servicios } = data as PerfilProveedor;
-  const nombre = (perfil.display_name ?? "").trim();
-
-  // Sin fila propia, `campos` viene vacío y eso significa "usa el template de
-  // SOMOS DER". No hay backfill ni estado intermedio: la ausencia ya lo dice.
   const form = (dataForm ?? null) as { campos?: CampoFormulario[]; intro?: string | null } | null;
 
   return (
     <Shell>
-      <div className="flex flex-col gap-lg pt-md">
-        <header className="flex flex-col gap-xs">
-          <h1 className="font-display text-[32px] text-fg">
-            {nombre ? `Hola ${nombre}` : "Hola"}
-          </h1>
-          <p className="text-body text-fg-muted">
-            Este es tu perfil de proveedor. Completalo, cargá los servicios que
-            prestás y publicate para que las productoras te encuentren. Cuando
-            alguien te quiera contratar, la consulta te llega a tu mail.
-          </p>
-        </header>
-
-        {/* Estado actual, todo de lectura. El sello de verificado se muestra y se
-            explica en una línea, para que nadie lo busque como un interruptor:
-            lo activa DER, no el que se verifica a sí mismo. */}
-        <div className="flex flex-col gap-sm rounded-2xl bg-surface-1 border border-border p-md">
-          <div className="flex items-center justify-between gap-md">
-            <span className="text-label text-fg-muted">Estado</span>
-            <span
-              className={`text-label font-semibold ${perfil.is_public ? "text-positive" : "text-fg"}`}
-            >
-              {perfil.is_public ? "Publicado" : "Todavía sin publicar"}
-            </span>
-          </div>
-          <div className="flex items-center justify-between gap-md">
-            <span className="text-label text-fg-muted">Verificado por DER</span>
-            <span className="text-label font-semibold text-fg">
-              {perfil.is_verified ? "Sí" : "Todavía no"}
-            </span>
-          </div>
-          <p className="text-label text-fg-subtle">
-            La verificación la activa DER después de trabajar con vos. No es algo
-            que puedas cambiar desde acá.
-          </p>
-        </div>
-
-        {/* Los tres bloques van en el orden en que el proveedor los usa: primero
-            quién es, después qué hace, y al final publicarse. Una columna, cada
-            bloque con su título, para que en el teléfono se entienda solo. */}
-        <Bloque
-          titulo="Mis datos"
-          bajada="Lo que ve la productora cuando te encuentra."
-        >
-          <PerfilForm token={token} perfil={perfil} />
-        </Bloque>
-
-        <Bloque
-          titulo="Mis servicios"
-          bajada="Qué prestás y en qué provincias trabajás."
-        >
-          <Servicios token={token} servicios={servicios ?? []} />
-        </Bloque>
-
-        {/* Va DESPUÉS de los servicios y ANTES de publicarse a propósito: es lo
-            último que define cómo te llegan los pedidos, y lo primero que
-            conviene tener listo el día que te publicás. */}
-        <Bloque
-          titulo="Cómo quiero que me consulten"
-          bajada="Lo que le vamos a preguntar a quien te pida un presupuesto. Te llega a tu mail ya completo."
-        >
-          <Formulario
-            token={token}
-            camposIniciales={form?.campos ?? []}
-            introInicial={form?.intro ?? null}
-          />
-        </Bloque>
-
-        <Bloque titulo="Publicarme">
-          <Publicar token={token} publicado={perfil.is_public} />
-        </Bloque>
-      </div>
+      <PanelProveedor
+        acceso={{ por: "token", token }}
+        data={data as PerfilProveedor}
+        form={form}
+      />
     </Shell>
   );
 }

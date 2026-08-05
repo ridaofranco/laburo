@@ -138,9 +138,19 @@ export function BienvenidaProveedor({
             <Text
               style={{ margin: "18px 0 0 0", fontSize: "14px", lineHeight: 1.5, color: FG_MUTED }}
             >
-              Guardá este mail: el link es tuyo y es la forma de volver a entrar.
-              Dura {dias} días. Si vence, volvé a anotarte con el mismo mail y te
-              mandamos uno nuevo sin perder nada de lo que cargaste.
+              Guardá este mail: el link es tuyo y dura {dias} días.
+            </Text>
+
+            {/* Desde el 5/8 el link ya no es el ÚNICO camino. Decirlo acá es lo
+             * que evita el callejón sin salida de antes: el que perdía el mail
+             * no entraba nunca más. */}
+            <Text
+              style={{ margin: "10px 0 0 0", fontSize: "14px", lineHeight: 1.5, color: FG_MUTED }}
+            >
+              Y si alguna vez lo perdés, no pasa nada: entrá a
+              laburo.somosder.ar/entrar, elegí &quot;Soy proveedor&quot; y poné
+              este mismo mail. Te mandamos uno nuevo, sin perder nada de lo que
+              cargaste.
             </Text>
 
             <Text

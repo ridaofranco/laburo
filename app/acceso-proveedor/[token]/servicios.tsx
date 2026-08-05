@@ -20,6 +20,7 @@
  */
 
 import { useState, useTransition } from "react";
+import type { Acceso } from "@/lib/proveedor-acceso";
 import { useRouter } from "next/navigation";
 import { Dialog } from "@base-ui/react/dialog";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -87,10 +88,10 @@ function textoPrecio(s: ServicioProveedor): string | null {
 }
 
 export function Servicios({
-  token,
+  acceso,
   servicios,
 }: {
-  token: string;
+  acceso: Acceso;
   servicios: ServicioProveedor[];
 }) {
   const router = useRouter();
@@ -149,7 +150,7 @@ export function Servicios({
 
     startTransition(async () => {
       try {
-        const res = await guardarServicio(token, {
+        const res = await guardarServicio(acceso, {
           servicio_id: draft.servicio_id,
           categoria,
           titulo: draft.titulo,
@@ -178,7 +179,7 @@ export function Servicios({
     if (pending) return;
     startTransition(async () => {
       try {
-        const res = await borrarServicio(token, id);
+        const res = await borrarServicio(acceso, id);
         if (res.ok) {
           toast.success("Servicio borrado.");
           setConfirmando(null);

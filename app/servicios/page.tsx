@@ -218,7 +218,7 @@ export default async function ServiciosPage({ searchParams }: Props) {
             {/* La puerta del proveedor que quiere estar acá. Sin esto, el
              *  directorio solo puede crecer si Franco carga a cada uno a mano. */}
             <Link
-              href="/login"
+              href="/entrar"
               className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
             >
               Soy proveedor

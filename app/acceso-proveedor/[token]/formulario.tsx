@@ -29,6 +29,7 @@
  */
 
 import { useState, useTransition } from "react";
+import type { Acceso } from "@/lib/proveedor-acceso";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Plus, Trash2, ChevronUp, ChevronDown, RotateCcw } from "lucide-react";
@@ -202,11 +203,11 @@ function Editor({
 }
 
 export function Formulario({
-  token,
+  acceso,
   camposIniciales,
   introInicial,
 }: {
-  token: string;
+  acceso: Acceso;
   camposIniciales: CampoFormulario[];
   introInicial: string | null;
 }) {
@@ -250,7 +251,7 @@ export function Formulario({
         label: c.label.trim(),
         opciones: c.tipo === "opciones" ? c.opciones.map((o) => o.trim()).filter(Boolean) : [],
       }));
-      const r = await guardarFormulario(token, limpios, intro);
+      const r = await guardarFormulario(acceso, limpios, intro);
       if (!r.ok) {
         toast.error(r.mensaje);
         if (r.terminal) router.refresh();
@@ -265,7 +266,7 @@ export function Formulario({
     setCampos([]);
     setEditando(false);
     startGuardar(async () => {
-      const r = await guardarFormulario(token, [], intro);
+      const r = await guardarFormulario(acceso, [], intro);
       if (!r.ok) {
         toast.error(r.mensaje);
         return;

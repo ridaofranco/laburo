@@ -38,6 +38,9 @@ export async function updateSession(request: NextRequest) {
   // auth/oferta. El resto de la app (/buscar, /staff, /tablero) queda gateada.
   const path = request.nextUrl.pathname;
   const publicPrefixes = [
+    // La puerta unica (5/8). Publica por definicion: es donde se entra.
+    // /login y /acceso-staff siguen andando abajo, no se retiran.
+    "/entrar",
     "/login",
     "/acceso-staff",
     // Alta abierta de productora (Fase 2, 2/8). Publica por definicion: la
@@ -127,7 +130,11 @@ export async function updateSession(request: NextRequest) {
 
   if (!user && !isPublic) {
     const url = request.nextUrl.clone();
-    url.pathname = "/login";
+    // A /entrar y no a /login (5/8): /login es la puerta de UN actor, y quien
+    // rebota acá puede ser cualquiera de los tres. Mandarlo a la pantalla de
+    // productoras es como empezo todo el lio de "no se por donde entro".
+    url.pathname = "/entrar";
+    url.search = "";
     return NextResponse.redirect(url);
   }
 
