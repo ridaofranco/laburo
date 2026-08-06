@@ -33,10 +33,10 @@ import { PAGO_TEXTO } from "@/lib/pago";
 import { createClient } from "@/lib/supabase/server";
 
 const DESCRIPCION =
-  "Staff para eventos con perfil y CV a la vista: más de 1000 mozos, barras, seguridad, sonido y producción. Contanos qué necesita tu evento, sin planillas ni cadenas de WhatsApp. Y si trabajás en eventos, sumate al pool.";
+  "Todo lo que necesita tu evento en un solo lugar: staff con perfil y CV a la vista, proveedores de todos los rubros y salones por capacidad. Buscás vos y cerrás directo. Y si trabajás en eventos, tenés un servicio o un salón, publicate gratis.";
 
 export const metadata: Metadata = {
-  title: "LABURO. Staff real para eventos",
+  title: "LABURO. Todo lo que necesita tu evento",
   description: DESCRIPCION,
   alternates: { canonical: "/" },
   openGraph: {
@@ -44,20 +44,20 @@ export const metadata: Metadata = {
     url: "/",
     siteName: "LABURO",
     locale: "es_AR",
-    title: "LABURO. Staff real para eventos",
+    title: "LABURO. Todo lo que necesita tu evento",
     description: DESCRIPCION,
     images: [
       {
         url: "/brand/laburo-og.png",
         width: 1200,
         height: 630,
-        alt: "LABURO. Staff para eventos",
+        alt: "LABURO. Todo lo que necesita tu evento",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "LABURO. Staff real para eventos",
+    title: "LABURO. Todo lo que necesita tu evento",
     description: DESCRIPCION,
     images: ["/brand/laburo-og.png"],
   },
@@ -116,21 +116,21 @@ function WhatsAppLink({
 const PASOS = [
   {
     n: "PASO 01",
-    titulo: "Contanos tu evento",
+    titulo: "Cargás tu evento",
     texto:
-      "Fecha, lugar y qué roles necesitás. Un formulario de dos minutos, sin crear ninguna cuenta.",
+      "Creás tu cuenta gratis y cargás la fecha, el lugar y qué te falta. Dos minutos y ya estás adentro.",
   },
   {
     n: "PASO 02",
-    titulo: "Buscamos en el pool",
+    titulo: "Buscás vos",
     texto:
-      "Filtramos por rol, zona y disponibilidad sobre perfiles reales, con experiencia y CV cargados por cada persona.",
+      "El pool completo con experiencia y CV a la vista, más los proveedores y los salones publicados. Filtrás por rol, por zona y por cuánta gente entra.",
   },
   {
     n: "PASO 03",
-    titulo: "Se confirma el staff",
+    titulo: "Cerrás directo",
     texto:
-      "Cada persona recibe una oferta con pago, fechas y horarios, y la acepta con un click. Queda confirmada para tu evento y todo queda registrado.",
+      "Mandás la oferta con pago y horarios, y la persona la acepta con un click desde el teléfono. Al proveedor y al salón les consultás por formulario y te contestan por mail. Todo queda registrado.",
   },
 ];
 
@@ -231,11 +231,11 @@ export default async function LandingPage() {
              * resto de la landing se cae pero el hero (titulo, cifra del pool,
              * parrafo y los dos CTA) se sirve visible. */}
             <Reveal visibleDeArranque>
-              <Eyebrow>Staff para eventos // por SOMOS DER</Eyebrow>
+              <Eyebrow>Staff, proveedores y salones // por SOMOS DER</Eyebrow>
               <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.85] text-[clamp(64px,15vw,180px)] mt-6">
-                <span className="block">Staff</span>
+                <span className="block">Tu evento.</span>
                 <span className="block text-transparent [-webkit-text-stroke:1.5px_#f5f5f5]">
-                  real.
+                  Entero.
                 </span>
               </h1>
             </Reveal>
@@ -243,7 +243,7 @@ export default async function LandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-10 md:mt-20 md:items-end">
               <Reveal visibleDeArranque delay={0.1} className="md:col-span-5">
                 <p className="font-[family-name:var(--font-syne)] font-extrabold text-[clamp(48px,7vw,88px)] leading-none text-[#0047ff]">
-                  +1000
+                  +{pool.toLocaleString("es-AR")}
                 </p>
                 <p className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] mt-3">
                   Postulantes con perfil y CV en el pool
@@ -255,10 +255,9 @@ export default async function LandingPage() {
                 className="md:col-span-7 lg:col-start-7 lg:col-span-6"
               >
                 <p className="text-[18px] md:text-[21px] leading-[1.6] text-[#8a8a8a] max-w-[560px]">
-                  Mozos, barras, seguridad, sonido y producción con datos reales
-                  a la vista. Contanos qué necesita tu evento y te acercamos una
-                  propuesta concreta, sin planillas eternas ni cadenas de
-                  WhatsApp.
+                  El staff, los proveedores y el salón, en un solo lugar. Buscás
+                  vos, con perfiles reales y datos a la vista, y cerrás directo
+                  con cada uno. Sin planillas eternas ni cadenas de WhatsApp.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 mt-10">
                   <a
