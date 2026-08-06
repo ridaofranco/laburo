@@ -373,8 +373,8 @@ export default async function LandingPage() {
                 del evento estás?
               </h2>
             </Reveal>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 border border-[#1a1a1a] mt-16 md:mt-24">
-              <Reveal className="p-8 md:p-9 lg:p-12 flex flex-col gap-6 border-b md:border-b-0 md:border-r border-[#1a1a1a]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[#1a1a1a] border border-[#1a1a1a] mt-16 md:mt-24">
+              <Reveal className="bg-black p-8 md:p-9 lg:p-12 flex flex-col gap-6">
                 <span className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a]">
                   Productores
                 </span>
@@ -385,17 +385,6 @@ export default async function LandingPage() {
                   Creá tu cuenta y entrá a probarlo. Cargás tu evento, mirás el
                   pool con experiencia y CV a la vista, y mandás la oferta vos
                   misma. No hace falta hablar con nadie para empezar.
-                </p>
-                {/* CUANDO SE COBRA, arriba y no despues de entrar. Es la misma
-                 * regla que en la tarjeta del staff: la duda numero uno de una
-                 * productora que ve una herramienta nueva es cuanto le va a
-                 * salir, y contestarla despues del registro es contestarla
-                 * tarde. Hoy usar LABURO no le cuesta nada: MercadoPago esta
-                 * para que el CLIENTE le pague el evento a ella, no para
-                 * cobrarle a ella. */}
-                <p className="text-[15px] leading-[1.7] text-[#cfc4c5] border-l-2 border-[#0047ff] pl-5">
-                  Usar LABURO es gratis. Creás la cuenta, la probás con un
-                  evento real y decidís después.
                 </p>
                 {/* PRIMERO ENTRAR, DESPUES LA CONSULTA (decision de Franco,
                  * 6/8): "una productora tiene que poder entrar gratis para
@@ -424,7 +413,7 @@ export default async function LandingPage() {
               </Reveal>
               <Reveal
                 delay={0.12}
-                className="p-8 md:p-9 lg:p-12 flex flex-col gap-6 border-b md:border-b-0 md:border-r border-[#1a1a1a]"
+                className="bg-black p-8 md:p-9 lg:p-12 flex flex-col gap-6"
               >
                 <span className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a]">
                   Staff
@@ -438,17 +427,6 @@ export default async function LandingPage() {
                   y fechas, y la aceptás con un click. Quedás confirmado/a para
                   ese evento.
                 </p>
-                {/* CUANDO SE COBRA, arriba y no despues de aceptar (diagnostico
-                 * de conversion 2026-07-30, L5). Es la pregunta numero uno de
-                 * cualquiera que trabaja en eventos y el argumento mas fuerte
-                 * del lado oferta, y hasta ahora solo aparecia en el mail de la
-                 * oferta, o sea despues de que la persona ya estaba adentro.
-                 * El plazo se lee de lib/pago.ts: un solo lugar en todo el
-                 * sistema, asi la landing no se despega de lo que dice el mail. */}
-                <p className="text-[15px] leading-[1.7] text-[#cfc4c5] border-l-2 border-[#0047ff] pl-5">
-                  Cargar tu perfil es gratis. {PAGO_TEXTO} El monto está escrito
-                  en la oferta, antes de que aceptes.
-                </p>
                 <Link
                   href="/sumate"
                   className="mt-auto self-start inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-9 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
@@ -456,7 +434,7 @@ export default async function LandingPage() {
                   Sumate al pool
                 </Link>
               </Reveal>
-              <Reveal delay={0.24} className="p-8 md:p-9 lg:p-12 flex flex-col gap-6 border-b md:border-b-0 xl:border-r border-[#1a1a1a]">
+              <Reveal delay={0.24} className="bg-black p-8 md:p-9 lg:p-12 flex flex-col gap-6">
                 <span className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a]">
                   Proveedores
                 </span>
@@ -468,13 +446,6 @@ export default async function LandingPage() {
                   lo que hacés y dónde trabajás, y las productoras te encuentran
                   cuando arman un evento.
                 </p>
-                {/* Mismo criterio que el "cuando se cobra" del staff: la duda
-                 * numero uno del proveedor es si esto le cuesta algo y si tiene
-                 * que crear otra cuenta mas. Se contesta acá, no despues. */}
-                <p className="text-[15px] leading-[1.7] text-[#cfc4c5] border-l-2 border-[#0047ff] pl-5">
-                  Estar en el directorio es gratis y no hace falta crear una
-                  cuenta. Editás o te sacás cuando quieras.
-                </p>
                 <Link
                   href="/registrar-proveedor"
                   className="mt-auto self-start inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-9 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
@@ -483,7 +454,7 @@ export default async function LandingPage() {
                 </Link>
               </Reveal>
 
-              <Reveal delay={0.32} className="p-8 md:p-9 lg:p-12 flex flex-col gap-6">
+              <Reveal delay={0.32} className="bg-black p-8 md:p-9 lg:p-12 flex flex-col gap-6">
                 <span className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a]">
                   Salones
                 </span>
@@ -494,10 +465,6 @@ export default async function LandingPage() {
                   Un salón, un quincho, un galpón, una terraza. Publicalo con
                   cuánta gente entra y dónde queda, y te encuentran los que están
                   buscando dónde hacer su fiesta.
-                </p>
-                <p className="text-[15px] leading-[1.7] text-[#cfc4c5] border-l-2 border-[#0047ff] pl-5">
-                  Es gratis y no hace falta crear una cuenta. Te consultan la
-                  fecha por mail y arreglás directo.
                 </p>
                 <Link
                   href="/registrar-salon"
