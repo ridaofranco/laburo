@@ -58,6 +58,13 @@ export async function updateSession(request: NextRequest) {
     "/o",
     "/sumate",
     "/api/parse-cv",
+    // Bienvenida de una ficha recien creada. La llama somosder.ar despues de
+    // registrar a alguien, SIN sesion (esa persona todavia no tiene cuenta). Sin
+    // esto el middleware la mandaria a /login con un 307 mudo y el mail no
+    // saldria nunca, que es exactamente el agujero que vino a tapar. El gate
+    // real vive adentro: uuid de la ficha + ventana de 30 minutos + la marca
+    // bienvenida_enviada_at, que la hace idempotente.
+    "/api/bienvenida",
     "/api/mp/webhook",
     // Crons de Vercel: llegan SIN sesión (no hay usuario), así que sin esto el
     // middleware los redirigía a /login y el cron "corría" con un 307 a una
