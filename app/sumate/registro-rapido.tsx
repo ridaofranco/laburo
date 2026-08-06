@@ -25,6 +25,9 @@ import {
   labelCls,
   inputCls,
   useCvAutofill,
+  CV_MAX_ADJUNTAR,
+  CV_MAX_LEER,
+  enMb,
   type CvParsed,
 } from "@/components/staff-form-shared";
 import { PAGO_TEXTO } from "@/lib/pago";
@@ -94,7 +97,31 @@ export function RegistroRapido({
       setFile(null);
       return;
     }
+    // ── LOS DOS TECHOS, AVISADOS ANTES Y NO DESPUÉS (6/8) ─────────────────
+    // Antes acá no se miraba el tamaño, así que un CV grande se adjuntaba
+    // igual, el parser fallaba sin explicación y el envío moría después con un
+    // "No se pudo enviar" que no decía nada. Los dos límites existen igual: lo
+    // único que cambia es que ahora la persona se entera y sabe qué hacer.
+    if (f.size > CV_MAX_ADJUNTAR) {
+      toast.error(
+        `Tu CV pesa ${enMb(f.size)} MB y el máximo es ${enMb(CV_MAX_ADJUNTAR)} MB. ` +
+          `Subilo más liviano, o anotate sin CV y cargalo después desde tu perfil.`,
+      );
+      e.target.value = "";
+      setFile(null);
+      return;
+    }
     setFile(f);
+    // Entre 3 y 4 MB el CV se sube perfecto pero NO se puede leer solo: el
+    // parser lo manda en base64 y se pasa del límite de la función. Se dice y
+    // se sigue, en vez de intentar y fallar.
+    if (f.size > CV_MAX_LEER) {
+      toast(
+        "Tu CV se sube bien, pero es muy grande para leerlo solo. " +
+          "Completá tu nombre y tu mail y listo.",
+      );
+      return;
+    }
     const d = await runAutofill(f, ALL_OFICIOS);
     if (!d) return;
     setParsed(d);
@@ -161,7 +188,15 @@ export function RegistroRapido({
       if (res.ok) onDone();
       else toast.error(res.reason || "No se pudo enviar.");
     } catch {
-      toast.error("No se pudo enviar. Probá de nuevo.");
+      // El motivo NÚMERO UNO por el que este catch se dispara es el tamaño: el
+      // CV viaja adentro del Server Action y por arriba del límite la request
+      // muere antes de llegar al servidor, sin `reason` que mostrar. Decir
+      // "probá de nuevo" mandaba a la persona a repetir lo mismo para siempre.
+      toast.error(
+        file
+          ? "No se pudo enviar. Suele ser el CV: probá con uno más liviano, o sacalo y cargalo después desde tu perfil."
+          : "No se pudo enviar. Probá de nuevo.",
+      );
     } finally {
       setSending(false);
     }

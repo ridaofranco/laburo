@@ -17,6 +17,7 @@ import { paises, provinciasAr } from "@/lib/data/paises";
 import {
   WORK_REGIONS, LEGAL_OPTS, AVISO_OPTS, YEARS_OPTS,
   labelCls, inputCls, selectCls, Section, Check, OficiosPicker, useCvAutofill,
+  CV_MAX_ADJUNTAR, CV_MAX_LEER, enMb,
 } from "@/components/staff-form-shared";
 import { PAGO_TEXTO } from "@/lib/pago";
 import { registerApplicant } from "./actions";
@@ -56,6 +57,19 @@ export function RegistroForm({
     const file = cvRef.current?.files?.[0];
     if (!file) {
       toast.error("Elegí tu CV primero.");
+      return;
+    }
+    // Mismos dos techos que el registro rápido, avisados antes de intentar.
+    // Ver el comentario largo en components/staff-form-shared.tsx.
+    if (file.size > CV_MAX_ADJUNTAR) {
+      toast.error(
+        `Tu CV pesa ${enMb(file.size)} MB y el máximo es ${enMb(CV_MAX_ADJUNTAR)} MB. ` +
+          `Subilo más liviano, o dejalo sin adjuntar y cargalo después desde tu perfil.`,
+      );
+      return;
+    }
+    if (file.size > CV_MAX_LEER) {
+      toast("Tu CV se sube bien, pero es muy grande para leerlo solo. Completalo a mano.");
       return;
     }
     const allOficios = oficios.flatMap((g) => g.items.map((it) => it.es));

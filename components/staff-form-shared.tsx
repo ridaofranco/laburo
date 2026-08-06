@@ -32,6 +32,32 @@ export const AVISO_OPTS = [
 ];
 export const YEARS_OPTS = ["0–1", "1–3", "3–5", "5–10", "10+"];
 
+/**
+ * ── LOS DOS TECHOS DEL CV, ESCRITOS UNA SOLA VEZ (6/8) ──────────────────────
+ *
+ * Los dos existían y ninguno estaba declarado, así que la pantalla los cruzaba
+ * a ciegas y fallaba sin poder explicar nada. Franco, textual: *"no lee los
+ * pdfs y tampoco te deja enviar, se rompió todo, no entiendo que poronga pasa"*.
+ *
+ * 1. ADJUNTAR (`CV_MAX_ADJUNTAR`): el archivo viaja adentro de un Server
+ *    Action. Next topea eso (ahora en 4 MB, ver next.config.ts) y Vercel corta
+ *    el body de la función en 4,5 MB. Por arriba de eso el envío muere entero.
+ *
+ * 2. LEER SOLO (`CV_MAX_LEER`): el parser manda el archivo en base64 por JSON,
+ *    y base64 infla ~33%. Verificado contra producción: un PDF de 3,34 MB
+ *    genera un body de 4,45 MB y vuelve FUNCTION_PAYLOAD_TOO_LARGE.
+ *    3 MB deja margen para el resto del JSON.
+ *
+ * Por eso son DOS números y no uno: hay una franja (3 a 4 MB) donde el CV se
+ * sube perfecto pero no se puede leer solo. Ahí la persona se anota igual y
+ * completa a mano, que es infinitamente mejor que rebotarla.
+ */
+export const CV_MAX_ADJUNTAR = 4 * 1024 * 1024;
+export const CV_MAX_LEER = 3 * 1024 * 1024;
+
+/** El tamaño en MB, para decírselo a la persona en criollo. */
+export const enMb = (bytes: number) => (bytes / 1024 / 1024).toFixed(1).replace(".", ",");
+
 export const labelCls =
   "block mb-2 label-tech text-[11px] uppercase tracking-[0.1em] text-[#cfc4c5]";
 export const inputCls =
