@@ -58,6 +58,11 @@ export async function updateSession(request: NextRequest) {
     // abuso vive en el server action y la RPC esta granteada solo a
     // service_role.
     "/registrar-salon",
+    // El chooser de alta (6/8): "que elija que quiere registrar". Es la pantalla
+    // MAS publica que hay, la que abre el que todavia no es nada. Sin esta linea
+    // sale un 307 mudo a /entrar, que es exactamente la trampa que ya me habia
+    // anotado y en la que volvi a caer: TODA ruta publica nueva va en esta lista.
+    "/registrarme",
     "/auth/callback",
     "/dev-login",
     "/o",
