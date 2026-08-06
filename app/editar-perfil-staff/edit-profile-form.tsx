@@ -89,9 +89,13 @@ export function EditProfileForm({ profile }: { profile: StaffProfile }) {
     }
     // El archivo se sube derecho a Supabase y después se manda a leer por su
     // nombre: no pasa por Vercel, así que no hay techo de tamaño que esquivar.
+    let sub: Awaited<ReturnType<typeof subirCvDirecto>>;
     setSubiendo(true);
-    const sub = await subirCvDirecto(file);
-    setSubiendo(false);
+    try {
+      sub = await subirCvDirecto(file);
+    } finally {
+      setSubiendo(false);
+    }
     if (!sub.ok) {
       toast.error(sub.reason);
       return;

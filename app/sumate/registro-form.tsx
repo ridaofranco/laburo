@@ -76,9 +76,15 @@ export function RegistroForm({
     // nombre. Ya no pasa por Vercel, así que los dos techos de tamaño que había
     // acá (4 MB para adjuntar, 3 MB para leer) dejaron de existir.
     // Ver el comentario largo en components/staff-form-shared.tsx.
+    // try/finally: si la subida tira, un setSubiendo(false) suelto no corre y la
+    // pantalla queda colgada en "Subiendo…" con el envío deshabilitado.
+    let sub: Awaited<ReturnType<typeof subirCvDirecto>>;
     setSubiendo(true);
-    const sub = await subirCvDirecto(file);
-    setSubiendo(false);
+    try {
+      sub = await subirCvDirecto(file);
+    } finally {
+      setSubiendo(false);
+    }
     if (!sub.ok) {
       toast.error(sub.reason);
       return;
@@ -145,9 +151,13 @@ export function RegistroForm({
     const file = cvRef.current?.files?.[0];
     let subido = cv;
     if (file && !subido) {
+      let sub: Awaited<ReturnType<typeof subirCvDirecto>>;
       setSubiendo(true);
-      const sub = await subirCvDirecto(file);
-      setSubiendo(false);
+      try {
+        sub = await subirCvDirecto(file);
+      } finally {
+        setSubiendo(false);
+      }
       if (!sub.ok) {
         toast.error(sub.reason);
         setSending(false);

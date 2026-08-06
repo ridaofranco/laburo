@@ -110,9 +110,17 @@ export function RegistroRapido({
       return;
     }
     setFile(f);
+    // try/finally, no dos líneas sueltas: si la subida tira, un `setSubiendo(false)`
+    // suelto no corre y la pantalla queda en "Subiendo tu CV…" para siempre, con
+    // el botón de enviar deshabilitado. Encerrar a la persona es lo peor que
+    // puede hacer este formulario. Pasó el 6/8.
+    let sub: Awaited<ReturnType<typeof subirCvDirecto>>;
     setSubiendo(true);
-    const sub = await subirCvDirecto(f);
-    setSubiendo(false);
+    try {
+      sub = await subirCvDirecto(f);
+    } finally {
+      setSubiendo(false);
+    }
     if (!sub.ok) {
       // El formato y el tamaño se deciden acá adentro, mirando los bytes reales
       // del archivo, así que el mensaje ya viene explicando qué pasó.
