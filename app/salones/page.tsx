@@ -121,7 +121,7 @@ export default async function SalonesPage({ searchParams }: Props) {
           <span className="label-tech text-[11px] tracking-[0.3em] text-[#0047ff] block">
             Salones // por SOMOS DER
           </span>
-          <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.9] text-[clamp(40px,9vw,104px)] mt-5">
+          <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.9] text-[clamp(34px,5.5vw,64px)] mt-5">
             ¿Dónde
             <br />
             entran todos?

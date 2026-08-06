@@ -30,6 +30,7 @@ import { WhatsAppGlyph } from "@/components/icons/whatsapp-glyph";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { waLink } from "@/lib/wa";
 import { PAGO_TEXTO } from "@/lib/pago";
+import { createClient } from "@/lib/supabase/server";
 
 const DESCRIPCION =
   "Staff para eventos con perfil y CV a la vista: más de 1000 mozos, barras, seguridad, sonido y producción. Contanos qué necesita tu evento, sin planillas ni cadenas de WhatsApp. Y si trabajás en eventos, sumate al pool.";
@@ -133,14 +134,42 @@ const PASOS = [
   },
 ];
 
+/**
+ * El numero del pool SE ACTUALIZA SOLO (Franco, 6/8).
+ *
+ * Estaba escrito a mano y ya habia quedado corto por mas de 300 una vez. La RPC
+ * `staff_app_pool_publico` (0069) cuenta a los que no se dieron de baja y
+ * redondea hacia abajo a la centena: no se publica el padron exacto, y un numero
+ * redondo envejece mejor que uno que cambia cada vez que entra alguien.
+ *
+ * Si la consulta falla, cae en el ultimo numero conocido en vez de romper la
+ * landing o mostrar un "+0", que seria peor que un numero viejo.
+ */
+const POOL_FALLBACK = 1000;
+
+async function poolPublico(): Promise<number> {
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.rpc("staff_app_pool_publico");
+    const n = Number(data);
+    return Number.isFinite(n) && n > 0 ? n : POOL_FALLBACK;
+  } catch {
+    return POOL_FALLBACK;
+  }
+}
+
 const CIFRAS = [
-  { valor: "+1000", label: "Postulantes con perfil en el pool" },
+  { valor: "", label: "Postulantes con perfil en el pool" },
   { valor: "+100", label: "Eventos operados" },
   { valor: "+150.000", label: "Asistentes" },
   { valor: "6", label: "Países" },
 ];
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const pool = await poolPublico();
+  const cifras = CIFRAS.map((c) =>
+    c.valor === "" ? { ...c, valor: `+${pool.toLocaleString("es-AR")}` } : c,
+  );
   return (
     <div className="min-h-dvh bg-black text-[#f5f5f5] selection:bg-[#0047ff] selection:text-white">
       {/* Header minimalista, mismo patron que la landing anterior.
@@ -303,7 +332,7 @@ export default function LandingPage() {
              * calculado para que entre en la celda en cada breakpoint sin
              * desbordar sobre la celda vecina. */}
             <div className="grid grid-cols-2 lg:grid-cols-4 border border-[#1a1a1a] mt-16 md:mt-24">
-              {CIFRAS.map((c, i) => (
+              {cifras.map((c, i) => (
                 <Reveal
                   key={c.label}
                   delay={i * 0.1}
@@ -380,7 +409,7 @@ export default function LandingPage() {
                  * la que prefiere hablar antes de crear una cuenta. */}
                 <div className="mt-auto flex flex-col items-start gap-4">
                   <Link
-                    href="/registrar-productora"
+                    href="/registrarme"
                     className="self-start inline-flex items-center justify-center bg-[#f5f5f5] text-black px-9 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:bg-[#0047ff] hover:text-white transition-colors duration-300"
                   >
                     Crear mi cuenta gratis
@@ -505,7 +534,7 @@ export default function LandingPage() {
                     LABURO es gratis.
                   </p>
                   <Link
-                    href="/registrar-productora"
+                    href="/registrarme"
                     className="mt-4 inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-8 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
                   >
                     Crear mi cuenta gratis
@@ -550,28 +579,9 @@ export default function LandingPage() {
             <WhatsAppLink className="text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#25D366]">
               WhatsApp
             </WhatsAppLink>
-            {/* La vidriera de proveedores (Fase 4). Desde el 5/8 Proveedores
-             * TAMBIÉN es el tercer camino de la sección de arriba: este link se
-             * queda porque el de arriba lleva a publicarse y este a mirar el
-             * directorio, que no es lo mismo. */}
-            <Link
-              href="/servicios"
-              className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
-            >
-              Proveedores
-            </Link>
-            {/* SALONES (cuarto pool, 6/8) entra por el pie y NO como una cuarta
-             * tarjeta de "Tres caminos", siguiendo el mismo criterio que ya se
-             * escribió acá arriba para Proveedores y por la misma razón textual:
-             * el directorio está vacío, y mandar tráfico desde el lugar más caro
-             * de la landing a un empty state quema a la primera persona que
-             * entra. Sube a la sección de arriba cuando haya salones de verdad. */}
-            <Link
-              href="/salones"
-              className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
-            >
-              Salones
-            </Link>
+            {/* Proveedores y Salones SALIERON del pie el 6/8 (Franco: "sacalo de
+             * abajo del footer"). Ya no hacen falta: desde que son dos de los
+             * cuatro caminos de la seccion de arriba, el pie los repetia. */}
             {/* Entrada discreta al blog: no compite con los dos CTA de arriba. */}
             <Link
               href="/blog"
