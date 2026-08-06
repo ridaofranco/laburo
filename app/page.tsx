@@ -353,16 +353,45 @@ export default function LandingPage() {
                   Necesitás staff
                 </h3>
                 <p className="text-[16px] md:text-[17px] leading-[1.7] text-[#8a8a8a]">
-                  Contanos qué evento tenés y qué roles te faltan. Te
-                  respondemos con perfiles reales del pool, con experiencia y
-                  CV a la vista. Sin registro y sin compromiso.
+                  Creá tu cuenta y entrá a probarlo. Cargás tu evento, mirás el
+                  pool con experiencia y CV a la vista, y mandás la oferta vos
+                  misma. No hace falta hablar con nadie para empezar.
                 </p>
-                <a
-                  href="#productores"
-                  className="mt-auto self-start inline-flex items-center justify-center bg-[#f5f5f5] text-black px-9 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:bg-[#0047ff] hover:text-white transition-colors duration-300"
-                >
-                  Dejar mi consulta
-                </a>
+                {/* CUANDO SE COBRA, arriba y no despues de entrar. Es la misma
+                 * regla que en la tarjeta del staff: la duda numero uno de una
+                 * productora que ve una herramienta nueva es cuanto le va a
+                 * salir, y contestarla despues del registro es contestarla
+                 * tarde. Hoy usar LABURO no le cuesta nada: MercadoPago esta
+                 * para que el CLIENTE le pague el evento a ella, no para
+                 * cobrarle a ella. */}
+                <p className="text-[15px] leading-[1.7] text-[#cfc4c5] border-l-2 border-[#0047ff] pl-5">
+                  Usar LABURO es gratis. Creás la cuenta, la probás con un
+                  evento real y decidís después.
+                </p>
+                {/* PRIMERO ENTRAR, DESPUES LA CONSULTA (decision de Franco,
+                 * 6/8): "una productora tiene que poder entrar gratis para
+                 * probar el servicio, tenemos que dejar abierto".
+                 *
+                 * El alta abierta existe desde el 2/8 y FUNCIONA (verificado:
+                 * la productora que se registro sola el 3/8 entro), pero la
+                 * landing nunca se actualizo y seguia mandando a todo el mundo
+                 * al formulario de consulta, o sea a esperar que Franco
+                 * escriba. El formulario NO se saca: queda como la salida para
+                 * la que prefiere hablar antes de crear una cuenta. */}
+                <div className="mt-auto flex flex-col items-start gap-4">
+                  <Link
+                    href="/registrar-productora"
+                    className="self-start inline-flex items-center justify-center bg-[#f5f5f5] text-black px-9 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:bg-[#0047ff] hover:text-white transition-colors duration-300"
+                  >
+                    Crear mi cuenta gratis
+                  </Link>
+                  <a
+                    href="#productores"
+                    className="label-tech text-[11px] tracking-[0.2em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors duration-300"
+                  >
+                    Prefiero que me escriban
+                  </a>
+                </div>
               </Reveal>
               <Reveal
                 delay={0.12}
@@ -438,9 +467,26 @@ export default function LandingPage() {
                   Contanos qué necesitás.
                 </h2>
                 <p className="text-[16px] md:text-[17px] leading-[1.7] text-[#8a8a8a] mt-6 max-w-[420px]">
-                  Sin registro, sin llamadas en frío. Dejás tu consulta y te
-                  escribimos por mail para coordinar.
+                  Si preferís que lo veamos juntos, dejá tu consulta y te
+                  escribimos por mail para coordinar. Sin llamadas en frío.
                 </p>
+                {/* La salida de self-service TAMBIEN aca abajo, y no solo en la
+                 * tarjeta de arriba: los dos CTA del hero apuntan a esta
+                 * seccion, asi que la mayoria del trafico de productoras
+                 * aterriza directo aca sin pasar por "Tres caminos". Sin esto,
+                 * la que llega por el hero sigue sin poder entrar sola. */}
+                <div className="mt-8 pt-8 border-t border-[#1a1a1a] max-w-[420px]">
+                  <p className="text-[15px] leading-[1.7] text-[#cfc4c5]">
+                    ¿Preferís probarlo vos? Creá tu cuenta y entrá ahora. Usar
+                    LABURO es gratis.
+                  </p>
+                  <Link
+                    href="/registrar-productora"
+                    className="mt-4 inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-8 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
+                  >
+                    Crear mi cuenta gratis
+                  </Link>
+                </div>
                 <div className="mt-8 pt-8 border-t border-[#1a1a1a] max-w-[420px]">
                   <p className="text-[15px] leading-[1.7] text-[#8a8a8a]">
                     ¿Es para ya? Escribinos directo:

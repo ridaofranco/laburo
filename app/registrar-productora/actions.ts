@@ -26,6 +26,7 @@ import { BienvenidaProductora } from "@/components/emails/bienvenida-productora"
 import { siteUrl } from "@/lib/site";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { linkParaElegirContrasena } from "@/lib/auth-link";
+import { alerta } from "@/lib/alerta";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -80,6 +81,7 @@ export async function registrarProductora(input: {
   // El mail sale SIEMPRE, también si ya existía la invitación: el caso normal de
   // volver a registrarse es "no me llegó el mail". Un fallo del envío nunca
   // voltea el alta, que ya está guardada.
+  let mailOk = false;
   try {
     const claveLink = await linkParaElegirContrasena(admin, email, "registrar-productora");
     const html = await render(
@@ -94,6 +96,7 @@ export async function registrarProductora(input: {
       subject: `${productora} ya tiene su cuenta en LABURO`,
       html,
     });
+    mailOk = !!res.ok;
     if (!res.ok) {
       console.error("[registrar-productora] mail no salió:", res.error ?? res.channel);
     }
@@ -103,6 +106,30 @@ export async function registrarProductora(input: {
       e instanceof Error ? e.message : String(e),
     );
   }
+
+  /**
+   * ── EL AVISO (6/8) ─────────────────────────────────────────────────────────
+   * Franco: *"a lo sumo despues vemos quien se sumo"*. Hasta hoy no había forma
+   * de "ver después" en el momento: el alta abierta existía desde el 2/8 y NADIE
+   * avisaba. Una productora se registraba, entraba y operaba, y Franco se
+   * enteraba solo si entraba a /plataforma a mirar la lista.
+   *
+   * Es el mismo aviso que ya tiene el alta de proveedor. Nunca voltea el alta:
+   * `alerta` se traga sus propios errores.
+   */
+  await alerta({
+    titulo: `Productora nueva en LABURO: ${productora}`,
+    // Cada alta es su propio aviso: agrupadas por título, dos altas seguidas se
+    // comerían la segunda por el anti-repetición de 10 minutos.
+    clave: `productora-alta:${email}`,
+    datos: {
+      productora,
+      email,
+      "le llegó el mail": mailOk ? "sí" : "NO, revisar",
+      "ya se había registrado": r.ya_existia ? "sí" : "no",
+      "ver quién se sumó": siteUrl("/plataforma"),
+    },
+  });
 
   return { ok: true };
 }

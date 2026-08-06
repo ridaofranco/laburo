@@ -15,6 +15,13 @@
  * y además deja escribir la propia para el 10% restante.
  */
 export const CATEGORIAS_PROVEEDOR: string[] = [
+  // Sumados el 6/8 por pedido de Franco: faltaba el rubro de producción, y con
+  // él la posibilidad de que una PRODUCTORA se publique como proveedora de otra
+  // (subcontratación, que es como trabaja el rubro de verdad). Y los salones,
+  // para que un espacio pueda publicarse hoy mismo mientras se decide si merece
+  // su propio pool aparte.
+  "Producción de eventos",
+  "Salones y espacios",
   "Catering y gastronomía",
   "Seguridad",
   "Audiovisual",
