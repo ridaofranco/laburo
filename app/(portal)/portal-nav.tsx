@@ -51,7 +51,11 @@ const MAIN: Item[] = [
   { label: "Eventos", icon: CalendarDays, href: "/tablero", match: ["/tablero"] },
   { label: "Favoritos", icon: Heart, href: "/favoritos", match: ["/favoritos"] },
   { label: "Calendario", icon: CalendarRange, href: "/calendario", match: ["/calendario"] },
-  { label: "Rentabilidad", icon: TrendingUp, href: "/rentabilidad", match: ["/rentabilidad"] },
+  // Franco, 3/8: "eso es interno mío". Es de PLATAFORMA, igual que Leads: una
+  // productora cliente no tiene por qué ver una pantalla que le habla del margen
+  // del negocio. El arreglo se hizo el 3/8 y se perdió sin llegar a mergearse
+  // (la rama fix/login-rentabilidad-logo ya no existe); se rehizo el 6/8.
+  { label: "Rentabilidad", icon: TrendingUp, href: "/rentabilidad", match: ["/rentabilidad"], soloPlataforma: true },
   { label: "Pagos", icon: Wallet, href: "/pagos", match: ["/pagos"] },
   { label: "Notificaciones", icon: Bell, href: "/notificaciones", match: ["/notificaciones"] },
 ];

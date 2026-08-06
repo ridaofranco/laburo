@@ -187,3 +187,32 @@ export async function moderarProveedor(
   revalidatePath("/servicios");
   return { ok: true };
 }
+
+/** La plata de UNA productora, vista desde la plataforma (migración 0068). */
+export interface RentabilidadOrg {
+  id: string;
+  name: string | null;
+  slug: string | null;
+  es_plataforma: boolean | null;
+  eventos: number;
+  /** null = todavía no cargó cuánto le cobra al cliente. NO es cero. */
+  ingreso: number | null;
+  costo: number | null;
+  margen: number | null;
+  ofertas_mandadas: number;
+  ofertas_aceptadas: number;
+  ultimo_movimiento: string | null;
+}
+
+/**
+ * La rentabilidad de TODAS las productoras.
+ *
+ * Es lo único de "ver todo de todos" que no existía: el resto de esta pantalla
+ * ya era cruzado desde la 0054. La RPC chequea `is_platform_admin()` adentro y
+ * le devuelve `[]` a cualquier otro, así que el permiso no se decide acá.
+ */
+export async function getRentabilidadCruzada(): Promise<RentabilidadOrg[]> {
+  const supabase = await createClient();
+  const { data } = await supabase.rpc("staff_app_plataforma_rentabilidad");
+  return (data as RentabilidadOrg[] | null) ?? [];
+}

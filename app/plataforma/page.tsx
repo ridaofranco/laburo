@@ -17,8 +17,10 @@ import {
   getBusquedas,
   getContrataciones,
   getOrganizaciones,
+  getRentabilidadCruzada,
 } from "./actions";
 import { PlataformaClient } from "./plataforma-client";
+import { RentabilidadCruzada } from "./rentabilidad-cruzada";
 
 export const metadata: Metadata = {
   title: "LABURO. | Plataforma",
@@ -46,10 +48,11 @@ export default async function PlataformaPage() {
     );
   }
 
-  const [busquedas, contrataciones, organizaciones] = await Promise.all([
+  const [busquedas, contrataciones, organizaciones, rentabilidad] = await Promise.all([
     getBusquedas(),
     getContrataciones(),
     getOrganizaciones(),
+    getRentabilidadCruzada(),
   ]);
 
   return (
@@ -84,6 +87,11 @@ export default async function PlataformaPage() {
           contrataciones={contrataciones}
           organizaciones={organizaciones}
         />
+
+        {/* El superpoder que faltaba (6/8): la plata de TODAS. Va al final
+         * porque lo de arriba es lo que hay que moderar hoy, y esto es lo que
+         * se mira una vez por semana. */}
+        <RentabilidadCruzada filas={rentabilidad} />
       </div>
     </main>
   );

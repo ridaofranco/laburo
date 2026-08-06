@@ -19,8 +19,10 @@
  */
 
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { TrendingUp, Wallet } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { orgActual } from "@/lib/org";
 import { ExportCsvButton, type CsvRow } from "./export-csv-button";
 import { fmtFecha } from "@/lib/dates";
 import { money, moneyCompact } from "@/lib/format";
@@ -48,6 +50,18 @@ const MES_ABR = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", 
 
 
 export default async function RentabilidadPage() {
+  // ── EL GATE, y va acá y no solo en el menú (3/8, rehecho el 6/8) ──────────
+  // Franco: "eso es interno mío". Sacarlo del sidebar es cosmético: la URL se
+  // escribe a mano. `notFound()` y no un cartel de "no tenés permiso", igual que
+  // en /leads: para una productora cliente esta pantalla directamente no existe,
+  // y avisarle que existe pero no la puede ver es contarle de más.
+  //
+  // NO hubo fuga de datos antes de esto: las vistas son `security_invoker`, así
+  // que cada productora veía sus propios números, no los de SOMOS DER. El
+  // problema era mostrarle una pantalla del negocio que no es suya.
+  const org = await orgActual();
+  if (!org?.esPlataforma) notFound();
+
   const supabase = await createClient();
 
   const { data, error } = await supabase
