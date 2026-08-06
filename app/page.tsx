@@ -337,14 +337,14 @@ export default function LandingPage() {
         <section id="caminos" className="border-t border-[#1a1a1a]">
           <div className={`${WRAP} py-24 md:py-36`}>
             <Reveal>
-              <Eyebrow>03 // Tres caminos</Eyebrow>
+              <Eyebrow>03 // Cuatro caminos</Eyebrow>
               <h2 className="font-[family-name:var(--font-syne)] font-bold uppercase tracking-tighter text-[clamp(40px,8vw,96px)] leading-none mt-4">
                 ¿De qué lado
                 <br />
                 del evento estás?
               </h2>
             </Reveal>
-            <div className="grid grid-cols-1 md:grid-cols-3 border border-[#1a1a1a] mt-16 md:mt-24">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 border border-[#1a1a1a] mt-16 md:mt-24">
               <Reveal className="p-8 md:p-9 lg:p-12 flex flex-col gap-6 border-b md:border-b-0 md:border-r border-[#1a1a1a]">
                 <span className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a]">
                   Productores
@@ -427,7 +427,7 @@ export default function LandingPage() {
                   Sumate al pool
                 </Link>
               </Reveal>
-              <Reveal delay={0.24} className="p-8 md:p-9 lg:p-12 flex flex-col gap-6">
+              <Reveal delay={0.24} className="p-8 md:p-9 lg:p-12 flex flex-col gap-6 border-b md:border-b-0 xl:border-r border-[#1a1a1a]">
                 <span className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a]">
                   Proveedores
                 </span>
@@ -451,6 +451,30 @@ export default function LandingPage() {
                   className="mt-auto self-start inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-9 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
                 >
                   Publicar mis servicios
+                </Link>
+              </Reveal>
+
+              <Reveal delay={0.32} className="p-8 md:p-9 lg:p-12 flex flex-col gap-6">
+                <span className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a]">
+                  Salones
+                </span>
+                <h3 className="font-[family-name:var(--font-syne)] text-[28px] lg:text-[34px] font-bold uppercase tracking-tight leading-[1.05]">
+                  Tenés un espacio
+                </h3>
+                <p className="text-[16px] md:text-[17px] leading-[1.7] text-[#8a8a8a]">
+                  Un salón, un quincho, un galpón, una terraza. Publicalo con
+                  cuánta gente entra y dónde queda, y te encuentran los que están
+                  buscando dónde hacer su fiesta.
+                </p>
+                <p className="text-[15px] leading-[1.7] text-[#cfc4c5] border-l-2 border-[#0047ff] pl-5">
+                  Es gratis y no hace falta crear una cuenta. Te consultan la
+                  fecha por mail y arreglás directo.
+                </p>
+                <Link
+                  href="/registrar-salon"
+                  className="mt-auto self-start inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-9 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
+                >
+                  Publicar mi salón
                 </Link>
               </Reveal>
             </div>
