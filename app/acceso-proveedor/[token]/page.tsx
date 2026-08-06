@@ -28,6 +28,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { PanelProveedor } from "@/components/proveedor/panel-proveedor";
+import type { ConsultaProveedor } from "@/components/proveedor/consultas";
 import { WhatsAppCta } from "./wa-cta";
 import { TERMINAL_COPY, type PerfilProveedor } from "./estados";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
@@ -75,9 +76,10 @@ export default async function AccesoProveedorPage({
   // Dos lecturas, las dos por token y las dos validadas adentro de su RPC. Van
   // en paralelo porque son independientes: el formulario de consulta (0058) se
   // guarda en su propia tabla y no cuelga del perfil.
-  const [{ data }, { data: dataForm }] = await Promise.all([
+  const [{ data }, { data: dataForm }, { data: dataConsultas }] = await Promise.all([
     supabase.rpc("staff_app_proveedor_perfil", { p_token: token }),
     supabase.rpc("staff_app_proveedor_formulario", { p_token: token }),
+    supabase.rpc("staff_app_proveedor_consultas", { p_token: token }),
   ]);
 
   if (!data) {
@@ -96,6 +98,7 @@ export default async function AccesoProveedorPage({
         acceso={{ por: "token", token }}
         data={data as PerfilProveedor}
         form={form}
+        consultas={(dataConsultas ?? []) as ConsultaProveedor[]}
       />
     </Shell>
   );

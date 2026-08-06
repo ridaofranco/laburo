@@ -34,6 +34,7 @@ import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { PanelProveedor } from "@/components/proveedor/panel-proveedor";
 import type { PerfilProveedor } from "@/app/acceso-proveedor/[token]/estados";
 import type { CampoFormulario } from "@/lib/formulario-consulta";
+import type { ConsultaProveedor } from "@/components/proveedor/consultas";
 
 export const metadata: Metadata = {
   title: "LABURO. | Mi perfil de proveedor",
@@ -107,7 +108,12 @@ export default async function MiProveedorPage() {
     );
   }
 
-  const { data: dataForm } = await supabase.rpc("staff_app_mi_proveedor_formulario");
+  // Las dos lecturas van juntas: son independientes y sumar un viaje de ida y
+  // vuelta en serie es medio segundo mas de pantalla en blanco en un telefono.
+  const [{ data: dataForm }, { data: dataConsultas }] = await Promise.all([
+    supabase.rpc("staff_app_mi_proveedor_formulario"),
+    supabase.rpc("staff_app_mi_proveedor_consultas"),
+  ]);
   const form = (dataForm ?? null) as
     | { campos?: CampoFormulario[]; intro?: string | null }
     | null;
@@ -118,6 +124,7 @@ export default async function MiProveedorPage() {
         acceso={{ por: "sesion" }}
         data={data as PerfilProveedor}
         form={form}
+        consultas={(dataConsultas ?? []) as ConsultaProveedor[]}
       />
     </Shell>
   );

@@ -19,6 +19,7 @@ import { PerfilForm } from "@/app/acceso-proveedor/[token]/perfil-form";
 import { Servicios } from "@/app/acceso-proveedor/[token]/servicios";
 import { Publicar } from "@/app/acceso-proveedor/[token]/publicar";
 import { Formulario } from "@/app/acceso-proveedor/[token]/formulario";
+import { Consultas, type ConsultaProveedor } from "./consultas";
 
 /** Bloque de la pantalla, con su título. El proveedor los recorre en orden. */
 function Bloque({
@@ -45,10 +46,12 @@ export function PanelProveedor({
   acceso,
   data,
   form,
+  consultas,
 }: {
   acceso: Acceso;
   data: PerfilProveedor;
   form: { campos?: CampoFormulario[]; intro?: string | null } | null;
+  consultas: ConsultaProveedor[];
 }) {
   const { perfil, servicios } = data;
   const nombre = (perfil.display_name ?? "").trim();
@@ -89,6 +92,17 @@ export function PanelProveedor({
           que puedas cambiar desde acá.
         </p>
       </div>
+
+      {/* LAS CONSULTAS VAN PRIMERO, arriba de todo (6/8). Es lo unico que puede
+          ser URGENTE cuando el proveedor entra: alguien le pidio un presupuesto
+          para una fecha. Sus datos y sus servicios pueden esperar; una consulta
+          de hace tres dias sin contestar, no. */}
+      <Bloque
+        titulo="Mis consultas"
+        bajada="Quién te pidió presupuesto. También te llegan por mail."
+      >
+        <Consultas consultas={consultas} />
+      </Bloque>
 
       {/* Los tres bloques van en el orden en que el proveedor los usa: primero
           quién es, después qué hace, y al final publicarse. Una columna, cada
