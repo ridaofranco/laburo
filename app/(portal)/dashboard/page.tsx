@@ -64,7 +64,24 @@ export default async function DashboardPage() {
 
   const activeGigs = gigs.filter(isActive);
   const activeCount = activeGigs.length;
-  const nextGig = activeGigs[0] ?? gigs[0] ?? null;
+  /**
+   * SIN EVENTOS VIGENTES NO HAY "PRÓXIMO EVENTO". PUNTO.
+   *
+   * Acá había un `?? gigs[0]` de reserva, y hacía que la pantalla se
+   * contradijera sola: la lista viene ordenada por fecha ascendente, así que
+   * cuando no quedaba nada vigente agarraba **el evento más viejo de la
+   * historia** y lo mostraba como "tu próximo evento". Y como su fecha ya pasó,
+   * el cálculo de abajo daba días negativos y lo anunciaba "en curso".
+   *
+   * Visto en producción el 6/8: arriba decía "Fiesta de prueba 2026-07-20 en
+   * curso" y treinta píxeles más abajo "Todavía no hay eventos activos", las dos
+   * cosas en la misma pantalla. Con eventos reales eso significa que un evento
+   * terminado se queda de titular del dashboard para siempre.
+   *
+   * El vacío ya estaba escrito y era bueno ("Todavía no hay eventos activos"):
+   * lo único que hacía falta era dejarlo aparecer.
+   */
+  const nextGig = activeGigs[0] ?? null;
   const confirmedNext = nextGig ? acceptedByGig.get(nextGig.id) ?? 0 : 0;
 
   // Próximo hito: cuándo arranca el próximo evento.
@@ -122,8 +139,13 @@ export default async function DashboardPage() {
             <h3 className="t-stat text-[#e5e2e1] mb-4">
               {confirmedNext}
             </h3>
+            {/* Sin próximo evento, "0 personas confirmadas para tu próximo
+                evento" suena a que algo falla. No falla nada: todavía no hay
+                evento. El vacío tiene que decir eso y qué hacer. */}
             <p className="t-section text-[#e5e2e1] max-w-[440px]">
-              {confirmedNext === 1 ? "persona confirmada" : "personas confirmadas"} para tu próximo evento.
+              {nextGig
+                ? `${confirmedNext === 1 ? "persona confirmada" : "personas confirmadas"} para tu próximo evento.`
+                : "eventos por delante. Creá uno y empezá a armar el equipo."}
             </p>
           </div>
         </article>

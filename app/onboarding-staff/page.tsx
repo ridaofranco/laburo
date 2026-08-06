@@ -97,7 +97,14 @@ export default function OnboardingStaffPage() {
               <h2 className="t-display mb-6 text-[#e5e2e1]">
                 {slide.title}
               </h2>
-              <p className="text-[16px] md:text-[18px] leading-[1.6] text-[#cfc4c5] max-w-2xl mx-auto">
+              {/* ⚠️ NO usar `max-w-2xl` acá (ni `max-w-xl`, `-lg`, `-md`, `-sm`,
+                  `-3xl`). El tema de globals.css define `--spacing-2xl: 48px`
+                  para el espaciado de 8 puntos, y Tailwind lee esa MISMA clave
+                  para los anchos: `max-w-2xl` resolvía a 48 PÍXELES en vez de
+                  672, y el párrafo salía con una palabra por renglón. Medido el
+                  6/8 en la primera pantalla que ve alguien que recién se suma.
+                  Con un valor explícito no hay choque posible. */}
+              <p className="w-full max-w-[672px] text-[16px] md:text-[18px] leading-[1.6] text-[#cfc4c5]">
                 {slide.body}
               </p>
             </section>
