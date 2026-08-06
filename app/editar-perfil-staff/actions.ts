@@ -13,10 +13,10 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
-import { classifyCv, sniffCvMime } from "@/lib/cv";
+import { classifyCv, CV_BUCKET } from "@/lib/cv";
+import { verificarCvSubido } from "@/lib/cv-servidor";
 import { getMyStaffProfile } from "@/lib/staff";
 
-const CV_BUCKET = "staff-cvs";
 
 export interface UpdateStaffProfileInput {
   nombre: string;
@@ -112,35 +112,29 @@ export async function updateMyStaffProfile(
   return { ok: true };
 }
 
-/** Sube el CV al bucket privado y guarda el cv_url del staff. */
+/**
+ * Guarda el cv_url del staff apuntando a un CV QUE YA ESTÁ SUBIDO.
+ *
+ * El archivo ya no viaja por acá: lo subió el navegador derecho a Supabase con
+ * una URL firmada (lib/cv-subida.ts) y lo que llega es el nombre del objeto más
+ * la firma que acredita que ese path lo emitió este servidor. Eso saca de encima
+ * el límite de 4 MB del Server Action, que era el que hacía que "no te deje
+ * enviar" sin ningún mensaje. La validación del tipo real por magic bytes sigue
+ * pasando, ahora sobre el objeto ya subido (ver lib/cv-servidor.ts).
+ */
 export async function uploadMyCv(
-  formData: FormData,
+  cvPath: string,
+  cvFirma: string,
 ): Promise<{ ok: boolean; reason?: string }> {
-  const file = formData.get("cv");
-  if (!(file instanceof File) || file.size === 0) {
-    return { ok: false, reason: "Elegí un archivo." };
-  }
-  if (file.size > 10 * 1024 * 1024) {
-    return { ok: false, reason: "El archivo es muy grande (máximo 10MB)." };
-  }
-
-  // MIME real por magic bytes (no confiamos en file.type).
-  const head = new Uint8Array(await file.slice(0, 12).arrayBuffer());
-  const sniffed = sniffCvMime(head);
-  if (!sniffed) return { ok: false, reason: "El CV tiene que ser un PDF o una imagen." };
-
   // Solo un staff logueado puede subir su CV.
   const profile = await getMyStaffProfile();
   if (!profile) return { ok: false, reason: "No sos staff." };
 
-  const admin = createServiceRoleClient();
-  const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const path = `${profile.id}_${Date.now()}_${safe}`;
-  const { error: upErr } = await admin.storage
-    .from(CV_BUCKET)
-    .upload(path, file, { contentType: sniffed, upsert: false });
-  if (upErr) return { ok: false, reason: "No se pudo subir el archivo." };
+  const v = await verificarCvSubido(cvPath, cvFirma);
+  if (!v.ok) return { ok: false, reason: v.reason };
+  const path = cvPath;
 
+  const admin = createServiceRoleClient();
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("staff_app_update_my_cv", {
     p_cv_url: `${CV_BUCKET}/${path}`,

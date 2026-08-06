@@ -8,6 +8,8 @@
 
 import { useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { CV_MAX_BYTES } from "@/lib/cv";
+import type { CvSubido } from "@/lib/cv-subida-cliente";
 
 export const WORK_REGIONS = [
   "En mi país de residencia",
@@ -33,27 +35,25 @@ export const AVISO_OPTS = [
 export const YEARS_OPTS = ["0–1", "1–3", "3–5", "5–10", "10+"];
 
 /**
- * ── LOS DOS TECHOS DEL CV, ESCRITOS UNA SOLA VEZ (6/8) ──────────────────────
+ * ── LOS DOS TECHOS DEL CV YA NO EXISTEN (6/8, segunda vuelta) ───────────────
  *
- * Los dos existían y ninguno estaba declarado, así que la pantalla los cruzaba
- * a ciegas y fallaba sin poder explicar nada. Franco, textual: *"no lee los
- * pdfs y tampoco te deja enviar, se rompió todo, no entiendo que poronga pasa"*.
+ * Hasta hoy eran dos, y ninguno era una decisión de producto: eran dos límites
+ * de infraestructura que se filtraban hasta la cara de la persona. 4 MB porque
+ * el archivo viajaba adentro de un Server Action, y 3 MB para poder LEERLO
+ * porque viajaba en base64 (que infla 33%) y Vercel corta el body de una
+ * función en 4,5 MB. Entre 3 y 4 MB había una franja absurda: el CV se subía
+ * perfecto pero no se podía leer. Franco, textual: *"no lee los pdfs y tampoco
+ * te deja enviar, se rompió todo, no entiendo que poronga pasa"*.
  *
- * 1. ADJUNTAR (`CV_MAX_ADJUNTAR`): el archivo viaja adentro de un Server
- *    Action. Next topea eso (ahora en 4 MB, ver next.config.ts) y Vercel corta
- *    el body de la función en 4,5 MB. Por arriba de eso el envío muere entero.
+ * Ahora el archivo va derecho del navegador a Supabase y no toca Vercel, así
+ * que los dos topes desaparecen y queda UNO SOLO, que sí es una decisión:
+ * `CV_MAX_BYTES` (10 MB), el mismo que el servidor ya validaba.
  *
- * 2. LEER SOLO (`CV_MAX_LEER`): el parser manda el archivo en base64 por JSON,
- *    y base64 infla ~33%. Verificado contra producción: un PDF de 3,34 MB
- *    genera un body de 4,45 MB y vuelve FUNCTION_PAYLOAD_TOO_LARGE.
- *    3 MB deja margen para el resto del JSON.
- *
- * Por eso son DOS números y no uno: hay una franja (3 a 4 MB) donde el CV se
- * sube perfecto pero no se puede leer solo. Ahí la persona se anota igual y
- * completa a mano, que es infinitamente mejor que rebotarla.
+ * Los dos nombres viejos quedan apuntando al número nuevo para no romper lo que
+ * los importa, y porque la distinción que representaban ya no significa nada.
  */
-export const CV_MAX_ADJUNTAR = 4 * 1024 * 1024;
-export const CV_MAX_LEER = 3 * 1024 * 1024;
+export const CV_MAX_ADJUNTAR = CV_MAX_BYTES;
+export const CV_MAX_LEER = CV_MAX_BYTES;
 
 /** El tamaño en MB, para decírselo a la persona en criollo. */
 export const enMb = (bytes: number) => (bytes / 1024 / 1024).toFixed(1).replace(".", ",");
@@ -131,8 +131,19 @@ export interface CvParsed {
  *    sin capa de texto). ESTE es el peor de los tres, porque antes ni siquiera
  *    contaba como error: la pantalla no completaba nada y no decía nada, y del
  *    lado de la persona eso es "no anda".
+ *
+ * 6/8, SEGUNDA VUELTA. Los tres de arriba no alcanzaban: quedaban DOS fallas más
+ * cayendo juntas en el genérico "falla", y una de ellas es la que Franco vio.
+ * Medido contra producción el 6/8: el séptimo intento en un minuto devuelve
+ * `{ok:false, ...}` con status 429, que entraba por `if (!out.ok)` y mostraba
+ * "No pudimos leer el CV". O sea que el freno de abuso era INDISTINGUIBLE de un
+ * CV ilegible, y encima el freno por hora deja a la persona afuera 60 minutos.
+ *
+ *  · muchas  → 429, el freno de abuso. No es el archivo: es la insistencia.
+ *  · lector  → 502/504, el lector (Gemini) falló o tardó demasiado. Tampoco es
+ *    el archivo, y volver a intentar en un rato suele alcanzar.
  */
-export type MotivoCv = "formato" | "grande" | "vacio" | "falla" | "nokey";
+export type MotivoCv = "formato" | "grande" | "vacio" | "falla" | "nokey" | "muchas" | "lector";
 
 export function useCvAutofill() {
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error" | "nokey">("idle");
@@ -150,51 +161,75 @@ export function useCvAutofill() {
     motivoRef.current = m;
     setMotivoState(m);
   };
+  /**
+   * El código técnico de la falla (p.ej. "429", "502 gemini"), para mostrarlo
+   * chiquito al lado del mensaje. No es para la persona que se anota: es para
+   * que cuando alguien avise "no anda" se pueda saber CUÁL de las seis fallas
+   * fue, en vez de adivinar. El 6/8 se perdieron horas por no tenerlo.
+   */
+  const codigoRef = useRef<string | null>(null);
+  const [codigo, setCodigoState] = useState<string | null>(null);
+  const setCodigo = (c: string | null) => {
+    codigoRef.current = c;
+    setCodigoState(c);
+  };
 
-  async function run(file: File, oficios: string[]): Promise<CvParsed | null> {
+  /**
+   * Lee un CV QUE YA ESTÁ SUBIDO. Recibe el nombre del objeto, no el archivo.
+   *
+   * Antes esta función leía el archivo entero a base64 y lo mandaba adentro del
+   * request. Ese era el techo de 3 MB: base64 infla 33% y Vercel corta el body
+   * de una función en 4,5 MB, así que el pedido moría antes de llegar al código.
+   * Ahora el archivo ya viajó derecho a Supabase (ver lib/cv-subida-cliente.ts)
+   * y por acá pasan unos 200 bytes. El techo dejó de existir.
+   */
+  async function run(cv: CvSubido, oficios: string[]): Promise<CvParsed | null> {
     setMotivo(null);
-    if (!/pdf|image/.test(file.type)) {
-      setMotivo("formato");
-      setStatus("error");
-      return null;
-    }
-    if (file.size > CV_MAX_LEER) {
-      setMotivo("grande");
-      setStatus("error");
-      return null;
-    }
+    setCodigo(null);
     setStatus("loading");
     try {
-      const b64 = await new Promise<string>((res, rej) => {
-        const fr = new FileReader();
-        fr.onload = () => res(String(fr.result).split(",")[1] || "");
-        fr.onerror = rej;
-        fr.readAsDataURL(file);
-      });
       const r = await fetch("/api/parse-cv", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mime: file.type, data: b64, oficios }),
+        body: JSON.stringify({ path: cv.path, firma: cv.firma, oficios }),
       });
-      if (r.status === 500) {
-        const j = await r.json().catch(() => ({}));
-        if (j?.error === "no_key") {
-          setMotivo("nokey");
-          setStatus("nokey");
-          return null;
-        }
-      }
       // 413 lo devuelve la INFRAESTRUCTURA (Vercel corta el body de la función),
       // y el cuerpo es texto plano, no JSON: sin esta rama, el r.json() de abajo
       // tira y el motivo real se perdía adentro del catch genérico.
       if (r.status === 413) {
+        setCodigo("413");
         setMotivo("grande");
         setStatus("error");
         return null;
       }
-      const out = await r.json();
-      if (!out.ok) {
-        setMotivo(out?.error === "bad_mime" ? "formato" : "falla");
+      /**
+       * EL FRENO DE ABUSO, QUE ANTES SE VEÍA COMO "CV ILEGIBLE".
+       * 429 = probaste demasiadas veces seguidas. El cuerpo es `{ok:false,...}`,
+       * así que caía en la rama de abajo y decía "No pudimos leer el CV": el
+       * archivo no tenía nada que ver y la persona seguía cambiando de archivo.
+       */
+      if (r.status === 429) {
+        setCodigo("429");
+        setMotivo("muchas");
+        setStatus("error");
+        return null;
+      }
+      // El cuerpo se lee UNA sola vez. Antes el 500 hacía su propio r.json() y,
+      // si no era no_key, seguía de largo hasta un segundo r.json() que tiraba
+      // "body stream already read" y terminaba en el catch genérico.
+      const out = await r.json().catch(() => null as Record<string, unknown> | null);
+      const err = typeof out?.error === "string" ? out.error : null;
+      if (r.status === 500 && err === "no_key") {
+        setCodigo("500 no_key");
+        setMotivo("nokey");
+        setStatus("nokey");
+        return null;
+      }
+      if (!out?.ok) {
+        setCodigo(`${r.status}${err ? ` ${err}` : ""}`);
+        setMotivo(
+          err === "bad_mime" ? "formato" : r.status === 502 || r.status === 504 ? "lector" : "falla",
+        );
         setStatus("error");
         return null;
       }
@@ -217,17 +252,32 @@ export function useCvAutofill() {
       setStatus("ok");
       return d;
     } catch {
+      // Acá ya no llega ni el 413 ni el 429 ni el doble r.json(): lo que queda
+      // es una falla de red real o el FileReader.
+      setCodigo("red");
       setMotivo("falla");
       setStatus("error");
       return null;
     }
   }
 
-  return { status, motivo, motivoRef, run };
+  return { status, motivo, motivoRef, codigo, codigoRef, run };
 }
 
-/** El mensaje que se le muestra a la persona, según por qué falló. */
-export function mensajeCv(motivo: MotivoCv | null): string {
+/**
+ * El mensaje que se le muestra a la persona, según por qué falló.
+ *
+ * El `codigo` va al final entre paréntesis y es a propósito: cuando alguien
+ * avisa "no me anda", ese dato es la diferencia entre arreglarlo en minutos y
+ * pasarse un día probando hipótesis. Es corto y no asusta; el mensaje útil ya
+ * está dicho antes.
+ */
+export function mensajeCv(motivo: MotivoCv | null, codigo?: string | null): string {
+  const base = textoCv(motivo);
+  return codigo ? `${base} (código ${codigo})` : base;
+}
+
+function textoCv(motivo: MotivoCv | null): string {
   switch (motivo) {
     case "formato":
       return "Los CV en Word no los podemos leer. Subilo en PDF (desde Word: Archivo, Guardar como, PDF) o completá los datos a mano.";
@@ -237,6 +287,11 @@ export function mensajeCv(motivo: MotivoCv | null): string {
       return "Tu CV se subió bien, pero no pudimos sacarle los datos (suele pasar cuando es una foto escaneada). Completalos a mano y ya quedás anotado.";
     case "nokey":
       return "El autocompletado no está disponible ahora. Completá los datos a mano y ya quedás anotado.";
+    case "muchas":
+      // NO es el archivo. Decirlo así, porque el reflejo es cambiar de archivo.
+      return "Probaste varias veces seguidas y el sistema te frenó un rato. No es tu CV: esperá un minuto y volvé a intentar, o completá los datos a mano y ya quedás anotado.";
+    case "lector":
+      return "El lector de CV no contestó a tiempo. No es tu CV: probá de nuevo en un rato, o completá los datos a mano y ya quedás anotado.";
     default:
       return "No pudimos leer el CV. Se sube igual: completá tu nombre y tu mail a mano.";
   }

@@ -17,8 +17,9 @@ import { paises, provinciasAr } from "@/lib/data/paises";
 import {
   WORK_REGIONS, LEGAL_OPTS, AVISO_OPTS, YEARS_OPTS,
   labelCls, inputCls, selectCls, Section, Check, OficiosPicker, useCvAutofill,
-  CV_MAX_ADJUNTAR, CV_MAX_LEER, enMb, mensajeCv,
+  mensajeCv,
 } from "@/components/staff-form-shared";
+import { subirCvDirecto, type CvSubido } from "@/lib/cv-subida-cliente";
 import { PAGO_TEXTO } from "@/lib/pago";
 import { registerApplicant } from "./actions";
 
@@ -36,7 +37,19 @@ export function RegistroForm({
   const [oficiosSel, setOficiosSel] = useState<Set<string>>(new Set());
   const [regionsSel, setRegionsSel] = useState<Set<string>>(new Set());
   const cvRef = useRef<HTMLInputElement>(null);
-  const { status: afStatus, motivoRef: cvMotivo, run: runAutofill } = useCvAutofill();
+  /**
+   * El CV ya subido a Supabase. Se llena al autocompletar, y si la persona no
+   * autocompletó, al enviar. Se limpia cuando cambia el archivo elegido, porque
+   * si no se guardaría el CV viejo con el formulario nuevo.
+   */
+  const [cv, setCv] = useState<CvSubido | null>(null);
+  const [subiendo, setSubiendo] = useState(false);
+  const {
+    status: afStatus,
+    motivoRef: cvMotivo,
+    codigoRef: cvCodigo,
+    run: runAutofill,
+  } = useCvAutofill();
 
   const [f, setF] = useState({
     nombre: "", apellido: "", email: "", telefono: "", documento: "",
@@ -59,23 +72,22 @@ export function RegistroForm({
       toast.error("Elegí tu CV primero.");
       return;
     }
-    // Mismos dos techos que el registro rápido, avisados antes de intentar.
+    // El archivo se sube DERECHO A SUPABASE y después se manda a leer por su
+    // nombre. Ya no pasa por Vercel, así que los dos techos de tamaño que había
+    // acá (4 MB para adjuntar, 3 MB para leer) dejaron de existir.
     // Ver el comentario largo en components/staff-form-shared.tsx.
-    if (file.size > CV_MAX_ADJUNTAR) {
-      toast.error(
-        `Tu CV pesa ${enMb(file.size)} MB y el máximo es ${enMb(CV_MAX_ADJUNTAR)} MB. ` +
-          `Subilo más liviano, o dejalo sin adjuntar y cargalo después desde tu perfil.`,
-      );
+    setSubiendo(true);
+    const sub = await subirCvDirecto(file);
+    setSubiendo(false);
+    if (!sub.ok) {
+      toast.error(sub.reason);
       return;
     }
-    if (file.size > CV_MAX_LEER) {
-      toast("Tu CV se sube bien, pero es muy grande para leerlo solo. Completalo a mano.");
-      return;
-    }
+    setCv(sub.cv);
     const allOficios = oficios.flatMap((g) => g.items.map((it) => it.es));
-    const d = await runAutofill(file, allOficios);
+    const d = await runAutofill(sub.cv, allOficios);
     if (!d) {
-      toast.error(mensajeCv(cvMotivo.current));
+      toast.error(mensajeCv(cvMotivo.current, cvCodigo.current));
       return;
     }
     setF((p) => ({
@@ -128,8 +140,26 @@ export function RegistroForm({
     };
     const fd = new FormData();
     fd.append("payload", JSON.stringify(payload));
+    // Si adjuntó un CV pero nunca tocó "Autocompletar", todavía no está subido:
+    // se sube ahora. El archivo sigue sin pasar por Vercel.
     const file = cvRef.current?.files?.[0];
-    if (file) fd.append("cv", file);
+    let subido = cv;
+    if (file && !subido) {
+      setSubiendo(true);
+      const sub = await subirCvDirecto(file);
+      setSubiendo(false);
+      if (!sub.ok) {
+        toast.error(sub.reason);
+        setSending(false);
+        return;
+      }
+      subido = sub.cv;
+      setCv(sub.cv);
+    }
+    if (subido) {
+      fd.append("cv_path", subido.path);
+      fd.append("cv_firma", subido.firma);
+    }
     try {
       const res = await registerApplicant(fd);
       if (res.ok) onDone();
@@ -192,9 +222,11 @@ export function RegistroForm({
           </div>
           <p className="text-[14px] text-[#cfc4c5] -mt-1">Opcional. PDF o imagen. Revisá antes de enviar.</p>
           <div className="flex flex-col sm:flex-row gap-3">
-            <input ref={cvRef} type="file" accept=".pdf,image/*"
+            {/* Cambiar de archivo invalida el que ya se había subido: si no, se
+                guardaría el CV viejo con el formulario nuevo. */}
+            <input ref={cvRef} type="file" accept=".pdf,image/*" onChange={() => setCv(null)}
               className="text-[14px] text-[#cfc4c5] file:mr-3 file:border file:border-[#4c4546] file:bg-transparent file:text-[#e5e2e1] file:px-4 file:py-2 file:label-tech file:text-[11px] file:uppercase" />
-            <button type="button" onClick={autofill} disabled={afStatus === "loading"}
+            <button type="button" onClick={autofill} disabled={afStatus === "loading" || subiendo}
               className="inline-flex shrink-0 items-center justify-center gap-2 border border-[#b9c3ff]/50 text-[#b9c3ff] label-tech text-[11px] uppercase tracking-wide px-5 py-2.5 hover:bg-[#b9c3ff] hover:text-black transition-colors disabled:opacity-60">
               <Sparkles size={14} />
               {afStatus === "loading" ? "Leyendo tu CV…" : "Autocompletar con mi CV"}

@@ -25,12 +25,10 @@ import {
   labelCls,
   inputCls,
   useCvAutofill,
-  CV_MAX_ADJUNTAR,
-  CV_MAX_LEER,
-  enMb,
   mensajeCv,
   type CvParsed,
 } from "@/components/staff-form-shared";
+import { subirCvDirecto, type CvSubido } from "@/lib/cv-subida-cliente";
 import { PAGO_TEXTO } from "@/lib/pago";
 import { registerApplicant } from "./actions";
 
@@ -47,6 +45,9 @@ export function RegistroRapido({
   onFormularioLargo: () => void;
 }) {
   const [file, setFile] = useState<File | null>(null);
+  /** El CV ya subido a Supabase: es lo único que viaja al servidor al enviar. */
+  const [cv, setCv] = useState<CvSubido | null>(null);
+  const [subiendo, setSubiendo] = useState(false);
   const [parsed, setParsed] = useState<CvParsed | null>(null);
   const [nombreVisible, setNombreVisible] = useState("");
   const [email, setEmail] = useState("");
@@ -54,9 +55,17 @@ export function RegistroRapido({
   const [editar, setEditar] = useState(false);
   const [consent, setConsent] = useState(false);
   const [sending, setSending] = useState(false);
-  const { status: afStatus, motivoRef: cvMotivo, run: runAutofill } = useCvAutofill();
+  const {
+    status: afStatus,
+    motivoRef: cvMotivo,
+    codigoRef: cvCodigo,
+    run: runAutofill,
+  } = useCvAutofill();
 
-  const leyendo = afStatus === "loading";
+  // "Ocupado" es subiendo O leyendo: son dos pasos seguidos y para la persona es
+  // un solo momento de espera. Si solo se mirara la lectura, durante la subida
+  // los botones quedarían habilitados y se podría enviar sin CV sin querer.
+  const leyendo = subiendo || afStatus === "loading";
   const faltaNombre = !nombreVisible.trim();
   const faltaEmail = !email.trim();
   const mostrarNombre = editar || faltaNombre;
@@ -68,7 +77,9 @@ export function RegistroRapido({
   const parserFallo = afStatus === "error" || afStatus === "nokey";
 
   /** Lo que se anuncia por aria-live cada vez que cambia el estado de lectura. */
-  const estadoTexto = leyendo
+  const estadoTexto = subiendo
+    ? "Subiendo tu CV…"
+    : afStatus === "loading"
     ? "Leyendo tu CV…"
     : afStatus === "ok"
       ? "Listo, leímos tu CV. Revisá que esté bien y enviá."
@@ -79,56 +90,44 @@ export function RegistroRapido({
           : "";
 
   /**
-   * Adjuntar dispara la lectura sola, sin botón intermedio. UN SOLO intento por
-   * selección: cada llamada gasta cuota de Gemini y la ruta tiene freno de 6 por
-   * minuto por IP. Si falló, la salida es escribir los dos datos a mano.
+   * Adjuntar dispara la subida y la lectura solas, sin botón intermedio.
+   *
+   * EL ORDEN CAMBIÓ Y ES EL PUNTO DEL ARREGLO (6/8): primero el archivo se sube
+   * DERECHO A SUPABASE, y recién después se lo manda a leer por su nombre. Antes
+   * el archivo viajaba dos veces por Vercel (una en base64 para leerlo, otra
+   * adentro del Server Action para guardarlo) y chocaba contra dos topes de
+   * infraestructura que en pantalla se veían como "no se pudo leer" y "no te
+   * deja enviar". Ahora no toca Vercel y esos dos topes no existen más.
+   *
+   * UN SOLO intento de lectura por selección: cada llamada gasta cuota de
+   * Gemini. Si falló, la salida es escribir los dos datos a mano.
    */
   async function onPick(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0] ?? null;
+    setCv(null);
     if (!f) {
       setFile(null);
       return;
     }
-    // El servidor valida el MIME REAL por magic bytes y solo guarda PDF o imagen.
-    // Avisar acá evita que llene todo y recién ahí se entere de que el formato
-    // no entra.
-    if (!/pdf|image/.test(f.type)) {
-      toast.error("Ese formato no lo podemos leer. Subí el CV en PDF o sacale una foto.");
-      e.target.value = "";
-      setFile(null);
-      return;
-    }
-    // ── LOS DOS TECHOS, AVISADOS ANTES Y NO DESPUÉS (6/8) ─────────────────
-    // Antes acá no se miraba el tamaño, así que un CV grande se adjuntaba
-    // igual, el parser fallaba sin explicación y el envío moría después con un
-    // "No se pudo enviar" que no decía nada. Los dos límites existen igual: lo
-    // único que cambia es que ahora la persona se entera y sabe qué hacer.
-    if (f.size > CV_MAX_ADJUNTAR) {
-      toast.error(
-        `Tu CV pesa ${enMb(f.size)} MB y el máximo es ${enMb(CV_MAX_ADJUNTAR)} MB. ` +
-          `Subilo más liviano, o anotate sin CV y cargalo después desde tu perfil.`,
-      );
-      e.target.value = "";
-      setFile(null);
-      return;
-    }
     setFile(f);
-    // Entre 3 y 4 MB el CV se sube perfecto pero NO se puede leer solo: el
-    // parser lo manda en base64 y se pasa del límite de la función. Se dice y
-    // se sigue, en vez de intentar y fallar.
-    if (f.size > CV_MAX_LEER) {
-      toast(
-        "Tu CV se sube bien, pero es muy grande para leerlo solo. " +
-          "Completá tu nombre y tu mail y listo.",
-      );
+    setSubiendo(true);
+    const sub = await subirCvDirecto(f);
+    setSubiendo(false);
+    if (!sub.ok) {
+      // El formato y el tamaño se deciden acá adentro, mirando los bytes reales
+      // del archivo, así que el mensaje ya viene explicando qué pasó.
+      toast.error(sub.reason);
+      e.target.value = "";
+      setFile(null);
       return;
     }
-    const d = await runAutofill(f, ALL_OFICIOS);
+    setCv(sub.cv);
+    const d = await runAutofill(sub.cv, ALL_OFICIOS);
     // Decirle POR QUÉ. Antes esto era un `return` mudo: el CV quedaba adjunto,
     // no se completaba ningún campo y la persona no tenía forma de saber si
     // había pasado algo o si la pantalla estaba rota.
     if (!d) {
-      toast(mensajeCv(cvMotivo.current));
+      toast(mensajeCv(cvMotivo.current, cvCodigo.current));
       return;
     }
     setParsed(d);
@@ -188,22 +187,20 @@ export function RegistroRapido({
     };
     const fd = new FormData();
     fd.append("payload", JSON.stringify(payload));
-    // Solo si adjuntó algo. El server action ya trata el CV como opcional.
-    if (file) fd.append("cv", file);
+    // EL ARCHIVO YA NO VIAJA ACÁ. Va su nombre en el bucket, más la firma que lo
+    // acredita como emitido por el servidor. Este era el envío que "no dejaba
+    // enviar": el CV iba adentro del Server Action y por arriba del límite la
+    // request moría antes de llegar al servidor, sin motivo que mostrar.
+    if (cv) {
+      fd.append("cv_path", cv.path);
+      fd.append("cv_firma", cv.firma);
+    }
     try {
       const res = await registerApplicant(fd);
       if (res.ok) onDone();
       else toast.error(res.reason || "No se pudo enviar.");
     } catch {
-      // El motivo NÚMERO UNO por el que este catch se dispara es el tamaño: el
-      // CV viaja adentro del Server Action y por arriba del límite la request
-      // muere antes de llegar al servidor, sin `reason` que mostrar. Decir
-      // "probá de nuevo" mandaba a la persona a repetir lo mismo para siempre.
-      toast.error(
-        file
-          ? "No se pudo enviar. Suele ser el CV: probá con uno más liviano, o sacalo y cargalo después desde tu perfil."
-          : "No se pudo enviar. Probá de nuevo.",
-      );
+      toast.error("No se pudo enviar. Probá de nuevo.");
     } finally {
       setSending(false);
     }
@@ -368,7 +365,7 @@ export function RegistroRapido({
           className="w-full sm:w-auto sm:self-start flex items-center justify-center gap-3 bg-[#e5e2e1] text-black label-tech text-[12px] uppercase tracking-widest px-10 py-5 border border-[#e5e2e1] hover:bg-transparent hover:text-[#e5e2e1] transition-colors disabled:opacity-50"
         >
           <Upload size={16} />
-          {sending ? "Enviando…" : leyendo ? "Leyendo tu CV…" : "Listo, sumame"}
+          {sending ? "Enviando…" : subiendo ? "Subiendo tu CV…" : leyendo ? "Leyendo tu CV…" : "Listo, sumame"}
         </button>
 
         <button

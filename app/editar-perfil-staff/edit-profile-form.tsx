@@ -16,6 +16,7 @@ import { oficios } from "@/lib/data/oficios";
 import { paises, provinciasAr } from "@/lib/data/paises";
 import {
   useCvAutofill,
+  mensajeCv,
   WORK_REGIONS,
   LEGAL_OPTS,
   AVISO_OPTS,
@@ -27,6 +28,7 @@ import {
   Section,
   Check,
 } from "@/components/staff-form-shared";
+import { subirCvDirecto } from "@/lib/cv-subida-cliente";
 import { updateMyStaffProfile, uploadMyCv, signMyStaffCv } from "./actions";
 import type { StaffProfile } from "@/lib/staff";
 
@@ -72,17 +74,36 @@ export function EditProfileForm({ profile }: { profile: StaffProfile }) {
   const esArgentina = f.pais_residencia === "Argentina";
 
   const afRef = useRef<HTMLInputElement>(null);
-  const { status: afStatus, run: runAutofill } = useCvAutofill();
+  const [subiendo, setSubiendo] = useState(false);
+  const {
+    status: afStatus,
+    motivoRef: cvMotivo,
+    codigoRef: cvCodigo,
+    run: runAutofill,
+  } = useCvAutofill();
   async function autofill() {
     const file = afRef.current?.files?.[0];
     if (!file) {
       toast.error("Elegí un CV primero.");
       return;
     }
+    // El archivo se sube derecho a Supabase y después se manda a leer por su
+    // nombre: no pasa por Vercel, así que no hay techo de tamaño que esquivar.
+    setSubiendo(true);
+    const sub = await subirCvDirecto(file);
+    setSubiendo(false);
+    if (!sub.ok) {
+      toast.error(sub.reason);
+      return;
+    }
     const all = oficios.flatMap((g) => g.items.map((it) => it.es));
-    const d = await runAutofill(file, all);
+    const d = await runAutofill(sub.cv, all);
     if (!d) {
-      toast.error(afStatus === "nokey" ? "El autollenado no está configurado todavía." : "No pudimos leer el CV.");
+      // Antes acá se decidía el mensaje mirando `afStatus`, que es ESTADO de
+      // React: en esta línea, justo después del await, todavía tiene el valor
+      // viejo, así que salía casi siempre el genérico. Los refs se actualizan en
+      // el acto, y mensajeCv ya distingue las seis fallas posibles.
+      toast.error(mensajeCv(cvMotivo.current, cvCodigo.current));
       return;
     }
     setF((p) => ({
@@ -182,10 +203,10 @@ export function EditProfileForm({ profile }: { profile: StaffProfile }) {
         <div className="flex flex-col sm:flex-row gap-3">
           <input ref={afRef} type="file" accept=".pdf,image/*"
             className="text-[14px] text-[#cfc4c5] file:mr-3 file:border file:border-[#4c4546] file:bg-transparent file:text-[#e5e2e1] file:px-4 file:py-2 file:label-tech file:text-[11px] file:uppercase" />
-          <button type="button" onClick={autofill} disabled={afStatus === "loading"}
+          <button type="button" onClick={autofill} disabled={afStatus === "loading" || subiendo}
             className="inline-flex shrink-0 items-center justify-center gap-2 border border-[#b9c3ff]/50 text-[#b9c3ff] label-tech text-[11px] uppercase tracking-wide px-5 py-2.5 hover:bg-[#b9c3ff] hover:text-black transition-colors disabled:opacity-60">
             <Sparkles size={14} />
-            {afStatus === "loading" ? "Leyendo…" : "Autocompletar"}
+            {subiendo ? "Subiendo…" : afStatus === "loading" ? "Leyendo…" : "Autocompletar"}
           </button>
         </div>
       </section>
@@ -379,10 +400,16 @@ function CvSection({ cvUrl }: { cvUrl: string | null }) {
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
-    const fd = new FormData();
-    fd.append("cv", file);
     try {
-      const res = await uploadMyCv(fd);
+      // El archivo va derecho a Supabase; al servidor le llega solo el nombre
+      // del objeto. Antes viajaba adentro del Server Action y por arriba de
+      // 4 MB la request moría sin motivo que mostrar.
+      const sub = await subirCvDirecto(file);
+      if (!sub.ok) {
+        toast.error(sub.reason);
+        return;
+      }
+      const res = await uploadMyCv(sub.cv.path, sub.cv.firma);
       if (res.ok) {
         toast.success("CV actualizado");
         startTransition(() => router.refresh());
@@ -406,7 +433,7 @@ function CvSection({ cvUrl }: { cvUrl: string | null }) {
       <p className="text-[14px] text-[#cfc4c5] -mt-2 leading-[1.5]">
         {tieneCv
           ? "Ya tenés un CV cargado. Podés verlo o subir uno nuevo para reemplazarlo."
-          : "Todavía no cargaste tu CV. Subilo en PDF, Word o imagen."}
+          : "Todavía no cargaste tu CV. Subilo en PDF o como imagen."}
       </p>
       <div className="flex flex-wrap items-center gap-3">
         {tieneCv && (
@@ -421,7 +448,9 @@ function CvSection({ cvUrl }: { cvUrl: string | null }) {
         <label className="inline-flex items-center gap-2 bg-[#c6c6c6] text-black label-tech text-[11px] uppercase tracking-widest px-5 py-3 border border-[#c6c6c6] hover:bg-transparent hover:text-[#c6c6c6] transition-colors cursor-pointer">
           <Upload size={14} />
           {uploading || pending ? "Subiendo…" : tieneCv ? "Reemplazar CV" : "Subir CV"}
-          <input type="file" accept=".pdf,.doc,.docx,image/*" className="sr-only" onChange={onFile} disabled={uploading} />
+          {/* Word NO: uploadMyCv sniffea los magic bytes y lo rechaza siempre.
+              Ofrecerlo acá era mandar a la persona derecho contra un error. */}
+          <input type="file" accept=".pdf,image/*" className="sr-only" onChange={onFile} disabled={uploading} />
         </label>
       </div>
       {viewUrl && (

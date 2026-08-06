@@ -13,7 +13,8 @@ import { render } from "@react-email/components";
 import { oficios } from "@/lib/data/oficios";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
-import { sniffCvMime } from "@/lib/cv";
+import { CV_BUCKET } from "@/lib/cv";
+import { verificarCvSubido } from "@/lib/cv-servidor";
 import { sendMail } from "@/lib/email/mailer";
 import { WelcomeEmail } from "@/components/emails/welcome-email";
 import { siteUrl } from "@/lib/site";
@@ -21,7 +22,6 @@ import { bajaHeaders, bajaReady, bajaUrl } from "@/lib/baja";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { linkParaElegirContrasena } from "@/lib/auth-link";
 
-const CV_BUCKET = "staff-cvs";
 
 
 /**
@@ -130,26 +130,30 @@ export async function registerApplicant(
     return { ok: false, reason: "Ya recibimos tu registro. Revisá tu casilla, incluido el spam." };
   }
 
-  // CV opcional → bucket privado (service-role). Validamos el MIME REAL por magic
-  // bytes (no confiamos en file.type) y, si el registro falla después, borramos el
-  // objeto para no dejar CVs huérfanos en el bucket.
+  /**
+   * CV opcional. YA NO LLEGA EL ARCHIVO: llega el nombre del objeto que el
+   * navegador subió derecho a Supabase, más la firma que acredita que ese path
+   * lo emitió este servidor (ver lib/cv-subida.ts).
+   *
+   * Este era el envío que "no dejaba enviar": el archivo viajaba adentro del
+   * Server Action, Next lo topea y Vercel corta el body de la función en 4,5 MB,
+   * así que por arriba de eso la request moría antes de llegar a este código y
+   * no había ni un `reason` que devolver. Ahora acá entran dos strings.
+   *
+   * Lo que NO cambia: el tipo real se sigue decidiendo mirando los primeros
+   * bytes del objeto ya subido, porque la URL firmada deja que el navegador
+   * declare el contentType que quiera. Y si el registro falla después, el objeto
+   * se borra para no dejar CVs huérfanos en el bucket.
+   */
   const admin = createServiceRoleClient();
   let cvUrl: string | null = null;
   let uploadedPath: string | null = null;
-  const file = formData.get("cv");
-  if (file instanceof File && file.size > 0) {
-    if (file.size > 10 * 1024 * 1024) return { ok: false, reason: "El CV es muy grande (máx 10MB)." };
-    const head = new Uint8Array(await file.slice(0, 12).arrayBuffer());
-    const sniffed = sniffCvMime(head);
-    if (!sniffed) return { ok: false, reason: "El CV tiene que ser un PDF o una imagen." };
-    const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const path = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}_${safe}`;
-    const { error: upErr } = await admin.storage
-      .from(CV_BUCKET)
-      .upload(path, file, { contentType: sniffed, upsert: false });
-    if (upErr) return { ok: false, reason: "No se pudo subir el CV. Probá de nuevo." };
-    uploadedPath = path;
-    cvUrl = `${CV_BUCKET}/${path}`;
+  const cvPath = formData.get("cv_path");
+  if (typeof cvPath === "string" && cvPath) {
+    const v = await verificarCvSubido(cvPath, formData.get("cv_firma"));
+    if (!v.ok) return { ok: false, reason: v.reason };
+    uploadedPath = cvPath;
+    cvUrl = v.cvUrl;
   }
 
   const oficiosSel = arr(input.oficios).filter((o) => OFICIOS_VALIDOS.has(o));

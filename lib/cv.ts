@@ -17,6 +17,35 @@
  *  bucket, así que `classifyCv` normaliza sacando el prefijo `staff-cvs/`.
  */
 
+/** El bucket privado donde viven los CV. Estaba repetido a mano en 4 archivos. */
+export const CV_BUCKET = "staff-cvs";
+
+/**
+ * El ÚNICO techo de tamaño del CV, ahora que el archivo no pasa más por Vercel.
+ *
+ * Antes había DOS, y ninguno era una decisión: eran dos límites de
+ * infraestructura que se filtraban hasta la cara de la persona. 4 MB porque el
+ * archivo viajaba adentro de un Server Action, y 3 MB para leerlo porque viajaba
+ * en base64 (que infla 33%) y Vercel corta el body de una función en 4,5 MB. O
+ * sea que un CV de 3,5 MB se subía pero no se podía leer, y uno de 5 MB no se
+ * podía ni mandar. Con la subida directa a Supabase el archivo ya no toca a
+ * Vercel: por la función pasa el NOMBRE del objeto, unos 200 bytes.
+ *
+ * ⚠️ EL NÚMERO TIENE QUE SER EL MISMO QUE EL DEL BUCKET. `staff-cvs` tiene su
+ * propio `file_size_limit` en Supabase, que NADIE tenía anotado y que apareció
+ * recién el 6/8 midiendo: estaba en 6 MB. Si acá dijéramos un número más alto,
+ * un CV de más peso pasaría todas las validaciones del código y lo rebotaría el
+ * bucket con un 415 sin explicación, que es exactamente el problema que vinimos
+ * a matar.
+ *
+ * El 6/8 Franco decidió subir el bucket a 10 MB y sumarle `image/webp` (que
+ * sniffCvMime aceptaba y el bucket no). Los dos números quedaron alineados.
+ *
+ * SI ALGUNA VEZ CAMBIA UNO, CAMBIAR EL OTRO:
+ *   select file_size_limit, allowed_mime_types from storage.buckets where id = 'staff-cvs';
+ */
+export const CV_MAX_BYTES = 10 * 1024 * 1024;
+
 export type CvClassification =
   | { kind: "none" }
   | { kind: "drive"; id: string; preview: string; open: string }
