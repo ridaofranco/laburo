@@ -17,7 +17,7 @@ import { paises, provinciasAr } from "@/lib/data/paises";
 import {
   WORK_REGIONS, LEGAL_OPTS, AVISO_OPTS, YEARS_OPTS,
   labelCls, inputCls, selectCls, Section, Check, OficiosPicker, useCvAutofill,
-  CV_MAX_ADJUNTAR, CV_MAX_LEER, enMb,
+  CV_MAX_ADJUNTAR, CV_MAX_LEER, enMb, mensajeCv,
 } from "@/components/staff-form-shared";
 import { PAGO_TEXTO } from "@/lib/pago";
 import { registerApplicant } from "./actions";
@@ -36,7 +36,7 @@ export function RegistroForm({
   const [oficiosSel, setOficiosSel] = useState<Set<string>>(new Set());
   const [regionsSel, setRegionsSel] = useState<Set<string>>(new Set());
   const cvRef = useRef<HTMLInputElement>(null);
-  const { status: afStatus, run: runAutofill } = useCvAutofill();
+  const { status: afStatus, motivoRef: cvMotivo, run: runAutofill } = useCvAutofill();
 
   const [f, setF] = useState({
     nombre: "", apellido: "", email: "", telefono: "", documento: "",
@@ -75,7 +75,7 @@ export function RegistroForm({
     const allOficios = oficios.flatMap((g) => g.items.map((it) => it.es));
     const d = await runAutofill(file, allOficios);
     if (!d) {
-      toast.error(afStatus === "nokey" ? "El autollenado no está configurado todavía." : "No pudimos leer el CV. Completalo a mano.");
+      toast.error(mensajeCv(cvMotivo.current));
       return;
     }
     setF((p) => ({
@@ -192,7 +192,7 @@ export function RegistroForm({
           </div>
           <p className="text-[14px] text-[#cfc4c5] -mt-1">Opcional. PDF o imagen. Revisá antes de enviar.</p>
           <div className="flex flex-col sm:flex-row gap-3">
-            <input ref={cvRef} type="file" accept=".pdf,.doc,.docx,image/*"
+            <input ref={cvRef} type="file" accept=".pdf,image/*"
               className="text-[14px] text-[#cfc4c5] file:mr-3 file:border file:border-[#4c4546] file:bg-transparent file:text-[#e5e2e1] file:px-4 file:py-2 file:label-tech file:text-[11px] file:uppercase" />
             <button type="button" onClick={autofill} disabled={afStatus === "loading"}
               className="inline-flex shrink-0 items-center justify-center gap-2 border border-[#b9c3ff]/50 text-[#b9c3ff] label-tech text-[11px] uppercase tracking-wide px-5 py-2.5 hover:bg-[#b9c3ff] hover:text-black transition-colors disabled:opacity-60">

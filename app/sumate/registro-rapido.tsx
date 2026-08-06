@@ -28,6 +28,7 @@ import {
   CV_MAX_ADJUNTAR,
   CV_MAX_LEER,
   enMb,
+  mensajeCv,
   type CvParsed,
 } from "@/components/staff-form-shared";
 import { PAGO_TEXTO } from "@/lib/pago";
@@ -53,7 +54,7 @@ export function RegistroRapido({
   const [editar, setEditar] = useState(false);
   const [consent, setConsent] = useState(false);
   const [sending, setSending] = useState(false);
-  const { status: afStatus, run: runAutofill } = useCvAutofill();
+  const { status: afStatus, motivoRef: cvMotivo, run: runAutofill } = useCvAutofill();
 
   const leyendo = afStatus === "loading";
   const faltaNombre = !nombreVisible.trim();
@@ -123,7 +124,13 @@ export function RegistroRapido({
       return;
     }
     const d = await runAutofill(f, ALL_OFICIOS);
-    if (!d) return;
+    // Decirle POR QUÉ. Antes esto era un `return` mudo: el CV quedaba adjunto,
+    // no se completaba ningún campo y la persona no tenía forma de saber si
+    // había pasado algo o si la pantalla estaba rota.
+    if (!d) {
+      toast(mensajeCv(cvMotivo.current));
+      return;
+    }
     setParsed(d);
     const nom = [d.nombre, d.apellido].filter(Boolean).join(" ").trim();
     if (nom) setNombreVisible(nom);

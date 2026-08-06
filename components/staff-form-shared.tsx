@@ -6,7 +6,7 @@
  * con IA (parse-cv) en las dos aristas. Evita drift entre somosder.ar y la app.
  */
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
 export const WORK_REGIONS = [
@@ -119,11 +119,47 @@ export interface CvParsed {
  * Hook de autollenado con IA: manda el archivo a /api/parse-cv (Gemini) y
  * devuelve los datos. Estado: idle | loading | ok | error | nokey.
  */
+/**
+ * Por qué no se pudo leer un CV. Antes TODO caía en "error" y la pantalla decía
+ * siempre lo mismo ("No pudimos leer el CV"), así que tres problemas
+ * completamente distintos se veían idénticos y ninguno se podía arreglar:
+ *
+ *  · formato → es un Word. NUNCA se va a poder leer, y además el guardado
+ *    también lo rechaza. La salida es subirlo en PDF.
+ *  · grande  → se pasa del límite de la función. La salida es uno más liviano.
+ *  · vacio   → el lector contestó bien pero no encontró datos (un PDF escaneado,
+ *    sin capa de texto). ESTE es el peor de los tres, porque antes ni siquiera
+ *    contaba como error: la pantalla no completaba nada y no decía nada, y del
+ *    lado de la persona eso es "no anda".
+ */
+export type MotivoCv = "formato" | "grande" | "vacio" | "falla" | "nokey";
+
 export function useCvAutofill() {
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error" | "nokey">("idle");
+  /**
+   * El motivo va en un REF y no solo en estado, y no es un detalle: el que
+   * llama hace `const d = await run(...)` y lee el motivo en la línea siguiente.
+   * `setState` de React es asíncrono, así que en ese punto el estado TODAVÍA
+   * tiene el valor viejo y el mensaje saldría siempre el genérico, que es
+   * exactamente el problema que vinimos a arreglar. El ref se actualiza en el
+   * acto. El estado se mantiene aparte para lo que sí se renderiza.
+   */
+  const motivoRef = useRef<MotivoCv | null>(null);
+  const [motivo, setMotivoState] = useState<MotivoCv | null>(null);
+  const setMotivo = (m: MotivoCv | null) => {
+    motivoRef.current = m;
+    setMotivoState(m);
+  };
 
   async function run(file: File, oficios: string[]): Promise<CvParsed | null> {
+    setMotivo(null);
     if (!/pdf|image/.test(file.type)) {
+      setMotivo("formato");
+      setStatus("error");
+      return null;
+    }
+    if (file.size > CV_MAX_LEER) {
+      setMotivo("grande");
       setStatus("error");
       return null;
     }
@@ -143,21 +179,67 @@ export function useCvAutofill() {
       if (r.status === 500) {
         const j = await r.json().catch(() => ({}));
         if (j?.error === "no_key") {
+          setMotivo("nokey");
           setStatus("nokey");
           return null;
         }
       }
+      // 413 lo devuelve la INFRAESTRUCTURA (Vercel corta el body de la función),
+      // y el cuerpo es texto plano, no JSON: sin esta rama, el r.json() de abajo
+      // tira y el motivo real se perdía adentro del catch genérico.
+      if (r.status === 413) {
+        setMotivo("grande");
+        setStatus("error");
+        return null;
+      }
       const out = await r.json();
-      if (!out.ok) throw new Error("parse");
+      if (!out.ok) {
+        setMotivo(out?.error === "bad_mime" ? "formato" : "falla");
+        setStatus("error");
+        return null;
+      }
+
+      // LEYÓ, PERO NO SACÓ NADA. Pasa con los PDF escaneados: son una foto
+      // adentro de un PDF y no tienen texto. Antes esto devolvía "ok" con todo
+      // en null: la pantalla no completaba un solo campo y tampoco avisaba, así
+      // que del lado de la persona era exactamente igual que si estuviera roto.
+      const d = (out.data ?? {}) as CvParsed;
+      const saleAlgo = Boolean(
+        d.nombre || d.apellido || d.email || d.telefono || d.ciudad ||
+          d.experiencia_detalle || (d.oficios && d.oficios.length),
+      );
+      if (!saleAlgo) {
+        setMotivo("vacio");
+        setStatus("error");
+        return null;
+      }
+
       setStatus("ok");
-      return (out.data ?? {}) as CvParsed;
+      return d;
     } catch {
+      setMotivo("falla");
       setStatus("error");
       return null;
     }
   }
 
-  return { status, run };
+  return { status, motivo, motivoRef, run };
+}
+
+/** El mensaje que se le muestra a la persona, según por qué falló. */
+export function mensajeCv(motivo: MotivoCv | null): string {
+  switch (motivo) {
+    case "formato":
+      return "Los CV en Word no los podemos leer. Subilo en PDF (desde Word: Archivo, Guardar como, PDF) o completá los datos a mano.";
+    case "grande":
+      return "Tu CV es muy grande para leerlo solo. Se sube igual: completá tu nombre y tu mail y listo.";
+    case "vacio":
+      return "Tu CV se subió bien, pero no pudimos sacarle los datos (suele pasar cuando es una foto escaneada). Completalos a mano y ya quedás anotado.";
+    case "nokey":
+      return "El autocompletado no está disponible ahora. Completá los datos a mano y ya quedás anotado.";
+    default:
+      return "No pudimos leer el CV. Se sube igual: completá tu nombre y tu mail a mano.";
+  }
 }
 
 /** Selector de oficios agrupado (mismo taxonomía/estilo en registro y perfil). */
