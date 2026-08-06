@@ -26,7 +26,7 @@ import { notFound } from "next/navigation";
 import { BadgeCheck, MapPin, Users, Maximize2, ArrowLeft } from "lucide-react";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { ConsultaPublicaForm } from "@/components/vidriera/consulta-publica-form";
-import { textoCapacidad } from "@/lib/salones";
+import { textoCapacidad, urlDeFotoSalon } from "@/lib/salones";
 import { getFichaSalon } from "../actions";
 
 const WRAP = "max-w-[1440px] mx-auto w-full px-6 md:px-20";
@@ -118,6 +118,45 @@ export default async function FichaSalonPage({ params }: Props) {
       </header>
 
       <main className={`${WRAP} py-14 md:py-20`}>
+        {/* LAS FOTOS VAN ARRIBA DE TODO, antes del nombre. Un salón se elige
+         * mirando: la foto es lo que decide si la persona sigue leyendo. La
+         * primera va grande y el resto en una tira abajo.
+         *
+         * Sin fotos NO se dibuja nada: un placeholder gris ocupando media
+         * pantalla arriba de todo hace que el salón se vea peor que sin foto. */}
+        {s.fotos?.length ? (
+          <div className="flex flex-col gap-3 mb-12 md:mb-16">
+            <div className="w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden border border-[#1a1a1a]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={urlDeFotoSalon(s.fotos[0])}
+                alt={s.display_name ?? "Salón"}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            {s.fotos.length > 1 ? (
+              /* Tira que scrollea SOLA: con ocho fotos, en un teléfono, una
+               * grilla las dejaría del tamaño de una estampilla. */
+              <div className="flex gap-3 overflow-x-auto pb-1">
+                {s.fotos.slice(1).map((f, i) => (
+                  <div
+                    key={f}
+                    className="shrink-0 w-[180px] md:w-[240px] aspect-[4/3] overflow-hidden border border-[#1a1a1a]"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={urlDeFotoSalon(f)}
+                      alt={`${s.display_name ?? "Salón"}, foto ${i + 2}`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           {/* ── Qué salón es ── */}
           <div className="lg:col-span-6 flex flex-col gap-6">

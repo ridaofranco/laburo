@@ -21,6 +21,7 @@ import { Publicar } from "@/app/acceso-proveedor/[token]/publicar";
 import { Formulario } from "@/app/acceso-proveedor/[token]/formulario";
 import { Consultas, type ConsultaProveedor } from "./consultas";
 import { SalonCapacidad } from "./salon-capacidad";
+import { SalonFotos } from "./salon-fotos";
 
 /** Bloque de la pantalla, con su título. El proveedor los recorre en orden. */
 function Bloque({
@@ -132,6 +133,18 @@ export function PanelProveedor({
           bajada="Es con lo que te buscan. Sin esto no aparecés en ninguna búsqueda."
         >
           <SalonCapacidad acceso={acceso} salon={perfil.salon} />
+        </Bloque>
+      ) : null}
+
+      {/* Las fotos van en su propio bloque y DESPUES de la capacidad: la
+          capacidad es lo que te hace aparecer en la busqueda, la foto es lo que
+          hace que te elijan una vez que apareciste. Ese es el orden real. */}
+      {esSalon ? (
+        <Bloque
+          titulo="Las fotos"
+          bajada="Un salón se elige mirando. Sin fotos, tu ficha es solo texto."
+        >
+          <SalonFotos acceso={acceso} fotosIniciales={perfil.salon?.fotos ?? []} />
         </Bloque>
       ) : (
         <Bloque titulo="Mis servicios" bajada="Qué prestás y en qué provincias trabajás.">

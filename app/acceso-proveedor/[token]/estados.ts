@@ -39,6 +39,8 @@ export interface DatosSalon {
   /** Tres estados: sí, no, y null = "no lo dijo". El tercero no se muestra. */
   catering_propio: boolean | null;
   estacionamiento: boolean | null;
+  /** Paths del bucket venue-photos, en orden. La PRIMERA es la portada. */
+  fotos: string[];
 }
 
 export interface DatosProveedor {

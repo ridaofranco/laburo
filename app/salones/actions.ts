@@ -45,12 +45,18 @@ export interface SalonPublico {
   tipos_evento: string[];
   catering_propio: boolean | null;
   estacionamiento: boolean | null;
+  /** Solo la portada: mandar las 8 fotos de cada salón en el listado es peso al
+   *  pedo en un teléfono. La ficha sí las trae todas. */
+  portada: string | null;
+  cuantas_fotos: number;
 }
 
 /** La ficha suma el id (para consultar), la dirección y las redes. */
 export interface FichaSalon extends SalonPublico {
   profile_id: string;
   direccion: string | null;
+  /** Todas, en orden. La primera es la portada. */
+  fotos: string[];
   website: string | null;
   instagram: string | null;
   /** Las preguntas que arma el propio salón (provider_forms, vía 0066). */

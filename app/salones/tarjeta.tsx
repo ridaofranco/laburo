@@ -13,7 +13,7 @@
 
 import Link from "next/link";
 import { BadgeCheck, MapPin, Users, Maximize2 } from "lucide-react";
-import { textoCapacidad } from "@/lib/salones";
+import { textoCapacidad, urlDeFotoSalon } from "@/lib/salones";
 import type { SalonPublico } from "./actions";
 
 export function TarjetaSalon({ s }: { s: SalonPublico }) {
@@ -31,8 +31,26 @@ export function TarjetaSalon({ s }: { s: SalonPublico }) {
   ].filter(Boolean) as string[];
 
   return (
-    <article className="flex flex-col md:flex-row md:items-start justify-between gap-6 py-8 border-b border-[#1a1a1a]">
-      <div className="min-w-0 flex flex-col gap-3">
+    <article className="flex flex-col md:flex-row md:items-start gap-6 py-8 border-b border-[#1a1a1a]">
+      {/* La portada primero: es lo que hace que alguien siga leyendo. Si el
+       *  salón todavía no subió fotos NO se dibuja un placeholder gris, que
+       *  ensucia la fila y no aporta nada: simplemente la fila va sin foto. */}
+      {s.portada ? (
+        <Link
+          href={`/salones/${s.slug}`}
+          className="shrink-0 w-full md:w-[260px] aspect-[4/3] overflow-hidden border border-[#1a1a1a]"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={urlDeFotoSalon(s.portada)}
+            alt={s.display_name ?? "Salón"}
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+        </Link>
+      ) : null}
+
+      <div className="min-w-0 flex-1 flex flex-col gap-3">
         <div className="flex flex-wrap items-center gap-3">
           {/* `overflow-wrap:anywhere` no es decorativo: el nombre lo escribe el
            *  salón y puede ser una sola palabra larguísima. */}
@@ -92,7 +110,7 @@ export function TarjetaSalon({ s }: { s: SalonPublico }) {
         ) : null}
       </div>
 
-      <div className="shrink-0">
+      <div className="shrink-0 md:self-center">
         <Link
           href={`/salones/${s.slug}`}
           className="inline-flex items-center justify-center bg-[#f5f5f5] text-black px-8 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:bg-[#0047ff] hover:text-white transition-colors duration-300"

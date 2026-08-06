@@ -27,6 +27,7 @@
  */
 
 import { createClient } from "@/lib/supabase/server";
+import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { normalizarWebsite } from "@/lib/format";
 import { rpcDe, type Acceso } from "@/lib/proveedor-acceso";
 import type { CampoFormulario } from "@/lib/formulario-consulta";
@@ -300,5 +301,79 @@ export async function guardarSalon(
     p_token: acceso.por === "token" ? acceso.token : null,
   });
 
+  return resolver(data, error);
+}
+
+/**
+ * Pide permiso para subir UNA foto del salón.
+ *
+ * ── POR QUÉ URL FIRMADA Y NO SUBIR POR ACÁ ──────────────────────────────────
+ * Porque por una Server Action de Vercel no pasa un archivo grande: el techo del
+ * body es 4,5 MB y una foto de celular lo pasa sola. Es la misma lección que
+ * costó el caso del CV: el navegador pide una URL firmada, sube DIRECTO a
+ * Supabase, y al servidor le manda solo el nombre del objeto.
+ *
+ * ── EL PATH LO DECIDE EL SERVIDOR ───────────────────────────────────────────
+ * Se arma como `<profile_id>/<random>.<ext>` con el profile_id resuelto de la
+ * identidad, NO con uno que mande el cliente. Si el cliente eligiera el path,
+ * podría escribir adentro de la carpeta de otro salón.
+ */
+export async function pedirSubidaDeFoto(
+  acceso: Acceso,
+  ext: string,
+): Promise<{ ok: boolean; path?: string; token?: string; mensaje?: string }> {
+  const supabase = await createClient();
+  const r = rpcDe(acceso, "perfil");
+  const { data, error } = await supabase.rpc(r.nombre, { ...r.identidad });
+
+  if (error || !data) {
+    return { ok: false, mensaje: "Este link ya no anda. Pedinos uno nuevo por WhatsApp." };
+  }
+  const perfil = (data as { perfil?: { id?: string; tipo?: string } }).perfil;
+  if (!perfil?.id) {
+    return { ok: false, mensaje: "Algo falló. Probá de nuevo en un momento." };
+  }
+  if (perfil.tipo !== "salon") {
+    return { ok: false, mensaje: "Este perfil no es un salón." };
+  }
+
+  // Extensión de una lista blanca: nunca lo que mande el cliente tal cual, que
+  // podría traer un ".." o un nombre con barra y salirse de la carpeta.
+  const limpia = (ext || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  const permitidas = ["jpg", "jpeg", "png", "webp", "avif", "gif"];
+  const finalExt = permitidas.includes(limpia) ? limpia : "jpg";
+
+  const nombre = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+  const path = `${perfil.id}/${nombre}.${finalExt}`;
+
+  try {
+    const admin = createServiceRoleClient();
+    const { data: firma, error: e2 } = await admin.storage
+      .from("venue-photos")
+      .createSignedUploadUrl(path);
+    if (e2 || !firma) {
+      console.error("[salon-fotos] no se pudo firmar la subida:", e2?.message);
+      return { ok: false, mensaje: "No se pudo preparar la subida. Probá de nuevo." };
+    }
+    return { ok: true, path, token: firma.token };
+  } catch (e) {
+    console.error(
+      "[salon-fotos] service role no disponible:",
+      e instanceof Error ? e.message : String(e),
+    );
+    return { ok: false, mensaje: "No se pudo preparar la subida. Probá de nuevo." };
+  }
+}
+
+/** Guarda la lista COMPLETA de fotos, en orden. La primera es la portada. */
+export async function guardarFotosSalon(
+  acceso: Acceso,
+  fotos: string[],
+): Promise<ResultadoAccion> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("staff_app_salon_guardar_fotos", {
+    p_fotos: fotos,
+    p_token: acceso.por === "token" ? acceso.token : null,
+  });
   return resolver(data, error);
 }

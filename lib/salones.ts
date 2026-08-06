@@ -69,3 +69,20 @@ export const TIPOS_EVENTO_SUGERIDOS: string[] = [
   "Producción audiovisual",
   "Feria o expo",
 ];
+
+/**
+ * La URL pública de una foto del salón, a partir del path guardado.
+ *
+ * El bucket `venue-photos` es público a propósito: son fotos que el salón sube
+ * para que las vea cualquiera que entre a su ficha. Firmar cada una sería pedir
+ * una URL nueva por foto en cada carga de pantalla, para proteger algo que se
+ * publica igual.
+ *
+ * Se arma acá y no en cada componente porque la usan la vidriera, la ficha y el
+ * panel. Si estuviera escrita tres veces, el día que cambie el bucket una queda
+ * rota y no se entera nadie.
+ */
+export function urlDeFotoSalon(path: string): string {
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+  return `${base}/storage/v1/object/public/venue-photos/${path}`;
+}
