@@ -65,6 +65,13 @@ const MENSAJES: Record<string, string> = {
   demasiadas_opciones: "Una de las preguntas tiene demasiadas opciones.",
   opciones_invalidas: "Se rompieron las opciones de una pregunta. Probá de nuevo.",
   campos_invalidos: "El formulario quedó mal armado. Actualizá la pantalla.",
+  // Salón (0066). `sin_perfil` acá NO significa "no existís": significa que el
+  // link venció o que se cerró la sesión, que es lo mismo que `token_invalido`
+  // del otro lado y por eso dice lo mismo.
+  sin_perfil: "Este link ya no anda. Pedinos uno nuevo por WhatsApp.",
+  no_es_salon: "Este perfil no es un salón, así que no lleva capacidad.",
+  falta_capacidad: "Poné cuánta gente entra como máximo. Es con lo que te buscan.",
+  capacidad_invertida: "El mínimo no puede ser más grande que el máximo.",
 };
 
 function traducir(reason: string | undefined): string {
@@ -241,6 +248,56 @@ export async function guardarFormulario(
     ...r.identidad,
     p_campos: campos,
     p_intro: intro.trim() || null,
+  });
+
+  return resolver(data, error);
+}
+
+/** Lo propio de un salón: cuánta gente entra y con qué cuenta. */
+export interface DatosSalonInput {
+  capacidad_max: number | null;
+  capacidad_min: number | null;
+  superficie_m2: number | null;
+  direccion: string;
+  amenities: string[];
+  tipos_evento: string[];
+  /** null es "no lo dijo", y NO es lo mismo que false. */
+  catering_propio: boolean | null;
+  estacionamiento: boolean | null;
+}
+
+/**
+ * Guardar la capacidad y el resto de lo propio del salón
+ * (RPC staff_app_salon_guardar_detalles, migración 0066).
+ *
+ * ── POR QUÉ ACÁ NO SE USA `rpcDe` ───────────────────────────────────────────
+ * Porque no hay dos familias de funciones para esto: hay UNA sola, que resuelve
+ * la identidad por sesión y, si no hay, por token. Se escribió así en la 0066
+ * justamente para no repetir el desdoblamiento del proveedor, que existe por
+ * historia (las dos familias venían de la 0042 y de la 0045) y no porque haga
+ * falta. El token viaja como un parámetro más y queda en null cuando hay sesión.
+ *
+ * ── POR QUÉ EL SALÓN PUEDE EDITAR SU CAPACIDAD ──────────────────────────────
+ * Es el ÚNICO dato con el que se lo busca. Si se equivoca al anotarse y no lo
+ * puede corregir, queda invisible o mal listado para siempre, y la única salida
+ * sería tocarle la base a mano.
+ */
+export async function guardarSalon(
+  acceso: Acceso,
+  datos: DatosSalonInput,
+): Promise<ResultadoAccion> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.rpc("staff_app_salon_guardar_detalles", {
+    p_capacidad_max: datos.capacidad_max,
+    p_capacidad_min: datos.capacidad_min,
+    p_superficie_m2: datos.superficie_m2,
+    p_direccion: datos.direccion.trim() || null,
+    p_amenities: datos.amenities,
+    p_tipos_evento: datos.tipos_evento,
+    p_catering_propio: datos.catering_propio,
+    p_estacionamiento: datos.estacionamiento,
+    p_token: acceso.por === "token" ? acceso.token : null,
   });
 
   return resolver(data, error);

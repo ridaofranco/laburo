@@ -30,9 +30,12 @@ import { textoFalta } from "./estados";
 export function Publicar({
   acceso,
   publicado,
+  esSalon = false,
 }: {
   acceso: Acceso;
   publicado: boolean;
+  /** Cambia SOLO el texto. Los requisitos los decide la base (0067). */
+  esSalon?: boolean;
 }) {
   const router = useRouter();
   const reduce = useReducedMotion();
@@ -71,9 +74,13 @@ export function Publicar({
   return (
     <div className="flex flex-col gap-md">
       <p className="text-body text-fg-muted">
-        {publicado
-          ? "Estás publicado. Las productoras te pueden encontrar por lo que hacés y por dónde trabajás."
-          : "Cuando te publiques, las productoras te van a poder encontrar por lo que hacés y por dónde trabajás."}
+        {esSalon
+          ? publicado
+            ? "Estás publicado. Te pueden encontrar por cuánta gente entra y por dónde queda el salón."
+            : "Cuando te publiques, te van a poder encontrar por cuánta gente entra y por dónde queda el salón."
+          : publicado
+            ? "Estás publicado. Las productoras te pueden encontrar por lo que hacés y por dónde trabajás."
+            : "Cuando te publiques, las productoras te van a poder encontrar por lo que hacés y por dónde trabajás."}
       </p>
 
       <button

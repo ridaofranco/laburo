@@ -85,9 +85,9 @@ export default async function MiProveedorPage() {
             Todavía no tenés perfil de proveedor
           </h1>
           <p className="text-body text-fg-muted">
-            Tu cuenta funciona, pero con este mail no hay ningún proveedor
-            cargado. Si prestás un servicio para eventos, publicate y las
-            productoras te encuentran.
+            Tu cuenta funciona, pero con este mail no hay ningún perfil cargado.
+            Si prestás un servicio para eventos o tenés un salón, publicate y te
+            encuentran.
           </p>
           <div className="flex flex-col gap-sm">
             <Link
@@ -95,6 +95,16 @@ export default async function MiProveedorPage() {
               className="inline-flex items-center justify-center bg-[#f5f5f5] text-black px-8 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:bg-[#0047ff] hover:text-white transition-colors duration-300"
             >
               Publicar mis servicios
+            </Link>
+            {/* La segunda puerta (6/8). Sin esto, el dueño de un salón que llega
+             * hasta acá lee "publicá tus servicios" y se va: el formulario de
+             * proveedor no le pide capacidad, o sea que publicarse ahí sería
+             * publicarse invisible. */}
+            <Link
+              href="/registrar-salon"
+              className="inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-8 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
+            >
+              Publicar mi salón
             </Link>
             <Link
               href="/entrar"

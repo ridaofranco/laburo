@@ -20,6 +20,7 @@ import { Servicios } from "@/app/acceso-proveedor/[token]/servicios";
 import { Publicar } from "@/app/acceso-proveedor/[token]/publicar";
 import { Formulario } from "@/app/acceso-proveedor/[token]/formulario";
 import { Consultas, type ConsultaProveedor } from "./consultas";
+import { SalonCapacidad } from "./salon-capacidad";
 
 /** Bloque de la pantalla, con su título. El proveedor los recorre en orden. */
 function Bloque({
@@ -56,6 +57,18 @@ export function PanelProveedor({
   const { perfil, servicios } = data;
   const nombre = (perfil.display_name ?? "").trim();
 
+  /**
+   * Un salón usa EL MISMO panel, con un bloque distinto en el medio (6/8).
+   *
+   * No se hizo una pantalla aparte por lo mismo que el panel es uno solo para
+   * las dos puertas: el 90% es idéntico (datos, consultas, formulario,
+   * publicarse) y copiarlo es garantizar que en tres meses uno tenga un campo
+   * que el otro no. Lo único verdaderamente propio de un salón es cuánta gente
+   * entra, y eso reemplaza al bloque de servicios, que para un salón estaría
+   * siempre vacío.
+   */
+  const esSalon = perfil.tipo === "salon";
+
   return (
     <div className="flex flex-col gap-lg pt-md">
       <header className="flex flex-col gap-xs">
@@ -63,9 +76,9 @@ export function PanelProveedor({
           {nombre ? `Hola ${nombre}` : "Hola"}
         </h1>
         <p className="text-body text-fg-muted">
-          Este es tu perfil de proveedor. Completalo, cargá los servicios que
-          prestás y publicate para que las productoras te encuentren. Cuando
-          alguien te quiera contratar, la consulta te llega a tu mail.
+          {esSalon
+            ? "Este es el perfil de tu salón. Completalo, cargá cuánta gente entra y publicate para que te encuentren. Cuando alguien quiera consultar una fecha, te llega a tu mail."
+            : "Este es tu perfil de proveedor. Completalo, cargá los servicios que prestás y publicate para que las productoras te encuentren. Cuando alguien te quiera contratar, la consulta te llega a tu mail."}
         </p>
       </header>
 
@@ -111,9 +124,20 @@ export function PanelProveedor({
         <PerfilForm acceso={acceso} perfil={perfil} />
       </Bloque>
 
-      <Bloque titulo="Mis servicios" bajada="Qué prestás y en qué provincias trabajás.">
-        <Servicios acceso={acceso} servicios={servicios ?? []} />
-      </Bloque>
+      {/* El bloque que cambia según qué sos. En un salón, la capacidad ocupa el
+          lugar exacto de los servicios: es lo que lo hace encontrable. */}
+      {esSalon ? (
+        <Bloque
+          titulo="Cuánta gente entra"
+          bajada="Es con lo que te buscan. Sin esto no aparecés en ninguna búsqueda."
+        >
+          <SalonCapacidad acceso={acceso} salon={perfil.salon} />
+        </Bloque>
+      ) : (
+        <Bloque titulo="Mis servicios" bajada="Qué prestás y en qué provincias trabajás.">
+          <Servicios acceso={acceso} servicios={servicios ?? []} />
+        </Bloque>
+      )}
 
       {/* Va DESPUÉS de los servicios y ANTES de publicarse a propósito: es lo
           último que define cómo te llegan los pedidos, y lo primero que
@@ -130,7 +154,7 @@ export function PanelProveedor({
       </Bloque>
 
       <Bloque titulo="Publicarme">
-        <Publicar acceso={acceso} publicado={perfil.is_public} />
+        <Publicar acceso={acceso} publicado={perfil.is_public} esSalon={esSalon} />
       </Bloque>
     </div>
   );

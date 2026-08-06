@@ -536,6 +536,18 @@ export default function LandingPage() {
             >
               Proveedores
             </Link>
+            {/* SALONES (cuarto pool, 6/8) entra por el pie y NO como una cuarta
+             * tarjeta de "Tres caminos", siguiendo el mismo criterio que ya se
+             * escribió acá arriba para Proveedores y por la misma razón textual:
+             * el directorio está vacío, y mandar tráfico desde el lugar más caro
+             * de la landing a un empty state quema a la primera persona que
+             * entra. Sube a la sección de arriba cuando haya salones de verdad. */}
+            <Link
+              href="/salones"
+              className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
+            >
+              Salones
+            </Link>
             {/* Entrada discreta al blog: no compite con los dos CTA de arriba. */}
             <Link
               href="/blog"

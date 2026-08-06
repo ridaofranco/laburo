@@ -28,8 +28,30 @@ export interface ServicioProveedor {
  * mostrarlos, pero son de SOLO LECTURA: ninguna RPC por token los escribe
  * (MKT2-03, ver el comentario del SET en la migración 0042).
  */
+/** Lo propio de un salón, que viaja adentro del perfil desde la 0066. */
+export interface DatosSalon {
+  capacidad_min: number | null;
+  capacidad_max: number | null;
+  superficie_m2: number | null;
+  direccion: string | null;
+  amenities: string[];
+  tipos_evento: string[];
+  /** Tres estados: sí, no, y null = "no lo dijo". El tercero no se muestra. */
+  catering_propio: boolean | null;
+  estacionamiento: boolean | null;
+}
+
 export interface DatosProveedor {
   id: string;
+  /**
+   * 'proveedor' o 'salon'. El panel es el mismo para los dos y esto es lo único
+   * que le dice cuál está mirando: sin esto, un salón vería la pantalla de un
+   * proveedor con una lista de servicios vacía y ningún lugar donde poner
+   * cuánta gente entra, que es su único dato de búsqueda.
+   */
+  tipo: string;
+  /** null cuando el perfil es un proveedor. */
+  salon: DatosSalon | null;
   display_name: string;
   headline: string | null;
   bio: string | null;
@@ -86,6 +108,10 @@ export const FALTA_COPY: Record<string, string> = {
   nombre: "Poné el nombre con el que querés que te vean.",
   servicios: "Agregá al menos un servicio de los que prestás.",
   provincias: "Decí en qué provincias trabajás, al menos en un servicio.",
+  // Los dos del salón (0067). Un salón no tiene servicios: se publica con
+  // provincia y capacidad, que son las dos dimensiones con las que se lo busca.
+  provincia: "Elegí en qué provincia está el salón.",
+  capacidad: "Poné cuánta gente entra como máximo.",
 };
 
 /** Texto de un código de `faltan`, con un fallback honesto si aparece uno nuevo. */

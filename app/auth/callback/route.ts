@@ -32,11 +32,22 @@ import { createClient } from "@/lib/supabase/server";
  * NO se accede al schema staff_app por PostgREST (PGRST106): todo por RPC/vistas.
  */
 
-/** Las tres bases. Cualquier otra cosa que llegue en `como` se ignora. */
-type Como = "productora" | "staff" | "proveedor";
+/**
+ * Las bases. Cualquier otra cosa que llegue en `como` se ignora.
+ *
+ * `salon` es un hint más y va a la MISMA rama que `proveedor` (6/8): desde la
+ * migración 0066, `staff_app_vincular_proveedor` ata las fichas de los dos tipos
+ * y `/mi-proveedor` muestra las dos. Se acepta como valor propio y no se lo hace
+ * pasar por "proveedor" porque la puerta le pregunta a la persona qué es, y
+ * mandarle un hint que no dijo sería mentirle al único lugar donde se decide
+ * identidad.
+ */
+type Como = "productora" | "staff" | "proveedor" | "salon";
 
 function comoValido(v: string | null): Como | null {
-  return v === "productora" || v === "staff" || v === "proveedor" ? v : null;
+  return v === "productora" || v === "staff" || v === "proveedor" || v === "salon"
+    ? v
+    : null;
 }
 
 export async function GET(request: Request) {
@@ -91,7 +102,7 @@ export async function GET(request: Request) {
   if (como === "staff" && (await esStaff())) {
     return NextResponse.redirect(`${origin}/panel-staff`);
   }
-  if (como === "proveedor" && (await esProveedor())) {
+  if ((como === "proveedor" || como === "salon") && (await esProveedor())) {
     return NextResponse.redirect(`${origin}/mi-proveedor`);
   }
 

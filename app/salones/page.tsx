@@ -1,23 +1,20 @@
 /**
- * LA VIDRIERA: /servicios (Fase 4).
+ * LA VIDRIERA DE SALONES: /salones (cuarto pool, 6/8).
  *
- * La puerta del cliente final. Entra alguien que está organizando su casamiento,
- * el cumpleaños de 15 de su hija o el egreso de la escuela, busca "catering en
- * zona norte" y le pide presupuesto a quien le sirva. Sin cuenta y sin llamar a
- * nadie.
+ * La puerta del que está buscando dónde hacer su fiesta. Entra alguien que ya
+ * sabe cuántos son y para cuándo, y lo único que necesita saber es dónde entran.
  *
  * ── POR QUÉ LA BÚSQUEDA VA POR searchParams Y NO POR ESTADO EN EL CLIENTE ──
- * Porque esta pantalla existe para que la encuentren de afuera. Con los filtros
- * en la URL, /servicios?categoria=Catering+y+gastronomía es un link que se pega
- * en un WhatsApp, se comparte en un grupo de egresados y lo puede indexar un
- * buscador. Con el estado adentro del cliente, todo eso serían la misma página
- * vacía. Es la diferencia entre un directorio y una pantalla.
+ * Por lo mismo que /servicios: con los filtros en la URL,
+ * /salones?personas=180&provincia=Córdoba es un link que se pega en un WhatsApp,
+ * se comparte en un grupo de egresados y lo puede indexar un buscador. Con el
+ * estado adentro del cliente, todo eso sería la misma página vacía. Es la
+ * diferencia entre un directorio y una pantalla.
  *
- * ── EL VOCABULARIO CAMBIA, LA MÁQUINA NO ──
- * Es literalmente el mismo motor que usa la productora en /proveedores. Lo único
- * distinto son las palabras: acá no se dice "evento", "gig" ni "productora", se
- * dice casamiento, cumpleaños de 15 y fiesta. Una novia que lee "gestioná tus
- * búsquedas" no entiende dónde cayó.
+ * ── EL VOCABULARIO ──────────────────────────────────────────────────────────
+ * Acá no se dice "venue", que es como se llama la tabla en HITO. Se dice salón,
+ * que es como lo dice todo el mundo en Argentina. El nombre técnico se queda en
+ * la base.
  */
 
 export const dynamic = "force-dynamic";
@@ -26,63 +23,72 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { PROVINCIAS } from "@/lib/provincias";
-import { buscarPublico, getCategoriasPublicas } from "./actions";
-import { FiltrosVidriera } from "./filtros";
-import { TarjetaProveedor } from "./tarjeta";
+import { buscarSalones } from "./actions";
+import { FiltrosSalones } from "./filtros";
+import { TarjetaSalon } from "./tarjeta";
 
 const DESCRIPCION =
-  "Catering, sonido, fotografía, seguridad y todo lo que necesita tu fiesta, en un solo lugar. Pedile presupuesto directo a cada proveedor, sin cuenta y sin vueltas.";
+  "Salones y espacios para casamientos, cumpleaños de 15, egresados y eventos de empresa. Buscá por cuánta gente entra y por dónde queda, y consultá la fecha directo, sin cuenta y sin vueltas.";
+
+const WRAP = "max-w-[1440px] mx-auto w-full px-6 md:px-20";
 
 /**
- * La metadata es dinámica por UNA razón concreta: el `noindex` de abajo.
+ * La metadata es dinámica por el `noindex`, igual que en /servicios.
  *
- * Al 2/8 el directorio está vacío (1016 personas en el pool contra cero
- * proveedores publicados). Dejar que Google guarde una página que dice "todavía
- * no hay proveedores" es quedarse con ese resultado en el índice durante
- * semanas, justo cuando empiece a haber algo que mostrar. Se destraba solo: en
- * cuanto haya un proveedor publicado, la página vuelve a ser indexable sin que
+ * Al 6/8 no hay un solo salón publicado. Dejar que Google guarde una página que
+ * dice "todavía no hay salones" es quedarse con ese resultado en el índice
+ * durante semanas, justo cuando empiece a haber algo que mostrar. Se destraba
+ * solo: en cuanto haya uno publicado, la página vuelve a ser indexable sin que
  * nadie toque nada.
  */
 export async function generateMetadata(): Promise<Metadata> {
-  const hayAlgo = (await buscarPublico({})).length > 0;
+  const hayAlgo = (await buscarSalones({})).length > 0;
 
   return {
-    title: "Proveedores para tu evento | LABURO",
+    title: "Salones para eventos | LABURO",
     description: DESCRIPCION,
-    alternates: { canonical: "/servicios" },
+    alternates: { canonical: "/salones" },
     robots: hayAlgo ? undefined : { index: false, follow: true },
     openGraph: {
       type: "website",
-      url: "/servicios",
+      url: "/salones",
       siteName: "LABURO",
       locale: "es_AR",
-      title: "Proveedores para tu evento | LABURO",
+      title: "Salones para eventos | LABURO",
       description: DESCRIPCION,
       images: [{ url: "/brand/laburo-og.png", width: 1200, height: 630, alt: "LABURO" }],
     },
   };
 }
 
-const WRAP = "max-w-[1440px] mx-auto w-full px-6 md:px-20";
-
 interface Props {
-  searchParams: Promise<{ q?: string; categoria?: string; provincia?: string }>;
+  searchParams: Promise<{ q?: string; provincia?: string; personas?: string }>;
 }
 
-export default async function ServiciosPage({ searchParams }: Props) {
+export default async function SalonesPage({ searchParams }: Props) {
   const sp = await searchParams;
+
+  // El número llega como texto de la URL y puede ser cualquier cosa: alguien
+  // edita el link a mano, o llega "personas=abc" de un share mal copiado.
+  // Number.parseInt de basura da NaN, y NaN viajando a la RPC es un 400 mudo.
+  const personasNum = Number.parseInt(sp.personas ?? "", 10);
+  const personas = Number.isFinite(personasNum) && personasNum > 0 ? personasNum : null;
+
   const filtros = {
     texto: sp.q ?? "",
-    categoria: sp.categoria ?? "",
     provincia: sp.provincia ?? "",
+    // Se refleja el valor SANEADO y no el crudo: si alguien llegó con
+    // "personas=abc", el campo tiene que aparecer vacío y no repetirle su error.
+    personas: personas ? String(personas) : "",
   };
 
-  const [proveedores, categorias] = await Promise.all([
-    buscarPublico(filtros),
-    getCategoriasPublicas(),
-  ]);
+  const salones = await buscarSalones({
+    texto: filtros.texto,
+    provincia: filtros.provincia,
+    personas,
+  });
 
-  const hayFiltros = Boolean(filtros.texto || filtros.categoria || filtros.provincia);
+  const hayFiltros = Boolean(filtros.texto || filtros.provincia || filtros.personas);
 
   return (
     <div className="min-h-dvh bg-black text-[#f5f5f5] selection:bg-[#0047ff] selection:text-white">
@@ -91,30 +97,20 @@ export default async function ServiciosPage({ searchParams }: Props) {
           <Link href="/" aria-label="LABURO, ir al inicio">
             <LaburoWordmark className="h-[18px] md:h-[24px] w-auto" priority />
           </Link>
-          {/* La primera de las dos puertas del alta abierta (decision 2 de
-           * Franco, 3/8). Va acá arriba porque el que llega a la vidriera es
-           * justo el publico: o busca un proveedor, o es uno. */}
+          {/* El que llega a una vidriera de salones es, muchas veces, el dueño de
+           * uno. Es el lugar más barato del sitio para conseguir el primero. */}
           <div className="flex items-center gap-5 md:gap-7">
             <Link
-              href="/registrar-proveedor"
+              href="/registrar-salon"
               className="label-tech text-[10px] md:text-[11px] tracking-[0.2em] text-white hover:text-[#0047ff] transition-colors duration-300"
             >
-              ¿Sos proveedor? Sumate gratis
-            </Link>
-            {/* El que está armando su fiesta necesita las dos cosas, y casi
-             * siempre el salón primero. Cruzar las dos vidrieras es gratis y es
-             * lo que evita que alguien crea que acá solo hay proveedores. */}
-            <Link
-              href="/salones"
-              className="label-tech text-[10px] md:text-[11px] tracking-[0.2em] text-white/70 hover:text-[#0047ff] transition-colors duration-300"
-            >
-              Salones
+              ¿Tenés un salón? Publicalo gratis
             </Link>
             <Link
-              href="/sumate"
+              href="/servicios"
               className="label-tech text-[10px] md:text-[11px] tracking-[0.2em] text-white/70 hover:text-[#0047ff] transition-colors duration-300"
             >
-              Trabajo en eventos
+              Proveedores
             </Link>
           </div>
         </div>
@@ -123,74 +119,63 @@ export default async function ServiciosPage({ searchParams }: Props) {
       <main>
         <section className={`${WRAP} pt-16 md:pt-24 pb-10`}>
           <span className="label-tech text-[11px] tracking-[0.3em] text-[#0047ff] block">
-            Proveedores // por SOMOS DER
+            Salones // por SOMOS DER
           </span>
           <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.9] text-[clamp(40px,9vw,104px)] mt-5">
-            Todo lo que
+            ¿Dónde
             <br />
-            necesita tu fiesta.
+            entran todos?
           </h1>
           <p className="text-[17px] md:text-[19px] leading-[1.7] text-[#8a8a8a] max-w-[620px] mt-8">
-            Catering, sonido, fotos, seguridad, ambientación. Buscá lo que te
-            falta, entrá al perfil y pedile el presupuesto directo. No hace falta
-            crear ninguna cuenta.
+            Decinos cuántos son y dónde es, y te mostramos los salones donde tu
+            fiesta entra. Después consultás la fecha directo, sin crear ninguna
+            cuenta.
           </p>
         </section>
 
         <section className={`${WRAP} pb-12`}>
-          <FiltrosVidriera
-            categorias={categorias}
-            provincias={PROVINCIAS}
-            inicial={filtros}
-          />
+          <FiltrosSalones provincias={PROVINCIAS} inicial={filtros} />
         </section>
 
         <section className={`${WRAP} pb-28`}>
-          {proveedores.length === 0 ? (
+          {salones.length === 0 ? (
             /* El vacío se dice con honestidad y con una salida.
              *
-             * Al 2/8 el directorio está vacío de verdad: hay 1016 personas en el
-             * pool y cero proveedores publicados. Esta pantalla se construyó
-             * igual porque el día que Franco cargue los primeros diez ya está
+             * Al 6/8 el directorio de salones está vacío de verdad. Esta pantalla
+             * se construyó igual porque el día que se anote el primero ya está
              * prendida, pero mientras tanto NO puede simular que hay algo. Una
              * persona que llega y lee "no hay resultados" a secas no vuelve; una
              * que encuentra por dónde seguir, capaz sí. */
             <div className="border border-[#1a1a1a] p-10 md:p-16 flex flex-col gap-6 items-start">
               <span className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a]">
-                {hayFiltros ? "Sin resultados" : "Todavía no hay proveedores publicados"}
+                {hayFiltros ? "Sin resultados" : "Todavía no hay salones publicados"}
               </span>
               <h2 className="font-[family-name:var(--font-syne)] text-[28px] md:text-[38px] font-bold uppercase tracking-tight leading-[1.05] max-w-[620px]">
                 {hayFiltros
-                  ? "No encontramos nada con esa búsqueda"
+                  ? "No encontramos ninguno con esa búsqueda"
                   : "Estamos armando el directorio"}
               </h2>
               <p className="text-[16px] md:text-[17px] leading-[1.7] text-[#8a8a8a] max-w-[560px]">
                 {hayFiltros
-                  ? "Probá con menos filtros o con otra palabra. Si no aparece lo que buscás, escribinos y te lo conseguimos nosotros: SOMOS DER produce eventos hace años y trabaja con proveedores de todos los rubros."
-                  : "Todavía no hay proveedores publicados acá. Mientras tanto, escribinos y te armamos el evento con los proveedores con los que ya trabajamos."}
+                  ? "Probá con menos filtros, o con un número redondo de invitados. Si no aparece lo que buscás, escribinos y te lo conseguimos nosotros: SOMOS DER produce eventos hace años y trabaja con salones de todo el país."
+                  : "Todavía no hay salones publicados acá. Mientras tanto, escribinos y te conseguimos el lugar con los salones con los que ya trabajamos."}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mt-2">
                 {hayFiltros ? (
                   <Link
-                    href="/servicios"
+                    href="/salones"
                     className="inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-8 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
                   >
                     Ver todos
                   </Link>
-                ) : null}
-                {/* El que mira un directorio vacio es, muchas veces, alguien
-                 * que podria estar adentro. Antes del alta abierta esto no se
-                 * podia ofrecer porque no habia puerta; ahora sí, y es el lugar
-                 * mas barato de todo el sitio para conseguir el primer
-                 * proveedor de verdad. */}
-                {!hayFiltros ? (
+                ) : (
                   <Link
-                    href="/registrar-proveedor"
+                    href="/registrar-salon"
                     className="inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-8 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
                   >
-                    Sos proveedor, publicate
+                    Tengo un salón, publicarlo
                   </Link>
-                ) : null}
+                )}
                 <a
                   href="https://somosder.ar"
                   target="_blank"
@@ -204,13 +189,12 @@ export default async function ServiciosPage({ searchParams }: Props) {
           ) : (
             <>
               <p className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] pb-6 border-b border-[#1a1a1a]">
-                {proveedores.length === 1
-                  ? "1 proveedor"
-                  : `${proveedores.length} proveedores`}
+                {salones.length === 1 ? "1 salón" : `${salones.length} salones`}
+                {personas ? ` para ${personas} personas` : ""}
               </p>
               <div>
-                {proveedores.map((p) => (
-                  <TarjetaProveedor key={p.profile_id} p={p} />
+                {salones.map((s) => (
+                  <TarjetaSalon key={s.slug} s={s} />
                 ))}
               </div>
             </>
@@ -224,13 +208,17 @@ export default async function ServiciosPage({ searchParams }: Props) {
             © 2026 LABURO · SOMOS DER
           </span>
           <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
-            {/* La puerta del proveedor que quiere estar acá. Sin esto, el
-             *  directorio solo puede crecer si Franco carga a cada uno a mano. */}
             <Link
               href="/entrar"
               className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
             >
-              Soy proveedor
+              Tengo un salón
+            </Link>
+            <Link
+              href="/servicios"
+              className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
+            >
+              Proveedores
             </Link>
             <Link
               href="/"

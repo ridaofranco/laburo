@@ -53,6 +53,11 @@ export async function updateSession(request: NextRequest) {
     // magico. El freno de abuso vive en el server action, y la RPC esta
     // granteada solo a service_role.
     "/registrar-proveedor",
+    // Alta abierta de SALON (cuarto pool, 6/8). Identica al alta del proveedor
+    // en todo lo que importa acá: el que llega no tiene cuenta, el freno de
+    // abuso vive en el server action y la RPC esta granteada solo a
+    // service_role.
+    "/registrar-salon",
     "/auth/callback",
     "/dev-login",
     "/o",
@@ -127,6 +132,17 @@ export async function updateSession(request: NextRequest) {
     // DEFINER, solo miran proveedores publicados, no devuelven datos de
     // contacto, y la de consultar tiene el freno de abuso adentro.
     "/servicios",
+    // LA VIDRIERA DE SALONES (cuarto pool, migraciones 0064/0066/0067). Misma
+    // razón exacta que "/servicios": es la puerta del cliente final, alguien que
+    // busca dónde hacer su fiesta y que no tiene ni va a tener cuenta. Sin esta
+    // línea el pool entero es inalcanzable con un 307 mudo a /entrar, que es lo
+    // que ya pasó la primera vez que se probó la vidriera de proveedores.
+    //
+    // Dejarla pasar es seguro por lo mismo: `staff_app_vidriera_salones` y
+    // `staff_app_vidriera_salon` son SECURITY DEFINER, solo miran salones
+    // publicados, no devuelven mail ni teléfono, y la de consultar tiene el
+    // freno de abuso de tres capas adentro.
+    "/salones",
     // El matcher del middleware solo excluye imágenes y .js, así que /robots.txt
     // y /sitemap.xml pasan por acá: sin esta línea, Googlebot pide el sitemap y
     // se come un 307 a /login.

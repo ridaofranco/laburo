@@ -25,7 +25,9 @@ import { BadgeCheck, MapPin, ArrowLeft } from "lucide-react";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { money } from "@/lib/format";
 import { getFichaProveedor } from "../actions";
-import { ConsultaPublicaForm } from "./consulta-form";
+// El formulario se mudó a components/vidriera cuando entró el pool de salones:
+// es el mismo para las dos vidrieras. Acá no cambió nada de lo que muestra.
+import { ConsultaPublicaForm } from "@/components/vidriera/consulta-publica-form";
 
 const WRAP = "max-w-[1440px] mx-auto w-full px-6 md:px-20";
 

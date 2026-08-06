@@ -34,6 +34,20 @@ export interface BienvenidaProveedorProps {
   dias: number;
   /** true si ya estaba registrado y solo se le mandó un link nuevo. */
   yaExistia?: boolean;
+  /**
+   * true cuando el que se anotó es un SALÓN y no un proveedor.
+   *
+   * Es un parámetro y no una plantilla aparte por la misma razón por la que el
+   * panel es uno solo para las dos puertas: el mail es idéntico salvo dos
+   * frases, y duplicarlo es garantizar que dentro de tres meses uno diga algo
+   * que el otro no. Con `false` el mail sale byte por byte como salía antes.
+   *
+   * Lo único que cambia de fondo: un salón no carga "servicios", carga cuánta
+   * gente entra. Prometerle una pantalla de servicios sería el mismo error que
+   * costó una trabajadora el 1/8, cuando el mail describía un link que abría
+   * otra cosa.
+   */
+  esSalon?: boolean;
 }
 
 const SURFACE_0 = "#000000";
@@ -50,6 +64,7 @@ export function BienvenidaProveedor({
   link,
   dias,
   yaExistia = false,
+  esSalon = false,
 }: BienvenidaProveedorProps) {
   return (
     <Html lang="es">
@@ -105,16 +120,17 @@ export function BienvenidaProveedor({
             >
               {yaExistia
                 ? "Tu perfil sigue como lo dejaste, no se tocó nada. Este link reemplaza al anterior, así que usá este de acá en adelante."
-                : "Tu perfil ya aparece en el directorio de LABURO y las productoras te pueden encontrar por lo que hacés y por dónde trabajás."}
+                : esSalon
+                  ? "Tu salón ya aparece en el directorio de LABURO y te pueden encontrar por cuánta gente entra y por dónde queda."
+                  : "Tu perfil ya aparece en el directorio de LABURO y las productoras te pueden encontrar por lo que hacés y por dónde trabajás."}
             </Text>
 
             <Text
               style={{ margin: "0 0 20px 0", fontSize: "16px", lineHeight: 1.6, color: FG_MUTED }}
             >
-              No necesitás cuenta ni contraseña. Con este link entrás a tu panel,
-              donde editás tus datos, agregás o sacás servicios, armás el
-              formulario con el que te llegan las consultas, y podés sacarte del
-              directorio cuando quieras.
+              {esSalon
+                ? "No necesitás cuenta ni contraseña. Con este link entrás a tu panel, donde editás tus datos y la capacidad del salón, armás el formulario con el que te llegan las consultas, y podés sacarte del directorio cuando quieras."
+                : "No necesitás cuenta ni contraseña. Con este link entrás a tu panel, donde editás tus datos, agregás o sacás servicios, armás el formulario con el que te llegan las consultas, y podés sacarte del directorio cuando quieras."}
             </Text>
 
             <Section style={{ marginTop: "24px" }}>

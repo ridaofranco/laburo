@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { BLOG_ORIGIN, getAllPosts } from "@/lib/blog";
 import { buscarPublico } from "./servicios/actions";
+import { buscarSalones } from "./salones/actions";
 
 /**
  * Sitemap de LABURO.
@@ -21,7 +22,13 @@ import { buscarPublico } from "./servicios/actions";
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = getAllPosts();
-  const proveedores = await buscarPublico({}).catch(() => []);
+  // Las dos vidrieras van juntas: son independientes y encadenarlas sería un
+  // viaje de más para nada. Cada una cae sola con su propio catch, así que si
+  // una falla el sitemap igual sale con la otra.
+  const [proveedores, salones] = await Promise.all([
+    buscarPublico({}).catch(() => []),
+    buscarSalones({}).catch(() => []),
+  ]);
   const ultimoPost = posts
     .map((p) => p.date)
     .sort()
@@ -42,6 +49,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           },
           ...proveedores.map((p) => ({
             url: `${BLOG_ORIGIN}/servicios/${p.slug}`,
+            changeFrequency: "weekly" as const,
+            priority: 0.7,
+          })),
+        ]
+      : []),
+    // Los salones, con la MISMA regla: solo entran si hay alguno publicado.
+    // Mandar a indexar una vidriera vacía es pedirle a Google que guarde una
+    // página que dice "todavía no hay salones", y después cuesta sacársela.
+    ...(salones.length > 0
+      ? [
+          {
+            url: `${BLOG_ORIGIN}/salones`,
+            changeFrequency: "weekly" as const,
+            priority: 0.9,
+          },
+          ...salones.map((s) => ({
+            url: `${BLOG_ORIGIN}/salones/${s.slug}`,
             changeFrequency: "weekly" as const,
             priority: 0.7,
           })),

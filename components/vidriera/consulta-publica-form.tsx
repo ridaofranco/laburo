@@ -1,27 +1,33 @@
 "use client";
 
 /**
- * El formulario con el que un cliente final le pide presupuesto a un proveedor.
+ * El formulario con el que un cliente final pide un presupuesto.
  *
- * Es el mismo motor que el diálogo de /proveedores (mismos campos, misma
- * validación de lib/formulario-consulta.ts, misma RPC del lado del proveedor),
- * con tres diferencias que vienen de quién lo está completando:
+ * Lo usan las DOS vidrieras: la de proveedores (`/servicios/[slug]`) y la de
+ * salones (`/salones/[slug]`). Vivía adentro de `/servicios/[slug]` y se movió
+ * acá cuando entró el cuarto pool, sin cambiarle una coma al comportamiento: lo
+ * único que se sumó son los tres textos que nombran a quién se le escribe.
  *
- *   1. EL NOMBRE ES OBLIGATORIO. En la versión de la productora podía ir vacío
- *      porque el mail decía "tal productora te está pidiendo un presupuesto" y
- *      con eso el proveedor ya sabía con quién trataba. Acá no hay nada atrás:
- *      una consulta sin nombre es un mail anónimo, y a eso nadie contesta.
+ * ── POR QUÉ COMPARTIDO Y NO COPIADO ─────────────────────────────────────────
+ * Es la misma RPC, la misma validación, el mismo freno de abuso y la misma
+ * pantalla de éxito. Copiarlo para salones habría sido tener dos formularios que
+ * arrancan idénticos y se separan solos: exactamente lo que ya pasó con las dos
+ * familias de funciones de la base, que estuvieron un mes desincronizadas porque
+ * una nunca se conectó.
  *
- *   2. EL MAIL NO SE PUEDE AUTOCOMPLETAR. La productora tenía cuenta y se le
- *      ponía el suyo. Acá no hay sesión de dónde sacarlo, así que se pide, y es
- *      lo único sin lo cual la consulta no existe: sin mail el proveedor no
- *      tiene a dónde contestar.
- *
+ * ── LAS TRES DECISIONES DE ORIGEN, QUE SIGUEN VALIENDO ──────────────────────
+ *   1. EL NOMBRE ES OBLIGATORIO. Una consulta sin nombre es un mail anónimo, y a
+ *      eso nadie contesta.
+ *   2. EL MAIL NO SE PUEDE AUTOCOMPLETAR. Acá no hay sesión de dónde sacarlo, y
+ *      es lo único sin lo cual la consulta no existe.
  *   3. EL ÉXITO NO ES UN TOAST, ES UNA PANTALLA. Un toast dura tres segundos y
- *      se lo pierde cualquiera que estaba mirando el teléfono de reojo. Esta
- *      persona necesita saber, sin lugar a dudas, que su consulta salió y que la
- *      respuesta le va a llegar por mail (y que revise el spam, que es donde
- *      terminan la mitad).
+ *      se lo pierde cualquiera que estaba mirando el teléfono de reojo.
+ *
+ * ── DE DÓNDE SALE LA ACCIÓN ─────────────────────────────────────────────────
+ * `consultarPublico` sigue viviendo en `app/servicios/actions.ts` y no se mudó a
+ * propósito: es UNA sola acción, con UN solo freno de abuso, y moverla habría
+ * tocado la vidriera de proveedores que ya está en vivo y probada. Que el import
+ * cruce carpetas es más barato que tener dos puertas de entrada al mismo INSERT.
  */
 
 import { useState } from "react";
@@ -34,7 +40,7 @@ import {
   TOPES,
   type CampoFormulario,
 } from "@/lib/formulario-consulta";
-import { consultarPublico } from "../actions";
+import { consultarPublico } from "@/app/servicios/actions";
 
 const inputCls =
   "w-full min-h-[52px] bg-[#0a0a0a] border border-[#1a1a1a] focus:border-[#0047ff] outline-none text-[16px] text-[#f5f5f5] px-4 py-3 rounded-none transition-colors [color-scheme:dark]";
@@ -94,11 +100,19 @@ export function ConsultaPublicaForm({
   nombreProveedor,
   campos: camposCrudos,
   intro,
+  volverHref = "/servicios",
+  volverTexto = "Pedirle a otro también",
+  titulo = "Contale qué necesitás",
 }: {
   profileId: string;
+  /** Cómo se llama a quién se le escribe. Se usa tal cual en tres frases. */
   nombreProveedor: string;
   campos: CampoFormulario[];
   intro: string | null;
+  /** A dónde vuelve después de mandar. Cada vidriera a la suya. */
+  volverHref?: string;
+  volverTexto?: string;
+  titulo?: string;
 }) {
   const campos = camposAMostrar(camposCrudos);
 
@@ -135,15 +149,22 @@ export function ConsultaPublicaForm({
       return;
     }
 
+    // try/finally y no tres líneas sueltas: si el await tira, sin el finally el
+    // botón queda deshabilitado para siempre y la persona no puede ni reintentar
+    // ni salir. Es el mismo encierro que dejó a alguien en "Subiendo tu CV…".
     setEnviando(true);
-    const r = await consultarPublico({ profileId, respuestas, nombre, email, telefono });
-    setEnviando(false);
-
-    if (!r.ok) {
-      setError(r.error ?? "No se pudo enviar. Probá de nuevo.");
-      return;
+    try {
+      const r = await consultarPublico({ profileId, respuestas, nombre, email, telefono });
+      if (!r.ok) {
+        setError(r.error ?? "No se pudo enviar. Probá de nuevo.");
+        return;
+      }
+      setListo({ mailEnviado: Boolean(r.mailEnviado) });
+    } catch {
+      setError("No se pudo enviar. Probá de nuevo.");
+    } finally {
+      setEnviando(false);
     }
-    setListo({ mailEnviado: Boolean(r.mailEnviado) });
   }
 
   if (listo) {
@@ -169,10 +190,10 @@ export function ConsultaPublicaForm({
           suelen caer las respuestas de un remitente nuevo.
         </p>
         <Link
-          href="/servicios"
+          href={volverHref}
           className="mt-2 self-start inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-8 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
         >
-          Pedirle a otro también
+          {volverTexto}
         </Link>
       </div>
     );
@@ -185,7 +206,7 @@ export function ConsultaPublicaForm({
           Pedir presupuesto
         </span>
         <h2 className="font-[family-name:var(--font-syne)] text-[26px] md:text-[32px] font-bold uppercase tracking-tight leading-[1.05]">
-          Contale qué necesitás
+          {titulo}
         </h2>
         <p className="text-[15px] leading-[1.65] text-[#8a8a8a]">
           Le llega a su mail y te contesta directo. No hace falta crear cuenta ni

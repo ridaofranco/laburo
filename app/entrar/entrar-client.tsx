@@ -32,13 +32,29 @@ import { createClient } from "@/lib/supabase/client";
 import { signInWithPassword } from "@/lib/auth-password";
 import { proveedorPuedeCrearCuenta } from "./actions";
 
-type Rol = "productora" | "staff" | "proveedor";
+type Rol = "productora" | "staff" | "proveedor" | "salon";
 
+/**
+ * ── POR QUÉ EL SALÓN ES UN BOTÓN PROPIO Y NO "SOY PROVEEDOR" (6/8) ──────────
+ * Franco pidió menos puertas, no más, y este botón es uno más. Se suma igual
+ * por dos razones concretas:
+ *
+ *   1. Nadie que tiene un salón se reconoce en "presto un servicio: sonido,
+ *      catering, seguridad". Iba a leer las tres opciones y no elegir ninguna,
+ *      que es exactamente el problema que /entrar vino a resolver.
+ *   2. El botón de registrarse de abajo cambia con el rol. Metiendo salones
+ *      adentro de "proveedor", el dueño de un salón terminaba en el formulario
+ *      de proveedores, que no le pide capacidad, o sea publicándose invisible.
+ *
+ * Para ENTRAR, los dos son lo mismo: desde la 0066 el vínculo cuenta-perfil y
+ * `/mi-proveedor` cubren los dos tipos. Elegir uno u otro acá no cambia a dónde
+ * entra, solo dónde se anota si todavía no está.
+ */
 const ROLES: { id: Rol; titulo: string; bajada: string }[] = [
   {
     id: "productora",
     titulo: "Soy productora",
-    bajada: "Armo eventos y necesito personal o proveedores",
+    bajada: "Armo eventos y necesito personal, proveedores o un salón",
   },
   {
     id: "staff",
@@ -49,6 +65,11 @@ const ROLES: { id: Rol; titulo: string; bajada: string }[] = [
     id: "proveedor",
     titulo: "Soy proveedor",
     bajada: "Presto un servicio: sonido, catering, seguridad, lo que sea",
+  },
+  {
+    id: "salon",
+    titulo: "Tengo un salón",
+    bajada: "Alquilo un espacio para eventos y quiero que me consulten fechas",
   },
 ];
 
@@ -64,6 +85,7 @@ const ALTA: Record<Rol, { href: string; texto: string }> = {
   productora: { href: "/registrar-productora", texto: "Crear la cuenta de mi productora" },
   staff: { href: "/sumate", texto: "Sumarme al pool" },
   proveedor: { href: "/registrar-proveedor", texto: "Publicar mis servicios" },
+  salon: { href: "/registrar-salon", texto: "Publicar mi salón" },
 };
 
 const input =
@@ -86,7 +108,9 @@ export function EntrarClient() {
     // Se puede llegar directo con el rol ya elegido (?como=proveedor), que es
     // lo que usan los links de "cambiar de perfil" y los rebotes.
     const c = p.get("como");
-    if (c === "productora" || c === "staff" || c === "proveedor") setRol(c);
+    if (c === "productora" || c === "staff" || c === "proveedor" || c === "salon") {
+      setRol(c);
+    }
   }, []);
 
   const callbackUrl = (r: Rol) =>
@@ -115,8 +139,16 @@ export function EntrarClient() {
     // El proveedor viejo no tiene usuario de auth todavía (el diseño original
     // era sin cuenta). Solo para él, y solo si su mail YA está cargado como
     // proveedor, se permite crearlo en este primer ingreso.
+    //
+    // El salón entra por la MISMA rama (6/8) y no es un detalle: nace sin cuenta
+    // igual que el proveedor, así que sin esto un dueño de salón pedía su link,
+    // Supabase no le creaba usuario, y no entraba nunca. La 0066 abrió
+    // `staff_app_email_es_proveedor` a los dos tipos, que es lo que hace que
+    // este chequeo le conteste que sí.
     const crearSiHaceFalta =
-      rol === "proveedor" ? await proveedorPuedeCrearCuenta(email) : false;
+      rol === "proveedor" || rol === "salon"
+        ? await proveedorPuedeCrearCuenta(email)
+        : false;
 
     const supabase = createClient();
     await supabase.auth.signInWithOtp({
