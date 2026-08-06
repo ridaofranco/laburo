@@ -18,9 +18,13 @@ import {
   getContrataciones,
   getOrganizaciones,
   getRentabilidadCruzada,
+  getConsultasPlataforma,
+  getOfertasPlataforma,
+  getTimelinePlataforma,
 } from "./actions";
 import { PlataformaClient } from "./plataforma-client";
 import { RentabilidadCruzada } from "./rentabilidad-cruzada";
+import { ControlTotal } from "./control-total";
 
 export const metadata: Metadata = {
   title: "LABURO. | Plataforma",
@@ -48,11 +52,15 @@ export default async function PlataformaPage() {
     );
   }
 
-  const [busquedas, contrataciones, organizaciones, rentabilidad] = await Promise.all([
+  const [busquedas, contrataciones, organizaciones, rentabilidad, hechos, consultas, ofertas] =
+    await Promise.all([
     getBusquedas(),
     getContrataciones(),
     getOrganizaciones(),
     getRentabilidadCruzada(),
+    getTimelinePlataforma(30),
+    getConsultasPlataforma(),
+    getOfertasPlataforma(),
   ]);
 
   return (
@@ -92,6 +100,11 @@ export default async function PlataformaPage() {
          * porque lo de arriba es lo que hay que moderar hoy, y esto es lo que
          * se mira una vez por semana. */}
         <RentabilidadCruzada filas={rentabilidad} />
+
+        {/* CONTROL TOTAL (6/8): "absolutamente todo tengo que ver, no se me
+         * puede pasar nada". Va al final porque es lo mas largo, pero la linea
+         * de tiempo de adentro es lo primero que hay que mirar cada dia. */}
+        <ControlTotal hechos={hechos} consultas={consultas} ofertas={ofertas} />
       </div>
     </main>
   );

@@ -232,9 +232,18 @@ export default async function LandingPage() {
              * parrafo y los dos CTA) se sirve visible. */}
             <Reveal visibleDeArranque>
               <Eyebrow>Staff, proveedores y salones // por SOMOS DER</Eyebrow>
-              <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.85] text-[clamp(64px,15vw,180px)] mt-6">
-                <span className="block">Tu evento.</span>
-                <span className="block text-transparent [-webkit-text-stroke:1.5px_#f5f5f5]">
+              {/* `whitespace-nowrap` en cada linea NO es decorativo: sin eso "TU
+               * EVENTO." se parte en dos renglones en escritorio y el hero pasa
+               * a ocupar TRES lineas de texto monumental, que es lo que Franco
+               * marco ("esto esta gigante"). Con el nowrap son siempre dos
+               * lineas, en cualquier ancho.
+               *
+               * El tope bajo de 180px a 116px: a 180 el titulo se comia la
+               * pantalla entera y empujaba abajo del pliegue la cifra del pool,
+               * la bajada y los dos botones, que es donde esta la conversion. */}
+              <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.88] text-[clamp(40px,8.5vw,116px)] mt-6">
+                <span className="block whitespace-nowrap">Tu evento.</span>
+                <span className="block whitespace-nowrap text-transparent [-webkit-text-stroke:1.5px_#f5f5f5]">
                   Entero.
                 </span>
               </h1>

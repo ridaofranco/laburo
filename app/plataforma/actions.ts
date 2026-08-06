@@ -216,3 +216,67 @@ export async function getRentabilidadCruzada(): Promise<RentabilidadOrg[]> {
   const { data } = await supabase.rpc("staff_app_plataforma_rentabilidad");
   return (data as RentabilidadOrg[] | null) ?? [];
 }
+
+/** Una consulta a un proveedor o salón, vista desde la plataforma (0070). */
+export interface ConsultaPlataforma {
+  id: string;
+  created_at: string;
+  origen: string | null;
+  quien: string | null;
+  email: string | null;
+  telefono: string | null;
+  a_quien: string | null;
+  tipo_destino: string | null;
+  slug: string | null;
+  /** false = la consulta existe pero el proveedor NUNCA se enteró. */
+  mail_salio: boolean;
+  organizacion: string | null;
+  respuestas: { label: string; valor: string }[] | null;
+}
+
+/** Una oferta de trabajo, con en qué quedó (0070). */
+export interface OfertaPlataforma {
+  id: string;
+  sent_at: string | null;
+  responded_at: string | null;
+  expires_at: string | null;
+  monto: number | null;
+  /** 'vencida' NO está en la tabla: se deriva de expires_at. */
+  estado: string | null;
+  a_quien: string | null;
+  evento: string | null;
+  organizacion: string | null;
+}
+
+/** Un hecho de la línea de tiempo (0070/0071). */
+export interface HechoPlataforma {
+  cuando: string;
+  que: string;
+  quien: string | null;
+  detalle: string | null;
+  org: string | null;
+}
+
+export async function getConsultasPlataforma(): Promise<ConsultaPlataforma[]> {
+  const supabase = await createClient();
+  const { data } = await supabase.rpc("staff_app_plataforma_consultas");
+  return (data as ConsultaPlataforma[] | null) ?? [];
+}
+
+export async function getOfertasPlataforma(): Promise<OfertaPlataforma[]> {
+  const supabase = await createClient();
+  const { data } = await supabase.rpc("staff_app_plataforma_ofertas");
+  return (data as OfertaPlataforma[] | null) ?? [];
+}
+
+/**
+ * "Qué pasó en LABURO", todo junto y ordenado.
+ *
+ * Es la que contesta el pedido de Franco: *"no se me puede pasar nada"*. Las
+ * otras pantallas obligan a ir a buscar; esta trae.
+ */
+export async function getTimelinePlataforma(dias = 30): Promise<HechoPlataforma[]> {
+  const supabase = await createClient();
+  const { data } = await supabase.rpc("staff_app_plataforma_timeline", { p_dias: dias });
+  return (data as HechoPlataforma[] | null) ?? [];
+}
