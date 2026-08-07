@@ -97,6 +97,9 @@ export function LeadForm() {
         </div>
       </div>
 
+      {/* El ejemplo pide staff Y otra cosa a proposito (7/8): con el ejemplo
+       * anterior ("10 mozos y 4 de seguridad") el que entraba buscando un salon
+       * o un proveedor leia que este formulario no era para el. */}
       <div className="group">
         <label htmlFor="lead-mensaje" className={labelCls}>
           Qué necesitás *
@@ -107,7 +110,7 @@ export function LeadForm() {
           required
           maxLength={2000}
           rows={4}
-          placeholder="Ej: 10 mozos y 4 de seguridad para un evento el 20/9 en CABA."
+          placeholder="Ej: 10 mozos y 4 de seguridad para el 20/9 en CABA, y estoy buscando salón para 200 personas."
           className={`${inputCls} resize-none`}
         />
       </div>

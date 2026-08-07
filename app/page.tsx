@@ -82,8 +82,11 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
  * quiere llenar un formulario no tenía por dónde entrar.
  */
 const WA_NUMERO = "5491171540675";
+/* El mensaje NO nombra staff (7/8). Decía "Necesito staff para un evento" y el
+ * que entra buscando un salón o un proveedor arrancaba la conversación pidiendo
+ * otra cosa. Queda abierto a los cuatro lados, igual que el título. */
 const WA_MENSAJE =
-  "Hola, los encontré por LABURO. Necesito staff para un evento y quería consultarles.";
+  "Hola, los encontré por LABURO. Estoy armando un evento y quería consultarles.";
 const WA_HREF = waLink(WA_NUMERO, WA_MENSAJE);
 
 /**
@@ -180,8 +183,15 @@ export default async function LandingPage() {
        * nuevo que ponia su mail ahi NUNCA recibia el link y se quedaba esperando.
        * En movil ese boton era uno de los dos elementos que entran arriba del
        * pliegue: el lugar mas caro de la pantalla para la accion menos rentable.
-       * Ahora el relleno se lo lleva "Necesito staff" -> #productores (el
-       * formulario que si guarda el lead) y "Ingresar" baja a link de texto. */}
+       * Ahora el relleno se lo lleva el CTA comercial -> #productores (el
+       * formulario que si guarda el lead) y "Ingresar" baja a link de texto.
+       *
+       * EL CTA YA NO DICE "NECESITO STAFF" (7/8, cierre del pedido de Franco
+       * "el landing ya no es staff real"). El titulo y la metadata ya se habian
+       * abierto a los cuatro lados, pero los DOS botones primarios (este y el
+       * del hero) seguian pidiendo staff: el que llega buscando salon o
+       * proveedor leia arriba que esto no era para el. Dice "Armo un evento",
+       * que es el denominador comun de los cuatro pools y lleva al mismo lado. */}
       <header className="fixed top-0 inset-x-0 z-50 mix-blend-difference">
         <div className={`${WRAP} py-6 md:py-8 flex items-center justify-between gap-4`}>
           {/* 18px en movil: con "Necesito staff" + "Ingresar" al lado, el
@@ -199,7 +209,7 @@ export default async function LandingPage() {
               href="#productores"
               className="label-tech text-[10px] md:text-[11px] tracking-[0.08em] md:tracking-[0.2em] whitespace-nowrap bg-white text-black px-4 md:px-7 py-3 hover:bg-[#0047ff] hover:text-white transition-colors duration-300"
             >
-              Necesito staff
+              Armo un evento
             </a>
           </div>
         </div>
@@ -235,22 +245,49 @@ export default async function LandingPage() {
               {/* `whitespace-nowrap` en cada linea NO es decorativo: sin eso "TU
                * EVENTO." se parte en dos renglones en escritorio y el hero pasa
                * a ocupar TRES lineas de texto monumental, que es lo que Franco
-               * marco ("esto esta gigante"). Con el nowrap son siempre dos
-               * lineas, en cualquier ancho.
+               * marco ("esto esta gigante").
                *
                * El tope bajo de 180px a 116px: a 180 el titulo se comia la
                * pantalla entera y empujaba abajo del pliegue la cifra del pool,
-               * la bajada y los dos botones, que es donde esta la conversion. */}
-              <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.88] text-[clamp(40px,8.5vw,116px)] mt-6">
-                <span className="block whitespace-nowrap">Tu evento.</span>
-                <span className="block whitespace-nowrap text-transparent [-webkit-text-stroke:1.5px_#f5f5f5]">
+               * la bajada y los dos botones, que es donde esta la conversion.
+               *
+               * ⚠️ EL NOWRAP ESTABA CORTANDO EL TITULO Y NADIE LO VEIA (7/8).
+               * Medido: "TU EVENTO." se pasaba del ancho util 73px a 360, 43px a
+               * 390, 19px a 414 y 21px a 768. Se comia la "O." final. Los
+               * chequeos de desborde daban 0 igual porque la <section> tiene
+               * `overflow-hidden`: el titulo no empujaba la pagina, se recortaba
+               * en silencio. Medir `scrollWidth` NO alcanza para esto; hay que
+               * medir el Range del texto contra el borde del contenedor.
+               *
+               * Dos causas y dos arreglos:
+               * 1. En movil no hay ancho posible para una sola linea sin bajar la
+               *    tipografia a 32px, que la deja mas chica que la cifra del pool
+               *    (48px) y rompe la jerarquia. Ahi el titulo ENVUELVE
+               *    (`whitespace-normal`) y el nowrap arranca recien en md, que es
+               *    donde el hero monumental de dos lineas tiene sentido.
+               * 2. El escalado bajo de 8.5vw a 8vw por el salto de padding: WRAP
+               *    pasa de px-6 (24px) a md:px-20 (80px) justo en 768, o sea que
+               *    el ancho util CAE 112px en el mismo breakpoint donde el nowrap
+               *    se prende. A 8.5vw no entraba; a 8vw sobran 17px. */}
+              <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.88] text-[clamp(40px,8vw,116px)] mt-6">
+                <span className="block whitespace-normal md:whitespace-nowrap">
+                  Tu evento.
+                </span>
+                <span className="block whitespace-normal md:whitespace-nowrap text-transparent [-webkit-text-stroke:1.5px_#f5f5f5]">
                   Entero.
                 </span>
               </h1>
             </Reveal>
 
+            {/* 6+6 y no 5+7 (7/8): con 5 columnas de 12, y con `gap-8` comiendo
+             * 352px de los 608 utiles, a 768px la celda de la cifra quedaba en
+             * 235px y "+1.000" mide 262 a 7vw. Se cortaba el "0" final. Con 6 la
+             * cifra entra en los tres anchos md sin tocarle el tamaño, y el
+             * parrafo (que ya tiene max-w-[560px] y a 768 igual envuelve) no
+             * pierde nada. De lg en adelante manda `lg:col-start-7`, o sea que
+             * el reparto de escritorio no cambio. */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-10 md:mt-20 md:items-end">
-              <Reveal visibleDeArranque delay={0.1} className="md:col-span-5">
+              <Reveal visibleDeArranque delay={0.1} className="md:col-span-6">
                 <p className="font-[family-name:var(--font-syne)] font-extrabold text-[clamp(48px,7vw,88px)] leading-none text-[#0047ff]">
                   +{pool.toLocaleString("es-AR")}
                 </p>
@@ -261,7 +298,7 @@ export default async function LandingPage() {
               <Reveal
                 visibleDeArranque
                 delay={0.2}
-                className="md:col-span-7 lg:col-start-7 lg:col-span-6"
+                className="md:col-span-6 lg:col-start-7 lg:col-span-6"
               >
                 <p className="text-[18px] md:text-[21px] leading-[1.6] text-[#8a8a8a] max-w-[560px]">
                   El staff, los proveedores y el salón, en un solo lugar. Buscás
@@ -273,7 +310,7 @@ export default async function LandingPage() {
                     href="#productores"
                     className="inline-flex items-center justify-center bg-[#f5f5f5] text-black px-10 py-5 font-[family-name:var(--font-syne)] font-bold text-[13px] uppercase tracking-widest hover:bg-[#0047ff] hover:text-white transition-colors duration-300"
                   >
-                    Necesito staff
+                    Armo un evento
                   </a>
                   <Link
                     href="/sumate"
@@ -296,13 +333,19 @@ export default async function LandingPage() {
                 El proceso.
               </h2>
             </Reveal>
-            <div className="grid grid-cols-1 md:grid-cols-3 mt-16 md:mt-24">
+            {/* Las tres columnas arrancan en lg, no en md (7/8). En md el ancho
+             * util es 608px (WRAP pasa a px-20 justo ahi), o sea ~123px de texto
+             * por columna descontando el pr-10/pl-10: los parrafos quedaban en
+             * una cinta de tres palabras por renglon y "CERRÁS DIRECTO" se salia
+             * de su columna 31px, pisando el margen. En la tablet van apilados y
+             * a ancho completo, que es como se leen. */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 mt-16 md:mt-24">
               {PASOS.map((p, i) => (
                 <Reveal
                   key={p.n}
                   delay={i * 0.12}
-                  className={`border-t border-[#1a1a1a] py-12 md:py-16 md:pr-10 ${
-                    i > 0 ? "md:border-l md:pl-10" : ""
+                  className={`border-t border-[#1a1a1a] py-12 md:py-16 lg:pr-10 ${
+                    i > 0 ? "lg:border-l lg:pl-10" : ""
                   }`}
                 >
                   <span className="font-[family-name:var(--font-syne)] text-[13px] font-bold text-[#0047ff] block mb-6">
@@ -330,25 +373,47 @@ export default async function LandingPage() {
                 <br />
                 Es operación.
               </h2>
+              {/* Decia "el mismo pool y el mismo sistema que usamos para armar
+                * el staff": el respaldo se apoyaba en uno solo de los cuatro
+                * pools. Ahora nombra los tres que se buscan (gente, servicios y
+                * lugar), que es lo que promete el titulo. */}
               <p className="text-[17px] md:text-[19px] leading-[1.7] text-[#8a8a8a] max-w-[620px] mt-8">
                 LABURO nace adentro de SOMOS DER, productora de eventos. Es el
-                mismo pool y el mismo sistema que usamos para armar el staff de
-                nuestras propias operaciones.
+                mismo sistema con el que armamos nuestras propias operaciones:
+                la gente, los servicios y el lugar.
               </p>
             </Reveal>
-            {/* La cifra mas larga ("+150.000") dimensiona a todas: el clamp esta
-             * calculado para que entre en la celda en cada breakpoint sin
-             * desbordar sobre la celda vecina. */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 border border-[#1a1a1a] mt-16 md:mt-24">
+            {/* La cifra mas larga ("+150.000") dimensiona a todas.
+             *
+             * ⚠️ EL CLAMP ANTERIOR NO ESTABA CALCULADO, SE PASABA (7/8). Medido
+             * contra el ancho util de la celda: "+150.000" se salia 46px a 360,
+             * 31px a 390, 49px a 1024 y 25px a 1440. En el telefono se metia
+             * ADENTRO de la celda de al lado y se leia "+150.0006", pegado al 6
+             * de "6 paises". No lo cazaba ningun chequeo de desborde porque el
+             * texto se pasa de SU celda pero no empuja la pagina.
+             *
+             * Tres cambios, en este orden de importancia:
+             * 1. En telefono va a UNA columna (antes dos): con dos, el ancho util
+             *    por celda es 108px y "+150.000" necesita 154px a la tipografia
+             *    mas chica que mantiene la jerarquia contra el label. No habia
+             *    tamaño posible; habia que darle la fila entera.
+             * 2. El escalado bajo de 2.8vw a 2.1vw, que es lo que entra en la
+             *    celda cuando son CUATRO columnas (el caso apretado es 1024, no
+             *    el ancho maximo), y el tope de 44 a 36 por la misma razon.
+             * 3. Los bordes dejan de calcularse con el indice (`i % 2`, `i >= 2`)
+             *    y pasan a ser `border-b border-r` en cada celda sobre un
+             *    contenedor `border-t border-l`. La cuenta con el indice estaba
+             *    atada a que fueran 2 o 4 columnas: con la fila unica del
+             *    telefono quedaba mal, y ademas se rompia sola si algun dia se
+             *    suma o se saca una cifra. Asi dibuja bien con 1, 2 o 4. */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-t border-l border-[#1a1a1a] mt-16 md:mt-24">
               {cifras.map((c, i) => (
                 <Reveal
                   key={c.label}
                   delay={i * 0.1}
-                  className={`p-6 md:p-8 border-[#1a1a1a] ${i % 2 === 1 ? "border-l" : ""} ${
-                    i >= 2 ? "border-t lg:border-t-0" : ""
-                  } ${i > 0 ? "lg:border-l" : ""}`}
+                  className="p-6 md:p-8 lg:p-6 border-b border-r border-[#1a1a1a]"
                 >
-                  <p className="font-[family-name:var(--font-syne)] font-extrabold text-[clamp(22px,2.8vw,44px)] leading-none whitespace-nowrap">
+                  <p className="font-[family-name:var(--font-syne)] font-extrabold text-[clamp(22px,2.1vw,36px)] leading-none whitespace-nowrap">
                     {c.valor}
                   </p>
                   <p className="label-tech text-[10px] tracking-[0.2em] text-[#8a8a8a] mt-4">
@@ -488,10 +553,19 @@ export default async function LandingPage() {
         {/* ── Formulario de productores ── */}
         <section id="productores" className="border-t border-[#1a1a1a] bg-[#050505] scroll-mt-16">
           <div className={`${WRAP} py-24 md:py-36`}>
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
-              <Reveal className="md:col-span-5">
+            {/* Se parte en dos recien en lg (7/8). Con `md:grid-cols-12 gap-12`
+             * los 11 gaps de 48px se comian 528 de los 608px utiles de la
+             * tablet: a la columna del titulo le quedaban 225px y "necesitás."
+             * mide 253 a 6vw, asi que la palabra se cortaba. Y el formulario, en
+             * la mitad de una tablet, entraba en dos columnas de campos
+             * angostisimas. Apilado se lee y se completa mejor.
+             *
+             * El escalado del titulo tambien baja de 6vw a 5vw: el ancho
+             * apretado de verdad es 1024, no el maximo. */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+              <Reveal className="lg:col-span-5">
                 <Eyebrow>04 // Productores</Eyebrow>
-                <h2 className="font-[family-name:var(--font-syne)] font-bold uppercase tracking-tighter text-[clamp(36px,6vw,72px)] leading-[0.95] mt-4">
+                <h2 className="font-[family-name:var(--font-syne)] font-bold uppercase tracking-tighter text-[clamp(36px,5vw,72px)] leading-[0.95] mt-4">
                   Contanos qué necesitás.
                 </h2>
                 <p className="text-[16px] md:text-[17px] leading-[1.7] text-[#8a8a8a] mt-6 max-w-[420px]">
@@ -527,7 +601,7 @@ export default async function LandingPage() {
                   </WhatsAppLink>
                 </div>
               </Reveal>
-              <Reveal delay={0.15} className="md:col-span-7">
+              <Reveal delay={0.15} className="lg:col-span-7">
                 <LeadForm />
               </Reveal>
             </div>
