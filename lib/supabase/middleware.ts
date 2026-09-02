@@ -92,6 +92,22 @@ export async function updateSession(request: NextRequest) {
     // al mundo sin sesión, y además "/prov" chocaría con el "/proveedores" del
     // directorio cuando exista.
     "/acceso-proveedor",
+    // EL PANEL DEL PROVEEDOR Y DEL SALON (0066: comparten esta puerta). Pariente
+    // directo de "/acceso-proveedor": es la misma persona, entrando por sesión en
+    // vez de por token. Faltar acá provocaba un bug DOBLE, y la segunda mitad no
+    // es obvia: (1) el 307 a /entrar, que ya es malo; y (2) que el rebote hace
+    // url.search = "" unas líneas más abajo, así que se comía el querystring y la
+    // persona aterrizaba en el selector genérico en vez de en su solapa. El
+    // redirect("/entrar?como=proveedor") que la propia página tiene escrito
+    // (app/mi-proveedor/page.tsx) nunca llegaba a ejecutarse, porque el
+    // middleware cortaba antes.
+    // Dejarla pasar es seguro y además es lo correcto: el gate real lo hace la
+    // página (getUser() + staff_app_mi_perfil_proveedor), que es la única que
+    // sabe a qué solapa mandarlo.
+    // ⚠️ El prefijo va ENTERO, igual que "/acceso-proveedor": auditado el 2/9,
+    // "/mi-proveedor" es la única ruta de primer nivel que empieza con "/mi" y no
+    // es prefijo de ninguna otra, así que el startsWith no abre nada de más.
+    "/mi-proveedor",
     // Baja del pool ("no quiero formar parte"): la persona llega desde el pie de
     // un mail, sin cuenta y sin sesión. El gate es el token HMAC del link, que
     // valida la propia página/route (lib/baja.ts), no el middleware.
