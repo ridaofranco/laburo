@@ -17,12 +17,18 @@
  *     gatea is_org_writer y valida org de gig/candidato ella misma. Devuelve
  *     el raw token UNA sola vez. Si dice que no, el motivo se traduce a
  *     castellano (MOTIVOS): antes la productora leía "role_required" en pantalla.
- *  4. Arma el link mágico ${SITE_URL}/o/${token} y el mensaje wa.me (voseo, sin
+ *  4. revalidatePath de la ficha del candidato, del tablero y del dashboard,
+ *     JUSTO DESPUÉS de que la RPC confirmó y ANTES de armar el link y de mandar
+ *     el mail. Va acá y no al final por el mismo criterio de estado honesto del
+ *     paso 7: si el mail falla, la oferta ya existe igual, así que las pantallas
+ *     igual la tienen que mostrar. Antes no se revalidaba nada y al volver al
+ *     perfil el cache del router mostraba la lista sin la oferta recién creada.
+ *  5. Arma el link mágico ${SITE_URL}/o/${token} y el mensaje wa.me (voseo, sin
  *     em dash). El raw token vive SÓLO en memoria para el link; nunca se loguea
  *     ni se re-persiste (T-3-11).
- *  5. Renderiza el OfferEmail (react-email v2 → render() es ASYNC, Pitfall 4) y
+ *  6. Renderiza el OfferEmail (react-email v2 → render() es ASYNC, Pitfall 4) y
  *     lo manda con sendMail (mailer honesto: nunca tira, devuelve MailResult).
- *  6. Devuelve estado honesto (D-02): si el mail falla, ok:true con mail.ok:false
+ *  7. Devuelve estado honesto (D-02): si el mail falla, ok:true con mail.ok:false
  *     para que la UI ofrezca el wa.me de fallback con el link que funciona —
  *     nunca un success silencioso (T-3-07 / Pitfall 6).
  *
@@ -30,6 +36,7 @@
  */
 
 import { createElement } from "react";
+import { revalidatePath } from "next/cache";
 import { render } from "@react-email/components";
 import { createClient } from "@/lib/supabase/server";
 import { exigirOrg } from "@/lib/org";
@@ -153,7 +160,14 @@ export async function createAndSendOffer(
     };
   }
 
-  // 4. Link mágico + mensaje wa.me. El raw token SÓLO se usa acá para el link.
+  // 4. Refrescar las pantallas que muestran ofertas. Acá y no al final: si el
+  //    mail falla, la oferta ya existe, así que el cache no puede seguir
+  //    mostrando la lista vieja. Molde de createGig en tablero/gig-actions.ts.
+  revalidatePath(`/staff/${input.staffProfileId}`);
+  revalidatePath("/tablero");
+  revalidatePath("/dashboard");
+
+  // 5. Link mágico + mensaje wa.me. El raw token SÓLO se usa acá para el link.
   const link = siteUrl(`/o/${res.token}`);
   const firstName = input.firstName.trim();
   const saludo = firstName ? `Hola ${firstName}, ` : "Hola, ";
@@ -161,7 +175,7 @@ export async function createAndSendOffer(
   const waMsg = `${saludo}te paso la propuesta para ${input.role.trim()}${enGig}. Mirá los detalles y confirmá acá: ${link}`;
   const wa = input.telefono?.trim() ? waLink(input.telefono, waMsg) : "";
 
-  // 5. Render del email (ASYNC) + envío honesto. Sin email → mail honesto 'none'.
+  // 6. Render del email (ASYNC) + envío honesto. Sin email → mail honesto 'none'.
   let mail: MailResult;
   const to = input.email?.trim();
   if (to) {
@@ -196,6 +210,6 @@ export async function createAndSendOffer(
     };
   }
 
-  // 6. Estado honesto (D-02): la oferta YA existe aunque el mail falle.
+  // 7. Estado honesto (D-02): la oferta YA existe aunque el mail falle.
   return { ok: true, offerId: res.offer_id, link, waLink: wa, mail };
 }
