@@ -17,6 +17,34 @@
  * TOLERANCIA A FALLAS: cada tanda va en su propio try/catch. Que una explote no
  * puede impedir que salgan las demás; el resumen dice qué pasó con cada una.
  *
+ * ⚠️ EL STATUS HTTP DICE SI ALGO SE ROMPIÓ, NO SI TODO CORRIÓ (2/9). Hasta hoy
+ * esta ruta devolvía SIEMPRE 200 y el `ok:false` viajaba en el cuerpo, que el
+ * despachador de Cloudflare no lee: las cuatro tandas corren exclusivamente acá
+ * adentro, así que una RPC rota quedaba invisible para siempre. Hay TRES
+ * desenlaces distintos y por eso hay tres tratos distintos:
+ *
+ *  1. ROTO (la tanda tiró, o devolvió un 5xx que no es 503) → estado "error" y
+ *     el orquestador contesta 500. Es una falla real y un reintento es deseable.
+ *  2. SIN CONFIGURAR (503) → estado "sin_configurar", y NO sube el status. Hoy
+ *     `quien-ficho` cae acá todos los días porque falta MAIL_ADMIN_TO. Eso no es
+ *     una rotura: es una pieza que falta, es permanente, y reintentar no arregla
+ *     nada. Si contara como error, esta ruta tiraría 500 TODOS LOS DÍAS PARA
+ *     SIEMPRE y en dos semanas la alarma se ignora. La alarma que suena siempre
+ *     no es una alarma.
+ *  3. SALTEADA por presupuesto de tiempo → tampoco sube el status: es por diseño
+ *     y se autorepara en la vuelta siguiente.
+ *
+ * POR QUÉ DEVOLVER 500 ES SEGURO (o sea, por qué un reintento no manda ningún
+ * mail dos veces): se verificó RPC por RPC, no se asumió. Las cinco batch que
+ * usan las cuatro tandas (welcome_batch, perfil_reminder_batch,
+ * fichaje_resumen_batch, crew_due_reminder y offers_due_reminder, todas en la
+ * 0038) estampan su ancla de exactly-once en la MISMA sentencia que seleccionan:
+ * WITH ... UPDATE ... RETURNING, con FOR UPDATE SKIP LOCKED donde hace falta. La
+ * segunda corrida selecciona vacío.
+ *
+ * ⚠️ Que nadie "simplifique" esto a "cualquier cosa que no sea ok es 500": el
+ * punto entero de esta sección es la diferencia entre roto y sin configurar.
+ *
  * PRESUPUESTO DE TIEMPO: antes de arrancar cada tanda se mira el reloj, y si no
  * queda margen contra maxDuration esa tanda NO se arranca. Es seguro porque las
  * cuatro RPC estampan su ancla de exactly-once AL SELECCIONAR: la tanda que no
@@ -28,6 +56,7 @@
  * ejecuta nada.
  */
 
+import { alerta } from "@/lib/alerta";
 import { GET as reminders } from "../reminders/route";
 import { GET as bienvenida } from "../bienvenida/route";
 import { GET as quienFicho } from "../quien-ficho/route";
@@ -69,7 +98,15 @@ const TANDAS: Tanda[] = [
 /** Lo que se reporta de cada tanda. */
 interface ResultadoTanda {
   tanda: string;
-  estado: "ok" | "error" | "salteada";
+  /**
+   * ⚠️ "error" y "sin_configurar" NO son lo mismo, y esa diferencia es la que
+   * decide el status HTTP de toda la corrida. "error" es algo ROTO (la tanda
+   * tiró, o contestó un 5xx que no es 503): se puede arreglar y un reintento
+   * sirve. "sin_configurar" es una VARIABLE DE ENTORNO QUE FALTA (503): no está
+   * roto nada, es permanente hasta que alguien la cargue, y reintentar no
+   * cambia nada. Ver la sección del header.
+   */
+  estado: "ok" | "error" | "sin_configurar" | "salteada";
   status?: number;
   detalle?: unknown;
   ms?: number;
@@ -122,7 +159,11 @@ export async function GET(request: Request) {
       }
       resultados.push({
         tanda: nombre,
-        estado: res.ok ? "ok" : "error",
+        // El 503 de una hija significa "me falta una variable para poder
+        // trabajar", no "me rompí". El `detalle` queda como está: el cuerpo de la
+        // hija ya trae el `hint` con qué variable falta, que es justo lo que hay
+        // que leer.
+        estado: res.ok ? "ok" : res.status === 503 ? "sin_configurar" : "error",
         status: res.status,
         detalle,
         ms: Date.now() - desde,
@@ -140,14 +181,43 @@ export async function GET(request: Request) {
   }
 
   const conError = resultados.filter((r) => r.estado === "error").length;
+  const sinConfigurar = resultados.filter((r) => r.estado === "sin_configurar").length;
   const salteadas = resultados.filter((r) => r.estado === "salteada").length;
 
-  return Response.json({
-    ok: conError === 0,
-    corridas: resultados.length - salteadas,
-    con_error: conError,
-    salteadas,
-    ms_total: Date.now() - arranque,
-    resultados,
-  });
+  // 4. Aviso cuando hay algo ROTO de verdad (sin_configurar y salteada no
+  //    avisan: no hay nada que arreglar corriendo).
+  //    ⚠️ HOY ESTO ES UN NO-OP: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID y
+  //    MAIL_ADMIN_TO están las tres sin cargar, así que alerta() devuelve false
+  //    sin hacer nada. El valor real de este arreglo es el status 500 de abajo,
+  //    que el despachador de Cloudflare SÍ ve. Que quede escrito para que el
+  //    próximo no crea que el aviso está funcionando.
+  if (conError > 0) {
+    const rotas = resultados
+      .filter((r) => r.estado === "error")
+      .map((r) => `${r.tanda}: ${r.motivo ?? `status ${r.status ?? "?"}`}`)
+      .join("\n");
+    await alerta({
+      titulo: "El cron diario tuvo tandas rotas",
+      detalle: rotas,
+      datos: { rotas: conError, corridas: resultados.length - salteadas },
+      // Clave propia: si no, el anti repetición se lo come con cualquier otro
+      // aviso que comparta título.
+      clave: "cron-diario-tandas-rotas",
+    });
+  }
+
+  return Response.json(
+    {
+      ok: conError === 0,
+      corridas: resultados.length - salteadas,
+      con_error: conError,
+      sin_configurar: sinConfigurar,
+      salteadas,
+      ms_total: Date.now() - arranque,
+      resultados,
+    },
+    // Acá está el arreglo: hasta hoy esto era siempre 200 y el despachador no
+    // se enteraba nunca de una tanda rota.
+    { status: conError > 0 ? 500 : 200 },
+  );
 }
