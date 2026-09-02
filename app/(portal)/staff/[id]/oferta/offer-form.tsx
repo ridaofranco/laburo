@@ -332,11 +332,12 @@ export function OfferForm({
               className={inputCls}
             />
           </Field>
-          <Field label="Fecha y hora" hint="Cuándo arranca el gig (opcional).">
+          <Field label="Fecha y hora" hint="Cuándo arranca el gig. Va en la propuesta que lee el candidato.">
             <input
               type="datetime-local"
               value={gigDate}
               onChange={(e) => setGigDate(e.target.value)}
+              required
               className={inputCls}
             />
           </Field>
@@ -364,14 +365,15 @@ export function OfferForm({
         />
       </Field>
 
-      {/* Monto informativo (opcional) */}
-      <Field label="Monto" hint="Pago informativo, opcional.">
+      {/* Monto (requerido) */}
+      <Field label="Monto" hint="Lo que le vas a pagar. Va en la propuesta que lee el candidato.">
         <input
           type="text"
           inputMode="numeric"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           placeholder="Ej: 80000"
+          required
           className={inputCls}
         />
       </Field>
