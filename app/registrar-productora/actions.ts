@@ -16,6 +16,19 @@
  * No se inventa nada: la RPC crea la organización y le deja una invitación de
  * owner a su mail. Cuando entra por primera vez, `provision_member` (que ya
  * corre en /auth/callback) la lee y lo hace owner. Cero auth nueva.
+ *
+ * ── QUÉ SE GUARDA Y QUÉ NO (2/9) ─────────────────────────────────────────────
+ * El teléfono va a la base (columna `telefono` de la 0069). El tipo de eventos y
+ * el volumen anual van SOLO al aviso de Telegram. La razón del corte: el
+ * teléfono es el dato de RECUPERACIÓN, y si vive en un mensaje de Telegram no
+ * existe cuando hace falta ni lo puede mostrar /plataforma. Los otros dos son
+ * cualitativos, sirven para la primera charla, y ninguna pantalla los consume.
+ *
+ * ── EL MAIL SE DEVUELVE, NO SE TIRA ──────────────────────────────────────────
+ * `mailOk` se calculaba y se descartaba: la función devolvía `{ ok: true }`
+ * pelado, así que la pantalla afirmaba SIEMPRE "le mandamos un mail", saliera o
+ * no. Ahora sale con el resultado, mismo criterio de estado honesto que
+ * offer-actions.ts: la cuenta YA existe aunque el mail falle, son dos cosas.
  */
 
 import { createElement } from "react";
@@ -33,12 +46,24 @@ const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 export async function registrarProductora(input: {
   productora: string;
   email: string;
-}): Promise<{ ok: boolean; error?: string }> {
+  telefono: string;
+  /** Qué eventos arma, texto libre. Opcional: solo va al aviso interno. */
+  queEventos?: string;
+  /** Cuántos eventos por año, rango. Opcional: solo va al aviso interno. */
+  volumen?: string;
+}): Promise<{ ok: boolean; error?: string; mailOk?: boolean }> {
   const productora = (input.productora || "").trim();
   const email = (input.email || "").trim().toLowerCase();
+  const telefono = (input.telefono || "").trim();
+  const queEventos = (input.queEventos || "").trim();
+  const volumen = (input.volumen || "").trim();
 
   if (!productora) return { ok: false, error: "Escribí el nombre de tu productora." };
   if (!EMAIL_RE.test(email)) return { ok: false, error: "Ese email no parece válido." };
+  // Criterio liviano, igual que el del mail: acá no se valida un formato de
+  // teléfono, se valida que haya algo. Un número mal escrito se corrige por
+  // WhatsApp; un campo vacío deja a la productora sin ningún canal de rescate.
+  if (!telefono) return { ok: false, error: "Dejanos tu teléfono o WhatsApp." };
 
   // Freno de abuso: cada alta crea una organización Y manda un mail.
   const ip = await clientIp();
@@ -56,6 +81,7 @@ export async function registrarProductora(input: {
   const { data, error } = await admin.rpc("staff_app_crear_productora", {
     p_nombre: productora,
     p_email: email,
+    p_telefono: telefono,
   });
 
   if (error) {
@@ -125,11 +151,18 @@ export async function registrarProductora(input: {
     datos: {
       productora,
       email,
+      telefono,
+      // Los dos cualitativos no se persisten: viven acá y en la primera charla.
+      // Si vienen vacíos no se mandan, para no ensuciar el aviso con "sin dato".
+      ...(queEventos ? { "qué eventos arma": queEventos } : {}),
+      ...(volumen ? { "cuántos por año": volumen } : {}),
       "le llegó el mail": mailOk ? "sí" : "NO, revisar",
       "ya se había registrado": r.ya_existia ? "sí" : "no",
       "ver quién se sumó": siteUrl("/plataforma"),
     },
   });
 
-  return { ok: true };
+  // Estado honesto: la cuenta ya está creada. `mailOk` viaja para que la
+  // pantalla ofrezca el respaldo en vez de mentir.
+  return { ok: true, mailOk };
 }
