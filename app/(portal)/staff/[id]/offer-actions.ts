@@ -57,7 +57,13 @@ export interface CreateOfferInput {
   gigId?: string | null;
   /** título del gig: el del gig elegido (copy) o el del quick-create. */
   gigTitle?: string | null;
-  /** starts_at del gig: ISO / datetime-local. Copy + quick-create. */
+  /**
+   * starts_at del gig, SIEMPRE ISO con zona. Copy + quick-create.
+   * Antes decía "ISO / datetime-local" y esa ambigüedad ERA el bug: el
+   * quick-create mandaba el valor crudo del input, sin zona, y la RPC lo
+   * casteaba a timestamptz con la zona del server. Desde el 2/9 los dos caminos
+   * pasan por lib/dates.ts (desdeInputLocal) antes de llegar acá.
+   */
   gigStartsAt?: string | null;
   gigVenue?: string | null;
   amount?: number | null;

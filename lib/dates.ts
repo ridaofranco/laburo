@@ -11,6 +11,16 @@
  * Los eventos suceden en Argentina → se muestran en hora AR tanto en el
  * servidor como en el cliente (consistencia total). Todas devuelven
  * `string | null` (null = fecha vacía/inválida) para componer con `?? "—"`.
+ *
+ * ⚠️ EL MISMO PROBLEMA DEL OTRO LADO DEL VIAJE (al ESCRIBIR, 2/9). Un
+ * <input type="datetime-local"> devuelve un string SIN zona ("2026-09-10T20:00").
+ * Si ese valor crudo se manda a una columna timestamptz, la zona la termina
+ * eligiendo el server: en Supabase la sesión es UTC, así que la productora
+ * escribía 20:00 y al candidato le llegaba 17:00. Por eso la conversión
+ * datetime-local ↔ ISO vive acá abajo (aInputLocal / desdeInputLocal) y no
+ * suelta en un formulario: es fecha del proyecto, igual que el formateo, y ya
+ * había dos formularios resolviéndola cada uno por su cuenta (uno bien y otro
+ * mal). Regla: a la base NUNCA le llega el valor crudo del input.
  */
 
 export const AR_TZ = "America/Argentina/Buenos_Aires";
@@ -87,4 +97,36 @@ export function calcEdad(fechaNacimiento: string | null | undefined): number | n
   let edad = ty - by;
   if (tm < bm || (tm === bm && td < bd)) edad--;
   return edad > 0 && edad < 120 ? edad : null;
+}
+
+/**
+ * ISO → valor para un <input type="datetime-local">, en la hora LOCAL del
+ * dispositivo. Devuelve "" si no hay fecha o si es inválida, porque un input
+ * controlado no puede recibir null.
+ *
+ * ⚠️ Usa la hora local del navegador a propósito, no AR_TZ: el input muestra y
+ * edita en la zona del dispositivo, y desdeInputLocal() hace el viaje inverso
+ * con el mismo criterio. Mezclarlos correría la hora al editar un evento desde
+ * un dispositivo con otra zona.
+ */
+export function aInputLocal(iso: string | null | undefined): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+/**
+ * Valor de un <input type="datetime-local"> → ISO con zona (o null).
+ *
+ * Es la que evita el bug de las tres horas: `new Date("2026-09-10T20:00")`
+ * interpreta el string en la zona del dispositivo y `toISOString()` le pega la
+ * zona explícita, así que el timestamptz de la base guarda el instante correcto
+ * en vez de dejar que el server elija. Devuelve null con string vacío o basura.
+ */
+export function desdeInputLocal(v: string | null | undefined): string | null {
+  if (!v) return null;
+  const d = new Date(v);
+  return Number.isNaN(d.getTime()) ? null : d.toISOString();
 }

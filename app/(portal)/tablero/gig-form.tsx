@@ -2,8 +2,12 @@
 
 /**
  * Form de evento (gig) del productor — crear o editar. Usa las server actions
- * createGig/updateGig (RPC is_org_writer). datetime-local <-> ISO. Estilos Stitch
- * (inputs hairline, labels label-tech, radio 0). Al guardar, vuelve al tablero.
+ * createGig/updateGig (RPC is_org_writer). Estilos Stitch (inputs hairline,
+ * labels label-tech, radio 0). Al guardar, vuelve al tablero.
+ *
+ * La conversión datetime-local <-> ISO ya no vive acá: se mudó a lib/dates.ts
+ * (aInputLocal / desdeInputLocal) el 2/9, porque el formulario de oferta tenía
+ * que hacer la misma y la estaba salteando. Ver el header de ese archivo.
  */
 
 import { useState } from "react";
@@ -11,6 +15,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
 import { ArrowLeft, CalendarPlus, Plus, X } from "lucide-react";
+import { aInputLocal, desdeInputLocal } from "@/lib/dates";
 import { createGig, updateGig, setGigDetails, setGigSlots, geocodeAddress } from "./gig-actions";
 
 export interface GigInitial {
@@ -30,30 +35,14 @@ const labelCls = "block mb-2 label-tech text-[11px] uppercase tracking-[0.1em] t
 const inputCls =
   "w-full bg-transparent border-0 border-b border-[#4c4546] focus:border-[#e5e2e1] outline-none text-[16px] text-[#e5e2e1] py-3 px-0 rounded-none transition-colors placeholder:text-[#8a8a8a] [color-scheme:dark]";
 
-/** ISO -> valor para <input datetime-local> en hora local. */
-function toLocalInput(iso: string | null): string {
-  if (!iso) return "";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "";
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
-
-/** valor datetime-local -> ISO (o null). */
-function fromLocalInput(v: string): string | null {
-  if (!v) return null;
-  const d = new Date(v);
-  return Number.isNaN(d.getTime()) ? null : d.toISOString();
-}
-
 export function GigForm({ initial }: { initial?: GigInitial }) {
   const router = useRouter();
   const editing = Boolean(initial);
   const [saving, setSaving] = useState(false);
   const [f, setF] = useState({
     title: initial?.title ?? "",
-    startsAt: toLocalInput(initial?.starts_at ?? null),
-    endsAt: toLocalInput(initial?.ends_at ?? null),
+    startsAt: aInputLocal(initial?.starts_at ?? null),
+    endsAt: aInputLocal(initial?.ends_at ?? null),
     venue: initial?.venue_name ?? "",
     address: initial?.venue_address ?? "",
     budget: initial?.client_budget != null ? String(initial.client_budget) : "",
@@ -79,8 +68,8 @@ export function GigForm({ initial }: { initial?: GigInitial }) {
     setSaving(true);
     const payload = {
       title: f.title.trim(),
-      startsAt: fromLocalInput(f.startsAt),
-      endsAt: fromLocalInput(f.endsAt),
+      startsAt: desdeInputLocal(f.startsAt),
+      endsAt: desdeInputLocal(f.endsAt),
       venue: f.venue.trim(),
     };
     try {

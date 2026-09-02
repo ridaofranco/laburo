@@ -23,7 +23,7 @@ import { Select } from "@base-ui/react/select";
 import { Check, ChevronDown, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { fmtFecha } from "@/lib/dates";
+import { fmtFecha, desdeInputLocal } from "@/lib/dates";
 import { WhatsAppGlyph } from "@/components/icons/whatsapp-glyph";
 import { createAndSendOffer } from "../offer-actions";
 
@@ -161,7 +161,14 @@ export function OfferForm({
         telefono: candidate.telefono,
         gigId: isNewGig ? null : gigChoice,
         gigTitle: isNewGig ? gigTitle.trim() : (pickedGig?.title ?? ""),
-        gigStartsAt: isNewGig ? gigDate || null : (pickedGig?.starts_at ?? null),
+        // ⚠️ desdeInputLocal y no gigDate crudo: el <input datetime-local> da un
+        // string SIN zona y p_gig_starts_at es timestamptz, así que lo casteaba
+        // Postgres con la zona de la sesión (UTC) y un evento de las 20:00 le
+        // llegaba al candidato a las 17:00. Solo pasaba en el camino de evento
+        // NUEVO: con un gig ya cargado, starts_at viene ISO de la base y estaba
+        // bien. El helper ya devuelve null con string vacío, así que el `|| null`
+        // de antes sobra.
+        gigStartsAt: isNewGig ? desdeInputLocal(gigDate) : (pickedGig?.starts_at ?? null),
         gigVenue: isNewGig ? gigVenue.trim() || null : (pickedGig?.venue_name ?? null),
         amount:
           parsedAmount != null && !Number.isNaN(parsedAmount)
