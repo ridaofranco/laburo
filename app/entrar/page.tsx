@@ -18,7 +18,7 @@ import { EntrarClient } from "./entrar-client";
 export const metadata: Metadata = {
   title: "LABURO. | Entrar",
   description:
-    "Entrá a LABURO como productora, como staff o como proveedor. Una sola puerta.",
+    "Entrá a LABURO: armás eventos, trabajás en eventos, prestás un servicio o tenés un salón. Una sola puerta.",
 };
 
 export default function EntrarPage() {

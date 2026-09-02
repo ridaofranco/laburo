@@ -58,7 +58,7 @@ export function RegistroProductoraClient() {
           {...up(0.05)}
           className="label-tech text-[12px] uppercase tracking-[0.3em] text-[#cfc4c5] mb-10"
         >
-          Para productoras
+          Para el que arma el evento
         </motion.p>
 
         {listo ? (
@@ -79,13 +79,14 @@ export function RegistroProductoraClient() {
         ) : (
           <motion.form {...up(0.15)} onSubmit={onSubmit} className="w-full flex flex-col gap-10">
             <p className="text-[16px] text-[#cfc4c5] leading-[1.6] -mt-2">
-              Cargá tus eventos, publicá qué personal necesitás y recibí a la
-              gente que quiere trabajar. Publicar es gratis.
+              Productora, agencia, marca o empresa: si armás eventos, esto es
+              para vos. Cargá tu evento, publicá qué personal necesitás y recibí
+              a la gente que quiere trabajar. Publicar es gratis.
             </p>
 
             <div>
               <label className={label} htmlFor="productora">
-                Nombre de tu productora *
+                Nombre de tu productora o empresa *
               </label>
               <input
                 id="productora"

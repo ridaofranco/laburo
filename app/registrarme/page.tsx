@@ -36,9 +36,9 @@ const OPCIONES = [
   {
     titulo: "Busco staff para mis eventos",
     bajada:
-      "Soy productora o empresa. Cargo mi evento y contrato personal del pool.",
+      "Productora, agencia, marca, empresa o particular. Cargo mi evento y contrato personal del pool.",
     href: "/registrar-productora",
-    cta: "Crear la cuenta de mi productora",
+    cta: "Crear mi cuenta",
   },
   {
     titulo: "Quiero trabajar en eventos",

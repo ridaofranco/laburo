@@ -53,8 +53,9 @@ type Rol = "productora" | "staff" | "proveedor" | "salon";
 const ROLES: { id: Rol; titulo: string; bajada: string }[] = [
   {
     id: "productora",
-    titulo: "Soy productora",
-    bajada: "Armo eventos y necesito personal, proveedores o un salón",
+    titulo: "Armo eventos",
+    bajada:
+      "Productora, agencia, marca, empresa o por mi cuenta. Necesito personal, proveedores o un salón",
   },
   {
     id: "staff",
@@ -82,7 +83,7 @@ const MOTIVOS: Record<string, string> = {
 
 /** A dónde manda el botón de registrarse, según lo que la persona dijo que es. */
 const ALTA: Record<Rol, { href: string; texto: string }> = {
-  productora: { href: "/registrar-productora", texto: "Crear la cuenta de mi productora" },
+  productora: { href: "/registrar-productora", texto: "Crear mi cuenta" },
   staff: { href: "/sumate", texto: "Sumarme al pool" },
   proveedor: { href: "/registrar-proveedor", texto: "Publicar mis servicios" },
   salon: { href: "/registrar-salon", texto: "Publicar mi salón" },

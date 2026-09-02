@@ -449,15 +449,16 @@ export default async function LandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[#1a1a1a] border border-[#1a1a1a] mt-16 md:mt-24">
               <Reveal className="bg-black p-8 md:p-9 lg:p-12 flex flex-col gap-6">
                 <span className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a]">
-                  Productores
+                  Armás eventos
                 </span>
                 <h3 className="font-[family-name:var(--font-syne)] text-[28px] lg:text-[34px] font-bold uppercase tracking-tight leading-[1.05]">
                   Necesitás staff
                 </h3>
                 <p className="text-[16px] md:text-[17px] leading-[1.7] text-[#8a8a8a]">
-                  Creá tu cuenta y entrá a probarlo. Cargás tu evento, mirás el
-                  pool con experiencia y CV a la vista, y mandás la oferta vos
-                  misma. No hace falta hablar con nadie para empezar.
+                  Productora, agencia, marca o empresa: da igual. Creá tu cuenta
+                  y entrá a probarlo. Cargás tu evento, mirás el pool con
+                  experiencia y CV a la vista, y mandás la oferta vos mismo. No
+                  hace falta hablar con nadie para empezar.
                 </p>
                 {/* PRIMERO ENTRAR, DESPUES LA CONSULTA (decision de Franco,
                  * 6/8): "una productora tiene que poder entrar gratis para
@@ -516,8 +517,8 @@ export default async function LandingPage() {
                 </h3>
                 <p className="text-[16px] md:text-[17px] leading-[1.7] text-[#8a8a8a]">
                   Sonido, catering, seguridad, estructuras, lo que sea. Publicá
-                  lo que hacés y dónde trabajás, y las productoras te encuentran
-                  cuando arman un evento.
+                  lo que hacés y dónde trabajás, y el que arma el evento te
+                  encuentra cuando lo está armando.
                 </p>
                 <Link
                   href="/registrar-proveedor"
@@ -564,7 +565,7 @@ export default async function LandingPage() {
              * apretado de verdad es 1024, no el maximo. */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
               <Reveal className="lg:col-span-5">
-                <Eyebrow>04 // Productores</Eyebrow>
+                <Eyebrow>04 // Tu consulta</Eyebrow>
                 <h2 className="font-[family-name:var(--font-syne)] font-bold uppercase tracking-tighter text-[clamp(36px,5vw,72px)] leading-[0.95] mt-4">
                   Contanos qué necesitás.
                 </h2>

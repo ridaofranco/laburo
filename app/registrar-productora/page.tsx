@@ -9,9 +9,9 @@ import type { Metadata } from "next";
 import { RegistroProductoraClient } from "./registro-client";
 
 export const metadata: Metadata = {
-  title: "LABURO. | Creá la cuenta de tu productora",
+  title: "LABURO. | Creá tu cuenta y armá tu evento",
   description:
-    "Cargá tus eventos, publicá qué personal necesitás y recibí a la gente que quiere trabajar. Publicar es gratis.",
+    "Productora, agencia, marca, empresa o vos solo: cargá tu evento, publicá qué personal necesitás y recibí a la gente que quiere trabajar. Publicar es gratis.",
 };
 
 export default function RegistrarProductoraPage() {
