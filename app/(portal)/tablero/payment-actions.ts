@@ -10,16 +10,25 @@
  * ⚠️ Seguridad de plata: en dev usamos SIEMPRE el sandbox_init_point (tarjetas de
  * prueba, cero plata real). En prod, el init_point real. Si en dev no hay sandbox
  * (credenciales de producción sin sandbox), NO devolvemos el link real: cortamos.
+ *
+ * ⚠️ HOY ESTE CIRCUITO ESTÁ ENTERO PERO APAGADO. LABURO es gratis por decisión de
+ * producto (2/9/2026), así que la primera línea de la action corta con la bandera
+ * de lib/cobros.ts. No se borró nada: para prenderlo, mirá ese archivo.
  */
 
 import { revalidatePath } from "next/cache";
 import { MercadoPagoConfig, Preference } from "mercadopago";
 import { createClient } from "@/lib/supabase/server";
 import { SITE_URL as SITE } from "@/lib/site";
+import { COBRO_AL_CLIENTE_ACTIVO, COBRO_APAGADO_MOTIVO } from "@/lib/cobros";
 
 export async function createClientCheckout(
   gigId: string,
 ): Promise<{ ok: boolean; reason?: string; url?: string }> {
+  // El cobro está apagado por decisión de producto. Va ANTES que todo: una server
+  // action es un endpoint POST invocable, esconder el botón del tablero no alcanza.
+  if (!COBRO_AL_CLIENTE_ACTIVO) return { ok: false, reason: COBRO_APAGADO_MOTIVO };
+
   const accessToken = process.env.MP_ACCESS_TOKEN;
   if (!accessToken) return { ok: false, reason: "MercadoPago no está configurado todavía." };
 

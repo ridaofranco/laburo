@@ -8,9 +8,26 @@ archivo va en los tres repos que cobran o van a cobrar (ENTRÁ, LABURO, PASE).**
 No se unifica el CÓDIGO de MercadoPago: son tres casos distintos y el refactor
 tocaría plata sin ganar nada. Lo que se unifica es **el checklist**.
 
-> ⚠️ **LABURO todavía cobra con tarjetas de prueba.** Mientras `MP_SANDBOX` esté
-> cargada en Vercel, no entra un peso. Borrar esa variable es lo único que separa
-> a LABURO de facturar de verdad, y conviene repasar estas 4 reglas justo antes.
+> ⚠️ **LABURO no cobra: es gratis.** Decisión de producto de Franco (2/9/2026), no
+> una limitación técnica. El circuito de MercadoPago está entero y no se borró una
+> línea, pero está APAGADO en `lib/cobros.ts` (`COBRO_AL_CLIENTE_ACTIVO = false`):
+> el tablero no ofrece el botón y la server action corta antes de hacer nada.
+>
+> **Y aunque se prendiera la bandera, hoy no cobraría igual.** Lo que decía este
+> archivo hasta el 2/9 (que borrar `MP_SANDBOX` era "lo único" que faltaba) era
+> falso por tres razones, las tres verificadas contra el código:
+>
+> 1. **`MP_ACCESS_TOKEN` no está cargada.** `payment-actions.ts` corta ahí mismo y
+>    devuelve "MercadoPago no está configurado todavía." Sin ese token no hay
+>    checkout de ningún tipo.
+> 2. **`MP_WEBHOOK_SECRET` no está cargada.** `app/api/mp/webhook/route.ts` hace
+>    `if (!secret) return true`: sin esa variable la verificación de firma no se
+>    degrada, se **saltea entera**. Está escrito a propósito y documentado en el
+>    header del webhook, pero acá nunca se había contado.
+> 3. **Nada verifica que el token sea de producción.** El sandbox se elige por
+>    `NODE_ENV` y `MP_SANDBOX`, nunca por el prefijo `TEST-` del token. Con un
+>    token de prueba y `MP_SANDBOX` borrada, `init_point` viene igual: se entrega
+>    un link de pago DE PRUEBA como si fuera real, sin un solo aviso.
 
 ---
 
@@ -68,9 +85,22 @@ función se congela apenas devolvés la respuesta, y el mail se corta a la mitad
 
 ---
 
-## Antes de sacar `MP_SANDBOX`
+## Antes de prender el cobro
 
-Las cuatro, verificadas contra el código y no de memoria. Y una quinta que no es
-del cobro pero se paga igual de caro: **que avise cuando algo de esto falle**. El
-webhook ya avisa por Telegram (`lib/alerta.ts`) ante falla y ante pago de menos,
-pero eso solo funciona con `TELEGRAM_BOT_TOKEN` y `TELEGRAM_CHAT_ID` cargadas.
+Checklist, en este orden. No alcanza con ninguno solo:
+
+- [ ] **Poner `COBRO_AL_CLIENTE_ACTIVO = true` en `lib/cobros.ts`.** Mientras esté
+      en `false`, LABURO es gratis y el botón del tablero ni aparece.
+- [ ] **Cargar `MP_ACCESS_TOKEN` en Vercel.** Hoy no está: sin ella la action corta
+      con "MercadoPago no está configurado todavía."
+- [ ] **Cargar `MP_WEBHOOK_SECRET` en Vercel.** Hoy no está, y sin ella la
+      verificación de firma del webhook se saltea entera.
+- [ ] **Verificar que el token NO empiece con `TEST-`.** El código no lo chequea:
+      elige sandbox por `NODE_ENV` y `MP_SANDBOX`. Con un token de prueba y
+      `MP_SANDBOX` borrada, se entrega un link de prueba como si fuera real.
+- [ ] **Repasar las 4 reglas de arriba** contra el código y no de memoria.
+
+Y una quinta que no es del cobro pero se paga igual de caro: **que avise cuando
+algo de esto falle**. El webhook ya avisa por Telegram (`lib/alerta.ts`) ante falla
+y ante pago de menos, pero eso solo funciona con `TELEGRAM_BOT_TOKEN` y
+`TELEGRAM_CHAT_ID` cargadas.

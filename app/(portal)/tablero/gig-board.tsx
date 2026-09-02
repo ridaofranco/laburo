@@ -21,6 +21,7 @@ import { ChevronDown, UserRoundSearch, UserRoundPlus, Pencil, MapPin, CreditCard
 import { toast } from "sonner";
 import { offerLabel } from "@/lib/offers";
 import { createClientCheckout } from "./payment-actions";
+import { COBRO_AL_CLIENTE_ACTIVO } from "@/lib/cobros";
 import { fmtFecha, fmtHora } from "@/lib/dates";
 
 export interface BoardOffer {
@@ -133,7 +134,9 @@ function GigCard({ item }: { item: BoardGig }) {
   const faltan = Math.max(0, requiredTotal - resumen.cubierto);
 
   const cobrado = gig.client_payment_status === "paid";
-  const puedeCobrar = (Number(gig.client_budget) || 0) > 0 && !cobrado;
+  // La bandera va primera: con el cobro apagado el botón directamente no se ofrece.
+  // Un gig ya cobrado sigue mostrando su estado, que entra por `cobrado`, no por acá.
+  const puedeCobrar = COBRO_AL_CLIENTE_ACTIVO && (Number(gig.client_budget) || 0) > 0 && !cobrado;
   const [cobrando, setCobrando] = useState(false);
   async function cobrar() {
     if (cobrando) return;
