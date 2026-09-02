@@ -79,23 +79,65 @@ export function GigForm({ initial }: { initial?: GigInitial }) {
         return;
       }
       // Extras del gig (ingreso del cliente + ubicación). El monto se limpia a
-      // número; la ubicación se preserva de lo que ya había (el geocode la setea
-      // en su paso). Un fallo acá no tumba el guardado del evento, solo avisa.
+      // número. La ubicación se preserva SOLO si la dirección no cambió, y esa
+      // comparación es la que decide todo: la RPC hace un UPDATE plano, así que
+      // lo que se mande acá es lo que queda guardado.
+      //
+      // ⚠️ Antes se geocodificaba en CADA submit y se mandaba geo?.lat ?? null,
+      // así que un Nominatim caído (o lento, hay 8s de timeout) borraba las
+      // coordenadas de un evento al que solo se le había cambiado el título, y
+      // el fichaje por GPS dejaba de medir distancia. El comentario que estaba
+      // acá afirmaba lo contrario.
+      //
+      // ⚠️ Y NO se arregla con un COALESCE en la RPC, que es lo que parece
+      // obvio: cubriría "no toqué la dirección y el geocode falló", pero
+      // arruinaría "cambié la dirección y el geocode falló", dejando las
+      // coordenadas VIEJAS pegadas a una dirección nueva. Coordenadas
+      // equivocadas son peores que ausentes: sin coordenadas el geofencing
+      // simplemente no aplica, con coordenadas mentirosas le rebota el fichaje a
+      // alguien parado en el lugar correcto. Además un COALESCE haría imposible
+      // BORRAR una ubicación, que es una operación legítima. Quien sabe si la
+      // dirección cambió es este formulario, porque tiene `initial`.
       const gigId = editing ? initial!.id : (res as { gigId?: string }).gigId;
       const budgetNum = f.budget.trim() ? Number(f.budget.replace(/[^\d.]/g, "")) : null;
       if (gigId) {
-        // Geocodifico la dirección para el geofencing del fichaje (OSM, gratis).
         const addr = f.address.trim();
-        const geo = addr ? await geocodeAddress(addr) : null;
+        const addrAnterior = (initial?.venue_address ?? "").trim();
+        // Normalizadas igual (trim + minúsculas), que es como una persona
+        // percibe "la misma dirección".
+        const mismaDireccion =
+          addr !== "" && addr.toLocaleLowerCase("es-AR") === addrAnterior.toLocaleLowerCase("es-AR");
+
+        let venueLat: number | null = null;
+        let venueLng: number | null = null;
+        let noPudeUbicarla = false;
+        if (mismaDireccion) {
+          // Se reusan las coordenadas que ya estaban. De paso deja de pegarle a
+          // Nominatim en cada guardado, que es lo correcto según su policy de
+          // uso, y evita que el mismo domicilio devuelva un punto distinto de un
+          // día para el otro.
+          venueLat = initial?.venue_lat ?? null;
+          venueLng = initial?.venue_lng ?? null;
+        } else if (addr) {
+          // Dirección nueva o evento nuevo: se geocodifica (OSM, gratis). Si
+          // falla, van null a propósito y el toast de abajo lo dice.
+          const geo = await geocodeAddress(addr);
+          venueLat = geo?.lat ?? null;
+          venueLng = geo?.lng ?? null;
+          noPudeUbicarla = !geo;
+        }
+        // Dirección vacía habiendo tenido una: es un borrado explícito, van null
+        // los tres campos y no hay aviso de error porque no falló nada.
+
         const det = await setGigDetails(gigId, {
           clientBudget: budgetNum != null && !Number.isNaN(budgetNum) ? budgetNum : null,
-          venueLat: geo?.lat ?? null,
-          venueLng: geo?.lng ?? null,
+          venueLat,
+          venueLng,
           venueAddress: addr || null,
         });
         if (!det.ok) toast.error(det.reason || "El evento se guardó, pero los datos extra no.");
-        else if (addr && !geo) {
-          toast.error("Guardé la dirección, pero no pude ubicarla en el mapa. Revisá que esté completa (calle, número, ciudad).");
+        else if (noPudeUbicarla) {
+          toast.error("Guardé la dirección, pero no pude ubicarla en el mapa. Revisá que esté completa (calle, número, ciudad). Hasta que se pueda ubicar, el fichaje por GPS no va a medir distancia.");
         }
         const sl = await setGigSlots(
           gigId,
