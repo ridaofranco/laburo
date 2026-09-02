@@ -10,12 +10,19 @@ import { createServiceRoleClient } from "@/lib/supabase/admin";
  *
  * Cómo funciona sin tocar Supabase: el service-role genera un magic-link
  * server-side (generateLink, no manda mail, no depende de la lista de redirects)
- * y con ese token se crea una sesión real del admin ya sembrado. Así toda la app
- * corre igual que con login real (RLS lo ve como miembro, los datos cargan), pero
- * vos entrás directo. Borrá esta ruta antes de cualquier deploy serio.
+ * y con ese token se crea una sesión real. Así toda la app corre igual que con
+ * login real (RLS lo ve como miembro, los datos cargan), pero vos entrás directo.
+ * Borrá esta ruta antes de cualquier deploy serio.
+ *
+ * QUÉ CUENTA Y POR QUÉ (el dato que se perdió y costó un bug entero): tiene que
+ * ser franco@somosder.ar, que es owner de la organización SOMOS DER, la única que
+ * tiene es_plataforma = true. Antes acá decía ridaofrancorg@gmail.com, que existe
+ * como auth.user pero NO es miembro de ninguna organización: la sesión se creaba
+ * bien, el atajo "funcionaba", y /dashboard aterrizaba en "Esta cuenta no tiene
+ * acceso." Si cambiás este mail, cambialo por otro que sea miembro de una org.
  */
 
-const ADMIN_EMAIL = "ridaofrancorg@gmail.com";
+const ADMIN_EMAIL = "franco@somosder.ar";
 
 export async function GET() {
   if (
