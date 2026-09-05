@@ -465,20 +465,20 @@ Varios pasos dependen de esto, así que va explícito:
 
 | Migración | Estado |
 |---|---|
-| Hasta la **0070** | **Aplicadas** |
-| **0071** (rol `manager`, `members.scope`) | **Escrita, SIN aplicar** |
-| **0072** (`organizations.categoria`) | **Escrita, SIN aplicar** |
-| **0073** (actuar como productora) | **Escrita, SIN aplicar** |
+| Hasta la **0073** | ✅ **Aplicadas** (las tres últimas, el 5/9/2026, en orden 0071 → 0072 → 0073) |
 
-⚠️ **El orden importa: 0071 antes que 0073.** La 0073 reescribe `is_org_writer`
-incluyendo el rol `manager`; si se aplican al revés, la 0071 pisa el permiso de
-suplantación y hay que volver a correr la 0073.
+El analizador de seguridad de Supabase quedó en **0 errores** después de
+aplicarlas.
+
+⚠️ **Si alguna vez hay que reaplicarlas, el orden importa: 0071 antes que
+0073.** La 0073 reescribe `is_org_writer` incluyendo el rol `manager`; al revés,
+la 0071 pisa el permiso de suplantación.
 
 ---
 
 ### Camino 1 — Plataforma
 
-**Prerrequisitos:** ninguno, salvo los pasos marcados 0073.
+**Prerrequisitos:** para los pasos 8 a 12, una organización que no sea la plataforma y de la que **no seas miembro** (ver la sección 2).
 
 | # | Paso | Resultado esperado |
 |---|---|---|
@@ -489,11 +489,11 @@ suplantación y hay que volver a correr la 0073.
 | 5 | Mirar la sección Productoras | Cada una muestra su categoría, o **"sin clasificar"** si la 0072 no está aplicada |
 | 6 | Moderar una búsqueda, con motivo | Queda marcada como bajada, con el motivo visible |
 | 7 | Moderar sin motivo | **Tiene que fallar.** Una baja sin motivo es una pelea con el cliente dos días después |
-| **0073** | 8. Click en "Actuar como" en una productora | Pide el motivo **antes** de entrar |
-| **0073** | 9. Entrar con motivo | Aterriza en `/dashboard` con el **banner ámbar** arriba, con el nombre de esa productora |
-| **0073** | 10. Recorrer dos o tres pantallas del portal | El banner sigue estando en **todas**, y no se puede cerrar |
-| **0073** | 11. Click en "Salir" | Vuelve a la organización propia y el banner desaparece |
-| **0073** | 12. `SELECT motivo, iniciada_at, terminada_at FROM staff_app.impersonation_log ORDER BY iniciada_at DESC LIMIT 1;` | Una fila con el motivo escrito y **`terminada_at` estampado** |
+| 8 | Click en "Actuar como" en una productora | Pide el motivo **antes** de entrar |
+| 9 | Entrar con motivo | Aterriza en `/dashboard` con el **banner ámbar** arriba, con el nombre de esa productora |
+| 10 | Recorrer dos o tres pantallas del portal | El banner sigue estando en **todas**, y no se puede cerrar |
+| 11 | Click en "Salir" | Vuelve a la organización propia y el banner desaparece |
+| 12 | `SELECT motivo, iniciada_at, terminada_at FROM staff_app.impersonation_log ORDER BY iniciada_at DESC LIMIT 1;` | Una fila con el motivo escrito y **`terminada_at` estampado** |
 
 ---
 
@@ -571,10 +571,16 @@ llamando las funciones contra producción en una transacción con `ROLLBACK`: co
 la organización elegida el evento cayó en la correcta, y sin ella cayó en la
 otra.
 
-**Camino 1 (plataforma) — corrido en parte.** El ítem del menú, la carga de
-`/plataforma`, el "Volver al portal" y las categorías mostrando "sin
-clasificar". Los pasos marcados **0073 no se corrieron**: necesitan esa
-migración aplicada.
+**Camino 1 (plataforma) — corrido entero el 5/9, con las migraciones ya
+aplicadas.** El ítem del menú, la carga de `/plataforma`, el "Volver al portal",
+las categorías, y **toda la suplantación**: abrir con motivo, el banner
+apareciendo en las siete pantallas del portal probadas, el selector
+desapareciendo mientras dura, escribir en la organización ajena **sin ser
+miembro**, cerrar, y la fila de auditoría con su `terminada_at`. Más los
+controles negativos: sin motivo falla, sobre la propia plataforma falla, un
+usuario que no es admin recibe "sin permiso" y **no deja rastro**, una cookie
+con sesión cerrada o inventada se ignora, y una sesión de hace 2 horas **deja de
+autorizar sola**.
 
 **Caminos 3 y 4 — NO corridos.** Los dos mandan mails reales a casillas reales y
 crean registros de verdad. Los corre Franco.
@@ -600,32 +606,20 @@ Para que se sepa dónde termina:
 
 ## 8. Estado: ¿hay una productora de prueba viva ahora mismo?
 
-**SÍ. Hay una organización de prueba viva en producción desde el 5/9/2026.**
+**No.** Hubo una —`PRUEBA Aliada SRL`, sembrada el 5/9/2026 para poder verificar
+el selector de contexto y la suplantación— y **se sacó el mismo día**, con el
+procedimiento de la sección 4.
 
-Se sembró **por SQL y sin usuario nuevo**, o sea sin mandar ningún mail: es el
-mínimo que permite verificar el selector de contexto, que necesita a alguien con
-dos membresías. Sin ella, el selector y el aislamiento se "verificaban" leyendo
-código, que es como se cuelan los bugs de permisos.
+Los conteos volvieron **exactos** a los de la sección 0: 2 organizaciones, 1
+miembro, 1 invitación, 0 eventos, 0 ofertas, 1.050 fichas. El registro de
+auditoría también quedó en 0, porque `impersonation_log.organization_id`
+cascadea.
 
-| Organización | `slug` | Miembro | Desde | Sacada |
-|--------------|--------|---------|-------|--------|
-| PRUEBA Aliada SRL | `prueba-aliada` | el usuario de siempre, como `writer` (no `owner`) | 5/9/2026 | — |
+**Para volver a armarla**, la sección 2. Toma dos minutos por SQL si solo hace
+falta el selector (una organización más y una segunda membresía, sin usuario
+nuevo, sin mandar ningún mail), y el camino completo del producto si además hace
+falta probar el aislamiento entre dos usuarios distintos.
 
-**Lo que le falta** para ser el alta completa de la sección 2: no tiene usuario
-propio, ni evento, ni oferta. O sea que prueba el **selector**, pero no prueba el
-aislamiento entre dos usuarios distintos. Para eso hay que correr el alta por el
-camino del producto, que manda un mail real.
-
-⚠️ **Mientras exista, aparece en `/plataforma`, en los conteos y en la
-rentabilidad cruzada.** Es esperado. Para sacarla, la sección 4, que ya está
-probada:
-
-```sql
-DELETE FROM staff_app.staff_profiles
-WHERE organization_id = (SELECT id FROM staff_app.organizations WHERE slug = 'prueba-aliada');
-DELETE FROM staff_app.organizations WHERE slug = 'prueba-aliada';
-```
-
-⚠️ **Si se va a probar la suplantación (0073), NO la saques**: hace falta, y
-además hay que **quitarle antes la membresía**, porque el punto de esa prueba es
-operar una organización de la que no se es miembro.
+| Organización | `slug` | Desde | Sacada |
+|--------------|--------|-------|--------|
+| PRUEBA Aliada SRL | `prueba-aliada` | 5/9/2026 | ✅ 5/9/2026 |
