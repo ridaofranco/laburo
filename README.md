@@ -8,9 +8,31 @@ un link — **sin crear ninguna cuenta**.
 Alrededor de eso hay tres pools más: proveedores de servicios, salones y las
 productoras mismas.
 
-> **Estado:** el producto está construido y en producción. Hoy tiene **1.050
-> fichas de staff** y **cero productoras cliente**: es multi-tenant con un solo
-> inquilino. Ver [`ACTORES.md`](./ACTORES.md).
+## Estado y alcance de v1
+
+**En producción.** Hoy tiene **1.050 fichas de staff** y **cero productoras
+cliente**: es multi-tenant con un solo inquilino. Ver
+[`ACTORES.md`](./ACTORES.md).
+
+**Lo que v1 incluye:** una organización plataforma, **alta abierta de
+productoras** (nadie aprueba nada), el pool de staff con búsqueda y ofertas por
+link mágico, el directorio de proveedores y salones con sus altas abiertas,
+aislamiento entre organizaciones con selector de contexto, y la plataforma
+pudiendo operar una productora dejando rastro. **Sin cobro**: es gratis para
+todos, por decisión comercial, con el circuito de pago entero y apagado por una
+bandera.
+
+**Fuera de v1, a propósito** — no es deuda, es alcance:
+
+- SSO y cualquier login corporativo
+- Suite de tests automatizados (las pruebas son manuales, ver [`PRUEBAS.md`](./PRUEBAS.md))
+- Mensajería dentro de la app: la coordinación es por WhatsApp
+- Cobro de plataforma prendido
+- Alcance por zona o por evento dentro de un rol
+- El puente a HITO
+- Base de datos propia separada
+
+**Revisión de este alcance: 30 días después del lanzamiento.**
 
 ## Quién lo usa
 
@@ -104,6 +126,8 @@ nuevo sale antes que su migración, rompe.
 - **[`PRD-LABURO.md`](./PRD-LABURO.md)** — el documento de intención original
   (en inglés, 2026). Valor histórico: el producto creció y el mapa vigente es
   `ACTORES.md`.
+- **[`RUNBOOK.md`](./RUNBOOK.md)** — qué hacer cuando algo falla: no llegó un
+  mail, alguien no puede entrar, hay que bajar una publicación.
 - **`COBROS.md`** — qué falta para prender el cobro.
 
 ## Licencia

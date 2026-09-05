@@ -45,6 +45,21 @@ import { orgActual } from "@/lib/org";
  * eventos y manda las ofertas necesita poder llamar a la gente. Si no viera el
  * contacto no podría trabajar, y alguien terminaría pasándoselo por WhatsApp, que
  * es peor que mostrarlo en la pantalla.
+ *
+ * ── ⚠️⚠️ SUPLANTANDO NO SE VE EL CONTACTO (5/9) ────────────────────────────
+ * Cuando la plataforma entra a operar una productora ajena (0073), `orgActual()`
+ * devuelve `rol: "writer"` para que las pantallas no se rompan. Sin este corte,
+ * ese `writer` prestado **veía mail, teléfono, DNI y el PDF original del CV de
+ * las fichas de esa productora**, que son datos personales de terceros que nunca
+ * dieron su consentimiento a que los mire la plataforma.
+ *
+ * Peor: `impersonation_log` registra **que** entraste, no **qué miraste**. O sea
+ * que se podían leer doscientas fichas con DNI y el rastro diría una sola línea.
+ *
+ * **Entrar a resolverle un problema a alguien no requiere ver el documento de su
+ * gente.** Y este archivo ya dice cuál es el default ante la duda: ocultar. Si
+ * algún día hace falta de verdad, se saca este corte y se documenta por qué —
+ * pero que sea una decisión tomada, no un permiso heredado sin querer.
  */
 const ROLES_INTERNOS = new Set(
   (process.env.MOSTRAR_CONTACTO_A || "owner,manager,writer")
@@ -73,6 +88,8 @@ export async function permisos(): Promise<Permisos> {
     // PGRST116 en cuanto había dos membresías).
     const org = await orgActual();
     const rol = org?.rol ?? null;
+    // Suplantando, el rol es prestado: no se ve el contacto. Ver el header.
+    if (org?.suplantada) return { rol, verContacto: false };
     return { rol, verContacto: !!rol && ROLES_INTERNOS.has(rol) };
   } catch {
     return { rol: null, verContacto: false };

@@ -58,10 +58,20 @@ opera; el control es después, desde `/plataforma`. La puerta no dice
 "productora": está abierta a agencias, marcas, empresas y particulares, porque
 el que necesita staff no siempre se llama productora.
 
-**Roles adentro de una organización:** `owner`, `writer` y `viewer`. Son los
-tres que existen, y están fijados por un CHECK en la base
-(`staff_app_0006_hardening.sql`). El rol es **por organización**: la misma
-persona puede ser `owner` en una y `writer` en otra.
+**Roles adentro de una organización:** `owner`, `manager`, `writer` y `viewer`.
+Son los cuatro que existen, fijados por un CHECK en la base (`0006`, ampliado
+por la `0071`). El rol es **por organización**: la misma persona puede ser
+`owner` en una y `writer` en otra.
+
+| Rol | Qué puede |
+|---|---|
+| `owner` | Todo, incluido administrar la organización |
+| `manager` | Todo lo operativo: eventos, ofertas, pagos, proveedores. No administra la organización |
+| `writer` | Opera |
+| `viewer` | Solo lee, **y no ve el contacto del pool** (mail, teléfono, DNI) |
+
+⚠️ **Asignar un rol es un `INSERT`/`UPDATE` en la base.** No hay pantalla para
+invitar miembros todavía.
 
 ### 3. Staff
 
@@ -185,6 +195,33 @@ organizaciones del usuario y es **fail-closed**: una cookie con una organizació
 ajena se ignora entera y se vuelve a la de siempre, sin error distinto.
 
 Con una sola organización el selector no se dibuja.
+
+⚠️ **Tres funciones de proveedores no respetan el selector**, y está así a
+propósito hasta que se arregle aparte: `staff_app_consultar_proveedor`,
+`staff_app_consulta_mail_enviado` y `staff_app_contactar_proveedor` resuelven su
+organización con la **membresía más antigua** y no aceptan el parámetro de
+organización. O sea que quien eligió actuar como la productora B **igual
+consulta proveedores como la A**. Las escrituras de eventos, ofertas, notas y
+puntajes sí respetan el selector.
+
+### Actuar como una productora
+
+La plataforma puede entrar a operar la cuenta de una productora para resolverle
+un problema. Cuatro reglas, y ninguna es opcional:
+
+1. **El permiso sale de la misma fila que deja el rastro.** No hay un "log" al
+   costado: los gates de la RLS leen la tabla de auditoría, así que **no se puede
+   operar sin que quede escrito**. El motivo es obligatorio.
+2. **Vence a los 60 minutos, en la base.** No en la cookie. Una sesión olvidada
+   deja de autorizar sola.
+3. **Se ve.** Banner permanente en todas las pantallas del portal, con el nombre
+   de la organización, y salida en un click. No se puede cerrar.
+4. ⚠️ **No se ve el contacto del pool.** Ni mail, ni teléfono, ni DNI, ni el PDF
+   del CV — aunque el rol prestado sea `writer` y un `writer` normal sí los vea.
+   Entrar a resolverle un problema a alguien no requiere ver el documento de su
+   gente, y la auditoría registra **que** entraste, no **qué** miraste.
+
+Quien suplanta escribe como `writer`: puede operar, no administrar.
 
 ---
 
