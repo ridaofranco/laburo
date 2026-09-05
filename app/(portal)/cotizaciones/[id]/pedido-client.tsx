@@ -47,6 +47,14 @@ export function PedidoClient({
 
   const abierto = pedido.estado === "abierta" && !pedido.cerrado;
   const adjudicado = pedido.estado === "adjudicada";
+  /**
+   * ⚠️ SE PUEDE ELEGIR DESPUÉS DE QUE CIERRA, y es el caso NORMAL: el pedido
+   * cierra por fecha y recién ahí te sentás a comparar. Atar el botón a
+   * `abierto` dejaba sin adjudicar justamente al pedido que llegó al final de
+   * su plazo, que es el 90% de los casos. Lo único que lo cierra de verdad es
+   * que ya esté adjudicado o cancelado, que es lo mismo que dice la RPC.
+   */
+  const sePuedeElegir = !adjudicado && pedido.estado !== "cancelada";
 
   const previa = parsearInvitados(lista);
 
@@ -276,7 +284,7 @@ export function PedidoClient({
                     <Td>{c.no_incluye ?? "—"}</Td>
                     <Td>{c.validez_dias ? `${c.validez_dias} días` : "—"}</Td>
                     <Td>
-                      {abierto || (!adjudicado && pedido.estado === "cerrada") ? (
+                      {sePuedeElegir ? (
                         confirmando === c.quote_id ? (
                           <div className="flex flex-col gap-2">
                             <span className="text-[13px] text-[#cfc4c5]">
