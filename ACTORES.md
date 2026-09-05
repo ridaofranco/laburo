@@ -149,6 +149,34 @@ construida.
 `/sumate` → la ficha entra a `staff_app.staff_profiles` → se le manda la
 bienvenida por lotes.
 
+⚠️⚠️ **EL POOL NO SE COMPARTE ENTRE ORGANIZACIONES, Y ESO HOY DEJA A UNA
+PRODUCTORA NUEVA SIN NADIE A QUIEN CONTRATAR.**
+
+Verificado el 5/9 recorriendo el alta completa como cliente: una productora se
+anota, entra, y `/buscar` le muestra **cero fichas**. Las 1.050 del pool tienen
+el `organization_id` de la plataforma, y la política de RLS de `staff_profiles`
+es `is_org_member(organization_id)`: quien no es miembro de esa organización no
+las ve.
+
+Además, todas las altas de `/sumate` van a la organización por defecto, así que
+una productora nueva tampoco recibe fichas propias con el tiempo.
+
+**No es un bug de código: es una decisión de modelo que nunca se tomó
+explícitamente.** Hay dos caminos y son muy distintos:
+
+- **El pool es de la plataforma** y la productora llega a la gente a través de
+  ella. Es coherente con el modelo de intermediación (el contacto no se ve, la
+  comisión se sostiene), pero entonces el producto que se le ofrece a una
+  productora **no es "buscá en el pool"**, y hay que decírselo antes de que se
+  anote.
+- **El pool es compartido** y toda productora ve a todos, con el contacto
+  cerrado. Requiere cambiar la RLS de `staff_profiles`, y **es una decisión
+  sobre datos personales de 1.050 personas** que se anotaron cuando el pool era
+  de una sola organización.
+
+Hasta que se decida, **una productora que se anote hoy ve un marketplace
+vacío**.
+
 ---
 
 ## El modelo de organizaciones

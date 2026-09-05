@@ -562,7 +562,26 @@ comportamiento previo que preservar.
 
 ⚠️ **Un checklist no ejecutado es una hipótesis.** Estado al 5/9/2026:
 
-**Camino 2 (productora) — corrido con el servidor levantado y sesión real.**
+**Caminos 2 y 3 — CORRIDOS ENTEROS CONTRA PRODUCCIÓN el 5/9**, por el camino
+del producto: alta real en `/registrar-productora`, mail real recibido, cuenta
+creada, evento, oferta con monto y fecha, link mágico abierto sin sesión y
+aceptado. Lo que devolvió cada paso:
+
+| Paso | Resultado |
+|---|---|
+| Alta por la UI | `{ok:true, mailOk:true}` — organización creada con su `slug` y su teléfono |
+| El mail | Llegó, con el link para elegir contraseña y el CTA de WhatsApp |
+| Entrar | `provision_member` devolvió `owner` de su organización |
+| Aislamiento | La productora nueva ve **0 fichas** de las 1.050 (ver el aviso de `ACTORES.md`) |
+| Evento | Creado **con su `organization_id`**, no con el de la plataforma |
+| Oferta | Creada con monto, condiciones y token de 7 días |
+| `/o/<token>` sin sesión | 200, con el nombre de la productora, el monto y **la hora sin corrimiento** |
+| Aceptar | `{ok:true}` → `status: accepted`, `viewed_at` y `responded_at` estampados, y quedó en `crew` |
+| Mail de confirmación | Llegó: *"Confirmado: Mozo/a en PRUEBA Evento de cierre"* |
+
+Todo se borró después y los conteos volvieron exactos.
+
+**Camino 2, además, corrido con el servidor local y sesión real.**
 Pasaron: entrar, el selector dibujándose con dos organizaciones, `/leads` dando
 404 con la segunda y 200 con la original, el aislamiento de `/buscar` (50 fichas
 y "1 de 21" contra "Sin resultados"), y `/pagos` diciendo que el cobro está
@@ -582,8 +601,13 @@ usuario que no es admin recibe "sin permiso" y **no deja rastro**, una cookie
 con sesión cerrada o inventada se ignora, y una sesión de hace 2 horas **deja de
 autorizar sola**.
 
-**Caminos 3 y 4 — NO corridos.** Los dos mandan mails reales a casillas reales y
-crean registros de verdad. Los corre Franco.
+**Camino 4 (alta de proveedor) — NO corrido.** Es el único que queda: manda un
+mail real y crea un proveedor en la vidriera pública.
+
+⚠️ **Al correr el camino 2 completo apareció el hallazgo más importante de
+todos**, y no estaba en ninguna lista: una productora que se anota hoy entra y
+**no ve ninguna ficha**. Está explicado en `ACTORES.md`, en "Que alguien se sume
+al pool". Es una decisión de modelo pendiente, no un bug.
 
 ### Qué NO cubre esta matriz
 
@@ -606,20 +630,19 @@ Para que se sepa dónde termina:
 
 ## 8. Estado: ¿hay una productora de prueba viva ahora mismo?
 
-**No.** Hubo una —`PRUEBA Aliada SRL`, sembrada el 5/9/2026 para poder verificar
-el selector de contexto y la suplantación— y **se sacó el mismo día**, con el
-procedimiento de la sección 4.
-
-Los conteos volvieron **exactos** a los de la sección 0: 2 organizaciones, 1
-miembro, 1 invitación, 0 eventos, 0 ofertas, 1.050 fichas. El registro de
-auditoría también quedó en 0, porque `impersonation_log.organization_id`
-cascadea.
-
-**Para volver a armarla**, la sección 2. Toma dos minutos por SQL si solo hace
-falta el selector (una organización más y una segunda membresía, sin usuario
-nuevo, sin mandar ningún mail), y el camino completo del producto si además hace
-falta probar el aislamiento entre dos usuarios distintos.
+**No.** El 5/9/2026 se corrió el circuito entero por el camino del producto
+—alta, mail, cuenta, evento, oferta, aceptación— y se borró todo al terminar.
+Los conteos volvieron **exactos**: 2 organizaciones, 1 miembro, 1 invitación, 0
+eventos, 0 ofertas, 0 crew, 1.050 fichas.
 
 | Organización | `slug` | Desde | Sacada |
 |--------------|--------|-------|--------|
 | PRUEBA Aliada SRL | `prueba-aliada` | 5/9/2026 | ✅ 5/9/2026 |
+| PRUEBA Aliada SRL | `prueba-aliada-srl` (alta por la UI) | 5/9/2026 | ✅ 5/9/2026 |
+
+⚠️ **Quedaron dos cuentas huérfanas en `auth.users`**, con los alias
+`franco+laburoprueba@somosder.ar` y `franco+staffprueba@somosder.ar`. No
+pertenecen a ninguna organización, así que al entrar verían *"Esta cuenta no
+tiene acceso"*. Se dejan a propósito, como dice la sección 4: borrar de
+`auth.users` es una operación aparte y una cuenta huérfana no molesta a nadie.
+Si se vuelve a correr el circuito, se reusan.
