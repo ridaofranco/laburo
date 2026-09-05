@@ -21,16 +21,27 @@ import { createClient } from "@/lib/supabase/server";
 import { orgActual } from "@/lib/org";
 import { initials } from "@/lib/avatar-color";
 
+/**
+ * Los CUATRO roles que existen de verdad, y nada más.
+ *
+ * ⚠️ Acá figuraban `admin` y `member`, que **no existen** en el CHECK de la base,
+ * y faltaba `viewer`, que sí existía: la pantalla sabía traducir dos roles
+ * imposibles y no sabía nombrar uno real. `manager` llegó con la 0071, así que la
+ * lista completa es `owner`, `manager`, `writer`, `viewer`.
+ *
+ * El `default` se queda como fail-safe: si algún día aparece un rol que este
+ * switch no conoce, se muestra tal cual en vez de inventarle un nombre.
+ */
 function roleLabel(role: string | null): string {
   switch ((role ?? "").toLowerCase()) {
     case "owner":
       return "Dueño";
-    case "admin":
-      return "Admin";
+    case "manager":
+      return "Gerente";
     case "writer":
       return "Editor";
-    case "member":
-      return "Miembro";
+    case "viewer":
+      return "Solo lectura";
     default:
       return role?.trim() || "Miembro";
   }

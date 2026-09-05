@@ -13,7 +13,9 @@ import { orgActual } from "@/lib/org";
  * la organización, y el visor del CV original tiene el contacto adentro del PDF. Con
  * un solo equipo eso no era un problema. El día que Franco le da acceso a un cliente
  * o abre el marketplace a otra productora, **el contacto queda a la vista y la
- * comisión se puede saltear**. Y ese día no se avisa: pasa cuando pasa.
+ * comisión se puede saltear**. Y ese día **está más cerca**: desde la 0071 existe
+ * `manager`, que es justamente el rol para alguien que opera la productora sin ser
+ * su dueño, y `viewer` para quien solo mira.
  *
  * ── CÓMO SE RESUELVE, SIN INVENTAR ESTRUCTURA ──
  * La app ya tiene roles por miembro (`staff_app.members.role`, default `writer`).
@@ -38,9 +40,14 @@ import { orgActual } from "@/lib/org";
  * ⚠️ **`viewer` NO entra, y es deliberado.** Un rol de sólo lectura no tiene por
  * qué ver mail, teléfono y DNI de terceros: eso es exactamente lo que sostiene
  * la intermediación. El default tiene que ser ocultar.
+ *
+ * ⚠️ **`manager` SÍ entra (0071).** Es un rol operativo de la casa: quien arma los
+ * eventos y manda las ofertas necesita poder llamar a la gente. Si no viera el
+ * contacto no podría trabajar, y alguien terminaría pasándoselo por WhatsApp, que
+ * es peor que mostrarlo en la pantalla.
  */
 const ROLES_INTERNOS = new Set(
-  (process.env.MOSTRAR_CONTACTO_A || "owner,writer")
+  (process.env.MOSTRAR_CONTACTO_A || "owner,manager,writer")
     .split(",")
     .map((r) => r.trim().toLowerCase())
     .filter(Boolean),
