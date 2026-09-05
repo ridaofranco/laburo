@@ -81,12 +81,25 @@ export default async function PlataformaPage() {
           </p>
           {/* Los proveedores se moderan aparte porque no son búsquedas: viven en
            * marketplace_profiles y se bajan con otra RPC (0061). */}
-          <Link
-            href="/plataforma/proveedores"
-            className="label-tech text-[11px] tracking-[0.2em] text-[#cfc4c5] hover:text-[#0047ff] border-b border-[#4c4546] hover:border-[#0047ff] pb-1 transition-colors mt-3"
-          >
-            Moderar proveedores del directorio
-          </Link>
+          {/* Camino de VUELTA. Esta pantalla no vive en app/(portal)/: tiene su
+           * propio <main> y no recibe la barra lateral, así que el que entra
+           * desde el menú queda sin manera de volver. El link a /dashboard que
+           * ya existía está adentro del cartel de "no sos administrador", o
+           * sea que lo ve justamente el que NO llegó hasta acá. */}
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-3 mt-3">
+            <Link
+              href="/plataforma/proveedores"
+              className="label-tech text-[11px] tracking-[0.2em] text-[#cfc4c5] hover:text-[#0047ff] border-b border-[#4c4546] hover:border-[#0047ff] pb-1 transition-colors"
+            >
+              Moderar proveedores del directorio
+            </Link>
+            <Link
+              href="/dashboard"
+              className="label-tech text-[11px] tracking-[0.2em] text-[#cfc4c5] hover:text-[#0047ff] border-b border-[#4c4546] hover:border-[#0047ff] pb-1 transition-colors"
+            >
+              Volver al portal
+            </Link>
+          </div>
         </header>
 
         <PlataformaClient

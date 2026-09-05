@@ -24,6 +24,7 @@ import {
   Settings,
   LogOut,
   Truck,
+  Shield,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
@@ -43,6 +44,16 @@ const MAIN: Item[] = [
   // sirve de nada guardarla si nadie la mira. Es de PLATAFORMA: solo lo ve la
   // org dueña del producto (se filtra abajo, en el componente).
   { label: "Leads", icon: Inbox, href: "/leads", match: ["/leads"], soloPlataforma: true },
+  // Plataforma va PEGADO a Leads y no al final porque es el paraguas de todo lo
+  // demas: la pantalla que mira las productoras desde arriba. Escondida detras
+  // de las operativas quedaria enterrada, y hasta hoy no habia ningun link: se
+  // llegaba escribiendo la URL a mano.
+  // Icono Shield y no Globe ni Radio: lo que hace esta pantalla es moderar y
+  // dar de baja lo que este mal, no transmitir ni hablar de mercados.
+  // ⚠️ Ojo: /plataforma NO vive en app/(portal)/, tiene su propio <main> y no
+  // recibe esta barra. Es un link que SALE del portal, y por eso la pantalla
+  // tiene su propio link de vuelta en el header.
+  { label: "Plataforma", icon: Shield, href: "/plataforma", match: ["/plataforma"], soloPlataforma: true },
   { label: "Buscar", icon: Search, href: "/buscar", match: ["/buscar", "/staff"] },
   // Fase 3 (2/8): "si a la productora le faltan proveedores, que puedan
   // tenerlos". Va PEGADO a Buscar porque son la misma pregunta con distinta
@@ -82,6 +93,9 @@ export function PortalNav({
   // lista YA filtrada: si se calculara a nivel de módulo (como estaba), el
   // mobile quedaría desalineado con el sidebar y le ofrecería Leads a alguien
   // que no lo tiene en el sidebar.
+  // ⚠️ Con Plataforma adentro, para la cuenta de plataforma este slice esconde
+  // SEIS de once pantallas en el teléfono. No se arregla acá: es otro issue (el
+  // menú "Más"), y ningún commit mezcla dos.
   const mobile = items.slice(0, 5);
 
   // De quién es este panel. Antes había acá una etiqueta genérica en inglés,
