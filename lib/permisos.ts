@@ -60,6 +60,21 @@ import { orgActual } from "@/lib/org";
  * gente.** Y este archivo ya dice cuál es el default ante la duda: ocultar. Si
  * algún día hace falta de verdad, se saca este corte y se documenta por qué —
  * pero que sea una decisión tomada, no un permiso heredado sin querer.
+ *
+ * ⚠️⚠️ **ESTE CORTE SOLO NO ALCANZABA, Y ES LA PARTE QUE IMPORTA.** Lo de acá
+ * abajo es de aplicación: esconde las columnas en la pantalla. Pero quien
+ * suplanta **es `member` a nivel Postgres** para esa organización, así que la
+ * RLS lo dejaba leer y **la API devolvía el contacto igual** — bastaba pedir
+ * `select=email,telefono,documento` contra PostgREST con ese mismo JWT.
+ *
+ * Lo encontró una revisión externa y está reproducido contra producción. El
+ * corte de verdad lo hace la migración **0074**, que enmascara esas columnas en
+ * las tres vistas mientras haya una suplantación viva. Esto de acá queda como
+ * segunda barrera y para que la UI no muestre huecos raros.
+ *
+ * **La lección, para la próxima:** un corte de privacidad que vive en el
+ * componente no es un corte, es una cortina. Si el dato no tiene que salir,
+ * tiene que no salir de la base.
  */
 const ROLES_INTERNOS = new Set(
   (process.env.MOSTRAR_CONTACTO_A || "owner,manager,writer")

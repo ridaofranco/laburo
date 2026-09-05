@@ -244,10 +244,20 @@ un problema. Cuatro reglas, y ninguna es opcional:
    deja de autorizar sola.
 3. **Se ve.** Banner permanente en todas las pantallas del portal, con el nombre
    de la organización, y salida en un click. No se puede cerrar.
-4. ⚠️ **No se ve el contacto del pool.** Ni mail, ni teléfono, ni DNI, ni el PDF
-   del CV — aunque el rol prestado sea `writer` y un `writer` normal sí los vea.
-   Entrar a resolverle un problema a alguien no requiere ver el documento de su
-   gente, y la auditoría registra **que** entraste, no **qué** miraste.
+4. ⚠️ **No se ve el contacto del pool, y el corte está en la base.** Ni mail, ni
+   teléfono, ni DNI, ni fecha de nacimiento, ni el PDF del CV — aunque el rol
+   prestado sea `writer` y un `writer` normal sí los vea. Entrar a resolverle un
+   problema a alguien no requiere ver el documento de su gente, y la auditoría
+   registra **que** entraste, no **qué** miraste.
+
+   ⚠️⚠️ **Este corte estuvo mal hecho y se corrigió.** Primero se hizo solo en la
+   aplicación, y quien suplantaba **es** `member` a nivel Postgres: la pantalla
+   escondía las columnas pero **la API las devolvía igual**. Lo encontró una
+   revisión externa y está reproducido. Desde la `0074` las tres vistas con datos
+   personales (`staff_app_profiles`, `staff_app_postulaciones`,
+   `staff_app_producer_leads`) devuelven `NULL` en esas columnas mientras haya
+   una suplantación viva. **La lección: un corte de privacidad que vive en el
+   componente no es un corte, es una cortina.**
 
 Quien suplanta escribe como `writer`: puede operar, no administrar.
 
