@@ -424,17 +424,208 @@ una oferta**: ver el paso 4 de la sección 2.
 
 ---
 
-## 7. Estado: ¿hay una productora de prueba viva ahora mismo?
+## 7. Un camino feliz por actor
 
-**No.** Al 5/9/2026 este archivo está escrito y su ciclo verificado con
-`ROLLBACK`, pero **el alta por el camino del producto no se corrió**: crea una
-organización de verdad y manda un mail de verdad a una casilla real, así que la
-ejecuta Franco.
+Los cuatro caminos que **tienen que andar**. Si uno se rompe, el producto está
+roto para alguien, aunque compile.
 
-Cuando se corra, **anotarlo acá**: nombre de la organización, `slug`, mail del
-usuario nuevo y fecha. Es la única forma de saber que hay basura de prueba viva
-y desde cuándo.
+### Por qué esto es una matriz escrita y no un test automático
 
-| Organización | `slug` | Usuario nuevo | Desde | Sacada |
-|--------------|--------|---------------|-------|--------|
-| — | — | — | — | — |
+La decisión se tomó mirando lo que hay, no por comodidad. Los hechos: el
+`package.json` **no tiene ningún runner** (ni vitest, ni jest, ni playwright),
+los scripts son `dev`, `build`, `start`, `lint` y `typecheck`, y casi todos
+estos caminos atraviesan Supabase Auth y la RLS, o sea que no son funciones
+puras sino flujos con sesión.
+
+Las tres opciones y lo que cuesta cada una:
+
+| | Qué prueba | Lo que cuesta |
+|---|---|---|
+| **A. Playwright** | Lo correcto: sesión, redirects, RLS | La dependencia es lo de menos: hay que bajar y **mantener un Chromium**, y en este proyecto ya está anotado que el Chromium se actualiza solo y rompe cosas. Además cada corrida necesita datos sembrados |
+| **B. Vitest sobre funciones puras** | Fechas, parseo de params, formato | **No prueba ningún camino de actor.** Ningún camino feliz de acá es una función pura. No cumple el pedido |
+| **C. Matriz manual escrita** ← elegida | Los cuatro caminos, completos | **No corre sola.** No atrapa una regresión salvo que alguien la corra. Es una contra real |
+
+**Se eligió C ahora, con la puerta abierta a A**, por cuatro razones:
+
+1. **Lo que falta no es la automatización: es la lista.** Nadie sabía cuáles son
+   los cuatro caminos que tienen que andar. Escribir la lista es el 90% del
+   valor y cuesta el 10%.
+2. Automatizar hoy significa escribir a la vez el runner, el sembrado y las
+   aserciones. Es una tanda entera, no un rato.
+3. **Esta matriz es la especificación que después se automatiza.** Al revés se
+   automatiza lo que uno se acuerda.
+4. El sembrado —que es el prerrequisito de cualquier automatización— ya está
+   escrito arriba, en la sección 2.
+
+⚠️ **No se agregó ninguna dependencia.** `package.json` quedó igual.
+
+### El estado de las migraciones al escribir esto (5/9/2026)
+
+Varios pasos dependen de esto, así que va explícito:
+
+| Migración | Estado |
+|---|---|
+| Hasta la **0070** | **Aplicadas** |
+| **0071** (rol `manager`, `members.scope`) | **Escrita, SIN aplicar** |
+| **0072** (`organizations.categoria`) | **Escrita, SIN aplicar** |
+| **0073** (actuar como productora) | **Escrita, SIN aplicar** |
+
+⚠️ **El orden importa: 0071 antes que 0073.** La 0073 reescribe `is_org_writer`
+incluyendo el rol `manager`; si se aplican al revés, la 0071 pisa el permiso de
+suplantación y hay que volver a correr la 0073.
+
+---
+
+### Camino 1 — Plataforma
+
+**Prerrequisitos:** ninguno, salvo los pasos marcados 0073.
+
+| # | Paso | Resultado esperado |
+|---|---|---|
+| 1 | `/dev-login` | Entra como la cuenta dueña de SOMOS DER y aterriza en el portal |
+| 2 | Mirar la barra lateral | Aparece el ítem **Plataforma**, pegado a **Leads** |
+| 3 | Click en Plataforma | Carga `/plataforma` con datos reales, **no** el cartel de "no sos administrador" |
+| 4 | Mirar el header de esa pantalla | Hay un **"Volver al portal"**. Sin él, es un callejón sin salida |
+| 5 | Mirar la sección Productoras | Cada una muestra su categoría, o **"sin clasificar"** si la 0072 no está aplicada |
+| 6 | Moderar una búsqueda, con motivo | Queda marcada como bajada, con el motivo visible |
+| 7 | Moderar sin motivo | **Tiene que fallar.** Una baja sin motivo es una pelea con el cliente dos días después |
+| **0073** | 8. Click en "Actuar como" en una productora | Pide el motivo **antes** de entrar |
+| **0073** | 9. Entrar con motivo | Aterriza en `/dashboard` con el **banner ámbar** arriba, con el nombre de esa productora |
+| **0073** | 10. Recorrer dos o tres pantallas del portal | El banner sigue estando en **todas**, y no se puede cerrar |
+| **0073** | 11. Click en "Salir" | Vuelve a la organización propia y el banner desaparece |
+| **0073** | 12. `SELECT motivo, iniciada_at, terminada_at FROM staff_app.impersonation_log ORDER BY iniciada_at DESC LIMIT 1;` | Una fila con el motivo escrito y **`terminada_at` estampado** |
+
+---
+
+### Camino 2 — Productora
+
+⚠️ **Es el más largo y el que más cosas prueba a la vez.** Prueba que las
+escrituras van a la organización correcta, que es el bug de fondo que originó
+todo este lote.
+
+**Prerrequisitos:** el alta de la sección 2, con la segunda organización puesta
+y el usuario con dos membresías.
+
+| # | Paso | Resultado esperado |
+|---|---|---|
+| 1 | Entrar por `/entrar` | Aterriza en `/dashboard` |
+| 2 | Mirar arriba de la barra lateral | **Con dos organizaciones aparece el selector.** Con una sola no aparece nada, y eso es correcto |
+| 3 | Elegir la segunda organización | El nombre cambia. **Recargar: se queda en esa** |
+| 4 | Mirar el menú | **Leads**, **Rentabilidad** y **Plataforma** desaparecieron. Entrando a mano, `/leads` da **404** |
+| 5 | `/buscar` | Con la segunda organización: **"Sin resultados"** y cero fichas. Con la original: la primera página de 50 y el paginador diciendo **"1 de 21"**. Ese contraste es el aislamiento funcionando |
+| 6 | `/tablero` → crear un evento | Se crea y aparece en el tablero |
+| 7 | ⚠️ `SELECT g.title, o.slug FROM staff_app.gigs g JOIN staff_app.organizations o ON o.id=g.organization_id ORDER BY g.created_at DESC LIMIT 1;` | **El slug tiene que ser el de la organización elegida.** Si sale la otra, el arreglo de fondo no está funcionando y todo lo demás da igual |
+| 8 | `/buscar` → abrir una ficha → mandar oferta **con monto y fecha** | Se manda. Sin monto o sin fecha **tiene que frenar** |
+| 9 | Mismo `SELECT` sobre `staff_app.offers` | Mismo resultado: la organización elegida |
+| 10 | `/pagos` | Muestra lo comprometido de **esa** organización, y la sección "Lo que cobrás" **está visible diciendo que el cobro está apagado** |
+| 11 | Volver a elegir la organización original en el selector | Todo vuelve: `/leads` responde, el pool completo aparece |
+
+---
+
+### Camino 3 — Staff por link mágico
+
+**Prerrequisitos:** una oferta creada en el camino 2, paso 8, a una ficha **con
+mail cargado**.
+
+⚠️ Hay **0 ofertas** en la base, así que nadie recorrió nunca este camino. No hay
+comportamiento previo que preservar.
+
+| # | Paso | Resultado esperado |
+|---|---|---|
+| 1 | Abrir `/o/<token>` **en incógnito, sin sesión** | Carga la propuesta. Ese es el caso real: la persona no tiene cuenta |
+| 2 | Mirar la fecha y la hora | ⚠️ **Tiene que ser la hora del evento, no tres horas antes.** Una hora sin zona se guarda como UTC |
+| 3 | Aceptar | Pantalla de confirmación |
+| 4 | Mirar esa pantalla | Ofrece el panel diciendo **la ventaja concreta** ("mirá tus próximos laburos, fichá y enterate cuando está el pago"), no "entrá al portal" |
+| 5 | Seguir ese link, **sin sesión** | Aterriza en `/acceso-staff`, que **sabe atenderlo**: le pide el mail. No un rebote mudo |
+| 6 | Pedir el link con **el mismo mail de la ficha** | Entra y ve su oferta en `/panel-staff` |
+| 7 | ⚠️ Pedir el link con un mail **que no tenga ficha** | Anotá qué pasa. Es el caso del primer reclamo, y hoy no está resuelto (ver sección 6) |
+| 8 | Abrir el mail de confirmación y seguir **su** link | **Tiene que llevar a la misma puerta que el paso 5.** Una puerta, no dos |
+| 9 | Con otra oferta: **rechazarla** | Esa vista **NO** ofrece el panel. Rechazar no es momento de vender nada |
+| 10 | Verificar que **no se creó ninguna cuenta** por aceptar | Aceptar no crea cuenta, nunca |
+
+---
+
+### Camino 4 — Alta de proveedor
+
+| # | Paso | Resultado esperado |
+|---|---|---|
+| 1 | `/registrar-proveedor` **sin sesión** | El formulario carga |
+| 2 | Completar y enviar | Confirma, y dice si el mail salió o **no** salió: son dos cosas distintas |
+| 3 | Abrir el mail → `/acceso-proveedor/<token>` | Entra **sin contraseña**. El proveedor nunca tiene una |
+| 4 | Cargar uno o dos servicios | Se guardan |
+| 5 | `/servicios` | El proveedor aparece en la vidriera pública |
+| 6 | ⚠️ **Reinscribirse con el mismo mail** | Dice que ya existía y **no pisa nada** de lo cargado. Es un buen canario: esto estuvo roto y lo arregló `486a187` |
+
+---
+
+### Qué se corrió de verdad, y qué no
+
+⚠️ **Un checklist no ejecutado es una hipótesis.** Estado al 5/9/2026:
+
+**Camino 2 (productora) — corrido con el servidor levantado y sesión real.**
+Pasaron: entrar, el selector dibujándose con dos organizaciones, `/leads` dando
+404 con la segunda y 200 con la original, el aislamiento de `/buscar` (50 fichas
+y "1 de 21" contra "Sin resultados"), y `/pagos` diciendo que el cobro está
+apagado. Los pasos 6 a 9 (crear evento y oferta) se verificaron aparte,
+llamando las funciones contra producción en una transacción con `ROLLBACK`: con
+la organización elegida el evento cayó en la correcta, y sin ella cayó en la
+otra.
+
+**Camino 1 (plataforma) — corrido en parte.** El ítem del menú, la carga de
+`/plataforma`, el "Volver al portal" y las categorías mostrando "sin
+clasificar". Los pasos marcados **0073 no se corrieron**: necesitan esa
+migración aplicada.
+
+**Caminos 3 y 4 — NO corridos.** Los dos mandan mails reales a casillas reales y
+crean registros de verdad. Los corre Franco.
+
+### Qué NO cubre esta matriz
+
+Para que se sepa dónde termina:
+
+- **El fichaje con GPS.** Necesita un teléfono real en un lugar real.
+- **El alta de salón**, que comparte la puerta del proveedor pero tiene su propio
+  formulario y sus fotos.
+- **El cobro por MercadoPago.** Está apagado por bandera y no hay ni un pago en
+  la base, ni simulado.
+- **La lectura de CV con IA.**
+- **El envío por lotes de la bienvenida.**
+- **Los caminos de error**: qué pasa si el mail no sale, si el token venció, si
+  la sesión caduca en el medio. La matriz recorre caminos felices, y ese es su
+  límite por diseño.
+- **Cualquier regresión que nadie salga a buscar.** No corre sola: ese es el
+  costo de haber elegido C.
+
+---
+
+## 8. Estado: ¿hay una productora de prueba viva ahora mismo?
+
+**SÍ. Hay una organización de prueba viva en producción desde el 5/9/2026.**
+
+Se sembró **por SQL y sin usuario nuevo**, o sea sin mandar ningún mail: es el
+mínimo que permite verificar el selector de contexto, que necesita a alguien con
+dos membresías. Sin ella, el selector y el aislamiento se "verificaban" leyendo
+código, que es como se cuelan los bugs de permisos.
+
+| Organización | `slug` | Miembro | Desde | Sacada |
+|--------------|--------|---------|-------|--------|
+| PRUEBA Aliada SRL | `prueba-aliada` | el usuario de siempre, como `writer` (no `owner`) | 5/9/2026 | — |
+
+**Lo que le falta** para ser el alta completa de la sección 2: no tiene usuario
+propio, ni evento, ni oferta. O sea que prueba el **selector**, pero no prueba el
+aislamiento entre dos usuarios distintos. Para eso hay que correr el alta por el
+camino del producto, que manda un mail real.
+
+⚠️ **Mientras exista, aparece en `/plataforma`, en los conteos y en la
+rentabilidad cruzada.** Es esperado. Para sacarla, la sección 4, que ya está
+probada:
+
+```sql
+DELETE FROM staff_app.staff_profiles
+WHERE organization_id = (SELECT id FROM staff_app.organizations WHERE slug = 'prueba-aliada');
+DELETE FROM staff_app.organizations WHERE slug = 'prueba-aliada';
+```
+
+⚠️ **Si se va a probar la suplantación (0073), NO la saques**: hace falta, y
+además hay que **quitarle antes la membresía**, porque el punto de esa prueba es
+operar una organización de la que no se es miembro.
