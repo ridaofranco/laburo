@@ -3,10 +3,13 @@
 Pedirle precio a varias empresas por lo mismo, al mismo tiempo, y comparar las
 respuestas en una tabla. Cada una cotiza **sin ver lo que cotizaron las otras**.
 
-> **Estado: la ETAPA 1 está construida, aplicada en producción y probada.**
-> Las tres tablas, su RLS y las seis funciones existen y se corrieron de punta a
-> punta contra la base real (con `ROLLBACK`). Falta todo lo de pantalla, de la
-> etapa 2 en adelante.
+> **Estado: LAS CINCO ETAPAS ESTÁN CONSTRUIDAS, aplicadas en producción y
+> probadas** (5/9/2026). Se puede usar de verdad: crear el pedido, invitar a
+> quien sea por mail, que cotice sin cuenta, el recordatorio antes del cierre,
+> comparar y adjudicar avisándole a todos.
+>
+> **Lo único que falta es correrlo con un caso real**, que manda mails de verdad
+> a empresas de verdad y por eso no lo puede hacer una sesión de trabajo.
 
 ---
 
@@ -184,21 +187,50 @@ cierre, sin qué incluye, sin dedupe, sin adjudicación, y **el token guardado e
 claro**). No se reusó ni se tocó. Y ojo: `public.quotes` de HITO es el
 presupuesto AL CLIENTE, no la cotización de un proveedor.
 
-**Etapa 2 — Crear e invitar.** La pantalla del que pide: armar el pedido, elegir
-el desglose desde una plantilla por rubro, pegar la lista de mails. Y el mail de
-invitación.
-*Con esto ya se puede usar de verdad, aunque las respuestas lleguen por mail.*
+**Etapa 2 — Crear e invitar.** ✅ **HECHA el 5/9.** `/cotizaciones`,
+`/cotizaciones/nuevo` y `/cotizaciones/[id]`. El desglose se precarga con una
+plantilla por rubro (8 rubros más una genérica, en `lib/cotizaciones.ts`) y se
+edita o se borra; si ya tocaste el desglose, cambiar de rubro no te pisa nada. La
+fecha de cierre viene puesta en una semana. Los mails se pegan de una planilla o
+de un correo: acepta `Nombre <mail@x.com>`, coma, punto y coma o salto de línea,
+y deduplica antes de mandar para poder decirte "de los 40 que pegaste, 3 estaban
+repetidos".
 
-**Etapa 3 — La pantalla del que cotiza.** `/cotizar/[token]`, sin sesión. Es la
-pantalla más importante de todas: **de acá salen los 2 de 370**. El precio
-arriba, grande, y lo mínimo indispensable abajo.
+⚠️ **El orden es guardar → mandar → marcar.** `enviado_at` se estampa DESPUÉS del
+envío y solo en los que salieron. La pantalla muestra "el mail no salió" cuando
+no salió, en vez de un "listo" que miente.
 
-**Etapa 4 — La comparación.** La tabla lado a lado, ordenable, con qué incluye
-cada uno. Y la adjudicación con sus tres mails.
+**Etapa 3 — La pantalla del que cotiza.** ✅ **HECHA el 5/9.**
+`/cotizar/[token]`, sin sesión, en la lista de rutas públicas del middleware. El
+precio va primero y en 28px; después qué incluye (obligatorio); después lo
+opcional. Dice que se puede corregir hasta el cierre, que es lo que hace que
+alguien cargue un número estimado en vez de no cargar nada. Y no muestra una sola
+señal de competencia.
 
-**Etapa 5 — Los recordatorios.** Un recordatorio a los que no cotizaron, 48
-horas antes del cierre. Sobre 370 correos, esto solo probablemente valga más que
-todo lo anterior.
+⚠️ Cargar el precio es POST, nunca GET: ningún preview de link de WhatsApp o
+Gmail puede dejar un presupuesto cargado.
+
+**Etapa 4 — La comparación.** ✅ **HECHA el 5/9.** Tabla ordenada por precio con
+qué incluye y qué NO incluye al lado, el desglose de cada uno abajo, y un botón
+"elegir este" por fila con confirmación. **No hay adjudicación automática al más
+barato.** Y los tres mails: al que ganó, al que cotizó y no quedó, y al que fue
+invitado y no llegó a cotizar. Al que perdió **no** se le dice por cuánto ganó el
+otro.
+
+**Etapa 5 — Los recordatorios.** ✅ **HECHA el 5/9.**
+`/api/cron/recordatorio-cotizacion`, adentro del despachador diario. Le escribe a
+los invitados que no cotizaron de pedidos que cierran en 48 horas, **solo si la
+invitación les salió**, y **uno solo por invitación** (`recordado_at`).
+
+⚠️ El recordatorio trae **otro token**: el original no se puede reconstruir
+porque de él solo queda el sha256, y un recordatorio sin botón pierde a la mitad.
+Los dos links valen a la vez, así que el mail viejo tampoco se rompe. Mismo
+patrón que el recordatorio de las ofertas de staff (migración 0030).
+
+⚠️ Esta tanda **no tiene interruptor de encendido**, a diferencia de la
+bienvenida y la pregunta de visibilidad. Esas le escriben a cientos de personas
+que no esperan nada; esta le escribe a alguien que recibió una invitación
+explícita y todavía puede responderla.
 
 ---
 
@@ -215,6 +247,18 @@ todo lo anterior.
 - **Pago adentro.** Fuera de alcance mientras el cobro siga apagado.
 
 ---
+
+## Lo que falta, y no es código
+
+**Correrlo con un caso real.** Todo lo de arriba se probó contra producción
+adentro de transacciones con `ROLLBACK`, y los mails se revisaron renderizados,
+pero nunca salió uno a una empresa de verdad. El primer pedido real es la prueba
+que falta, y la que va a decir si el copy de la invitación funciona.
+
+**Decidir si se cobra.** Hoy LABURO es gratis y el cobro está apagado por
+bandera. Este módulo es el que hace posible cobrar sin discutir, porque por
+primera vez queda registrado **quién ganó y por cuánto**. Prenderlo es otra
+decisión.
 
 ## Las preguntas que quedan abiertas
 

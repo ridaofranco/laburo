@@ -646,3 +646,89 @@ pertenecen a ninguna organización, así que al entrar verían *"Esta cuenta no
 tiene acceso"*. Se dejan a propósito, como dice la sección 4: borrar de
 `auth.users` es una operación aparte y una cuenta huérfana no molesta a nadie.
 Si se vuelve a correr el circuito, se reusan.
+
+---
+
+## 9. El pedido de precio, paso a paso (5/9/2026)
+
+Las cinco etapas están construidas y probadas contra producción con `ROLLBACK`.
+**Lo que falta es correrlo con mails de verdad**, y eso lo tiene que hacer una
+persona porque le escribe a empresas reales.
+
+⚠️ **Hacelo con dos casillas tuyas** (`franco+prov1@somosder.ar` y
+`franco+prov2@somosder.ar`, por ejemplo) antes de mandarle esto a una empresa. El
+alias con `+` llega a la misma casilla y sirve como dos proveedores distintos.
+
+### Paso 1 — Crear el pedido
+
+1. Entrá a **`/cotizaciones`** → *Nuevo pedido*.
+2. Poné un título concreto, elegí un rubro (el desglose se precarga solo) y
+   dejá la fecha de cierre que viene puesta.
+3. *Crear y elegir a quién*. **Todavía no se le manda nada a nadie.**
+
+**Qué tiene que pasar:** aterrizás en `/cotizaciones/[id]` con el pedido armado y
+el desglose listado.
+
+### Paso 2 — Invitar
+
+1. Pegá los dos alias, uno por línea.
+2. Antes de mandar, la pantalla dice cuántos va a invitar. Probá pegar uno
+   **repetido** y uno **sin arroba**: tiene que decir "1 repetidos" y "1 no
+   parecen mails" y mandar solo los buenos.
+3. *Mandar las invitaciones*.
+
+**Qué tiene que pasar:** llegan los dos mails, con el qué/dónde/para cuándo en el
+cuerpo y el botón *Cargar mi presupuesto*. En la pantalla, los dos aparecen en
+"invitados sin cotizar" con "Todavía no abrió el link".
+
+⚠️ **Si dice "no salieron", el mail falló y la invitación existe igual**: el link
+sirve, se puede reenviar. Eso es a propósito.
+
+### Paso 3 — Cotizar, desde el mail y sin sesión
+
+1. Abrí el link del primer mail **en otro navegador o en incógnito**, para
+   probar de verdad que no hace falta cuenta.
+2. Probá mandar **sin precio**: tiene que frenar. Y **sin "qué incluye"**:
+   también.
+3. Cargá precio, qué incluye y qué no. Mandá.
+4. Volvé a abrir el mismo link: tiene que mostrar lo que cargaste y dejar
+   corregirlo.
+5. Repetí con el segundo mail, con un precio distinto.
+
+**Qué tiene que pasar:** en `/cotizaciones/[id]` aparecen los dos, ordenados de
+más barato a más caro, con qué incluye cada uno.
+
+### Paso 4 — Adjudicar
+
+1. *Elegir este* en el que quieras (no tiene por qué ser el más barato).
+2. Confirmá.
+
+**Qué tiene que pasar:** llegan **dos mails distintos** a la misma casilla: uno
+dice que quedó elegido y trae el monto; el otro dice que se cerró y **no dice por
+cuánto ganó el otro**. En la pantalla, uno queda "Elegido" y el otro "No
+elegido", y no se puede volver a adjudicar.
+
+### Paso 5 — El recordatorio (opcional, tarda)
+
+Para verlo hay que crear un pedido que **cierre dentro de las próximas 48 horas**
+e invitar a alguien que no cotice. Al día siguiente, cuando corre el cron diario,
+le llega un solo mail que dice "cierra mañana a las 18:00" con **otro link** (el
+original no se puede reconstruir). Los dos links funcionan.
+
+⚠️ **No sale dos veces**: `recordado_at` se estampa al seleccionar.
+
+### La limpieza
+
+Borrar el pedido borra sus invitaciones y cotizaciones en cascada:
+
+```sql
+DELETE FROM staff_app.quote_requests WHERE id = '<el id del pedido>';
+```
+
+Después, los tres conteos tienen que volver a cero:
+
+```sql
+SELECT (SELECT count(*) FROM staff_app.quote_requests)  AS pedidos,
+       (SELECT count(*) FROM staff_app.quote_invites)   AS invitaciones,
+       (SELECT count(*) FROM staff_app.quotes)          AS cotizaciones;
+```
