@@ -22,10 +22,15 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { invitar, adjudicar, cerrarPedido } from "../actions";
-import type { PedidoDetalle, CotizacionFila, InvitadoSinCotizar } from "../actions";
+import { invitar, adjudicar, cerrarPedido, reenviarInvitacion, extenderCierre } from "../actions";
+import type {
+  PedidoDetalle,
+  CotizacionFila,
+  InvitadoSinCotizar,
+  ProveedorInvitable,
+} from "../actions";
 import { parsearInvitados, fmtMonto } from "@/lib/cotizaciones";
-import { fmtFecha, fmtFechaHora } from "@/lib/dates";
+import { fmtFecha, fmtFechaHora, aInputLocal, desdeInputLocal } from "@/lib/dates";
 
 const inputCaja =
   "w-full min-h-[48px] bg-[#121212] border border-[#2a2a2a] focus:border-[#e5e2e1] outline-none text-[16px] text-[#e5e2e1] px-4 py-3 rounded-none transition-colors [color-scheme:dark]";
@@ -35,15 +40,19 @@ export function PedidoClient({
   pedido,
   cotizaciones,
   sinCotizar,
+  proveedores,
 }: {
   pedido: PedidoDetalle;
   cotizaciones: CotizacionFila[];
   sinCotizar: InvitadoSinCotizar[];
+  proveedores: ProveedorInvitable[];
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [lista, setLista] = useState("");
   const [confirmando, setConfirmando] = useState<string | null>(null);
+  const [elegidos, setElegidos] = useState<Set<string>>(new Set());
+  const [nuevaFecha, setNuevaFecha] = useState("");
 
   const abierto = pedido.estado === "abierta" && !pedido.cerrado;
   const adjudicado = pedido.estado === "adjudicada";
@@ -59,17 +68,27 @@ export function PedidoClient({
   const previa = parsearInvitados(lista);
 
   function mandarInvitaciones() {
-    if (previa.invitados.length === 0) {
-      toast.error("Pegá al menos un mail.");
+    // Los dos caminos van juntos en una sola llamada: el que eligió tres del
+    // directorio y pegó cuatro mails manda una vez, no dos.
+    // ⚠️ Los del directorio viajan SIN mail: solo el profile_id. La productora
+    // no ve el contacto de un proveedor, y la base lo resuelve.
+    const delDirectorio = proveedores
+      .filter((p) => elegidos.has(p.profile_id))
+      .map((p) => ({ email: "", nombre: p.display_name, profileId: p.profile_id }));
+    const todos = [...delDirectorio, ...previa.invitados];
+
+    if (todos.length === 0) {
+      toast.error("Elegí a alguien del directorio o pegá al menos un mail.");
       return;
     }
     startTransition(async () => {
-      const r = await invitar(pedido.id, previa.invitados);
+      const r = await invitar(pedido.id, todos);
       if (!r.ok) {
         toast.error(r.error);
         return;
       }
       setLista("");
+      setElegidos(new Set());
       // Se dice exactamente qué pasó, incluido lo que no salió. Un "listo" con
       // tres mails caídos adentro es la forma más cara de mentir acá.
       const partes = [`${r.enviados} ${r.enviados === 1 ? "invitación enviada" : "invitaciones enviadas"}`];
@@ -95,6 +114,36 @@ export function PedidoClient({
           : `Adjudicado y avisados los ${r.avisados}.`,
       );
       setConfirmando(null);
+      router.refresh();
+    });
+  }
+
+  function reenviar(inviteId: string) {
+    startTransition(async () => {
+      const r = await reenviarInvitacion(inviteId);
+      if (!r.ok) {
+        toast.error(r.error);
+        return;
+      }
+      toast.success("Invitación reenviada, con un link nuevo.");
+      router.refresh();
+    });
+  }
+
+  function correrFecha() {
+    const iso = desdeInputLocal(nuevaFecha);
+    if (!iso) {
+      toast.error("Elegí la fecha nueva.");
+      return;
+    }
+    startTransition(async () => {
+      const r = await extenderCierre(pedido.id, iso);
+      if (!r.ok) {
+        toast.error(r.error);
+        return;
+      }
+      toast.success("Listo, el pedido cierra más tarde.");
+      setNuevaFecha("");
       router.refresh();
     });
   }
@@ -177,6 +226,31 @@ export function PedidoClient({
             </button>
           </div>
         ) : null}
+
+        {/* Correr la fecha. Existe porque el caso real es: cierra mañana,
+            cotizaron dos de doce, y lo único razonable es dar tres días más.
+            Sin esto había que cancelar y rehacer, perdiendo lo que ya entró. */}
+        {abierto ? (
+          <div className="flex flex-wrap items-end gap-3 pt-2 border-t border-[#1A1A1A] mt-2">
+            <label className="flex flex-col gap-2">
+              <span className={labelCls}>Darle más tiempo</span>
+              <input
+                type="datetime-local"
+                className={`${inputCaja} max-w-[260px]`}
+                value={nuevaFecha || aInputLocal(pedido.cierra_at)}
+                onChange={(e) => setNuevaFecha(e.target.value)}
+              />
+            </label>
+            <button
+              type="button"
+              onClick={correrFecha}
+              disabled={pending || !nuevaFecha}
+              className="min-h-[48px] px-5 border border-[#2a2a2a] text-[14px] text-[#cfc4c5] hover:border-[#e5e2e1] hover:text-[#e5e2e1] transition-colors disabled:opacity-50"
+            >
+              Correr el cierre
+            </button>
+          </div>
+        ) : null}
       </section>
 
       {/* ── Invitar ─────────────────────────────────────────────────── */}
@@ -192,8 +266,60 @@ export function PedidoClient({
             </p>
           </div>
 
+          {proveedores.length > 0 ? (
+            <div className="flex flex-col gap-3">
+              <p className={labelCls}>Del directorio de LABURO</p>
+              <ul className="flex flex-col border border-[#222]">
+                {proveedores.map((p) => (
+                  <li
+                    key={p.profile_id}
+                    className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[#1A1A1A] last:border-b-0"
+                  >
+                    <label className="flex items-center gap-3 min-w-0 cursor-pointer flex-1">
+                      <input
+                        type="checkbox"
+                        className="w-5 h-5 accent-[#0047FF]"
+                        disabled={p.ya_invitado}
+                        checked={elegidos.has(p.profile_id)}
+                        onChange={(e) =>
+                          setElegidos((prev) => {
+                            const s = new Set(prev);
+                            if (e.target.checked) s.add(p.profile_id);
+                            else s.delete(p.profile_id);
+                            return s;
+                          })
+                        }
+                      />
+                      <span className="flex flex-col min-w-0">
+                        <span className="text-[15px] text-[#e5e2e1] truncate">
+                          {p.display_name ?? "Sin nombre"}
+                          {p.is_verified ? (
+                            <span className="text-[#7ee787] text-[12px] ml-2">verificado</span>
+                          ) : null}
+                        </span>
+                        <span className="text-[13px] text-[#8A8A8A] truncate">
+                          {[p.categorias.join(", "), p.provincia].filter(Boolean).join(" · ")}
+                        </span>
+                      </span>
+                    </label>
+                    {p.ya_invitado ? (
+                      <span className="text-[13px] text-[#8A8A8A] whitespace-nowrap">
+                        Ya invitado
+                      </span>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+              <p className="text-[13px] text-[#8A8A8A]">
+                No ves su mail y no hace falta: se lo mandamos nosotros.
+              </p>
+            </div>
+          ) : null}
+
           <label className="flex flex-col gap-2">
-            <span className={labelCls}>Mails</span>
+            <span className={labelCls}>
+              {proveedores.length > 0 ? "Y/o pegá otros mails" : "Mails"}
+            </span>
             <textarea
               className={`${inputCaja} min-h-[140px] font-mono text-[14px]`}
               value={lista}
@@ -202,9 +328,9 @@ export function PedidoClient({
             />
           </label>
 
-          {lista.trim() ? (
+          {lista.trim() || elegidos.size ? (
             <p className="text-[14px] text-[#cfc4c5]">
-              {previa.invitados.length} para invitar
+              {previa.invitados.length + elegidos.size} para invitar
               {previa.repetidos ? ` · ${previa.repetidos} repetidos en la lista` : ""}
               {previa.invalidos.length
                 ? ` · ${previa.invalidos.length} no parecen mails: ${previa.invalidos.slice(0, 3).join(", ")}`
@@ -215,7 +341,7 @@ export function PedidoClient({
           <button
             type="button"
             onClick={mandarInvitaciones}
-            disabled={pending || previa.invitados.length === 0}
+            disabled={pending || previa.invitados.length + elegidos.size === 0}
             className="self-start min-h-[48px] px-8 bg-[#0047FF] text-white text-[15px] font-semibold disabled:opacity-50"
           >
             {pending ? "Mandando..." : "Mandar las invitaciones"}
@@ -368,12 +494,24 @@ export function PedidoClient({
                 className="flex flex-wrap items-center justify-between gap-3 py-3 border-b border-[#1A1A1A]"
               >
                 <span className="text-[15px] text-[#e5e2e1]">{i.proveedor}</span>
-                <span className="text-[14px] text-[#8A8A8A]">
-                  {!i.enviado_at
-                    ? "El mail no salió"
-                    : i.visto_at
-                      ? `Abrió el link el ${fmtFecha(i.visto_at, { day: "2-digit", month: "short" })} y no cargó nada`
-                      : "Todavía no abrió el link"}
+                <span className="flex items-center gap-4">
+                  <span className="text-[14px] text-[#8A8A8A]">
+                    {!i.enviado_at
+                      ? "El mail no salió"
+                      : i.visto_at
+                        ? `Abrió el link el ${fmtFecha(i.visto_at, { day: "2-digit", month: "short" })} y no cargó nada`
+                        : "Todavía no abrió el link"}
+                  </span>
+                  {abierto ? (
+                    <button
+                      type="button"
+                      onClick={() => reenviar(i.invite_id)}
+                      disabled={pending}
+                      className="min-h-[40px] px-4 border border-[#2a2a2a] text-[13px] text-[#cfc4c5] hover:border-[#0047FF] hover:text-[#e5e2e1] transition-colors disabled:opacity-50 whitespace-nowrap"
+                    >
+                      {i.enviado_at ? "Volver a mandar" : "Reintentar"}
+                    </button>
+                  ) : null}
                 </span>
               </li>
             ))}

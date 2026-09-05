@@ -96,6 +96,24 @@ export interface InvitadoSinCotizar {
   visto_at: string | null;
 }
 
+/**
+ * Un proveedor del directorio, para elegirlo en vez de escribir su mail.
+ *
+ * ⚠️ NO trae el mail, y no es un olvido: la productora no ve el contacto de un
+ * proveedor (decisión de Franco del 2/8, migración 0058). Se manda el
+ * `profile_id` y el mail lo resuelve la base al invitar.
+ */
+export interface ProveedorInvitable {
+  profile_id: string;
+  display_name: string | null;
+  headline: string | null;
+  provincia: string | null;
+  ciudad: string | null;
+  is_verified: boolean;
+  categorias: string[];
+  ya_invitado: boolean;
+}
+
 /* ────────────────────────────── lecturas ────────────────────────────── */
 
 export async function listarPedidos(): Promise<PedidoResumen[]> {
@@ -136,6 +154,21 @@ export async function getCotizaciones(requestId: string): Promise<{
   return { cotizaciones: r.cotizaciones ?? [], sinCotizar: r.sin_cotizar ?? [] };
 }
 
+export async function proveedoresParaInvitar(
+  requestId: string,
+  categoria?: string | null,
+): Promise<ProveedorInvitable[]> {
+  const supabase = await createClient();
+  const org = await exigirOrg();
+  const { data } = await supabase.rpc("staff_app_proveedores_para_invitar", {
+    p_request_id: requestId,
+    p_categoria: categoria?.trim() || null,
+    p_org: org.organizationId,
+  });
+  const r = data as { ok?: boolean; proveedores?: ProveedorInvitable[] } | null;
+  return r?.ok ? (r.proveedores ?? []) : [];
+}
+
 /* ────────────────────────────── crear ────────────────────────────── */
 
 const MENSAJES: Record<string, string> = {
@@ -151,6 +184,11 @@ const MENSAJES: Record<string, string> = {
   cancelada: "Ese pedido está cancelado.",
   cotizacion_no_encontrada: "Esa cotización no es de este pedido.",
   invitados_invalidos: "La lista de invitados quedó mal armada.",
+  no_encontrada: "Esa invitación no existe o no es de tu productora.",
+  ya_cotizo: "Ese proveedor ya cargó su presupuesto.",
+  cerrado: "El pedido ya está cerrado.",
+  no_esta_abierto: "Solo se puede correr la fecha de un pedido abierto.",
+  fecha_invalida: "La fecha nueva tiene que ser futura.",
 };
 
 function traducir(reason: string | undefined, fallback = "No se pudo. Probá de nuevo."): string {
@@ -434,4 +472,126 @@ export async function cerrarPedido(
   revalidatePath(`/cotizaciones/${requestId}`);
   revalidatePath("/cotizaciones");
   return { ok: true, estado: r.estado ?? "cerrada" };
+}
+
+/* ──────────────────── reenviar y correr la fecha ──────────────────── */
+
+/**
+ * Reenvía la invitación de alguien que todavía no cotizó.
+ *
+ * Existe porque la pantalla ya mostraba "el mail no salió" y no dejaba hacer
+ * nada al respecto: información sin salida. Y no alcanza con volver a mandar el
+ * mismo mail, porque **el token original no se puede reconstruir** (de él solo
+ * queda el sha256). La RPC emite uno nuevo; los dos valen.
+ */
+export async function reenviarInvitacion(
+  inviteId: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const supabase = await createClient();
+  const org = await exigirOrg();
+
+  const { data, error } = await supabase.rpc("staff_app_reenviar_invitacion", {
+    p_invite_id: inviteId,
+    p_org: org.organizationId,
+  });
+  if (error) {
+    console.error("[cotizaciones] reenviar falló:", error.message);
+    return { ok: false, error: "No se pudo reenviar. Probá de nuevo." };
+  }
+  const r = data as {
+    ok?: boolean;
+    reason?: string;
+    email?: string;
+    nombre?: string | null;
+    token?: string;
+    pedido?: {
+      titulo: string;
+      descripcion: string | null;
+      categoria: string | null;
+      provincia: string | null;
+      ciudad: string | null;
+      necesario_para: string | null;
+      cierra_at: string;
+    };
+  } | null;
+  if (!r?.ok || !r.token || !r.email || !r.pedido) {
+    return { ok: false, error: traducir(r?.reason) };
+  }
+
+  const p = r.pedido;
+  try {
+    const html = await render(
+      createElement(InvitacionCotizar, {
+        nombre: r.nombre ?? null,
+        productora: org.nombre ?? "Una productora",
+        titulo: p.titulo,
+        descripcion: p.descripcion,
+        categoria: p.categoria,
+        donde: [p.ciudad, p.provincia].filter(Boolean).join(", ") || null,
+        necesarioPara: p.necesario_para
+          ? fmtFecha(p.necesario_para, { day: "2-digit", month: "long", year: "numeric" })
+          : null,
+        cierra:
+          fmtFechaHora(p.cierra_at, {
+            weekday: "long", day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit",
+          }) ?? "la fecha de cierre",
+        link: cotizarUrl(r.token),
+      }),
+    );
+    const res = await sendMail({
+      to: r.email,
+      subject: `${org.nombre ?? "Una productora"} te pide un presupuesto · ${p.titulo}`,
+      html,
+    });
+    if (!res.ok) {
+      // El token nuevo ya está guardado: el link sirve igual y se puede volver a
+      // intentar. Lo que no se hace es marcarlo como enviado.
+      return { ok: false, error: "El mail no salió. Probá de nuevo en un rato." };
+    }
+  } catch (e) {
+    console.error("[cotizaciones] reenviar: render/envío falló:", e instanceof Error ? e.message : String(e));
+    return { ok: false, error: "El mail no salió. Probá de nuevo en un rato." };
+  }
+
+  await supabase.rpc("staff_app_marcar_enviadas", {
+    p_invite_ids: [inviteId],
+    p_org: org.organizationId,
+  });
+
+  revalidatePath(`/cotizaciones`);
+  return { ok: true };
+}
+
+/**
+ * Corre la fecha de cierre de un pedido abierto.
+ *
+ * El caso real: cierra mañana, cotizaron dos de doce, y lo único razonable es
+ * darle tres días más. Sin esto había que cancelar y rehacer el pedido entero,
+ * perdiendo las invitaciones y las cotizaciones que ya habían entrado.
+ *
+ * ⚠️ La RPC también corre el vencimiento de los tokens: extender sin eso dejaría
+ * un pedido vivo con links muertos.
+ */
+export async function extenderCierre(
+  requestId: string,
+  cierraAt: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const supabase = await createClient();
+  const org = await exigirOrg();
+
+  const { data, error } = await supabase.rpc("staff_app_extender_cierre", {
+    p_request_id: requestId,
+    p_cierra_at: cierraAt,
+    p_org: org.organizationId,
+  });
+  if (error) {
+    console.error("[cotizaciones] extender falló:", error.message);
+    return { ok: false, error: "No se pudo cambiar la fecha. Probá de nuevo." };
+  }
+  const r = data as { ok?: boolean; reason?: string } | null;
+  if (!r?.ok) return { ok: false, error: traducir(r?.reason) };
+
+  revalidatePath(`/cotizaciones/${requestId}`);
+  revalidatePath("/cotizaciones");
+  return { ok: true };
 }

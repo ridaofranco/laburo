@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPedido, getCotizaciones } from "../actions";
+import { getPedido, getCotizaciones, proveedoresParaInvitar } from "../actions";
 import { PedidoClient } from "./pedido-client";
 
 export const metadata: Metadata = {
@@ -28,6 +28,12 @@ export default async function PedidoPage({
   if (!pedido) notFound();
 
   const { cotizaciones, sinCotizar } = await getCotizaciones(id);
+  // Los proveedores del directorio que se pueden invitar. Filtrados por el rubro
+  // del pedido: si el pedido es de sonido, ofrecer los 200 de catering es ruido.
+  // Si el rubro no tiene ninguno cargado, se cae a la lista completa, que es
+  // mejor que una lista vacía sin explicación.
+  const porRubro = await proveedoresParaInvitar(id, pedido.categoria);
+  const proveedores = porRubro.length > 0 ? porRubro : await proveedoresParaInvitar(id, null);
 
   return (
     <div className="max-w-[1100px] mx-auto px-6 md:px-10 py-10 md:py-16 flex flex-col gap-8">
@@ -38,7 +44,12 @@ export default async function PedidoPage({
         <h1 className="t-display text-[#e5e2e1]">{pedido.titulo}</h1>
       </header>
 
-      <PedidoClient pedido={pedido} cotizaciones={cotizaciones} sinCotizar={sinCotizar} />
+      <PedidoClient
+        pedido={pedido}
+        cotizaciones={cotizaciones}
+        sinCotizar={sinCotizar}
+        proveedores={proveedores}
+      />
     </div>
   );
 }

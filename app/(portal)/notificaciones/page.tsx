@@ -9,12 +9,22 @@
  *
  * Server component, RLS-scopeado al org del caller (staff_app_offers ya viene
  * scopeada). Estilos exactos de Stitch en valores arbitrarios. Copy en voseo.
+ *
+ * ── DESDE EL 5/9 TAMBIÉN TRAE LAS COTIZACIONES QUE ENTRARON ─────────────────
+ * Un pedido de precio junta respuestas de a una, durante días, y hasta hoy no
+ * avisaba ninguna: había que acordarse de volver a mirar la pantalla. Eso es
+ * exactamente lo que este módulo vino a arreglar del correo, así que repetirlo
+ * adentro del producto no tenía sentido.
+ *
+ * Las dos fuentes se mezclan en el mismo feed ordenado por fecha, porque para
+ * el que mira es la misma pregunta: qué pasó desde la última vez que entré.
  */
 
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { orgActual } from "@/lib/org";
 import { fmtFecha } from "@/lib/dates";
+import { fmtMonto } from "@/lib/cotizaciones";
 import { LoadError } from "@/components/load-error";
 
 interface OfferRow {
@@ -32,6 +42,18 @@ interface OfferRow {
 }
 
 type Severity = "accepted" | "viewed" | "sent" | "expired" | "declined";
+
+/** Una cotización que entró a un pedido de precio. */
+interface CotizacionRow {
+  quote_id: string;
+  request_id: string;
+  titulo: string | null;
+  proveedor: string | null;
+  monto: number | null;
+  moneda: string | null;
+  estado: string | null;
+  updated_at: string | null;
+}
 
 interface Feed {
   key: string;
@@ -145,6 +167,34 @@ function toFeed(o: OfferRow): Feed | null {
   return null;
 }
 
+/** La cotización, al mismo formato del feed. */
+function cotizacionAFeed(c: CotizacionRow): Feed | null {
+  const at = ms(c.updated_at);
+  if (at === null) return null;
+  const quien = (c.proveedor ?? "").trim() || "Un proveedor";
+  const que = (c.titulo ?? "").trim() || "un pedido";
+  const monto = fmtMonto(c.monto, c.moneda ?? "ARS");
+
+  if (c.estado === "ganadora") {
+    return {
+      key: `q-${c.quote_id}`,
+      at,
+      label: "PRESUPUESTO ELEGIDO",
+      title: `Elegiste a ${quien}`,
+      body: `${monto} por ${que}. Ya le avisamos, a él y a los demás.`,
+      severity: "accepted",
+    };
+  }
+  return {
+    key: `q-${c.quote_id}`,
+    at,
+    label: "PRESUPUESTO RECIBIDO",
+    title: `${quien} te pasó su precio`,
+    body: `${monto} por ${que}. Entrá a compararlo con los demás.`,
+    severity: "viewed",
+  };
+}
+
 function Dot({ severity }: { severity: Severity }) {
   const base = "mt-2 w-2 h-2 rounded-full shrink-0";
   switch (severity) {
@@ -178,8 +228,20 @@ export default async function NotificacionesPage() {
   const { data, error } = await q;
 
   const offers = (data ?? []) as OfferRow[];
-  const feed = offers
-    .map(toFeed)
+
+  // Las cotizaciones que entraron a los pedidos de precio. Van por RPC porque
+  // staff_app no está expuesto por PostgREST, y con p_org por la misma razón
+  // que arriba: sin él, con dos membresías el feed mezcla productoras.
+  const { data: cotizacionesData } = await supabase.rpc("staff_app_cotizaciones_recientes", {
+    p_org: orgId,
+    p_limit: 20,
+  });
+  const cotizaciones = (cotizacionesData as CotizacionRow[] | null) ?? [];
+
+  const feed = [
+    ...offers.map(toFeed),
+    ...cotizaciones.map(cotizacionAFeed),
+  ]
     .filter((f): f is Feed => f !== null)
     .sort((a, b) => b.at - a.at);
 
@@ -199,8 +261,9 @@ export default async function NotificacionesPage() {
         ) : feed.length === 0 ? (
           <div className="border-t border-b border-[#353535] py-20 text-center">
             <p className="text-[16px] text-[#cfc4c5] max-w-[420px] mx-auto">
-              No hay actividad todavía. Cuando envíes ofertas, acá vas a ver
-              cuándo las ven, las aceptan o vencen.
+              No hay actividad todavía. Cuando envíes ofertas o pidas precios, acá
+              vas a ver cuándo las ven, las aceptan, vencen, y qué presupuestos
+              entraron.
             </p>
             <Link
               href="/buscar"
