@@ -18,18 +18,38 @@ interface Props {
   candidates: StaffCard[];
   error: boolean;
   initialFilters: SearchFilters;
+  /** Total REAL de fichas que matchean los filtros (no las de esta página). */
+  total: number;
+  /** Cuántas fichas entran en una página (lo define el server component). */
+  porPagina: number;
 }
 
 /**
  * Región focal de la búsqueda (UI-SPEC visual anchor): input + fila de chips
  * de oficios arriba, resultados abajo. Los cambios actualizan la URL y el
  * server component re-consulta (payload chico, filtrado en Postgres).
+ *
+ * La página también vive en la URL (`?p=N`). Dos caminos distintos a propósito:
+ * `composeAndPush` (cambiar un filtro) NO propaga la página y la deja en 1, y
+ * `irAPagina` (los controles de abajo) sí la manda. El por qué está en el
+ * comentario de buildQueryString.
  */
-export function SearchClient({ candidates, error, initialFilters }: Props) {
+export function SearchClient({
+  candidates,
+  error,
+  initialFilters,
+  total,
+  porPagina,
+}: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const reduce = useReducedMotion();
   const [pending, startTransition] = useTransition();
+
+  const pagina = initialFilters.pagina;
+  const totalPaginas = Math.max(1, Math.ceil(total / porPagina));
+  /** Ancla para subir al principio de los resultados al cambiar de página. */
+  const resultadosRef = useRef<HTMLDivElement | null>(null);
 
   const [text, setText] = useState(initialFilters.q);
   const [selected, setSelected] = useState<string[]>(initialFilters.oficios);
@@ -56,6 +76,10 @@ export function SearchClient({ candidates, error, initialFilters }: Props) {
         // XTRA-02: conservar el modo "buscar reemplazo" al ajustar otros
         // filtros; se limpia sólo con "Ver todos" (href="/") o clearAll.
         gig: initialFilters.gig,
+        // ⚠️ `pagina` NO se pasa a propósito: cambiar cualquier filtro vuelve a la
+        // página 1. Si se propagara, alguien parado en la página 8 que escribe
+        // "bartender" vería el vacío de "sin resultados" con 12 candidatos ahí
+        // nomás, y lo leería como "la búsqueda no anda".
       });
       startTransition(() => {
         router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
@@ -90,6 +114,28 @@ export function SearchClient({ candidates, error, initialFilters }: Props) {
   };
 
   const retry = () => router.refresh();
+
+  /**
+   * Navegación de páginas: es el ÚNICO camino que propaga `pagina`. Usa el mismo
+   * startTransition + router.replace que composeAndPush, así el `pending` ya
+   * existente muestra el LoadingResults mientras el server vuelve a consultar.
+   */
+  const irAPagina = (destino: number) => {
+    const siguiente = Math.min(Math.max(1, destino), totalPaginas);
+    if (siguiente === pagina) return;
+    const qs = buildQueryString({ ...initialFilters, pagina: siguiente });
+    startTransition(() => {
+      // scroll: false como el resto (ajustar un filtro no tiene que patear la
+      // pantalla), pero cambiar de página SÍ tiene que subir: quedarse abajo del
+      // todo mirando el pie de la página 2 es desorientador. Por eso el scroll va
+      // acá, explícito, y no cambiando el scroll:false de los otros llamados.
+      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    });
+    resultadosRef.current?.scrollIntoView({
+      behavior: reduce ? "auto" : "smooth",
+      block: "start",
+    });
+  };
 
   const fineCount = activeFineFilterCount(initialFilters);
 
@@ -159,32 +205,88 @@ export function SearchClient({ candidates, error, initialFilters }: Props) {
       </div>
 
       {/* Resultados */}
-      {error ? (
-        <ErrorResults onRetry={retry} />
-      ) : pending ? (
-        <LoadingResults />
-      ) : candidates.length === 0 ? (
-        <EmptyResults onClear={clearAll} />
-      ) : (
-        <div className="flex flex-col gap-4">
-          <p className="label-tech text-[12px] text-[#cfc4c5]">
-            {candidates.length}{" "}
-            {candidates.length === 1 ? "candidato" : "candidatos"}
-          </p>
-          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {candidates.map((c, i) => (
-              <motion.li
-                key={c.id}
-                initial={reduce ? false : { opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2, delay: reduce ? 0 : Math.min(i, 8) * 0.025 }}
+      <div ref={resultadosRef} className="scroll-mt-8">
+        {error ? (
+          <ErrorResults onRetry={retry} />
+        ) : pending ? (
+          <LoadingResults />
+        ) : candidates.length === 0 ? (
+          pagina > 1 ? (
+            // Página fuera de rango (por ejemplo ?p=999 escrito a mano): no es
+            // "sin resultados", es una página que no existe. La salida es volver
+            // a la primera, no limpiar los filtros.
+            <div className="flex flex-col items-center text-center gap-md py-2xl">
+              <h2 className="font-display text-[28px] text-fg">
+                Esta página está vacía
+              </h2>
+              <p className="text-body text-fg-muted max-w-[300px]">
+                Te fuiste más allá del último candidato.
+              </p>
+              <button
+                type="button"
+                onClick={() => irAPagina(1)}
+                className="min-h-[44px] rounded-xl bg-surface-2 border border-border text-fg text-label font-semibold px-lg py-sm transition-transform active:scale-[0.98]"
               >
-                <CandidateCard candidate={c} />
-              </motion.li>
-            ))}
-          </ul>
-        </div>
-      )}
+                Volver a la primera página
+              </button>
+            </div>
+          ) : (
+            <EmptyResults onClear={clearAll} />
+          )
+        ) : (
+          <div className="flex flex-col gap-4">
+            <p className="label-tech text-[12px] text-[#cfc4c5]">
+              {total.toLocaleString("es-AR")}{" "}
+              {total === 1 ? "candidato" : "candidatos"}
+              {totalPaginas > 1 && (
+                <> · página {pagina} de {totalPaginas}</>
+              )}
+            </p>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+              {candidates.map((c, i) => (
+                <motion.li
+                  key={c.id}
+                  initial={reduce ? false : { opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2, delay: reduce ? 0 : Math.min(i, 8) * 0.025 }}
+                >
+                  <CandidateCard candidate={c} />
+                </motion.li>
+              ))}
+            </ul>
+
+            {/* Con una sola página no se dibujan los controles. Anterior y
+                siguiente, sin tira de números: con 21 páginas no entra en un
+                teléfono y no aporta. */}
+            {totalPaginas > 1 && (
+              <nav
+                aria-label="Paginación de resultados"
+                className="mt-4 flex items-center justify-between gap-sm border-t border-[#4c4546] pt-6"
+              >
+                <button
+                  type="button"
+                  onClick={() => irAPagina(pagina - 1)}
+                  disabled={pagina <= 1}
+                  className="inline-flex items-center min-h-[44px] px-md label-tech text-[12px] border border-border bg-surface-2 text-fg transition-colors hover:border-accent disabled:opacity-40 disabled:pointer-events-none"
+                >
+                  Anterior
+                </button>
+                <span className="label-tech text-[11px] text-[#cfc4c5]">
+                  {pagina} / {totalPaginas}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => irAPagina(pagina + 1)}
+                  disabled={pagina >= totalPaginas}
+                  className="inline-flex items-center min-h-[44px] px-md label-tech text-[12px] border border-border bg-surface-2 text-fg transition-colors hover:border-accent disabled:opacity-40 disabled:pointer-events-none"
+                >
+                  Siguiente
+                </button>
+              </nav>
+            )}
+          </div>
+        )}
+      </div>
 
       <FiltrosSheet
         open={showFiltros}

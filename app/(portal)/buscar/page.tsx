@@ -5,6 +5,12 @@
  * security_invoker, RLS como el JWT de Franco). Selecciona SOLO las columnas de
  * card (payload chico, T-02-12), aplica oficios overlap (GIN) + texto ilike
  * parametrizado + toggles .eq + exclusión de crew_busy (SRCH-02) + paginación.
+ *
+ * La paginación existe de verdad desde el 2/9/2026. Antes había un `.range(0, 49)`
+ * fijo: con 1.049 fichas en el pool, 999 no se podían ver desde ninguna pantalla,
+ * y el contador decía "50 candidatos" como si no hubiera más. La página viaja en
+ * la URL (`?p=N`, ver lib/search-params.ts) y el total sale de `count: "exact"`,
+ * o sea del total REAL después de aplicar todos los filtros.
  */
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
@@ -22,6 +28,12 @@ const TODOS_OFICIOS = OFICIOS_TAXONOMIA.flatMap((g) => g.items.map((it) => it.es
 const CARD_COLUMNS =
   "id,nombre,apellido,oficios,oficios_otro,provincia,ciudad,experiencia,anios_experiencia,eventos_trabajados";
 
+/**
+ * Cuántas fichas por página. 50 es exactamente lo que ya traía el `.range(0, 49)`
+ * de antes: este arreglo suma paginación, no discute el tamaño de la página.
+ */
+const POR_PAGINA = 50;
+
 export default async function SearchPage({
   searchParams,
 }: {
@@ -32,7 +44,11 @@ export default async function SearchPage({
 
   const supabase = await createClient();
 
-  let query = supabase.from("staff_app_profiles").select(CARD_COLUMNS);
+  // count: "exact" para que el contador diga el total REAL después de los filtros
+  // y no cuántos entraron en la página que se está mirando.
+  let query = supabase
+    .from("staff_app_profiles")
+    .select(CARD_COLUMNS, { count: "exact" });
 
   // SRCH-01: oficios overlap (GIN-indexed), strings ya whitelisteadas (V5).
   if (filters.oficios.length) {
@@ -109,8 +125,19 @@ export default async function SearchPage({
     }
   }
 
-  const { data, error } = await query.order("nombre").range(0, 49);
+  const desde = (filters.pagina - 1) * POR_PAGINA;
+  const { data, error, count } = await query
+    .order("nombre")
+    .range(desde, desde + POR_PAGINA - 1);
   const candidates = (data ?? []) as StaffCard[];
+
+  // ⚠️ Trampa de PostgREST: un `.range()` que arranca más allá del último registro
+  // no devuelve una lista vacía, devuelve error de rango (416 / PGRST103). Eso NO
+  // es una falla de la búsqueda, es una página que no existe: se trata como página
+  // vacía y la pantalla ofrece volver a la primera, en vez de mostrar el cartel de
+  // "no pudimos cargar los candidatos" a alguien que sólo escribió ?p=999.
+  const fueraDeRango = Boolean(error) && filters.pagina > 1;
+  const total = count ?? candidates.length;
 
   return (
     <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-16 md:py-24">
@@ -129,8 +156,10 @@ export default async function SearchPage({
       )}
       <SearchClient
         candidates={candidates}
-        error={Boolean(error)}
+        error={Boolean(error) && !fueraDeRango}
         initialFilters={filters}
+        total={total}
+        porPagina={POR_PAGINA}
       />
     </div>
   );
