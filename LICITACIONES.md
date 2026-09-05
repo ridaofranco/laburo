@@ -60,9 +60,14 @@ Sin eso, la tabla comparativa miente.
 2. Arma el desglose: qué quiere que cada empresa le detalle además del precio.
    Hay una plantilla por rubro para no arrancar de cero.
 3. Invita: elige proveedores del directorio **y/o pega una lista de mails**.
+   ⚠️ A los del directorio los tilda de una lista y **nunca ve su mail**: lo
+   resuelve la base al invitar. El contacto de un proveedor no se entrega.
 4. A cada invitado le llega **su propio link**.
-5. Ve las cotizaciones entrar en una tabla, ordenables por precio.
-6. Marca la ganadora. Se avisa a todos: al que ganó y a los que no.
+5. Ve las cotizaciones entrar en una tabla, ordenables por precio, y le avisan
+   en el centro de notificaciones a medida que entran.
+6. Si hace falta, **corre la fecha de cierre** o **reenvía** la invitación al que
+   no contestó (con un link nuevo, porque el original no se puede reconstruir).
+7. Marca la ganadora. Se avisa a todos: al que ganó y a los que no.
 
 ### Para el que cotiza
 
