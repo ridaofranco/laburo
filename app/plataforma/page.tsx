@@ -5,6 +5,20 @@
  * `is_platform_admin()` adentro. Si el que entra no es de la plataforma, todas
  * devuelven vacío y acá se muestra el cartel de "no sos administrador". No se
  * decide ningún permiso en esta capa.
+ *
+ * ── EL SELECTOR DE CONTEXTO TAMBIÉN MANDA ACÁ (5/9) ─────────────────────────
+ * Hallazgo del 5/9, ahora arreglado: con otra organización elegida en el
+ * selector, el ítem "Plataforma" desaparecía del menú y /leads y /rentabilidad
+ * pasaban a dar 404, pero ESTA pantalla seguía mostrando el panel real. Nunca
+ * fue un agujero (su gate es `is_platform_admin()`, que se resuelve por el
+ * USUARIO), pero era una inconsistencia: la persona dice "estoy operando la
+ * productora B" y el producto le contesta con el panel de la plataforma.
+ *
+ * La regla que se eligió, y es la misma que ya seguían /leads y /rentabilidad:
+ * **mientras actuás como otra productora, no sos la plataforma.** No se toca la
+ * base ni se le saca el permiso a nadie: se sale del contexto y la pantalla
+ * vuelve. El corte de acá arriba es de CONTEXTO; el de permiso sigue estando
+ * abajo, en la RPC, y los dos tienen que pasar.
  */
 
 export const dynamic = "force-dynamic";
@@ -12,6 +26,7 @@ export const dynamic = "force-dynamic";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
+import { cortePorContexto } from "./gate";
 import {
   getResumen,
   getBusquedas,
@@ -32,6 +47,11 @@ export const metadata: Metadata = {
 };
 
 export default async function PlataformaPage() {
+  // Contexto antes que permiso: con otra productora elegida (o suplantando una),
+  // esta pantalla no es la que corresponde, aunque el usuario sea admin.
+  const fueraDeContexto = await cortePorContexto();
+  if (fueraDeContexto) return fueraDeContexto;
+
   const resumen = await getResumen();
 
   if (!resumen.ok) {

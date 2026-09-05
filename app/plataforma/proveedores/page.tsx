@@ -17,6 +17,7 @@ import Link from "next/link";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { getResumen, getProveedores } from "../actions";
 import { ProveedoresClient } from "./proveedores-client";
+import { cortePorContexto } from "../gate";
 
 export const metadata: Metadata = {
   title: "LABURO. | Plataforma · Proveedores",
@@ -24,6 +25,11 @@ export const metadata: Metadata = {
 };
 
 export default async function PlataformaProveedoresPage() {
+  // Mismo corte de contexto que /plataforma: operando otra productora, esta
+  // pantalla no corresponde aunque el permiso siga estando.
+  const fueraDeContexto = await cortePorContexto();
+  if (fueraDeContexto) return fueraDeContexto;
+
   const resumen = await getResumen();
 
   if (!resumen.ok) {

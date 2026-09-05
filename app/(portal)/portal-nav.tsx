@@ -78,14 +78,13 @@ const MAIN: Item[] = [
   // ⚠️ Ojo: /plataforma NO vive en app/(portal)/, tiene su propio <main> y no
   // recibe esta barra. Es un link que SALE del portal, y por eso la pantalla
   // tiene su propio link de vuelta en el header.
-  // ⚠️⚠️ HALLAZGO 5/9, sin arreglar a propósito: con otra organización elegida
-  // en el selector, este ítem desaparece y /leads y /rentabilidad pasan a dar
-  // 404, pero /plataforma SIGUE mostrando el panel real. No es un agujero
-  // (nadie que no sea admin de plataforma entra), es una inconsistencia: su
-  // gate es is_platform_admin() adentro de las RPC de la 0054, que se resuelve
-  // por el USUARIO y no por la organización elegida. Arreglarlo es decidir si
-  // el admin de plataforma deja de serlo mientras actúa como otra productora,
-  // que es una decisión de diseño y toca la base. Va con la suplantación.
+  // ⚠️ HALLAZGO 5/9, ARREGLADO esa misma noche: con otra organización elegida
+  // este ítem desaparecía del menú y /leads y /rentabilidad daban 404, pero
+  // /plataforma seguía mostrando el panel real. Nunca fue un agujero (su gate
+  // es is_platform_admin(), por USUARIO), era una inconsistencia. La regla que
+  // se eligió: mientras actuás como otra productora, NO sos la plataforma. La
+  // pantalla ahora corta por contexto además de por permiso, sin tocar la base
+  // ni sacarle el permiso a nadie: se sale del contexto y vuelve.
   { label: "Plataforma", icon: Shield, href: "/plataforma", match: ["/plataforma"], soloPlataforma: true },
   { label: "Buscar", icon: Search, href: "/buscar", match: ["/buscar", "/staff"] },
   // Fase 3 (2/8): "si a la productora le faltan proveedores, que puedan

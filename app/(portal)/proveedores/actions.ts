@@ -24,6 +24,7 @@ import { createElement } from "react";
 import { revalidatePath } from "next/cache";
 import { render } from "@react-email/components";
 import { createClient } from "@/lib/supabase/server";
+import { exigirOrg } from "@/lib/org";
 import { sendMail } from "@/lib/email/mailer";
 import { ConsultaProveedor } from "@/components/emails/consulta-proveedor-email";
 import type { CampoFormulario, RespuestaConsulta } from "@/lib/formulario-consulta";
@@ -60,10 +61,16 @@ export async function buscarProveedores(filtros: {
   provincia?: string;
 }): Promise<Proveedor[]> {
   const supabase = await createClient();
+  // ⚠️ p_org viaja SIEMPRE (0081). Sin él, la RPC resolvía con la membresía más
+  // ANTIGUA, así que quien eligió operar la productora B veía los favoritos, las
+  // notas y el "ya contactado" de la A. Los proveedores son los mismos; lo que
+  // mentía era todo lo que es de cada productora.
+  const org = await exigirOrg();
   const { data } = await supabase.rpc("staff_app_buscar_proveedores", {
     p_texto: filtros.texto?.trim() || null,
     p_categoria: filtros.categoria?.trim() || null,
     p_provincia: filtros.provincia?.trim() || null,
+    p_org: org.organizationId,
   });
   return (data as Proveedor[] | null) ?? [];
 }
@@ -143,6 +150,10 @@ export async function consultarProveedor(input: {
 }): Promise<{ ok: boolean; error?: string; mailEnviado?: boolean }> {
   const supabase = await createClient();
 
+  // ⚠️ Igual que arriba: la consulta queda registrada a nombre de la productora
+  // ELEGIDA, y el mail que le llega al proveedor dice ese nombre. Sin p_org, una
+  // productora podía mandar una consulta firmada por otra.
+  const org = await exigirOrg();
   const { data, error } = await supabase.rpc("staff_app_consultar_proveedor", {
     p_profile_id: input.profileId,
     p_respuestas: input.respuestas,
@@ -150,6 +161,7 @@ export async function consultarProveedor(input: {
     p_email: input.email.trim() || null,
     p_telefono: input.telefono.trim() || null,
     p_gig_id: null,
+    p_org: org.organizationId,
   });
 
   if (error) {
