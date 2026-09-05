@@ -69,6 +69,7 @@ import { GET as bienvenida } from "../bienvenida/route";
 import { GET as quienFicho } from "../quien-ficho/route";
 import { GET as recordatorioPerfil } from "../recordatorio-perfil/route";
 import { GET as visibilidad } from "../visibilidad/route";
+import { GET as recordatorioCotizacion } from "../recordatorio-cotizacion/route";
 
 // Nunca cachear: cada disparo del cron debe ejecutar de verdad.
 export const dynamic = "force-dynamic";
@@ -101,6 +102,11 @@ const TANDAS: Tanda[] = [
   { nombre: "bienvenida", handler: bienvenida },
   { nombre: "quien-ficho", handler: quienFicho },
   { nombre: "recordatorio-perfil", handler: recordatorioPerfil },
+  // El recordatorio de los pedidos de precio que cierran en 48hs. Va ANTES que
+  // visibilidad porque tiene fecha: si el presupuesto de tiempo se acaba, el que
+  // no sale hoy pierde su ventana (el pedido cierra igual), y la pregunta de
+  // visibilidad no vence nunca.
+  { nombre: "recordatorio-cotizacion", handler: recordatorioCotizacion },
   // ⚠️ VA ÚLTIMA, Y NO ES CAPRICHO. Es la única tanda que le escribe al pool
   // entero por un tema que no es trabajo, así que si el presupuesto de tiempo
   // alcanza para una sola, tiene que ganar la que manda una propuesta o un

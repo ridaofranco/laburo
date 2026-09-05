@@ -45,6 +45,7 @@ import { PerfilReminderEmail } from '../components/emails/perfil-reminder-email.
 import { VisibilidadEmail } from '../components/emails/visibilidad-email.tsx';
 import { InvitacionCotizar } from '../components/emails/invitacion-cotizar-email.tsx';
 import { ResultadoCotizacionEmail } from '../components/emails/resultado-cotizacion-email.tsx';
+import { RecordatorioCotizar } from '../components/emails/recordatorio-cotizar-email.tsx';
 
 const PARA = 'ridaofrancorg@gmail.com';
 const LINK = 'https://laburo.somosder.ar/o/PREVIEW-no-es-un-link-real';
@@ -92,6 +93,17 @@ const mails = [
       donde: 'CABA, Buenos Aires',
       necesarioPara: '25 de septiembre de 2026',
       cierra: 'martes 10 de septiembre a las 18:00',
+      link: 'https://laburo.somosder.ar/cotizar/PREVIEW-no-es-un-link-real',
+    }),
+  },
+  {
+    n: 'Pedido de precio: cierra pronto y no cotizaste',
+    subject: 'Cierra mañana a las 18:00 · Transporte de un pallet a 7 destinos',
+    el: () => createElement(RecordatorioCotizar, {
+      nombre: 'Transportes Dos', productora: 'SOMOS DER',
+      titulo: 'Transporte de un pallet a 7 destinos',
+      categoria: 'Logística', donde: 'CABA, Buenos Aires',
+      cuandoCierra: 'mañana a las 18:00',
       link: 'https://laburo.somosder.ar/cotizar/PREVIEW-no-es-un-link-real',
     }),
   },
