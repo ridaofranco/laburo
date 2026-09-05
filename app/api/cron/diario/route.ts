@@ -2,17 +2,24 @@
  * /api/cron/diario — el ÚNICO cron agendado de LABURO.
  *
  * POR QUÉ EXISTE: `vercel.json` agendaba una sola ruta (`reminders`) mientras que
- * en `app/api/cron/` hay cuatro. Las otras tres (`bienvenida`, `quien-ficho`,
+ * en `app/api/cron/` hay varias. Las otras tres (`bienvenida`, `quien-ficho`,
  * `recordatorio-perfil`) no las llamaba nadie: el código estaba en producción y
  * los mails no salían nunca. La salida obvia (agendar las cuatro) no entra: el
  * plan Hobby de Vercel topea en 2 cron jobs, y cada tanda futura volvería a
  * chocar contra el mismo techo. Este orquestador lo resuelve una sola vez.
  *
- * CÓMO: importa los `GET` de las cuatro rutas y los llama en secuencia con el
- * MISMO request. Se verificó que ninguna de las cuatro lee `searchParams` — todas
+ * CÓMO: importa los `GET` de las rutas hijas y los llama en secuencia con el
+ * MISMO request. Se verificó que ninguna lee `searchParams` — todas
  * leen solo el header de authorization — así que el request original les sirve
  * tal cual. Cero lógica duplicada: si cambia una tanda, cambia en un solo lugar,
  * y las cuatro rutas siguen siendo llamables a mano para probar de a una.
+ *
+ * 🚨 UNA RUTA NUEVA EN `app/api/cron/` QUE NO ESTÉ EN `TANDAS` NO LA LLAMA
+ * NADIE. Es exactamente el bug que dio origen a este archivo, y volvió a pasar
+ * el 5/9 con la tanda de visibilidad: quedó escrita, probada y desplegada, con
+ * su variable de encendido documentada, y no se habría disparado jamás. El
+ * despachador de Cloudflare pega en ESTA ruta y en ninguna otra. Agregar una
+ * tanda es agregarla al array de abajo, en el mismo commit.
  *
  * TOLERANCIA A FALLAS: cada tanda va en su propio try/catch. Que una explote no
  * puede impedir que salgan las demás; el resumen dice qué pasó con cada una.
@@ -61,6 +68,7 @@ import { GET as reminders } from "../reminders/route";
 import { GET as bienvenida } from "../bienvenida/route";
 import { GET as quienFicho } from "../quien-ficho/route";
 import { GET as recordatorioPerfil } from "../recordatorio-perfil/route";
+import { GET as visibilidad } from "../visibilidad/route";
 
 // Nunca cachear: cada disparo del cron debe ejecutar de verdad.
 export const dynamic = "force-dynamic";
@@ -93,6 +101,19 @@ const TANDAS: Tanda[] = [
   { nombre: "bienvenida", handler: bienvenida },
   { nombre: "quien-ficho", handler: quienFicho },
   { nombre: "recordatorio-perfil", handler: recordatorioPerfil },
+  // ⚠️ VA ÚLTIMA, Y NO ES CAPRICHO. Es la única tanda que le escribe al pool
+  // entero por un tema que no es trabajo, así que si el presupuesto de tiempo
+  // alcanza para una sola, tiene que ganar la que manda una propuesta o un
+  // recordatorio de un evento real. Y si se saltea no se pierde nada: su ancla
+  // de exactly-once (visibilidad_preguntada_at) se estampa AL SELECCIONAR,
+  // igual que las otras cinco.
+  //
+  // ⚠️ MIENTRAS `BIENVENIDA_BATCH` ESTÉ PRENDIDA, ESTA VA APAGADA. Las dos
+  // salen en la misma corrida: con las dos encendidas, a las 686 fichas que
+  // todavía no saben que LABURO existe les llegan dos mails el mismo día y
+  // parecen dos remitentes distintos. Primero la bienvenida, y cuando se
+  // termine, esta.
+  { nombre: "visibilidad", handler: visibilidad },
 ];
 
 /** Lo que se reporta de cada tanda. */
