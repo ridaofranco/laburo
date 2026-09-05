@@ -26,9 +26,21 @@ import { orgActual } from "@/lib/org";
  * interno sin tocar código.
  */
 
-/** Los roles que SÍ ven el contacto. Todo lo demás, no. */
+/**
+ * Los roles que SÍ ven el contacto. Todo lo demás, no.
+ *
+ * ⚠️ El default decía `owner,admin,writer` y **`admin` nunca existió**: el CHECK
+ * de la base es `role = ANY (ARRAY['owner','writer','viewer'])` (0006:23,
+ * verificado contra producción). Era una entrada muerta desde siempre: parecía
+ * que había un rol contemplado y no había ninguno. Queda alineado con los roles
+ * reales.
+ *
+ * ⚠️ **`viewer` NO entra, y es deliberado.** Un rol de sólo lectura no tiene por
+ * qué ver mail, teléfono y DNI de terceros: eso es exactamente lo que sostiene
+ * la intermediación. El default tiene que ser ocultar.
+ */
 const ROLES_INTERNOS = new Set(
-  (process.env.MOSTRAR_CONTACTO_A || "owner,admin,writer")
+  (process.env.MOSTRAR_CONTACTO_A || "owner,writer")
     .split(",")
     .map((r) => r.trim().toLowerCase())
     .filter(Boolean),
