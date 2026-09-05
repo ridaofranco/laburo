@@ -16,6 +16,11 @@ import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 import { signInWithPassword } from "@/lib/auth-password";
+// El envío del link vive en el server action de /entrar, compartido por las dos
+// puertas a propósito: necesita la service-role key (o sea que no puede correr
+// en el navegador) y duplicarlo es exactamente el error que este repo ya cometió
+// dos veces, arreglando el lado del staff y dejando roto el del productor.
+import { pedirLinkDeAcceso } from "@/app/entrar/actions";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { GoogleLogo } from "@/components/google-logo";
 
@@ -96,15 +101,17 @@ export function LoginForm() {
     }
 
     setLoading(true);
-    const supabase = createClient();
-    await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: callbackUrl(),
-        // Gate LABURO: solo los admin ya existen en auth.users (CR-01).
-        shouldCreateUser: false,
-      },
-    });
+    // ⭐ EL ENVÍO SE MUDÓ AL SERVIDOR EL 2/9, por el link que vencía siendo
+    // válido: el mail de Supabase traía un `code` de PKCE que solo se canjeaba
+    // en el mismo navegador que lo pidió. Ahora el link lo arma
+    // `admin.generateLink` y viaja adentro de nuestro mail.
+    //
+    // El `null` es el rol: esta puerta nunca mandó `como` en su
+    // `emailRedirectTo`, así que el ruteo por orden natural de /auth/callback
+    // queda igual que siempre. Y con rol null el server action NO crea ninguna
+    // cuenta, que es el `shouldCreateUser: false` de acá (gate LABURO, CR-01:
+    // solo los admin ya existen en auth.users) dicho del lado del servidor.
+    await pedirLinkDeAcceso(email, null);
     setLoading(false);
     // Respuesta SIEMPRE uniforme (decisión de Franco, 28/7): con
     // shouldCreateUser:false, Supabase devuelve error cuando la cuenta no

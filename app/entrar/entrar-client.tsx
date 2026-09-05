@@ -28,9 +28,8 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
-import { createClient } from "@/lib/supabase/client";
 import { signInWithPassword } from "@/lib/auth-password";
-import { proveedorPuedeCrearCuenta } from "./actions";
+import { pedirLinkDeAcceso } from "./actions";
 
 type Rol = "productora" | "staff" | "proveedor" | "salon";
 
@@ -114,9 +113,6 @@ export function EntrarClient() {
     }
   }, []);
 
-  const callbackUrl = (r: Rol) =>
-    `${window.location.origin}/auth/callback?como=${r}`;
-
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email || !rol || loading) return;
@@ -137,28 +133,19 @@ export function EntrarClient() {
     }
 
     setLoading(true);
-    // El proveedor viejo no tiene usuario de auth todavía (el diseño original
-    // era sin cuenta). Solo para él, y solo si su mail YA está cargado como
-    // proveedor, se permite crearlo en este primer ingreso.
+    // ⭐ EL ENVÍO ENTERO VIVE EN EL SERVIDOR DESDE EL 2/9.
     //
-    // El salón entra por la MISMA rama (6/8) y no es un detalle: nace sin cuenta
-    // igual que el proveedor, así que sin esto un dueño de salón pedía su link,
-    // Supabase no le creaba usuario, y no entraba nunca. La 0066 abrió
-    // `staff_app_email_es_proveedor` a los dos tipos, que es lo que hace que
-    // este chequeo le conteste que sí.
-    const crearSiHaceFalta =
-      rol === "proveedor" || rol === "salon"
-        ? await proveedorPuedeCrearCuenta(email)
-        : false;
-
-    const supabase = createClient();
-    await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: callbackUrl(rol),
-        shouldCreateUser: crearSiHaceFalta,
-      },
-    });
+    // Antes esta pantalla llamaba a `signInWithOtp` desde el navegador, y ese
+    // camino manda el mail de Supabase con un `code` de PKCE, que solo se puede
+    // canjear en el MISMO navegador que lo pidió. Quien pedía el link en el
+    // celular y lo abría desde el visor de Gmail veía "ese link ya se usó o
+    // venció" con un link válido.
+    //
+    // Ahora el link lo arma `admin.generateLink` (service-role, o sea que no
+    // puede vivir acá) y viaja adentro de nuestro mail. El server action se
+    // queda además con el chequeo de proveedor y con el freno de abuso, que era
+    // lo otro que esta pantalla resolvía a mano.
+    await pedirLinkDeAcceso(email, rol);
     setLoading(false);
     // Respuesta SIEMPRE uniforme (decisión de Franco, 28/7): mostrar si la
     // cuenta existe o no sería un oráculo de qué mails están registrados.
@@ -218,9 +205,13 @@ export function EntrarClient() {
               mandamos un link para entrar. Revisá tu casilla, y si no lo ves,
               mirá en spam.
             </p>
+            {/* Acá decía "abrilo desde este mismo navegador, si lo abrís desde
+                el visor de Gmail puede fallar". Era verdad y era el síntoma del
+                bug de PKCE, no una recomendación: se fue junto con el bug el
+                2/9. El link nuevo se abre desde donde sea. Si esta advertencia
+                vuelve a hacer falta, es que alguien volvió al mail de Supabase. */}
             <p className="text-center text-[14px] leading-[1.6] text-[#8a8a8a]">
-              Abrilo desde este mismo navegador. Si lo abrís desde el visor de
-              Gmail puede fallar.
+              Sirve una sola vez y dura poco. Si ya venció, pedí otro desde acá.
             </p>
             <Link
               href={ALTA[rol].href}

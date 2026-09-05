@@ -29,6 +29,20 @@ import { createClient } from "@/lib/supabase/server";
  * proveedora entra a su panel de productora sin que el login le toque un perfil
  * que no venía a usar. Si quiere el otro, lo elige en la puerta.
  *
+ * ── DOS FORMATOS DE LINK, PORQUE HAY DOS GENERACIONES DE MAILS (2/9) ────────
+ * `token_hash` → lo genera `admin.generateLink` y viaja adentro de NUESTRO mail
+ *                (lib/auth-link.ts). Se canjea con `verifyOtp` desde cualquier
+ *                navegador.
+ * `code`       → lo ponía el mail de Supabase. Es PKCE: solo se puede canjear
+ *                en el MISMO navegador que lo pidió, porque ahí quedó guardado
+ *                el `code_verifier`. Abierto desde el visor interno de Gmail,
+ *                que es otro navegador, fallaba SIEMPRE y la persona veía "ese
+ *                link ya se usó o venció" con un link perfectamente válido.
+ *
+ * ⚠️ El `code` NO se saca y no se va a sacar: hay mails viejos circulando en
+ * casillas reales y tienen que seguir andando. Se aceptan los dos a propósito,
+ * igual que en /definir-contrasena/confirmar.
+ *
  * NO se accede al schema staff_app por PostgREST (PGRST106): todo por RPC/vistas.
  */
 
@@ -50,14 +64,48 @@ function comoValido(v: string | null): Como | null {
     : null;
 }
 
+/**
+ * El `type` del link también es entrada no confiable, igual que el `como`: viene
+ * de la URL y lo puede escribir cualquiera. Se valida contra las tres formas que
+ * puede tomar un link de acceso y cae a `recovery`, que es lo que genera
+ * lib/auth-link.ts hoy.
+ *
+ * ⚠️ `recovery` es el default y NO es un descuido: `generateLink` con
+ * `type:'magiclink'` CREA la cuenta si el mail no la tiene, así que las puertas
+ * usan `recovery`, que no crea nada. El razonamiento completo está en
+ * lib/auth-link.ts. Acá se aceptan igual los tres, porque un link de los otros
+ * dos tipos puede llegar de un mail viejo y tiene que seguir entrando.
+ *
+ * Verificado corriéndolo el 2/9: `verifyOtp` acepta "magiclink", "email" y
+ * "recovery" (de ahí que /dev-login use "email" sobre un token de magiclink y
+ * funcione), y con cualquiera de los tres queda una sesión completa.
+ */
+type TipoDeLink = "magiclink" | "email" | "recovery";
+
+function tipoValido(v: string | null): TipoDeLink {
+  return v === "magiclink" || v === "email" || v === "recovery" ? v : "recovery";
+}
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
+  const tokenHash = searchParams.get("token_hash");
   const code = searchParams.get("code");
   const como = comoValido(searchParams.get("como"));
 
   const supabase = await createClient();
 
-  if (code) {
+  if (tokenHash) {
+    const { error } = await supabase.auth.verifyOtp({
+      token_hash: tokenHash,
+      type: tipoValido(searchParams.get("type")),
+    });
+    // Mismo destino que el `code`: el canje falla casi siempre por lo mismo (el
+    // link ya se usó o venció) y esa pantalla ya sabe explicarlo.
+    if (error) return NextResponse.redirect(`${origin}/entrar?motivo=link_vencido`);
+    // ⚠️ Y NO se redirige a ningún panel acá. Sigue de largo al ruteo por
+    // identidad de abajo, que es la regla dura del encabezado: saltearlo es el
+    // bug que ya rompió LABURO tres veces.
+  } else if (code) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     // 1/8: antes rebotaba a /login MUDO. El canje falla casi siempre por lo
     // mismo (el link ya se usó o venció) y no decírselo a la persona es lo que

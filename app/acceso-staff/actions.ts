@@ -13,11 +13,16 @@
  *     pool: sin oráculo de enumeración, nadie puede averiguar quién es staff.
  */
 
+import { createElement } from "react";
+import { render } from "@react-email/components";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { SITE_URL } from "@/lib/site";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { signInWithPassword as entrarConContrasena } from "@/lib/auth-password";
+import { linkParaElegirContrasena, mandarLinkDeAcceso } from "@/lib/auth-link";
+import { sendMail } from "@/lib/email/mailer";
+import { LinkDeAccesoEmail } from "@/components/emails/link-de-acceso-email";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -45,16 +50,38 @@ export async function requestStaffMagicLink(email: string): Promise<{ ok: boolea
   });
   if (error || inPool !== true) return { ok: true };
 
-  // Recién acá mandamos el OTP (y recién acá se puede crear la cuenta).
-  const origin = SITE_URL;
-  const supabase = await createClient();
-  await supabase.auth.signInWithOtp({
-    email: clean,
-    options: {
-      emailRedirectTo: `${origin}/auth/callback`,
-      shouldCreateUser: true,
-    },
+  // Recién acá mandamos el link (y recién acá se puede crear la cuenta).
+  //
+  // ⭐ NUESTRO MAIL, NO EL DE SUPABASE (2/9). El mail de Supabase traía un
+  // `code` de PKCE, que solo se canjea en el MISMO navegador que lo pidió: quien
+  // pedía el link en el celular y lo abría desde el visor de Gmail veía "ese
+  // link ya se usó o venció" con un link perfectamente válido. Es el camino que
+  // le toca a las 686 fichas del pool viejo, porque el cron de bienvenida las
+  // manda justo a esta pantalla. Ver lib/auth-link.ts.
+  //
+  // ⚠️ Y ahora va con `como: "staff"`, que antes no iba. Sin el hint, alguien
+  // que es staff Y productora aterrizaba en el panel equivocado por el orden
+  // natural del callback. Es gratis y corresponde: esta pantalla sabe con
+  // certeza que quien pide es staff, porque lo acaba de verificar contra el pool.
+  const mandado = await mandarLinkDeAcceso(admin, clean, {
+    como: "staff",
+    crearSiNoExiste: true,
+    etiqueta: "acceso-staff",
   });
+
+  // LA VÁLVULA: si el link propio no se pudo armar o el mail no salió, sale el
+  // de siempre. El peor caso de este cambio es "quedó como estaba".
+  if (!mandado) {
+    const origin = SITE_URL;
+    const supabase = await createClient();
+    await supabase.auth.signInWithOtp({
+      email: clean,
+      options: {
+        emailRedirectTo: `${origin}/auth/callback`,
+        shouldCreateUser: true,
+      },
+    });
+  }
   return { ok: true };
 }
 
@@ -77,10 +104,17 @@ export async function requestStaffMagicLink(email: string): Promise<{ ok: boolea
  * piden su primer magic link. Si llamáramos directo al reset, a la persona no le
  * llegaría nada y no habría forma de saber por qué.
  *
- * Por eso acá se crea la cuenta primero, en el momento en que la persona la pide
+ * Por eso la cuenta se crea primero, en el momento en que la persona la pide
  * (que es lo que eligió Franco: nadie recibe una contraseña por mail y no se
  * crean 699 cuentas de golpe). Se crea con `email_confirm: true` porque el mail
  * ya se está por verificar con el propio link que sale a continuación.
+ *
+ * ⭐ ESO YA NO SE HACE ACÁ (2/9): lo hace `linkParaElegirContrasena`, que es la
+ * misma función que usan el alta de /sumate y el alta de productora. Esta
+ * función dejó de tener su propia copia del `createUser` y del envío. Lo que
+ * cambió de verdad es que el link ahora lleva `token_hash` en vez del `code` de
+ * PKCE del mail de Supabase, que solo se podía canjear en el mismo navegador
+ * que lo pidió: abrirlo desde el visor de Gmail fallaba siempre.
  *
  * ── SEGURIDAD, IGUAL QUE EL MAGIC LINK ──
  * · Solo se le manda a quien está en el pool (RPC service-role).
@@ -104,17 +138,43 @@ export async function requestPasswordSetup(email: string): Promise<{ ok: boolean
   });
   if (error || inPool !== true) return { ok: true };
 
-  // Si todavía no tiene cuenta, se la creamos. Si ya la tiene, createUser
-  // devuelve error y seguimos igual: lo único que importa es que exista antes
-  // del reset. No se mira el motivo del error a propósito, para no convertir
-  // esto en un oráculo de "este mail ya tenía cuenta".
-  await admin.auth.admin
-    .createUser({ email: clean, email_confirm: true })
-    .catch(() => undefined);
+  // ⭐ EL LINK LO ARMAMOS NOSOTROS (2/9), con la función que ya existía y que ya
+  // se venía usando en el alta de /sumate y en el alta de productora. Ella se
+  // encarga de crear la cuenta si hace falta (que es la mitad de lo que hacía
+  // esta función a mano) y devuelve un link con `token_hash` que apunta a
+  // /definir-contrasena/confirmar, que es una ruta que ese route handler ya
+  // sabe canjear desde el 1/8.
+  //
+  // POR QUÉ SE CAMBIÓ: `resetPasswordForEmail` manda el mail de Supabase, y ese
+  // mail trae un `code` de PKCE. El `code` solo se canjea en el MISMO navegador
+  // que lo pidió, así que quien pedía el link en el celular y lo abría desde el
+  // visor interno de Gmail veía "ese link ya se usó o venció" con un link
+  // perfectamente válido. Con `token_hash` entra desde cualquier lado.
+  const claveLink = await linkParaElegirContrasena(admin, clean, "acceso-staff");
 
-  // Y ahora sí, el mail para definir la contraseña. Sale con la plantilla
-  // "Reset Password" del panel de Supabase, que está en el repo en
-  // supabase/email-templates/definir-contrasena.html, y desde nuestro SMTP.
+  if (claveLink) {
+    const html = await render(
+      createElement(LinkDeAccesoEmail, {
+        link: claveLink,
+        paraElegirContrasena: true,
+      }),
+    );
+    const result = await sendMail({
+      to: clean,
+      subject: "Tu link para elegir la contraseña de LABURO",
+      html,
+    });
+    if (result.ok) return { ok: true };
+    console.error(
+      "[acceso-staff] el mail con el link de contraseña no salió:",
+      result.error ?? result.channel,
+    );
+  }
+
+  // LA VÁLVULA: si el link propio no se pudo armar o el mail no salió, sale el
+  // de siempre, con la plantilla "Reset Password" del panel de Supabase (la que
+  // está en el repo en supabase/email-templates/definir-contrasena.html). Es
+  // peor experiencia, pero nunca una puerta cerrada.
   const supabase = await createClient();
   await supabase.auth.resetPasswordForEmail(clean, {
     // A /confirmar, NO a la página: el canje del `code` por sesión escribe
