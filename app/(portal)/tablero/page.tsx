@@ -15,6 +15,7 @@
 import Link from "next/link";
 import { CalendarPlus } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { orgActual } from "@/lib/org";
 import {
   GigBoard,
   type BoardGig,
@@ -26,22 +27,41 @@ import {
 export default async function TableroPage() {
   const supabase = await createClient();
 
+  // ⚠️ SCOPE POR ORGANIZACIÓN ELEGIDA. La RLS filtra por MEMBRESÍA, así que a
+  // quien es miembro de dos productoras le devuelve los eventos de las dos
+  // mezclados. El selector de contexto dice en nombre de cuál está actuando y
+  // la lectura tiene que respetarlo: si no, el tablero muestra los eventos de
+  // la otra productora y el usuario los edita creyendo que son suyos.
+  const org = await orgActual();
+  // Un helper genérico acá hace que TypeScript se coma la inferencia de Supabase
+  // (TS2589, "type instantiation is excessively deep"). Se escribe a mano: son
+  // cuatro consultas y el filtro es una línea. Sin organización resuelta no se
+  // filtra: `orgActual()` devolvió null y el layout ya cortó antes.
+  const orgId = org?.organizationId ?? null;
+
+  let qGigs = supabase
+    .from("staff_app_gigs")
+    .select("id,title,starts_at,ends_at,venue_name,status,client_budget,client_payment_status")
+    .order("starts_at", { ascending: false });
+  if (orgId) qGigs = qGigs.eq("organization_id", orgId);
+
+  let qOffers = supabase
+    .from("staff_app_offers")
+    .select(
+      "id,gig_id,staff_profile_id,role,status,expires_at,sent_at,responded_at,gig_title,staff_nombre,staff_apellido",
+    );
+  if (orgId) qOffers = qOffers.eq("organization_id", orgId);
+
+  let qAtt = supabase
+    .from("staff_app_attendance")
+    .select("gig_id,staff_nombre,staff_apellido,check_in_at,check_out_at,check_in_distance_m");
+  if (orgId) qAtt = qAtt.eq("organization_id", orgId);
+
+  let qSlots = supabase.from("staff_app_gig_slots").select("gig_id,role,quantity");
+  if (orgId) qSlots = qSlots.eq("organization_id", orgId);
+
   const [{ data: gigsData }, { data: offersData }, { data: attData }, { data: slotsData }] =
-    await Promise.all([
-      supabase
-        .from("staff_app_gigs")
-        .select("id,title,starts_at,ends_at,venue_name,status,client_budget,client_payment_status")
-        .order("starts_at", { ascending: false }),
-      supabase
-        .from("staff_app_offers")
-        .select(
-          "id,gig_id,staff_profile_id,role,status,expires_at,sent_at,responded_at,gig_title,staff_nombre,staff_apellido",
-        ),
-      supabase
-        .from("staff_app_attendance")
-        .select("gig_id,staff_nombre,staff_apellido,check_in_at,check_out_at,check_in_distance_m"),
-      supabase.from("staff_app_gig_slots").select("gig_id,role,quantity"),
-    ]);
+    await Promise.all([qGigs, qOffers, qAtt, qSlots]);
 
   const gigs = (gigsData ?? []) as BoardGigMeta[];
   const offers = (offersData ?? []) as BoardOffer[];

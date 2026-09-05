@@ -1,5 +1,7 @@
 import "server-only";
+import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
+import { LABURO_ORG_COOKIE, esUuid } from "@/lib/org-cookie";
 
 /**
  * LA ORGANIZACIÓN DEL QUE ESTÁ MIRANDO.
@@ -17,9 +19,29 @@ import { createClient } from "@/lib/supabase/server";
  * lindo: con un error.
  *
  * Acá la lectura pasa a ser explícita: pedí las organizaciones del usuario,
- * ordenadas, y quedate con la primera. Devuelve además el id de la org, que es
- * lo que las server actions le pasan a las RPCs que corren con service_role (las
- * que no tienen forma de deducirla solas).
+ * ordenadas. Devuelve además el id de la org, que es lo que las server actions
+ * le pasan a las RPCs que corren con service_role (las que no tienen forma de
+ * deducirla solas).
+ *
+ * ── CUÁL DE TODAS, DESDE EL 5/9: LA QUE ELIGIÓ EL USUARIO ───────────────────
+ * Antes acá decía "quedate con la primera", y era la única regla. Ya no: ahora
+ * manda la cookie `laburo_org_id`, que setea el selector de contexto. El orden
+ * es:
+ *
+ *   1. Hay cookie, tiene forma de UUID, y esa organización está entre las del
+ *      usuario  →  esa.
+ *   2. Cualquier otro caso  →  la más antigua, que es el comportamiento de
+ *      siempre.
+ *
+ * **El paso 2 se come en silencio una cookie inválida, vencida o ajena, y eso
+ * es deliberado.** Una cookie con el UUID de una organización de la que no sos
+ * miembro no habilita nada y tampoco produce un error distinto: quien la pise a
+ * mano no aprende nada del sistema, solo vuelve a su organización de siempre.
+ *
+ * ⚠️ La validación va contra `staff_app_my_orgs`, que es `security_invoker`: la
+ * RLS ya filtra a las organizaciones del que consulta, así que "aparece en la
+ * lista" ES la prueba de membresía. No hay ni tiene que haber una validación
+ * propia contra `organizations`.
  *
  * ── POR QUÉ HAY FALLBACK ────────────────────────────────────────────────────
  * La base y el deploy se aplican por separado. Si este código llega a producción
@@ -87,6 +109,13 @@ export interface OrgActual {
    * owner y writer.
    */
   esPlataforma: boolean;
+  /**
+   * ¿Esta organización la eligió el usuario con el selector, o ganó el fallback
+   * de "la más antigua"? La interfaz lo necesita para no mentir: si el fallback
+   * ganó porque la cookie era inválida, el selector no puede mostrarse como si
+   * el usuario hubiera elegido eso.
+   */
+  elegidaPorElUsuario: boolean;
 }
 
 interface FilaMyOrgs {
@@ -97,9 +126,49 @@ interface FilaMyOrgs {
   es_plataforma: boolean | null;
 }
 
+function desdeFila(fila: FilaMyOrgs, elegida: boolean): OrgActual {
+  return {
+    organizationId: fila.organization_id ?? null,
+    rol: (fila.role ?? "").toLowerCase() || null,
+    nombre: fila.org_name ?? null,
+    slug: fila.org_slug ?? null,
+    esPlataforma: fila.es_plataforma === true,
+    elegidaPorElUsuario: elegida,
+  };
+}
+
+/**
+ * TODAS las organizaciones del usuario, la más antigua primero.
+ *
+ * Es la misma vista que usa `orgActual()`, sin el `limit(1)`. Alimenta al
+ * selector de contexto y es además la lista contra la que se valida la cookie:
+ * como `staff_app_my_orgs` es `security_invoker`, estar en esta lista ES la
+ * prueba de membresía.
+ *
+ * FAIL-CLOSED: ante cualquier error devuelve `[]`, y sin organizaciones no hay
+ * selector ni cookie válida posible.
+ */
+export async function orgsDelUsuario(): Promise<OrgActual[]> {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("staff_app_my_orgs")
+      .select("organization_id, role, org_name, org_slug, es_plataforma")
+      .order("created_at", { ascending: true });
+
+    if (error || !data) return [];
+    return (data as FilaMyOrgs[]).map((f) => desdeFila(f, false));
+  } catch {
+    return [];
+  }
+}
+
 /**
  * La organización con la que está trabajando el usuario logueado.
  * Devuelve null si no es miembro de ninguna (o si no hay sesión).
+ *
+ * Cuál de todas: la de la cookie si es suya, y si no la más antigua. Ver el
+ * header, sección "CUÁL DE TODAS".
  *
  * FAIL-CLOSED: ante cualquier error devuelve null, y todos los gates que la usan
  * tratan null como "no sos miembro".
@@ -109,24 +178,27 @@ export async function orgActual(): Promise<OrgActual | null> {
     const supabase = await createClient();
 
     // Camino nuevo (migración 0035): todas mis organizaciones, la más antigua
-    // primero. limit(1) es lo que evita el PGRST116 de maybeSingle().
+    // primero. Sin limit(1) porque la cookie puede pedir cualquiera de ellas, y
+    // pedir la lista entera es además lo que evita el PGRST116 de maybeSingle().
     const { data, error } = await supabase
       .from("staff_app_my_orgs")
       .select("organization_id, role, org_name, org_slug, es_plataforma")
-      .order("created_at", { ascending: true })
-      .limit(1)
-      .maybeSingle();
+      .order("created_at", { ascending: true });
 
     if (!error) {
-      const fila = data as FilaMyOrgs | null;
-      if (!fila) return null;
-      return {
-        organizationId: fila.organization_id ?? null,
-        rol: (fila.role ?? "").toLowerCase() || null,
-        nombre: fila.org_name ?? null,
-        slug: fila.org_slug ?? null,
-        esPlataforma: fila.es_plataforma === true,
-      };
+      const filas = (data ?? []) as FilaMyOrgs[];
+      if (filas.length === 0) return null;
+
+      // La cookie es entrada NO confiable: se valida el formato y después se
+      // busca EN LA LISTA que ya filtró la RLS. Si no está, se ignora entera y
+      // gana la más antigua, sin error ni mensaje distinto.
+      const elegida = (await cookies()).get(LABURO_ORG_COOKIE)?.value;
+      if (esUuid(elegida)) {
+        const suya = filas.find((f) => f.organization_id === elegida);
+        if (suya) return desdeFila(suya, true);
+      }
+
+      return desdeFila(filas[0], false);
     }
 
     // Fallback: la 0035 (o la 0044) todavía no está aplicada.
@@ -145,6 +217,9 @@ export async function orgActual(): Promise<OrgActual | null> {
       // Fail closed: sin la 0044 no hay forma de saber quién es la plataforma,
       // así que nadie lo es y nadie ve sus pantallas.
       esPlataforma: false,
+      // La vista vieja no sabe de varias organizaciones, así que acá no hay nada
+      // que elegir y la cookie no juega.
+      elegidaPorElUsuario: false,
     };
   } catch {
     return null;

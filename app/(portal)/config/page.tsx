@@ -39,13 +39,23 @@ function roleLabel(role: string | null): string {
 export default async function ConfigPage() {
   const supabase = await createClient();
 
-  const [{ data: userData }, org, pool, gigs, offers] = await Promise.all([
+  // ⚠️ Los tres conteos salían de vistas con RLS por MEMBRESÍA, así que a quien
+  // fuera miembro de dos productoras le SUMABAN las dos y decían un número que
+  // no correspondía a ninguna. Ahora cuentan la organización elegida.
+  const [{ data: userData }, org] = await Promise.all([
     supabase.auth.getUser(),
     orgActual(),
-    supabase.from("staff_app_profiles").select("*", { count: "exact", head: true }),
-    supabase.from("staff_app_gigs").select("*", { count: "exact", head: true }),
-    supabase.from("staff_app_offers").select("*", { count: "exact", head: true }),
   ]);
+  const orgId = org?.organizationId ?? null;
+
+  let qPool = supabase.from("staff_app_profiles").select("*", { count: "exact", head: true });
+  if (orgId) qPool = qPool.eq("organization_id", orgId);
+  let qGigs = supabase.from("staff_app_gigs").select("*", { count: "exact", head: true });
+  if (orgId) qGigs = qGigs.eq("organization_id", orgId);
+  let qOffers = supabase.from("staff_app_offers").select("*", { count: "exact", head: true });
+  if (orgId) qOffers = qOffers.eq("organization_id", orgId);
+
+  const [pool, gigs, offers] = await Promise.all([qPool, qGigs, qOffers]);
 
   const email = userData?.user?.email ?? "—";
   const rol = roleLabel(org?.rol ?? null);

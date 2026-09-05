@@ -38,6 +38,7 @@
 
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { orgActual } from "@/lib/org";
 import { fmtFecha } from "@/lib/dates";
 import { money, moneyCompact } from "@/lib/format";
 import { LoadError } from "@/components/load-error";
@@ -78,10 +79,18 @@ interface CobroRow {
 export default async function PagosPage() {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  // ⚠️ SCOPE POR ORGANIZACIÓN ELEGIDA. La RLS filtra por MEMBRESÍA: sin esto,
+  // quien sea miembro de dos productoras ve en su resumen de plata lo que le
+  // debe la OTRA, sumado al total. Es la pantalla donde mezclar duele más.
+  const org = await orgActual();
+  const orgId = org?.organizationId ?? null;
+
+  let qOfertas = supabase
     .from("staff_app_offers")
     .select("id,amount,status,responded_at,sent_at,gig_title,staff_nombre,staff_apellido")
     .eq("status", "accepted");
+  if (orgId) qOfertas = qOfertas.eq("organization_id", orgId);
+  const { data, error } = await qOfertas;
 
   const rows = (data ?? []) as OfferRow[];
   rows.sort((a, b) => {
@@ -99,19 +108,23 @@ export default async function PagosPage() {
   // principal, tiraría abajo TODA la pantalla de pagos; así, solo faltan los
   // estados y el botón contesta honesto al apretar.
   const avisadoPor = new Map<string, boolean>();
-  const { data: avisosData } = await supabase
+  let qAvisos = supabase
     .from("staff_app_offers")
     .select("id,pago_listo_at")
     .eq("status", "accepted");
+  if (orgId) qAvisos = qAvisos.eq("organization_id", orgId);
+  const { data: avisosData } = await qAvisos;
   for (const a of (avisosData ?? []) as Array<{ id: string; pago_listo_at: string | null }>) {
     avisadoPor.set(a.id, !!a.pago_listo_at);
   }
 
   // Panel de cobros al cliente (cada intento de pago por MercadoPago).
-  const { data: cobrosData } = await supabase
+  let qCobros = supabase
     .from("staff_app_client_payment_events")
     .select("id,gig_title,amount,status,created_at")
     .order("created_at", { ascending: false });
+  if (orgId) qCobros = qCobros.eq("organization_id", orgId);
+  const { data: cobrosData } = await qCobros;
   const cobros = (cobrosData ?? []) as CobroRow[];
 
   return (

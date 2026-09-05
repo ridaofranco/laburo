@@ -14,6 +14,7 @@
  */
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { orgActual } from "@/lib/org";
 import {
   parseSearchParams,
   type RawSearchParams,
@@ -44,11 +45,20 @@ export default async function SearchPage({
 
   const supabase = await createClient();
 
+  // ⚠️ SCOPE POR ORGANIZACIÓN ELEGIDA, que NO es lo mismo que la RLS. La RLS
+  // filtra por MEMBRESÍA: a alguien que es miembro de dos productoras le
+  // devuelve las filas de las dos juntas. El selector de contexto dice en
+  // nombre de cuál está actuando, así que la lectura tiene que respetarlo o la
+  // pantalla mezcla los dos pools.
+  const org = await orgActual();
+
   // count: "exact" para que el contador diga el total REAL después de los filtros
   // y no cuántos entraron en la página que se está mirando.
   let query = supabase
     .from("staff_app_profiles")
     .select(CARD_COLUMNS, { count: "exact" });
+
+  if (org?.organizationId) query = query.eq("organization_id", org.organizationId);
 
   // SRCH-01: oficios overlap (GIN-indexed), strings ya whitelisteadas (V5).
   if (filters.oficios.length) {
@@ -90,6 +100,11 @@ export default async function SearchPage({
   if (filters.movilidad) query = query.eq("movilidad_propia", true);
 
   // SRCH-02 (mínimo honesto): ocultar quienes ya están en crew de un gig.
+  // ⚠️ `staff_app_crew_busy` NO expone `organization_id` (verificado contra la
+  // base el 5/9), así que este filtro no se puede scopear a la organización
+  // elegida: sigue siendo por membresía. Es un filtro que ESCONDE gente, o sea
+  // que el error posible es esconder de más, nunca mostrar de más. Se deja y se
+  // anota; arreglarlo es sumar la columna a la vista, o sea una migración.
   if (filters.ocultarAsignados) {
     const { data: busy } = await supabase
       .from("staff_app_crew_busy")
@@ -109,10 +124,12 @@ export default async function SearchPage({
   // T-5-12); los ids del .in() vienen de la vista, no del input crudo. Si la
   // lectura falla, degradamos en silencio (no bloqueamos la búsqueda).
   if (filters.gig) {
-    const { data: ofertados } = await supabase
+    let qOfertados = supabase
       .from("staff_app_offers")
       .select("staff_profile_id")
       .eq("gig_id", filters.gig);
+    if (org?.organizationId) qOfertados = qOfertados.eq("organization_id", org.organizationId);
+    const { data: ofertados } = await qOfertados;
     const ids = Array.from(
       new Set(
         (ofertados ?? [])

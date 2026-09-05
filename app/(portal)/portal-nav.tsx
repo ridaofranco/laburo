@@ -49,6 +49,7 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
+import { OrgSelector, type OrgOpcion } from "./org-selector";
 
 type Item = {
   label: string;
@@ -75,6 +76,14 @@ const MAIN: Item[] = [
   // ⚠️ Ojo: /plataforma NO vive en app/(portal)/, tiene su propio <main> y no
   // recibe esta barra. Es un link que SALE del portal, y por eso la pantalla
   // tiene su propio link de vuelta en el header.
+  // ⚠️⚠️ HALLAZGO 5/9, sin arreglar a propósito: con otra organización elegida
+  // en el selector, este ítem desaparece y /leads y /rentabilidad pasan a dar
+  // 404, pero /plataforma SIGUE mostrando el panel real. No es un agujero
+  // (nadie que no sea admin de plataforma entra), es una inconsistencia: su
+  // gate es is_platform_admin() adentro de las RPC de la 0054, que se resuelve
+  // por el USUARIO y no por la organización elegida. Arreglarlo es decidir si
+  // el admin de plataforma deja de serlo mientras actúa como otra productora,
+  // que es una decisión de diseño y toca la base. Va con la suplantación.
   { label: "Plataforma", icon: Shield, href: "/plataforma", match: ["/plataforma"], soloPlataforma: true },
   { label: "Buscar", icon: Search, href: "/buscar", match: ["/buscar", "/staff"] },
   // Fase 3 (2/8): "si a la productora le faltan proveedores, que puedan
@@ -100,9 +109,14 @@ function isActive(item: Item, pathname: string) {
 export function PortalNav({
   esPlataforma = false,
   orgNombre = null,
+  orgs = [],
+  orgActualId = null,
 }: {
   esPlataforma?: boolean;
   orgNombre?: string | null;
+  /** Todas las organizaciones del usuario. Con menos de dos no hay selector. */
+  orgs?: OrgOpcion[];
+  orgActualId?: string | null;
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -151,7 +165,11 @@ export function PortalNav({
       <nav className="hidden md:flex flex-col h-screen py-8 fixed left-0 top-0 w-[280px] bg-[#0e0e0e]/90 backdrop-blur-2xl border-r border-[#1c1b1b] shadow-2xl z-40">
         <div className="px-8 mb-16">
           <LaburoWordmark className="h-[28px] w-auto" />
-          <p className="label-tech text-[12px] text-[#cfc4c5] mt-2">{bajada}</p>
+          {/* El nombre de la productora pasó a ser el selector de contexto: es
+              el mismo lugar contestando la misma pregunta ("¿de quién es este
+              panel?"), ahora también en modo escritura. Con una sola
+              organización se sigue viendo el nombre pelado. */}
+          <OrgSelector orgs={orgs} actualId={orgActualId} bajada={bajada} />
         </div>
 
         <ul className="flex flex-col gap-2 flex-1 w-full">
@@ -286,7 +304,16 @@ export function PortalNav({
                   </Dialog.Close>
                 </div>
 
-                <ul className="flex-1 overflow-y-auto px-2 pb-[max(24px,env(safe-area-inset-bottom))]">
+                {/* El selector también en el teléfono. En móvil no hay barra
+                    lateral, así que sin esto la única forma de cambiar de
+                    productora sería agrandar la ventana. */}
+                {orgs.length > 1 && (
+                  <div className="px-6 pb-4 border-b border-[#1c1b1b]">
+                    <OrgSelector orgs={orgs} actualId={orgActualId} bajada={bajada} />
+                  </div>
+                )}
+
+                <ul className="flex-1 overflow-y-auto px-2 pt-2 pb-[max(24px,env(safe-area-inset-bottom))]">
                   {resto.map((item) => {
                     const active = isActive(item, pathname);
                     return (

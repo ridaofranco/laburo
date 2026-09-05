@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { orgActual } from "@/lib/org";
+import { orgActual, orgsDelUsuario } from "@/lib/org";
 import { AccesoDenegado } from "../(app)/acceso-denegado";
 import { PortalNav } from "./portal-nav";
 
@@ -28,13 +28,26 @@ export default async function PortalLayout({
   const org = await orgActual();
   if (!org) return <AccesoDenegado />;
 
+  // Todas sus organizaciones, para el selector de contexto. Con una sola el
+  // selector no se dibuja (ver org-selector.tsx), así que esto no agrega ruido
+  // al caso de hoy; con dos o más es lo que permite elegir en nombre de quién
+  // se actúa, que es a dónde van las escrituras.
+  const orgs = await orgsDelUsuario();
+
   return (
     <div className="min-h-dvh bg-black text-[#e5e2e1]">
       {/* El nav necesita saber DE QUIÉN es este panel (para decirlo en la barra
           lateral) y si el que mira es la plataforma (para no ofrecerle pantallas
           que no son de su producto). Filtrar el menú es cosmético: el gate de
           verdad vive en la página y en la server action. */}
-      <PortalNav esPlataforma={org.esPlataforma} orgNombre={org.nombre} />
+      <PortalNav
+        esPlataforma={org.esPlataforma}
+        orgNombre={org.nombre}
+        orgs={orgs
+          .filter((o) => o.organizationId)
+          .map((o) => ({ id: o.organizationId as string, nombre: o.nombre ?? "Productora" }))}
+        orgActualId={org.organizationId}
+      />
       <main className="flex-1 flex flex-col min-h-dvh w-full md:pl-[280px] pb-32 md:pb-0">
         {children}
       </main>
