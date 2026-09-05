@@ -62,6 +62,13 @@ export interface OrgPlataforma {
   slug: string | null;
   activa: boolean;
   es_plataforma: boolean;
+  /**
+   * Qué tipo de organización es (0072). ⚠️ Puede llegar `undefined` mientras la
+   * migración no esté aplicada, no solo `null`: la base y el deploy se aplican
+   * por separado en este repo, a propósito. Por eso el tipo lo admite y la
+   * pantalla trata los dos casos igual, como "sin clasificar".
+   */
+  categoria?: string | null;
   created_at: string;
   miembros: number;
   eventos: number;

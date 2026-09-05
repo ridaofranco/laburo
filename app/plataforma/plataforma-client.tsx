@@ -25,6 +25,36 @@ function dia(iso: string | null): string {
   return fmtFecha(iso, { day: "2-digit", month: "short", year: "numeric" }) ?? "—";
 }
 
+/**
+ * Las cinco categorías de la 0072, con su etiqueta para mostrar.
+ *
+ * El valor guardado va SIN acentos, porque así va todo `supabase/migrations/`.
+ * La etiqueta linda vive acá, que es TypeScript y sí los lleva. Es a propósito
+ * y no se mezclan: si algún día una categoría necesita tilde para mostrarse, se
+ * suma acá, no en la base.
+ */
+const CATEGORIA_LABEL: Record<string, string> = {
+  productora: "Productora",
+  agencia: "Agencia",
+  marca: "Marca",
+  empresa: "Empresa",
+  particular: "Particular",
+};
+
+const SIN_CLASIFICAR = "sin clasificar";
+
+/**
+ * ⚠️ `undefined` y `null` son el MISMO caso acá, y no por descuido: mientras la
+ * 0072 no esté aplicada el campo llega `undefined`, y una vez aplicada llega
+ * `null` hasta que alguien lo cargue. Los dos significan "sin clasificar" y la
+ * pantalla tiene que aguantar los dos sin romperse: en este repo la base y el
+ * deploy se aplican por separado.
+ */
+function categoriaDe(o: OrgPlataforma): string {
+  const c = (o.categoria ?? "").trim().toLowerCase();
+  return c ? CATEGORIA_LABEL[c] ?? c : SIN_CLASIFICAR;
+}
+
 function Dato({ n, label }: { n: number | undefined; label: string }) {
   return (
     <div className="flex flex-col gap-1 border border-[#4c4546]/40 px-5 py-4">
@@ -159,6 +189,18 @@ export function PlataformaClient({
   );
   const resto = busquedas.filter((b) => !conSenal.includes(b));
 
+  // Las categorías que EXISTEN en los datos que llegaron, no la lista de
+  // posibles: filtrar por una categoría que no tiene a nadie es un botón que
+  // siempre devuelve cero.
+  const [filtroCategoria, setFiltroCategoria] = useState("todas");
+  const categoriasPresentes = Array.from(
+    new Set(organizaciones.map(categoriaDe)),
+  ).sort();
+  const organizacionesVisibles =
+    filtroCategoria === "todas"
+      ? organizaciones
+      : organizaciones.filter((o) => categoriaDe(o) === filtroCategoria);
+
   return (
     <div className="flex flex-col gap-14">
       <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -246,7 +288,45 @@ export function PlataformaClient({
         <h3 className="t-section text-[#e5e2e1] border-b border-[#4c4546]/60 pb-3">
           Productoras
         </h3>
-        {organizaciones.map((o) => (
+
+        {/* El filtro solo aparece si hay MÁS DE UNA categoría entre los datos que
+            llegaron. Con una sola (o con todas sin clasificar, que es el caso de
+            hoy) un filtro de una opción es ruido, igual que el selector de
+            organización. Se calcula sobre lo que llegó, no sobre la lista de
+            categorías posibles.
+
+            ⚠️ El estado va en useState y NO en la URL, a diferencia de /buscar.
+            Es deliberado: /plataforma es interna, se mira y se cierra, y nadie
+            comparte por link un filtro de esta pantalla. /buscar paga el costo de
+            los search params porque ahí el link SÍ se comparte y se recarga. */}
+        {categoriasPresentes.length > 1 && (
+          <div className="flex flex-wrap items-center gap-2 pb-2">
+            {["todas", ...categoriasPresentes].map((c) => {
+              const activo = filtroCategoria === c;
+              return (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => setFiltroCategoria(c)}
+                  className={
+                    activo
+                      ? "label-tech text-[10px] uppercase tracking-widest text-black bg-[#e5e2e1] border border-[#e5e2e1] px-3 py-2 min-h-[44px]"
+                      : "label-tech text-[10px] uppercase tracking-widest text-[#988e90] border border-[#4c4546] px-3 py-2 min-h-[44px] hover:text-[#e5e2e1] transition-colors"
+                  }
+                >
+                  {c === "todas" ? "todas" : c}
+                </button>
+              );
+            })}
+            {filtroCategoria !== "todas" && (
+              <span className="label-tech text-[10px] uppercase tracking-widest text-[#988e90] ml-1">
+                {organizacionesVisibles.length} de {organizaciones.length}
+              </span>
+            )}
+          </div>
+        )}
+
+        {organizacionesVisibles.map((o) => (
           <div
             key={o.id}
             className="flex flex-col md:flex-row md:items-center justify-between gap-3 py-4 border-b border-[#1A1A1A]"
@@ -264,6 +344,12 @@ export function PlataformaClient({
                     inactiva
                   </span>
                 ) : null}
+                {/* "sin clasificar" se MUESTRA, no se esconde: que una
+                    organización no tenga categoría es información, no un hueco
+                    que haya que disimular. */}
+                <span className="ml-3 label-tech text-[10px] uppercase tracking-widest text-[#988e90] border border-[#4c4546] px-2 py-1">
+                  {categoriaDe(o)}
+                </span>
               </h4>
               <span className="text-[14px] text-[#cfc4c5]">
                 {o.miembros} {o.miembros === 1 ? "miembro" : "miembros"} · {o.eventos}{" "}
