@@ -44,6 +44,16 @@ export function WhatsAppCta({
  * rutea por email de perfil a /panel-staff), así que a quien confirmó se le
  * ofrece seguir sus laburos ahí. Link secundario, discreto, no compite con el
  * CTA principal.
+ *
+ * ── SE OFRECE, NO SE EXIGE (política, 5/9) ─────────────────────────────────
+ * Aceptar una oferta **no crea ninguna cuenta**: es requisito del PRD y
+ * decisión de arquitectura. El panel aparece cuando la persona lo pide, y este
+ * link es justamente el pedirlo. Por eso dice la VENTAJA concreta y no "entrá
+ * al portal": es el momento de mayor intención (acaba de decir que sí a un
+ * laburo), y lo único que la puede mover es qué gana.
+ *
+ * ⚠️ La misma puerta que usa el mail de confirmación (`offer-actions.ts`). Una
+ * puerta, no dos. La política completa está en PRUEBAS.md.
  */
 export function PortalStaffLink() {
   return (
@@ -51,7 +61,7 @@ export function PortalStaffLink() {
       href="/acceso-staff"
       className="flex items-center justify-center min-h-[44px] text-label text-fg-muted underline underline-offset-4 transition-colors hover:text-fg"
     >
-      Seguí tus laburos en el portal de staff
+      Mirá tus próximos laburos, fichá y enterate cuando está el pago
     </Link>
   );
 }

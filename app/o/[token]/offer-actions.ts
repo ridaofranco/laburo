@@ -176,7 +176,15 @@ async function avisarRespuesta(token: string, accepted: boolean): Promise<void> 
           venue: row.venue_name,
           amountText,
           conditions: row.conditions,
-          link: siteUrl("/panel-staff"),
+          // ⚠️ /acceso-staff y NO /panel-staff: UNA sola puerta. /panel-staff
+          // exige sesión, así que a quien no tiene cuenta (que es el caso
+          // normal: aceptar una oferta NO crea cuenta) lo rebotaba a
+          // /acceso-staff igual, con una pantalla de más justo en el momento en
+          // que menos dispuesta está. /acceso-staff sabe atender a los dos: al
+          // que ya tiene cuenta lo rutea, y al que no, le pide el mail.
+          // La política completa está en PRUEBAS.md, "Cuándo el staff pasa a
+          // tener panel".
+          link: siteUrl("/acceso-staff"),
         }),
       );
       const res = await sendMail({

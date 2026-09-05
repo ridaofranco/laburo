@@ -329,7 +329,102 @@ exactos a los de la sección 0. La base quedó igual.
 
 ---
 
-## 6. Estado: ¿hay una productora de prueba viva ahora mismo?
+## 6. Cuándo el staff pasa a tener panel
+
+Hay **dos formas de ser staff en LABURO** y hasta ahora no había ninguna regla
+escrita sobre cuándo se pasa de una a la otra. Esto es esa regla.
+
+⚠️ La Tarea 8 va a mover o citar esta sección desde `ACTORES.md`. **Esta es la
+versión original: si las dos se separan, manda esta.**
+
+### Las dos formas
+
+- **Sin cuenta** — `/o/<token>`. Token opaco, RPC `SECURITY DEFINER`, cero auth.
+  Es como se acepta una oferta.
+- **Con cuenta** — `/panel-staff`, `/trabajos`, `/fichaje`,
+  `/editar-perfil-staff`. Gate `requireStaff()`, que resuelve identidad **por
+  email verificado**.
+
+### Las cinco preguntas, contestadas
+
+**1. ¿Aceptar una oferta crea una cuenta?**
+
+**NO.** Ni "silenciosamente" ni "por las dudas". Es requisito del PRD (*"A staff
+member can accept an offer from the magic link **without creating an
+account**"*) y decisión de arquitectura del research (*"Supabase Auth magic link
+para staff: NUNCA"*). Crear una cuenta que la persona no pidió rompe la promesa
+de que aceptar es un solo click.
+
+**2. ¿Entonces cuándo aparece el panel?**
+
+Cuando **la persona lo pide**: se anota en `/sumate`, o entra por
+`/acceso-staff` con su mail. **El disparador es la persona, nunca el sistema.**
+
+**3. ¿Qué pasa justo después de aceptar?**
+
+Se le **ofrece** el panel, con la ventaja concreta y no como trámite: *"mirá tus
+próximos laburos, fichá y enterate cuando está el pago"*. Ofrecer, no exigir. Es
+el momento de mayor intención —acaba de decir que sí a un laburo—, y lo único
+que la puede mover es qué gana.
+
+⚠️ **Rechazar no es momento de ofrecer nada.** La vista de rechazo no muestra
+este link, a propósito.
+
+**4. ¿La ficha del pool y la cuenta son lo mismo?**
+
+**No, y es la parte que más confunde.**
+
+- La **ficha** existe desde que alguien se anota. Hay **1.050 fichas** y
+  prácticamente ninguna tiene cuenta.
+- La **cuenta** se crea después, por su lado.
+- Lo único que las une es el **email verificado**, en `requireStaff()`.
+
+⚠️⚠️ **Si los dos mails no coinciden, la persona entra y no ve nada suyo.** Se
+anotó con el mail del trabajo y entra con el personal, o al revés:
+`requireStaff()` no encuentra perfil y la manda a `/acceso-staff`. Desde afuera
+se ve idéntico a "no tenés cuenta", pero la persona **sí está en el pool**, con
+sus ofertas y su historial, mirando una puerta que le dice que no.
+
+**Es el caso que va a generar el primer reclamo.** Hoy no está resuelto: no hay
+forma de que la persona una los dos mails sola. Cuando pase, se arregla **del
+lado del dato** (corrigiendo el email de la ficha), no relajando el gate:
+resolver por email verificado es correcto y no se toca.
+
+**5. ¿Qué ve cada uno?**
+
+| | Sin cuenta | Con cuenta |
+|---|---|---|
+| Qué ve | **Solo esa oferta**, por su token, mientras el token viva | Todas sus ofertas, el fichaje y su perfil |
+| Cómo entra | El link del mail | Su mail, en `/acceso-staff` |
+| Cuánto dura | Lo que dure el token | Mientras tenga la cuenta |
+
+### Una puerta, no dos
+
+Antes había **dos puentes al mismo lugar**, decididos en dos momentos: la
+pantalla de aceptación mandaba a `/acceso-staff` y el mail de confirmación a
+`/panel-staff`. Ahora los dos van a **`/acceso-staff`**.
+
+Por qué esa y no la otra: `/panel-staff` **exige sesión**, así que a quien no
+tiene cuenta —que es el caso normal— lo rebotaba a `/acceso-staff` igual, con
+una pantalla de más justo cuando menos dispuesta está. `/acceso-staff` sabe
+atender a los dos casos: al que ya tiene cuenta lo rutea, y al que no, le pide
+el mail.
+
+### Lo que NO se cambió, y es decisión
+
+- **No se crea ninguna cuenta al aceptar.**
+- **No se tocó la RPC de aceptar.** Es atómica, de un solo uso, y anda.
+- **No se tocó `requireStaff()`.** Resolver por email verificado es correcto.
+- **No se tocó `middleware.ts`.** `/panel-staff` y `/acceso-staff` ya están en
+  `publicPrefixes` y el gate real es la página.
+
+⚠️ **Con 0 ofertas en la base, nadie recorrió nunca este camino.** No hay
+comportamiento en producción que preservar, y para probarlo **hay que fabricar
+una oferta**: ver el paso 4 de la sección 2.
+
+---
+
+## 7. Estado: ¿hay una productora de prueba viva ahora mismo?
 
 **No.** Al 5/9/2026 este archivo está escrito y su ciclo verificado con
 `ROLLBACK`, pero **el alta por el camino del producto no se corrió**: crea una

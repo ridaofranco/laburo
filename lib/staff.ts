@@ -6,6 +6,27 @@ import { createClient } from "@/lib/supabase/server";
  * email verificado vía los RPC SECURITY DEFINER staff_app_my_staff_* (0012): el
  * staff solo ve/edita lo suyo. requireStaff() es el gate: sin sesión o sin perfil
  * de staff con ese email, redirige a /acceso-staff.
+ *
+ * ── CUÁNDO ALGUIEN PASA A TENER PANEL ───────────────────────────────────────
+ * La política está escrita en `PRUEBAS.md`, sección "Cuándo el staff pasa a
+ * tener panel". En una línea: **aceptar una oferta no crea cuenta**; el panel
+ * aparece cuando la persona lo pide.
+ *
+ * ── ⚠️ LA TRAMPA QUE ESTE ARCHIVO CONOCE Y NADIE MÁS ────────────────────────
+ * La ficha del pool y la cuenta **son dos cosas distintas**, y lo único que las
+ * une es el email: la ficha existe desde que alguien se anotó (hay 1.050 sin
+ * ninguna cuenta), y la cuenta se crea después, por su lado.
+ *
+ * Si el mail con el que la persona se anotó y el mail con el que entra **no
+ * coinciden** —se anotó con el del trabajo y entra con el personal, o al revés—
+ * `requireStaff()` no encuentra perfil y la manda a /acceso-staff. Desde
+ * adentro se ve igual que "no tenés cuenta", pero la persona SÍ está en el
+ * pool, con sus ofertas y su historial, mirando una puerta que le dice que no.
+ *
+ * **Es el caso que va a generar el primer reclamo**, y hoy no está resuelto:
+ * no hay forma de que la persona una los dos mails sola. Cuando pase, se
+ * arregla del lado del dato (corregir el email de la ficha), no relajando este
+ * gate: resolver por email verificado es lo correcto y no se toca.
  */
 
 export interface StaffProfile {
