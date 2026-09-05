@@ -117,6 +117,9 @@ export async function updateSession(request: NextRequest) {
     // startsWith y un "/p" abriria /pagos y /panel-staff al mundo sin sesion.
     "/terminos",
     "/privacidad",
+    // La pregunta de visibilidad (0076). Publica por definicion: la abre alguien
+    // del pool, que NO tiene cuenta. El gate es el token HMAC del link.
+    "/mi-visibilidad",
     // Baja del pool ("no quiero formar parte"): la persona llega desde el pie de
     // un mail, sin cuenta y sin sesión. El gate es el token HMAC del link, que
     // valida la propia página/route (lib/baja.ts), no el middleware.
