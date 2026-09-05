@@ -42,6 +42,7 @@ import { OfferAnswerEmail } from '../components/emails/offer-answer-email.tsx';
 import { PagoListoEmail } from '../components/emails/pago-listo-email.tsx';
 import { QuienFichoEmail } from '../components/emails/quien-ficho-email.tsx';
 import { PerfilReminderEmail } from '../components/emails/perfil-reminder-email.tsx';
+import { VisibilidadEmail } from '../components/emails/visibilidad-email.tsx';
 
 const PARA = 'ridaofrancorg@gmail.com';
 const LINK = 'https://laburo.somosder.ar/o/PREVIEW-no-es-un-link-real';
@@ -65,6 +66,15 @@ const mails = [
     el: () => createElement(WelcomeLegacyEmail, {
       firstName: 'Franco',
       link: 'https://laburo.somosder.ar/acceso-staff',
+      bajaLink: 'https://laburo.somosder.ar/baja?p=demo&t=demo',
+    }),
+  },
+  {
+    n: 'La pregunta de visibilidad: ¿querés que otras productoras te vean?',
+    subject: '¿Querés que otras productoras vean tu ficha?',
+    el: () => createElement(VisibilidadEmail, {
+      firstName: 'Franco',
+      link: 'https://laburo.somosder.ar/mi-visibilidad?id=demo&t=demo',
       bajaLink: 'https://laburo.somosder.ar/baja?p=demo&t=demo',
     }),
   },

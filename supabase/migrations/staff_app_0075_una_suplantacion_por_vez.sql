@@ -1,5 +1,9 @@
 -- Migration: staff_app_0075_una_suplantacion_por_vez
--- Escrita y APLICADA el 2026-09-05.
+-- Escrita el 2026-09-05 y APLICADA DE VERDAD el 2026-09-05, mas tarde.
+--
+-- ⚠️ Esta cabecera decia APLICADA y NO lo estaba: se verifico consultando
+-- pg_get_functiondef contra produccion y el cuerpo era el de la 0073, sin el
+-- cierre de las suplantaciones anteriores. Escribir APLICADA no aplica nada.
 --
 -- Cada llamada a staff_app_actuar_como abria una fila y NO cerraba las
 -- anteriores, asi que con dos pestanas se podian tener dos organizaciones

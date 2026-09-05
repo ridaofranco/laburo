@@ -1,5 +1,6 @@
 import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { siteUrl } from "@/lib/site";
 
 /**
  * Token del link de VISIBILIDAD ("¿querés que otras productoras te vean?").
@@ -59,4 +60,18 @@ export function visibilidadTokenOk(
   const got = Buffer.from(String(token), "utf8");
   if (expected.length !== got.length) return false;
   return timingSafeEqual(expected, got);
+}
+
+/**
+ * La URL del mail: la PÁGINA donde la persona elige.
+ *
+ * ⚠️ El link NO responde nada por sí solo. Abrirlo muestra la pregunta; la
+ * respuesta se manda por POST desde la pantalla. Es a propósito: Gmail, los
+ * antivirus corporativos y los escáneres de links abren cada URL de un mail
+ * antes de que la persona la vea. Un GET que guarde el consentimiento firmaría
+ * el «sí» de gente que nunca abrió el mail, y eso no es un consentimiento.
+ * Por eso, a diferencia de la baja, acá no hay one-click.
+ */
+export function visibilidadUrl(profileId: string): string {
+  return `${siteUrl("/mi-visibilidad")}?id=${encodeURIComponent(profileId)}&t=${visibilidadToken(profileId)}`;
 }

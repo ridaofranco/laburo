@@ -1,5 +1,6 @@
 -- Migration: staff_app_0076_visibilidad_en_la_red
--- Escrita el 2026-09-05. SIN APLICAR.
+-- Escrita y APLICADA el 2026-09-05. Verificado contra produccion: las 3 columnas
+-- existen y la RPC esta granteada solo a service_role.
 --
 -- ---------------------------------------------------------------------------
 -- POR QUE ESTA COLUMNA ES UNA DECISION LEGAL Y NO UNA PREFERENCIA
