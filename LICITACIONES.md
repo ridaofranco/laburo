@@ -3,7 +3,10 @@
 Pedirle precio a varias empresas por lo mismo, al mismo tiempo, y comparar las
 respuestas en una tabla. Cada una cotiza **sin ver lo que cotizaron las otras**.
 
-> **Estado: especificación. Nada de esto está construido todavía.**
+> **Estado: la ETAPA 1 está construida, aplicada en producción y probada.**
+> Las tres tablas, su RLS y las seis funciones existen y se corrieron de punta a
+> punta contra la base real (con `ROLLBACK`). Falta todo lo de pantalla, de la
+> etapa 2 en adelante.
 
 ---
 
@@ -155,9 +158,31 @@ solo sobre las funciones del token.
 
 Cada una deja algo que funciona. No hay etapa que sirva solo para la siguiente.
 
-**Etapa 1 — La base.** Las tres tablas, su RLS, y las funciones: crear pedido,
-invitar, ver mi invitación por token, cotizar, listar cotizaciones, adjudicar.
-Se prueba con SQL, sin una sola pantalla.
+**Etapa 1 — La base.** ✅ **HECHA el 5/9** (`staff_app_0078`). Las tres tablas,
+su RLS, y las seis funciones: `staff_app_crear_pedido`,
+`staff_app_invitar_a_cotizar`, `staff_app_ver_invitacion`, `staff_app_cotizar`,
+`staff_app_listar_cotizaciones` y `staff_app_adjudicar`.
+
+*Probado contra producción, adentro de una transacción con `ROLLBACK`, y la base
+quedó en cero:* se creó el pedido, se invitó a tres (con un mail repetido en otra
+capitalización y uno sin arroba: **1 repetido y 1 inválido, reportados, y salieron
+2 links, no 4**), dos cotizaron sin cuenta, uno corrigió su precio (**la misma
+fila, no una segunda**), se comparó, se adjudicó y **no se pudo adjudicar dos
+veces**. Después de adjudicar, cotizar devuelve `cerrado` y el que perdió ve su
+propia cotización marcada `no_elegida`.
+
+*Y lo ciego se probó de los dos lados:* un pedido en una organización de la que no
+sos miembro devuelve `forbidden`; `anon` llamando a `staff_app_listar_cotizaciones`
+recibe **permission denied** de Postgres, y `anon` leyendo `quote_requests` a mano
+también, porque ni siquiera tiene el `GRANT`. El que cotiza nunca recibe cuántos
+más fueron invitados.
+
+⚠️ **De paso apareció que HITO ya tenía un esbozo de esto**: `public.rfqs`,
+`public.rfq_vendors`, `get_rfq_request` y `submit_rfq_quote`, en el mismo
+proyecto de Supabase. Están **en cero filas** y les falta casi todo (sin fecha de
+cierre, sin qué incluye, sin dedupe, sin adjudicación, y **el token guardado en
+claro**). No se reusó ni se tocó. Y ojo: `public.quotes` de HITO es el
+presupuesto AL CLIENTE, no la cotización de un proveedor.
 
 **Etapa 2 — Crear e invitar.** La pantalla del que pide: armar el pedido, elegir
 el desglose desde una plantilla por rubro, pegar la lista de mails. Y el mail de
