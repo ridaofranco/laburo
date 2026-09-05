@@ -11,9 +11,24 @@
  * el staff). Ahora son dos secciones con su encabezado y su bajada.
  *
  * LABURO no procesa el pago al staff: eso lo coordina y lo paga ella como
- * siempre, y esta pantalla es su resumen. El cobro al cliente sí pasa por
- * MercadoPago y ya funciona (tablero/payment-actions.ts y api/mp/webhook): esta
- * pantalla solo lo muestra, no lo toca.
+ * siempre, y esta pantalla es su resumen.
+ *
+ * ── EL COBRO AL CLIENTE ESTÁ APAGADO, Y LA PANTALLA LO DICE (5/9) ───────────
+ * Este header decía que el cobro "ya funciona". Dejó de ser cierto el 2/9,
+ * cuando Franco decidió que LABURO es gratis. El circuito de MercadoPago sigue
+ * entero (tablero/payment-actions.ts y api/mp/webhook), pero está apagado por
+ * bandera.
+ *
+ * LA FUENTE DE VERDAD ES `lib/cobros.ts`, no esta pantalla: acá se LEE
+ * COBRO_AL_CLIENTE_ACTIVO y se muestra COBRO_APAGADO_MOTIVO tal cual. El día
+ * que se prenda el cobro, se cambia ese archivo y esta pantalla se entera sola.
+ *
+ * ⚠️ Y "Lo que cobrás" NO se esconde. Antes se dibujaba solo con
+ * `cobros.length > 0`, así que con el cobro apagado la sección desaparecía
+ * entera y no había forma de distinguir "todavía no cobré nada" de "esto no
+ * existe en este producto". Ahora son tres estados: apagado (lo dice),
+ * prendido y vacío (vacío honesto), prendido con cobros (la lista de siempre).
+ * Un cobro que existió no se esconde nunca, ni con la bandera apagada.
  *
  * El cobro de plataforma (LABURO le cobra a la productora) NO existe todavía:
  * queda para cuando esté definido el precio. No hay UI preparada, a propósito.
@@ -26,6 +41,7 @@ import { createClient } from "@/lib/supabase/server";
 import { fmtFecha } from "@/lib/dates";
 import { money, moneyCompact } from "@/lib/format";
 import { LoadError } from "@/components/load-error";
+import { COBRO_AL_CLIENTE_ACTIVO, COBRO_APAGADO_MOTIVO } from "@/lib/cobros";
 import { PagoListoBoton } from "./pago-listo-boton";
 
 interface OfferRow {
@@ -113,18 +129,49 @@ export default async function PagosPage() {
       </div>
 
       {/* ── LO QUE COBRÁS: la plata que ENTRA. Cada intento de pago por
-          MercadoPago de tu cliente y cómo salió. ── */}
-      {cobros.length > 0 && (
-        <section className="mb-16">
-          <div className="border-b border-[#4c4546] pb-6 mb-8">
-            <h3 className="t-section text-[#e5e2e1] uppercase">
-              Lo que cobrás
-            </h3>
-            <p className="text-[15px] text-[#cfc4c5] mt-2 max-w-[620px] leading-[1.6]">
-              Lo que te pagan tus clientes por MercadoPago. Cada intento y cómo
-              salió, se actualiza solo, no tenés que preguntar.
+          MercadoPago de tu cliente y cómo salió.
+
+          La sección se dibuja SIEMPRE. Lo que cambia es lo que muestra adentro,
+          y son tres casos distintos que antes se veían todos igual (o sea, no
+          se veían): el cobro apagado, el cobro prendido sin cobros todavía, y
+          el cobro prendido con cobros. ── */}
+      <section className="mb-16">
+        <div className="border-b border-[#4c4546] pb-6 mb-8">
+          <h3 className="t-section text-[#e5e2e1] uppercase">
+            Lo que cobrás
+          </h3>
+          <p className="text-[15px] text-[#cfc4c5] mt-2 max-w-[620px] leading-[1.6]">
+            Lo que te pagan tus clientes por MercadoPago. Cada intento y cómo
+            salió, se actualiza solo, no tenés que preguntar.
+          </p>
+        </div>
+
+        {/* El motivo sale de lib/cobros.ts, no está escrito acá: si mañana se
+            prende el cobro, cambia UN archivo y esta pantalla se entera. */}
+        {!COBRO_AL_CLIENTE_ACTIVO && (
+          <div className="border border-[#2a2a2a] bg-[#0e0e0e] px-6 py-8 mb-8">
+            <p className="text-[15px] text-[#cfc4c5] max-w-[620px] leading-[1.6]">
+              {COBRO_APAGADO_MOTIVO}
             </p>
           </div>
+        )}
+
+        {/* Vacío honesto: el cobro está prendido y todavía no entró ninguno.
+            Antes este caso y el de arriba eran la misma nada. */}
+        {COBRO_AL_CLIENTE_ACTIVO && cobros.length === 0 && (
+          <div className="border border-[#2a2a2a] bg-[#0e0e0e] px-6 py-8">
+            <p className="text-[15px] text-[#cfc4c5] max-w-[620px] leading-[1.6]">
+              Todavía no te pagó ningún cliente. Cuando cobres desde el tablero,
+              cada intento aparece acá con cómo salió.
+            </p>
+          </div>
+        )}
+
+        {/* Los cobros que EXISTIERON se muestran aunque la bandera esté
+            apagada. Hoy no puede pasar (hay 0), pero sí después de prender el
+            cobro y volver a apagarlo, y esconderle a alguien plata que entró de
+            verdad sería peor que el bug que estamos arreglando. */}
+        {cobros.length > 0 && (
           <ul className="flex flex-col border border-[#2a2a2a] bg-[#0e0e0e]">
             {cobros.map((c) => {
               const e = estadoCobro(c.status);
@@ -149,8 +196,8 @@ export default async function PagosPage() {
               );
             })}
           </ul>
-        </section>
-      )}
+        )}
+      </section>
 
       {error ? (
         <div className="mt-12">
