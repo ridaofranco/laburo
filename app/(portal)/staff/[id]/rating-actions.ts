@@ -46,7 +46,11 @@ export async function rateStaff(
   // 1. Gate de membresía (T-5-17) — molde de notes-actions.ts.
   // exigirOrg(): mismo gate, pero aguanta que el usuario sea miembro de más de
   // una productora (el .maybeSingle() de antes tiraba PGRST116 con dos filas).
-  await exigirOrg();
+  //
+  // ⚠️ El resultado viaja a la RPC como p_org: sin él, staff_app_rate_staff
+  // resuelve la organización sola con resolve_org(NULL) y termina calificando en
+  // la membresía más antigua del usuario, no en la que validó este gate.
+  const org = await exigirOrg();
 
   // 2. Validación de score server-side (T-5-18): entero 1..5, sin tocar el RPC.
   if (
@@ -67,6 +71,7 @@ export async function rateStaff(
     p_gig_id: input.gigId,
     p_score: input.score,
     p_note: note,
+    p_org: org.organizationId,
   });
 
   const res = data as RpcRating | null;

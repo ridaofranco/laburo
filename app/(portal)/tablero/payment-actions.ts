@@ -21,6 +21,7 @@ import { MercadoPagoConfig, Preference } from "mercadopago";
 import { createClient } from "@/lib/supabase/server";
 import { SITE_URL as SITE } from "@/lib/site";
 import { COBRO_AL_CLIENTE_ACTIVO, COBRO_APAGADO_MOTIVO } from "@/lib/cobros";
+import { exigirOrg } from "@/lib/org";
 
 export async function createClientCheckout(
   gigId: string,
@@ -28,6 +29,16 @@ export async function createClientCheckout(
   // El cobro está apagado por decisión de producto. Va ANTES que todo: una server
   // action es un endpoint POST invocable, esconder el botón del tablero no alcanza.
   if (!COBRO_AL_CLIENTE_ACTIVO) return { ok: false, reason: COBRO_APAGADO_MOTIVO };
+
+  // Gate de organización, y sobre todo: CUÁL organización. staff_app_set_gig_payment_pref
+  // resuelve la suya con resolve_org(p_org); sin p_org la elige Postgres tomando la
+  // membresía más antigua del usuario, no la que validó la app. Molde: pago-actions.ts.
+  let orgId: string | null;
+  try {
+    orgId = (await exigirOrg()).organizationId;
+  } catch {
+    return { ok: false, reason: "No sos miembro de ninguna productora." };
+  }
 
   const accessToken = process.env.MP_ACCESS_TOKEN;
   if (!accessToken) return { ok: false, reason: "MercadoPago no está configurado todavía." };
@@ -89,6 +100,7 @@ export async function createClientCheckout(
   const { data, error } = await supabase.rpc("staff_app_set_gig_payment_pref", {
     p_gig_id: gigId,
     p_preference_id: created.id,
+    p_org: orgId,
   });
   const res = data as { ok: boolean; reason?: string } | null;
   if (error || !res?.ok) {

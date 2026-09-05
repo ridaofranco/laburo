@@ -44,7 +44,12 @@ export async function setCandidateNote(
   // 1. Gate de membresía (T-5-17) — molde de offer-actions.ts.
   // exigirOrg(): mismo gate, pero aguanta que el usuario sea miembro de más de
   // una productora (el .maybeSingle() de antes tiraba PGRST116 con dos filas).
-  await exigirOrg();
+  //
+  // ⚠️ El resultado viaja a la RPC como p_org: sin él,
+  // staff_app_set_candidate_note resuelve la organización sola con
+  // resolve_org(NULL) y el favorito o la nota quedan colgados de la membresía
+  // más antigua del usuario, no de la que validó este gate.
+  const org = await exigirOrg();
 
   // 2. Persistir vía RPC con el cliente autenticado. Nota vacía → null.
   const note = (input.note ?? "").trim() || null;
@@ -52,6 +57,7 @@ export async function setCandidateNote(
     p_staff_profile_id: input.staffProfileId,
     p_is_favorite: input.isFavorite,
     p_note: note,
+    p_org: org.organizationId,
   });
 
   const res = data as RpcNote | null;

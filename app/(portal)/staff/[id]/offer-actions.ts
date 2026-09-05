@@ -124,7 +124,12 @@ export async function createAndSendOffer(
   // 1. Gate de membresía (T-3-09) — molde de cv-actions.ts.
   // exigirOrg(): mismo gate, pero aguanta que el usuario sea miembro de más de
   // una productora (el .maybeSingle() de antes tiraba PGRST116 con dos filas).
-  await exigirOrg();
+  //
+  // ⚠️ El resultado NO se descarta: viaja a la RPC como p_org. Antes se usaba
+  // sólo de portero, y staff_app_create_offer resolvía su organización sola con
+  // resolve_org(NULL) → current_org_id() → la membresía MÁS ANTIGUA del usuario.
+  // O sea que el gate validaba una organización y la oferta se creaba en otra.
+  const org = await exigirOrg();
 
   // 2. Validación server-side, molde de rating-actions.ts. El formulario ya
   //    frena, pero esto es un endpoint POST invocable: sin estos tres chequeos se
@@ -155,6 +160,7 @@ export async function createAndSendOffer(
     p_gig_venue: input.gigVenue ?? null,
     p_amount: input.amount ?? null,
     p_conditions: input.conditions ?? null,
+    p_org: org.organizationId,
   });
 
   const res = data as RpcOffer | null;

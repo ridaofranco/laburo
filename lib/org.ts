@@ -35,6 +35,40 @@ import { createClient } from "@/lib/supabase/server";
  * false`. O sea: el portal sigue cargando y NADIE ve las pantallas de
  * plataforma. El error cae del lado seguro (fail closed). Cuando la 0044
  * aterrice, SOMOS DER las recupera sola, sin deploy.
+ *
+ * ── ⚠️ LA TRAMPA QUE SE VA A OLVIDAR PRIMERO: LA BASE TAMBIÉN ADIVINA ───────
+ * Esta lógica está DUPLICADA adentro de Postgres:
+ *
+ *     staff_app.current_org_id()  → la membresía MÁS ANTIGUA del usuario
+ *     staff_app.resolve_org(p_org) → coalesce(p_org, current_org_id(), default_org_id())
+ *
+ * Nueve funciones de escritura resuelven su organización así. Por eso
+ * `exigirOrg()` NO alcanza como portero: si su resultado no viaja a la RPC como
+ * `p_org`, el gate valida una organización y la base escribe en otra. Está
+ * reproducido contra producción: con dos membresías, `staff_app_create_gig` sin
+ * `p_org` creó el evento en SOMOS DER en vez de en la productora.
+ *
+ * **Regla: toda escritura pasa `p_org` explícito.** Ya lo hacen las ocho que
+ * aceptan el parámetro (create_gig, update_gig, set_gig_details, set_gig_slots,
+ * set_gig_payment_pref, create_offer, rate_staff, set_candidate_note) más
+ * marcar_pago_listo.
+ *
+ * **La única que queda afuera a propósito:**
+ * `staff_app_generar_link_proveedor(p_profile_id uuid, p_dias int)` (0042:164)
+ * **NO tiene `p_org` en su firma**: mandárselo es un PGRST202 garantizado.
+ * Resuelve su organización leyendo `profile_org_links`, o sea desde el PERFIL y
+ * no desde el usuario, que para ese caso es lo correcto. Sólo cae a
+ * `resolve_org(NULL)` si el perfil no tiene vínculo. Hoy, además, ningún archivo
+ * del código la llama. Se deja como está.
+ *
+ * ── Y POR QUÉ `default_org_id()` NO ES UN AGUJERO ──────────────────────────
+ * El tercer nivel del coalesce deposita en SOMOS DER (la organización
+ * plataforma), así que a simple vista parece que un usuario sin contexto termina
+ * en la organización más poderosa. **Cae del lado seguro**: las nueve funciones
+ * gatean DESPUÉS con `is_org_writer(v_org)`, y un usuario sin membresía ahí no
+ * es writer. El tercer nivel existe para los llamados sin `auth.uid()` (cron,
+ * webhook, formulario público), que no tienen otra forma de resolver. No se
+ * toca.
  */
 
 export interface OrgActual {
