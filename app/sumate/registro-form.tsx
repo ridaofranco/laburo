@@ -352,6 +352,15 @@ export function RegistroForm({
           <Upload size={16} />
           {sending ? "Enviando…" : "Enviar mi registro"}
         </button>
+        {/* Términos y privacidad, al lado del botón que los acepta. El momento
+            de decirlo es cuando la persona está por mandar sus datos. */}
+        <p className="text-[13px] text-[#8a8a8a] leading-[1.6] mt-4 text-center">
+          Al continuar aceptás los{" "}
+          <a href="/terminos" className="text-[#cfc4c5] border-b border-[#4c4546] hover:text-[#e5e2e1] hover:border-[#e5e2e1] transition-colors">términos</a>
+          {" "}y la{" "}
+          <a href="/privacidad" className="text-[#cfc4c5] border-b border-[#4c4546] hover:text-[#e5e2e1] hover:border-[#e5e2e1] transition-colors">política de privacidad</a>.
+        </p>
+
       </form>
     </div>
   );

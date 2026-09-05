@@ -130,11 +130,24 @@ nuevo sale antes que su migración, rompe.
   mail, alguien no puede entrar, hay que bajar una publicación.
 - **`COBROS.md`** — qué falta para prender el cobro.
 
-## Licencia
+## Licencia y visibilidad
 
-<!-- TODO (Franco): decidir. El repo es público; el producto no. Mientras no
-     haya decisión, no hay licencia abierta: sin licencia explícita rige el
-     copyright por defecto (todos los derechos reservados). -->
+**Todos los derechos reservados.** No hay licencia abierta: sin una licencia
+explícita rige el copyright por defecto, así que el código se puede **leer y
+revisar**, que es para lo que se abrió el repositorio, pero no usar, copiar ni
+derivar.
 
-Sin licencia definida todavía. El código es público para poder ser revisado; el
-producto es privado.
+⚠️ **Este repositorio es público de forma temporal**, para una revisión externa
+del código. Cuando esa revisión termine, vuelve a privado.
+
+Las direcciones de correo que están en el código ya quedaron expuestas y van a
+seguir recibiendo spam aunque el repositorio se cierre: eso no se deshace.
+
+## Términos y privacidad
+
+- [Términos de uso](https://laburo.somosder.ar/terminos)
+- [Privacidad](https://laburo.somosder.ar/privacidad)
+
+Están escritos describiendo lo que el producto **hace hoy**, no lo que podría
+hacer. Si el producto cambia qué guarda o quién lo ve, esas páginas cambian con
+él: una política que describe otro producto miente con formato legal.

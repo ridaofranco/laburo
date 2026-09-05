@@ -108,6 +108,15 @@ export async function updateSession(request: NextRequest) {
     // "/mi-proveedor" es la única ruta de primer nivel que empieza con "/mi" y no
     // es prefijo de ninguna otra, así que el startsWith no abre nada de más.
     "/mi-proveedor",
+    // Terminos y privacidad (5/9). Publicas por definicion: las linkea el
+    // formulario de alta, o sea que las abre alguien que TODAVIA no tiene
+    // cuenta, y ademas tienen que poder leerse sin estar registrado. Sin esta
+    // linea salen con un 307 mudo a /entrar, que es la trampa que este archivo
+    // ya se anoto dos veces.
+    // ⚠️ Los prefijos van ENTEROS, como los de arriba: esta lista se evalua con
+    // startsWith y un "/p" abriria /pagos y /panel-staff al mundo sin sesion.
+    "/terminos",
+    "/privacidad",
     // Baja del pool ("no quiero formar parte"): la persona llega desde el pie de
     // un mail, sin cuenta y sin sesión. El gate es el token HMAC del link, que
     // valida la propia página/route (lib/baja.ts), no el middleware.

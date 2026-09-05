@@ -269,6 +269,17 @@ export function RegistroProductoraClient() {
               </span>
               <ArrowRight size={18} strokeWidth={1.5} />
             </button>
+            {/* Términos y privacidad, al lado del botón que los acepta. Acá y
+                no en un pie de página: el momento de decirlo es cuando la
+                persona está por mandar sus datos, no en una pantalla aparte que
+                nadie abre. */}
+            <p className="text-[13px] text-[#8a8a8a] leading-[1.6] mt-4 text-center">
+              Al continuar aceptás los{" "}
+              <a href="/terminos" className="text-[#cfc4c5] border-b border-[#4c4546] hover:text-[#e5e2e1] hover:border-[#e5e2e1] transition-colors">términos</a>
+              {" "}y la{" "}
+              <a href="/privacidad" className="text-[#cfc4c5] border-b border-[#4c4546] hover:text-[#e5e2e1] hover:border-[#e5e2e1] transition-colors">política de privacidad</a>.
+            </p>
+
 
             <div className="w-full border-t border-[#4c4546]/60 pt-8 flex flex-col items-center gap-3">
               <a

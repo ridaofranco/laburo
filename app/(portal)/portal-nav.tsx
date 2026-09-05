@@ -50,6 +50,7 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { OrgSelector, type OrgOpcion } from "./org-selector";
+import { SoporteLink } from "./soporte-link";
 
 type Item = {
   label: string;
@@ -213,6 +214,7 @@ export function PortalNav({
                 <span className="label-tech text-[12px]">Logout</span>
               </button>
             </li>
+            <SoporteLink />
           </ul>
         </div>
       </nav>
