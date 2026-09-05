@@ -1,5 +1,23 @@
 # LABURO — Product Requirements Document (PRD)
 
+> ## ⚠️ Read this first (added 2026-09-05)
+>
+> **This is the ORIGINAL intent document, written before the product grew.** It is
+> kept for its historical value: it records what LABURO was meant to be, and the
+> decisions in section 6 are still binding. It is **not** the current map.
+>
+> **What changed since:** this PRD describes **two** actors. The product has
+> **five**, and four separate pools (staff, providers, venues, production
+> companies). Multi-tenancy, the platform organization, the provider and venue
+> marketplaces and the staff portal all arrived afterwards.
+>
+> **The current map lives in [`ACTORES.md`](./ACTORES.md)** — in Spanish, like the
+> rest of the repo. **Where the two disagree, `ACTORES.md` wins.**
+>
+> **Language:** this PRD stays in English on purpose; translating it whole is a
+> separate job and would destroy its value as a record. `ACTORES.md` and
+> `README.md` are in Spanish. Please don't "fix" this inconsistency.
+
 ## 1. Product Overview
 
 **LABURO** is the staff-hiring app of **SOMOS DER**. It lets an event operator (Franco)
@@ -18,12 +36,31 @@ Long-term vision: a multi-employer marketplace for temporary event staff.
 
 ## 2. Users / Roles
 
-- **Operator / Admin (Franco):** logs into the internal portal, searches the candidate
-  pool by role and availability, views profiles/CVs, creates gigs, sends paid offers,
-  and tracks offer status. Operates mostly from the phone (mobile-first).
-- **Staff / Candidate (worker):** applies through a public form, completes an onboarding,
-  edits their staff profile, receives an offer via a **magic link** (no account needed),
-  and accepts or declines it. On accept, they become crew of the app.
+> ⚠️ **This section described two actors. There are five.** What follows is
+> corrected; the full map, with routes and permissions, is in
+> [`ACTORES.md`](./ACTORES.md).
+
+- **Platform (SOMOS DER):** the organization that owns the product. Marked by
+  `es_plataforma = true` on its row — a column, not a role (migration `0044`).
+  Sees every organization, moderates providers and venues, and reads
+  cross-tenant profitability. The real gate is `is_platform_admin()` **inside
+  the database functions**, not in the UI.
+- **Production company (client):** a tenant organization with its own members.
+  Open self-signup — nobody approves anything. Publishes events, searches the
+  staff pool, sends offers, hires. Roles inside an organization are `owner`,
+  `writer` and `viewer`, and the role is **per organization**.
+- **Staff / Candidate (worker):** applies through a public form, receives an
+  offer via a **magic link**, and accepts or declines it **without creating an
+  account**. Separately, and only if they ask for it, they can have an account
+  with a staff portal (jobs, check-in, profile). The rule for when one becomes
+  the other is written in [`PRUEBAS.md`](./PRUEBAS.md), section 6.
+- **Provider:** sells services for events. Open self-signup. **Never has a
+  password** — always enters through a magic link. Has a public listing.
+- **Venue:** the space where the event happens. Signs up separately and shares
+  the provider's door. Has its own public listing.
+
+**Today there are ZERO client production companies.** The product is
+multi-tenant with a single tenant.
 
 ## 3. Tech Stack
 
@@ -93,6 +130,11 @@ Long-term vision: a multi-employer marketplace for temporary event staff.
 ## 6. Business Rules / Constraints
 
 - **Zero paid services** — free tiers only (Supabase, Vercel Hobby, own SMTP).
+- **LABURO charges nobody** (decided 2026-09-02, added here 2026-09-05). It is free
+  for every actor: no commission, no access fee. The MercadoPago flow is fully
+  built and **switched off by a flag** in `lib/cobros.ts` — a commercial decision,
+  not a missing feature. This PRD never claimed otherwise, but the codebase used
+  to say the charge "already works"; it does not, on purpose.
 - **Independence** — the app owns its data and runs without HITO; the HITO bridge is optional per gig.
 - **Security** — RLS mandatory on every table; public access only via `SECURITY DEFINER`
   token functions with a fixed `search_path`; magic-link tokens expire (e.g. 7 days).

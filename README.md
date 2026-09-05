@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LABURO
 
-## Getting Started
+Marketplace de staff eventual para producción de eventos. Una productora publica
+un evento, busca gente por oficio y disponibilidad sobre un pool real de
+postulantes, manda una oferta con monto y fechas, y la persona la acepta desde
+un link — **sin crear ninguna cuenta**.
 
-First, run the development server:
+Alrededor de eso hay tres pools más: proveedores de servicios, salones y las
+productoras mismas.
+
+> **Estado:** el producto está construido y en producción. Hoy tiene **1.050
+> fichas de staff** y **cero productoras cliente**: es multi-tenant con un solo
+> inquilino. Ver [`ACTORES.md`](./ACTORES.md).
+
+## Quién lo usa
+
+Cinco actores, cada uno con su puerta:
+
+- **Plataforma** — la organización dueña del producto. Ve todo, modera todo.
+- **Productora** — el cliente. Publica eventos y contrata. Alta abierta.
+- **Staff** — la persona que trabaja. Acepta ofertas **sin cuenta**; el panel
+  aparece si ella lo pide.
+- **Proveedor** — servicios para eventos. **Nunca tiene contraseña**: entra por
+  link mágico.
+- **Salón** — el espacio. Comparte la puerta del proveedor.
+
+El mapa completo, con rutas, permisos y flujos: **[`ACTORES.md`](./ACTORES.md)**.
+
+## Stack
+
+| | |
+|---|---|
+| Framework | Next.js 15.5 (App Router) · React 19 · TypeScript 5 |
+| Datos y auth | Supabase (`supabase-js` 2, `@supabase/ssr` 0.12) — **la RLS es el modelo de seguridad** |
+| Estilos | Tailwind CSS 4 · Base UI · lucide-react |
+| Animación | Motion |
+| Mail | nodemailer + `@react-email/components`, sobre SMTP propio |
+| Pagos | MercadoPago — **integrado y apagado por bandera** (`lib/cobros.ts`) |
+
+Sin ORM en el camino de datos: las lecturas y escrituras van por `supabase-js`
+con el JWT del usuario, para que la RLS se aplique sola. Una conexión directa la
+saltearía.
+
+## Levantarlo en local
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Hace falta un `.env.local`. Las variables, **por nombre** (los valores no están
+en el repo y no van a estar):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Imprescindibles**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY     # solo servidor, nunca en el cliente
+SITE_URL
+```
 
-## Learn More
+**Mail** — `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`,
+`SMTP_PASSWORD`, `MAIL_FROM_NAME`, `MAIL_FROM_ADDRESS`, `MAIL_REPLY_TO`,
+`MAIL_ADMIN_TO`
 
-To learn more about Next.js, take a look at the following resources:
+**Cobro (opcional, hoy apagado)** — `MP_ACCESS_TOKEN`, `MP_WEBHOOK_SECRET`,
+`MP_SANDBOX`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Otros** — `GEMINI_API_KEY` (lectura de CV), `TELEGRAM_BOT_TOKEN` y
+`TELEGRAM_CHAT_ID` (avisos internos), `CRON_SECRET`, `BIENVENIDA_BATCH`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts
 
-## Deploy on Vercel
+| Script | Qué hace |
+|---|---|
+| `npm run dev` | Servidor de desarrollo |
+| `npm run build` | Build de producción |
+| `npm run start` | Sirve el build |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | `tsc --noEmit` |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**No hay suite de tests automatizados.** Las pruebas son manuales y están
+escritas en [`PRUEBAS.md`](./PRUEBAS.md).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+⚠️ Para probar en serio conviene `npm run build && npm run start` y no `dev`: el
+servidor de desarrollo se cae bajo carga y fabrica errores que no existen.
+
+## Migraciones
+
+Viven en `supabase/migrations/`, numeradas y en orden. **Se aplican a mano**, no
+hay pipeline automático.
+
+⚠️ **El orden es migración primero, deploy después.** Un parámetro opcional
+nuevo protege al código *viejo* contra la base nueva, no al revés: si el código
+nuevo sale antes que su migración, rompe.
+
+## Documentación
+
+- **[`ACTORES.md`](./ACTORES.md)** — quién usa LABURO, por dónde entra y qué
+  puede hacer. **Empezá por acá.**
+- **[`PRUEBAS.md`](./PRUEBAS.md)** — cómo dar de alta una organización de
+  prueba, qué se puede ver, y cómo sacarla.
+- **[`PRD-LABURO.md`](./PRD-LABURO.md)** — el documento de intención original
+  (en inglés, 2026). Valor histórico: el producto creció y el mapa vigente es
+  `ACTORES.md`.
+- **`COBROS.md`** — qué falta para prender el cobro.
+
+## Licencia
+
+<!-- TODO (Franco): decidir. El repo es público; el producto no. Mientras no
+     haya decisión, no hay licencia abierta: sin licencia explícita rige el
+     copyright por defecto (todos los derechos reservados). -->
+
+Sin licencia definida todavía. El código es público para poder ser revisado; el
+producto es privado.
