@@ -13,6 +13,7 @@
 
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { orgActual } from "@/lib/org";
 import { fmtFecha } from "@/lib/dates";
 import { LoadError } from "@/components/load-error";
 
@@ -162,11 +163,19 @@ function Dot({ severity }: { severity: Severity }) {
 export default async function NotificacionesPage() {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  // ⚠️ Scope por organización elegida: sin esto, con dos membresías el feed
+  // mezcla los movimientos de las dos productoras y no hay forma de saber cuál
+  // es cuál, porque la fila solo dice el evento y la persona.
+  const org = await orgActual();
+  const orgId = org?.organizationId ?? null;
+
+  let q = supabase
     .from("staff_app_offers")
     .select(
       "id,gig_id,staff_nombre,staff_apellido,gig_title,role,status,sent_at,viewed_at,responded_at,expires_at",
     );
+  if (orgId) q = q.eq("organization_id", orgId);
+  const { data, error } = await q;
 
   const offers = (data ?? []) as OfferRow[];
   const feed = offers

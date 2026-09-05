@@ -14,6 +14,7 @@
 import Link from "next/link";
 import { ListFilter } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { orgActual } from "@/lib/org";
 import { oficioColor, initials } from "@/lib/avatar-color";
 import { FavoriteRemoveButton } from "./favorite-remove-button";
 import { LoadError } from "@/components/load-error";
@@ -54,11 +55,20 @@ function disponibilidad(p: ProfileRow): string | null {
 export default async function FavoritosPage() {
   const supabase = await createClient();
 
+  // ⚠️ Scope por organización elegida: la RLS filtra por MEMBRESÍA, así que con
+  // dos membresías se mezclaban los favoritos de las dos productoras. El filtro
+  // va acá, en las notas, que es lo que cuelga de la organización; los perfiles
+  // se buscan después por id, así que quedan acotados por esta consulta.
+  const org = await orgActual();
+  const orgId = org?.organizationId ?? null;
+
   // 1. Favoritos del org (candidate_notes is_favorite=true), RLS-scopeado.
-  const { data: notesData, error } = await supabase
+  let qNotes = supabase
     .from("staff_app_candidate_notes")
     .select("staff_profile_id,note")
     .eq("is_favorite", true);
+  if (orgId) qNotes = qNotes.eq("organization_id", orgId);
+  const { data: notesData, error } = await qNotes;
 
   const notes = (notesData ?? []) as NoteRow[];
   const noteById = new Map(notes.map((n) => [n.staff_profile_id, n.note]));

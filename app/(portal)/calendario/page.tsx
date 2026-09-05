@@ -6,19 +6,30 @@
  */
 
 import { createClient } from "@/lib/supabase/server";
+import { orgActual } from "@/lib/org";
 import { CalendarioClient, type CalGig } from "./calendario-client";
 import { LoadError } from "@/components/load-error";
 
 export default async function CalendarioPage() {
   const supabase = await createClient();
 
-  const [{ data: gigsData, error: gigsError }, { data: offersData }] = await Promise.all([
-    supabase
-      .from("staff_app_gigs")
-      .select("id,title,starts_at,ends_at,venue_name")
-      .order("starts_at", { ascending: true }),
-    supabase.from("staff_app_offers").select("gig_id,status"),
-  ]);
+  // ⚠️ Scope por organización elegida: la RLS filtra por MEMBRESÍA, así que a
+  // quien es miembro de dos productoras le devuelve las filas de las dos
+  // juntas. El selector dice en nombre de cuál está actuando y la lectura
+  // tiene que respetarlo.
+  const org = await orgActual();
+  const orgId = org?.organizationId ?? null;
+
+  let qGigs = supabase
+    .from("staff_app_gigs")
+    .select("id,title,starts_at,ends_at,venue_name")
+    .order("starts_at", { ascending: true });
+  if (orgId) qGigs = qGigs.eq("organization_id", orgId);
+
+  let qOffers = supabase.from("staff_app_offers").select("gig_id,status");
+  if (orgId) qOffers = qOffers.eq("organization_id", orgId);
+
+  const [{ data: gigsData, error: gigsError }, { data: offersData }] = await Promise.all([qGigs, qOffers]);
 
   if (gigsError) {
     return (

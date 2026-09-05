@@ -14,6 +14,7 @@
 import Link from "next/link";
 import { UserPlus, ArrowRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { orgActual } from "@/lib/org";
 import { fmtFecha } from "@/lib/dates";
 
 interface Gig {
@@ -35,13 +36,23 @@ function fmtRange(startIso: string | null, endIso: string | null): string {
 export default async function DashboardPage() {
   const supabase = await createClient();
 
-  const [{ data: gigsData }, { data: offersData }] = await Promise.all([
-    supabase
-      .from("staff_app_gigs")
-      .select("id,title,starts_at,ends_at,venue_name,status")
-      .order("starts_at", { ascending: true }),
-    supabase.from("staff_app_offers").select("gig_id,status"),
-  ]);
+  // ⚠️ Scope por organización elegida: la RLS filtra por MEMBRESÍA, así que a
+  // quien es miembro de dos productoras le devuelve las filas de las dos
+  // juntas. El selector dice en nombre de cuál está actuando y la lectura
+  // tiene que respetarlo.
+  const org = await orgActual();
+  const orgId = org?.organizationId ?? null;
+
+  let qGigs = supabase
+    .from("staff_app_gigs")
+    .select("id,title,starts_at,ends_at,venue_name,status")
+    .order("starts_at", { ascending: true });
+  if (orgId) qGigs = qGigs.eq("organization_id", orgId);
+
+  let qOffers = supabase.from("staff_app_offers").select("gig_id,status");
+  if (orgId) qOffers = qOffers.eq("organization_id", orgId);
+
+  const [{ data: gigsData }, { data: offersData }] = await Promise.all([qGigs, qOffers]);
 
   const gigs = (gigsData ?? []) as Gig[];
   const offers = (offersData ?? []) as { gig_id: string | null; status: string | null }[];
