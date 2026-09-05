@@ -66,6 +66,13 @@ export async function updateSession(request: NextRequest) {
     "/auth/callback",
     "/dev-login",
     "/o",
+    // LA PANTALLA DEL QUE COTIZA (0078). El proveedor llega desde el mail SIN
+    // cuenta y sin sesion: si el middleware lo mandara a /entrar, el pedido de
+    // precio no recibiria una sola respuesta. El gate real es el token, que
+    // valida la RPC SECURITY DEFINER contra el sha256 guardado.
+    // ⚠️ El prefijo va ENTERO: "/cotizar" y no "/cot", que ademas seria prefijo
+    // de "/cotizaciones", la pantalla del portal, y la abriria sin sesion.
+    "/cotizar",
     "/sumate",
     "/api/parse-cv",
     // Bienvenida de una ficha recien creada. La llama somosder.ar despues de

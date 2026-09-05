@@ -43,6 +43,7 @@ import {
   Settings,
   LogOut,
   Truck,
+  ClipboardList,
   Shield,
   MoreHorizontal,
   X,
@@ -91,6 +92,11 @@ const MAIN: Item[] = [
   // tenerlos". Va PEGADO a Buscar porque son la misma pregunta con distinta
   // respuesta: me falta gente / me falta un servicio.
   { label: "Proveedores", icon: Truck, href: "/proveedores", match: ["/proveedores"] },
+  // Pedidos de precio (0078). Va PEGADO a Proveedores porque es el paso
+  // siguiente de la misma tarea: encontré a quién pedirle, ahora les pido
+  // precio a varios a la vez. ⚠️ El match es "/cotizaciones" (el portal), NO
+  // "/cotizar", que es la pantalla pública del proveedor y no lleva este menú.
+  { label: "Pedir precio", icon: ClipboardList, href: "/cotizaciones", match: ["/cotizaciones"] },
   { label: "Eventos", icon: CalendarDays, href: "/tablero", match: ["/tablero"] },
   { label: "Favoritos", icon: Heart, href: "/favoritos", match: ["/favoritos"] },
   { label: "Calendario", icon: CalendarRange, href: "/calendario", match: ["/calendario"] },

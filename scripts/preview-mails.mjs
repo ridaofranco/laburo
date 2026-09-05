@@ -43,6 +43,8 @@ import { PagoListoEmail } from '../components/emails/pago-listo-email.tsx';
 import { QuienFichoEmail } from '../components/emails/quien-ficho-email.tsx';
 import { PerfilReminderEmail } from '../components/emails/perfil-reminder-email.tsx';
 import { VisibilidadEmail } from '../components/emails/visibilidad-email.tsx';
+import { InvitacionCotizar } from '../components/emails/invitacion-cotizar-email.tsx';
+import { ResultadoCotizacionEmail } from '../components/emails/resultado-cotizacion-email.tsx';
 
 const PARA = 'ridaofrancorg@gmail.com';
 const LINK = 'https://laburo.somosder.ar/o/PREVIEW-no-es-un-link-real';
@@ -76,6 +78,39 @@ const mails = [
       firstName: 'Franco',
       link: 'https://laburo.somosder.ar/mi-visibilidad?id=demo&t=demo',
       bajaLink: 'https://laburo.somosder.ar/baja?p=demo&t=demo',
+    }),
+  },
+  {
+    n: 'Pedido de precio: la invitación a cotizar',
+    subject: 'SOMOS DER te pide un presupuesto · Transporte de un pallet a 7 destinos',
+    el: () => createElement(InvitacionCotizar, {
+      nombre: 'Transportes Uno',
+      productora: 'SOMOS DER',
+      titulo: 'Transporte de un pallet a 7 destinos',
+      descripcion: 'Sale de Villa Soldati. Carga y descarga por nuestra cuenta.',
+      categoria: 'Logística',
+      donde: 'CABA, Buenos Aires',
+      necesarioPara: '25 de septiembre de 2026',
+      cierra: 'martes 10 de septiembre a las 18:00',
+      link: 'https://laburo.somosder.ar/cotizar/PREVIEW-no-es-un-link-real',
+    }),
+  },
+  {
+    n: 'Pedido de precio: ganaste',
+    subject: 'Quedó elegido tu presupuesto · Transporte de un pallet a 7 destinos',
+    el: () => createElement(ResultadoCotizacionEmail, {
+      nombre: 'Transportes Uno', productora: 'SOMOS DER',
+      titulo: 'Transporte de un pallet a 7 destinos',
+      resultado: 'gano', montoTexto: '$1.300.000',
+    }),
+  },
+  {
+    n: 'Pedido de precio: no quedó el tuyo',
+    subject: 'Se cerró el pedido · Transporte de un pallet a 7 destinos',
+    el: () => createElement(ResultadoCotizacionEmail, {
+      nombre: 'Transportes Dos', productora: 'SOMOS DER',
+      titulo: 'Transporte de un pallet a 7 destinos',
+      resultado: 'no_gano',
     }),
   },
   {
