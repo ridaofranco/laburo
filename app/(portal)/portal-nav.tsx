@@ -3,14 +3,33 @@
 /**
  * Navegación del portal (porteo FIEL del SideNavBar/BottomNavBar de Stitch
  * "Dashboard Productor"). Sidebar 280px en desktop, bottom-nav en mobile.
- * Estilos exactos de Stitch en valores arbitrarios. Ítems: Search/Offers/
- * Favorites/Events + Settings/Logout. Los que todavía no tienen pantalla
- * muestran un toast "Próximamente" (se van cableando a medida que se portean).
+ * Estilos exactos de Stitch en valores arbitrarios.
+ *
+ * ── TODOS LOS ÍTEMS TIENEN PANTALLA (5/9) ──────────────────────────────────
+ * Este header decía que los ítems sin pantalla mostraban un toast
+ * "Próximamente". Eso ya no existe: `href` es obligatorio en `Item`, así que es
+ * imposible sumar un ítem sin destino. El toast y sus dos ramas de <button>
+ * llevaban tiempo sin alcanzarse nunca.
+ *
+ * ── EL TELÉFONO LLEGA A TODAS LAS PANTALLAS (5/9) ──────────────────────────
+ * El bottom-nav era `items.slice(0, 5)` y nada más, así que desde el teléfono
+ * desaparecían las pantallas 6 en adelante: Favoritos, Calendario,
+ * Rentabilidad, PAGOS y Notificaciones. Ahora son cuatro ítems más un botón
+ * "Más" que abre una hoja con TODO el resto.
+ *
+ * Cuatro y no cinco: con cinco visibles más el botón son seis columnas en un
+ * ancho de teléfono, y cada una queda por debajo del objetivo de toque de 44px.
+ *
+ * ⚠️ El "Más" se calcula sobre `items` (la lista YA filtrada), nunca sobre
+ * MAIN. Calcularlo sobre MAIN le abriría las pantallas de plataforma a una
+ * productora cliente justo en el teléfono, que es donde nadie mira.
  */
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { Dialog } from "@base-ui/react/dialog";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
   LayoutGrid,
   Search,
@@ -25,6 +44,8 @@ import {
   LogOut,
   Truck,
   Shield,
+  MoreHorizontal,
+  X,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
@@ -32,7 +53,8 @@ import { LaburoWordmark } from "@/components/laburo-wordmark";
 type Item = {
   label: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
-  href?: string;
+  /** Obligatorio: un ítem de menú sin destino es un ítem que miente. */
+  href: string;
   match?: string[]; // rutas que marcan este ítem como activo
   /** Pantalla de la plataforma (SOMOS DER), no del producto de una productora. */
   soloPlataforma?: boolean;
@@ -93,16 +115,28 @@ export function PortalNav({
   // lista YA filtrada: si se calculara a nivel de módulo (como estaba), el
   // mobile quedaría desalineado con el sidebar y le ofrecería Leads a alguien
   // que no lo tiene en el sidebar.
-  // ⚠️ Con Plataforma adentro, para la cuenta de plataforma este slice esconde
-  // SEIS de once pantallas en el teléfono. No se arregla acá: es otro issue (el
-  // menú "Más"), y ningún commit mezcla dos.
-  const mobile = items.slice(0, 5);
+  // Cuatro ranuras para pantallas y la quinta para "Más". Con cinco visibles
+  // más el botón son seis columnas en un ancho de teléfono y cada una cae por
+  // debajo de los 44px de objetivo de toque.
+  const mobile = items.slice(0, 4);
+  const resto = items.slice(4);
 
   // De quién es este panel. Antes había acá una etiqueta genérica en inglés,
   // resto del mockup de Stitch: la barra lateral no decía de quién era el panel.
   const bajada = orgNombre?.trim() || "Panel de productora";
 
-  const soon = (label: string) => toast(`${label}: próximamente`);
+  const reduce = useReducedMotion();
+  const [masAbierto, setMasAbierto] = useState(false);
+
+  // Cerrar la hoja al navegar. Sin esto queda abierta encima de la pantalla
+  // nueva, que es el bug clásico de este patrón.
+  useEffect(() => {
+    setMasAbierto(false);
+  }, [pathname]);
+
+  // El "Más" se ve activo si la pantalla donde estás quedó adentro de la hoja.
+  // Sin esto, desde el teléfono no hay ninguna pista de dónde estás parado.
+  const restoActivo = resto.some((item) => isActive(item, pathname));
 
   const logout = async () => {
     const supabase = createClient();
@@ -134,11 +168,7 @@ export function PortalNav({
             );
             return (
               <li key={item.label}>
-                {item.href ? (
-                  <Link href={item.href} className={cls}>{inner}</Link>
-                ) : (
-                  <button type="button" onClick={() => soon(item.label)} className={`w-full text-left ${cls}`}>{inner}</button>
-                )}
+                <Link href={item.href} className={cls}>{inner}</Link>
               </li>
             );
           })}
@@ -185,16 +215,103 @@ export function PortalNav({
             );
             return (
               <li key={item.label} className="flex-1 flex justify-center">
-                {item.href ? (
-                  <Link href={item.href} className={cls}>{inner}</Link>
-                ) : (
-                  <button type="button" onClick={() => soon(item.label)} className={cls}>{inner}</button>
-                )}
+                <Link href={item.href} className={cls}>{inner}</Link>
               </li>
             );
           })}
+
+          {/* La quinta ranura. Solo aparece si de verdad quedó algo afuera: con
+              una lista corta, cinco ítems entran y no hace falta. */}
+          {resto.length > 0 && (
+            <li className="flex-1 flex justify-center">
+              <button
+                type="button"
+                onClick={() => setMasAbierto(true)}
+                aria-label={`Más pantallas (${resto.length})`}
+                className={
+                  restoActivo
+                    ? "flex flex-col items-center justify-center bg-[#e5e2e1] text-black w-[90%] h-[90%] scale-95 duration-200"
+                    : "flex flex-col items-center justify-center text-[#cfc4c5] w-full h-full hover:bg-[#2a2a2a]/30 transition-colors"
+                }
+              >
+                <MoreHorizontal size={22} className="mb-1" />
+                <span className="label-tech text-[10px]">Más</span>
+              </button>
+            </li>
+          )}
         </ul>
       </nav>
+
+      {/* La hoja con el resto. Mismo patrón que buscar/filtros-sheet.tsx: Base
+          UI Dialog para el shell accesible (focus trap + backdrop) y Motion
+          para el slide-up. Estilos del portal, que son los del archivo, no los
+          tokens de la pantalla de búsqueda.
+          md:hidden en el Portal: si alguien agranda la ventana con la hoja
+          abierta, no puede quedar una hoja huérfana encima del sidebar. */}
+      <Dialog.Root open={masAbierto} onOpenChange={setMasAbierto}>
+        <AnimatePresence>
+          {masAbierto && (
+            <Dialog.Portal keepMounted>
+              <Dialog.Backdrop
+                render={
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: reduce ? 0 : 0.2 }}
+                    className="md:hidden fixed inset-0 z-[60] bg-black/60"
+                  />
+                }
+              />
+              <Dialog.Popup
+                render={
+                  <motion.div
+                    initial={reduce ? { y: 0 } : { y: "100%" }}
+                    animate={{ y: 0 }}
+                    exit={reduce ? { y: 0 } : { y: "100%" }}
+                    transition={{ type: "tween", duration: reduce ? 0 : 0.25 }}
+                    className="md:hidden fixed inset-x-0 bottom-0 z-[70] mx-auto w-full max-w-[520px] max-h-[85vh] flex flex-col bg-[#20201f] border-t border-[#1c1b1b] outline-none"
+                  />
+                }
+              >
+                <div className="flex items-center justify-between px-6 pt-6 pb-2">
+                  <Dialog.Title className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#cfc4c5]">
+                    Todas las pantallas
+                  </Dialog.Title>
+                  <Dialog.Close
+                    aria-label="Cerrar"
+                    className="grid place-items-center w-11 h-11 -mr-2 text-[#cfc4c5] hover:text-[#e5e2e1] transition-colors"
+                  >
+                    <X size={20} aria-hidden="true" />
+                  </Dialog.Close>
+                </div>
+
+                <ul className="flex-1 overflow-y-auto px-2 pb-[max(24px,env(safe-area-inset-bottom))]">
+                  {resto.map((item) => {
+                    const active = isActive(item, pathname);
+                    return (
+                      <li key={item.label}>
+                        <Link
+                          href={item.href}
+                          onClick={() => setMasAbierto(false)}
+                          className={
+                            active
+                              ? "flex items-center gap-4 px-6 min-h-[56px] bg-[#1c1b1b] border-l-2 border-[#e5e2e1] text-[#e5e2e1]"
+                              : "flex items-center gap-4 px-6 min-h-[56px] text-[#cfc4c5] hover:bg-[#1c1b1b]/50 transition-colors"
+                          }
+                        >
+                          <item.icon size={20} className="shrink-0" />
+                          <span className="label-tech text-[12px]">{item.label}</span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </Dialog.Popup>
+            </Dialog.Portal>
+          )}
+        </AnimatePresence>
+      </Dialog.Root>
     </>
   );
 }
