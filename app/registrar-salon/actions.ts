@@ -20,6 +20,28 @@
  * ── EL SALÓN NO TIENE CUENTA ────────────────────────────────────────────────
  * Entra por link mágico con token, no por /login. El mail dice exactamente eso:
  * es el error que costó una trabajadora el 1/8 del lado del staff.
+ *
+ * ── POR QUÉ REINSCRIBIRSE NO PISA LOS DATOS (y por qué se devuelve `yaExistia`)
+ * Si el mail ya tiene ficha, `staff_app_registrar_salon` sólo regenera el token
+ * y devuelve `ya_existia = true`: la capacidad, la dirección y todo lo que la
+ * persona acaba de escribir se descarta. Eso NO es un descuido, y no se cambia:
+ *
+ * 1. SEGURIDAD, y es la que decide. Este formulario es PÚBLICO y sin sesión:
+ *    cualquiera que sepa el mail de un salón lo puede completar. Hoy lo peor que
+ *    logra es invalidar el token viejo y que salga un mail nuevo A LA CASILLA
+ *    DEL DUEÑO, o sea que el atacante no recibe nada. Si el formulario pudiera
+ *    pisar los datos, un desconocido reescribiría la ficha pública de un salón
+ *    (nombre, dirección, capacidad, web, instagram, bio) sin probar jamás que
+ *    ese mail es suyo. Eso es una toma de perfil: sería una regresión de
+ *    seguridad para arreglar un problema de copy.
+ * 2. Ya está decidido y documentado (0060, líneas 115 a 118): no se pisan los
+ *    datos porque destruir el trabajo de alguien por un click sería peor.
+ * 3. El lugar para editar ya existe y es autenticado: el link nuevo lleva al
+ *    panel, donde la propiedad del mail ya está probada.
+ *
+ * Lo que estaba mal era la PANTALLA, que decía "listo, ya está publicado" como
+ * si hubiera guardado algo. Por eso este action devuelve `yaExistia` en vez de
+ * tirarlo: es el mismo criterio de "estado honesto" que ya se usa con `mailOk`.
  */
 
 import { createElement } from "react";
@@ -35,6 +57,17 @@ const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
 /** Cuántos días vive el link mágico. Se dice en el mail, así que va acá una vez. */
 const DIAS_DEL_LINK = 30;
+
+export interface RegistrarSalonResult {
+  ok: boolean;
+  error?: string;
+  /**
+   * true si el mail ya tenía ficha de salón: la RPC regeneró el token y NO
+   * guardó nada de lo que se acaba de escribir. Sólo viene con `ok: true`; la
+   * pantalla lo usa para decir la verdad en vez de un "listo" que miente.
+   */
+  yaExistia?: boolean;
+}
 
 export interface RegistrarSalonInput {
   nombre: string;
@@ -69,7 +102,7 @@ function aEntero(v: string | undefined): number | null {
 
 export async function registrarSalon(
   input: RegistrarSalonInput,
-): Promise<{ ok: boolean; error?: string }> {
+): Promise<RegistrarSalonResult> {
   const nombre = (input.nombre || "").trim();
   const email = (input.email || "").trim().toLowerCase();
   const provincia = (input.provincia || "").trim();
@@ -217,5 +250,7 @@ export async function registrarSalon(
     },
   });
 
-  return { ok: true };
+  // ⚠️ `yaExistia` viaja hasta la pantalla a propósito: si la RPC no guardó los
+  // datos nuevos, decir "listo, ya está publicado" es mentir.
+  return { ok: true, yaExistia: !!r.ya_existia };
 }

@@ -19,6 +19,15 @@
  * Por eso las listas de "qué tiene" y "para qué se alquila" van en chips que
  * envuelven, y no en una fila que desborda.
  *
+ * ── EL BLOQUE DE "LISTO" TIENE DOS CARAS ────────────────────────────────────
+ * Alta nueva y reinscripción NO son lo mismo, y hasta el 2/9 la pantalla decía
+ * "listo, ya está publicado" en los dos casos. Si el mail ya tenía ficha, la RPC
+ * sólo regenera el token y descarta todo lo que se acaba de escribir (el porqué,
+ * que es de seguridad, está en el header de ./actions.ts). Decirle "listo" a
+ * alguien que acaba de corregir su capacidad es mentirle. Por eso el estado es
+ * uno solo (`yaExistia: boolean | null`, null = todavía no mandó) y no dos
+ * booleanos sueltos: molde de offer-form.tsx.
+ *
  * ── LOS DOS CAMPOS QUE NO SE PUEDEN SALTEAR ─────────────────────────────────
  * Provincia y capacidad máxima. No es burocracia: son las DOS dimensiones con
  * las que se busca un salón. Un salón sin ninguna de las dos se publicaría
@@ -125,7 +134,9 @@ export function RegistroSalonClient() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [listo, setListo] = useState(false);
+  // null = todavía no se mandó. true/false = ya se mandó, y dice si el mail YA
+  // tenía ficha (o sea, si lo que se escribió acá se guardó o se descartó).
+  const [yaExistia, setYaExistia] = useState<boolean | null>(null);
 
   function toggle(lista: string[], set: (v: string[]) => void, valor: string) {
     set(lista.includes(valor) ? lista.filter((x) => x !== valor) : [...lista, valor]);
@@ -158,7 +169,7 @@ export function RegistroSalonClient() {
         cateringPropio,
         estacionamiento,
       });
-      if (r.ok) setListo(true);
+      if (r.ok) setYaExistia(!!r.yaExistia);
       else setError(r.error ?? "No se pudo. Probá de nuevo.");
     } catch {
       setError("No se pudo. Probá de nuevo.");
@@ -167,7 +178,7 @@ export function RegistroSalonClient() {
     }
   }
 
-  if (listo) {
+  if (yaExistia !== null) {
     return (
       <main className="relative min-h-dvh flex flex-col items-center justify-center bg-black text-[#e5e2e1] px-6 py-16">
         <div className="relative z-10 w-full max-w-[520px] flex flex-col items-center">
@@ -180,19 +191,52 @@ export function RegistroSalonClient() {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="w-full flex flex-col items-center gap-6"
           >
-            <p className="text-center text-[16px] leading-[1.6] text-[#cfc4c5]">
-              Listo, <span className="text-[#e5e2e1]">{nombre}</span> ya está
-              publicado en el directorio de salones. Te mandamos a{" "}
-              <span className="text-[#e5e2e1]">{email}</span> el link para entrar
-              a tu panel. Guardá ese mail, porque el link es la forma de volver a
-              entrar. Si no lo ves, mirá en spam.
-            </p>
-            <Link
-              href="/salones"
-              className="label-tech text-[12px] uppercase tracking-widest text-[#cfc4c5] hover:text-[#e5e2e1] border-b border-[#4c4546] hover:border-[#e5e2e1] pb-1 transition-colors"
-            >
-              Ver el directorio
-            </Link>
+            {yaExistia ? (
+              <>
+                <p className="text-center text-[16px] leading-[1.6] text-[#cfc4c5]">
+                  <span className="text-[#e5e2e1]">{nombre}</span> ya tenía su
+                  ficha publicada en el directorio de salones, así que no creamos
+                  nada nuevo ni te duplicamos.
+                </p>
+                <p className="text-center text-[16px] leading-[1.6] text-[#e5e2e1]">
+                  Lo que acabás de escribir acá no se guardó. Los datos del salón
+                  se editan desde tu panel, entrando con el link, que es el único
+                  lugar donde sabemos que sos vos.
+                </p>
+                <p className="text-center text-[16px] leading-[1.6] text-[#cfc4c5]">
+                  Te mandamos a <span className="text-[#e5e2e1]">{email}</span> un
+                  link nuevo para entrar y corregir lo que quieras. Si no lo ves,
+                  mirá en spam.
+                </p>
+                {/* Acá no se puede linkear /acceso-proveedor/<token>: el token
+                    viaja en el mail y NO vuelve en la respuesta del action, y
+                    está bien que sea así (si volviera, cualquiera que conozca un
+                    mail se llevaría la llave del panel desde el navegador).
+                    /mi-proveedor es la puerta que sí se puede mostrar. */}
+                <Link
+                  href="/mi-proveedor"
+                  className="label-tech text-[12px] uppercase tracking-widest text-[#cfc4c5] hover:text-[#e5e2e1] border-b border-[#4c4546] hover:border-[#e5e2e1] pb-1 transition-colors"
+                >
+                  Entrar a mi panel
+                </Link>
+              </>
+            ) : (
+              <>
+                <p className="text-center text-[16px] leading-[1.6] text-[#cfc4c5]">
+                  Listo, <span className="text-[#e5e2e1]">{nombre}</span> ya está
+                  publicado en el directorio de salones. Te mandamos a{" "}
+                  <span className="text-[#e5e2e1]">{email}</span> el link para entrar
+                  a tu panel. Guardá ese mail, porque el link es la forma de volver a
+                  entrar. Si no lo ves, mirá en spam.
+                </p>
+                <Link
+                  href="/salones"
+                  className="label-tech text-[12px] uppercase tracking-widest text-[#cfc4c5] hover:text-[#e5e2e1] border-b border-[#4c4546] hover:border-[#e5e2e1] pb-1 transition-colors"
+                >
+                  Ver el directorio
+                </Link>
+              </>
+            )}
           </motion.div>
         </div>
       </main>
