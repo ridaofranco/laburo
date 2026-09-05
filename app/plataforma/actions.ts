@@ -16,6 +16,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { iniciarSuplantacion } from "@/lib/suplantacion";
 
 export interface Resumen {
   ok: boolean;
@@ -98,6 +99,25 @@ export async function getOrganizaciones(): Promise<OrgPlataforma[]> {
   const supabase = await createClient();
   const { data } = await supabase.rpc("staff_app_plataforma_organizaciones");
   return (data as OrgPlataforma[] | null) ?? [];
+}
+
+/**
+ * Entrar a operar una productora (0073).
+ *
+ * ⚠️ El permiso NO se decide acá. `iniciarSuplantacion` llama a
+ * `staff_app_actuar_como`, cuyo gate es `is_platform_admin()` adentro de la
+ * base. Este archivo es "use server", o sea que sus exports son endpoints POST
+ * invocables: si el gate viviera acá, alcanzaría con llamarlo a mano.
+ */
+export async function actuarComo(
+  orgId: string,
+  motivo: string,
+): Promise<{ ok: boolean; error?: string }> {
+  const r = await iniciarSuplantacion(orgId, motivo);
+  if (!r.ok) return r;
+  // Redibuja el portal entero: cambia la organización, el menú y el banner.
+  revalidatePath("/", "layout");
+  return { ok: true };
 }
 
 export async function moderar(

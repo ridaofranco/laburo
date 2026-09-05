@@ -9,11 +9,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { AlertTriangle, EyeOff, RotateCcw } from "lucide-react";
+import { AlertTriangle, EyeOff, RotateCcw, LogIn } from "lucide-react";
 import { money } from "@/lib/format";
 import { fmtFecha } from "@/lib/dates";
 import { senalesDeRiesgo } from "@/lib/senales-riesgo";
 import {
+  actuarComo,
   moderar,
   type BusquedaPlataforma,
   type Contratacion,
@@ -168,6 +169,50 @@ function FilaBusqueda({ b }: { b: BusquedaPlataforma }) {
         )}
       </div>
     </div>
+  );
+}
+
+/**
+ * Entrar a operar una productora.
+ *
+ * ⚠️ Pide el motivo ANTES de entrar, no después: el motivo es obligatorio en la
+ * RPC (mismo criterio que la moderación de la 0054), y pedirlo al salir sería
+ * pedirlo cuando ya no sirve para decidir nada.
+ */
+function BotonActuarComo({ org }: { org: OrgPlataforma }) {
+  const router = useRouter();
+  const [busy, setBusy] = useState(false);
+
+  async function entrar() {
+    const motivo = window.prompt(
+      `Vas a operar como ${org.name}. Todo lo que hagas queda registrado con este motivo.\n\n¿Para qué entrás?`,
+      "",
+    );
+    if (motivo == null) return;
+    if (!motivo.trim()) {
+      toast.error("Hace falta un motivo.");
+      return;
+    }
+    setBusy(true);
+    const r = await actuarComo(org.id, motivo);
+    setBusy(false);
+    if (!r.ok) {
+      toast.error(r.error ?? "No se pudo entrar.");
+      return;
+    }
+    router.push("/dashboard");
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={entrar}
+      disabled={busy}
+      className="flex items-center gap-2 min-h-[44px] px-3 label-tech text-[10px] uppercase tracking-widest text-[#988e90] border border-[#4c4546] hover:text-[#e5e2e1] hover:border-[#e5e2e1] transition-colors disabled:opacity-60"
+    >
+      <LogIn size={14} aria-hidden="true" />
+      {busy ? "Entrando…" : "Actuar como"}
+    </button>
   );
 }
 
@@ -358,9 +403,16 @@ export function PlataformaClient({
                 {o.contrataciones === 1 ? "contratación" : "contrataciones"}
               </span>
             </div>
-            <span className="label-tech text-[11px] uppercase tracking-widest text-[#988e90] shrink-0">
-              desde {dia(o.created_at)}
-            </span>
+            <div className="flex items-center gap-4 shrink-0">
+              <span className="label-tech text-[11px] uppercase tracking-widest text-[#988e90]">
+                desde {dia(o.created_at)}
+              </span>
+              {/* No aparece en la propia organización plataforma: suplantarse a
+                  uno mismo no tiene sentido y la RPC lo rechaza igual. Esconder
+                  el botón es cortesía, no seguridad: el gate es
+                  is_platform_admin() adentro de la base. */}
+              {!o.es_plataforma && <BotonActuarComo org={o} />}
+            </div>
           </div>
         ))}
       </section>

@@ -2,6 +2,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { LABURO_ORG_COOKIE, esUuid } from "@/lib/org-cookie";
+import { suplantacionActiva } from "@/lib/suplantacion";
 
 /**
  * LA ORGANIZACIÓN DEL QUE ESTÁ MIRANDO.
@@ -28,10 +29,17 @@ import { LABURO_ORG_COOKIE, esUuid } from "@/lib/org-cookie";
  * manda la cookie `laburo_org_id`, que setea el selector de contexto. El orden
  * es:
  *
- *   1. Hay cookie, tiene forma de UUID, y esa organización está entre las del
- *      usuario  →  esa.
- *   2. Cualquier otro caso  →  la más antigua, que es el comportamiento de
+ *   1. **¿Hay una suplantación viva y validada contra la base?** → esa
+ *      organización, marcada como `suplantada`. Ver `lib/suplantacion.ts`.
+ *   2. Hay cookie de contexto, tiene forma de UUID, y esa organización está
+ *      entre las del usuario  →  esa.
+ *   3. Cualquier otro caso  →  la más antigua, que es el comportamiento de
  *      siempre.
+ *
+ * ⚠️ **La suplantación gana sobre la cookie de contexto, y es deliberado.** Son
+ * dos mecanismos que viven los dos en una cookie, y si compitieran habría
+ * estados imposibles: el banner diciendo que estás operando la productora A
+ * mientras las escrituras van a la B. Uno manda, y manda el más excepcional.
  *
  * **El paso 2 se come en silencio una cookie inválida, vencida o ajena, y eso
  * es deliberado.** Una cookie con el UUID de una organización de la que no sos
@@ -116,6 +124,17 @@ export interface OrgActual {
    * el usuario hubiera elegido eso.
    */
   elegidaPorElUsuario: boolean;
+  /**
+   * ¿Se está operando esta organización SIN ser miembro, por una suplantación
+   * de plataforma (0073)?
+   *
+   * ⚠️ Este booleano es lo que hace posible el banner. Sin él, el portal no
+   * tiene forma de saber que está en modo prestado, y una pantalla que no lo
+   * dice es exactamente el problema que la suplantación tiene que evitar.
+   */
+  suplantada: boolean;
+  /** El id de la sesión de auditoría, para poder cerrarla desde el banner. */
+  suplantacionId: string | null;
 }
 
 interface FilaMyOrgs {
@@ -134,6 +153,8 @@ function desdeFila(fila: FilaMyOrgs, elegida: boolean): OrgActual {
     slug: fila.org_slug ?? null,
     esPlataforma: fila.es_plataforma === true,
     elegidaPorElUsuario: elegida,
+    suplantada: false,
+    suplantacionId: null,
   };
 }
 
@@ -175,6 +196,30 @@ export async function orgsDelUsuario(): Promise<OrgActual[]> {
  */
 export async function orgActual(): Promise<OrgActual | null> {
   try {
+    // (1) La suplantación gana sobre todo lo demás. Se valida contra la base en
+    // cada llamada: la ventana de 60 minutos vive en SQL, así que una sesión
+    // vencida deja de resolver acá sola, sin que nadie limpie nada.
+    const supl = await suplantacionActiva();
+    if (supl) {
+      return {
+        organizationId: supl.organizationId,
+        // Quien suplanta NO es miembro, así que no tiene rol en esa
+        // organización. La base lo trata como writer (0073); acá se dice
+        // "writer" para que las pantallas que leen el rol no se rompan, y el
+        // banner es el que aclara que el permiso es prestado.
+        rol: "writer",
+        nombre: supl.nombre,
+        slug: supl.slug,
+        // ⚠️ Nunca es la plataforma: la RPC rechaza suplantar a la propia
+        // organización plataforma. Y aunque llegara, marcarla como plataforma
+        // le abriría /leads y /rentabilidad de una organización ajena.
+        esPlataforma: false,
+        elegidaPorElUsuario: true,
+        suplantada: true,
+        suplantacionId: supl.sesionId,
+      };
+    }
+
     const supabase = await createClient();
 
     // Camino nuevo (migración 0035): todas mis organizaciones, la más antigua
@@ -220,6 +265,8 @@ export async function orgActual(): Promise<OrgActual | null> {
       // La vista vieja no sabe de varias organizaciones, así que acá no hay nada
       // que elegir y la cookie no juega.
       elegidaPorElUsuario: false,
+      suplantada: false,
+      suplantacionId: null,
     };
   } catch {
     return null;

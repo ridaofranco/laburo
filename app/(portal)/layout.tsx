@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { orgActual, orgsDelUsuario } from "@/lib/org";
 import { AccesoDenegado } from "../(app)/acceso-denegado";
 import { PortalNav } from "./portal-nav";
+import { BannerSuplantacion } from "./banner-suplantacion";
 
 /**
  * Layout del portal del productor (porteo del SideNavBar de Stitch). Mismo gate
@@ -43,14 +44,26 @@ export default async function PortalLayout({
       <PortalNav
         esPlataforma={org.esPlataforma}
         orgNombre={org.nombre}
-        orgs={orgs
-          .filter((o) => o.organizationId)
-          .map((o) => ({ id: o.organizationId as string, nombre: o.nombre ?? "Productora" }))}
+        /* Suplantando NO hay selector: la organización la fija la sesión de
+           suplantación, y ofrecer un cambio de contexto ahí adentro es un
+           estado que no queremos que exista. Se sale del banner y se elige
+           después. */
+        orgs={
+          org.suplantada
+            ? []
+            : orgs
+                .filter((o) => o.organizationId)
+                .map((o) => ({ id: o.organizationId as string, nombre: o.nombre ?? "Productora" }))
+        }
         orgActualId={org.organizationId}
       />
-      <main className="flex-1 flex flex-col min-h-dvh w-full md:pl-[280px] pb-32 md:pb-0">
-        {children}
-      </main>
+      <div className="flex-1 flex flex-col min-h-dvh w-full md:pl-[280px] pb-32 md:pb-0">
+        {/* Invariante 4 de la 0073: visible en TODAS las pantallas del portal.
+            Va acá y no adentro de cada página justamente para que no haya
+            ninguna pantalla donde se pueda olvidar. */}
+        {org.suplantada && <BannerSuplantacion nombre={org.nombre} />}
+        <main className="flex-1 flex flex-col w-full">{children}</main>
+      </div>
     </div>
   );
 }
