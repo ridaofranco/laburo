@@ -19,12 +19,13 @@
  *    cumple.
  */
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { crearPedido } from "../actions";
 import { plantillaDe, type CampoDesglose } from "@/lib/cotizaciones";
 import { desdeInputLocal } from "@/lib/dates";
+import { sniffCvMime } from "@/lib/cv";
 
 const inputCaja =
   "w-full min-h-[48px] bg-[#121212] border border-[#2a2a2a] focus:border-[#e5e2e1] outline-none text-[16px] text-[#e5e2e1] px-4 py-3 rounded-none transition-colors [color-scheme:dark]";
@@ -58,6 +59,112 @@ export function NuevoPedidoForm({
   const [cierraAt, setCierraAt] = useState(enUnaSemana);
   const [campos, setCampos] = useState<CampoDesglose[]>(plantillaDe(""));
   const [tocoElDesglose, setTocoElDesglose] = useState(false);
+
+  // ── El brief ──────────────────────────────────────────────────────────────
+  const [brief, setBrief] = useState("");
+  const [leyendo, setLeyendo] = useState(false);
+  const [faltantes, setFaltantes] = useState<string[]>([]);
+  const [archivo, setArchivo] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  /**
+   * Lee el brief y rellena el formulario.
+   *
+   * ⚠️ NO crea nada: deja un borrador arriba del formulario de siempre, que la
+   * persona revisa y edita. Lo que la IA no encontró queda vacío, nunca
+   * inventado, y lo que le falta al brief se avisa aparte en vez de rellenarse
+   * con un supuesto.
+   */
+  async function leerBrief() {
+    const file = fileRef.current?.files?.[0] ?? null;
+    if (!brief.trim() && !file) {
+      toast.error("Pegá el pedido del cliente o subí el archivo.");
+      return;
+    }
+
+    setLeyendo(true);
+    try {
+      let mime: string | undefined;
+      let data: string | undefined;
+
+      if (file) {
+        const buf = new Uint8Array(await file.arrayBuffer());
+        // El MIME se sniffea por magic bytes, igual que el CV: lo que declara el
+        // navegador miente seguido (sobre todo en Android).
+        const sniffed = sniffCvMime(buf.slice(0, 16));
+        if (!sniffed) {
+          toast.error("Ese archivo no lo puedo leer. Va PDF o una foto.");
+          setLeyendo(false);
+          return;
+        }
+        mime = sniffed;
+        let bin = "";
+        for (let i = 0; i < buf.length; i += 8192) {
+          bin += String.fromCharCode(...buf.subarray(i, i + 8192));
+        }
+        data = btoa(bin);
+      }
+
+      const res = await fetch("/api/pedido-desde-brief", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ texto: brief.trim(), mime, data, categoria }),
+      });
+
+      if (!res.ok) {
+        const MOTIVOS: Record<number, string> = {
+          401: "Se cerró tu sesión. Entrá de nuevo.",
+          413: "El archivo es muy grande. Probá con uno más chico o pegá el texto.",
+          415: "Ese archivo no lo puedo leer. Va PDF o una foto.",
+          429: "Esperá un minuto: se leyeron muchos briefs seguidos.",
+          504: "Tardó demasiado. Probá con el texto pegado en vez del archivo.",
+        };
+        toast.error(MOTIVOS[res.status] ?? "No se pudo leer. Cargalo a mano, que es igual de válido.");
+        setLeyendo(false);
+        return;
+      }
+
+      const { data: d } = (await res.json()) as {
+        data: {
+          titulo: string | null;
+          descripcion: string | null;
+          categoria: string | null;
+          provincia: string | null;
+          ciudad: string | null;
+          necesario_para: string | null;
+          campos: CampoDesglose[];
+          faltantes: string[];
+        };
+      };
+
+      // Solo se pisa lo que está vacío... salvo que venga del brief y la persona
+      // no haya escrito nada todavía. Escribir arriba de lo que alguien tipeó a
+      // mano es la forma más rápida de que no vuelva a usar el botón.
+      if (d.titulo && !titulo.trim()) setTitulo(d.titulo);
+      if (d.descripcion && !descripcion.trim()) setDescripcion(d.descripcion);
+      if (d.categoria && !categoria) setCategoria(d.categoria);
+      if (d.provincia && !provincia) setProvincia(d.provincia);
+      if (d.ciudad && !ciudad.trim()) setCiudad(d.ciudad);
+      if (d.necesario_para && !necesarioPara) setNecesarioPara(d.necesario_para);
+      if (d.campos?.length && !tocoElDesglose) {
+        setCampos(d.campos);
+        setTocoElDesglose(true); // ya no es la plantilla del rubro: es de este caso
+      }
+      setFaltantes(d.faltantes ?? []);
+      setArchivo(file?.name ?? null);
+
+      toast.success(
+        d.faltantes?.length
+          ? `Listo. Ojo: hay ${d.faltantes.length} ${d.faltantes.length === 1 ? "dato" : "datos"} que conviene aclarar.`
+          : "Listo, revisalo antes de crear.",
+      );
+    } catch (e) {
+      console.error("[nuevo pedido] leer brief falló:", e);
+      toast.error("No se pudo leer. Cargalo a mano, que es igual de válido.");
+    } finally {
+      setLeyendo(false);
+    }
+  }
 
   /** Al elegir rubro se trae su plantilla, salvo que la persona ya haya editado
    *  el desglose: pisarle lo que escribió sería el peor momento para ser útil. */
@@ -124,6 +231,77 @@ export function NuevoPedidoForm({
 
   return (
     <div className="flex flex-col gap-8">
+      {/* ── Contá qué necesitás ─────────────────────────────────────────────
+          Franco: "la licitación se arma de alguna forma, y tengo que contar".
+          Contar es el trabajo, y esto lo saca del medio: pegás el mail del
+          cliente o subís el brief, y el formulario de abajo queda armado.
+          ⚠️ No crea nada: es un borrador para revisar. */}
+      <section className="border border-[#222] bg-[#0A0A0A] p-6 flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <h2 className="text-[20px] text-[#e5e2e1]">Contá qué necesitás</h2>
+          <p className="text-[15px] text-[#cfc4c5] leading-[1.6]">
+            Pegá el mail del cliente, el mensaje de WhatsApp o lo que tengas, y armo
+            el pedido. También podés subir el PDF del brief. Después lo revisás y lo
+            corregís: no se manda nada hasta que vos lo digas.
+          </p>
+        </div>
+
+        <textarea
+          className={`${inputCaja} min-h-[120px]`}
+          value={brief}
+          onChange={(e) => setBrief(e.target.value)}
+          placeholder="Hola Franco, necesitamos llevar un pallet desde Villa Soldati a siete puntos del país entre el 20 y el 25. Son cajas de 30 kilos..."
+          maxLength={40000}
+        />
+
+        <div className="flex flex-wrap items-center gap-4">
+          <label className="inline-flex items-center gap-3 cursor-pointer text-[14px] text-[#cfc4c5] hover:text-[#e5e2e1] transition-colors">
+            <span className="min-h-[44px] px-5 border border-[#2a2a2a] inline-flex items-center">
+              Subir el brief
+            </span>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="application/pdf,image/*"
+              className="sr-only"
+              onChange={(e) => setArchivo(e.target.files?.[0]?.name ?? null)}
+            />
+            {archivo ? <span className="text-[13px] text-[#8A8A8A]">{archivo}</span> : null}
+          </label>
+
+          <button
+            type="button"
+            onClick={leerBrief}
+            disabled={leyendo}
+            className="min-h-[48px] px-6 border border-[#0047FF] text-[15px] text-[#e5e2e1] hover:bg-[#0047FF] transition-colors disabled:opacity-50"
+          >
+            {leyendo ? "Leyendo..." : "Armar el pedido"}
+          </button>
+        </div>
+
+        {/* Lo que el brief NO dice. No rellena ningún campo a propósito: es la
+            lista de repreguntas que te vas a comer si lo mandás así. De las 45
+            respuestas al pedido del pallet, 43 eran exactamente esto. */}
+        {faltantes.length > 0 ? (
+          <div className="flex flex-col gap-2 border-l-2 border-[#e3c77f] pl-4 mt-1">
+            <p className="label-tech text-[11px] uppercase tracking-widest text-[#e3c77f]">
+              Esto no lo aclara, y te lo van a preguntar
+            </p>
+            <ul className="flex flex-col gap-1">
+              {faltantes.map((f, i) => (
+                <li key={i} className="text-[14px] text-[#cfc4c5] leading-[1.5]">
+                  · {f}
+                </li>
+              ))}
+            </ul>
+            <p className="text-[13px] text-[#8A8A8A] mt-1">
+              Agregalo al detalle o sumalo como pregunta. Cada uno de estos es un ida
+              y vuelta de mails que te ahorrás.
+            </p>
+          </div>
+        ) : null}
+      </section>
+
       <section className="flex flex-col gap-5">
         <label className="flex flex-col gap-2">
           <span className={labelCls}>

@@ -55,6 +55,20 @@ Sin eso, la tabla comparativa miente.
 
 ### Para el que pide
 
+0. **Cuenta lo que necesita, como le llegó.** Pega el mail del cliente o sube el
+   PDF del brief, y el pedido sale armado: título, rubro, dónde, para cuándo, y
+   sobre todo **las preguntas del desglose para ese caso**. Es un borrador: se
+   revisa y se corrige antes de crear nada.
+
+   ⚠️ Además devuelve **lo que el brief NO dice** y va a generar repreguntas.
+   Eso no completa ningún campo a propósito: es la lista de idas y vueltas que
+   te ahorrás si lo aclarás antes de mandar 40 mails. De las 45 respuestas al
+   pedido del pallet, 43 eran exactamente esto.
+
+   ⚠️ **No inventa.** Lo que no está en el texto queda vacío. Si el brief dice
+   "25 de septiembre" sin año, resuelve el próximo y lo AVISA, en vez de
+   esconder el supuesto.
+
 1. Crea un pedido: qué necesita, dónde, para cuándo, y hasta cuándo recibe
    respuestas.
 2. Arma el desglose: qué quiere que cada empresa le detalle además del precio.
