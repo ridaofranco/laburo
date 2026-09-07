@@ -17,11 +17,21 @@
 import { NextResponse } from "next/server";
 import { clientIpFrom, rateLimitOr429 } from "@/lib/rate-limit";
 import { verificarCvSubido } from "@/lib/cv-servidor";
+import { pedirleAGemini } from "@/lib/gemini";
 
 export const runtime = "nodejs";
-// gemini-2.5-flash quedó deprecado para cuentas nuevas (404). Usamos el alias
-// estable "latest" del flash actual: gratis, apto tier free, sin deprecarse.
-const MODEL = "gemini-flash-latest";
+// ⚠️ 7/9: LA LLAMADA SE MUDÓ A lib/gemini.ts, CON CAÍDA AL MODELO LIVIANO.
+// Probando el lector de briefs apareció que `gemini-flash-latest` topea en 20
+// requests POR MINUTO en el tier gratuito, y ese límite es del PROYECTO: lo
+// comparten LABURO y somosder.ar. O sea que una tanda de pruebas en un producto
+// dejaba SIN AUTOLLENADO al formulario donde se anota la gente, y del lado de
+// la persona eso se ve igual que "no se pudo leer el CV".
+// Medido el mismo día con un PDF de prueba: flash-latest en 429, y
+// flash-lite-latest leyó el mismo archivo perfecto. Ahora se cae al liviano en
+// vez de fallar.
+//
+// ⚠️ Y quedó comprobado por qué no se hardcodea una versión: `gemini-2.0-flash`
+// ahora devuelve 404 "no longer available". Los alias -latest se mueven solos.
 
 // Un CV en el form se capa a 10MB; en base64 infla ~33% → ~13.3MB. Dejamos 16MB
 // de margen para el JSON entero (data + claves). Más que eso = cortamos.
@@ -132,58 +142,18 @@ export async function POST(request: Request) {
     `- experiencia_detalle (2 o 3 líneas resumiendo su experiencia laboral / en eventos)\n` +
     `- oficios (array; incluí SOLO valores EXACTOS de esta lista que apliquen a la persona: ${lista})`;
 
-  // Timeout duro: si Gemini no responde a tiempo, abortamos (no colgamos la request).
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
-  let r: Response;
-  try {
-    r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [
-            { parts: [{ inline_data: { mime_type: mimeType, data } }, { text: prompt }] },
-          ],
-          generationConfig: { response_mime_type: "application/json", temperature: 0 },
-        }),
-        signal: controller.signal,
-      },
-    );
-  } catch (e) {
-    const aborted = e instanceof Error && e.name === "AbortError";
-    console.error(
-      `[parse-cv] ${aborted ? "504 timeout" : "502 fetch_failed"} · ${e instanceof Error ? e.message : String(e)}`,
-    );
-    return NextResponse.json(
-      { error: aborted ? "timeout" : "fetch_failed" },
-      { status: aborted ? 504 : 502 },
-    );
-  } finally {
-    clearTimeout(timer);
-  }
-  if (!r.ok) {
-    // EL MOTIVO REAL, EN LOS LOGS. Hacia afuera se sigue devolviendo solo
-    // {error:"gemini", status} a propósito: el detalle de Google puede incluir
-    // el nombre del proyecto o de la key, y esta ruta es pública.
-    //
-    // Sin esto, un 403 (clave sin permiso, API deshabilitada, key con
-    // restricción de IP) y un 429 (cuota agotada) se ven idénticos desde acá, y
-    // se diagnostican adivinando. Pasó el 1/8: Gemini devolvía 403 en LABURO Y
-    // en somosder.ar y no había forma de saber por qué sin leer el cuerpo.
-    let detalle = "";
-    try {
-      detalle = (await r.text()).slice(0, 500);
-    } catch {
-      detalle = "(sin cuerpo)";
-    }
-    console.error(`[parse-cv] Gemini ${r.status}:`, detalle);
-    return NextResponse.json({ error: "gemini", status: r.status }, { status: 502 });
-  }
+  // Timeout duro + caída al modelo liviano (lib/gemini.ts). El motivo real de
+  // un fallo va a los logs y no a la respuesta, porque esta ruta es pública.
+  const g = await pedirleAGemini(
+    [{ inline_data: { mime_type: mimeType, data } }, { text: prompt }],
+    { timeoutMs: GEMINI_TIMEOUT_MS, etiqueta: "parse-cv" },
+  );
 
-  const g = await r.json();
-  const text = g?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+  if (!g.ok) {
+    const status = g.error === "timeout" ? 504 : 502;
+    return NextResponse.json({ error: g.error, status: g.status }, { status });
+  }
+  const text = g.texto || "{}";
   let parsed: Record<string, unknown>;
   try {
     parsed = JSON.parse(text);

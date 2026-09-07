@@ -46,11 +46,10 @@ import { rateLimitOr429 } from "@/lib/rate-limit";
 import { PLANTILLA_GENERICA, plantillaDe, conPreguntasDePlaza } from "@/lib/cotizaciones";
 import { CATEGORIAS_PROVEEDOR } from "@/lib/categorias-proveedor";
 import { PROVINCIAS } from "@/lib/provincias";
+import { pedirleAGemini } from "@/lib/gemini";
 
 export const runtime = "nodejs";
 
-// El mismo alias estable que usa el lector de CV: gratis y sin deprecarse.
-const MODEL = "gemini-flash-latest";
 const GEMINI_TIMEOUT_MS = 25_000;
 
 // Un brief no es un CV escaneado: 8MB de PDF es muchísimo para un pliego.
@@ -162,58 +161,27 @@ export async function POST(request: Request) {
     texto ? `EL PEDIDO DEL CLIENTE:\n${texto}` : `El pedido del cliente está en el archivo adjunto.`,
   ].join("\n");
 
-  const parts: unknown[] = [];
+  const parts = [];
   if (hayArchivo) parts.push({ inline_data: { mime_type: mimeType, data } });
   parts.push({ text: prompt });
 
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
-  let r: Response;
-  try {
-    r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts }],
-          // temperature 0: acá no queremos creatividad, queremos que no invente.
-          generationConfig: { response_mime_type: "application/json", temperature: 0 },
-        }),
-        signal: controller.signal,
-      },
-    );
-  } catch (e) {
-    const aborted = e instanceof Error && e.name === "AbortError";
-    console.error(
-      `[pedido-desde-brief] ${aborted ? "504 timeout" : "502 fetch_failed"} · ${e instanceof Error ? e.message : String(e)}`,
-    );
-    return NextResponse.json(
-      { error: aborted ? "timeout" : "fetch_failed" },
-      { status: aborted ? 504 : 502 },
-    );
-  } finally {
-    clearTimeout(timer);
+  // ⚠️ Con caída al modelo liviano: el tier gratuito de `gemini-flash-latest`
+  // topea en 20 requests por minuto DEL PROYECTO, compartidos con el lector de
+  // CV de somosder.ar. Medido el 7/9: con el principal en 429, el liviano leyó
+  // el mismo PDF sin problema. Ver lib/gemini.ts.
+  const g = await pedirleAGemini(parts, {
+    timeoutMs: GEMINI_TIMEOUT_MS,
+    etiqueta: "pedido-desde-brief",
+  });
+
+  if (!g.ok) {
+    const status = g.error === "timeout" ? 504 : 502;
+    return NextResponse.json({ error: g.error, status: g.status }, { status });
   }
 
-  if (!r.ok) {
-    // El motivo real va a los logs, no a la respuesta: el detalle de Google
-    // puede traer el nombre del proyecto o de la key.
-    let detalle = "";
-    try {
-      detalle = (await r.text()).slice(0, 500);
-    } catch {
-      detalle = "(sin cuerpo)";
-    }
-    console.error(`[pedido-desde-brief] Gemini ${r.status}:`, detalle);
-    return NextResponse.json({ error: "gemini", status: r.status }, { status: 502 });
-  }
-
-  const g = await r.json();
-  const raw = g?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
   let parsed: Record<string, unknown>;
   try {
-    parsed = JSON.parse(raw);
+    parsed = JSON.parse(g.texto || "{}");
   } catch {
     console.error("[pedido-desde-brief] Gemini devolvió algo que no es JSON");
     return NextResponse.json({ error: "respuesta_ilegible" }, { status: 502 });
