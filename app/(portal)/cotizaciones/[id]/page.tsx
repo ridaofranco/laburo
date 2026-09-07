@@ -13,6 +13,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPedido, getCotizaciones, proveedoresParaInvitar } from "../actions";
 import { PedidoClient } from "./pedido-client";
+import { Publicar } from "./publicar";
+import { createClient } from "@/lib/supabase/server";
+import { orgActual } from "@/lib/org";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "LABURO. | Pedido de precio",
@@ -32,6 +36,16 @@ export default async function PedidoPage({
   // del pedido: si el pedido es de sonido, ofrecer los 200 de catering es ruido.
   // Si el rubro no tiene ninguno cargado, se cae a la lista completa, que es
   // mejor que una lista vacía sin explicación.
+  const supabase = await createClient();
+  const org = await orgActual();
+  const { data: vis } = await supabase.rpc("staff_app_visibilidad_de", {
+    p_request_id: id,
+    p_org: org?.organizationId ?? null,
+  });
+  const visibilidad = vis as
+    | { publica: boolean; mostrar_productora: boolean; slug: string | null; puede_editar: boolean }
+    | null;
+
   const porRubro = await proveedoresParaInvitar(id, pedido.categoria);
   const proveedores = porRubro.length > 0 ? porRubro : await proveedoresParaInvitar(id, null);
 
@@ -43,6 +57,13 @@ export default async function PedidoPage({
         </Link>
         <h1 className="t-display text-[#e5e2e1]">{pedido.titulo}</h1>
       </header>
+
+      {/* Publicar la licitación: los dos interruptores (pública/privada y
+        * mostrar o no quién pide). Va ARRIBA de los invitados porque decide
+        * quién puede llegar al pedido, no solo a quién se lo mandaste. */}
+      {visibilidad ? (
+        <Publicar requestId={id} inicial={visibilidad} origen={SITE_URL} />
+      ) : null}
 
       <PedidoClient
         pedido={pedido}

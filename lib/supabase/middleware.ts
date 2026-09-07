@@ -134,6 +134,13 @@ export async function updateSession(request: NextRequest) {
     // nada: devuelve el mail invitado y el nombre de la productora, que son los
     // datos que la persona necesita para saber con que cuenta entrar.
     "/equipo",
+    // Las licitaciones publicas (0085). Publicas por definicion: las abre un
+    // proveedor que llega de Google o de un link compartido y que NO tiene
+    // cuenta. Sin esta linea el link muere en un 307 mudo a /entrar.
+    // ⚠️ Lo que se ve ahi no filtra nada: el pedido, y el nombre de la
+    // productora SOLO si ella eligio mostrarlo. Nunca quienes cotizaron ni por
+    // cuanto: eso convertiria la licitacion en una subasta a la vista.
+    "/licitaciones",
     // La pregunta de visibilidad (0076). Publica por definicion: la abre alguien
     // del pool, que NO tiene cuenta. El gate es el token HMAC del link.
     "/mi-visibilidad",
