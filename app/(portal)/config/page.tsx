@@ -16,36 +16,14 @@
  */
 
 import Link from "next/link";
-import { Building2, Gauge, ShieldCheck } from "lucide-react";
+import { Gauge } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { orgActual } from "@/lib/org";
-import { initials } from "@/lib/avatar-color";
+import { leerPerfil } from "./perfil-actions";
+import { leerEquipo } from "./equipo-actions";
+import { EquipoPanel } from "./equipo-panel";
+import { PerfilForm } from "./perfil-form";
 
-/**
- * Los CUATRO roles que existen de verdad, y nada más.
- *
- * ⚠️ Acá figuraban `admin` y `member`, que **no existen** en el CHECK de la base,
- * y faltaba `viewer`, que sí existía: la pantalla sabía traducir dos roles
- * imposibles y no sabía nombrar uno real. `manager` llegó con la 0071, así que la
- * lista completa es `owner`, `manager`, `writer`, `viewer`.
- *
- * El `default` se queda como fail-safe: si algún día aparece un rol que este
- * switch no conoce, se muestra tal cual en vez de inventarle un nombre.
- */
-function roleLabel(role: string | null): string {
-  switch ((role ?? "").toLowerCase()) {
-    case "owner":
-      return "Dueño";
-    case "manager":
-      return "Gerente";
-    case "writer":
-      return "Editor";
-    case "viewer":
-      return "Solo lectura";
-    default:
-      return role?.trim() || "Miembro";
-  }
-}
 
 export default async function ConfigPage() {
   const supabase = await createClient();
@@ -66,10 +44,11 @@ export default async function ConfigPage() {
   let qOffers = supabase.from("staff_app_offers").select("*", { count: "exact", head: true });
   if (orgId) qOffers = qOffers.eq("organization_id", orgId);
 
-  const [pool, gigs, offers] = await Promise.all([qPool, qGigs, qOffers]);
+  const [pool, gigs, offers, perfil, equipo] = await Promise.all([
+    qPool, qGigs, qOffers, leerPerfil(), leerEquipo(),
+  ]);
 
   const email = userData?.user?.email ?? "—";
-  const rol = roleLabel(org?.rol ?? null);
   // El nombre de la productora sale de la base, no de un literal. Con una sola
   // organización sigue diciendo SOMOS DER; con dos, cada uno ve la suya.
   const orgNombre = org?.nombre?.trim() || "SOMOS DER";
@@ -91,74 +70,30 @@ export default async function ConfigPage() {
         </h2>
         <p className="text-[18px] leading-[1.6] text-[#cfc4c5] max-w-[672px]">
           Los datos de tu organización, el estado de la cuenta y el acceso del
-          equipo. La edición de perfil y las invitaciones llegan en una próxima
-          versión.
+          equipo.
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Perfil de la agencia (8 cols) */}
+        {/* Perfil de la agencia (8 cols) — ahora EDITABLE.
+          *
+          * ⚠️ ACÁ HABÍA UNA TARJETA FIJA Y MENTÍA. Mostraba, para toda
+          * productora, un "Qué hace" escrito a mano que describía a LABURO, y
+          * "Ubicación: Argentina". Venía de cuando LABURO era interno de SOMOS
+          * DER y esos datos eran los del único dueño; con más de una
+          * organización adentro pasó a ser un dato falso. Los campos ahora
+          * viven en la base (migración 0083) y los edita la propia productora. */}
         <section className="lg:col-span-8 flex flex-col gap-6">
-          <div className="border border-[#1A1A1A] bg-[#0A0A0A] p-6 lg:p-10">
-            <div className="flex items-center justify-between mb-8 pb-2 border-b border-[#1A1A1A]">
-              <h3 className="t-section text-[#e5e2e1] flex items-center gap-3">
-                <Building2 size={24} className="shrink-0" />
-                Perfil de la agencia
-              </h3>
-              <span className="label-tech text-[11px] text-[#cfc4c5] uppercase tracking-[0.1em] border border-[#4c4546] px-2 py-1">
-                Solo lectura
-              </span>
+          {perfil ? (
+            <PerfilForm perfil={perfil} sigla={orgSigla} />
+          ) : (
+            <div className="border border-[#1A1A1A] bg-[#0A0A0A] p-6 lg:p-10">
+              <p className="text-[16px] text-[#cfc4c5]">
+                No pudimos cargar el perfil de tu organización. Recargá la
+                página; si sigue igual, escribinos.
+              </p>
             </div>
-
-            <div className="flex flex-col md:flex-row gap-6 md:gap-12 items-start">
-              {/* Logo/monograma */}
-              <div className="w-32 h-32 shrink-0 border border-[#4c4546] grid place-items-center bg-[#131313]">
-                <span className="t-stat-sm text-[#e5e2e1]">
-                  {orgSigla}
-                </span>
-              </div>
-
-              {/* Campos */}
-              <div className="flex-1 w-full flex flex-col gap-8">
-                <div>
-                  <p className="label-tech text-[11px] text-[#cfc4c5] uppercase tracking-[0.1em] mb-2">
-                    Nombre de la agencia
-                  </p>
-                  <p className="text-[18px] text-[#e5e2e1] border-b border-[#4c4546] pb-2">
-                    {orgNombre}
-                  </p>
-                </div>
-                <div>
-                  <p className="label-tech text-[11px] text-[#cfc4c5] uppercase tracking-[0.1em] mb-2">
-                    Qué hace
-                  </p>
-                  <p className="text-[18px] leading-[1.6] text-[#e5e2e1] border-b border-[#4c4546] pb-2">
-                    Producción de eventos. LABURO es la herramienta para buscar,
-                    contratar y coordinar staff eventual sobre el pool real de
-                    postulantes.
-                  </p>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-8">
-                  <div className="flex-1">
-                    <p className="label-tech text-[11px] text-[#cfc4c5] uppercase tracking-[0.1em] mb-2">
-                      Ubicación
-                    </p>
-                    <p className="text-[16px] text-[#e5e2e1] border-b border-[#4c4546] pb-2">
-                      Argentina
-                    </p>
-                  </div>
-                  <div className="flex-1">
-                    <p className="label-tech text-[11px] text-[#cfc4c5] uppercase tracking-[0.1em] mb-2">
-                      Mercado v1
-                    </p>
-                    <p className="text-[16px] text-[#e5e2e1] border-b border-[#4c4546] pb-2">
-                      Interno ({orgNombre})
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          )}
         </section>
 
         {/* Resumen de la cuenta (4 cols) */}
@@ -229,55 +164,15 @@ export default async function ConfigPage() {
           </div>
         </section>
 
-        {/* Acceso del equipo (12 cols) */}
+        {/* Acceso del equipo (12 cols) — invitar YA FUNCIONA.
+          *
+          * ⚠️ ACÁ HABÍA UN CARTEL DE "INVITAR MIEMBROS: PRÓXIMAMENTE" y una
+          * lista de una sola fila (el usuario logueado). El efecto práctico era
+          * que una productora se quedaba sola adentro: el único que entraba era
+          * quien creó la cuenta. Ahora se invita por mail con un link que vale
+          * 14 días, se cambia el rol y se saca gente (migración 0084). */}
         <section className="lg:col-span-12 mt-6">
-          <div className="border border-[#1A1A1A] bg-[#0A0A0A] p-6 lg:p-10">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 pb-2 border-b border-[#1A1A1A] gap-4">
-              <h3 className="t-section text-[#e5e2e1] flex items-center gap-3">
-                <ShieldCheck size={24} className="shrink-0" />
-                Acceso del equipo
-              </h3>
-              <span className="label-tech text-[11px] text-[#cfc4c5] uppercase tracking-[0.1em] border border-[#4c4546] px-3 py-2">
-                Invitar miembros: próximamente
-              </span>
-            </div>
-
-            <div className="flex flex-col">
-              <div className="hidden md:grid grid-cols-12 gap-4 pb-4 border-b border-[#1A1A1A] mb-4">
-                <div className="col-span-6 label-tech text-[11px] text-[#cfc4c5] uppercase tracking-[0.1em]">
-                  Usuario
-                </div>
-                <div className="col-span-3 label-tech text-[11px] text-[#cfc4c5] uppercase tracking-[0.1em]">
-                  Rol
-                </div>
-                <div className="col-span-3 label-tech text-[11px] text-[#cfc4c5] uppercase tracking-[0.1em] text-right">
-                  Estado
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center py-6">
-                <div className="col-span-1 md:col-span-6 flex items-center gap-4">
-                  <div className="h-10 w-10 flex items-center justify-center shrink-0 bg-[#c6c6c6]/20 border border-[#c6c6c6]/30">
-                    <span className="label-tech text-[12px] text-[#c6c6c6]">
-                      {initials(nombreUsuario)}
-                    </span>
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-[16px] text-[#e5e2e1] font-medium">Vos</p>
-                    <p className="label-tech text-[12px] text-[#cfc4c5] truncate">{email}</p>
-                  </div>
-                </div>
-                <div className="col-span-1 md:col-span-3">
-                  <span className="inline-block px-2 py-1 label-tech text-[11px] uppercase tracking-[0.1em] border bg-[#c6c6c6]/10 text-[#c6c6c6] border-[#c6c6c6]/30">
-                    {rol}
-                  </span>
-                </div>
-                <div className="col-span-1 md:col-span-3 text-[15px] text-[#3dd68c] md:text-right">
-                  Sesión activa
-                </div>
-              </div>
-            </div>
-          </div>
+          <EquipoPanel equipo={equipo} emailPropio={email} />
         </section>
       </div>
     </div>

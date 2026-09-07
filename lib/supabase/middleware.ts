@@ -124,6 +124,16 @@ export async function updateSession(request: NextRequest) {
     // startsWith y un "/p" abriria /pagos y /panel-staff al mundo sin sesion.
     "/terminos",
     "/privacidad",
+    // La invitacion al equipo (0084). Publica por definicion: la abre alguien a
+    // quien una productora acaba de invitar por mail y que muchas veces TODAVIA
+    // no tiene cuenta. Sin esta linea el link del mail termina en un 307 mudo a
+    // /entrar y la invitacion no se puede aceptar nunca.
+    // ⚠️ El gate real esta en la base: `staff_app_aceptar_invitacion_miembro`
+    // exige sesion Y que el mail de esa sesion sea el invitado, asi que la
+    // pantalla es publica pero aceptar no lo es. Ver la pagina tampoco filtra
+    // nada: devuelve el mail invitado y el nombre de la productora, que son los
+    // datos que la persona necesita para saber con que cuenta entrar.
+    "/equipo",
     // La pregunta de visibilidad (0076). Publica por definicion: la abre alguien
     // del pool, que NO tiene cuenta. El gate es el token HMAC del link.
     "/mi-visibilidad",
