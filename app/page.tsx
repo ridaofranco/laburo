@@ -183,8 +183,9 @@ export default async function LandingPage() {
        * nuevo que ponia su mail ahi NUNCA recibia el link y se quedaba esperando.
        * En movil ese boton era uno de los dos elementos que entran arriba del
        * pliegue: el lugar mas caro de la pantalla para la accion menos rentable.
-       * Ahora el relleno se lo lleva el CTA comercial -> #productores (el
-       * formulario que si guarda el lead) y "Ingresar" baja a link de texto.
+       * Ahora el relleno se lo lleva el CTA comercial (que desde el 7/9 va
+       * derecho a /registrar-productora, no al formulario) y "Ingresar" baja a
+       * link de texto.
        *
        * EL CTA YA NO DICE "NECESITO STAFF" (7/8, cierre del pedido de Franco
        * "el landing ya no es staff real"). El titulo y la metadata ya se habian
@@ -205,12 +206,22 @@ export default async function LandingPage() {
             >
               Ingresar
             </Link>
-            <a
-              href="#productores"
+            {/* ⚠️ VA AL REGISTRO, NO AL FORMULARIO (7/9/2026, lo marcó Franco:
+              * "si toco armo un evento me lleva al contacto, no deberia llevarme
+              * ahi"). Tenía razón, y el motivo es de fecha: el formulario se puso
+              * cuando el login estaba gateado por membresía y un productor nuevo
+              * no podía ni dejar sus datos. Eso dejó de ser cierto el 2/8, con el
+              * alta abierta ("se anota y opera"), y esa página se llama
+              * literalmente "Creá tu cuenta y armá tu evento". El botón quedó
+              * apuntando a un callejón un mes de más: el formulario tenía CERO
+              * consultas en todo ese tiempo. El formulario no se saca, baja a
+              * segunda vía para el que prefiere que lo contacten. */}
+            <Link
+              href="/registrar-productora"
               className="label-tech text-[10px] md:text-[11px] tracking-[0.08em] md:tracking-[0.2em] whitespace-nowrap bg-white text-black px-4 md:px-7 py-3 hover:bg-[#0047ff] hover:text-white transition-colors duration-300"
             >
               Armo un evento
-            </a>
+            </Link>
           </div>
         </div>
       </header>
@@ -306,12 +317,12 @@ export default async function LandingPage() {
                   con cada uno. Sin planillas eternas ni cadenas de WhatsApp.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 mt-10">
-                  <a
-                    href="#productores"
+                  <Link
+                    href="/registrar-productora"
                     className="inline-flex items-center justify-center bg-[#f5f5f5] text-black px-10 py-5 font-[family-name:var(--font-syne)] font-bold text-[13px] uppercase tracking-widest hover:bg-[#0047ff] hover:text-white transition-colors duration-300"
                   >
                     Armo un evento
-                  </a>
+                  </Link>
                   <Link
                     href="/sumate"
                     className="inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-10 py-5 font-[family-name:var(--font-syne)] font-bold text-[13px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
@@ -573,11 +584,13 @@ export default async function LandingPage() {
                   Si preferís que lo veamos juntos, dejá tu consulta y te
                   escribimos por mail para coordinar. Sin llamadas en frío.
                 </p>
-                {/* La salida de self-service TAMBIEN aca abajo, y no solo en la
-                 * tarjeta de arriba: los dos CTA del hero apuntan a esta
-                 * seccion, asi que la mayoria del trafico de productoras
-                 * aterriza directo aca sin pasar por "Tres caminos". Sin esto,
-                 * la que llega por el hero sigue sin poder entrar sola. */}
+                {/* ⚠️ EL COMENTARIO DE ACÁ DECÍA QUE LOS DOS CTA DEL HERO APUNTAN
+                 * A ESTA SECCIÓN. Dejó de ser cierto el 7/9/2026: ahora van
+                 * derecho a /registrar-productora, así que esta sección pasó a
+                 * ser la SEGUNDA vía, para el que prefiere que lo contacten
+                 * antes de crear nada. La salida de self-service se queda igual
+                 * (es la misma decisión del 6/8, elegir qué se registra), pero
+                 * ya no es el paracaídas del que aterrizó acá sin querer. */}
                 <div className="mt-8 pt-8 border-t border-[#1a1a1a] max-w-[420px]">
                   <p className="text-[15px] leading-[1.7] text-[#cfc4c5]">
                     ¿Preferís probarlo vos? Creá tu cuenta y entrá ahora. Usar

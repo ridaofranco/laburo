@@ -12,6 +12,7 @@ import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { guardarContrasena } from "./actions";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
+import { CampoContrasena } from "@/components/campo-contrasena";
 
 const up = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -22,7 +23,6 @@ const up = (delay: number) => ({
 export function DefinirContrasenaForm() {
   const [password, setPassword] = useState("");
   const [repetida, setRepetida] = useState("");
-  const [ver, setVer] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [listo, setListo] = useState(false);
@@ -95,10 +95,9 @@ export function DefinirContrasenaForm() {
           <motion.form {...up(0.2)} onSubmit={onSubmit} className="w-full flex flex-col gap-10">
             <div className="relative w-full group">
               <label htmlFor="password" className={labelCls}>Elegí tu contraseña</label>
-              <input
+              <CampoContrasena
                 id="password"
                 name="password"
-                type={ver ? "text" : "password"}
                 autoComplete="new-password"
                 required
                 minLength={8}
@@ -114,10 +113,9 @@ export function DefinirContrasenaForm() {
 
             <div className="relative w-full group">
               <label htmlFor="repetida" className={labelCls}>Repetila</label>
-              <input
+              <CampoContrasena
                 id="repetida"
                 name="repetida"
-                type={ver ? "text" : "password"}
                 autoComplete="new-password"
                 required
                 minLength={8}
@@ -127,15 +125,15 @@ export function DefinirContrasenaForm() {
               />
             </div>
 
-            {/* Poder ver lo que se escribe baja muchísimo los errores de tipeo,
-                sobre todo desde el celular, que es como entra casi todo el staff. */}
-            <button
-              type="button"
-              onClick={() => setVer((v) => !v)}
-              className="self-start font-[family-name:var(--font-geist)] text-[11px] uppercase tracking-[0.1em] text-[#988e90] hover:text-[#e5e2e1] transition-colors"
-            >
-              {ver ? "Ocultar contraseña" : "Ver contraseña"}
-            </button>
+            {/* ⚠️ ACÁ HABÍA UN "VER CONTRASEÑA" DE TEXTO, DEBAJO DE LOS DOS CAMPOS.
+                Lo marcó Franco el 7/9/2026 entrando él mismo: *"yo recién no sé
+                qué puse, bueno, está abajo, pero que esté al lado el ojito"*. El
+                control existía y resolvía lo mismo, pero puesto abajo se lee
+                DESPUÉS de haber escrito, y para entonces el error ya está hecho.
+                Ahora cada campo tiene su ojito adentro, con el mismo criterio de
+                siempre: ver lo que se escribe baja muchísimo los errores de
+                tipeo, sobre todo desde el celular, que es como entra casi todo
+                el staff. */}
 
             {error ? (
               <p role="alert" className="text-[14px] leading-[1.5] text-[#ff8a8a]">{error}</p>

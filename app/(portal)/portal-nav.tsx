@@ -61,6 +61,19 @@ type Item = {
   match?: string[]; // rutas que marcan este ítem como activo
   /** Pantalla de la plataforma (SOMOS DER), no del producto de una productora. */
   soloPlataforma?: boolean;
+  /**
+   * Fuera del menú, para todos, sin borrar nada.
+   *
+   * Franco, 7/9/2026: *"pagos lo bajaría por el momento, lo veo como que todavía
+   * no lo voy a desarrollar, que sea un feature para después"*.
+   *
+   * ⚠️ NO ES LO MISMO QUE `soloPlataforma`: eso esconde una pantalla que SÍ está
+   * en uso, pero es interna (Rentabilidad, Leads). Esto es una función que
+   * todavía no se decidió, guardada entera. La pantalla y su código quedan como
+   * están y la ruta sigue respondiendo: lo único que se saca es la puerta.
+   * Para volver a prenderla, se borra esta línea.
+   */
+  guardado?: boolean;
 };
 
 const MAIN: Item[] = [
@@ -104,7 +117,7 @@ const MAIN: Item[] = [
   // del negocio. El arreglo se hizo el 3/8 y se perdió sin llegar a mergearse
   // (la rama fix/login-rentabilidad-logo ya no existe); se rehizo el 6/8.
   { label: "Rentabilidad", icon: TrendingUp, href: "/rentabilidad", match: ["/rentabilidad"], soloPlataforma: true },
-  { label: "Pagos", icon: Wallet, href: "/pagos", match: ["/pagos"] },
+  { label: "Pagos", icon: Wallet, href: "/pagos", match: ["/pagos"], guardado: true },
   { label: "Notificaciones", icon: Bell, href: "/notificaciones", match: ["/notificaciones"] },
 ];
 
@@ -130,7 +143,11 @@ export function PortalNav({
   // Los ítems que ve el que mira. Una productora cliente no ve las pantallas de
   // plataforma. Esto es cosmético: el gate real está en la página y en la
   // server action de cada una.
-  const items = esPlataforma ? MAIN : MAIN.filter((i) => !i.soloPlataforma);
+  // `guardado` se filtra SIEMPRE, incluso para plataforma: no es una pantalla
+  // interna, es una función que todavía no se decidió.
+  const items = (esPlataforma ? MAIN : MAIN.filter((i) => !i.soloPlataforma)).filter(
+    (i) => !i.guardado,
+  );
   // El bottom-nav mobile son los primeros cinco. Se corta acá adentro, sobre la
   // lista YA filtrada: si se calculara a nivel de módulo (como estaba), el
   // mobile quedaría desalineado con el sidebar y le ofrecería Leads a alguien

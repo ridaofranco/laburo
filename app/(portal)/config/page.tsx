@@ -182,7 +182,14 @@ export default async function ConfigPage() {
                       Interno
                     </h4>
                   </div>
-                  <span className="bg-[#3dd68c]/10 text-[#3dd68c] border border-[#3dd68c]/30 px-2 py-1 label-tech text-[11px] uppercase tracking-[0.1em]">
+                  {/* ⚠️ `shrink-0 whitespace-nowrap` NO ES DECORATIVO. Lo marcó
+                    * Franco el 7/9/2026 con dos capturas: al 90% de zoom el badge
+                    * entra en una línea, al 100% se parte en "SIN / COSTO" y se
+                    * encima sobre "Interno". El contenedor es un flex y este
+                    * span era el único elemento sin protección: al achicarse el
+                    * ancho disponible, flex lo comprime a él (es el más chico) y
+                    * el texto busca una segunda línea que no tiene lugar. */}
+                  <span className="shrink-0 whitespace-nowrap bg-[#3dd68c]/10 text-[#3dd68c] border border-[#3dd68c]/30 px-2 py-1 label-tech text-[11px] uppercase tracking-[0.1em]">
                     Sin costo
                   </span>
                 </div>
@@ -210,12 +217,13 @@ export default async function ConfigPage() {
                 >
                   Buscar staff
                 </Link>
-                <Link
-                  href="/rentabilidad"
-                  className="w-full text-center text-[#cfc4c5] label-tech text-[12px] py-2 px-4 hover:text-[#e5e2e1] transition-colors uppercase tracking-[0.1em]"
-                >
-                  Ver rentabilidad
-                </Link>
+                {/* ⚠️ ACÁ HABÍA UN "VER RENTABILIDAD" Y SE SACÓ (7/9/2026, Franco:
+                  * "eso de ver rentabilidad no estaría funcionando y no sería
+                  * necesario ahora"). Además contradecía una decisión del 3/8:
+                  * Rentabilidad es una pantalla de PLATAFORMA ("eso es interno
+                  * mío"), está marcada `soloPlataforma` en el menú, y este botón
+                  * la ofrecía desde una tarjeta que ve cualquier productora. La
+                  * pantalla no se toca: lo que se saca es la puerta de acá. */}
               </div>
             </div>
           </div>

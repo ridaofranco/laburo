@@ -30,6 +30,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { signInWithPassword } from "@/lib/auth-password";
 import { pedirLinkDeAcceso } from "./actions";
+import { CampoContrasena } from "@/components/campo-contrasena";
 
 type Rol = "productora" | "staff" | "proveedor" | "salon";
 
@@ -255,9 +256,8 @@ export function EntrarClient() {
               <label className={label} htmlFor="password">
                 Tu contraseña
               </label>
-              <input
+              <CampoContrasena
                 id="password"
-                type="password"
                 className={input}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

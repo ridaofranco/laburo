@@ -23,6 +23,7 @@ import { signInWithPassword } from "@/lib/auth-password";
 import { pedirLinkDeAcceso } from "@/app/entrar/actions";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { GoogleLogo } from "@/components/google-logo";
+import { CampoContrasena } from "@/components/campo-contrasena";
 
 const up = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -209,10 +210,9 @@ export function LoginForm() {
               >
                 Contraseña
               </label>
-              <input
+              <CampoContrasena
                 id="password"
                 name="password"
-                type="password"
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

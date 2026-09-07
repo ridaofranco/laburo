@@ -17,6 +17,7 @@ import { createClient } from "@/lib/supabase/client";
 import { requestStaffMagicLink, requestPasswordSetup, signInWithPassword } from "./actions";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { GoogleLogo } from "@/components/google-logo";
+import { CampoContrasena } from "@/components/campo-contrasena";
 
 /**
  * ⭐⭐ POR QUÉ TE REBOTARON A ESTA PANTALLA (1/8).
@@ -339,10 +340,9 @@ export function StaffLoginForm() {
                 >
                   Tu contraseña
                 </label>
-                <input
+                <CampoContrasena
                   id="password"
                   name="password"
-                  type="password"
                   autoComplete="current-password"
                   required
                   value={password}
