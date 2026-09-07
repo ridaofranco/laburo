@@ -43,7 +43,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { rateLimitOr429 } from "@/lib/rate-limit";
-import { PLANTILLA_GENERICA, plantillaDe } from "@/lib/cotizaciones";
+import { PLANTILLA_GENERICA, plantillaDe, conPreguntasDePlaza } from "@/lib/cotizaciones";
 import { CATEGORIAS_PROVEEDOR } from "@/lib/categorias-proveedor";
 import { PROVINCIAS } from "@/lib/provincias";
 
@@ -269,7 +269,13 @@ export async function POST(request: Request) {
       provincia: deLista(parsed.provincia, PROVINCIAS),
       ciudad: str(parsed.ciudad, 120),
       necesario_para: fecha(parsed.necesario_para),
-      campos,
+      // ⚠️ Las preguntas de plaza se suman ACÁ, del lado del servidor, y no se
+      // le piden al modelo. Probando con el pedido de catering real de Franco,
+      // la IA sacó 4 de sus 7 preguntas y sumó 2 buenas, pero se comió las tres
+      // que él pone siempre: precio desagregado, validez con actualización por
+      // índice, y anticipo. Son las que se aprenden cobrando, no leyendo un
+      // brief, y por eso no pueden depender de que el modelo se acuerde.
+      campos: conPreguntasDePlaza(campos),
       faltantes,
     },
   });

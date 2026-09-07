@@ -63,6 +63,11 @@ export const PLANTILLAS: Record<string, CampoDesglose[]> = {
     { clave: "vajilla", etiqueta: "¿Vajilla, mantelería y cristalería incluidas?" },
     { clave: "restricciones", etiqueta: "¿Contemplás celíacos, veganos y alergias?" },
     { clave: "minimo", etiqueta: "¿Hay mínimo de personas?" },
+    // ⚠️ Esta no es teoría: en CABA casi no hay cocinas de producción para
+    // alquilar, así que si el catering necesita cocina EN el lugar y la sede no
+    // la tiene, el evento se complica y el precio cambia. Franco la pone en
+    // todos sus pedidos de catering, y la IA no la sacó sola.
+    { clave: "cocina", etiqueta: "¿Necesitás cocina en el lugar o trabajás con producción externa y traslado?" },
   ],
   Seguridad: [
     { clave: "personas", etiqueta: "¿Cuánta gente y en qué puestos?" },
@@ -90,6 +95,65 @@ export const PLANTILLAS: Record<string, CampoDesglose[]> = {
   ],
 };
 
+/**
+ * ── LAS PREGUNTAS QUE NUNCA PUEDEN FALTAR, SEA EL RUBRO QUE SEA ─────────────
+ *
+ * Hay dos tipos de pregunta en un pedido de precio, y se consiguen de maneras
+ * distintas:
+ *
+ *  · **Las del caso** ("¿tenés rampa para cargar sin autoelevador?"). Salen de
+ *    leer el brief, y ahí la IA es muy buena.
+ *  · **Las de plaza**: las que valen para cualquier cotización en Argentina, y
+ *    que no dependen de lo que diga el brief. Esas NO se le pueden dejar a un
+ *    modelo, porque las va a olvidar justo cuando el caso sea interesante.
+ *
+ * Esta lista es la segunda clase, y sale de comparar el pedido de catering que
+ * Franco escribió a mano (5 al 7 de octubre, 100 personas) contra lo que armó
+ * la IA con el mismo brief: la IA sacó 4 de las 7 preguntas y sumó 2 buenas,
+ * pero se comió las tres que Franco pone SIEMPRE. Y no por casualidad: son las
+ * que se aprenden cobrando.
+ *
+ *  · **El precio desagregado.** Palabras de Franco: *"los paquetes cerrados no
+ *    dejan mover nada: si el cliente recorta una cena, con un paquete hay que
+ *    volver a pedir todo"*.
+ *  · **Validez y actualización.** Con inflación, un precio sin fecha de validez
+ *    no es un precio. Es LA pregunta argentina.
+ *  · **Anticipo y forma de pago.** Define si el negocio se puede hacer, y no
+ *    aparece en ningún brief del mundo.
+ *
+ * Se suman al final del desglose y solo si no están ya cubiertas, así que
+ * cuando la IA hace bien su trabajo no se duplica nada.
+ */
+export const PREGUNTAS_DE_PLAZA: CampoDesglose[] = [
+  { clave: "desagregado", etiqueta: "¿Podés mandarlo desagregado por ítem, y no como un paquete cerrado?" },
+  { clave: "validez_precio", etiqueta: "¿Hasta cuándo vale ese precio? ¿Lo actualizás por índice si el evento se corre?" },
+  { clave: "pago", etiqueta: "¿Qué forma de pago necesitás y cuánto anticipo pedís para reservar?" },
+];
+
+/**
+ * Suma las preguntas de plaza que falten, sin duplicar.
+ *
+ * La comparación es floja a propósito (por palabra clave, sin acentos): si la
+ * IA ya preguntó por el anticipo con otras palabras, no se pregunta dos veces.
+ * Preferimos perder una de plaza antes que mandarle al proveedor dos preguntas
+ * que dicen lo mismo, que es la señal más rápida de que el pedido lo armó una
+ * máquina sin mirar.
+ */
+export function conPreguntasDePlaza(campos: CampoDesglose[]): CampoDesglose[] {
+  const norm = (t: string) =>
+    t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const yaEsta = (claves: string[]) =>
+    campos.some((c) => claves.some((k) => norm(c.etiqueta).includes(k)));
+
+  const faltan = PREGUNTAS_DE_PLAZA.filter((p) => {
+    if (p.clave === "desagregado") return !yaEsta(["desagreg", "por item", "por separado", "discrimin"]);
+    if (p.clave === "validez_precio") return !yaEsta(["validez", "hasta cuando vale", "vale ese precio", "actualiza"]);
+    return !yaEsta(["anticipo", "forma de pago", "sena", "pago"]);
+  });
+
+  return [...campos, ...faltan];
+}
+
 /** El desglose genérico, para el rubro que no tiene plantilla propia. */
 export const PLANTILLA_GENERICA: CampoDesglose[] = [
   { clave: "detalle", etiqueta: "¿Qué entra exactamente en ese precio?" },
@@ -98,10 +162,13 @@ export const PLANTILLA_GENERICA: CampoDesglose[] = [
   { clave: "pago", etiqueta: "¿Qué forma de pago necesitás?" },
 ];
 
-/** La plantilla de un rubro, o la genérica. Nunca devuelve vacío. */
+/**
+ * La plantilla de un rubro, o la genérica, SIEMPRE con las preguntas de plaza.
+ * Nunca devuelve vacío.
+ */
 export function plantillaDe(categoria: string | null | undefined): CampoDesglose[] {
   const c = (categoria ?? "").trim();
-  return PLANTILLAS[c] ?? PLANTILLA_GENERICA;
+  return conPreguntasDePlaza(PLANTILLAS[c] ?? PLANTILLA_GENERICA);
 }
 
 /** Un invitado, tal como lo manda la pantalla. */
