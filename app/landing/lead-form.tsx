@@ -53,7 +53,15 @@ export function LeadForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-8">
+    // ⚠️ `method="post"` NO ES DECORATIVO, aunque el envío real lo haga onSubmit.
+    // Si alguien completa y aprieta enviar ANTES de que React hidrate (JS lento,
+    // conexión mala, o simplemente rápido), el navegador hace el submit nativo.
+    // Sin `method`, ese submit por defecto es un GET: los datos se van a la
+    // barra de direcciones, y con ellos el nombre, el mail y el teléfono de la
+    // persona. Comprobado el 7/9/2026 en una prueba automatizada: la consulta se
+    // perdía sin decir nada Y Vercel Analytics registraba la URL completa, con
+    // los datos personales adentro, como si fuera el nombre de una página.
+    <form onSubmit={onSubmit} method="post" className="flex flex-col gap-8">
       {/* Honeypot anti-bots: invisible para humanos, tentador para scripts. */}
       <input
         type="text"

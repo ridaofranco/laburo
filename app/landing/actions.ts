@@ -8,6 +8,17 @@
  * un productor interesado no podia ni dejar sus datos. Este action es la puerta
  * de entrada comercial: sin cuenta, sin login, un formulario corto.
  *
+ * ── A DONDE LLEGA ESTA CONSULTA (fix 7/9/2026) ──
+ * Franco preguntó "las consultas no sé a dónde llegan". Tenía razón: esta salía
+ * a `MAIL_ADMIN_TO`, una variable Sensitive de Vercel que no puede leer nadie, y
+ * quedaba en una lista propia (staff_app.producer_leads) separada de los leads
+ * de somosder.ar. Dos listas y un destinatario invisible.
+ * Ahora la consulta pasa por el RECEPTOR ÚNICO (www.somosder.ar/api/lead), el
+ * mismo que usa la landing de PASE: cae en `public.web_leads` junto a todo lo
+ * demás, avisa a `contacto@somosder.com.ar` con `[LABURO]` en el asunto, y le
+ * manda al productor la confirmación con la marca DER. El guardado local se
+ * mantiene como copia y como memoria del portal (/leads).
+ *
  * ── ORDEN: GUARDAR PRIMERO, MAIL DESPUES (fix 30/7/2026) ──
  * Hasta hoy este action SOLO mandaba un mail a MAIL_ADMIN_TO. Si Resend y el
  * SMTP fallaban los dos, el lead se perdia entero y Franco no se enteraba nunca.
@@ -31,7 +42,7 @@
  */
 
 import { rateLimit, clientIp } from "@/lib/rate-limit";
-import { sendMail, adminEmail, emailEnabled } from "@/lib/email/mailer";
+import { sendMail, emailEnabled } from "@/lib/email/mailer";
 import { alerta } from "@/lib/alerta";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 
@@ -49,6 +60,82 @@ const esc = (v: string): string =>
     .replace(/"/g, "&quot;");
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/**
+ * EL RECEPTOR ÚNICO DEL ECOSISTEMA.
+ *
+ * Es el mismo al que le pega la landing de PASE. Hace las tres cosas que acá
+ * hacían falta y no estaban: avisa a la casilla de la productora, le manda al
+ * que consultó la confirmación con la marca DER, y **lo guarda en la misma
+ * lista que los leads de somosder.ar** (public.web_leads).
+ *
+ * ⚠️ CON www, Y NO ES UN DETALLE. `somosder.ar` pelado devuelve un 308 hacia
+ * `www.somosder.ar`, y ese salto no sobrevive adentro de la función: el reenvío
+ * falla entero. El host canónico del sitio argentino es el `www`.
+ */
+const RECEPTOR_UNICO = "https://www.somosder.ar/api/lead";
+
+/**
+ * ⚠️ ESCRITA ACÁ Y NO EN UNA VARIABLE DE ENTORNO, A PROPÓSITO.
+ *
+ * Hasta hoy el aviso de este formulario iba a `adminEmail()`, o sea a
+ * `MAIL_ADMIN_TO`, que vive en Vercel marcada como Sensitive: no la puede leer
+ * nadie, ni Franco. Un destinatario invisible es exactamente lo que hizo que
+ * durante meses las reuniones agendadas de somosder.ar cayeran en un Gmail
+ * personal sin que nadie se enterara. Si el destino de un lead comercial no se
+ * puede leer en el código, nadie sabe a dónde llega.
+ */
+const CASILLA_DER = "contacto@somosder.com.ar";
+
+/**
+ * Manda la consulta al receptor único. Server a server: no hay CORS que valga.
+ *
+ * NUNCA tira: devuelve `false` y el caller cae al mail propio como red de
+ * seguridad. El lead ya está guardado antes de llegar acá, así que lo peor que
+ * puede pasar es que el aviso viaje por la vía vieja.
+ */
+async function avisarAlReceptorUnico(d: LeadDatos): Promise<boolean> {
+  // ⚠️ 25 SEGUNDOS, Y NO ES UN NÚMERO AL AZAR. El destino tarda ~11s en
+  // contestar: manda DOS mails (el aviso y la confirmación) y escribe en HITO
+  // antes de responder. Con un timeout corto esto aborta justo antes de que
+  // llegue la respuesta, y el productor ve un error con el formulario lleno.
+  const ctrl = new AbortController();
+  const reloj = setTimeout(() => ctrl.abort(), 25_000);
+  try {
+    const r = await fetch(RECEPTOR_UNICO, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        // ⚠️ ORIGEN FIJO, del lado del servidor. Va al asunto del mail para que
+        // se distinga de un vistazo una consulta de LABURO de una de la
+        // productora. No se toma de lo que mandó el navegador: así ninguna
+        // landing puede hacerse pasar por otro origen.
+        origen: "LABURO",
+        kind: "contacto",
+        lang: "es",
+        name: d.nombre,
+        email: d.email,
+        phone: d.telefono,
+        page: "laburo.somosder.ar/",
+        fields: [
+          ...(d.empresa ? [{ label: "Empresa", value: d.empresa }] : []),
+          { label: "Qué necesita", value: d.mensaje },
+        ],
+      }),
+      signal: ctrl.signal,
+    });
+    if (!r.ok) {
+      console.error("[lead-productor] el receptor único rechazó el lead:", r.status);
+      return false;
+    }
+    return true;
+  } catch (e) {
+    console.error("[lead-productor] el receptor único no respondió:", (e as Error).message);
+    return false;
+  } finally {
+    clearTimeout(reloj);
+  }
+}
 
 interface LeadDatos {
   nombre: string;
@@ -134,8 +221,21 @@ export async function enviarLeadProductor(formData: FormData): Promise<LeadResul
   // ── (1) GUARDAR. Va PRIMERO: es lo único que no se puede perder. ──
   const guardado = await guardarLead({ nombre, email, telefono, empresa, mensaje });
 
-  // ── (2) EL MAIL. Aviso, no almacenamiento. ──
-  const to = adminEmail();
+  // ── (2) EL RECEPTOR ÚNICO. Para que esta consulta caiga donde caen todas. ──
+  //
+  // Antes de esto, un productor que escribía por la landing de LABURO quedaba
+  // en una lista aparte (staff_app.producer_leads) y su aviso salía a una
+  // casilla que no se podía leer. Ahora pasa por el mismo lugar que un lead de
+  // somosder.ar: misma lista, misma casilla, mismo mail de confirmación.
+  //
+  // El guardado local de arriba NO se saca: es la memoria del portal (/leads) y
+  // la copia que queda si el receptor está caído.
+  const enElReceptor = await avisarAlReceptorUnico({ nombre, email, telefono, empresa, mensaje });
+  if (enElReceptor) return { ok: true };
+
+  // ── (3) EL MAIL PROPIO, solo como red de seguridad. ──
+  // Se llega acá únicamente si el receptor único no contestó.
+  const to = CASILLA_DER;
   if (!to || !emailEnabled()) {
     console.error("[lead-productor] sin via de mail configurada (MAIL_ADMIN_TO / Resend / SMTP)");
     await alerta({
