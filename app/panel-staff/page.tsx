@@ -166,6 +166,15 @@ export default async function PanelStaffPage() {
               >
                 Editar mi perfil
               </Link>
+              {/* ⚠️ La misma persona puede además armar sus propios eventos o
+                * prestar un servicio. Sin este link, para eso había que salir y
+                * volver a entrar por otra puerta. */}
+              <Link
+                href="/soy"
+                className="label-tech text-[12px] text-[#cfc4c5] hover:text-[#c6c6c6] uppercase tracking-widest transition-colors"
+              >
+                Mis perfiles
+              </Link>
             </div>
           </section>
 

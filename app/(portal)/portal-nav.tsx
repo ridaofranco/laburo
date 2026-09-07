@@ -47,6 +47,7 @@ import {
   Shield,
   MoreHorizontal,
   X,
+  Repeat,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
@@ -224,6 +225,21 @@ export function PortalNav({
               >
                 <Settings size={18} className="shrink-0" />
                 <span className="label-tech text-[12px]">Ajustes</span>
+              </Link>
+            </li>
+            {/* ⚠️ EL CAMBIADOR DE SOMBRERO, arriba del logout y no escondido.
+              * Antes, para pasar de productora a proveedor o a staff había que
+              * DESLOGUEARSE y volver a entrar por otra puerta, como si fueras
+              * otra persona. El unico "Cambiar de perfil" que existia estaba
+              * solo en /mi-proveedor y mandaba a /entrar, o sea a escribir el
+              * mail de nuevo teniendo la sesion abierta. */}
+            <li>
+              <Link
+                href="/soy"
+                className="w-full flex items-center gap-4 py-2 text-[#cfc4c5] hover:text-[#e5e2e1] transition-colors"
+              >
+                <Repeat size={18} className="shrink-0" />
+                <span className="label-tech text-[12px]">Mis perfiles</span>
               </Link>
             </li>
             <li>

@@ -46,11 +46,12 @@ function Shell({ children }: { children: React.ReactNode }) {
     <div className="min-h-dvh flex flex-col bg-surface-0">
       <header className="px-md py-md pt-[max(var(--spacing-md),env(safe-area-inset-top))] flex items-center justify-between gap-4">
         <LaburoWordmark className="h-[24px] w-auto" />
-        {/* El cambio de perfil vuelve a la puerta: si esta persona además es
-         * staff o productora, elige de nuevo desde ahí. Es el "seleccionador"
-         * que pidió Franco, sin inventar un estado de rol en la sesión. */}
+        {/* ⚠️ ANTES ESTO IBA A `/entrar`, o sea a escribir el mail de nuevo
+         * teniendo la sesión abierta: para cambiar de sombrero había que
+         * desloguearse y volver a entrar como si fueras otra persona. Ahora va a
+         * /soy, que muestra lo que ya sos y lo que podés sumar, sin pedir nada. */}
         <Link
-          href="/entrar"
+          href="/soy"
           className="label-tech text-[11px] tracking-[0.2em] text-fg-muted hover:text-fg transition-colors"
         >
           Cambiar de perfil
