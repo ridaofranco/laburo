@@ -15,6 +15,11 @@
  *                  en vez de contra su costo.
  *  · `sin_cotizar` — lo invitaron y no llegó a cotizar. **No es un reproche.**
  *                  Se cierra el círculo para que el próximo link no se ignore.
+ *  · `cancelado`  — cotizó y el trabajo NO se hace. Es distinto de perder, y hay
+ *                  que decirlo con esas palabras: "no se hizo" no es "elegimos a
+ *                  otro". Si se confunden, el que cotizó bien cree que perdió.
+ *  · `cerrado`    — cotizó, se cerró la recepción y todavía no se decidió. Sirve
+ *                  para que no quede esperando en silencio.
  *
  * ⚠️ NUNCA se dice cuántos cotizaron, ni quiénes eran, ni con qué números. Lo
  * ciego entre proveedores no termina cuando se adjudica: si el que perdió puede
@@ -35,7 +40,7 @@ import {
 } from "@react-email/components";
 import { Encabezado } from "./encabezado";
 
-export type ResultadoCotizacion = "gano" | "no_gano" | "sin_cotizar";
+export type ResultadoCotizacion = "gano" | "no_gano" | "sin_cotizar" | "cancelado" | "cerrado";
 
 export interface ResultadoCotizacionProps {
   nombre: string | null;
@@ -78,6 +83,18 @@ const COPY: Record<
     titulo: "Se cerró el pedido de presupuesto",
     cuerpo: (p, t) =>
       `Se cerró el pedido de ${p} para ${t} y no llegamos a recibir tu presupuesto. Te avisamos igual para que sepas que quedó resuelto y no te quede el link abierto.`,
+  },
+  cancelado: {
+    etiqueta: "El pedido se dio de baja",
+    titulo: "Esto no se va a hacer",
+    cuerpo: (p, t) =>
+      `${p} dio de baja ${t}, así que no vamos a avanzar. No es que se haya elegido a otro: el trabajo no se hace. Gracias por tomarte el tiempo de cotizar, y perdón por hacerte laburar al pedo.`,
+  },
+  cerrado: {
+    etiqueta: "Se cerró la recepción",
+    titulo: "Ya no recibimos más presupuestos",
+    cuerpo: (p, t) =>
+      `${p} cerró la recepción de presupuestos para ${t}. El tuyo está entre los que se están comparando. Cuando haya una decisión te avisamos, ganes o no.`,
   },
 };
 

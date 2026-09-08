@@ -415,6 +415,8 @@ export async function adjudicar(
     gano: `Quedó elegido tu presupuesto · ${pedido.titulo}`,
     no_gano: `Se cerró el pedido · ${pedido.titulo}`,
     sin_cotizar: `Se cerró el pedido · ${pedido.titulo}`,
+    cancelado: `Se dio de baja · ${pedido.titulo}`,
+    cerrado: `Se cerró la recepción de presupuestos · ${pedido.titulo}`,
   };
 
   let avisados = 0;
@@ -449,10 +451,28 @@ export async function adjudicar(
 
 /* ────────────────────────────── cerrar ────────────────────────────── */
 
+/**
+ * Cierra o cancela el pedido, Y LE AVISA A LOS QUE COTIZARON.
+ *
+ * ⚠️ Esto faltaba, y apareció con el primer pedido real (el catering de octubre):
+ * el evento se cayó, se canceló el pedido, y a la única que había cotizado hubo
+ * que escribirle a mano. Adjudicar avisaba a todos; cancelar no avisaba a nadie.
+ * Es el mismo problema —el que cotizó y nunca supo nada no te vuelve a cotizar—
+ * cubierto a medias.
+ *
+ * ⚠️ "Cancelado" y "cerrado" son mails DISTINTOS, y no es un detalle: "no se
+ * hizo" no es "elegimos a otro". Si se confunden, el que cotizó bien se queda
+ * creyendo que perdió.
+ *
+ * ⚠️ Solo se le escribe a quien COTIZÓ. Al invitado que nunca contestó no: es
+ * ruido, y encima le recuerda que no contestó.
+ */
 export async function cerrarPedido(
   requestId: string,
   cancelar: boolean,
-): Promise<{ ok: true; estado: string } | { ok: false; error: string }> {
+): Promise<
+  { ok: true; estado: string; avisados: number; fallados: number } | { ok: false; error: string }
+> {
   const supabase = await createClient();
   const org = await exigirOrg();
 
@@ -466,12 +486,54 @@ export async function cerrarPedido(
     console.error("[cotizaciones] cerrar falló:", error.message);
     return { ok: false, error: "No se pudo cerrar. Probá de nuevo." };
   }
-  const r = data as { ok?: boolean; reason?: string; estado?: string } | null;
+  const r = data as {
+    ok?: boolean;
+    reason?: string;
+    estado?: string;
+    titulo?: string;
+    avisar?: { email: string; nombre: string | null }[];
+  } | null;
   if (!r?.ok) return { ok: false, error: traducir(r?.reason) };
+
+  // Los mails salen DESPUÉS de que la base ya cerró. Si falla el envío, el
+  // pedido está cerrado igual y se puede avisar a mano.
+  const resultado: ResultadoCotizacion = cancelar ? "cancelado" : "cerrado";
+  const titulo = r.titulo ?? "";
+  const productora = org.nombre ?? "Una productora";
+  let avisados = 0;
+  let fallados = 0;
+
+  for (const d of r.avisar ?? []) {
+    try {
+      const html = await render(
+        createElement(ResultadoCotizacionEmail, {
+          nombre: d.nombre,
+          productora,
+          titulo,
+          resultado,
+        }),
+      );
+      const res = await sendMail({
+        to: d.email,
+        subject: cancelar
+          ? `Se dio de baja · ${titulo}`
+          : `Se cerró la recepción de presupuestos · ${titulo}`,
+        html,
+      });
+      if (res.ok) avisados += 1;
+      else fallados += 1;
+    } catch (e) {
+      console.error(
+        "[cotizaciones] no salió el aviso de cierre:",
+        e instanceof Error ? e.message : String(e),
+      );
+      fallados += 1;
+    }
+  }
 
   revalidatePath(`/cotizaciones/${requestId}`);
   revalidatePath("/cotizaciones");
-  return { ok: true, estado: r.estado ?? "cerrada" };
+  return { ok: true, estado: r.estado ?? "cerrada", avisados, fallados };
 }
 
 /* ──────────────────── reenviar y correr la fecha ──────────────────── */

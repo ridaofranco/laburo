@@ -155,7 +155,13 @@ export function PedidoClient({
         toast.error(r.error);
         return;
       }
-      toast.success(cancelar ? "Pedido cancelado." : "Pedido cerrado.");
+      // Se dice a cuántos se les avisó: cerrar sin avisar era el agujero.
+      const base = cancelar ? "Pedido cancelado" : "Pedido cerrado";
+      toast.success(
+        r.avisados
+          ? `${base}. Se le avisó a ${r.avisados} que ${r.avisados === 1 ? "había cotizado" : "habían cotizado"}${r.fallados ? `, ${r.fallados} sin avisar` : ""}.`
+          : `${base}.`,
+      );
       router.refresh();
     });
   }
@@ -213,6 +219,7 @@ export function PedidoClient({
               onClick={() => cerrar(false)}
               disabled={pending}
               className="min-h-[44px] px-5 border border-[#2a2a2a] text-[14px] text-[#cfc4c5] hover:border-[#e5e2e1] hover:text-[#e5e2e1] transition-colors disabled:opacity-50"
+              title="Deja de recibir presupuestos. A los que ya cotizaron les avisa que se cerró la recepción."
             >
               Cerrar antes de tiempo
             </button>
@@ -221,6 +228,7 @@ export function PedidoClient({
               onClick={() => cerrar(true)}
               disabled={pending}
               className="min-h-[44px] px-5 border border-[#2a2a2a] text-[14px] text-[#8A8A8A] hover:border-[#e5e2e1] hover:text-[#e5e2e1] transition-colors disabled:opacity-50"
+              title="El trabajo no se hace. A los que cotizaron les avisa que se dio de baja, que NO es lo mismo que perder."
             >
               Cancelar el pedido
             </button>
