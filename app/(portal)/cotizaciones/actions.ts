@@ -37,7 +37,14 @@ import {
   ResultadoCotizacionEmail,
   type ResultadoCotizacion,
 } from "@/components/emails/resultado-cotizacion-email";
-import { cotizarUrl, fmtMonto, type InvitadoNuevo } from "@/lib/cotizaciones";
+import {
+  cotizarUrl,
+  fmtMonto,
+  type InvitadoNuevo,
+  type ItemNuevo,
+  type ItemPedido,
+  type LineaCotizacion,
+} from "@/lib/cotizaciones";
 import { fmtFecha, fmtFechaHora } from "@/lib/dates";
 
 /* ────────────────────────────── tipos ────────────────────────────── */
@@ -66,6 +73,8 @@ export interface PedidoDetalle {
   necesario_para: string | null;
   cierra_at: string;
   campos: { clave: string; etiqueta: string }[];
+  /** Los renglones que se piden con precio. Vacío es el caso normal y simple. */
+  items: ItemPedido[];
   estado: string;
   gig_id: string | null;
   adjudicada_at: string | null;
@@ -84,6 +93,11 @@ export interface CotizacionFila {
   no_incluye: string | null;
   validez_dias: number | null;
   respuestas: Record<string, string>;
+  /**
+   * El desglose por ítem, si cotizó por renglones. Vacío cuando cotizó el
+   * paquete cerrado, que sigue siendo válido: ahí `monto` es lo único que hay.
+   */
+  lineas: LineaCotizacion[];
   estado: string;
   updated_at: string;
 }
@@ -177,6 +191,7 @@ const MENSAJES: Record<string, string> = {
   titulo_required: "Poné un título: es lo primero que lee el que va a cotizar.",
   cierra_at_required: "Falta la fecha de cierre, y tiene que ser futura.",
   campos_invalidos: "El desglose quedó mal armado. Recargá la página.",
+  items_invalidos: "La lista de ítems quedó mal armada. Recargá la página.",
   gig_not_found: "Ese evento no es de tu productora.",
   pedido_no_encontrado: "Ese pedido no existe o no es de tu productora.",
   pedido_cerrado: "Ese pedido ya está cerrado.",
@@ -204,6 +219,7 @@ export async function crearPedido(input: {
   necesarioPara?: string;
   cierraAt: string;
   campos: { clave: string; etiqueta: string }[];
+  items?: ItemNuevo[];
   gigId?: string | null;
 }): Promise<{ ok: true; requestId: string } | { ok: false; error: string }> {
   const supabase = await createClient();
@@ -218,6 +234,17 @@ export async function crearPedido(input: {
     p_necesario_para: input.necesarioPara?.trim() || null,
     p_cierra_at: input.cierraAt,
     p_campos: input.campos,
+    // Los ítems sin título no viajan: la base también los descarta, pero
+    // cortarlos acá evita mandar renglones fantasma que nadie escribió.
+    p_items: (input.items ?? [])
+      .filter((i) => (i.titulo || "").trim())
+      .map((i) => ({
+        titulo: i.titulo.trim(),
+        detalle: (i.detalle || "").trim() || null,
+        cantidad: (i.cantidad || "").trim() || null,
+        unidad: (i.unidad || "").trim() || null,
+        obligatorio: !!i.obligatorio,
+      })),
     p_gig_id: input.gigId || null,
     p_org: org.organizationId,
   });

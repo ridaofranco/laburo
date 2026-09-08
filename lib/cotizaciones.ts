@@ -21,6 +21,103 @@ export interface CampoDesglose {
 }
 
 /**
+ * ── LOS ITEMS: EL PEDIDO PARTIDO EN RENGLONES ───────────────────────────────
+ *
+ * Franco: *"tampoco es que se puede poner precios, es decir, si quieren
+ * desglosarlo o pueden solo ofertar por alguna de todas las cosas"*.
+ *
+ * Un ítem NO es una pregunta del desglose. La pregunta se contesta con texto
+ * ("¿incluye seguro?"); el ítem se contesta con un PRECIO, y por eso vive en su
+ * propia tabla y no adentro de `campos`. Son las dos mitades del mismo pedido y
+ * conviven: se puede pedir el precio de tres renglones y además preguntar por
+ * la forma de pago.
+ *
+ * ⚠️ Un pedido puede no tener NINGÚN ítem, y ese es el caso simple: pedir precio
+ * por una sola cosa no tiene que obligar a cargar un renglón. Cuando no hay
+ * ítems, todo se comporta exactamente como antes de la migración 0087.
+ */
+export interface ItemPedido {
+  id: string;
+  orden: number;
+  titulo: string;
+  detalle: string | null;
+  /** Opcionales las dos: hay ítems que no se cuentan ("armado del escenario"). */
+  cantidad: number | null;
+  unidad: string | null;
+  /**
+   * ⚠️ NO EXCLUYE A NADIE. Es la regla 2: un requisito excluyente devuelve cero
+   * (el portón hidráulico espantó a 37 empresas). Marcarlo se lo dice al que
+   * cotiza y se le muestra al que compara; no impide cotizar sin ese renglón.
+   */
+  obligatorio: boolean;
+}
+
+/** Un ítem mientras se está escribiendo el pedido, cuando todavía no tiene id. */
+export interface ItemNuevo {
+  titulo: string;
+  detalle?: string;
+  /** Texto porque viene de un input; la base lo castea con guarda. */
+  cantidad?: string;
+  unidad?: string;
+  obligatorio?: boolean;
+}
+
+/**
+ * Lo que un proveedor contestó para UN ítem.
+ *
+ * ⚠️ Los tres estados posibles y por qué importan:
+ *   · hay línea con monto      → lo cotizó
+ *   · hay línea con no_cotiza  → "esto no lo hago"
+ *   · NO hay línea             → no lo cargó todavía
+ * Confundir los dos últimos hace que el que compara crea que tiene una oferta
+ * parcial cuando en realidad tiene una incompleta, y elija mal.
+ */
+export interface LineaCotizacion {
+  item_id: string;
+  monto: number | null;
+  no_cotiza: boolean;
+  comentario: string | null;
+}
+
+/**
+ * Lo que alguien escribió en un campo de precio, pasado a número.
+ *
+ * Acepta lo que la gente realmente tipea acá: "1.200.000", "$ 1200000,50",
+ * "1200000". El punto se trata como separador de miles y la coma como decimal,
+ * que es como se escribe un precio en Argentina. Devuelve null si no queda un
+ * número mayor a cero, así el que llama decide qué hacer con eso.
+ */
+export function parsearMonto(texto: string): number | null {
+  const limpio = (texto || "").replace(/[^\d.,]/g, "").replace(/\./g, "").replace(",", ".");
+  const n = Number(limpio);
+  return limpio && !Number.isNaN(n) && n > 0 ? n : null;
+}
+
+/** "100 personas", "100", "personas", o vacío. Nunca inventa una unidad. */
+export function fmtCantidad(item: Pick<ItemPedido, "cantidad" | "unidad">): string {
+  const n = item.cantidad == null ? "" : Number(item.cantidad).toLocaleString("es-AR");
+  return [n, (item.unidad ?? "").trim()].filter(Boolean).join(" ");
+}
+
+/**
+ * El total de un desglose: la suma de lo cotizado, ignorando los "no lo hago".
+ *
+ * ⚠️ Esto es para MOSTRAR mientras se escribe. El total que vale lo calcula la
+ * base al guardar (migración 0087), y a propósito: si el número que ordena la
+ * tabla comparativa viniera del navegador, podría no ser la suma de lo que se
+ * ve abajo.
+ */
+export function sumaDeLineas(
+  lineas: { monto: number | string | null; no_cotiza?: boolean }[],
+): number {
+  return lineas.reduce((acc, l) => {
+    if (l.no_cotiza) return acc;
+    const n = typeof l.monto === "string" ? Number(l.monto) : l.monto;
+    return acc + (n && !Number.isNaN(n) ? n : 0);
+  }, 0);
+}
+
+/**
  * ── LAS PLANTILLAS, Y POR QUÉ EXISTEN ───────────────────────────────────────
  * "Arrancar de cero" es la forma más rápida de escribir un pedido al que le
  * falta el dato que después obliga a quince mails de ida y vuelta. En el caso

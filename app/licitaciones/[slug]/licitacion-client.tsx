@@ -45,6 +45,12 @@ export function LicitacionClient({
   const abierta = lic.abierta === true;
   const donde = [lic.ciudad, lic.provincia].filter(Boolean).join(", ");
   const campos = Array.isArray(lic.campos) ? (lic.campos as Record<string, unknown>[]) : [];
+  /**
+   * Los renglones que se piden con precio (0087). Van ANTES de las preguntas
+   * porque son lo que define si a alguien le sirve entrar: el que hace una sola
+   * de las tres cosas se entera acá de que puede ofertar por esa sola.
+   */
+  const items = Array.isArray(lic.items) ? (lic.items as Record<string, unknown>[]) : [];
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -101,6 +107,40 @@ export function LicitacionClient({
           <motion.p {...up(0.14)} className="text-[15px] text-[#8a8a8a]">
             Lo necesitan para el <span className="text-[#e5e2e1]">{fmt(lic.necesario_para)}</span>.
           </motion.p>
+        ) : null}
+
+        {items.length ? (
+          <motion.section {...up(0.17)} className="border border-[#1a1a1a] bg-[#0a0a0a] p-6 flex flex-col gap-4">
+            <p className="label-tech text-[11px] uppercase tracking-[0.2em] text-[#8a8a8a]">
+              Se cotiza por separado
+            </p>
+            <ul className="flex flex-col gap-3">
+              {items.map((it, i) => {
+                const cantidad = [
+                  it.cantidad == null ? "" : Number(it.cantidad).toLocaleString("es-AR"),
+                  String(it.unidad ?? "").trim(),
+                ]
+                  .filter(Boolean)
+                  .join(" ");
+                return (
+                  <li key={i} className="text-[16px] text-[#e5e2e1] border-b border-[#1a1a1a] pb-3 last:border-0 last:pb-0">
+                    {String(it.titulo ?? "")}
+                    {cantidad ? <span className="text-[#8a8a8a]"> · {cantidad}</span> : null}
+                    {it.obligatorio === true ? (
+                      <span className="text-[#e3c77f] text-[13px]"> · lo necesitan sí o sí</span>
+                    ) : null}
+                    {it.detalle ? (
+                      <span className="block text-[14px] text-[#8a8a8a] mt-1">{String(it.detalle)}</span>
+                    ) : null}
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="text-[14px] text-[#8a8a8a] leading-[1.6]">
+              No hace falta que hagas todo: podés poner precio solo en lo que sí hacés y
+              marcar el resto.
+            </p>
+          </motion.section>
         ) : null}
 
         {campos.length ? (

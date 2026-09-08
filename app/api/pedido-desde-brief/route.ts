@@ -12,6 +12,8 @@
  * además de los campos:
  *
  *  · `campos`     — las preguntas del desglose PARA ESE CASO, no las genéricas
+ *  · `items`      — las partes que se cotizan POR SEPARADO, con su cantidad. Un
+ *                   campo se contesta con texto, un ítem con un precio (8/9)
  *                   del rubro. "¿Hay que subir por escalera?" solo aparece si el
  *                   brief habla de un tercer piso.
  *  · `faltantes`  — los datos que el brief NO dice y que van a generar
@@ -139,6 +141,7 @@ export async function POST(request: Request) {
     `- necesario_para: la fecha del trabajo en formato YYYY-MM-DD, o null.`,
     `  Hoy es ${new Date().toISOString().slice(0, 10)}. Si el texto dice un día y un mes SIN año, usá la próxima vez que caiga esa fecha, y avisalo en "faltantes".`,
     `- campos: array de objetos {clave, etiqueta} con las preguntas que hay que hacerle a cada empresa ADEMÁS del precio.`,
+    `- items: array de objetos {titulo, detalle, cantidad, unidad, obligatorio} con las PARTES que se cotizan por separado.`,
     `- faltantes: array de strings. Cada uno es un dato que NO está en el texto y que va a hacer que las empresas repregunten en vez de cotizar.`,
     ``,
     `SOBRE "campos", que es lo más importante:`,
@@ -148,6 +151,13 @@ export async function POST(request: Request) {
     `Cada pregunta tiene que poder contestarse en una línea. La "clave" en minúsculas, sin espacios ni acentos.`,
     `Este es el nivel de detalle esperado para el rubro (son un EJEMPLO, no los copies tal cual):`,
     ejemplo,
+    ``,
+    `SOBRE "items", que es la otra mitad del pedido:`,
+    `Un "campo" se contesta con texto; un "item" se contesta con UN PRECIO. Partí el pedido en los renglones que una empresa cotizaría por separado: cada comida de un catering, cada tramo de un transporte, cada servicio de un armado.`,
+    `Esto sirve para dos cosas concretas: comparar renglón contra renglón en vez de dos paquetes cerrados, y que el que hace solo una parte pueda ofertar por esa parte en vez de no cotizar.`,
+    `"cantidad" es un número y "unidad" una palabra ("100" y "personas"). Van null si el texto no las dice: NO las inventes.`,
+    `"obligatorio" es true SOLO si el texto dice que sin eso no sirve. Ante la duda, false: marcar todo como obligatorio espanta a los que hacen una parte, que es lo que esto vino a resolver.`,
+    `⚠️ Si el pedido es UNA SOLA COSA, devolvé un array vacío. Partir en renglones algo que no tiene partes convierte un formulario simple en una planilla.`,
     ``,
     `SOBRE "faltantes":`,
     `Pensá qué te preguntaría una empresa antes de poder cotizar esto, y listá los datos que el texto no tiene. Frases cortas, en voseo, del estilo "No aclara si hay que subir por escalera".`,
@@ -223,6 +233,36 @@ export async function POST(request: Request) {
     })
     .filter((c): c is { clave: string; etiqueta: string } => c !== null);
 
+  /**
+   * Los ítems. Mismo saneado que los campos y una decisión más: `cantidad` se
+   * acepta SOLO si es un número, y si no queda vacía. Un "100 aprox" escrito en
+   * ese casillero le llega al que cotiza como una cantidad que no es.
+   *
+   * ⚠️ Un ítem solo no es un desglose: si el modelo devuelve uno, se descarta.
+   * Un pedido de una sola cosa tiene que seguir siendo el formulario simple.
+   */
+  const itemsCrudos = Array.isArray(parsed.items) ? parsed.items : [];
+  const items = itemsCrudos
+    .slice(0, 20)
+    .map((c) => {
+      const o = (c ?? {}) as Record<string, unknown>;
+      const titulo = str(o.titulo, 160);
+      if (!titulo) return null;
+      const cantidadCruda = typeof o.cantidad === "number" ? String(o.cantidad) : str(o.cantidad, 20);
+      const cantidad =
+        cantidadCruda && /^\d+(\.\d+)?$/.test(cantidadCruda) && Number(cantidadCruda) > 0
+          ? cantidadCruda
+          : "";
+      return {
+        titulo,
+        detalle: str(o.detalle, 500) ?? "",
+        cantidad,
+        unidad: str(o.unidad, 40) ?? "",
+        obligatorio: o.obligatorio === true,
+      };
+    })
+    .filter((i): i is NonNullable<typeof i> => i !== null);
+
   const faltantes = (Array.isArray(parsed.faltantes) ? parsed.faltantes : [])
     .slice(0, 8)
     .map((f) => str(f, 200))
@@ -244,6 +284,7 @@ export async function POST(request: Request) {
       // índice, y anticipo. Son las que se aprenden cobrando, no leyendo un
       // brief, y por eso no pueden depender de que el modelo se acuerde.
       campos: conPreguntasDePlaza(campos),
+      items: items.length > 1 ? items : [],
       faltantes,
     },
   });

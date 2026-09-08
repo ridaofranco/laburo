@@ -12,6 +12,15 @@
  * Porque el más barato no es el que gana: gana el que incluye lo que hay que
  * incluir. La tabla ordena; elegir lo hace una persona, con un botón por fila.
  *
+ * ── LA MATRIZ ÍTEM x PROVEEDOR (8/9) ───────────────────────────────────────
+ * Cuando el pedido viene partido en renglones, abajo de la tabla va una segunda
+ * con una fila por ítem y una columna por proveedor. Es donde partir el pedido
+ * se paga solo: se ve quién es más barato EN QUÉ, y que la suma más conveniente
+ * puede ser de dos proveedores distintos.
+ *
+ * ⚠️ Una celda vacía y un "no lo hace" no son lo mismo y se escriben distinto.
+ * Vacía es "no lo cargó"; "no lo hace" es una respuesta.
+ *
  * ── LOS QUE NO COTIZARON SE MUESTRAN IGUAL ─────────────────────────────────
  * Con su estado real: si el mail no salió, si no lo abrió, o si lo abrió y no
  * cargó nada. Son tres problemas distintos con tres soluciones distintas, y
@@ -29,7 +38,7 @@ import type {
   InvitadoSinCotizar,
   ProveedorInvitable,
 } from "../actions";
-import { parsearInvitados, fmtMonto } from "@/lib/cotizaciones";
+import { parsearInvitados, fmtMonto, fmtCantidad } from "@/lib/cotizaciones";
 import { fmtFecha, fmtFechaHora, aInputLocal, desdeInputLocal } from "@/lib/dates";
 
 const inputCaja =
@@ -66,6 +75,61 @@ export function PedidoClient({
   const sePuedeElegir = !adjudicado && pedido.estado !== "cancelada";
 
   const previa = parsearInvitados(lista);
+
+  /**
+   * ── LO QUE LA MATRIZ DEJA VER Y LA TABLA DE ARRIBA NO ──────────────────────
+   * Lo más barato de cada renglón, sumado, y contra qué se compara.
+   *
+   * ⚠️ EL "CONTRA QUÉ" ES LA MITAD DIFÍCIL, y compararlo contra el total más
+   * barato a secas está MAL: en la prueba real, el más barato (2.230.000) no
+   * hacía la barra, así que su total cubría dos renglones de tres. Medir una
+   * suma que cubre TODO contra un total que cubre una parte es exactamente el
+   * error que la tabla comparativa vino a evitar (regla 3: un precio suelto no
+   * se puede comparar).
+   *
+   * Entonces se compara contra la cotización más barata QUE CUBRE TODO. Y si no
+   * hay ninguna, se dice eso, que es más útil todavía: repartir no es una forma
+   * de ahorrar, es la única forma de tener el trabajo completo.
+   *
+   * Una cotización sin líneas (paquete cerrado) cuenta como que cubre todo: su
+   * número es por el trabajo entero, que es lo que significa cotizar cerrado.
+   */
+  const repartido = (() => {
+    if (pedido.items.length === 0 || cotizaciones.length === 0) return null;
+
+    let suma = 0;
+    const de = new Set<string>();
+    for (const it of pedido.items) {
+      let mejor: { monto: number; quote: string } | null = null;
+      for (const c of cotizaciones) {
+        const l = (c.lineas ?? []).find((x) => x.item_id === it.id);
+        if (!l || l.no_cotiza || l.monto == null) continue;
+        const n = Number(l.monto);
+        if (!mejor || n < mejor.monto) mejor = { monto: n, quote: c.quote_id };
+      }
+      // Un renglón que nadie cotizó deja la suma incompleta, y una suma
+      // incompleta no se puede comparar contra nada.
+      if (!mejor) return null;
+      suma += mejor.monto;
+      de.add(mejor.quote);
+    }
+
+    const completas = cotizaciones.filter((c) => {
+      const lineas = c.lineas ?? [];
+      if (lineas.length === 0) return true; // paquete cerrado: cubre todo
+      return pedido.items.every((it) => {
+        const l = lineas.find((x) => x.item_id === it.id);
+        return l && !l.no_cotiza && l.monto != null;
+      });
+    });
+    const mejorCompleta = completas.length
+      ? Math.min(...completas.map((c) => Number(c.monto)))
+      : null;
+
+    // Repartir entre uno solo no es repartir: eso ya es elegir una cotización.
+    if (de.size < 2) return null;
+    return { suma, cuantos: de.size, mejorCompleta };
+  })();
 
   function mandarInvitaciones() {
     // Los dos caminos van juntos en una sola llamada: el que eligió tres del
@@ -197,6 +261,29 @@ export function PedidoClient({
           <p className="text-[15px] text-[#cfc4c5] leading-[1.6] whitespace-pre-line border-l-2 border-[#4c4546] pl-4">
             {pedido.descripcion}
           </p>
+        ) : null}
+
+        {/* Los renglones que se piden con precio. Se muestran acá aunque todavía
+            no haya llegado ninguna cotización: es lo que se mandó a pedir, y no
+            poder verlo obliga a abrir el link del proveedor para acordarse. */}
+        {pedido.items.length > 0 ? (
+          <div className="flex flex-col gap-2">
+            <p className={labelCls}>
+              {pedido.items.length === 1 ? "1 ítem" : `${pedido.items.length} ítems`} a cotizar
+              por separado
+            </p>
+            <ul className="flex flex-col gap-1">
+              {pedido.items.map((it) => (
+                <li key={it.id} className="text-[15px] text-[#cfc4c5]">
+                  {it.titulo}
+                  {fmtCantidad(it) ? <span className="text-[#8A8A8A]"> · {fmtCantidad(it)}</span> : null}
+                  {it.obligatorio ? (
+                    <span className="text-[#e3c77f] text-[13px]"> · sí o sí</span>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </div>
         ) : null}
 
         {pedido.campos.length > 0 ? (
@@ -457,6 +544,136 @@ export function PedidoClient({
                 ))}
               </tbody>
             </table>
+          </div>
+        ) : null}
+
+        {/* ── La matriz ítem x proveedor ──────────────────────────────────
+            Acá es donde partir el pedido se paga solo: se ve de un vistazo
+            quién es más barato en QUÉ, y no solo quién dio el total más chico.
+
+            ⚠️ Una celda vacía y un "no lo hace" NO son lo mismo, y por eso se
+            escriben distinto. Vacía es "no lo cargó"; "no lo hace" es una
+            respuesta. Confundirlas hace creer que hay una oferta parcial cuando
+            lo que hay es una incompleta. */}
+        {pedido.items.length > 0 && cotizaciones.length > 0 ? (
+          <div className="flex flex-col gap-3 mt-6">
+            <p className={labelCls}>Renglón por renglón</p>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="border-b border-[#222]">
+                    <Th>Ítem</Th>
+                    {cotizaciones.map((c) => (
+                      <Th key={c.quote_id}>
+                        <span className="block text-[#e5e2e1] normal-case tracking-normal text-[13px]">
+                          {c.proveedor}
+                        </span>
+                        {(c.lineas ?? []).length === 0 ? (
+                          <span className="block text-[10px] text-[#8A8A8A] normal-case tracking-normal">
+                            paquete cerrado
+                          </span>
+                        ) : null}
+                      </Th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {pedido.items.map((it) => {
+                    // El más barato de la fila. Solo entre los que pusieron un
+                    // número: el que no lo hace no compite por ese renglón.
+                    const montos = cotizaciones
+                      .map((c) => (c.lineas ?? []).find((l) => l.item_id === it.id))
+                      .filter((l) => l && !l.no_cotiza && l.monto != null)
+                      .map((l) => Number(l!.monto));
+                    const minimo = montos.length ? Math.min(...montos) : null;
+
+                    return (
+                      <tr key={it.id} className="border-b border-[#1A1A1A] align-top">
+                        <Td>
+                          <span className="text-[#e5e2e1]">{it.titulo}</span>
+                          {fmtCantidad(it) ? (
+                            <span className="block text-[13px] text-[#8A8A8A]">{fmtCantidad(it)}</span>
+                          ) : null}
+                          {it.obligatorio ? (
+                            <span className="block text-[11px] uppercase tracking-[0.12em] text-[#e3c77f] mt-1">
+                              Sí o sí
+                            </span>
+                          ) : null}
+                        </Td>
+                        {cotizaciones.map((c) => {
+                          const l = (c.lineas ?? []).find((x) => x.item_id === it.id);
+                          if (!l) {
+                            return (
+                              <Td key={c.quote_id}>
+                                <span className="text-[#4c4546]" title="No lo cargó">
+                                  —
+                                </span>
+                              </Td>
+                            );
+                          }
+                          if (l.no_cotiza) {
+                            return (
+                              <Td key={c.quote_id}>
+                                <span className="text-[#8A8A8A]">No lo hace</span>
+                                {l.comentario ? (
+                                  <span className="block text-[13px] text-[#8A8A8A]">{l.comentario}</span>
+                                ) : null}
+                              </Td>
+                            );
+                          }
+                          const esMinimo = minimo != null && Number(l.monto) === minimo;
+                          return (
+                            <Td key={c.quote_id}>
+                              <span className={esMinimo ? "text-[#7ee787]" : "text-[#e5e2e1]"}>
+                                {fmtMonto(l.monto, c.moneda)}
+                              </span>
+                              {l.comentario ? (
+                                <span className="block text-[13px] text-[#8A8A8A]">{l.comentario}</span>
+                              ) : null}
+                            </Td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })}
+                  <tr className="align-top">
+                    <Td>
+                      <span className="text-[#e5e2e1]">Total</span>
+                    </Td>
+                    {cotizaciones.map((c) => (
+                      <Td key={c.quote_id}>
+                        <span className="text-[16px] text-[#e5e2e1]">
+                          {fmtMonto(c.monto, c.moneda)}
+                        </span>
+                      </Td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* Lo que la matriz deja ver y la tabla de arriba no. Se dice como
+                dato, no como recomendación: hoy se elige UNA cotización entera,
+                y prometer un reparto que la pantalla no sabe hacer sería peor
+                que no decirlo. */}
+            {repartido &&
+            (repartido.mejorCompleta === null || repartido.suma < repartido.mejorCompleta) ? (
+              <p className="text-[14px] text-[#cfc4c5] leading-[1.6]">
+                {repartido.mejorCompleta === null
+                  ? "Ninguna cotización cubre todos los renglones. "
+                  : ""}
+                Tomando el más barato de cada renglón la suma da{" "}
+                {/* El texto que sigue va pegado al </span> a propósito: un salto
+                    de línea acá lo convierte en un espacio y queda "$2.980.000 ,
+                    repartida". */}
+                <span className="text-[#7ee787]">{fmtMonto(repartido.suma, cotizaciones[0].moneda)}</span>
+                {`, repartida entre ${repartido.cuantos} proveedores${
+                  repartido.mejorCompleta !== null
+                    ? `, contra ${fmtMonto(repartido.mejorCompleta, cotizaciones[0].moneda)} de la más barata que hace todo`
+                    : ""
+                }. Hoy se elige una cotización entera, así que repartir hay que arreglarlo por afuera: esto es para saber dónde te están cobrando de más.`}
+              </p>
+            ) : null}
           </div>
         ) : null}
 

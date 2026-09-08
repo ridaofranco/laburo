@@ -16,14 +16,20 @@
  * 3. **No hay ningún campo de "requisito excluyente".** Es la regla 2 y es
  *    deliberado: pedir portón hidráulico como condición espantó a 37 empresas.
  *    Lo que necesitás se pregunta en el desglose, y al comparar ves quién lo
- *    cumple.
+ *    cumple. Lo mismo vale para el "lo necesito sí o sí" de un ítem: se
+ *    muestra, no bloquea.
+ *
+ * 4. **Los ítems arrancan vacíos y se pueden dejar así (8/9).** Partir el
+ *    pedido en renglones es opcional, y el caso más común es no necesitarlo:
+ *    pedir precio por una sola cosa. Un formulario que abre con una fila
+ *    obligatoria castiga al caso simple para servir al complejo.
  */
 
 import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { crearPedido } from "../actions";
-import { plantillaDe, type CampoDesglose } from "@/lib/cotizaciones";
+import { plantillaDe, type CampoDesglose, type ItemNuevo } from "@/lib/cotizaciones";
 import { desdeInputLocal } from "@/lib/dates";
 import { sniffCvMime } from "@/lib/cv";
 
@@ -59,6 +65,13 @@ export function NuevoPedidoForm({
   const [cierraAt, setCierraAt] = useState(enUnaSemana);
   const [campos, setCampos] = useState<CampoDesglose[]>(plantillaDe(""));
   const [tocoElDesglose, setTocoElDesglose] = useState(false);
+  /**
+   * Los renglones que se piden con precio. Arranca VACÍO a propósito: un pedido
+   * de una sola cosa no tiene por qué obligar a cargar un ítem, y un formulario
+   * que abre con una fila vacía obligatoria es un formulario más pesado para el
+   * caso más común. Se llena a mano o lo llena el brief.
+   */
+  const [items, setItems] = useState<ItemNuevo[]>([]);
 
   // ── El brief ──────────────────────────────────────────────────────────────
   const [brief, setBrief] = useState("");
@@ -133,6 +146,7 @@ export function NuevoPedidoForm({
           ciudad: string | null;
           necesario_para: string | null;
           campos: CampoDesglose[];
+          items: ItemNuevo[];
           faltantes: string[];
         };
       };
@@ -150,6 +164,10 @@ export function NuevoPedidoForm({
         setCampos(d.campos);
         setTocoElDesglose(true); // ya no es la plantilla del rubro: es de este caso
       }
+      // Los ítems solo se pisan si la persona todavía no cargó ninguno, igual
+      // que todo lo demás: escribir arriba de lo que alguien tipeó a mano es la
+      // forma más rápida de que no vuelva a usar el botón.
+      if (d.items?.length && items.length === 0) setItems(d.items);
       setFaltantes(d.faltantes ?? []);
       setArchivo(file?.name ?? null);
 
@@ -188,6 +206,18 @@ export function NuevoPedidoForm({
     setCampos((prev) => [...prev, { clave: `extra_${prev.length + 1}`, etiqueta: "" }]);
   }
 
+  function editarItem(i: number, cambio: Partial<ItemNuevo>) {
+    setItems((prev) => prev.map((it, j) => (j === i ? { ...it, ...cambio } : it)));
+  }
+
+  function borrarItem(i: number) {
+    setItems((prev) => prev.filter((_, j) => j !== i));
+  }
+
+  function agregarItem() {
+    setItems((prev) => [...prev, { titulo: "", detalle: "", cantidad: "", unidad: "" }]);
+  }
+
   function guardar() {
     if (!titulo.trim()) {
       toast.error("Poné un título: es lo primero que lee el que va a cotizar.");
@@ -219,6 +249,9 @@ export function NuevoPedidoForm({
         necesarioPara,
         cierraAt: cierra,
         campos: limpios,
+        // Los ítems sin título no viajan, igual que las preguntas en blanco: un
+        // renglón vacío le llega así al que cotiza.
+        items: items.filter((i) => (i.titulo || "").trim()),
       });
       if (!r.ok) {
         toast.error(r.error);
@@ -437,6 +470,108 @@ export function NuevoPedidoForm({
         >
           Sumar pregunta
         </button>
+      </section>
+
+      {/* ── Los ítems ────────────────────────────────────────────────────────
+          La otra mitad del pedido. Una pregunta se contesta con texto; un ítem
+          se contesta con un PRECIO.
+
+          ⚠️ Arranca vacío y se puede dejar así. Es el caso más común: pedir
+          precio por una sola cosa. Obligar a cargar un renglón para eso
+          convertiría el formulario simple en una planilla. */}
+      <section className="flex flex-col gap-4 border-t border-[#1A1A1A] pt-8">
+        <div className="flex flex-col gap-2">
+          <h2 className="text-[20px] text-[#e5e2e1]">Qué querés que te coticen por separado</h2>
+          <p className="text-[15px] text-[#cfc4c5] leading-[1.6]">
+            Opcional. Si lo que pedís tiene partes (cada comida, cada tramo, cada
+            servicio), cargalas acá y cada empresa pone un precio por renglón. Sirve
+            para dos cosas: comparás renglón contra renglón en vez de dos paquetes
+            cerrados, y el que hace solo una parte puede ofertar por esa parte en vez
+            de no cotizar.
+          </p>
+        </div>
+
+        {items.length > 0 ? (
+          <ul className="flex flex-col gap-4">
+            {items.map((it, i) => (
+              <li key={i} className="border border-[#2a2a2a] p-4 flex flex-col gap-3">
+                <div className="flex items-start gap-3">
+                  <input
+                    className={inputCaja}
+                    value={it.titulo}
+                    onChange={(e) => editarItem(i, { titulo: e.target.value })}
+                    placeholder="Cena de recepción"
+                    maxLength={160}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => borrarItem(i)}
+                    className="min-h-[48px] min-w-[48px] border border-[#2a2a2a] text-[#cfc4c5] hover:border-[#e5e2e1] hover:text-[#e5e2e1] transition-colors"
+                    aria-label="Borrar este ítem"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                <input
+                  className={`${inputCaja} min-h-[44px] text-[15px]`}
+                  value={it.detalle ?? ""}
+                  onChange={(e) => editarItem(i, { detalle: e.target.value })}
+                  placeholder="Detalle, si hace falta"
+                  maxLength={500}
+                />
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <input
+                    inputMode="decimal"
+                    className={`${inputCaja} min-h-[44px] max-w-[120px] text-[15px]`}
+                    value={it.cantidad ?? ""}
+                    onChange={(e) => editarItem(i, { cantidad: e.target.value.replace(/[^\d.]/g, "") })}
+                    placeholder="100"
+                    maxLength={12}
+                    aria-label="Cantidad"
+                  />
+                  <input
+                    className={`${inputCaja} min-h-[44px] max-w-[180px] text-[15px]`}
+                    value={it.unidad ?? ""}
+                    onChange={(e) => editarItem(i, { unidad: e.target.value })}
+                    placeholder="personas"
+                    maxLength={40}
+                    aria-label="Unidad"
+                  />
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="w-5 h-5 accent-[#0047FF]"
+                      checked={!!it.obligatorio}
+                      onChange={(e) => editarItem(i, { obligatorio: e.target.checked })}
+                    />
+                    <span className="text-[14px] text-[#cfc4c5]">Lo necesito sí o sí</span>
+                  </label>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+
+        <button
+          type="button"
+          onClick={agregarItem}
+          className="self-start min-h-[44px] px-5 border border-[#2a2a2a] text-[15px] text-[#cfc4c5] hover:border-[#e5e2e1] hover:text-[#e5e2e1] transition-colors"
+        >
+          {items.length === 0 ? "Partirlo en ítems" : "Sumar ítem"}
+        </button>
+
+        {/* ⚠️ Marcar un ítem NO excluye a nadie, y decirlo acá es lo que evita
+            que se marquen todos. Es la regla 2: pedir portón hidráulico como
+            condición espantó a 37 empresas. */}
+        {items.some((i) => i.obligatorio) ? (
+          <p className="text-[13px] text-[#8A8A8A] leading-[1.6]">
+            &quot;Lo necesito sí o sí&quot; se lo mostramos al que cotiza y lo vas a ver
+            al comparar, pero no le impide mandarte precio por el resto. Una oferta
+            parcial sirve más que ninguna.
+          </p>
+        ) : null}
       </section>
 
       <div className="flex flex-wrap gap-4 border-t border-[#1A1A1A] pt-8">

@@ -27,6 +27,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { fmtFecha, fmtFechaHora } from "@/lib/dates";
+import { fmtCantidad, fmtMonto, type ItemPedido, type LineaCotizacion } from "@/lib/cotizaciones";
 import { CotizarForm } from "./cotizar-client";
 
 export const metadata: Metadata = {
@@ -48,6 +49,7 @@ interface Invitacion {
     necesario_para: string | null;
     cierra_at: string;
     campos: { clave: string; etiqueta: string }[];
+    items: ItemPedido[];
     estado: string;
   };
   puede_cotizar?: boolean;
@@ -58,6 +60,7 @@ interface Invitacion {
     no_incluye: string | null;
     validez_dias: number | null;
     respuestas: Record<string, string>;
+    lineas: LineaCotizacion[];
     estado: string;
     updated_at: string;
   } | null;
@@ -145,6 +148,23 @@ export default async function CotizarPage({
               {p.descripcion}
             </p>
           ) : null}
+
+          {/* Los renglones se listan acá SOLO cuando ya no se puede cotizar. Con
+              el pedido abierto la lista de abajo es el formulario mismo, y
+              repetirla arriba haría dudar de cuál de las dos hay que completar. */}
+          {cerrado && (p.items ?? []).length > 0 ? (
+            <ul className="flex flex-col gap-1 mt-2 border-l-2 border-[#4c4546] pl-4">
+              {(p.items ?? []).map((it) => {
+                const cantidad = fmtCantidad(it);
+                return (
+                  <li key={it.id} className="text-[15px] text-[#cfc4c5]">
+                    {it.titulo}
+                    {cantidad ? <span className="text-[#8A8A8A]"> · {cantidad}</span> : null}
+                  </li>
+                );
+              })}
+            </ul>
+          ) : null}
         </section>
 
         {/* Cerrado: se dice cómo terminó, que es lo que el que cotizó vino a ver. */}
@@ -169,16 +189,35 @@ export default async function CotizarPage({
                     : "Se cerró antes de que llegaras a cargar tu presupuesto."}
             </p>
             {yaCotizo && inv.mi_cotizacion ? (
-              <p className="text-[15px] text-[#8A8A8A]">
-                Lo último que cargaste: {inv.mi_cotizacion.moneda === "USD" ? "USD " : "$"}
-                {Number(inv.mi_cotizacion.monto).toLocaleString("es-AR")}.
-              </p>
+              <>
+                <p className="text-[15px] text-[#8A8A8A]">
+                  Lo último que cargaste: {fmtMonto(inv.mi_cotizacion.monto, inv.mi_cotizacion.moneda)}.
+                </p>
+                {/* Si lo cargó renglón por renglón, se le muestra así. Un total
+                    pelado cuando cotizó cinco ítems lo obliga a ir a buscar el
+                    mail para saber qué había puesto en cada uno. */}
+                {(inv.mi_cotizacion.lineas ?? []).length > 0 ? (
+                  <ul className="flex flex-col gap-1 mt-1">
+                    {(p.items ?? []).map((it) => {
+                      const l = (inv.mi_cotizacion?.lineas ?? []).find((x) => x.item_id === it.id);
+                      if (!l) return null;
+                      return (
+                        <li key={it.id} className="text-[14px] text-[#8A8A8A]">
+                          {it.titulo}:{" "}
+                          {l.no_cotiza ? "no lo hacés" : fmtMonto(l.monto, inv.mi_cotizacion!.moneda)}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : null}
+              </>
             ) : null}
           </section>
         ) : (
           <CotizarForm
             token={token}
             campos={p.campos ?? []}
+            items={p.items ?? []}
             inicial={inv.mi_cotizacion ?? null}
             productora={productora}
           />
