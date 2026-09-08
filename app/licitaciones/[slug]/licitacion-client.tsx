@@ -15,15 +15,21 @@ const up = (delay = 0) => ({
   transition: { duration: 0.4, delay, ease: [0.22, 1, 0.36, 1] as const },
 });
 
-const fmt = (iso: unknown, conHora = false) =>
-  iso
-    ? new Intl.DateTimeFormat("es-AR", {
-        day: "2-digit",
-        month: "long",
-        ...(conHora ? { hour: "2-digit", minute: "2-digit" } : {}),
-        timeZone: "America/Argentina/Buenos_Aires",
-      }).format(new Date(String(iso)))
-    : null;
+const fmt = (iso: unknown, conHora = false) => {
+  if (!iso) return null;
+  const d = new Date(String(iso));
+  const tz = "America/Argentina/Buenos_Aires";
+  const dia = new Intl.DateTimeFormat("es-AR", { day: "numeric", timeZone: tz }).format(d);
+  const mes = new Intl.DateTimeFormat("es-AR", { month: "long", timeZone: tz }).format(d);
+  const base = `${dia} de ${mes}`;
+  if (!conHora) return base;
+  // 24 horas: "04:17 p. m." obliga a traducir mentalmente, y en un cierre de
+  // licitacion la hora es justo lo que no se puede leer mal.
+  const hora = new Intl.DateTimeFormat("es-AR", {
+    hour: "2-digit", minute: "2-digit", hour12: false, timeZone: tz,
+  }).format(d);
+  return `${base} a las ${hora}`;
+};
 
 export function LicitacionClient({
   slug,
