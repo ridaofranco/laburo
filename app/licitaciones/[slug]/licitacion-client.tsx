@@ -103,9 +103,16 @@ export function LicitacionClient({
               Lo que piden
             </p>
             <ul className="flex flex-col gap-3">
-              {campos.map((c, i) => (
+              {campos.filter((c) => String(c.etiqueta ?? c.label ?? c.nombre ?? "").trim()).map((c, i) => (
                 <li key={i} className="text-[16px] text-[#e5e2e1] border-b border-[#1a1a1a] pb-3 last:border-0 last:pb-0">
-                  {String(c.label ?? c.nombre ?? "")}
+                  {/* ⚠️ El campo se llama `etiqueta`. Es como lo escribe
+                      staff_app_crear_pedido y como lo lee el portal y la
+                      pantalla del que cotiza. Esta pantalla buscaba `label` y
+                      `nombre`, que no existen en ningún lado: el resultado era
+                      una lista de renglones VACÍOS, o sea el proveedor entrando
+                      a la licitación sin ver qué le piden. Lo encontró Franco
+                      probándolo con un pedido real. */}
+                  {String(c.etiqueta ?? c.label ?? c.nombre ?? "")}
                   {c.detalle ? (
                     <span className="block text-[14px] text-[#8a8a8a] mt-1">{String(c.detalle)}</span>
                   ) : null}
