@@ -29,6 +29,7 @@
  */
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { invitar, adjudicar, cerrarPedido, reenviarInvitacion, extenderCierre } from "../actions";
@@ -301,6 +302,17 @@ export function PedidoClient({
 
         {abierto ? (
           <div className="flex flex-wrap gap-4 pt-2">
+            {/* ⚠️ Corregir es lo PRIMERO de la fila, y no un detalle de orden:
+                los otros dos botones cierran o cancelan el pedido, o sea que
+                son irreversibles. El que entra a arreglar un título tiene que
+                encontrar la salida barata antes que las caras. */}
+            <Link
+              href={`/cotizaciones/${pedido.id}/editar`}
+              className="min-h-[44px] px-5 border border-[#2a2a2a] text-[14px] text-[#cfc4c5] hover:border-[#e5e2e1] hover:text-[#e5e2e1] transition-colors inline-flex items-center"
+              title="Cambiar el título, el detalle o las preguntas sin perder las invitaciones que ya mandaste."
+            >
+              Corregir el pedido
+            </Link>
             <button
               type="button"
               onClick={() => cerrar(false)}

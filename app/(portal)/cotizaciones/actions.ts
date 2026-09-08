@@ -202,7 +202,9 @@ const MENSAJES: Record<string, string> = {
   no_encontrada: "Esa invitación no existe o no es de tu productora.",
   ya_cotizo: "Ese proveedor ya cargó su presupuesto.",
   cerrado: "El pedido ya está cerrado.",
-  no_esta_abierto: "Solo se puede correr la fecha de un pedido abierto.",
+  no_esta_abierto: "Solo se puede editar un pedido abierto.",
+  ya_cotizaron:
+    "Ya hay presupuestos cargados, así que los ítems no se pueden cambiar: cambiarlos borraría los precios que ya te mandaron. Lo demás sí.",
   fecha_invalida: "La fecha nueva tiene que ser futura.",
 };
 
@@ -258,6 +260,75 @@ export async function crearPedido(input: {
 
   revalidatePath("/cotizaciones");
   return { ok: true, requestId: r.request_id };
+}
+
+/**
+ * EDITAR UN PEDIDO SIN REHACERLO.
+ *
+ * Hasta hoy de un pedido solo se podía correr la fecha, cerrarlo o cancelarlo:
+ * un título mal escrito obligaba a rehacerlo entero y perder las invitaciones,
+ * que son lo caro (cada una es un mail que ya salió y un token que alguien
+ * puede tener abierto).
+ *
+ * ⚠️ `items` es opcional Y ESO SIGNIFICA ALGO: sin él, la base no los toca. La
+ * pantalla lo manda solo cuando todavía no cotizó nadie, porque borrar un ítem
+ * con cotizaciones adentro se llevaría en cascada las líneas de cada proveedor
+ * y el total quedaría siendo la suma de algo que ya no existe. Si igual llega,
+ * la base devuelve `ya_cotizaron` y no cambia nada.
+ *
+ * ⚠️ Y NO toca la fecha de cierre: eso es `extenderCierre`, que además corre los
+ * tokens de las invitaciones. Dos funciones para dos cosas.
+ */
+export async function editarPedido(
+  requestId: string,
+  input: {
+    titulo: string;
+    descripcion?: string;
+    categoria?: string;
+    provincia?: string;
+    ciudad?: string;
+    necesarioPara?: string;
+    campos: { clave: string; etiqueta: string }[];
+    items?: ItemNuevo[] | null;
+  },
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const supabase = await createClient();
+  const org = await exigirOrg();
+
+  const { data, error } = await supabase.rpc("staff_app_editar_pedido", {
+    p_request_id: requestId,
+    p_titulo: input.titulo.trim(),
+    p_descripcion: input.descripcion?.trim() || null,
+    p_categoria: input.categoria?.trim() || null,
+    p_provincia: input.provincia?.trim() || null,
+    p_ciudad: input.ciudad?.trim() || null,
+    p_necesario_para: input.necesarioPara?.trim() || null,
+    p_campos: input.campos,
+    p_items:
+      input.items == null
+        ? null
+        : input.items
+            .filter((i) => (i.titulo || "").trim())
+            .map((i) => ({
+              titulo: i.titulo.trim(),
+              detalle: (i.detalle || "").trim() || null,
+              cantidad: (i.cantidad || "").trim() || null,
+              unidad: (i.unidad || "").trim() || null,
+              obligatorio: !!i.obligatorio,
+            })),
+    p_org: org.organizationId,
+  });
+
+  if (error) {
+    console.error("[cotizaciones] editar falló:", error.message);
+    return { ok: false, error: "No se pudo guardar. Probá de nuevo." };
+  }
+  const r = data as { ok?: boolean; reason?: string } | null;
+  if (!r?.ok) return { ok: false, error: traducir(r?.reason) };
+
+  revalidatePath("/cotizaciones");
+  revalidatePath(`/cotizaciones/${requestId}`);
+  return { ok: true };
 }
 
 /* ────────────────────────────── invitar ────────────────────────────── */

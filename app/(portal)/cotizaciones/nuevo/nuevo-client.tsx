@@ -28,7 +28,7 @@
 import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { crearPedido } from "../actions";
+import { crearPedido, editarPedido, type PedidoDetalle } from "../actions";
 import { plantillaDe, type CampoDesglose, type ItemNuevo } from "@/lib/cotizaciones";
 import { desdeInputLocal } from "@/lib/dates";
 import { sniffCvMime } from "@/lib/cv";
@@ -49,29 +49,62 @@ function enUnaSemana(): string {
 export function NuevoPedidoForm({
   categorias,
   provincias,
+  pedido,
+  itemsBloqueados = false,
 }: {
   categorias: string[];
   provincias: string[];
+  /**
+   * Si viene, esta pantalla EDITA ese pedido en vez de crear uno nuevo.
+   *
+   * Es el mismo formulario y no una copia a propósito: son los mismos campos
+   * con los mismos textos, y este repo ya pagó dos veces el precio de copiar en
+   * vez de compartir. Lo único que cambia es de dónde salen los valores
+   * iniciales, qué botón hay abajo y a qué función se llama.
+   */
+  pedido?: PedidoDetalle;
+  /**
+   * true cuando ya hay presupuestos cargados. Ahí los ítems se muestran pero no
+   * se editan: cambiarlos borraría en cascada las líneas que los proveedores ya
+   * mandaron, y el total de cada cotización quedaría siendo la suma de algo que
+   * ya no existe. La base también lo corta (`ya_cotizaron`).
+   */
+  itemsBloqueados?: boolean;
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const editando = !!pedido;
 
-  const [titulo, setTitulo] = useState("");
-  const [descripcion, setDescripcion] = useState("");
-  const [categoria, setCategoria] = useState("");
-  const [provincia, setProvincia] = useState("");
-  const [ciudad, setCiudad] = useState("");
-  const [necesarioPara, setNecesarioPara] = useState("");
+  const [titulo, setTitulo] = useState(pedido?.titulo ?? "");
+  const [descripcion, setDescripcion] = useState(pedido?.descripcion ?? "");
+  const [categoria, setCategoria] = useState(pedido?.categoria ?? "");
+  const [provincia, setProvincia] = useState(pedido?.provincia ?? "");
+  const [ciudad, setCiudad] = useState(pedido?.ciudad ?? "");
+  const [necesarioPara, setNecesarioPara] = useState(pedido?.necesario_para ?? "");
   const [cierraAt, setCierraAt] = useState(enUnaSemana);
-  const [campos, setCampos] = useState<CampoDesglose[]>(plantillaDe(""));
-  const [tocoElDesglose, setTocoElDesglose] = useState(false);
+  const [campos, setCampos] = useState<CampoDesglose[]>(
+    pedido ? pedido.campos : plantillaDe(""),
+  );
+  // Editando, el desglose YA es el de este caso: traerle la plantilla del rubro
+  // al cambiar el <select> le pisaría lo que escribió.
+  const [tocoElDesglose, setTocoElDesglose] = useState(editando);
   /**
    * Los renglones que se piden con precio. Arranca VACÍO a propósito: un pedido
    * de una sola cosa no tiene por qué obligar a cargar un ítem, y un formulario
    * que abre con una fila vacía obligatoria es un formulario más pesado para el
    * caso más común. Se llena a mano o lo llena el brief.
    */
-  const [items, setItems] = useState<ItemNuevo[]>([]);
+  const [items, setItems] = useState<ItemNuevo[]>(
+    pedido
+      ? pedido.items.map((i) => ({
+          titulo: i.titulo,
+          detalle: i.detalle ?? "",
+          cantidad: i.cantidad == null ? "" : String(i.cantidad),
+          unidad: i.unidad ?? "",
+          obligatorio: i.obligatorio,
+        }))
+      : [],
+  );
 
   // ── El brief ──────────────────────────────────────────────────────────────
   const [brief, setBrief] = useState("");
@@ -223,6 +256,44 @@ export function NuevoPedidoForm({
       toast.error("Poné un título: es lo primero que lee el que va a cotizar.");
       return;
     }
+
+    // Las preguntas vacías no viajan: un desglose con renglones en blanco le
+    // llega así al que cotiza.
+    const limpios = campos
+      .map((c) => ({ clave: c.clave, etiqueta: c.etiqueta.trim() }))
+      .filter((c) => c.etiqueta);
+    // Los ítems sin título tampoco, por la misma razón.
+    const itemsLimpios = items.filter((i) => (i.titulo || "").trim());
+
+    if (editando) {
+      startTransition(async () => {
+        const r = await editarPedido(pedido!.id, {
+          titulo,
+          descripcion,
+          categoria,
+          provincia,
+          ciudad,
+          necesarioPara,
+          campos: limpios,
+          // ⚠️ null, no [], cuando ya cotizó alguien: null significa "no los
+          // toques" y un array vacío significa "borralos todos". Mandar el
+          // segundo por descuido borraría el desglose del pedido.
+          items: itemsBloqueados ? null : itemsLimpios,
+        });
+        if (!r.ok) {
+          toast.error(r.error);
+          return;
+        }
+        toast.success("Listo, el pedido quedó corregido.");
+        router.push(`/cotizaciones/${pedido!.id}`);
+        router.refresh();
+      });
+      return;
+    }
+
+    // ── Creando: acá sí hace falta la fecha de cierre ───────────────────────
+    // Editando no se toca, porque correrla ya tiene su propio botón en la
+    // pantalla del pedido y ese además corre los tokens de las invitaciones.
     const cierra = desdeInputLocal(cierraAt);
     if (!cierra) {
       toast.error("Falta la fecha de cierre.");
@@ -232,12 +303,6 @@ export function NuevoPedidoForm({
       toast.error("La fecha de cierre tiene que ser futura.");
       return;
     }
-
-    // Las preguntas vacías no viajan: un desglose con renglones en blanco le
-    // llega así al que cotiza.
-    const limpios = campos
-      .map((c) => ({ clave: c.clave, etiqueta: c.etiqueta.trim() }))
-      .filter((c) => c.etiqueta);
 
     startTransition(async () => {
       const r = await crearPedido({
@@ -249,9 +314,7 @@ export function NuevoPedidoForm({
         necesarioPara,
         cierraAt: cierra,
         campos: limpios,
-        // Los ítems sin título no viajan, igual que las preguntas en blanco: un
-        // renglón vacío le llega así al que cotiza.
-        items: items.filter((i) => (i.titulo || "").trim()),
+        items: itemsLimpios,
       });
       if (!r.ok) {
         toast.error(r.error);
@@ -268,7 +331,12 @@ export function NuevoPedidoForm({
           Franco: "la licitación se arma de alguna forma, y tengo que contar".
           Contar es el trabajo, y esto lo saca del medio: pegás el mail del
           cliente o subís el brief, y el formulario de abajo queda armado.
-          ⚠️ No crea nada: es un borrador para revisar. */}
+          ⚠️ No crea nada: es un borrador para revisar.
+
+          ⚠️ Editando NO aparece. El pedido ya está escrito y corregido a mano:
+          ofrecerle acá que lo vuelva a leer una IA es ofrecerle pisar lo que
+          acaba de arreglar. */}
+      {editando ? null : (
       <section className="border border-[#222] bg-[#0A0A0A] p-6 flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <h2 className="text-[20px] text-[#e5e2e1]">Contá qué necesitás</h2>
@@ -334,6 +402,7 @@ export function NuevoPedidoForm({
           </div>
         ) : null}
       </section>
+      )}
 
       <section className="flex flex-col gap-5">
         <label className="flex flex-col gap-2">
@@ -414,21 +483,26 @@ export function NuevoPedidoForm({
           </label>
         </div>
 
-        <label className="flex flex-col gap-2">
-          <span className={labelCls}>
-            Hasta cuándo recibís presupuestos <span className="text-[#e3c77f]">*</span>
-          </span>
-          <input
-            type="datetime-local"
-            className={inputCaja}
-            value={cierraAt}
-            onChange={(e) => setCierraAt(e.target.value)}
-          />
-          <span className="text-[13px] text-[#8A8A8A]">
-            Después de esa fecha y hora, la pantalla del proveedor se cierra sola. Es lo
-            que hace que cotizar no sea algo para mañana.
-          </span>
-        </label>
+        {/* ⚠️ Editando no está: correr el cierre tiene su propio botón en la
+            pantalla del pedido, y ese además corre los `token_expires_at` de
+            las invitaciones. Duplicarlo acá dejaría links vencidos vivos. */}
+        {editando ? null : (
+          <label className="flex flex-col gap-2">
+            <span className={labelCls}>
+              Hasta cuándo recibís presupuestos <span className="text-[#e3c77f]">*</span>
+            </span>
+            <input
+              type="datetime-local"
+              className={inputCaja}
+              value={cierraAt}
+              onChange={(e) => setCierraAt(e.target.value)}
+            />
+            <span className="text-[13px] text-[#8A8A8A]">
+              Después de esa fecha y hora, la pantalla del proveedor se cierra sola. Es lo
+              que hace que cotizar no sea algo para mañana.
+            </span>
+          </label>
+        )}
       </section>
 
       <section className="flex flex-col gap-4 border-t border-[#1A1A1A] pt-8">
@@ -491,7 +565,30 @@ export function NuevoPedidoForm({
           </p>
         </div>
 
-        {items.length > 0 ? (
+        {itemsBloqueados ? (
+          <p className="text-[14px] text-[#e3c77f] leading-[1.6]">
+            Los ítems no se pueden cambiar: ya hay presupuestos cargados y cambiarlos
+            borraría los precios que te mandaron renglón por renglón. Todo lo demás sí.
+          </p>
+        ) : null}
+
+        {itemsBloqueados && items.length > 0 ? (
+          <ul className="flex flex-col gap-1">
+            {items.map((it, i) => (
+              <li key={i} className="text-[15px] text-[#cfc4c5]">
+                {it.titulo}
+                {it.cantidad || it.unidad ? (
+                  <span className="text-[#8A8A8A]">
+                    {" · "}
+                    {[it.cantidad, it.unidad].filter(Boolean).join(" ")}
+                  </span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        ) : null}
+
+        {!itemsBloqueados && items.length > 0 ? (
           <ul className="flex flex-col gap-4">
             {items.map((it, i) => (
               <li key={i} className="border border-[#2a2a2a] p-4 flex flex-col gap-3">
@@ -554,13 +651,15 @@ export function NuevoPedidoForm({
           </ul>
         ) : null}
 
-        <button
-          type="button"
-          onClick={agregarItem}
-          className="self-start min-h-[44px] px-5 border border-[#2a2a2a] text-[15px] text-[#cfc4c5] hover:border-[#e5e2e1] hover:text-[#e5e2e1] transition-colors"
-        >
-          {items.length === 0 ? "Partirlo en ítems" : "Sumar ítem"}
-        </button>
+        {itemsBloqueados ? null : (
+          <button
+            type="button"
+            onClick={agregarItem}
+            className="self-start min-h-[44px] px-5 border border-[#2a2a2a] text-[15px] text-[#cfc4c5] hover:border-[#e5e2e1] hover:text-[#e5e2e1] transition-colors"
+          >
+            {items.length === 0 ? "Partirlo en ítems" : "Sumar ítem"}
+          </button>
+        )}
 
         {/* ⚠️ Marcar un ítem NO excluye a nadie, y decirlo acá es lo que evita
             que se marquen todos. Es la regla 2: pedir portón hidráulico como
@@ -581,10 +680,18 @@ export function NuevoPedidoForm({
           disabled={pending}
           className="min-h-[48px] px-8 bg-[#0047FF] text-white text-[15px] font-semibold disabled:opacity-50"
         >
-          {pending ? "Creando..." : "Crear y elegir a quién"}
+          {pending
+            ? editando
+              ? "Guardando..."
+              : "Creando..."
+            : editando
+              ? "Guardar los cambios"
+              : "Crear y elegir a quién"}
         </button>
         <span className="text-[13px] text-[#8A8A8A] self-center">
-          Todavía no se le manda nada a nadie.
+          {editando
+            ? "Los que ya recibieron el link van a ver el pedido corregido."
+            : "Todavía no se le manda nada a nadie."}
         </span>
       </div>
     </div>
