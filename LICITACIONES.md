@@ -3,10 +3,12 @@
 Pedirle precio a varias empresas por lo mismo, al mismo tiempo, y comparar las
 respuestas en una tabla. Cada una cotiza **sin ver lo que cotizaron las otras**.
 
-> **Estado: LAS CINCO ETAPAS ESTÁN CONSTRUIDAS, aplicadas en producción y
-> probadas** (5/9/2026). Se puede usar de verdad: crear el pedido, invitar a
-> quien sea por mail, que cotice sin cuenta, el recordatorio antes del cierre,
-> comparar y adjudicar avisándole a todos.
+> **Estado: LAS SEIS ETAPAS ESTÁN CONSTRUIDAS, aplicadas en producción y
+> probadas** (etapas 1 a 5 el 5/9/2026, la 6 el 8/9). Se puede usar de verdad:
+> crear el pedido, partirlo en renglones, invitar a quien sea por mail, que
+> cotice sin cuenta y renglón por renglón, el recordatorio antes del cierre,
+> comparar en una matriz y adjudicar avisándole a todos. Un pedido abierto
+> además se puede corregir sin perder las invitaciones.
 >
 > **Lo único que falta es correrlo con un caso real**, que manda mails de verdad
 > a empresas de verdad y por eso no lo puede hacer una sesión de trabajo.
@@ -156,6 +158,33 @@ al mismo lugar y llegan dos cotizaciones de la misma empresa.
 | `respuestas` | `jsonb`: el desglose que pidió el que pide |
 | `estado` | `enviada`, `ganadora`, `no_elegida` |
 
+⚠️ Desde la 0087, **`monto` es EL TOTAL**: si la cotización trae líneas lo
+calcula la base sumándolas, y si no, es lo que se cargó a mano. Las cotizaciones
+viejas siguen valiendo y la comparación sigue teniendo un solo camino.
+
+### `quote_request_items` — los renglones que se piden (0087)
+
+| Campo | Qué es |
+|---|---|
+| `request_id`, `orden` | El pedido, y en qué orden se muestran |
+| `titulo`, `detalle` | "Cena de recepción", y una aclaración opcional |
+| `cantidad`, `unidad` | 100 / "personas". Opcionales: hay ítems que no se cuentan |
+| `obligatorio` | **NO excluye a nadie.** Se muestra y se compara; no impide cotizar sin ese renglón (regla 2) |
+
+### `quote_lines` — lo que contestó cada uno, renglón por renglón (0087)
+
+| Campo | Qué es |
+|---|---|
+| `quote_id`, `item_id` | **UNIQUE juntos**: una línea por ítem y por cotización |
+| `monto` | Su precio para ESE ítem |
+| `no_cotiza` | "esto no lo hago". **Es un dato, no un vacío** |
+| `comentario` | "Solo si son más de 80 personas" |
+
+⚠️ **Los tres estados hay que poder distinguirlos**: línea con monto (lo cotizó),
+línea con `no_cotiza` (no lo hace), y SIN línea (no lo cargó todavía). Un CHECK
+obliga a que una línea sea una cosa o la otra. Si los dos últimos se confunden,
+el que compara cree que tiene una oferta parcial cuando tiene una incompleta.
+
 ---
 
 ## Lo ciego, que es el punto
@@ -251,6 +280,31 @@ bienvenida y la pregunta de visibilidad. Esas le escriben a cientos de personas
 que no esperan nada; esta le escribe a alguien que recibió una invitación
 explícita y todavía puede responderla.
 
+**Etapa 6 — La cotización por ítems.** ✅ **HECHA el 8/9** (`staff_app_0087`).
+Franco: *"tampoco es que se puede poner precios, es decir, si quieren
+desglosarlo o pueden solo ofertar por alguna de todas las cosas"*.
+
+El pedido se puede partir en renglones y cada uno cotiza renglón por renglón,
+con una casilla **"esto no lo hago"** por ítem. El total lo suma la base. La
+comparación gana una matriz ítem × proveedor donde se ve quién es más barato en
+qué, y una línea que dice cuánto daría tomando el más barato de cada renglón
+**contra la cotización más barata que cubre todo** (comparar contra el total más
+barato a secas está mal: puede ser el de alguien que no hace la mitad).
+
+Los ítems viajan a las CUATRO pantallas donde se ve un pedido, más el mail de
+invitación (0089) y el reenvío. Una que los muestre y otra que no es como quedó
+la página pública el 7/9, dibujando renglones vacíos.
+
+⚠️ **Se adjudica la cotización entera, no por ítem.** El modelo lo aguantaría
+(la ganadora sería por línea), pero cambia los mails: hoy hay un ganador y varios
+que no. Partir un trabajo entre dos proveedores es una decisión de producción, no
+de planilla, y conviene ver si se usa antes de construirla. Ver la pregunta 4.
+
+**Además, el mismo día:** un pedido abierto **se corrige sin rehacerlo**
+(`staff_app_0088`), o sea sin perder las invitaciones, que son lo caro. Los ítems
+solo si todavía no cotizó nadie: cambiarlos con presupuestos adentro borraría en
+cascada las líneas de cada proveedor.
+
 ---
 
 ## Lo que NO va a tener, y es a propósito
@@ -284,8 +338,15 @@ decisión.
 1. **¿Puede crear un pedido alguien sin cuenta?** Hoy no: el pedido cuelga de
    una organización. Abrirlo a un independiente sin cuenta es la Fase 4 que
    `provider_contacts` ya dejó preparada al hacer `organization_id` nullable.
-2. **¿Se puede partir un pedido en dos?** La regla 2 dice que partir la carga
-   destrabó una cotización. Hoy sería crear dos pedidos a mano. Ver si vale un
-   "duplicar este pedido".
+2. **¿Se puede partir un pedido en dos?** Contestada a medias por la etapa 6: el
+   PROVEEDOR ya puede ofertar por una parte, que era la mitad urgente. Partir el
+   pedido mismo en dos sigue siendo a mano, y ahora al menos el lector de briefs
+   avisa cuando el texto trae dos trabajos distintos adentro. Falta ver si vale
+   un "duplicar este pedido".
 3. **¿Qué pasa si nadie cotiza?** Hay que decidir qué muestra la pantalla y si
    avisa. Un pedido vencido y vacío no puede quedar en silencio.
+4. **¿Se adjudica por ítem?** O sea, darle la cena a uno y los coffees a otro. El
+   modelo de la 0087 lo aguanta y la matriz de comparación ya muestra cuánto se
+   ahorraría, pero adjudicar por línea cambia los mails (hoy hay UN ganador). La
+   recomendación es dejarlo así hasta ver si Franco de verdad reparte un trabajo
+   entre dos proveedores: es una decisión de producción, no de planilla.
