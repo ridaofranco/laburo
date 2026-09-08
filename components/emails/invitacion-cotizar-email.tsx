@@ -24,6 +24,14 @@
  *    "estás compitiendo con otros". Saber que sos uno de doce cambia el precio,
  *    y encima nunca es del todo cierto en el momento en que se manda.
  *
+ * 6. **SI EL PEDIDO VIENE PARTIDO EN ÍTEMS, LOS LISTA, Y DICE QUE SE PUEDE
+ *    COTIZAR UNA PARTE (8/9).** Por la misma razón que el punto 1, y encima más
+ *    fuerte: el que hace una sola de las tres cosas es exactamente el que hoy
+ *    archiva el mail. Si eso no está ACÁ, se pierde justo al proveedor para el
+ *    que se construyó la cotización por renglones. En el caso del pallet,
+ *    partir la carga en dos fue lo que destrabó a una empresa que ya había
+ *    dicho que no.
+ *
  * El asunto lo arma quien envía e incluye el rubro y quién pide: en la casilla
  * de un proveedor compite con veinte mails más.
  */
@@ -52,6 +60,15 @@ export interface InvitacionCotizarProps {
   necesarioPara: string | null;
   /** "el martes 10 de septiembre a las 18:00", ya formateado. */
   cierra: string;
+  /**
+   * Los renglones que se cotizan por separado, ya en texto ("Cena de recepción
+   * · 100 personas"). Vacío es el caso normal: un pedido de una sola cosa.
+   *
+   * Llega armado y no como objetos a propósito: el formateo de una cantidad ya
+   * vive en `fmtCantidad`, y una plantilla de mail que hace cuentas es una
+   * plantilla que se desincroniza de la pantalla.
+   */
+  items?: string[];
   link: string;
 }
 
@@ -87,6 +104,7 @@ export function InvitacionCotizar({
   donde,
   necesarioPara,
   cierra,
+  items = [],
   link,
 }: InvitacionCotizarProps) {
   const saludo = nombre?.trim() ? `Hola ${nombre.trim()}` : "Hola";
@@ -143,6 +161,39 @@ export function InvitacionCotizar({
               <Dato label="Para cuándo" value={necesarioPara} />
               <Dato label="Detalle" value={descripcion} />
             </Section>
+
+            {/* Los renglones. Van ANTES de la fecha de cierre porque son lo que
+                define si a alguien le sirve entrar, y la frase de abajo es la
+                que abre la puerta al que hace una parte. */}
+            {items.length > 0 ? (
+              <Section style={{ margin: "0 0 18px 0" }}>
+                <Text
+                  style={{
+                    margin: "0 0 10px 0",
+                    fontSize: "11px",
+                    letterSpacing: "0.18em",
+                    textTransform: "uppercase",
+                    color: FG_MUTED,
+                  }}
+                >
+                  Se cotiza por separado
+                </Text>
+                {items.map((it, i) => (
+                  <Text
+                    key={i}
+                    style={{ margin: "0 0 6px 0", fontSize: "15px", lineHeight: 1.5, color: FG }}
+                  >
+                    · {it}
+                  </Text>
+                ))}
+                <Text
+                  style={{ margin: "12px 0 0 0", fontSize: "14px", lineHeight: 1.6, color: FG_MUTED }}
+                >
+                  No hace falta que hagas todo: podés poner precio solo en lo que sí
+                  hacés y marcar el resto.
+                </Text>
+              </Section>
+            ) : null}
 
             <Text style={{ ...P, color: FG }}>
               <strong style={{ color: FG }}>Podés cargarlo hasta el {cierra}.</strong>{" "}

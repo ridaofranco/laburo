@@ -39,6 +39,7 @@ import {
 } from "@/components/emails/resultado-cotizacion-email";
 import {
   cotizarUrl,
+  fmtCantidad,
   fmtMonto,
   type InvitadoNuevo,
   type ItemNuevo,
@@ -398,6 +399,22 @@ export async function editarPedido(
   return { ok: true };
 }
 
+/**
+ * Los ítems de un pedido, en las líneas de texto que van adentro del mail.
+ *
+ * Vive acá y no en la plantilla porque los DOS lugares que mandan la invitación
+ * (invitar y reenviar) tienen que armar lo mismo: si cada uno lo escribe, en
+ * tres meses uno dice la cantidad y el otro no.
+ */
+function itemsParaElMail(items: ItemPedido[]): string[] {
+  return items.map((i) => {
+    const cantidad = fmtCantidad(i);
+    return [i.titulo, cantidad || null, i.obligatorio ? "lo necesitan sí o sí" : null]
+      .filter(Boolean)
+      .join(" · ");
+  });
+}
+
 /* ────────────────────────────── invitar ────────────────────────────── */
 
 /**
@@ -473,6 +490,7 @@ export async function invitar(
           donde,
           necesarioPara,
           cierra,
+          items: itemsParaElMail(pedido.items ?? []),
           // El token en crudo se usa acá y en ningún otro lado.
           link: cotizarUrl(inv.token),
         }),
@@ -739,6 +757,8 @@ export async function reenviarInvitacion(
       ciudad: string | null;
       necesario_para: string | null;
       cierra_at: string;
+      /** Los renglones que se cotizan por separado (0089). */
+      items: ItemPedido[];
     };
   } | null;
   if (!r?.ok || !r.token || !r.email || !r.pedido) {
@@ -762,6 +782,7 @@ export async function reenviarInvitacion(
           fmtFechaHora(p.cierra_at, {
             weekday: "long", day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit",
           }) ?? "la fecha de cierre",
+        items: itemsParaElMail(p.items ?? []),
         link: cotizarUrl(r.token),
       }),
     );
