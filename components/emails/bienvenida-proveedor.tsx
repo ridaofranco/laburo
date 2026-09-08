@@ -5,10 +5,21 @@
  * el link abre. El 1/8 el mail del staff decía "no hace falta contraseña" y
  * mandaba a una pantalla que pedía una, y eso costó una trabajadora.
  *
- * Acá la diferencia con el mail de la productora es de fondo y no de forma: el
- * proveedor NO tiene cuenta, NO tiene contraseña y NO va a /login. Entra por un
- * link mágico con token y se acabó. Por eso este mail no habla de contraseñas ni
- * de "tu cuenta": habla del link, de que es suyo y de que vence.
+ * ── LO QUE CAMBIÓ (8/9) ─────────────────────────────────────────────────────
+ * Hasta hoy este mail decía "no necesitás cuenta ni contraseña", y era cierto:
+ * el proveedor entraba por un link con token y nada más. El problema es que ese
+ * link vence, y el que lo perdía no volvía a entrar nunca. Franco: *"el tema del
+ * proveedor es raro, todavía no puede crearse una contraseña, manejar, ver todo
+ * como un cliente, es rarísimo eso"*.
+ *
+ * Ahora el mail lleva LOS DOS caminos, y el orden importa: el link con token
+ * sigue siendo el botón grande, porque es un click y entra; la contraseña va
+ * abajo, como lo que resuelve el mail perdido. El token NO se retira.
+ *
+ * ⚠️ Por eso `linkContrasena` es opcional: si no se pudo armar, este mail sale
+ * BYTE POR BYTE como salía antes. Un problema de auth no puede voltear un alta
+ * que ya se guardó, y mucho menos dejar sin mail a alguien que ya está
+ * publicado.
  *
  * Nada de em dash (regla dura de Franco).
  */
@@ -48,6 +59,14 @@ export interface BienvenidaProveedorProps {
    * otra cosa.
    */
   esSalon?: boolean;
+  /**
+   * Link para ELEGIR CONTRASEÑA (/definir-contrasena), si se pudo armar.
+   *
+   * Va como opcional a propósito: `linkParaElegirContrasena` devuelve null
+   * cuando algo de auth falla, y en ese caso el mail tiene que salir igual con
+   * el link de token, que es el que ya andaba. Ver lib/auth-link.ts.
+   */
+  linkContrasena?: string | null;
 }
 
 const SURFACE_0 = "#000000";
@@ -65,6 +84,7 @@ export function BienvenidaProveedor({
   dias,
   yaExistia = false,
   esSalon = false,
+  linkContrasena = null,
 }: BienvenidaProveedorProps) {
   return (
     <Html lang="es">
@@ -128,9 +148,18 @@ export function BienvenidaProveedor({
             <Text
               style={{ margin: "0 0 20px 0", fontSize: "16px", lineHeight: 1.6, color: FG_MUTED }}
             >
-              {esSalon
-                ? "No necesitás cuenta ni contraseña. Con este link entrás a tu panel, donde editás tus datos y la capacidad del salón, armás el formulario con el que te llegan las consultas, y podés sacarte del directorio cuando quieras."
-                : "No necesitás cuenta ni contraseña. Con este link entrás a tu panel, donde editás tus datos, agregás o sacás servicios, armás el formulario con el que te llegan las consultas, y podés sacarte del directorio cuando quieras."}
+              {/* ⚠️ El "No necesitás cuenta ni contraseña" de antes se saca SOLO
+               * cuando este mail lleva de verdad el link para elegirla. Si no
+               * se pudo armar, la frase vieja sigue siendo la verdad y queda.
+               * Prometer una contraseña que el mail no trae es exactamente el
+               * error que costó una trabajadora el 1/8. */}
+              {linkContrasena
+                ? esSalon
+                  ? "Con este link entrás a tu panel, donde editás tus datos y la capacidad del salón, armás el formulario con el que te llegan las consultas, y podés sacarte del directorio cuando quieras."
+                  : "Con este link entrás a tu panel, donde editás tus datos, agregás o sacás servicios, armás el formulario con el que te llegan las consultas, y podés sacarte del directorio cuando quieras."
+                : esSalon
+                  ? "No necesitás cuenta ni contraseña. Con este link entrás a tu panel, donde editás tus datos y la capacidad del salón, armás el formulario con el que te llegan las consultas, y podés sacarte del directorio cuando quieras."
+                  : "No necesitás cuenta ni contraseña. Con este link entrás a tu panel, donde editás tus datos, agregás o sacás servicios, armás el formulario con el que te llegan las consultas, y podés sacarte del directorio cuando quieras."}
             </Text>
 
             <Section style={{ marginTop: "24px" }}>
@@ -157,6 +186,47 @@ export function BienvenidaProveedor({
               Guardá este mail: el link es tuyo y dura {dias} días.
             </Text>
 
+            {/* ── LA CONTRASEÑA (8/9) ──────────────────────────────────────
+             * Va DESPUÉS del botón grande y con menos peso visual, y no es
+             * capricho de diseño: el link de arriba entra de un click y este
+             * pide elegir algo y escribirlo dos veces. El que solo quiere ver
+             * su panel hoy no tiene que pasar por acá. Esto es para el que
+             * mañana no encuentra el mail. */}
+            {linkContrasena ? (
+              <Section
+                style={{
+                  marginTop: "22px",
+                  paddingTop: "20px",
+                  borderTop: `1px solid ${BORDER}`,
+                }}
+              >
+                <Text
+                  style={{ margin: "0 0 12px 0", fontSize: "14px", lineHeight: 1.5, color: FG_MUTED }}
+                >
+                  Y si querés entrar cuando se te cante sin depender de ningún
+                  mail, elegí una contraseña. De ahí en adelante entrás desde
+                  laburo.somosder.ar/entrar con este mismo mail y esa contraseña,
+                  igual que cualquier otra cuenta de LABURO.
+                </Text>
+                <Button
+                  href={linkContrasena}
+                  style={{
+                    display: "inline-block",
+                    backgroundColor: "transparent",
+                    color: FG,
+                    border: `1px solid ${BORDER}`,
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    textDecoration: "none",
+                    padding: "12px 22px",
+                    borderRadius: "0",
+                  }}
+                >
+                  Elegir mi contraseña
+                </Button>
+              </Section>
+            ) : null}
+
             {/* Desde el 5/8 el link ya no es el ÚNICO camino. Decirlo acá es lo
              * que evita el callejón sin salida de antes: el que perdía el mail
              * no entraba nunca más. */}
@@ -164,9 +234,10 @@ export function BienvenidaProveedor({
               style={{ margin: "10px 0 0 0", fontSize: "14px", lineHeight: 1.5, color: FG_MUTED }}
             >
               Y si alguna vez lo perdés, no pasa nada: entrá a
-              laburo.somosder.ar/entrar, elegí &quot;Soy proveedor&quot; y poné
-              este mismo mail. Te mandamos uno nuevo, sin perder nada de lo que
-              cargaste.
+              laburo.somosder.ar/entrar, elegí{" "}
+              {esSalon ? <>&quot;Tengo un salón&quot;</> : <>&quot;Soy proveedor&quot;</>}{" "}
+              y poné este mismo mail. Te mandamos uno nuevo, sin perder nada de
+              lo que cargaste.
             </Text>
 
             <Text

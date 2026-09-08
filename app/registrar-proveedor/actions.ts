@@ -19,9 +19,30 @@
  * obscenidad en la bio y era el 100% del directorio, visible para cualquier
  * productora. Por eso el aviso lleva el link directo para despublicarlo.
  *
- * ── EL PROVEEDOR NO TIENE CUENTA ─────────────────────────────────────────────
- * Entra por link mágico con token, no por /login. El mail dice exactamente eso:
- * es el error que costó una trabajadora el 1/8 del lado del staff.
+ * ── EL PROVEEDOR AHORA SÍ TIENE CUENTA (8/9) ─────────────────────────────────
+ * Franco: *"el tema del proveedor es raro, todavía no puede crearse una
+ * contraseña, manejar, ver todo como un cliente, es rarísimo eso"*.
+ *
+ * Tenía razón y la causa era chica: `linkParaElegirContrasena` ya existía y ya
+ * la usaban el alta de staff (/sumate), el alta de productora
+ * (/registrar-productora), el acceso de staff y la bienvenida. Esta alta era la
+ * ÚNICA que no la llamaba, así que el proveedor entraba solo por el link con
+ * token y, si lo perdía, no volvía más. Es el mismo agujero que ya pagamos dos
+ * veces por copiar en vez de compartir ("lo que hacés para empleados no lo
+ * hacés para productores").
+ *
+ * ⚠️ EL LINK CON TOKEN NO SE REEMPLAZA: SE SUMA. Hay proveedores adentro que
+ * solo tienen su link, y sacárselo sería echarlos sin avisar. Los dos caminos
+ * conviven, igual que en el staff, y el mail los muestra a los dos.
+ *
+ * ⚠️ Y ES UNA CUENTA POR MAIL, NO UNA POR PERFIL. `linkParaElegirContrasena`
+ * hace `createUser` y si ya existe sigue de largo, así que la misma persona que
+ * ya es productora o staff no estrena un usuario paralelo: se apoya en el suyo,
+ * que es lo que hace posible ser las tres cosas a la vez (commit d8a0e68).
+ *
+ * ⚠️ Si el link de contraseña no se puede armar, el mail sale igual con el de
+ * token. Un problema de auth no puede voltear un alta ya guardada, ni dejar sin
+ * mail a alguien que YA está publicado en la vidriera.
  *
  * ── POR QUÉ REINSCRIBIRSE NO PISA LOS DATOS (y por qué se devuelve `yaExistia`)
  * Si el mail ya tiene perfil, `staff_app_registrar_proveedor` sólo regenera el
@@ -54,6 +75,7 @@ import { sendMail } from "@/lib/email/mailer";
 import { BienvenidaProveedor } from "@/components/emails/bienvenida-proveedor";
 import { siteUrl } from "@/lib/site";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { linkParaElegirContrasena } from "@/lib/auth-link";
 import { alerta } from "@/lib/alerta";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
@@ -187,12 +209,16 @@ export async function registrarProveedor(
   // recibió su link es un perfil que nadie puede editar ni bajar.
   let mailOk = false;
   try {
+    // Devuelve null si algo de auth falla, y ahí el mail sale igual: sin el
+    // bloque de la contraseña y con el copy viejo, que sigue siendo verdad.
+    const claveLink = await linkParaElegirContrasena(admin, email, "registrar-proveedor");
     const html = await render(
       createElement(BienvenidaProveedor, {
         nombre,
         link: linkPanel,
         dias: DIAS_DEL_LINK,
         yaExistia: !!r.ya_existia,
+        linkContrasena: claveLink,
       }),
     );
     const res = await sendMail({

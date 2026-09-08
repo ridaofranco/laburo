@@ -17,9 +17,15 @@
  * del lado de proveedores: el único de prueba tenía una obscenidad en la bio y
  * era el 100% del directorio. Por eso el aviso lleva el link para despublicarlo.
  *
- * ── EL SALÓN NO TIENE CUENTA ────────────────────────────────────────────────
- * Entra por link mágico con token, no por /login. El mail dice exactamente eso:
- * es el error que costó una trabajadora el 1/8 del lado del staff.
+ * ── EL SALÓN AHORA SÍ TIENE CUENTA (8/9) ────────────────────────────────────
+ * Mismo cambio y por el mismo motivo que en /registrar-proveedor: el alta manda
+ * también el link para elegir contraseña. El razonamiento completo está allá.
+ *
+ * ⚠️ SE HACE EN LAS DOS Y EN LA MISMA SESIÓN A PROPÓSITO. Arreglar una sola es
+ * el error que este repo ya cometió dos veces (el botón de Google del staff, el
+ * `signInWithPassword` del productor): a los tres meses el salón sigue sin poder
+ * entrar y nadie se acuerda por qué. Para entrar, salón y proveedor son el mismo
+ * actor desde la 0066.
  *
  * ── POR QUÉ REINSCRIBIRSE NO PISA LOS DATOS (y por qué se devuelve `yaExistia`)
  * Si el mail ya tiene ficha, `staff_app_registrar_salon` sólo regenera el token
@@ -51,6 +57,7 @@ import { sendMail } from "@/lib/email/mailer";
 import { BienvenidaProveedor } from "@/components/emails/bienvenida-proveedor";
 import { siteUrl } from "@/lib/site";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { linkParaElegirContrasena } from "@/lib/auth-link";
 import { alerta } from "@/lib/alerta";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
@@ -203,6 +210,9 @@ export async function registrarSalon(
   // su link es un perfil que nadie puede editar ni bajar.
   let mailOk = false;
   try {
+    // Devuelve null si algo de auth falla, y ahí el mail sale igual: sin el
+    // bloque de la contraseña y con el copy viejo, que sigue siendo verdad.
+    const claveLink = await linkParaElegirContrasena(admin, email, "registrar-salon");
     const html = await render(
       createElement(BienvenidaProveedor, {
         nombre,
@@ -210,6 +220,7 @@ export async function registrarSalon(
         dias: DIAS_DEL_LINK,
         yaExistia: !!r.ya_existia,
         esSalon: true,
+        linkContrasena: claveLink,
       }),
     );
     const res = await sendMail({
