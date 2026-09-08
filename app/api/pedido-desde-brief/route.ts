@@ -14,6 +14,8 @@
  *  · `campos`     — las preguntas del desglose PARA ESE CASO, no las genéricas
  *  · `items`      — las partes que se cotizan POR SEPARADO, con su cantidad. Un
  *                   campo se contesta con texto, un ítem con un precio (8/9)
+ *  · `otros_trabajos` — si el brief trae DOS trabajos distintos adentro, cuáles
+ *                   son. Avisa, no parte nada (8/9)
  *                   del rubro. "¿Hay que subir por escalera?" solo aparece si el
  *                   brief habla de un tercer piso.
  *  · `faltantes`  — los datos que el brief NO dice y que van a generar
@@ -143,6 +145,7 @@ export async function POST(request: Request) {
     `- campos: array de objetos {clave, etiqueta} con las preguntas que hay que hacerle a cada empresa ADEMÁS del precio.`,
     `- items: array de objetos {titulo, detalle, cantidad, unidad, obligatorio} con las PARTES que se cotizan por separado.`,
     `- faltantes: array de strings. Cada uno es un dato que NO está en el texto y que va a hacer que las empresas repregunten en vez de cotizar.`,
+    `- otros_trabajos: array de strings. Si el texto pide DOS O MÁS trabajos distintos, poné una línea corta por cada uno. Si es uno solo, array vacío.`,
     ``,
     `SOBRE "campos", que es lo más importante:`,
     `Escribí entre 3 y 7 preguntas ESPECÍFICAS DE ESTE CASO. Si el texto habla de un tercer piso sin ascensor, preguntá cómo suben. Si menciona siete destinos, preguntá cuánto cuesta sumar uno más.`,
@@ -158,6 +161,13 @@ export async function POST(request: Request) {
     `"cantidad" es un número y "unidad" una palabra ("100" y "personas"). Van null si el texto no las dice: NO las inventes.`,
     `"obligatorio" es true SOLO si el texto dice que sin eso no sirve. Ante la duda, false: marcar todo como obligatorio espanta a los que hacen una parte, que es lo que esto vino a resolver.`,
     `⚠️ Si el pedido es UNA SOLA COSA, devolvé un array vacío. Partir en renglones algo que no tiene partes convierte un formulario simple en una planilla.`,
+    `⚠️ Y si pusiste algo en "otros_trabajos", NO lo repitas como item. Los items son las partes del pedido que estás armando, no los otros trabajos que el brief menciona: ese va a ser su propio pedido.`,
+    ``,
+    `SOBRE "otros_trabajos":`,
+    `Un brief puede traer adentro dos trabajos que no se cotizan juntos: dos activaciones en ciudades distintas, un armado y una filmación, un catering y un transporte.`,
+    `Cuando pasa, hay que hacer UN PEDIDO POR CADA UNO: las empresas de uno no son las del otro, y dos precios metidos en un mismo total no se pueden comparar contra nada.`,
+    `Devolvé una línea corta por trabajo, empezando por el que armaste arriba, para que la persona sepa qué le quedó afuera. Ejemplo: ["Activación en Bariloche, 5 al 7 de octubre", "Activación en Mendoza, 12 de octubre"].`,
+    `⚠️ Dos partes del MISMO trabajo (la cena y el coffee del mismo evento) NO son dos trabajos: eso son items, y van en "items". Ante la duda, array vacío.`,
     ``,
     `SOBRE "faltantes":`,
     `Pensá qué te preguntaría una empresa antes de poder cotizar esto, y listá los datos que el texto no tiene. Frases cortas, en voseo, del estilo "No aclara si hay que subir por escalera".`,
@@ -268,6 +278,22 @@ export async function POST(request: Request) {
     .map((f) => str(f, 200))
     .filter((f): f is string => f !== null);
 
+  /**
+   * Los trabajos distintos que el modelo vio adentro del mismo brief.
+   *
+   * ⚠️ Solo vale si son DOS O MÁS. Con uno solo la respuesta correcta es "es un
+   * trabajo", y devolverlo sería un cartel de advertencia sobre nada, que es la
+   * forma más rápida de que se dejen de leer los carteles.
+   *
+   * Y es un AVISO, no una acción: no parte el pedido ni crea dos. Esta pantalla
+   * no crea nada hasta que la persona lo diga, y partir un brief en dos es una
+   * decisión sobre a quién le vas a pedir precio, no sobre cómo leer un texto.
+   */
+  const otrosTrabajos = (Array.isArray(parsed.otros_trabajos) ? parsed.otros_trabajos : [])
+    .slice(0, 6)
+    .map((f) => str(f, 200))
+    .filter((f): f is string => f !== null);
+
   return NextResponse.json({
     ok: true,
     data: {
@@ -285,6 +311,7 @@ export async function POST(request: Request) {
       // brief, y por eso no pueden depender de que el modelo se acuerde.
       campos: conPreguntasDePlaza(campos),
       items: items.length > 1 ? items : [],
+      otros_trabajos: otrosTrabajos.length > 1 ? otrosTrabajos : [],
       faltantes,
     },
   });

@@ -10,7 +10,8 @@ export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import { listarPedidos } from "./actions";
+import { listarPedidos, pedidosEnOtrasCuentas } from "./actions";
+import { OtrasCuentas } from "./otras-cuentas";
 import { fmtMonto } from "@/lib/cotizaciones";
 import { fmtFechaHora } from "@/lib/dates";
 
@@ -44,6 +45,9 @@ function Estado({ estado, cerrado }: { estado: string; cerrado: boolean }) {
 
 export default async function CotizacionesPage() {
   const pedidos = await listarPedidos();
+  // Solo con la lista vacía: con pedidos a la vista, contar los de las otras
+  // productoras no cambia ninguna decisión y agrega ruido.
+  const otras = pedidos.length === 0 ? await pedidosEnOtrasCuentas() : [];
 
   return (
     <div className="max-w-[1200px] mx-auto px-6 md:px-10 py-10 md:py-16 flex flex-col gap-10">
@@ -81,6 +85,10 @@ export default async function CotizacionesPage() {
             diez mails y una planilla a mano, armás el pedido una vez, pegás la lista de
             correos y las respuestas entran ordenadas por precio.
           </p>
+          {/* ⚠️ Y si los pedidos están en la OTRA productora, se dice acá. Una
+              pantalla vacía teniendo doce pedidos a un click no se lee como
+              "estás mirando la otra cuenta": se lee como que la app los perdió. */}
+          <OtrasCuentas cuentas={otras} />
         </div>
       ) : (
         <ul className="flex flex-col gap-3">

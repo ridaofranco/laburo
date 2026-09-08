@@ -110,6 +110,11 @@ export function NuevoPedidoForm({
   const [brief, setBrief] = useState("");
   const [leyendo, setLeyendo] = useState(false);
   const [faltantes, setFaltantes] = useState<string[]>([]);
+  /**
+   * Los trabajos distintos que el brief trae adentro, cuando son más de uno.
+   * Probado con el de H&S: el brief pedía dos activaciones y se cotizó una.
+   */
+  const [otrosTrabajos, setOtrosTrabajos] = useState<string[]>([]);
   const [archivo, setArchivo] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -180,6 +185,7 @@ export function NuevoPedidoForm({
           necesario_para: string | null;
           campos: CampoDesglose[];
           items: ItemNuevo[];
+          otros_trabajos: string[];
           faltantes: string[];
         };
       };
@@ -202,12 +208,15 @@ export function NuevoPedidoForm({
       // forma más rápida de que no vuelva a usar el botón.
       if (d.items?.length && items.length === 0) setItems(d.items);
       setFaltantes(d.faltantes ?? []);
+      setOtrosTrabajos(d.otros_trabajos ?? []);
       setArchivo(file?.name ?? null);
 
       toast.success(
-        d.faltantes?.length
-          ? `Listo. Ojo: hay ${d.faltantes.length} ${d.faltantes.length === 1 ? "dato" : "datos"} que conviene aclarar.`
-          : "Listo, revisalo antes de crear.",
+        d.otros_trabajos?.length
+          ? `Ojo: este brief tiene ${d.otros_trabajos.length} trabajos distintos.`
+          : d.faltantes?.length
+            ? `Listo. Ojo: hay ${d.faltantes.length} ${d.faltantes.length === 1 ? "dato" : "datos"} que conviene aclarar.`
+            : "Listo, revisalo antes de crear.",
       );
     } catch (e) {
       console.error("[nuevo pedido] leer brief falló:", e);
@@ -379,6 +388,35 @@ export function NuevoPedidoForm({
             {leyendo ? "Leyendo..." : "Armar el pedido"}
           </button>
         </div>
+
+        {/* ── Dos trabajos en un brief ────────────────────────────────────
+            Probado con el de H&S: el brief pedía dos activaciones y terminó
+            cotizada una sola. Un pedido que mezcla dos trabajos no se puede
+            comparar contra nada, porque las empresas de uno no son las del otro
+            y los dos precios entran en un mismo total.
+
+            ⚠️ Avisa y no parte nada. Esta pantalla no crea nada hasta que la
+            persona lo diga, y decidir si son dos pedidos es sobre a quién le
+            vas a pedir precio, no sobre cómo leer un texto. */}
+        {otrosTrabajos.length > 1 ? (
+          <div className="flex flex-col gap-2 border-l-2 border-[#ff8a8a] pl-4 mt-1">
+            <p className="label-tech text-[11px] uppercase tracking-widest text-[#ff8a8a]">
+              Esto son {otrosTrabajos.length} trabajos distintos, no uno
+            </p>
+            <ul className="flex flex-col gap-1">
+              {otrosTrabajos.map((t, i) => (
+                <li key={i} className="text-[14px] text-[#cfc4c5] leading-[1.5]">
+                  · {t}
+                </li>
+              ))}
+            </ul>
+            <p className="text-[13px] text-[#8A8A8A] mt-1">
+              Conviene un pedido por cada uno: las empresas de uno no son las del otro,
+              y dos precios metidos en un mismo total no se comparan contra nada. Armá
+              este, crealo, y después volvé a esta pantalla para el siguiente.
+            </p>
+          </div>
+        ) : null}
 
         {/* Lo que el brief NO dice. No rellena ningún campo a propósito: es la
             lista de repreguntas que te vas a comer si lo mandás así. De las 45

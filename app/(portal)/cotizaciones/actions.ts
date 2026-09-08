@@ -30,7 +30,7 @@ import { createElement } from "react";
 import { revalidatePath } from "next/cache";
 import { render } from "@react-email/components";
 import { createClient } from "@/lib/supabase/server";
-import { exigirOrg } from "@/lib/org";
+import { exigirOrg, orgActual, orgsDelUsuario } from "@/lib/org";
 import { sendMail } from "@/lib/email/mailer";
 import { InvitacionCotizar } from "@/components/emails/invitacion-cotizar-email";
 import {
@@ -166,6 +166,73 @@ export async function getCotizaciones(requestId: string): Promise<{
     | null;
   if (!r?.ok) return { cotizaciones: [], sinCotizar: [] };
   return { cotizaciones: r.cotizaciones ?? [], sinCotizar: r.sin_cotizar ?? [] };
+}
+
+/**
+ * LOS PEDIDOS QUE TENÉS EN OTRA DE TUS PRODUCTORAS.
+ *
+ * ── POR QUÉ EXISTE ──────────────────────────────────────────────────────────
+ * Una misma persona puede ser miembro de más de una organización, y el portal
+ * trabaja con UNA por vez (la cookie `laburo_org_id`). El resultado, cuando el
+ * selector quedó en la otra, es una pantalla vacía que dice "todavía no pediste
+ * ningún precio" teniendo doce pedidos a un click de distancia. Eso no se lee
+ * como "estás mirando la otra cuenta": se lee como que la app perdió los datos.
+ *
+ * ⚠️ Solo se llama cuando la lista de la organización actual está VACÍA. No es
+ * una optimización: con pedidos a la vista, contar los de las otras no cambia
+ * ninguna decisión y sí agrega ruido a la pantalla.
+ *
+ * ── POR QUÉ NO HAY UNA RPC NUEVA ────────────────────────────────────────────
+ * Porque `staff_app_mis_pedidos` ya hace exactamente esto y ya valida la
+ * membresía: se la llama una vez por organización. Son dos o tres, y solo
+ * cuando la pantalla está vacía. Una función nueva que consulte varias
+ * organizaciones de una es un lugar más donde equivocarse con el gate de
+ * membresía, que es el que sostiene toda la separación entre productoras.
+ */
+export interface PedidosEnOtraCuenta {
+  organizationId: string;
+  nombre: string;
+  pedidos: number;
+}
+
+export async function pedidosEnOtrasCuentas(): Promise<PedidosEnOtraCuenta[]> {
+  try {
+    const actual = await orgActual();
+    // `orgsDelUsuario` puede traer filas con el id o el nombre en null (la vista
+    // es un LEFT JOIN). Una organización sin id no se puede elegir y una sin
+    // nombre no se puede nombrar, así que no sirven para este aviso.
+    const otras = (await orgsDelUsuario()).filter(
+      (o): o is typeof o & { organizationId: string; nombre: string } =>
+        !!o.organizationId &&
+        !!o.nombre &&
+        o.organizationId !== actual?.organizationId,
+    );
+    if (otras.length === 0) return [];
+
+    const supabase = await createClient();
+    const cuentas = await Promise.all(
+      otras.map(async (o) => {
+        const { data } = await supabase.rpc("staff_app_mis_pedidos", {
+          p_org: o.organizationId,
+        });
+        const r = data as { ok?: boolean; pedidos?: unknown[] } | null;
+        return {
+          organizationId: o.organizationId,
+          nombre: o.nombre,
+          pedidos: r?.ok ? (r.pedidos?.length ?? 0) : 0,
+        };
+      }),
+    );
+    return cuentas.filter((c) => c.pedidos > 0);
+  } catch (e) {
+    // Un aviso que falla no puede voltear la pantalla: sin él se ve el vacío de
+    // siempre, que es exactamente como estaba antes.
+    console.error(
+      "[cotizaciones] no se pudieron contar los pedidos de las otras cuentas:",
+      e instanceof Error ? e.message : String(e),
+    );
+    return [];
+  }
 }
 
 export async function proveedoresParaInvitar(
