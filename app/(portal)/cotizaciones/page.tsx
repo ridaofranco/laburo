@@ -100,7 +100,7 @@ export default async function CotizacionesPage() {
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex flex-col gap-1 min-w-0">
-                    <span className="text-[18px] text-[#e5e2e1] truncate">{p.titulo}</span>
+                    <span className="text-[18px] text-[#e5e2e1] break-words">{p.titulo}</span>
                     <span className="text-[14px] text-[#8A8A8A]">
                       {p.categoria ? `${p.categoria} · ` : ""}
                       {p.cerrado ? "cerró el " : "cierra el "}
@@ -124,7 +124,13 @@ export default async function CotizacionesPage() {
                   </span>
                   {p.mejor != null ? (
                     <span className="text-[#cfc4c5]">
-                      Más barato: <strong className="text-[#e5e2e1]">{fmtMonto(p.mejor)}</strong>
+                      Más barato:{" "}
+                      <strong className="text-[#e5e2e1]">
+                        {fmtMonto(p.mejor, p.mejor_moneda ?? "ARS")}
+                      </strong>
+                      {/* Dólares y pesos no se comparan entre sí: se dice que hay
+                          otra moneda en vez de elegir un ganador mezclándolas. */}
+                      {p.otras_monedas ? " · hay precios en otra moneda" : null}
                     </span>
                   ) : null}
                 </div>

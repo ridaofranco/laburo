@@ -61,7 +61,12 @@ export interface PedidoResumen {
   cerrado: boolean;
   invitados: number;
   cotizaron: number;
+  /** El más barato DENTRO de una moneda (pesos primero), desde la 0090. */
   mejor: number | null;
+  /** En qué moneda está `mejor`. Antes de la 0090 no venía: se asume ARS. */
+  mejor_moneda?: string | null;
+  /** Hay presupuestos en otra moneda que no entraron en `mejor`. */
+  otras_monedas?: boolean;
 }
 
 export interface PedidoDetalle {

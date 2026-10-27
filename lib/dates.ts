@@ -33,13 +33,37 @@ function toDate(v: DateInput): Date | null {
   return Number.isNaN(d.getTime()) ? null : d;
 }
 
+/**
+ * ⚠️ EL CASTELLANO QUE ARMA Intl NO ES EL QUE SE HABLA (27/10). Con es-AR, el
+ * Node de Vercel devuelve:
+ *   - la hora en 12 horas: "09:00 p. m." en vez de "21:00", también en
+ *     `{ hour: "2-digit", minute: "2-digit" }`, que era el formato por defecto
+ *     de fmtHora y se suponía que daba "21:00";
+ *   - la fecha con guion cuando el día va "2-digit" sin año: "13-septiembre",
+ *     "13-sept".
+ * Se vio en producción el 27/10 (pedidos de precio, avisos) y ya se había
+ * arreglado a mano en /licitaciones (990e287). Acá se corrige para todas las
+ * pantallas y mails que pasan por estas helpers: hora en 24 y "13 de septiembre".
+ * Si alguien pide 12 horas a propósito (hour12 / hourCycle), se respeta.
+ */
+export function opcionesAR(options: Intl.DateTimeFormatOptions): Intl.DateTimeFormatOptions {
+  const o = { ...options };
+  if (o.hour !== undefined && o.hour12 === undefined && o.hourCycle === undefined) {
+    o.hourCycle = "h23";
+  }
+  if (o.day === "2-digit" && (o.month === "long" || o.month === "short")) {
+    o.day = "numeric";
+  }
+  return o;
+}
+
 /** Fecha (por defecto "19 jul"). Pasá `{}` para el formato largo dd/mm/aaaa. */
 export function fmtFecha(
   v: DateInput,
   options: Intl.DateTimeFormatOptions = { day: "2-digit", month: "short" },
 ): string | null {
   const d = toDate(v);
-  return d ? d.toLocaleDateString("es-AR", { timeZone: AR_TZ, ...options }) : null;
+  return d ? d.toLocaleDateString("es-AR", { timeZone: AR_TZ, ...opcionesAR(options) }) : null;
 }
 
 /** Hora (por defecto "21:00"). */
@@ -48,10 +72,10 @@ export function fmtHora(
   options: Intl.DateTimeFormatOptions = { hour: "2-digit", minute: "2-digit" },
 ): string | null {
   const d = toDate(v);
-  return d ? d.toLocaleTimeString("es-AR", { timeZone: AR_TZ, ...options }) : null;
+  return d ? d.toLocaleTimeString("es-AR", { timeZone: AR_TZ, ...opcionesAR(options) }) : null;
 }
 
-/** Fecha + hora (por defecto "19 de julio, 21:00"). */
+/** Fecha + hora (por defecto "19 de julio a las 21:00"). */
 export function fmtFechaHora(
   v: DateInput,
   options: Intl.DateTimeFormatOptions = {
@@ -62,7 +86,7 @@ export function fmtFechaHora(
   },
 ): string | null {
   const d = toDate(v);
-  return d ? d.toLocaleString("es-AR", { timeZone: AR_TZ, ...options }) : null;
+  return d ? d.toLocaleString("es-AR", { timeZone: AR_TZ, ...opcionesAR(options) }) : null;
 }
 
 /**

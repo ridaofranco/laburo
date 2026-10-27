@@ -27,7 +27,19 @@ export default async function PortalLayout({
   // productora (acompañamiento de aliadas, Fase 2). Antes era un .maybeSingle()
   // que con dos membresías tiraba PGRST116 y dejaba el portal entero sin cargar.
   const org = await orgActual();
-  if (!org) return <AccesoDenegado />;
+  if (!org) {
+    // ⚠️ "Sin organización" NO es "sin acceso" (27/10). Quien trabaja en eventos
+    // o es proveedor y llega acá (un link viejo a /dashboard, el botón de atrás,
+    // un favorito) veía "Esta cuenta no tiene acceso" teniendo su panel a un
+    // click. Se lo manda a SU panel. Se usan solo las lecturas, no
+    // /auth/callback: ese provisiona membresías y vincula proveedores, y desde
+    // un layout no corresponde escribir nada.
+    const { data: ficha } = await supabase.rpc("staff_app_my_staff_profile");
+    if (ficha) redirect("/panel-staff");
+    const { data: proveedor } = await supabase.rpc("staff_app_mi_perfil_proveedor");
+    if (proveedor) redirect("/mi-proveedor");
+    return <AccesoDenegado />;
+  }
 
   // Todas sus organizaciones, para el selector de contexto. Con una sola el
   // selector no se dibuja (ver org-selector.tsx), así que esto no agrega ruido

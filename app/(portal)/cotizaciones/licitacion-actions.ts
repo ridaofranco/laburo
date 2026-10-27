@@ -31,6 +31,7 @@ import { exigirOrg } from "@/lib/org";
 import { sendMail } from "@/lib/email/mailer";
 import { siteUrl } from "@/lib/site";
 import { cotizarUrl } from "@/lib/cotizaciones";
+import { AR_TZ, opcionesAR } from "@/lib/dates";
 import { InvitacionCotizar } from "@/components/emails/invitacion-cotizar-email";
 
 export const licitacionUrl = async (slug: string) => siteUrl(`/licitaciones/${slug}`);
@@ -146,11 +147,7 @@ export async function pedirLinkParaCotizar(
 function fechaHora(iso: string): string {
   if (!iso) return "";
   return new Intl.DateTimeFormat("es-AR", {
-    weekday: "long",
-    day: "2-digit",
-    month: "long",
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "America/Argentina/Buenos_Aires",
+    timeZone: AR_TZ,
+    ...opcionesAR({ weekday: "long", day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" }),
   }).format(new Date(iso));
 }

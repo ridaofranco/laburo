@@ -48,7 +48,7 @@ const labelCls = "label-tech text-[11px] uppercase tracking-widest text-[#cfc4c5
 
 export function PedidoClient({
   pedido,
-  cotizaciones,
+  cotizaciones: cotizacionesTalCual,
   sinCotizar,
   proveedores,
 }: {
@@ -57,6 +57,20 @@ export function PedidoClient({
   sinCotizar: InvitadoSinCotizar[];
   proveedores: ProveedorInvitable[];
 }) {
+  /**
+   * ⚠️ DÓLARES Y PESOS NO SE ORDENAN JUNTOS (27/10). La base las devuelve por
+   * monto a secas, y en el pedido real de catering USD 22.200 quedaba primero,
+   * "el más barato", delante de $21.000.000. Se agrupan por moneda (pesos
+   * primero) manteniendo el orden por monto adentro de cada una, y se avisa.
+   */
+  const moneda = (c: CotizacionFila) => c.moneda || "ARS";
+  const mezclaMonedas = new Set(cotizacionesTalCual.map(moneda)).size > 1;
+  const cotizaciones = mezclaMonedas
+    ? [...cotizacionesTalCual].sort(
+        (a, b) => Number(moneda(a) !== "ARS") - Number(moneda(b) !== "ARS"),
+      )
+    : cotizacionesTalCual;
+
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [lista, setLista] = useState("");
@@ -97,6 +111,8 @@ export function PedidoClient({
    */
   const repartido = (() => {
     if (pedido.items.length === 0 || cotizaciones.length === 0) return null;
+    // Sumar un renglón en dólares con otro en pesos da un número que no existe.
+    if (mezclaMonedas) return null;
 
     let suma = 0;
     const de = new Set<string>();
@@ -468,8 +484,11 @@ export function PedidoClient({
           </h2>
           {cotizaciones.length > 1 ? (
             <p className="text-[15px] text-[#cfc4c5] leading-[1.6]">
-              Ordenados de más barato a más caro. Mirá qué incluye cada uno antes de
-              elegir: el más barato no siempre es el que conviene.
+              {mezclaMonedas
+                ? "Hay presupuestos en pesos y en otra moneda: van separados, primero los de pesos, cada grupo de más barato a más caro. No se comparan entre sí."
+                : "Ordenados de más barato a más caro."}{" "}
+              Mirá qué incluye cada uno antes de elegir: el más barato no siempre es
+              el que conviene.
             </p>
           ) : null}
         </div>
