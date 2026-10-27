@@ -29,7 +29,7 @@ export default async function TrabajosPage() {
       <StaffNav />
 
       <main className="flex-1 w-full md:pl-[280px] pt-16 md:pt-0 pb-[100px] md:pb-0">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-20 py-12 md:py-32 flex flex-col gap-10">
+        <div className="w-full max-w-[1440px] mx-auto px-6 md:px-20 py-12 md:py-32 flex flex-col gap-10">
           <header className="flex flex-col gap-3">
             <p className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#c6c6c6]">
               Trabajos disponibles

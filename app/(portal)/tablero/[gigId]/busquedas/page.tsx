@@ -49,7 +49,7 @@ export default async function BusquedasPage({
   ]);
 
   return (
-    <div className="max-w-[1200px] mx-auto px-6 md:px-10 py-10 md:py-16 flex flex-col gap-10">
+    <div className="w-full max-w-[1200px] mx-auto px-6 md:px-10 py-10 md:py-16 flex flex-col gap-10">
       <header className="flex flex-col gap-3">
         <Link
           href="/tablero"

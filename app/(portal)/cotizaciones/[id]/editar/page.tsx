@@ -53,7 +53,7 @@ export default async function EditarPedidoPage({
   const { cotizaciones } = await getCotizaciones(id);
 
   return (
-    <div className="max-w-[760px] mx-auto px-6 md:px-10 py-10 md:py-16 flex flex-col gap-8">
+    <div className="w-full max-w-[760px] mx-auto px-6 md:px-10 py-10 md:py-16 flex flex-col gap-8">
       <header className="flex flex-col gap-3">
         <Link href={`/cotizaciones/${id}`} className="text-[14px] text-[#8A8A8A] hover:text-[#e5e2e1]">
           ← {pedido.titulo}

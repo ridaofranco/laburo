@@ -65,7 +65,7 @@ export function LicitacionClient({
 
   return (
     <main className="min-h-dvh bg-black text-[#e5e2e1] px-6 py-14 md:py-20">
-      <div className="max-w-[720px] mx-auto flex flex-col gap-10">
+      <div className="w-full max-w-[720px] mx-auto flex flex-col gap-10">
         <motion.div {...up(0)}>
           <LaburoWordmark className="h-[28px] md:h-[34px] w-auto" priority />
         </motion.div>

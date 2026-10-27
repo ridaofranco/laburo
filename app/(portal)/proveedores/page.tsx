@@ -41,7 +41,7 @@ export default async function ProveedoresPage({
   ]);
 
   return (
-    <div className="max-w-[1200px] mx-auto px-6 md:px-10 py-10 md:py-16 flex flex-col gap-10">
+    <div className="w-full max-w-[1200px] mx-auto px-6 md:px-10 py-10 md:py-16 flex flex-col gap-10">
       <header className="flex flex-col gap-3">
         <p className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#c6c6c6]">
           Proveedores

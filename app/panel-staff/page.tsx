@@ -102,7 +102,7 @@ export default async function PanelStaffPage() {
       <StaffNav />
 
       <main className="flex-1 w-full md:pl-[280px] pt-16 md:pt-0 pb-[100px] md:pb-0 relative">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-20 py-12 md:py-32 flex flex-col gap-12">
+        <div className="w-full max-w-[1440px] mx-auto px-6 md:px-20 py-12 md:py-32 flex flex-col gap-12">
           {/* Hero / próximo evento */}
           <section className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
             <div className="col-span-1 md:col-span-8 flex flex-col gap-2">

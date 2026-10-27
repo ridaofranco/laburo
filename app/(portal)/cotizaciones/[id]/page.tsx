@@ -50,7 +50,7 @@ export default async function PedidoPage({
   const proveedores = porRubro.length > 0 ? porRubro : await proveedoresParaInvitar(id, null);
 
   return (
-    <div className="max-w-[1100px] mx-auto px-6 md:px-10 py-10 md:py-16 flex flex-col gap-8">
+    <div className="w-full max-w-[1100px] mx-auto px-6 md:px-10 py-10 md:py-16 flex flex-col gap-8">
       <header className="flex flex-col gap-3">
         <Link href="/cotizaciones" className="text-[14px] text-[#8A8A8A] hover:text-[#e5e2e1]">
           ← Pedidos de precio
@@ -61,7 +61,9 @@ export default async function PedidoPage({
       {/* Publicar la licitación: los dos interruptores (pública/privada y
         * mostrar o no quién pide). Va ARRIBA de los invitados porque decide
         * quién puede llegar al pedido, no solo a quién se lo mandaste. */}
-      {visibilidad ? (
+      {/* Un pedido cancelado, adjudicado o cerrado ya no se publica: ofrecerlo
+        * invita a abrir a proveedores algo que no va a elegir a nadie. */}
+      {visibilidad && pedido.estado === "abierta" && !pedido.cerrado ? (
         <Publicar requestId={id} inicial={visibilidad} origen={SITE_URL} />
       ) : null}
 

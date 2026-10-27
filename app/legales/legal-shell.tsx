@@ -21,7 +21,7 @@ export function LegalShell({
 }) {
   return (
     <main className="min-h-dvh bg-[#131313] text-[#e5e2e1] antialiased">
-      <div className="max-w-[720px] mx-auto px-6 md:px-10 py-10 md:py-16 flex flex-col gap-8">
+      <div className="w-full max-w-[720px] mx-auto px-6 md:px-10 py-10 md:py-16 flex flex-col gap-8">
         <header className="flex flex-col items-start gap-3">
           <Link href="/">
             <LaburoWordmark className="h-[28px] w-auto" />

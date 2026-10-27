@@ -91,7 +91,7 @@ export function SoyClient({
 
   return (
     <main className="min-h-dvh bg-black text-[#e5e2e1] px-6 py-16 md:py-24">
-      <div className="max-w-[760px] mx-auto flex flex-col gap-12">
+      <div className="w-full max-w-[760px] mx-auto flex flex-col gap-12">
         <motion.div {...up(0)} className="flex flex-col gap-6">
           <LaburoWordmark className="h-[32px] md:h-[40px] w-auto" priority />
           <div>

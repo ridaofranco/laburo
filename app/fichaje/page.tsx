@@ -37,7 +37,7 @@ export default async function FichajePage() {
     <div className="min-h-dvh bg-[#131313] text-[#e5e2e1] antialiased flex flex-col md:flex-row">
       <StaffNav />
       <main className="flex-1 w-full md:pl-[280px] pt-16 md:pt-0 pb-[100px] md:pb-0">
-        <div className="max-w-[1100px] mx-auto px-6 md:px-20 py-12 md:py-24 flex flex-col gap-10">
+        <div className="w-full max-w-[1100px] mx-auto px-6 md:px-20 py-12 md:py-24 flex flex-col gap-10">
           <header className="border-b border-[#1A1A1A] pb-6">
             <p className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#c6c6c6] mb-3">
               Fichaje

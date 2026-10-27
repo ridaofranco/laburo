@@ -85,7 +85,7 @@ export default async function PlataformaPage() {
 
   return (
     <main className="min-h-dvh bg-[#131313] text-[#e5e2e1] antialiased">
-      <div className="max-w-[1200px] mx-auto px-6 md:px-10 py-10 md:py-16 flex flex-col gap-12">
+      <div className="w-full max-w-[1200px] mx-auto px-6 md:px-10 py-10 md:py-16 flex flex-col gap-12">
         {/* items-start: sin esto el stretch de la columna flex estira el
          * wordmark a todo el ancho del contenedor. Mismo bug que el footer. */}
         <header className="flex flex-col items-start gap-3">

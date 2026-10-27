@@ -49,7 +49,7 @@ export default async function LicitacionesPage() {
 
   return (
     <main className="min-h-dvh bg-black text-[#e5e2e1] px-6 py-14 md:py-20">
-      <div className="max-w-[860px] mx-auto flex flex-col gap-10">
+      <div className="w-full max-w-[860px] mx-auto flex flex-col gap-10">
         <div className="flex flex-col gap-6">
           <Link href="/" aria-label="LABURO">
             <LaburoWordmark className="h-[28px] md:h-[34px] w-auto" priority />
