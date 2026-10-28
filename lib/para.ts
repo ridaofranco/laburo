@@ -97,6 +97,8 @@ export const PARA_POR_NOTA: Record<string, string[]> = {
   "staff-para-stand-en-feria-o-exposicion": ["promotoras-y-azafatas-para-activaciones", "staff-para-eventos-corporativos"],
   "guardarropa-en-un-evento": ["staff-para-eventos-corporativos", "personal-de-control-de-accesos-y-acreditacion"],
   "hostess-y-recepcion-en-eventos-corporativos": ["trabajar-de-promotora-o-azafata", "staff-para-eventos-corporativos"],
+  "equipo-de-sampling-o-degustacion": ["promotoras-y-azafatas-para-activaciones", "trabajar-de-promotora-o-azafata"],
+  "traductores-e-interpretes-en-un-congreso": ["staff-para-eventos-corporativos", "personal-de-control-de-accesos-y-acreditacion"],
   "que-es-un-stage-manager-en-un-evento": ["trabajar-en-montaje-tecnica-y-produccion-de-eventos", "trabajo-en-eventos-buenos-aires"],
 };
 
