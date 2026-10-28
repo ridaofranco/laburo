@@ -62,6 +62,12 @@ export function BlogFooter() {
           >
             Blog
           </Link>
+          <Link
+            href="/para"
+            className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
+          >
+            Para quién es
+          </Link>
           <a
             href="https://somosder.ar"
             target="_blank"

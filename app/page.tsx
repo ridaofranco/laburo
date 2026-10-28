@@ -494,6 +494,14 @@ export default async function LandingPage() {
                   >
                     Prefiero que me escriban
                   </a>
+                  {/* Enlace interno a la página por público (28/10): le da a Google
+                   * el camino desde la página más fuerte del sitio. */}
+                  <Link
+                    href="/para/staff-para-eventos-productoras-y-agencias"
+                    className="label-tech text-[11px] tracking-[0.2em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors duration-300"
+                  >
+                    Cómo se arma el staff
+                  </Link>
                 </div>
               </Reveal>
               <Reveal
@@ -518,6 +526,12 @@ export default async function LandingPage() {
                 >
                   Sumate al pool
                 </Link>
+                <Link
+                  href="/para/trabajo-en-eventos-buenos-aires"
+                  className="label-tech text-[11px] tracking-[0.2em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors duration-300"
+                >
+                  Cómo es trabajar en eventos
+                </Link>
               </Reveal>
               <Reveal delay={0.24} className="bg-black p-8 md:p-9 lg:p-12 flex flex-col gap-6">
                 <span className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a]">
@@ -536,6 +550,12 @@ export default async function LandingPage() {
                   className="mt-auto self-start inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-9 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
                 >
                   Publicar mis servicios
+                </Link>
+                <Link
+                  href="/para/proveedores-para-eventos-publicar-servicio"
+                  className="label-tech text-[11px] tracking-[0.2em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors duration-300"
+                >
+                  Cómo funciona para proveedores
                 </Link>
               </Reveal>
 
@@ -556,6 +576,12 @@ export default async function LandingPage() {
                   className="mt-auto self-start inline-flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-9 py-4 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest hover:border-[#0047ff] hover:text-[#0047ff] transition-colors duration-300"
                 >
                   Publicar mi salón
+                </Link>
+                <Link
+                  href="/para/publicar-salon-para-eventos"
+                  className="label-tech text-[11px] tracking-[0.2em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors duration-300"
+                >
+                  Cómo funciona para salones
                 </Link>
               </Reveal>
             </div>
