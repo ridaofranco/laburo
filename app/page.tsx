@@ -218,7 +218,7 @@ export default async function LandingPage() {
               * segunda vía para el que prefiere que lo contacten. */}
             <Link
               href="/registrar-productora"
-              className="label-tech text-[10px] md:text-[11px] tracking-[0.08em] md:tracking-[0.2em] whitespace-nowrap bg-white text-black px-4 md:px-7 py-3 hover:bg-[#0047ff] hover:text-white transition-colors duration-300"
+              className="max-[359px]:hidden label-tech text-[10px] md:text-[11px] tracking-[0.08em] md:tracking-[0.2em] whitespace-nowrap bg-white text-black px-4 md:px-7 py-3 hover:bg-[#0047ff] hover:text-white transition-colors duration-300"
             >
               Armo un evento
             </Link>
