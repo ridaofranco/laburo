@@ -61,10 +61,12 @@ El primer pedido real es además la única forma de saber si la cotización por
 
 # 3. Lo que queda anotado, sin diseño todavía
 
-- **¿Qué pasa si nadie cotiza?** Un pedido que vence vacío hoy queda en
-  silencio. Hay que decidir qué muestra la pantalla y si avisa.
-- **Duplicar un pedido.** El lector de briefs ya avisa cuando el texto trae dos
-  trabajos distintos, pero armar el segundo sigue siendo empezar de cero.
+- ✅ **¿Qué pasa si nadie cotiza?** (28/10, `e432038`) La lista dice «Venció
+  sin presupuestos» o «Falta elegir», y el detalle explica y ofrece correr el
+  cierre o cancelar. Sigue sin mandar ningún aviso por mail: eso no está decidido.
+- ✅ **Duplicar un pedido.** (28/10, `fec7fe4`) «Hacer otro pedido igual», en el
+  detalle de cualquier pedido, abre `/cotizaciones/nuevo?desde=<id>` con todo
+  cargado menos invitados, presupuestos y fecha de cierre.
 - **Un pedido sin cuenta.** Hoy el pedido cuelga de una organización.
   `provider_contacts` dejó preparado el `organization_id` nullable para abrirlo
   a un independiente, pero es la Fase 4 y no está decidida.
