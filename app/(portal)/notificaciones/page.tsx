@@ -246,7 +246,7 @@ export default async function NotificacionesPage() {
     .sort((a, b) => b.at - a.at);
 
   return (
-    <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-24 md:py-40 grid grid-cols-12 gap-8 relative">
+    <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-24 md:py-40 grid grid-cols-12 gap-y-8 md:gap-8 relative">
       {/* Header */}
       <header className="col-span-12 mb-12 border-b border-[#353535] pb-6">
         <h1 className="t-display text-[#e5e2e1] break-words">
