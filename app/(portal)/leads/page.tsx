@@ -80,9 +80,9 @@ export default async function LeadsPage() {
   return (
     <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-16 md:py-24">
       <div className="mb-10">
-        <h2 className="t-display text-[#c6c6c6]">
+        <h1 className="t-display text-[#c6c6c6]">
           Leads
-        </h2>
+        </h1>
         <p className="text-[16px] text-[#cfc4c5] mt-4 max-w-[620px] leading-[1.6]">
           Las consultas que dejan los productores en la landing. Se guardan acá
           apenas se envían, antes de cualquier mail: si el mail falla, el lead

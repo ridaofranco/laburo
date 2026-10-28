@@ -131,9 +131,9 @@ export default async function PagosPage() {
     <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-16 md:py-24">
       {/* Title */}
       <div className="mb-8">
-        <h2 className="t-display text-[#c6c6c6]">
+        <h1 className="t-display text-[#c6c6c6]">
           Pagos
-        </h2>
+        </h1>
         <p className="text-[16px] text-[#cfc4c5] mt-4 max-w-[620px] leading-[1.6]">
           Tu plata en dos columnas: lo que cobrás de tus clientes y lo que le
           debés al staff que ya confirmó. LABURO no procesa el pago al staff:

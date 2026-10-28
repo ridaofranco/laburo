@@ -118,9 +118,9 @@ export default async function DashboardPage() {
           <p className="label-tech text-[12px] text-[#cfc4c5] mb-4 tracking-[0.2em] font-bold">
             Tu operación
           </p>
-          <h2 className="t-display uppercase text-[#e5e2e1]">
+          <h1 className="t-display uppercase text-[#e5e2e1]">
             Tus eventos
-          </h2>
+          </h1>
         </div>
         <Link
           href="/buscar"

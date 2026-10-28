@@ -137,9 +137,9 @@ export function CalendarioClient({ gigs }: { gigs: CalGig[] }) {
         {/* Header */}
         <header className="p-8 md:p-20 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#1A1A1A] bg-[#0e0e0e]">
           <div>
-            <h2 className="t-display text-[#c6c6c6] uppercase">
+            <h1 className="t-display text-[#c6c6c6] uppercase">
               {MESES[view.m]}
-            </h2>
+            </h1>
             <div className="flex items-center gap-4 mt-2">
               <span className="t-section text-[#cfc4c5]">
                 {view.y}

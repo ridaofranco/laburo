@@ -128,11 +128,11 @@ export default async function RentabilidadPage() {
         {/* Header */}
         <section className="flex flex-col gap-6">
           <div className="flex justify-between items-end border-b border-[#2a2a2a] pb-2 gap-6">
-            <h2 className="t-display text-[#e5e2e1] uppercase break-words">
+            <h1 className="t-display text-[#e5e2e1] uppercase break-words">
               Tu
               <br />
               Rentabilidad
-            </h2>
+            </h1>
             <p className="label-tech text-[12px] text-[#cfc4c5] mb-2 shrink-0">
               Ingreso, costo y margen
             </p>

@@ -65,9 +65,9 @@ export default async function ConfigPage() {
     <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-16 md:py-24">
       {/* Header */}
       <div className="mb-12">
-        <h2 className="t-display text-[#e5e2e1] mb-2">
+        <h1 className="t-display text-[#e5e2e1] mb-2">
           Ajustes
-        </h2>
+        </h1>
         <p className="text-[18px] leading-[1.6] text-[#cfc4c5] max-w-[672px]">
           Los datos de tu organización, el estado de la cuenta y el acceso del
           equipo.
