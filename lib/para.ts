@@ -84,6 +84,7 @@ export const PARA_POR_NOTA: Record<string, string[]> = {
   "que-poner-en-tu-perfil-para-trabajar-en-eventos": ["trabajo-en-eventos-buenos-aires", "trabajar-en-montaje-tecnica-y-produccion-de-eventos"],
   "si-te-falla-un-staff-el-dia-del-evento": ["staff-para-eventos-productoras-y-agencias", "personal-de-control-de-accesos-y-acreditacion"],
   "trabajar-en-eventos-sin-experiencia": ["trabajo-en-eventos-buenos-aires", "trabajar-de-promotora-o-azafata"],
+  "que-hace-un-acreditador-en-un-congreso": ["personal-de-control-de-accesos-y-acreditacion", "staff-para-eventos-corporativos"],
   "turnos-y-horarios-del-staff-en-un-evento-largo": ["staff-para-eventos-productoras-y-agencias", "mozos-y-bartenders-para-eventos"],
 };
 
