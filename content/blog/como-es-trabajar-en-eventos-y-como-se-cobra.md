@@ -20,7 +20,7 @@ faqs:
     a: "No. Es trabajo eventual: se contrata por evento, con fechas y horarios definidos. Estar en el pool no garantiza que te convoquen, y aceptar un evento no significa formar parte de un equipo permanente: quedás confirmado para ese evento. Lo que sí funciona es que la gente que cumple es a la que se vuelve a llamar."
 ---
 
-Si estás pensando en trabajar en eventos, esto es lo que conviene saber antes: cómo es el trabajo de verdad, cómo se entra, cómo llegan las propuestas y —la pregunta que todo el mundo hace y pocos contestan claro— **cuándo se cobra**.
+Si estás pensando en trabajar en eventos, esto es lo que conviene saber antes: cómo es el trabajo de verdad, cómo se entra, cómo llegan las propuestas y (la pregunta que todo el mundo hace y pocos contestan claro) **cuándo se cobra**.
 
 ## Cómo es el trabajo, sin adornos
 
@@ -71,7 +71,7 @@ La pregunta directa, con la respuesta directa:
 
 Eso es lo que dice la política, y es lo mismo que vas a ver escrito en la propuesta antes de aceptar. El monto también está en la propuesta: no se define después ni se ajusta sobre la marcha.
 
-Si algo no coincide —el horario que fichaste, el monto, las fechas—, se plantea con la información a la vista, que es justamente para lo que sirve tener todo registrado.
+Si algo no coincide (el horario que fichaste, el monto, las fechas), se plantea con la información a la vista, que es justamente para lo que sirve tener todo registrado.
 
 ## Lo que no te vamos a prometer
 

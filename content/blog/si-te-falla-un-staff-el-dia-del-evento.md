@@ -13,11 +13,11 @@ faqs:
   - q: "¿Qué hago si un staff no aparece el día del evento?"
     a: "Primero, moverte con la información a la vista: saber exactamente qué puesto quedó vacío y de qué momento del evento es. Después, cubrirlo en este orden: recolocar internamente al que ya está en el lugar, llamar a alguien que ya trabajó con vos y conocés, y recién ahí salir a buscar afuera filtrando por rol, zona y disponibilidad inmediata. Y mandar la propuesta por escrito, con rol, horario y pago, aunque sea sobre la hora: un reemplazo confirmado de palabra es el mismo problema otra vez."
   - q: "¿Cómo me entero a tiempo de que me va a faltar gente?"
-    a: "Mirando el estado real de cada propuesta, no la cantidad que mandaste. Una propuesta enviada o vista no es una persona confirmada. En LABURO cada oferta tiene un estado —enviada, vista, aceptada, rechazada o vencida— y el tablero muestra cuántos lugares de la dotación están cubiertos y cuántos faltan. Las vencidas y las rechazadas son lugares abiertos: si las contás como confirmadas, te enterás el día del evento."
+    a: "Mirando el estado real de cada propuesta, no la cantidad que mandaste. Una propuesta enviada o vista no es una persona confirmada. En LABURO cada oferta tiene un estado (enviada, vista, aceptada, rechazada o vencida) y el tablero muestra cuántos lugares de la dotación están cubiertos y cuántos faltan. Las vencidas y las rechazadas son lugares abiertos: si las contás como confirmadas, te enterás el día del evento."
   - q: "¿Cómo evito que la gente confirmada no se presente?"
     a: "Con una confirmación explícita por escrito que incluya rol, fecha, horario, lugar, pago y plazo de pago, y con un recordatorio antes del turno. En LABURO la persona acepta la propuesta con un click y queda confirmada para ese evento, y el día antes o el mismo día recibe un recordatorio de su turno que le pide avisar enseguida por WhatsApp si no va a poder llegar. Un aviso temprano se cubre; un ausente silencioso, no."
   - q: "¿Conviene tener staff de reemplazo para un evento?"
-    a: "Conviene tener margen en los roles críticos —puerta, caja, barra— y una lista corta de gente que ya trabajó con vos y sabe que puede ser llamada. Es mucho más rápido y más seguro recurrir a alguien cuyo trabajo ya conocés que salir a buscar un perfil nuevo con el evento empezado."
+    a: "Conviene tener margen en los roles críticos (puerta, caja, barra) y una lista corta de gente que ya trabajó con vos y sabe que puede ser llamada. Es mucho más rápido y más seguro recurrir a alguien cuyo trabajo ya conocés que salir a buscar un perfil nuevo con el evento empezado."
 ---
 
 Te falta uno. Faltan dos horas. La barra abre igual.
@@ -32,7 +32,7 @@ Esta es la situación real, y tiene dos respuestas distintas: qué hacer **ahora
 
 **3. Llamá a alguien que ya trabajó con vos.** Segunda parada, no primera opción de último recurso. Alguien cuyo trabajo ya viste es infinitamente mejor apuesta que un perfil desconocido a dos horas del evento. Por eso conviene tener esa lista marcada antes: en LABURO se marcan perfiles como favoritos, con su experiencia y su disponibilidad a la vista, justamente para no tener que reconstruir esa lista de memoria en el peor momento.
 
-**4. Recién ahí, buscá afuera.** Y buscá bien: por rol, por provincia y ciudad, y por disponibilidad real. Un dato que importa a esta hora es con cuánta anticipación puede tomar un trabajo cada persona —hay quien declara disponibilidad inmediata y quien necesita 24 o 48 horas de aviso— y si tiene movilidad propia, que sobre la hora y para una zona sin transporte puede ser lo que define si llega.
+**4. Recién ahí, buscá afuera.** Y buscá bien: por rol, por provincia y ciudad, y por disponibilidad real. Un dato que importa a esta hora es con cuánta anticipación puede tomar un trabajo cada persona (hay quien declara disponibilidad inmediata y quien necesita 24 o 48 horas de aviso) y si tiene movilidad propia, que sobre la hora y para una zona sin transporte puede ser lo que define si llega.
 
 Un detalle que ahorra llamados perdidos: no le ofrezcas a alguien que ya está asignado a otro evento tuyo esa misma noche. En la búsqueda de LABURO se pueden ocultar los que ya están asignados.
 
@@ -54,7 +54,7 @@ Y las propuestas **vencen**. Una propuesta vencida no es un "sí" pendiente: es 
 
 Si no escribiste cuánta gente necesitás por rol, no podés saber cuánta te falta.
 
-Con la dotación declarada —10 mozos, 4 de barra, 5 de accesos— el tablero de LABURO muestra por evento **cuántos lugares están cubiertos y cuántos faltan**, contando solamente las aceptadas. Las rechazadas y las vencidas aparecen como rol abierto, que es la señal de "volvé a buscar acá".
+Con la dotación declarada (10 mozos, 4 de barra, 5 de accesos) el tablero de LABURO muestra por evento **cuántos lugares están cubiertos y cuántos faltan**, contando solamente las aceptadas. Las rechazadas y las vencidas aparecen como rol abierto, que es la señal de "volvé a buscar acá".
 
 La diferencia práctica: te enterás de que te faltan dos el martes, no el sábado a las siete de la tarde.
 

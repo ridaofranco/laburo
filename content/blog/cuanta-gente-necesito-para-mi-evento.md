@@ -90,7 +90,7 @@ La cuenta no sirve si vive en tu cabeza. Antes de mandar el primer mensaje tené
 
 Es exactamente lo que se declara en LABURO al crear el evento: la dotación requerida por rol, con cantidad. A partir de ahí el tablero te muestra **cuántos de esos lugares están cubiertos y cuántos faltan**, para cada evento.
 
-Esa distinción es la parte que más plata ahorra. Una propuesta **enviada** no es una persona confirmada. Una propuesta **vista** tampoco. En el tablero cada oferta tiene su estado real —enviada, vista, aceptada, rechazada o vencida— y solo las aceptadas cuentan como lugar cubierto: cuando alguien acepta, queda confirmada para ese evento. Las rechazadas y las vencidas vuelven a ser un lugar abierto, que es la única forma de enterarte a tiempo de que te falta gente.
+Esa distinción es la parte que más plata ahorra. Una propuesta **enviada** no es una persona confirmada. Una propuesta **vista** tampoco. En el tablero cada oferta tiene su estado real (enviada, vista, aceptada, rechazada o vencida) y solo las aceptadas cuentan como lugar cubierto: cuando alguien acepta, queda confirmada para ese evento. Las rechazadas y las vencidas vuelven a ser un lugar abierto, que es la única forma de enterarte a tiempo de que te falta gente.
 
 ## El checklist
 

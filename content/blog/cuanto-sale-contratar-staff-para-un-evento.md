@@ -85,7 +85,7 @@ Margen es simple: **lo que le cobrás al cliente menos lo que te cuesta el staff
 
 La trampa está en el "confirmado". Si calculás el costo sobre las propuestas que mandaste, estás midiendo una intención. Solo lo aceptado es plata comprometida, y solo lo aceptado es un lugar cubierto.
 
-En LABURO esa cuenta es un dato: cargás el ingreso del cliente al crear el evento —no se comparte con el staff— y el panel de Rentabilidad te muestra el monto comprometido en ofertas **aceptadas**, la tasa de aceptación y el margen contra ese ingreso. Sin planilla paralela.
+En LABURO esa cuenta es un dato: cargás el ingreso del cliente al crear el evento (no se comparte con el staff) y el panel de Rentabilidad te muestra el monto comprometido en ofertas **aceptadas**, la tasa de aceptación y el margen contra ese ingreso. Sin planilla paralela.
 
 ## Cómo pedir un presupuesto que puedas comparar
 

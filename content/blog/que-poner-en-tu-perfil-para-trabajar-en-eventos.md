@@ -42,7 +42,7 @@ Esta es la parte que casi nadie sabe. **Varios campos de tu perfil no son decora
 
 En la lista de resultados no aparece tu perfil entero. Aparece una tarjeta con **tu nombre, tu oficio principal, hasta tres de tus oficios, tu ciudad y provincia, y una señal de experiencia**.
 
-Esa señal sale, en este orden, de la cantidad de eventos que trabajaste, o de tu rango de años de experiencia, o —si no cargaste ninguno de los dos— de un simple "con experiencia".
+Esa señal sale, en este orden, de la cantidad de eventos que trabajaste, o de tu rango de años de experiencia, o (si no cargaste ninguno de los dos) de un simple "con experiencia".
 
 Es un detalle chico con una consecuencia grande: **si no cargás la cantidad de eventos ni los años, tu tarjeta muestra la señal más débil de las tres.** Al lado de otra que dice "12 eventos", perdés sin que nadie haya leído nada tuyo.
 
@@ -66,13 +66,13 @@ Tres cosas que conviene que estén en ese texto:
 - **Qué tamaño**, aunque sea aproximado.
 - **Qué hacías exactamente**, no el título del puesto.
 
-Y si el rubro tiene algo formal que te distingue —una certificación, un carnet, una habilitación—, ponelo. En roles de salud, seguridad y transporte eso no es un adorno.
+Y si el rubro tiene algo formal que te distingue (una certificación, un carnet, una habilitación), ponelo. En roles de salud, seguridad y transporte eso no es un adorno.
 
 ## El CV y los links
 
 Podés subir tu CV y se completa buena parte del formulario solo; después revisás y corregís lo que haya quedado mal. **Revisalo igual**: el autocompletado ahorra tiempo, pero un dato mal cargado que no corregiste es un filtro donde no vas a aparecer.
 
-Si tu rol es audiovisual —foto, cámara, dron, edición, streaming— cargá el portfolio. Ahí tu trabajo se ve, no se cuenta.
+Si tu rol es audiovisual (foto, cámara, dron, edición, streaming) cargá el portfolio. Ahí tu trabajo se ve, no se cuenta.
 
 ## El contacto: obvio y sin embargo
 

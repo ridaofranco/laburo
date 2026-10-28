@@ -78,7 +78,7 @@ El camino que funciona es lateral y corto, no un salto:
 - De **acreditador** a **operador de escáner** y de ahí a **coordinación de accesos**.
 - De **runner** a **asistente de producción**.
 
-Se sube estando adentro. Por eso los turnos que nadie quiere —montaje, desmontaje, madrugada— son la mejor puerta de entrada real que existe: hay más lugar, y es donde te ven trabajar.
+Se sube estando adentro. Por eso los turnos que nadie quiere (montaje, desmontaje, madrugada) son la mejor puerta de entrada real que existe: hay más lugar, y es donde te ven trabajar.
 
 Un detalle que importa: al cargar tu perfil, marcá **los puestos que sabés hacer de verdad**. Marcar veinte oficios no te hace aparecer en más búsquedas útiles, te hace aparecer en las que no encajás. Si querés abrirte a un puesto nuevo, sumalo y aclaralo en el detalle de tu experiencia ([acá está cómo escribirlo](/blog/que-poner-en-tu-perfil-para-trabajar-en-eventos)).
 

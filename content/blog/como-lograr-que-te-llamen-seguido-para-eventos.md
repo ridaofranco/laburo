@@ -52,7 +52,7 @@ Y si estás por dejar vencer una propuesta sin querer, va a llegarte un recordat
 
 La convocatoria casi nunca es la hora en que abre el evento. Se convoca antes justamente para que todo esté listo cuando llega el público.
 
-Llegar al horario de convocatoria —no cinco minutos después— es la conducta que más pesa en si te vuelven a llamar, y es también la más fácil de cumplir. El día antes de tu turno te va a llegar un recordatorio con el lugar y la hora, así que no hay excusa de "no me acordaba".
+Llegar al horario de convocatoria (no cinco minutos después) es la conducta que más pesa en si te vuelven a llamar, y es también la más fácil de cumplir. El día antes de tu turno te va a llegar un recordatorio con el lugar y la hora, así que no hay excusa de "no me acordaba".
 
 ## 3. Avisá temprano cuando no podés
 
