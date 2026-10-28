@@ -93,6 +93,8 @@ export const PARA_POR_NOTA: Record<string, string[]> = {
   "app-para-trabajar-en-eventos-que-mirar": ["trabajo-en-eventos-buenos-aires", "trabajar-de-promotora-o-azafata"],
   "de-staff-a-coordinador-de-equipo-en-eventos": ["trabajo-en-eventos-buenos-aires", "trabajar-en-montaje-tecnica-y-produccion-de-eventos"],
   "seguridad-privada-en-eventos-caba": ["personal-de-control-de-accesos-y-acreditacion", "proveedores-para-eventos-publicar-servicio"],
+  "que-hace-un-runner-en-un-evento": ["trabajar-en-montaje-tecnica-y-produccion-de-eventos", "trabajo-en-eventos-buenos-aires"],
+  "staff-para-stand-en-feria-o-exposicion": ["promotoras-y-azafatas-para-activaciones", "staff-para-eventos-corporativos"],
   "que-es-un-stage-manager-en-un-evento": ["trabajar-en-montaje-tecnica-y-produccion-de-eventos", "trabajo-en-eventos-buenos-aires"],
 };
 
