@@ -86,6 +86,10 @@ export const PARA_POR_NOTA: Record<string, string[]> = {
   "trabajar-en-eventos-sin-experiencia": ["trabajo-en-eventos-buenos-aires", "trabajar-de-promotora-o-azafata"],
   "que-hace-un-acreditador-en-un-congreso": ["personal-de-control-de-accesos-y-acreditacion", "staff-para-eventos-corporativos"],
   "turnos-y-horarios-del-staff-en-un-evento-largo": ["staff-para-eventos-productoras-y-agencias", "mozos-y-bartenders-para-eventos"],
+  "como-contratar-bartenders-para-evento-corporativo": ["mozos-y-bartenders-para-eventos", "staff-para-eventos-corporativos"],
+  "ley-26370-admision-y-permanencia-personal-de-puerta": ["personal-de-control-de-accesos-y-acreditacion", "staff-para-eventos-productoras-y-agencias"],
+  "como-armar-el-brief-para-promotoras-de-una-activacion": ["promotoras-y-azafatas-para-activaciones", "trabajar-de-promotora-o-azafata"],
+  "que-es-un-stage-manager-en-un-evento": ["trabajar-en-montaje-tecnica-y-produccion-de-eventos", "trabajo-en-eventos-buenos-aires"],
 };
 
 /** Las páginas por público de una nota, solo las que existen. */

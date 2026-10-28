@@ -45,15 +45,11 @@ export async function generateMetadata({
       title: post.metaTitle,
       description: post.description,
       publishedTime: post.date,
-      images: [
-        { url: "/brand/laburo-og.png", width: 1200, height: 630, alt: "LABURO. Staff para eventos" },
-      ],
     },
     twitter: {
       card: "summary_large_image",
       title: post.metaTitle,
       description: post.description,
-      images: ["/brand/laburo-og.png"],
     },
   };
 }

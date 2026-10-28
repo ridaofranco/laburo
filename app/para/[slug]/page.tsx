@@ -40,15 +40,11 @@ export async function generateMetadata({
       locale: "es_AR",
       title: page.metaTitle,
       description: page.description,
-      images: [
-        { url: "/brand/laburo-og.png", width: 1200, height: 630, alt: "LABURO. Staff para eventos" },
-      ],
     },
     twitter: {
       card: "summary_large_image",
       title: page.metaTitle,
       description: page.description,
-      images: ["/brand/laburo-og.png"],
     },
   };
 }
