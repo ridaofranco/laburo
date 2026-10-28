@@ -23,7 +23,7 @@ faqs:
     a: "Crear la cuenta y usar LABURO es gratis. Cargás el evento, declarás la dotación por rol, buscás perfiles y mandás ofertas desde la misma cuenta. Si preferís que el equipo lo vea SOMOS DER, podés dejar tu consulta o escribir por WhatsApp."
 ---
 
-Si producís eventos, el staff es la parte de la operación que más se ve y la que peor se controla. Un sábado tenés una activación de marca con doce personas, un congreso con treinta y un casamiento con diez, y los tres viven en grupos de WhatsApp distintos, con una planilla que quedó vieja el jueves.
+Si producís eventos, el staff es la parte de la operación que más se ve y la que peor se controla. Un sábado tenés una activación de marca con doce personas, un congreso con treinta y un casamiento con diez, y los tres viven en grupos de WhatsApp distintos, con una planilla que quedó vieja el jueves. (Si querés ver punto por punto qué resuelve la planilla y dónde se rompe, está en [planilla y WhatsApp o LABURO](/para/planilla-y-whatsapp-o-laburo-para-convocar-staff).)
 
 Esta página es para productoras y agencias que contratan staff eventual seguido: cómo calcular cuánta gente hace falta, qué perfil pedir, cómo evitar faltazos y cómo coordinar turnos cuando hay varios eventos a la vez. Y al final, cómo se hace todo eso en LABURO.
 

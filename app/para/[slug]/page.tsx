@@ -84,6 +84,7 @@ export default async function ParaPage({
       description: page.description,
       inLanguage: "es-AR",
       dateModified: page.date,
+      primaryImageOfPage: { "@type": "ImageObject", url: `${page.canonical}/opengraph-image`, width: 1200, height: 630 },
       isPartOf: { "@type": "WebSite", "@id": `${BLOG_ORIGIN}/#website`, url: BLOG_ORIGIN, name: "LABURO" },
       publisher: organizacion,
     },

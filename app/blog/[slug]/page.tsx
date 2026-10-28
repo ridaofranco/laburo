@@ -82,10 +82,13 @@ export default async function BlogPostPage({
         "@type": "Organization",
         name: "LABURO",
         url: BLOG_ORIGIN,
+        logo: { "@type": "ImageObject", url: `${BLOG_ORIGIN}/brand/laburo-wordmark.png`, width: 716, height: 128 },
         parentOrganization: { "@type": "Organization", name: "SOMOS DER", url: "https://somosder.ar" },
       },
       mainEntityOfPage: { "@type": "WebPage", "@id": post.canonical },
       url: post.canonical,
+      // La imagen para compartir de la nota (opengraph-image.tsx), 1200x630.
+      image: { "@type": "ImageObject", url: `${post.canonical}/opengraph-image`, width: 1200, height: 630 },
     },
     {
       "@context": "https://schema.org",

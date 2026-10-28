@@ -89,6 +89,10 @@ export const PARA_POR_NOTA: Record<string, string[]> = {
   "como-contratar-bartenders-para-evento-corporativo": ["mozos-y-bartenders-para-eventos", "staff-para-eventos-corporativos"],
   "ley-26370-admision-y-permanencia-personal-de-puerta": ["personal-de-control-de-accesos-y-acreditacion", "staff-para-eventos-productoras-y-agencias"],
   "como-armar-el-brief-para-promotoras-de-una-activacion": ["promotoras-y-azafatas-para-activaciones", "trabajar-de-promotora-o-azafata"],
+  "fiesta-de-fin-de-ano-de-empresa-como-armar-el-staff": ["staff-para-eventos-corporativos", "mozos-y-bartenders-para-eventos"],
+  "app-para-trabajar-en-eventos-que-mirar": ["trabajo-en-eventos-buenos-aires", "trabajar-de-promotora-o-azafata"],
+  "de-staff-a-coordinador-de-equipo-en-eventos": ["trabajo-en-eventos-buenos-aires", "trabajar-en-montaje-tecnica-y-produccion-de-eventos"],
+  "seguridad-privada-en-eventos-caba": ["personal-de-control-de-accesos-y-acreditacion", "proveedores-para-eventos-publicar-servicio"],
   "que-es-un-stage-manager-en-un-evento": ["trabajar-en-montaje-tecnica-y-produccion-de-eventos", "trabajo-en-eventos-buenos-aires"],
 };
 
