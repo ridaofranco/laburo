@@ -81,6 +81,14 @@ export function PedidoClient({
   const abierto = pedido.estado === "abierta" && !pedido.cerrado;
   const adjudicado = pedido.estado === "adjudicada";
   /**
+   * VENCIDO (28/10): llegó la fecha de cierre y nadie lo cerró a mano. Antes
+   * quedaba en silencio: «Cerrado», sin ningún botón para darle más tiempo,
+   * aunque la base sí lo permite (staff_app_extender_cierre solo mira que el
+   * estado siga 'abierta'). El caso real: el pedido de equipo de septiembre
+   * venció vacío y nadie se enteró.
+   */
+  const vencido = pedido.estado === "abierta" && pedido.cerrado;
+  /**
    * ⚠️ SE PUEDE ELEGIR DESPUÉS DE QUE CIERRA, y es el caso NORMAL: el pedido
    * cierra por fecha y recién ahí te sentás a comparar. Atar el botón a
    * `abierto` dejaba sin adjudicar justamente al pedido que llegó al final de
@@ -255,7 +263,9 @@ export function PedidoClient({
           <Dato label="Estado" valor={
             adjudicado ? "Adjudicado"
               : pedido.estado === "cancelada" ? "Cancelado"
-              : pedido.cerrado ? "Cerrado" : "Abierto"
+              : vencido
+                ? cotizaciones.length === 0 ? "Venció sin presupuestos" : "Falta elegir"
+                : pedido.cerrado ? "Cerrado" : "Abierto"
           } />
           <Dato label="Rubro" valor={pedido.categoria} />
           <Dato
@@ -350,10 +360,31 @@ export function PedidoClient({
           </div>
         ) : null}
 
+        {vencido ? (
+          <div className="border border-[#e5c07b]/40 bg-[#e5c07b]/5 p-4 flex flex-col gap-3">
+            <p className="text-[15px] text-[#e5e2e1] leading-[1.6]">
+              {cotizaciones.length === 0
+                ? "Venció y no entró ningún presupuesto. Podés darle más tiempo (los links de los invitados vuelven a andar) o cancelarlo si el trabajo no va."
+                : `Cerró con ${cotizaciones.length === 1 ? "1 presupuesto" : `${cotizaciones.length} presupuestos`}. Falta elegir uno más abajo, darle más tiempo o cancelarlo si el trabajo no va.`}
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <button
+                type="button"
+                onClick={() => cerrar(true)}
+                disabled={pending}
+                className="min-h-[44px] px-5 border border-[#2a2a2a] text-[14px] text-[#cfc4c5] hover:border-[#e5e2e1] hover:text-[#e5e2e1] transition-colors disabled:opacity-50"
+                title="El trabajo no se hace. A los que cotizaron les avisa que se dio de baja, que NO es lo mismo que perder."
+              >
+                Cancelar el pedido
+              </button>
+            </div>
+          </div>
+        ) : null}
+
         {/* Correr la fecha. Existe porque el caso real es: cierra mañana,
             cotizaron dos de doce, y lo único razonable es dar tres días más.
             Sin esto había que cancelar y rehacer, perdiendo lo que ya entró. */}
-        {abierto ? (
+        {abierto || vencido ? (
           <div className="flex flex-wrap items-end gap-3 pt-2 border-t border-[#1A1A1A] mt-2">
             <label className="flex flex-col gap-2">
               <span className={labelCls}>Darle más tiempo</span>

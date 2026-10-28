@@ -19,15 +19,30 @@ export const metadata: Metadata = {
   title: "LABURO. | Pedidos de precio",
 };
 
-function Estado({ estado, cerrado }: { estado: string; cerrado: boolean }) {
+function Estado({
+  estado,
+  cerrado,
+  cotizaron,
+}: {
+  estado: string;
+  cerrado: boolean;
+  cotizaron: number;
+}) {
+  // Un pedido que venció solo (sigue 'abierta' pero pasó la fecha) no dice
+  // «Cerrado» a secas: dice qué falta. Antes vencía vacío en silencio (28/10).
+  const vencido = estado === "abierta" && cerrado;
   const texto =
     estado === "adjudicada"
       ? "Adjudicado"
       : estado === "cancelada"
         ? "Cancelado"
-        : cerrado
-          ? "Cerrado"
-          : "Abierto";
+        : vencido
+          ? cotizaron === 0
+            ? "Venció sin presupuestos"
+            : "Falta elegir"
+          : cerrado
+            ? "Cerrado"
+            : "Abierto";
   const color =
     estado === "adjudicada"
       ? "text-[#7ee787] border-[#7ee787]/30"
@@ -112,7 +127,7 @@ export default async function CotizacionesPage() {
                       })}
                     </span>
                   </div>
-                  <Estado estado={p.estado} cerrado={p.cerrado} />
+                  <Estado estado={p.estado} cerrado={p.cerrado} cotizaron={p.cotizaron} />
                 </div>
 
                 <div className="flex flex-wrap gap-x-8 gap-y-2 mt-4 text-[14px]">
