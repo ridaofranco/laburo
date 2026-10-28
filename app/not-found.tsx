@@ -1,8 +1,8 @@
 /**
  * 404 propia (estética LABURO: negro absoluto, Syne monumental, radio 0). La
  * muestra Next cuando una ruta no existe y el usuario está logueado, o cuando
- * una página llama notFound(). Para usuarios sin sesión, el middleware manda las
- * rutas desconocidas a /login (postura defensiva: no revela qué rutas existen).
+ * una página llama notFound(). Sin sesión también: desde el 28/10 el middleware
+ * reescribe acá las rutas desconocidas en vez de mandarlas a /entrar.
  */
 
 import Link from "next/link";
@@ -27,7 +27,7 @@ export default function NotFound() {
           Ir al inicio
         </Link>
         <Link
-          href="/login"
+          href="/entrar"
           className="label-tech text-[12px] uppercase tracking-[0.1em] text-[#8a8a8a] hover:text-[#e5e2e1] transition-colors"
         >
           Ingresar

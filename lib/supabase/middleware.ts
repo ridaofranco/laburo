@@ -208,6 +208,31 @@ export async function updateSession(request: NextRequest) {
   ];
   const isPublic = path === "/" || publicPrefixes.some((p) => path.startsWith(p));
 
+  // DIRECCIÓN QUE NO EXISTE, SIN SESIÓN (28/10): antes rebotaba a /entrar, y
+  // alguien con un link mal copiado («/legales», «/dashbord») creía que tenía
+  // que loguearse para ver algo que no existe. Ahora ve la 404.
+  // ⚠️ Es una lista CERRADA a propósito: un segmento que no esté acá ni en
+  // publicPrefixes se reescribe a una ruta inexistente, NO se deja pasar. Así,
+  // si mañana se crea una pantalla gateada y nadie la suma acá, sin sesión da
+  // 404 (bug visible) en vez de quedar abierta al mundo (bug silencioso).
+  // Toda carpeta nueva de app/ o app/(portal)/ que pida sesión va en esta lista.
+  const gatedSegments = new Set([
+    // app/(portal)/
+    "billetera", "buscar", "calendario", "config", "confirmacion",
+    "cotizaciones", "dashboard", "favoritos", "leads", "mensajes",
+    "notificaciones", "pagos", "proveedores", "rentabilidad", "staff",
+    "tablero",
+    // app/
+    "plataforma", "soy", "dev-login-staff", "api",
+  ]);
+  const firstSegment = path.split("/")[1] ?? "";
+
+  if (!user && !isPublic && !gatedSegments.has(firstSegment)) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/__no-existe";
+    return NextResponse.rewrite(url);
+  }
+
   if (!user && !isPublic) {
     const url = request.nextUrl.clone();
     // A /entrar y no a /login (5/8): /login es la puerta de UN actor, y quien
