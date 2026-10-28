@@ -652,6 +652,13 @@ export default async function LandingPage() {
             >
               Blog
             </Link>
+            {/* Las páginas por público (28/10): entrada discreta, como el blog. */}
+            <Link
+              href="/para"
+              className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
+            >
+              Para quién es
+            </Link>
             <a
               href="https://somosder.ar"
               target="_blank"
@@ -675,6 +682,64 @@ export default async function LandingPage() {
           </div>
         </div>
       </footer>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(HOME_SCHEMA) }}
+      />
     </div>
   );
 }
+
+/**
+ * Datos estructurados de la home (28/10). Antes no tenía ninguno. El @id de
+ * SOMOS DER es el mismo que usa somosder-web, para que Google y las IA entiendan
+ * que LABURO es de la productora y no un sitio suelto. Solo datos que la página
+ * ya muestra.
+ */
+const HOME_SCHEMA = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://laburo.somosder.ar/#website",
+    url: "https://laburo.somosder.ar",
+    name: "LABURO",
+    inLanguage: "es-AR",
+    publisher: { "@id": "https://laburo.somosder.ar/#organization" },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "https://laburo.somosder.ar/#organization",
+    name: "LABURO",
+    url: "https://laburo.somosder.ar",
+    logo: "https://laburo.somosder.ar/laburo-120.png",
+    description:
+      "Plataforma de SOMOS DER para armar eventos: staff eventual con perfil y CV, proveedores de todos los rubros y salones por capacidad.",
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer service",
+      telephone: "+54 9 11 7154-0675",
+      areaServed: "AR",
+      availableLanguage: "es",
+    },
+    parentOrganization: {
+      "@type": "Organization",
+      "@id": "https://www.somosder.ar/#organization",
+      name: "SOMOS DER",
+      url: "https://www.somosder.ar",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "LABURO",
+    url: "https://laburo.somosder.ar",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    description:
+      "Staff, proveedores y salones para eventos en un solo lugar. Buscás por rol y zona, mandás la oferta con pago y horarios, y la persona la acepta con un click.",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "ARS" },
+    publisher: { "@id": "https://laburo.somosder.ar/#organization" },
+  },
+];

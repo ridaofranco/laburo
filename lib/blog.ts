@@ -48,6 +48,8 @@ export type BlogPost = {
   order: number;
   lang: string;
   faqs: BlogFaq[];
+  /** Solo en las páginas por público: contrata | trabaja | proveedor | salon. */
+  audiencia?: string;
   /** HTML ya renderizado del cuerpo del post. */
   html: string;
 };
@@ -79,8 +81,8 @@ function toFaqs(value: unknown): BlogFaq[] {
     .filter((f) => f.q.length > 0 && f.a.length > 0);
 }
 
-function parsePost(fileName: string): BlogPost {
-  const raw = fs.readFileSync(path.join(BLOG_DIR, fileName), "utf8");
+function parsePost(fileName: string, dir = BLOG_DIR, base = "blog"): BlogPost {
+  const raw = fs.readFileSync(path.join(dir, fileName), "utf8");
   const { data, content } = matter(raw);
 
   // El slug del frontmatter manda; el nombre del archivo es el fallback.
@@ -92,25 +94,34 @@ function parsePost(fileName: string): BlogPost {
     title,
     description: String(data.description ?? ""),
     metaTitle: String(data.metaTitle ?? `${title} | LABURO`),
-    canonical: String(data.canonical ?? `${BLOG_ORIGIN}/blog/${slug}`),
+    canonical: String(data.canonical ?? `${BLOG_ORIGIN}/${base}/${slug}`),
     kicker: String(data.kicker ?? "Guía"),
     date: toIsoDate(data.date),
     readingTime: String(data.readingTime ?? ""),
     order: Number(data.order ?? 99),
     lang: String(data.lang ?? "es"),
     faqs: toFaqs(data.faqs),
+    audiencia: data.audiencia ? String(data.audiencia) : undefined,
     html: marked.parse(content, { async: false }),
   };
 }
 
+/**
+ * Lee una carpeta de .md con el formato del blog. La usan el blog y las páginas
+ * por público (`content/para`, lib/para.ts): mismo frontmatter, mismo motor.
+ */
+export function readMarkdownDir(dir: string, base: string): BlogPost[] {
+  if (!fs.existsSync(dir)) return [];
+  return fs
+    .readdirSync(dir)
+    .filter((f) => f.endsWith(".md"))
+    .map((f) => parsePost(f, dir, base))
+    .sort((a, b) => a.order - b.order || a.title.localeCompare(b.title, "es"));
+}
+
 /** Todos los posts, ordenados por `order` (y por título ante empate). */
 export function getAllPosts(): BlogPost[] {
-  if (!fs.existsSync(BLOG_DIR)) return [];
-  return fs
-    .readdirSync(BLOG_DIR)
-    .filter((f) => f.endsWith(".md"))
-    .map(parsePost)
-    .sort((a, b) => a.order - b.order || a.title.localeCompare(b.title, "es"));
+  return readMarkdownDir(BLOG_DIR, "blog");
 }
 
 export function getPost(slug: string): BlogPost | undefined {

@@ -260,6 +260,15 @@ body {
   border-collapse: collapse;
   margin: 2rem 0;
   font-size: 15px;
+  /* En celular (320-390 px) una tabla de tres columnas no entra: se desplaza
+   * adentro de su caja en vez de empujar la página entera (28/10). */
+  display: block;
+  overflow-x: auto;
+}
+/* Las URL de las fuentes son una sola palabra larguísima: sin esto se salen
+ * de la pantalla en el celular (28/10). */
+.prose-laburo a {
+  overflow-wrap: anywhere;
 }
 .prose-laburo th,
 .prose-laburo td {

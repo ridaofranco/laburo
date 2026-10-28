@@ -175,6 +175,12 @@ export async function updateSession(request: NextRequest) {
     // esta línea el middleware mandaría a /login a cualquiera que llegue desde
     // Google — o sea, a todo el tráfico que el blog existe para captar.
     "/blog",
+    // Páginas por público (/para y /para/<slug>, 28/10): contenido estático,
+    // sin sesión, por la misma razón que el blog. Ninguna otra ruta de primer
+    // nivel empieza con "/para", así que el startsWith no abre nada de más.
+    "/para",
+    // llms.txt: lo que leen los asistentes de IA. Sin esto, 307 a /entrar.
+    "/llms.txt",
     // LA VIDRIERA DE PROVEEDORES (Fase 4, migración 0059). Es la puerta del
     // cliente final: alguien que organiza su casamiento y que no tiene ni va a
     // tener cuenta. Sin esta línea la fase entera es inalcanzable, que es

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { BLOG_ORIGIN, getAllPosts } from "@/lib/blog";
+import { getAllPara } from "@/lib/para";
 import { buscarPublico } from "./servicios/actions";
 import { buscarSalones } from "./salones/actions";
 
@@ -22,6 +23,7 @@ import { buscarSalones } from "./salones/actions";
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = getAllPosts();
+  const para = getAllPara();
   // Las dos vidrieras van juntas: son independientes y encadenarlas sería un
   // viaje de más para nada. Cada una cae sola con su propio catch, así que si
   // una falla el sitemap igual sale con la otra.
@@ -68,6 +70,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             url: `${BLOG_ORIGIN}/salones/${s.slug}`,
             changeFrequency: "weekly" as const,
             priority: 0.7,
+          })),
+        ]
+      : []),
+    // Páginas por público (28/10): mismo motor que el blog, por eso también
+    // están en outputFileTracingIncludes de next.config.ts.
+    ...(para.length > 0
+      ? [
+          { url: `${BLOG_ORIGIN}/para`, changeFrequency: "monthly" as const, priority: 0.8 },
+          ...para.map((p) => ({
+            url: p.canonical,
+            lastModified: p.date,
+            changeFrequency: "monthly" as const,
+            priority: 0.8,
           })),
         ]
       : []),

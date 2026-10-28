@@ -21,7 +21,7 @@ const nextConfig: NextConfig = {
    * El blog en sí andaba porque sus páginas se arman al compilar.
    */
   outputFileTracingIncludes: {
-    "/sitemap.xml": ["./content/blog/**/*"],
+    "/sitemap.xml": ["./content/blog/**/*", "./content/para/**/*"],
   },
   experimental: {
     /**
