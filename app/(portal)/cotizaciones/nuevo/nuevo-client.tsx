@@ -50,6 +50,7 @@ export function NuevoPedidoForm({
   categorias,
   provincias,
   pedido,
+  base,
   itemsBloqueados = false,
 }: {
   categorias: string[];
@@ -64,6 +65,12 @@ export function NuevoPedidoForm({
    */
   pedido?: PedidoDetalle;
   /**
+   * Si viene, CREA un pedido nuevo arrancando con los valores de este
+   * ("Hacer otro pedido igual"). No es `pedido`: acá no se edita nada, se
+   * pide fecha de cierre nueva y no se arrastran invitaciones ni presupuestos.
+   */
+  base?: PedidoDetalle;
+  /**
    * true cuando ya hay presupuestos cargados. Ahí los ítems se muestran pero no
    * se editan: cambiarlos borraría en cascada las líneas que los proveedores ya
    * mandaron, y el total de cada cotización quedaría siendo la suma de algo que
@@ -74,20 +81,31 @@ export function NuevoPedidoForm({
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const editando = !!pedido;
+  // De dónde salen los valores iniciales: el pedido que se edita o el que se
+  // duplica. La fecha de cierre NO sale de acá: la del original ya pasó o
+  // está por pasar.
+  const ini = pedido ?? base;
 
-  const [titulo, setTitulo] = useState(pedido?.titulo ?? "");
-  const [descripcion, setDescripcion] = useState(pedido?.descripcion ?? "");
-  const [categoria, setCategoria] = useState(pedido?.categoria ?? "");
-  const [provincia, setProvincia] = useState(pedido?.provincia ?? "");
-  const [ciudad, setCiudad] = useState(pedido?.ciudad ?? "");
-  const [necesarioPara, setNecesarioPara] = useState(pedido?.necesario_para ?? "");
+  const [titulo, setTitulo] = useState(ini?.titulo ?? "");
+  const [descripcion, setDescripcion] = useState(ini?.descripcion ?? "");
+  const [categoria, setCategoria] = useState(ini?.categoria ?? "");
+  const [provincia, setProvincia] = useState(ini?.provincia ?? "");
+  const [ciudad, setCiudad] = useState(ini?.ciudad ?? "");
+  const [necesarioPara, setNecesarioPara] = useState(
+    // Duplicando, una fecha que ya pasó no sirve de punto de partida.
+    pedido
+      ? (pedido.necesario_para ?? "")
+      : base?.necesario_para && base.necesario_para >= new Date().toISOString().slice(0, 10)
+        ? base.necesario_para
+        : "",
+  );
   const [cierraAt, setCierraAt] = useState(enUnaSemana);
   const [campos, setCampos] = useState<CampoDesglose[]>(
-    pedido ? pedido.campos : plantillaDe(""),
+    ini ? ini.campos : plantillaDe(""),
   );
   // Editando, el desglose YA es el de este caso: traerle la plantilla del rubro
   // al cambiar el <select> le pisaría lo que escribió.
-  const [tocoElDesglose, setTocoElDesglose] = useState(editando);
+  const [tocoElDesglose, setTocoElDesglose] = useState(!!ini);
   /**
    * Los renglones que se piden con precio. Arranca VACÍO a propósito: un pedido
    * de una sola cosa no tiene por qué obligar a cargar un ítem, y un formulario
@@ -95,8 +113,8 @@ export function NuevoPedidoForm({
    * caso más común. Se llena a mano o lo llena el brief.
    */
   const [items, setItems] = useState<ItemNuevo[]>(
-    pedido
-      ? pedido.items.map((i) => ({
+    ini
+      ? ini.items.map((i) => ({
           titulo: i.titulo,
           detalle: i.detalle ?? "",
           cantidad: i.cantidad == null ? "" : String(i.cantidad),

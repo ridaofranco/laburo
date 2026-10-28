@@ -405,6 +405,21 @@ export function PedidoClient({
             </button>
           </div>
         ) : null}
+
+        {/* Duplicar. El caso real: el mismo catering para otra fecha, o el
+            segundo trabajo que el brief traía adentro. Antes era empezar de
+            cero. Abre el formulario de pedido NUEVO ya cargado con esto: no
+            copia invitaciones ni presupuestos, y no se manda nada hasta elegir
+            a quién. Va en cualquier estado, también cancelado o adjudicado. */}
+        <div className="pt-2">
+          <Link
+            href={`/cotizaciones/nuevo?desde=${pedido.id}`}
+            className="text-[14px] text-[#8A8A8A] underline underline-offset-4 hover:text-[#e5e2e1]"
+            title="Abre un pedido nuevo con el mismo título, detalle, preguntas e ítems. No copia invitados ni presupuestos."
+          >
+            Hacer otro pedido igual
+          </Link>
+        </div>
       </section>
 
       {/* ── Invitar ─────────────────────────────────────────────────── */}
