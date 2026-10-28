@@ -237,8 +237,6 @@ export function StaffLoginForm() {
 
   return (
     <main className="relative min-h-dvh flex flex-col items-center justify-center overflow-hidden bg-black text-[#e5e2e1] px-6">
-      {/* Título para Google y lectores de pantalla: el visible es el logo. */}
-      <h1 className="sr-only">Entrar como staff</h1>
       <div
         aria-hidden="true"
         className="fixed inset-0 pointer-events-none hidden md:grid grid-cols-12 gap-8 px-20 opacity-[0.04] z-0"
