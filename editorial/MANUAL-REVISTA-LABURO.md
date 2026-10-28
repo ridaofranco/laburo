@@ -39,14 +39,20 @@ Copiar el de cualquier nota de `content/blog/`: title, description (140 a 160 ca
 3. Probar a 320, 390 y 1366 px (tablas y URLs largas ya tienen arreglo en `globals.css`).
 4. Publicar, verificar 200 en producción, que esté en `/sitemap.xml` y `/llms.txt`, y mandar a IndexNow (clave en `public/94763d2734274822aec29fcd0449c819.txt`).
 
-## Próximos temas (priorizados, 28/10)
-1. Ley 26.370 de admisión y permanencia: qué le pide al personal de puerta (fuente: texto oficial).
-2. Temporada alta de eventos: cómo armar el equipo de fin de año con tiempo (publicar en noviembre).
-3. Cómo contratar bartenders para un evento corporativo.
-4. Qué hace un acreditador y cómo se arma la acreditación de un congreso (enlazar PASE).
-5. App para trabajar en eventos: qué mirar antes de cargar tus datos en una plataforma.
-6. Staff para eventos en Misiones y en Bariloche (solo si Franco dice dale a C-1; hay pool real ahí).
-7. Cómo armar el brief para promotoras de una activación.
-8. Qué es un stage manager y cómo se llega a serlo.
-9. Seguridad privada en eventos masivos en CABA: qué exige la ciudad (fuente oficial).
-10. Cómo pasar de staff a coordinador/a de equipo.
+## Publicadas el 28/10 (no repetir)
+Ley 26.370 (admisión y permanencia), bartenders para evento corporativo, brief de promotoras, stage manager, fiesta de fin de año de empresa, app para trabajar en eventos, seguridad privada en CABA, de staff a coordinador, runner, stand en feria. Página /para nueva: planilla y WhatsApp o LABURO.
+
+## Imagen para compartir
+Cada nota y cada página /para genera sola su imagen con el título (`app/blog/[slug]/opengraph-image.tsx`, `lib/og.tsx`). No hay que hacer nada al publicar.
+
+## Próximos temas (priorizados, 28/10 a la mañana)
+1. Staff para eventos en Misiones y en Bariloche (solo si Franco dice dale a la decisión C-1; hay pool real ahí).
+2. Agencia de promotoras o plataforma: comparativa honesta (página /para, como la de planilla y WhatsApp).
+3. Qué hace un guardarropa en un evento y cómo se organiza.
+4. Hostess y recepción en eventos corporativos: qué se pide.
+5. Cómo armar un equipo de sampling o degustación (si se toca alcohol, Ley 24.788 abierta).
+6. Montaje y desmontaje: qué pide el oficio y cómo se cuida el cuerpo (solo con fuente oficial de la SRT si se dan datos).
+7. Traductores e intérpretes en congresos: qué perfil y cuántos.
+8. Temporada de verano en la costa: cómo conseguir trabajo en eventos (publicar en noviembre, sin datos inventados).
+9. Cómo evaluar al staff después del evento (favoritas con nota en LABURO).
+10. Para salones: cómo describir tu espacio para que te encuentren (capacidad, zona, fotos).
