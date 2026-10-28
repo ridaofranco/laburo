@@ -181,6 +181,8 @@ export function RegistroSalonClient() {
   if (yaExistia !== null) {
     return (
       <main className="relative min-h-dvh flex flex-col items-center justify-center bg-black text-[#e5e2e1] px-6 py-16">
+        {/* Título para Google y lectores de pantalla: el visible es el logo. */}
+        <h1 className="sr-only">Registro de salón</h1>
         <div className="relative z-10 w-full max-w-[520px] flex flex-col items-center">
           <div className="mb-8">
             <LaburoWordmark className="h-[48px] md:h-[64px] w-auto" priority />
@@ -245,6 +247,8 @@ export function RegistroSalonClient() {
 
   return (
     <main className="relative min-h-dvh bg-black text-[#e5e2e1] px-6 py-14 md:py-20">
+      {/* Título para Google y lectores de pantalla: el visible es el logo. */}
+      <h1 className="sr-only">Registrar tu salón</h1>
       <div className="relative z-10 w-full max-w-[720px] mx-auto">
         <div className="flex flex-col items-start gap-3 mb-3">
           <LaburoWordmark className="h-[40px] md:h-[56px] w-auto" priority />

@@ -126,6 +126,8 @@ export function LoginForm() {
 
   return (
     <main className="relative min-h-dvh flex flex-col items-center justify-center overflow-hidden bg-black text-[#e5e2e1] px-6">
+      {/* Título para Google y lectores de pantalla: el visible es el logo. */}
+      <h1 className="sr-only">Entrar como productora</h1>
       {/* Grilla estructural de fondo (motif arquitectónico de Stitch) */}
       <div
         aria-hidden="true"

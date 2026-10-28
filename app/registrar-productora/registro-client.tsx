@@ -96,6 +96,8 @@ export function RegistroProductoraClient() {
 
   return (
     <main className="relative min-h-dvh flex flex-col items-center justify-center bg-black text-[#e5e2e1] px-6">
+      {/* Título para Google y lectores de pantalla: el visible es el logo. */}
+      <h1 className="sr-only">Registrar tu productora</h1>
       <div className="relative z-10 w-full max-w-[448px] flex flex-col items-center">
         <motion.div {...up(0)} className="mb-4">
           <LaburoWordmark className="h-[56px] md:h-[72px] w-auto" priority />

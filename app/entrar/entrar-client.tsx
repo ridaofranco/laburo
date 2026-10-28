@@ -155,6 +155,8 @@ export function EntrarClient() {
 
   return (
     <main className="relative min-h-dvh flex flex-col items-center justify-center bg-black text-[#e5e2e1] px-6 py-16">
+      {/* Título para Google y lectores de pantalla: el visible es el logo. */}
+      <h1 className="sr-only">Entrar a LABURO</h1>
       <div className="relative z-10 w-full max-w-[460px] flex flex-col items-center">
         <div className="mb-10">
           <LaburoWordmark className="h-[48px] md:h-[64px] w-auto" priority />
