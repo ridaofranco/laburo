@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BLOG_ORIGIN, formatBlogDate, getAllPosts, getPost } from "@/lib/blog";
+import { paraDeNota } from "@/lib/para";
 import { BlogCta, BlogFooter, BlogHeader, WRAP } from "../chrome";
 import { Faq } from "../faq";
 
@@ -67,6 +68,7 @@ export default async function BlogPostPage({
   if (!post) notFound();
 
   const otros = getAllPosts().filter((p) => p.slug !== post.slug);
+  const relacionadas = paraDeNota(post.slug);
 
   const schema = [
     {
@@ -154,6 +156,32 @@ export default async function BlogPostPage({
         </article>
 
         <Faq faqs={post.faqs} />
+
+        {relacionadas.length > 0 && (
+          <section className="border-t border-[#1a1a1a]">
+            <div className={`${WRAP} py-16 md:py-20`}>
+              <span className="label-tech text-[11px] tracking-[0.3em] text-[#0047ff] block">
+                Para tu caso
+              </span>
+              <div className="border-t border-[#1a1a1a] mt-8">
+                {relacionadas.map((p) => (
+                  <Link
+                    key={p.slug}
+                    href={`/para/${p.slug}`}
+                    className="group block border-b border-[#1a1a1a] py-8 transition-colors hover:bg-[#050505]"
+                  >
+                    <span className="label-tech text-[10px] tracking-[0.25em] text-[#8a8a8a]">
+                      {p.kicker}
+                    </span>
+                    <h3 className="font-[family-name:var(--font-syne)] font-bold uppercase tracking-tight leading-[1.1] text-[20px] md:text-[26px] mt-3 break-words group-hover:text-[#0047ff] transition-colors">
+                      {p.title}
+                    </h3>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {otros.length > 0 && (
           <section className="border-t border-[#1a1a1a]">

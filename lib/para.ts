@@ -62,3 +62,33 @@ export const CTA_POR_AUDIENCIA: Record<
 export function ctaDe(audiencia: string | undefined) {
   return CTA_POR_AUDIENCIA[(audiencia as Audiencia) in CTA_POR_AUDIENCIA ? (audiencia as Audiencia) : "contrata"];
 }
+
+/**
+ * Qué páginas por público le corresponden a cada nota del blog (28/10). Se
+ * muestran al pie de la nota: quien llegó por una guía sigue a la página que
+ * lo convierte, y Google ve el camino entre las dos.
+ */
+export const PARA_POR_NOTA: Record<string, string[]> = {
+  "carnet-de-manipulador-de-alimentos-para-eventos": ["trabajar-en-gastronomia-de-eventos", "mozos-y-bartenders-para-eventos"],
+  "como-armar-staff-evento-roles": ["staff-para-eventos-productoras-y-agencias", "staff-para-eventos-corporativos"],
+  "como-elegir-salon-para-un-evento-por-capacidad": ["publicar-salon-para-eventos", "staff-para-eventos-corporativos"],
+  "como-es-trabajar-en-eventos-y-como-se-cobra": ["trabajo-en-eventos-buenos-aires", "trabajar-de-promotora-o-azafata"],
+  "como-lograr-que-te-llamen-seguido-para-eventos": ["trabajo-en-eventos-buenos-aires", "trabajar-en-montaje-tecnica-y-produccion-de-eventos"],
+  "como-pedir-presupuesto-a-proveedores-de-eventos": ["proveedores-para-eventos-publicar-servicio", "staff-para-eventos-productoras-y-agencias"],
+  "cuanta-gente-necesito-para-mi-evento": ["staff-para-eventos-productoras-y-agencias", "personal-de-control-de-accesos-y-acreditacion"],
+  "cuanto-sale-contratar-staff-para-un-evento": ["staff-para-eventos-corporativos", "mozos-y-bartenders-para-eventos"],
+  "documentacion-para-contratar-personal-eventual": ["staff-para-eventos-productoras-y-agencias", "staff-para-eventos-corporativos"],
+  "oficios-de-eventos-con-mas-salida": ["trabajo-en-eventos-buenos-aires", "trabajar-en-gastronomia-de-eventos"],
+  "primer-dia-trabajando-en-un-evento": ["trabajo-en-eventos-buenos-aires", "trabajar-de-promotora-o-azafata"],
+  "que-mirar-antes-de-contratar-personal-evento": ["staff-para-eventos-productoras-y-agencias", "promotoras-y-azafatas-para-activaciones"],
+  "que-poner-en-tu-perfil-para-trabajar-en-eventos": ["trabajo-en-eventos-buenos-aires", "trabajar-en-montaje-tecnica-y-produccion-de-eventos"],
+  "si-te-falla-un-staff-el-dia-del-evento": ["staff-para-eventos-productoras-y-agencias", "personal-de-control-de-accesos-y-acreditacion"],
+  "trabajar-en-eventos-sin-experiencia": ["trabajo-en-eventos-buenos-aires", "trabajar-de-promotora-o-azafata"],
+  "turnos-y-horarios-del-staff-en-un-evento-largo": ["staff-para-eventos-productoras-y-agencias", "mozos-y-bartenders-para-eventos"],
+};
+
+/** Las páginas por público de una nota, solo las que existen. */
+export function paraDeNota(slugNota: string): BlogPost[] {
+  const slugs = PARA_POR_NOTA[slugNota] ?? [];
+  return slugs.map(getPara).filter((p): p is BlogPost => Boolean(p));
+}
