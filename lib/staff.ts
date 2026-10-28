@@ -107,7 +107,22 @@ export async function getMyStaffOffers(): Promise<StaffOffer[]> {
  */
 export async function requireStaff(): Promise<StaffProfile> {
   const profile = await getMyStaffProfile();
-  if (!profile) redirect("/acceso-staff");
+  if (!profile) {
+    // Con sesión de productora o de proveedor, mandar a /acceso-staff era pedirle
+    // un login que ya hizo con otra cuenta, sin decirle nada (27/10). Se lo lleva
+    // a SU panel; el login de staff queda para quien no tiene sesión.
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      const { orgActual } = await import("@/lib/org");
+      if (await orgActual()) redirect("/dashboard");
+      const { data: proveedor } = await supabase.rpc("staff_app_mi_perfil_proveedor");
+      if (proveedor) redirect("/mi-proveedor");
+    }
+    redirect("/acceso-staff");
+  }
   return profile;
 }
 

@@ -7,6 +7,7 @@
  * queda como confirmación standalone reutilizable.
  */
 
+import { redirect } from "next/navigation";
 import { ConfirmacionView, type ResumenCell } from "./confirmacion-view";
 
 type Param = string | string[] | undefined;
@@ -30,6 +31,9 @@ export default async function ConfirmacionPage({
   if (staff) resumen.push({ label: "Staff", value: staff });
   if (rol) resumen.push({ label: "Rol", value: rol });
   if (evento) resumen.push({ label: "Evento", value: evento });
+  // Abierta suelta decía «Oferta enviada» sin que hubiera oferta (27/10). Nadie
+  // enlaza acá sin datos: sin resumen no hay nada que confirmar.
+  if (resumen.length === 0) redirect("/dashboard");
 
   return <ConfirmacionView resumen={resumen} />;
 }
