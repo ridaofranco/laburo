@@ -10,6 +10,19 @@ const nextConfig: NextConfig = {
   // NEXT_DIST_DIR se manda ese build a otra carpeta y el dev sigue vivo.
   // Sin la variable no cambia nada: en Vercel y en local sigue siendo `.next`.
   distDir: process.env.NEXT_DIST_DIR || ".next",
+  /**
+   * EL SITEMAP SIN EL BLOG (28/10).
+   *
+   * `app/sitemap.ts` consulta la base (proveedores y salones), así que corre
+   * en el servidor en cada pedido y no al compilar. Y lee los artículos con
+   * `fs` desde `content/blog`, una carpeta que Vercel NO mete en la función
+   * porque ningún import la nombra. Resultado: en producción `getAllPosts()`
+   * daba [] y el sitemap salía con 5 direcciones y ninguno de los 12 artículos.
+   * El blog en sí andaba porque sus páginas se arman al compilar.
+   */
+  outputFileTracingIncludes: {
+    "/sitemap.xml": ["./content/blog/**/*"],
+  },
   experimental: {
     /**
      * EL LÍMITE QUE ROMPÍA EL REGISTRO CON CV (6/8).
