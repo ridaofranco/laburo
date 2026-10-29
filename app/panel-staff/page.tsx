@@ -79,6 +79,11 @@ export default async function PanelStaffPage() {
   // caemos a un evento pasado (sería mentira rotularlo "Próximo"): el hero muestra
   // el estado "sin eventos" y los pasados viven en el Historial.
   const next: StaffOffer | null = upcoming[0] ?? null;
+  // Ya arrancó y no terminó: decir "en curso" y no "próximo" (29/10).
+  const enCurso =
+    next != null &&
+    ts(next.gig_starts_at) <= now &&
+    (next.gig_ends_at ? ts(next.gig_ends_at) > now : true);
   const agenda = upcoming.filter((o) => o.id !== next?.id); // el resto (el próximo va en el hero)
   const totalGanado = past.reduce((s, o) => s + (Number(o.amount) || 0), 0);
 
@@ -107,7 +112,13 @@ export default async function PanelStaffPage() {
           <section className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
             <div className="col-span-1 md:col-span-8 flex flex-col gap-2">
               <p className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#c6c6c6]">
-                {next ? "Próximo evento" : `Hola, ${nombre}`}
+                {next
+                  ? enCurso
+                    ? "Evento en curso"
+                    : ts(next.gig_starts_at) <= now
+                      ? "Tu evento de hoy"
+                      : "Próximo evento"
+                  : `Hola, ${nombre}`}
               </p>
               <h1 className="t-display text-[#e5e2e1] break-words">
                 {next
