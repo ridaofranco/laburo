@@ -67,7 +67,7 @@ El primer pedido real es además la única forma de saber si la cotización por
 - ✅ **Duplicar un pedido.** (28/10, `fec7fe4`) «Hacer otro pedido igual», en el
   detalle de cualquier pedido, abre `/cotizaciones/nuevo?desde=<id>` con todo
   cargado menos invitados, presupuestos y fecha de cierre.
-- **Corregir a mano un fichaje (diseñado el 29/10, sin construir).** Desde las
+- ✅ **Corregir a mano un fichaje.** (29/10, `82e4723`, migración 0094, probado en producción) Hecho tal cual este diseño; en el tablero se ve al abrir la tarjeta del evento. Desde las
   migraciones 0091 y 0092 la entrada se ficha solo desde 3 h antes del inicio
   y la salida hasta 12 h después del fin. Quien se olvida de la salida queda
   «sin registrar» y hoy la productora no tiene cómo cargarla. Propuesta:
