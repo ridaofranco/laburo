@@ -16,6 +16,8 @@ import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { CV_BUCKET } from "@/lib/cv";
 import { verificarCvSubido } from "@/lib/cv-servidor";
 import { sendMail } from "@/lib/email/mailer";
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
 import { WelcomeEmail } from "@/components/emails/welcome-email";
 import { siteUrl } from "@/lib/site";
 import { bajaHeaders, bajaReady, bajaUrl } from "@/lib/baja";
@@ -95,9 +97,17 @@ export async function registerApplicant(
     return { ok: false, reason: "Datos inválidos." };
   }
   const nombre = txt(input.nombre);
-  const email = txt(input.email);
+  // El mail se limpia de lo que se cuela al tipear o al leerlo del CV (espacios
+  // en el medio, una arroba de más adelante) y se valida acá también: el 23/10
+  // entró una ficha con email «s», y en la base hay «outlook .com» y
+  // «@nombre@gmail.com». Con eso no sale la bienvenida ni el link para entrar,
+  // y la persona queda anotada sin forma de que le llegue nada.
+  const email = txt(input.email).replace(/\s+/g, "").replace(/^@+/, "");
   if (!nombre || !email) {
     return { ok: false, reason: "Nombre y email son obligatorios." };
+  }
+  if (!EMAIL_RE.test(email)) {
+    return { ok: false, reason: "Revisá tu email: tiene que ser como nombre@gmail.com." };
   }
   // Consentimiento Ley 25.326 validado también en el servidor: el check del
   // browser se puede saltear, así que sin consentimiento explícito no se guarda
