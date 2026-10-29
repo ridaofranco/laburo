@@ -6,6 +6,7 @@
 
 export const dynamic = "force-dynamic";
 
+import Link from "next/link";
 import { StaffNav } from "@/components/staff-nav";
 import { requireStaff } from "@/lib/staff";
 import { EditProfileForm } from "./edit-profile-form";
@@ -32,6 +33,23 @@ export default async function EditarPerfilStaffPage() {
             </p>
           </header>
           <EditProfileForm profile={profile} />
+          {/* La elección de si otras productoras ven el perfil (0076). Antes
+           *  solo se llegaba desde el link del mail. */}
+          <section className="border-t border-[#1A1A1A] pt-8 flex flex-col gap-3">
+            <h2 className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#c6c6c6]">
+              Quién ve tu perfil
+            </h2>
+            <p className="text-[15px] text-[#cfc4c5] max-w-[560px] leading-[1.6]">
+              Elegí si querés que otras productoras que usan LABURO puedan ver tu
+              perfil y mandarte ofertas. Lo podés cambiar cuando quieras.
+            </p>
+            <Link
+              href="/mi-visibilidad"
+              className="self-start label-tech text-[12px] uppercase tracking-[0.15em] text-[#e5e2e1] border-b border-[#4c4546] hover:border-[#e5e2e1] pb-1 transition-colors"
+            >
+              Elegir quién me ve
+            </Link>
+          </section>
         </div>
       </main>
     </div>

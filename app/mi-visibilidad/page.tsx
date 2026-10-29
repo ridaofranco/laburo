@@ -13,7 +13,9 @@ export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
-import { visibilidadTokenOk } from "@/lib/visibilidad";
+import { redirect } from "next/navigation";
+import { visibilidadReady, visibilidadToken, visibilidadTokenOk } from "@/lib/visibilidad";
+import { getMyStaffProfile } from "@/lib/staff";
 import { VisibilidadClient } from "./visibilidad-client";
 
 export const metadata: Metadata = {
@@ -27,6 +29,17 @@ export default async function MiVisibilidadPage({
   searchParams: Promise<{ id?: string; t?: string }>;
 }) {
   const { id, t } = await searchParams;
+
+  // CON SESIÓN DE STAFF (29/10): sin link, o con uno que no sirve, la persona
+  // logueada elige sobre SU ficha. Así puede cambiar de opinión desde «Mi
+  // perfil» aunque haya perdido el mail. El token se firma acá, del lado del
+  // servidor, solo para el id de la sesión: no abre la ficha de nadie más.
+  if (!id || !t || !visibilidadTokenOk(id, t)) {
+    const propia = visibilidadReady() ? await getMyStaffProfile() : null;
+    if (propia?.id && propia.id !== id) {
+      redirect(`/mi-visibilidad?id=${encodeURIComponent(propia.id)}&t=${visibilidadToken(propia.id)}`);
+    }
+  }
 
   if (!id || !t || !visibilidadTokenOk(id, t)) {
     return (
