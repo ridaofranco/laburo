@@ -97,6 +97,9 @@ export default async function DashboardPage() {
    */
   const nextGig = activeGigs[0] ?? null;
   const confirmedNext = nextGig ? acceptedByGig.get(nextGig.id) ?? 0 : 0;
+  // Si ya arrancó, no es "próximo": es el que está en curso (29/10).
+  const nextEnCurso =
+    nextGig?.starts_at != null && new Date(nextGig.starts_at).getTime() <= now;
 
   // Próximo hito: cuándo arranca el próximo evento.
   let hito = "Sin eventos próximos.";
@@ -146,7 +149,7 @@ export default async function DashboardPage() {
           <div className="relative z-10">
             <p className="label-tech text-[12px] text-[#cfc4c5] flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#e5e2e1] animate-pulse" />
-              Próximo Evento: {nextGig?.title?.trim() || "Sin eventos"}
+              {nextEnCurso ? "En curso" : "Próximo Evento"}: {nextGig?.title?.trim() || "Sin eventos"}
             </p>
           </div>
           <div className="relative z-10 mt-16">
@@ -158,7 +161,7 @@ export default async function DashboardPage() {
                 evento. El vacío tiene que decir eso y qué hacer. */}
             <p className="t-section text-[#e5e2e1] max-w-[440px]">
               {nextGig
-                ? `${confirmedNext === 1 ? "persona confirmada" : "personas confirmadas"} para tu próximo evento.`
+                ? `${confirmedNext === 1 ? "persona confirmada" : "personas confirmadas"} ${nextEnCurso ? "en el evento en curso" : "para tu próximo evento"}.`
                 : "eventos por delante. Creá uno y empezá a armar el equipo."}
             </p>
           </div>

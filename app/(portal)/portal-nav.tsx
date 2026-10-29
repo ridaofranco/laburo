@@ -62,6 +62,8 @@ type Item = {
   match?: string[]; // rutas que marcan este ítem como activo
   /** Pantalla de la plataforma (SOMOS DER), no del producto de una productora. */
   soloPlataforma?: boolean;
+  /** Nombre corto para la barra de abajo del celular, si el largo no entra. */
+  corto?: string;
   /**
    * Fuera del menú, para todos, sin borrar nada.
    *
@@ -78,7 +80,7 @@ type Item = {
 };
 
 const MAIN: Item[] = [
-  { label: "Dashboard", icon: LayoutGrid, href: "/dashboard", match: ["/dashboard"] },
+  { label: "Dashboard", corto: "Inicio", icon: LayoutGrid, href: "/dashboard", match: ["/dashboard"] },
   // Leads arriba de todo lo operativo: es la plata que entra por la landing y no
   // sirve de nada guardarla si nadie la mira. Es de PLATAFORMA: solo lo ve la
   // org dueña del producto (se filtra abajo, en el componente).
@@ -217,7 +219,7 @@ export function PortalNav({
             const inner = (
               <>
                 <item.icon size={20} className="shrink-0" />
-                <span className="label-tech text-[12px]">{item.label}</span>
+                <span className="label-tech text-[12px]">{item.corto ?? item.label}</span>
               </>
             );
             return (

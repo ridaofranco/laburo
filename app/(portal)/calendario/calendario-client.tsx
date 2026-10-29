@@ -186,7 +186,7 @@ export function CalendarioClient({ gigs }: { gigs: CalGig[] }) {
           {DAY_NAMES.map((name, i) => (
             <div
               key={name}
-              className={`p-4 label-tech text-[12px] text-[#cfc4c5] text-center ${
+              className={`min-w-0 px-0.5 py-3 md:p-4 label-tech text-[10px] md:text-[12px] tracking-normal md:tracking-[inherit] text-[#cfc4c5] text-center ${
                 i < 6 ? "border-r border-[#1A1A1A]" : ""
               }`}
             >
@@ -207,7 +207,7 @@ export function CalendarioClient({ gigs }: { gigs: CalGig[] }) {
                 type="button"
                 key={k}
                 onClick={() => setSelected(k)}
-                className={`text-left border-b border-r border-[#1A1A1A] min-h-[120px] md:min-h-[140px] p-4 relative group transition-all duration-200 ${
+                className={`text-left border-b border-r border-[#1A1A1A] min-w-0 min-h-[72px] md:min-h-[140px] p-2 md:p-4 relative group transition-all duration-200 ${
                   isSelected ? "bg-[#2a2a2a]/60" : "hover:bg-[#2a2a2a]/40"
                 }`}
               >
