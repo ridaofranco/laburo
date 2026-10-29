@@ -268,11 +268,11 @@ export function PortalNav({
             const inner = (
               <>
                 <item.icon size={22} className="mb-1" />
-                <span className="label-tech text-[10px]">{item.label}</span>
+                <span className="label-tech text-[10px] max-[380px]:text-[9px] max-[380px]:tracking-normal max-w-full truncate px-0.5">{item.label}</span>
               </>
             );
             return (
-              <li key={item.label} className="flex-1 flex justify-center">
+              <li key={item.label} className="flex-1 min-w-0 flex justify-center">
                 <Link href={item.href} className={cls}>{inner}</Link>
               </li>
             );
@@ -281,7 +281,7 @@ export function PortalNav({
           {/* La quinta ranura. Solo aparece si de verdad quedó algo afuera: con
               una lista corta, cinco ítems entran y no hace falta. */}
           {resto.length > 0 && (
-            <li className="flex-1 flex justify-center">
+            <li className="flex-1 min-w-0 flex justify-center">
               <button
                 type="button"
                 onClick={() => setMasAbierto(true)}
@@ -293,7 +293,7 @@ export function PortalNav({
                 }
               >
                 <MoreHorizontal size={22} className="mb-1" />
-                <span className="label-tech text-[10px]">Más</span>
+                <span className="label-tech text-[10px] max-[380px]:text-[9px] max-[380px]:tracking-normal max-w-full truncate px-0.5">Más</span>
               </button>
             </li>
           )}

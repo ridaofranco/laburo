@@ -218,13 +218,15 @@ function GigCard({ item }: { item: BoardGig }) {
           {meta && <span className="label-tech text-[11px] text-[#cfc4c5] truncate">{meta}</span>}
           {requiredTotal > 0 ? (
             <span className={`label-tech text-[11px] mt-1 ${faltan > 0 ? "text-[#f5a623]" : "text-[#3dd68c]"}`}>
-              {resumen.cubierto} de {requiredTotal} cubiertos
-              {faltan > 0 ? ` · faltan ${faltan}` : " · completo"}
-              {resumen.pendiente > 0 ? ` · ${resumen.pendiente} pendientes` : ""}
+              {resumen.cubierto} de {requiredTotal} {requiredTotal === 1 ? "cubierto" : "cubiertos"}
+              {faltan > 0 ? ` · ${faltan === 1 ? "falta" : "faltan"} ${faltan}` : " · completo"}
+              {resumen.pendiente > 0 ? ` · ${resumen.pendiente} ${resumen.pendiente === 1 ? "pendiente" : "pendientes"}` : ""}
             </span>
           ) : (
             <span className="label-tech text-[11px] text-[#cfc4c5] mt-1">
-              {resumen.cubierto} cubiertos · {resumen.pendiente} pendientes · {resumen.abierto} abiertos
+              {resumen.cubierto} {resumen.cubierto === 1 ? "cubierto" : "cubiertos"} · {resumen.pendiente}{" "}
+              {resumen.pendiente === 1 ? "pendiente" : "pendientes"} · {resumen.abierto}{" "}
+              {resumen.abierto === 1 ? "abierto" : "abiertos"}
             </span>
           )}
         </div>
@@ -239,7 +241,7 @@ function GigCard({ item }: { item: BoardGig }) {
       </button>
 
       {/* Acciones del evento (fuera del toggle: no anidar interactivos) */}
-      <div className="flex items-center gap-4 px-6 pb-4 -mt-1">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-3 px-6 pb-4 -mt-1">
         <Link
           href={`/tablero/${gig.id}/editar`}
           className="inline-flex items-center gap-2 label-tech text-[11px] text-[#cfc4c5] hover:text-[#e5e2e1] transition-colors"
@@ -308,9 +310,9 @@ function GigCard({ item }: { item: BoardGig }) {
                     return (
                       <li
                         key={o.id}
-                        className="flex flex-col gap-3 bg-[#131313] border border-[#1A1A1A] px-6 py-5"
+                        className="flex flex-col gap-3 bg-[#131313] border border-[#1A1A1A] px-4 sm:px-6 py-5"
                       >
-                        <div className="flex items-start justify-between gap-3">
+                        <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
                           <div className="flex min-w-0 flex-col gap-1">
                             <span className="text-[16px] font-semibold text-[#e5e2e1] truncate uppercase">
                               {candidato(o)}
