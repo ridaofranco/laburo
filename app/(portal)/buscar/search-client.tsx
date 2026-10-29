@@ -44,6 +44,11 @@ export function SearchClient({
   const router = useRouter();
   const pathname = usePathname();
   const reduce = useReducedMotion();
+  // Las tarjetas que vienen del servidor salen visibles en el HTML (sin JS o con
+  // el JS lento se veían en opacidad 0). Solo se animan las que entran después,
+  // al filtrar o cambiar de página.
+  const [montado, setMontado] = useState(false);
+  useEffect(() => setMontado(true), []);
   const [pending, startTransition] = useTransition();
 
   const pagina = initialFilters.pagina;
@@ -246,7 +251,7 @@ export function SearchClient({
               {candidates.map((c, i) => (
                 <motion.li
                   key={c.id}
-                  initial={reduce ? false : { opacity: 0, y: 8 }}
+                  initial={reduce || !montado ? false : { opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2, delay: reduce ? 0 : Math.min(i, 8) * 0.025 }}
                 >
