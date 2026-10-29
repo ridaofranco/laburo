@@ -230,7 +230,7 @@ export function RegistroProductoraClient() {
                 className={input}
                 value={queEventos}
                 onChange={(e) => setQueEventos(e.target.value)}
-                placeholder="Ej: casamientos y eventos corporativos"
+                placeholder="Ej: casamientos, corporativos"
               />
             </div>
 

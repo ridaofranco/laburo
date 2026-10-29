@@ -266,7 +266,7 @@ export function RegistroProveedorClient() {
                   className={input}
                   value={headline}
                   onChange={(e) => setHeadline(e.target.value)}
-                  placeholder="Sonido e iluminación para eventos grandes"
+                  placeholder="Sonido e iluminación"
                 />
               </div>
 
@@ -406,7 +406,7 @@ export function RegistroProveedorClient() {
                         value={s.titulo}
                         onChange={(e) => editarServicio(i, "titulo", e.target.value)}
                         required
-                        placeholder="Equipo completo para 500 personas"
+                        placeholder="Equipo para 500 personas"
                       />
                     </div>
                   </div>
@@ -452,7 +452,7 @@ export function RegistroProveedorClient() {
                         className={input}
                         value={s.unidad}
                         onChange={(e) => editarServicio(i, "unidad", e.target.value)}
-                        placeholder="por evento, por día, por persona"
+                        placeholder="por evento, día o persona"
                       />
                     </div>
                   </div>

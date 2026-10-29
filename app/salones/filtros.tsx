@@ -79,7 +79,7 @@ export function FiltrosSalones({
             name="q"
             type="search"
             defaultValue={inicial.texto}
-            placeholder="Casamiento, quincho, salón con pileta…"
+            placeholder="Casamiento, quincho, pileta…"
             maxLength={80}
             className={inputCls}
           />

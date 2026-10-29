@@ -327,7 +327,7 @@ export function RegistroSalonClient() {
                   value={headline}
                   onChange={(e) => setHeadline(e.target.value)}
                   maxLength={200}
-                  placeholder="Salón con parque y quincho en zona norte"
+                  placeholder="Salón con parque y quincho"
                 />
                 <p className={ayuda}>
                   Es lo primero que se lee debajo del nombre, en la lista.
