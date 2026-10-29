@@ -222,7 +222,7 @@ export function CotizarForm({
                 </span>
               </div>
               <span className="text-[28px] font-semibold text-[#e5e2e1] whitespace-nowrap">
-                {total > 0 ? fmtMonto(total, moneda) : fmtMonto(0, moneda)}
+                {fmtMonto(total, moneda)}
               </span>
             </div>
             <label className="flex items-center gap-3">
