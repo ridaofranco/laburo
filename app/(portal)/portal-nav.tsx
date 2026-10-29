@@ -219,7 +219,7 @@ export function PortalNav({
             const inner = (
               <>
                 <item.icon size={20} className="shrink-0" />
-                <span className="label-tech text-[12px]">{item.corto ?? item.label}</span>
+                <span className="label-tech text-[12px]">{item.label}</span>
               </>
             );
             return (
@@ -282,7 +282,7 @@ export function PortalNav({
             const inner = (
               <>
                 <item.icon size={22} className="mb-1" />
-                <span className="label-tech text-[10px] max-[380px]:text-[9px] max-[380px]:tracking-normal max-[380px]:normal-case max-w-full truncate px-0.5">{item.label}</span>
+                <span className="label-tech text-[10px] max-[380px]:text-[9px] max-[380px]:tracking-normal max-[380px]:normal-case max-w-full truncate px-0.5">{item.corto ?? item.label}</span>
               </>
             );
             return (
