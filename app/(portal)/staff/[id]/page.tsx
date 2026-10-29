@@ -12,6 +12,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft, ExternalLink, FilePlus2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { orgActual } from "@/lib/org";
 import { isHttpUrl, classifyCv } from "@/lib/cv";
 import { calcEdad } from "@/lib/dates";
 import { QuickActions } from "./quick-actions";
@@ -132,29 +133,40 @@ export default async function ProfilePage({
   if (!data) notFound();
   const p = data as Profile;
 
-  const { data: offersData, error: offersError } = await supabase
+  // Ofertas, nota interna y calificaciones son de CADA productora: quien es
+  // miembro de dos veía las de las dos mezcladas, y con notas en las dos la
+  // nota (maybeSingle) daba error y no se mostraba ninguna. Mismo filtro que el tablero.
+  const org = await orgActual();
+  const orgId = org?.organizationId ?? null;
+
+  let qOffers = supabase
     .from("staff_app_offers")
     .select("id,role,gig_id,gig_title,status,expires_at,sent_at,viewed_at,responded_at")
     .eq("staff_profile_id", id)
     .order("sent_at", { ascending: false });
+  if (orgId) qOffers = qOffers.eq("organization_id", orgId);
+  const { data: offersData, error: offersError } = await qOffers;
   if (offersError) console.error("[staff] no se pudo leer offers:", offersError.message);
   const offers = (offersData ?? []) as OfferRow[];
 
-  const { data: noteData, error: noteError } = await supabase
+  let qNote = supabase
     .from("staff_app_candidate_notes")
     .select("is_favorite,note")
-    .eq("staff_profile_id", id)
-    .maybeSingle();
+    .eq("staff_profile_id", id);
+  if (orgId) qNote = qNote.eq("organization_id", orgId);
+  const { data: noteData, error: noteError } = await qNote.maybeSingle();
   if (noteError) console.error("[staff] no se pudo leer candidate_notes:", noteError.message);
   const candidateNote = noteData as {
     is_favorite: boolean | null;
     note: string | null;
   } | null;
 
-  const { data: ratingsData, error: ratingsError } = await supabase
+  let qRatings = supabase
     .from("staff_app_staff_ratings")
     .select("gig_id,score,note")
     .eq("staff_profile_id", id);
+  if (orgId) qRatings = qRatings.eq("organization_id", orgId);
+  const { data: ratingsData, error: ratingsError } = await qRatings;
   if (ratingsError) console.error("[staff] no se pudo leer staff_ratings:", ratingsError.message);
   const ratings = (ratingsData ?? []) as {
     gig_id: string | null;
