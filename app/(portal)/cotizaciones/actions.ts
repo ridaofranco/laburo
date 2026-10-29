@@ -139,9 +139,10 @@ export interface ProveedorInvitable {
 export async function listarPedidos(): Promise<PedidoResumen[]> {
   const supabase = await createClient();
   const org = await exigirOrg();
-  const { data } = await supabase.rpc("staff_app_mis_pedidos", {
+  const { data, error } = await supabase.rpc("staff_app_mis_pedidos", {
     p_org: org.organizationId,
   });
+  if (error) console.error("[cotizaciones] no se pudo leer mis_pedidos:", error.message);
   const r = data as { ok?: boolean; pedidos?: PedidoResumen[] } | null;
   return r?.ok ? (r.pedidos ?? []) : [];
 }
@@ -149,10 +150,11 @@ export async function listarPedidos(): Promise<PedidoResumen[]> {
 export async function getPedido(requestId: string): Promise<PedidoDetalle | null> {
   const supabase = await createClient();
   const org = await exigirOrg();
-  const { data } = await supabase.rpc("staff_app_pedido_detalle", {
+  const { data, error } = await supabase.rpc("staff_app_pedido_detalle", {
     p_request_id: requestId,
     p_org: org.organizationId,
   });
+  if (error) console.error("[cotizaciones] no se pudo leer pedido_detalle:", error.message);
   const r = data as { ok?: boolean; pedido?: PedidoDetalle } | null;
   return r?.ok ? (r.pedido ?? null) : null;
 }
@@ -163,10 +165,11 @@ export async function getCotizaciones(requestId: string): Promise<{
 }> {
   const supabase = await createClient();
   const org = await exigirOrg();
-  const { data } = await supabase.rpc("staff_app_listar_cotizaciones", {
+  const { data, error } = await supabase.rpc("staff_app_listar_cotizaciones", {
     p_request_id: requestId,
     p_org: org.organizationId,
   });
+  if (error) console.error("[cotizaciones] no se pudo leer listar_cotizaciones:", error.message);
   const r = data as
     | { ok?: boolean; cotizaciones?: CotizacionFila[]; sin_cotizar?: InvitadoSinCotizar[] }
     | null;
@@ -218,9 +221,10 @@ export async function pedidosEnOtrasCuentas(): Promise<PedidosEnOtraCuenta[]> {
     const supabase = await createClient();
     const cuentas = await Promise.all(
       otras.map(async (o) => {
-        const { data } = await supabase.rpc("staff_app_mis_pedidos", {
+        const { data, error } = await supabase.rpc("staff_app_mis_pedidos", {
           p_org: o.organizationId,
         });
+        if (error) console.error("[cotizaciones] no se pudo leer mis_pedidos de otra cuenta:", error.message);
         const r = data as { ok?: boolean; pedidos?: unknown[] } | null;
         return {
           organizationId: o.organizationId,
@@ -247,11 +251,12 @@ export async function proveedoresParaInvitar(
 ): Promise<ProveedorInvitable[]> {
   const supabase = await createClient();
   const org = await exigirOrg();
-  const { data } = await supabase.rpc("staff_app_proveedores_para_invitar", {
+  const { data, error } = await supabase.rpc("staff_app_proveedores_para_invitar", {
     p_request_id: requestId,
     p_categoria: categoria?.trim() || null,
     p_org: org.organizationId,
   });
+  if (error) console.error("[cotizaciones] no se pudo leer proveedores_para_invitar:", error.message);
   const r = data as { ok?: boolean; proveedores?: ProveedorInvitable[] } | null;
   return r?.ok ? (r.proveedores ?? []) : [];
 }

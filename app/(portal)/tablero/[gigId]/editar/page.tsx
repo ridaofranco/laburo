@@ -16,18 +16,20 @@ export default async function EditarEventoPage({
 }) {
   const { gigId } = await params;
   const supabase = await createClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("staff_app_gigs")
     .select("id,title,starts_at,ends_at,venue_name,client_budget,venue_address,venue_lat,venue_lng")
     .eq("id", gigId)
     .maybeSingle();
+  if (error) console.error("[editar evento] no se pudo leer gig:", error.message);
 
   if (!data) redirect("/tablero");
 
-  const { data: slotsData } = await supabase
+  const { data: slotsData, error: slotsError } = await supabase
     .from("staff_app_gig_slots")
     .select("role,quantity")
     .eq("gig_id", gigId);
+  if (slotsError) console.error("[editar evento] no se pudo leer gig_slots:", slotsError.message);
 
   return (
     <GigForm

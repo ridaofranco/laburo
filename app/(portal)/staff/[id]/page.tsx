@@ -118,36 +118,40 @@ export default async function ProfilePage({
   const { id } = await params;
   const supabase = await createClient();
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("staff_app_profiles")
     .select(PROFILE_COLUMNS)
     .eq("id", id)
     .maybeSingle();
+  if (error) console.error("[staff] no se pudo leer profile:", error.message);
 
   if (!data) notFound();
   const p = data as Profile;
 
-  const { data: offersData } = await supabase
+  const { data: offersData, error: offersError } = await supabase
     .from("staff_app_offers")
     .select("id,role,gig_id,gig_title,status,expires_at,sent_at,viewed_at,responded_at")
     .eq("staff_profile_id", id)
     .order("sent_at", { ascending: false });
+  if (offersError) console.error("[staff] no se pudo leer offers:", offersError.message);
   const offers = (offersData ?? []) as OfferRow[];
 
-  const { data: noteData } = await supabase
+  const { data: noteData, error: noteError } = await supabase
     .from("staff_app_candidate_notes")
     .select("is_favorite,note")
     .eq("staff_profile_id", id)
     .maybeSingle();
+  if (noteError) console.error("[staff] no se pudo leer candidate_notes:", noteError.message);
   const candidateNote = noteData as {
     is_favorite: boolean | null;
     note: string | null;
   } | null;
 
-  const { data: ratingsData } = await supabase
+  const { data: ratingsData, error: ratingsError } = await supabase
     .from("staff_app_staff_ratings")
     .select("gig_id,score,note")
     .eq("staff_profile_id", id);
+  if (ratingsError) console.error("[staff] no se pudo leer staff_ratings:", ratingsError.message);
   const ratings = (ratingsData ?? []) as {
     gig_id: string | null;
     score: number | null;

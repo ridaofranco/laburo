@@ -66,18 +66,20 @@ export async function buscarProveedores(filtros: {
   // notas y el "ya contactado" de la A. Los proveedores son los mismos; lo que
   // mentía era todo lo que es de cada productora.
   const org = await exigirOrg();
-  const { data } = await supabase.rpc("staff_app_buscar_proveedores", {
+  const { data, error } = await supabase.rpc("staff_app_buscar_proveedores", {
     p_texto: filtros.texto?.trim() || null,
     p_categoria: filtros.categoria?.trim() || null,
     p_provincia: filtros.provincia?.trim() || null,
     p_org: org.organizationId,
   });
+  if (error) console.error("[proveedores] no se pudo leer buscar_proveedores:", error.message);
   return (data as Proveedor[] | null) ?? [];
 }
 
 export async function getCategorias(): Promise<string[]> {
   const supabase = await createClient();
-  const { data } = await supabase.rpc("staff_app_categorias_proveedores");
+  const { data, error } = await supabase.rpc("staff_app_categorias_proveedores");
+  if (error) console.error("[proveedores] no se pudo leer categorias_proveedores:", error.message);
   return (data as string[] | null) ?? [];
 }
 

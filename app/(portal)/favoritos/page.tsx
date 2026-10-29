@@ -77,12 +77,13 @@ export default async function FavoritosPage() {
   // 2. Perfiles reales de esos ids (si hay favoritos).
   let profiles: ProfileRow[] = [];
   if (ids.length > 0) {
-    const { data: profData } = await supabase
+    const { data: profData, error: profError } = await supabase
       .from("staff_app_profiles")
       .select(
         "id,nombre,apellido,oficios,provincia,ciudad,eventos_trabajados,anios_experiencia,disponibilidad_aviso",
       )
       .in("id", ids);
+    if (profError) console.error("[favoritos] no se pudo leer profiles:", profError.message);
     profiles = (profData ?? []) as ProfileRow[];
     // Orden estable por nombre.
     profiles.sort((a, b) =>

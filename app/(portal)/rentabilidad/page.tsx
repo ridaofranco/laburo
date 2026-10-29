@@ -79,7 +79,8 @@ export default async function RentabilidadPage() {
 
   // Margen = lo que le cobrás al cliente (suma de client_budget de los gigs)
   // menos el costo del staff confirmado (monto comprometido). Tu ganancia.
-  const { data: gigsData } = await supabase.from("staff_app_gigs").select("client_budget");
+  const { data: gigsData, error: gigsError } = await supabase.from("staff_app_gigs").select("client_budget");
+  if (gigsError) console.error("[rentabilidad] no se pudo leer gigs:", gigsError.message);
   const totalIngreso = (gigsData ?? []).reduce(
     (s, g) => s + (Number((g as { client_budget: number | null }).client_budget) || 0),
     0,

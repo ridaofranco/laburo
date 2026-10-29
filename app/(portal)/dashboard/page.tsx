@@ -52,7 +52,10 @@ export default async function DashboardPage() {
   let qOffers = supabase.from("staff_app_offers").select("gig_id,status");
   if (orgId) qOffers = qOffers.eq("organization_id", orgId);
 
-  const [{ data: gigsData }, { data: offersData }] = await Promise.all([qGigs, qOffers]);
+  const [{ data: gigsData, error: errGigs }, { data: offersData, error: errOffers }] =
+    await Promise.all([qGigs, qOffers]);
+  if (errGigs) console.error("[dashboard] no se pudo leer gigs:", errGigs.message);
+  if (errOffers) console.error("[dashboard] no se pudo leer offers:", errOffers.message);
 
   const gigs = (gigsData ?? []) as Gig[];
   const offers = (offersData ?? []) as { gig_id: string | null; status: string | null }[];

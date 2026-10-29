@@ -106,9 +106,10 @@ export default async function SearchPage({
   // que el error posible es esconder de más, nunca mostrar de más. Se deja y se
   // anota; arreglarlo es sumar la columna a la vista, o sea una migración.
   if (filters.ocultarAsignados) {
-    const { data: busy } = await supabase
+    const { data: busy, error: busyError } = await supabase
       .from("staff_app_crew_busy")
       .select("staff_profile_id");
+    if (busyError) console.error("[buscar] no se pudo leer crew_busy:", busyError.message);
     const ids = (busy ?? [])
       .map((r) => (r as { staff_profile_id: string }).staff_profile_id)
       .filter(Boolean);
@@ -129,7 +130,8 @@ export default async function SearchPage({
       .select("staff_profile_id")
       .eq("gig_id", filters.gig);
     if (org?.organizationId) qOfertados = qOfertados.eq("organization_id", org.organizationId);
-    const { data: ofertados } = await qOfertados;
+    const { data: ofertados, error: ofertadosError } = await qOfertados;
+    if (ofertadosError) console.error("[buscar] no se pudo leer offers del gig:", ofertadosError.message);
     const ids = Array.from(
       new Set(
         (ofertados ?? [])

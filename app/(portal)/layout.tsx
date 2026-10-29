@@ -34,9 +34,11 @@ export default async function PortalLayout({
     // click. Se lo manda a SU panel. Se usan solo las lecturas, no
     // /auth/callback: ese provisiona membresías y vincula proveedores, y desde
     // un layout no corresponde escribir nada.
-    const { data: ficha } = await supabase.rpc("staff_app_my_staff_profile");
+    const { data: ficha, error: fichaError } = await supabase.rpc("staff_app_my_staff_profile");
+    if (fichaError) console.error("[portal] no se pudo leer my_staff_profile:", fichaError.message);
     if (ficha) redirect("/panel-staff");
-    const { data: proveedor } = await supabase.rpc("staff_app_mi_perfil_proveedor");
+    const { data: proveedor, error: proveedorError } = await supabase.rpc("staff_app_mi_perfil_proveedor");
+    if (proveedorError) console.error("[portal] no se pudo leer mi_perfil_proveedor:", proveedorError.message);
     if (proveedor) redirect("/mi-proveedor");
     return <AccesoDenegado />;
   }

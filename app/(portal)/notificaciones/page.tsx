@@ -232,10 +232,13 @@ export default async function NotificacionesPage() {
   // Las cotizaciones que entraron a los pedidos de precio. Van por RPC porque
   // staff_app no está expuesto por PostgREST, y con p_org por la misma razón
   // que arriba: sin él, con dos membresías el feed mezcla productoras.
-  const { data: cotizacionesData } = await supabase.rpc("staff_app_cotizaciones_recientes", {
-    p_org: orgId,
-    p_limit: 20,
-  });
+  const { data: cotizacionesData, error: cotizacionesError } = await supabase.rpc(
+    "staff_app_cotizaciones_recientes",
+    { p_org: orgId, p_limit: 20 },
+  );
+  if (cotizacionesError) {
+    console.error("[notificaciones] no se pudo leer cotizaciones_recientes:", cotizacionesError.message);
+  }
   const cotizaciones = (cotizacionesData as CotizacionRow[] | null) ?? [];
 
   const feed = [

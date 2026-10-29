@@ -29,19 +29,21 @@ export default async function OfferPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  const { data: candidateData } = await supabase
+  const { data: candidateData, error: candidateError } = await supabase
     .from("staff_app_profiles")
     .select("id,nombre,apellido,telefono,email,oficios")
     .eq("id", id)
     .maybeSingle();
+  if (candidateError) console.error("[oferta] no se pudo leer profile:", candidateError.message);
 
   if (!candidateData) notFound();
   const candidate = candidateData as OfferFormCandidate;
 
-  const { data: gigsData } = await supabase
+  const { data: gigsData, error: gigsError } = await supabase
     .from("staff_app_gigs")
     .select("id,title,starts_at,venue_name")
     .order("starts_at", { ascending: false });
+  if (gigsError) console.error("[oferta] no se pudo leer gigs:", gigsError.message);
 
   const gigs = (gigsData ?? []) as OfferFormGig[];
 

@@ -38,10 +38,11 @@ export default async function PedidoPage({
   // mejor que una lista vacía sin explicación.
   const supabase = await createClient();
   const org = await orgActual();
-  const { data: vis } = await supabase.rpc("staff_app_visibilidad_de", {
+  const { data: vis, error: visError } = await supabase.rpc("staff_app_visibilidad_de", {
     p_request_id: id,
     p_org: org?.organizationId ?? null,
   });
+  if (visError) console.error("[cotizacion] no se pudo leer visibilidad:", visError.message);
   const visibilidad = vis as
     | { publica: boolean; mostrar_productora: boolean; slug: string | null; puede_editar: boolean }
     | null;

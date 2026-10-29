@@ -113,7 +113,8 @@ export default async function PagosPage() {
     .select("id,pago_listo_at")
     .eq("status", "accepted");
   if (orgId) qAvisos = qAvisos.eq("organization_id", orgId);
-  const { data: avisosData } = await qAvisos;
+  const { data: avisosData, error: avisosError } = await qAvisos;
+  if (avisosError) console.error("[pagos] no se pudo leer pago_listo_at:", avisosError.message);
   for (const a of (avisosData ?? []) as Array<{ id: string; pago_listo_at: string | null }>) {
     avisadoPor.set(a.id, !!a.pago_listo_at);
   }
@@ -124,7 +125,8 @@ export default async function PagosPage() {
     .select("id,gig_title,amount,status,created_at")
     .order("created_at", { ascending: false });
   if (orgId) qCobros = qCobros.eq("organization_id", orgId);
-  const { data: cobrosData } = await qCobros;
+  const { data: cobrosData, error: cobrosError } = await qCobros;
+  if (cobrosError) console.error("[pagos] no se pudo leer client_payment_events:", cobrosError.message);
   const cobros = (cobrosData ?? []) as CobroRow[];
 
   return (
