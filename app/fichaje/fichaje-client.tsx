@@ -12,13 +12,14 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { MapPin, LogIn, LogOut, CheckCircle2 } from "lucide-react";
 import { checkIn, checkOut } from "./actions";
-import { fmtHora as fmtHoraTz } from "@/lib/dates";
+import { fmtHora as fmtHoraTz, fmtFechaHora } from "@/lib/dates";
 
 export interface FichajeGig {
   gigId: string;
   title: string;
   venue: string | null;
   startsAt: string | null;
+  endsAt: string | null;
   checkInAt: string | null;
   checkOutAt: string | null;
 }
@@ -27,6 +28,24 @@ const SYNE = "font-[family-name:var(--font-syne)]";
 
 function hora(iso: string | null): string | null {
   return fmtHoraTz(iso);
+}
+
+/**
+ * Ventana para fichar la entrada (misma regla que la RPC, migración 0091):
+ * desde 3 h antes del inicio hasta 6 h después del fin (sin fin: inicio + 12 h).
+ * Sin inicio cargado no se limita. La RPC es la que manda; esto solo evita
+ * mostrar un botón que va a fallar.
+ */
+const H = 3600 * 1000;
+function ventana(gig: FichajeGig, now: number): "antes" | "abierta" | "paso" {
+  if (!gig.startsAt) return "abierta";
+  const ini = new Date(gig.startsAt).getTime();
+  if (Number.isNaN(ini)) return "abierta";
+  const finRaw = gig.endsAt ? new Date(gig.endsAt).getTime() : NaN;
+  const fin = Number.isNaN(finRaw) ? ini + 12 * H : finRaw;
+  if (now < ini - 3 * H) return "antes";
+  if (now > fin + 6 * H) return "paso";
+  return "abierta";
 }
 
 function getCoords(): Promise<{ lat: number | null; lng: number | null }> {
@@ -64,6 +83,10 @@ function motivoLegible(reason: string | undefined, salida: boolean): string {
       return "Se cerró tu sesión. Entrá de nuevo y probá otra vez.";
     case "no_check_in_or_already_out":
       return "No tenés una entrada abierta en este evento.";
+    case "too_early":
+      return "Todavía es temprano: la entrada se ficha desde 3 horas antes del evento.";
+    case "too_late":
+      return "Ya pasó el horario de este evento. Si trabajaste, avisale a la productora.";
     case "bad_coords":
       return "Tu teléfono mandó una ubicación imposible. Cerrá y abrí la app, y probá de nuevo.";
     default:
@@ -126,6 +149,9 @@ function GigCard({ gig }: { gig: FichajeGig }) {
   }
 
   const done = Boolean(entrada && salida);
+  const estado = ventana(gig, Date.now());
+  const abre = gig.startsAt ? fmtFechaHora(new Date(new Date(gig.startsAt).getTime() - 3 * H).toISOString(), { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }) : null;
+  const cuando = gig.startsAt ? fmtFechaHora(gig.startsAt, { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }) : null;
 
   return (
     <div className="border border-[#1A1A1A] bg-[#0e0e0e] p-6 md:p-8 flex flex-col gap-6">
@@ -134,11 +160,12 @@ function GigCard({ gig }: { gig: FichajeGig }) {
           {gig.title}
         </h3>
         {gig.venue && <p className="text-[14px] text-[#cfc4c5]">{gig.venue}</p>}
+        {cuando && <p className="text-[14px] text-[#cfc4c5]">{cuando}</p>}
       </div>
 
       <div className="flex items-center gap-6 label-tech text-[12px] text-[#cfc4c5]">
-        <span>Entrada: <span className="text-[#e5e2e1]">{entrada ?? "—"}</span></span>
-        <span>Salida: <span className="text-[#e5e2e1]">{salida ?? "—"}</span></span>
+        <span>Entrada: <span className="text-[#e5e2e1]">{entrada ?? "sin registrar"}</span></span>
+        <span>Salida: <span className="text-[#e5e2e1]">{salida ?? "sin registrar"}</span></span>
       </div>
 
       {done ? (
@@ -156,6 +183,14 @@ function GigCard({ gig }: { gig: FichajeGig }) {
           <LogOut size={18} />
           {busy ? "Registrando…" : "Fichar salida"}
         </button>
+      ) : estado === "antes" ? (
+        <p className="border border-[#1A1A1A] px-5 py-4 text-[14px] text-[#cfc4c5] leading-[1.5]">
+          Vas a poder fichar la entrada desde 3 horas antes{abre ? `: el ${abre}` : ""}.
+        </p>
+      ) : estado === "paso" ? (
+        <p className="border border-[#1A1A1A] px-5 py-4 text-[14px] text-[#cfc4c5] leading-[1.5]">
+          Este evento ya pasó y no quedó entrada registrada. Si trabajaste, avisale a la productora.
+        </p>
       ) : (
         <button
           type="button"

@@ -109,9 +109,15 @@ export default async function PanelStaffPage() {
               <p className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#c6c6c6]">
                 {next ? "Próximo evento" : `Hola, ${nombre}`}
               </p>
-              <h2 className="t-display text-[#e5e2e1] break-words">
-                {next ? (next.gig_title?.trim() || "Evento confirmado") : "Todavía sin eventos"}
-              </h2>
+              <h1 className="t-display text-[#e5e2e1] break-words">
+                {next
+                  ? (next.gig_title?.trim() || "Evento confirmado")
+                  : pending.length > 0
+                    ? pending.length === 1
+                      ? "Tenés una propuesta para responder"
+                      : `Tenés ${pending.length} propuestas para responder`
+                    : "Todavía sin eventos"}
+              </h1>
               {next ? (
                 <div className="flex flex-wrap items-center gap-4 mt-4">
                   {next.gig_venue?.trim() && (
@@ -133,6 +139,19 @@ export default async function PanelStaffPage() {
                       <span className="text-[18px] text-[#cfc4c5]">{next.role}</span>
                     </>
                   )}
+                </div>
+              ) : pending.length > 0 ? (
+                <div className="flex flex-col items-start gap-5 mt-4">
+                  <p className="text-[18px] text-[#cfc4c5] max-w-[520px] leading-[1.6]">
+                    Mirá el rol, la fecha y el pago, y aceptala o rechazala desde acá.
+                    Cuando la confirmes, el evento aparece en este lugar.
+                  </p>
+                  <a
+                    href="#propuestas"
+                    className="bg-[#c6c6c6] text-[#303030] label-tech text-[12px] px-10 py-5 uppercase tracking-widest border border-[#c6c6c6] hover:bg-transparent hover:text-[#c6c6c6] transition-all duration-200"
+                  >
+                    {pending.length === 1 ? "Ver la propuesta" : "Ver las propuestas"}
+                  </a>
                 </div>
               ) : (
                 <p className="text-[18px] text-[#cfc4c5] mt-4 max-w-[520px] leading-[1.6]">
@@ -271,13 +290,13 @@ export default async function PanelStaffPage() {
           </section>
 
           {/* Propuestas pendientes reales */}
-          <section className="flex flex-col gap-6 mt-6">
-            <div className="flex justify-between items-end border-b border-[#1A1A1A] pb-4">
+          <section id="propuestas" className="flex flex-col gap-6 mt-6 scroll-mt-24">
+            <div className="flex justify-between items-end gap-4 border-b border-[#1A1A1A] pb-4">
               <h3 className="t-section text-[#e5e2e1]">
                 Propuestas pendientes
               </h3>
               {pending.length > 0 && (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 shrink-0 whitespace-nowrap">
                   <span className="w-2 h-2 rounded-full bg-[#c6c6c6]" />
                   <span className="label-tech text-[12px] text-[#c6c6c6] uppercase tracking-widest">
                     {pending.length} {pending.length === 1 ? "nueva" : "nuevas"}

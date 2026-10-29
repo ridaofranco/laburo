@@ -114,11 +114,11 @@ export default function OnboardingStaffPage() {
 
       {/* Controles inferiores */}
       <footer className="fixed bottom-0 left-0 w-full p-6 md:p-20 flex justify-between items-center z-50">
-        <div className="flex gap-2">
+        <div className="flex gap-2 shrink">
           {SLIDES.map((slide, index) => (
             <div
               key={slide.id}
-              className={`w-12 h-[2px] transition-all duration-300 ${
+              className={`w-8 sm:w-12 h-[2px] transition-all duration-300 ${
                 index === current ? "bg-[#e5e2e1]" : "bg-[#353535]"
               }`}
             />
@@ -127,7 +127,7 @@ export default function OnboardingStaffPage() {
         <button
           type="button"
           onClick={handleNext}
-          className="group relative px-8 py-4 bg-[#F5F5F5] text-black border border-transparent hover:bg-transparent hover:text-[#F5F5F5] hover:border-[#F5F5F5] transition-all duration-150 label-tech text-[12px] tracking-widest flex items-center gap-2"
+          className="group relative px-6 sm:px-8 py-4 shrink-0 whitespace-nowrap bg-[#F5F5F5] text-black border border-transparent hover:bg-transparent hover:text-[#F5F5F5] hover:border-[#F5F5F5] transition-all duration-150 label-tech text-[12px] tracking-widest flex items-center gap-2"
         >
           {isLast ? (
             <>

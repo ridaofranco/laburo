@@ -21,7 +21,7 @@
  */
 
 import { createClient } from "@/lib/supabase/server";
-import { fmtFechaHora } from "@/lib/dates";
+import { fmtFecha, fmtFechaHora, fmtHora } from "@/lib/dates";
 import { AcceptDecline } from "./accept-decline";
 import { WhatsAppCta, PortalStaffLink } from "./wa-cta";
 import {
@@ -50,6 +50,13 @@ function fmtDate(iso: string | null): string | null {
 function fmtWhen(startsAt: string | null, endsAt: string | null): string | null {
   const start = fmtDate(startsAt);
   const end = fmtDate(endsAt);
+  // Mismo día (en hora AR): si el fin cae otro día se muestran las dos fechas;
+  // «martes, 3 de noviembre, de 18:00 a 23:00» sí, sin repetir la fecha.
+  const diaIni = fmtFecha(startsAt, { weekday: "long", day: "numeric", month: "long" });
+  const diaFin = fmtFecha(endsAt, { weekday: "long", day: "numeric", month: "long" });
+  if (start && end && diaIni && diaIni === diaFin) {
+    return `${diaIni}, de ${fmtHora(startsAt)} a ${fmtHora(endsAt)}`;
+  }
   if (start && end) return `${start} a ${end}`;
   return start ?? end;
 }

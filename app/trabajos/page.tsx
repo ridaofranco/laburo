@@ -34,13 +34,13 @@ export default async function TrabajosPage() {
             <p className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#c6c6c6]">
               Trabajos disponibles
             </p>
-            <h2 className="t-display text-[#e5e2e1]">
+            <h1 className="t-display text-[#e5e2e1]">
               {trabajos.length === 0
                 ? "Sin búsquedas abiertas"
                 : trabajos.length === 1
                   ? "Hay 1 búsqueda abierta"
                   : `Hay ${trabajos.length} búsquedas abiertas`}
-            </h2>
+            </h1>
             {trabajos.length > 0 ? (
               <p className="text-[16px] text-[#cfc4c5] leading-[1.6] max-w-[620px] mt-2">
                 Postularte no te compromete a nada: es avisar que te interesa. Si

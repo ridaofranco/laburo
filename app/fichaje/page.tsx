@@ -28,6 +28,7 @@ export default async function FichajePage() {
       title: o.gig_title?.trim() || "Evento",
       venue: o.gig_venue,
       startsAt: o.gig_starts_at,
+      endsAt: o.gig_ends_at,
       checkInAt: o.check_in_at,
       checkOutAt: o.check_out_at,
     });
