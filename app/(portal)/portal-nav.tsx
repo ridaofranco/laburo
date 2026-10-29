@@ -156,8 +156,20 @@ export function PortalNav({
   // Cuatro ranuras para pantallas y la quinta para "Más". Con cinco visibles
   // más el botón son seis columnas en un ancho de teléfono y cada una cae por
   // debajo de los 44px de objetivo de toque.
-  const mobile = items.slice(0, 4);
-  const resto = items.slice(4);
+  //
+  // Qué cuatro (29/10): primero lo que se usa parado en el evento con el
+  // teléfono. "Eventos" (el tablero, donde se ve y se corrige el fichaje)
+  // quedaba escondido en "Más" porque iba sexto en la lista; para la
+  // plataforma, Leads y Plataforma le ganaban el lugar.
+  const PRIORIDAD_MOVIL = ["/dashboard", "/tablero", "/buscar"];
+  const ordenMovil = [
+    ...PRIORIDAD_MOVIL.map((h) => items.find((i) => i.href === h)).filter(
+      (i): i is Item => i != null,
+    ),
+    ...items.filter((i) => !PRIORIDAD_MOVIL.includes(i.href)),
+  ];
+  const mobile = ordenMovil.slice(0, 4);
+  const resto = ordenMovil.slice(4);
 
   // De quién es este panel. Antes había acá una etiqueta genérica en inglés,
   // resto del mockup de Stitch: la barra lateral no decía de quién era el panel.
@@ -268,7 +280,7 @@ export function PortalNav({
             const inner = (
               <>
                 <item.icon size={22} className="mb-1" />
-                <span className="label-tech text-[10px] max-[380px]:text-[9px] max-[380px]:tracking-normal max-w-full truncate px-0.5">{item.label}</span>
+                <span className="label-tech text-[10px] max-[380px]:text-[9px] max-[380px]:tracking-normal max-[380px]:normal-case max-w-full truncate px-0.5">{item.label}</span>
               </>
             );
             return (
@@ -293,7 +305,7 @@ export function PortalNav({
                 }
               >
                 <MoreHorizontal size={22} className="mb-1" />
-                <span className="label-tech text-[10px] max-[380px]:text-[9px] max-[380px]:tracking-normal max-w-full truncate px-0.5">Más</span>
+                <span className="label-tech text-[10px] max-[380px]:text-[9px] max-[380px]:tracking-normal max-[380px]:normal-case max-w-full truncate px-0.5">Más</span>
               </button>
             </li>
           )}
