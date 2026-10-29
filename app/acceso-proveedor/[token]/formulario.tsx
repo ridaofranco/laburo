@@ -34,7 +34,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Plus, Trash2, ChevronUp, ChevronDown, RotateCcw } from "lucide-react";
 import {
-  TEMPLATE_CONSULTA,
+  templateConsulta,
   NOMBRE_TIPO,
   TOPES,
   campoNuevo,
@@ -206,10 +206,13 @@ export function Formulario({
   acceso,
   camposIniciales,
   introInicial,
+  esSalon = false,
 }: {
   acceso: Acceso;
   camposIniciales: CampoFormulario[];
   introInicial: string | null;
+  /** Un salón parte del template de salón (sin «¿Dónde es?»). */
+  esSalon?: boolean;
 }) {
   const router = useRouter();
   const [guardando, startGuardar] = useTransition();
@@ -220,7 +223,8 @@ export function Formulario({
   const [intro, setIntro] = useState(introInicial ?? "");
 
   const enTemplate = usaTemplate(campos) && !editando;
-  const visibles = enTemplate ? TEMPLATE_CONSULTA : campos;
+  const template = templateConsulta(esSalon);
+  const visibles = enTemplate ? template : campos;
 
   function mover(i: number, delta: number) {
     const j = i + delta;
@@ -233,7 +237,7 @@ export function Formulario({
   function armarElMio() {
     // Se parte del template, no de una hoja en blanco. Los ids se regeneran para
     // que sean suyos y no queden atados a los del template.
-    setCampos(TEMPLATE_CONSULTA.map((c) => ({ ...c, id: campoNuevo().id, opciones: [...c.opciones] })));
+    setCampos(template.map((c) => ({ ...c, id: campoNuevo().id, opciones: [...c.opciones] })));
     setEditando(true);
   }
 

@@ -163,6 +163,7 @@ export function PanelProveedor({
           acceso={acceso}
           camposIniciales={form?.campos ?? []}
           introInicial={form?.intro ?? null}
+          esSalon={esSalon}
         />
       </Bloque>
 

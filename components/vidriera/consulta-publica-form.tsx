@@ -103,6 +103,7 @@ export function ConsultaPublicaForm({
   volverHref = "/servicios",
   volverTexto = "Pedirle a otro también",
   titulo = "Contale qué necesitás",
+  esSalon = false,
 }: {
   profileId: string;
   /** Cómo se llama a quién se le escribe. Se usa tal cual en tres frases. */
@@ -113,8 +114,10 @@ export function ConsultaPublicaForm({
   volverHref?: string;
   volverTexto?: string;
   titulo?: string;
+  /** Un salón sin formulario propio usa el template de salón (sin «¿Dónde es?»). */
+  esSalon?: boolean;
 }) {
-  const campos = camposAMostrar(camposCrudos);
+  const campos = camposAMostrar(camposCrudos, esSalon);
 
   const [valores, setValores] = useState<Record<string, string>>({});
   const [nombre, setNombre] = useState("");

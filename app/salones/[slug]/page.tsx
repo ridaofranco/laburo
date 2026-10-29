@@ -300,6 +300,7 @@ export default async function FichaSalonPage({ params }: Props) {
                 volverHref="/salones"
                 volverTexto="Consultar en otro también"
                 titulo="Consultá tu fecha"
+                esSalon
               />
             </div>
           </div>

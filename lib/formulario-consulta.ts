@@ -122,9 +122,75 @@ export const TEMPLATE_CONSULTA: CampoFormulario[] = [
   },
 ];
 
+/**
+ * EL TEMPLATE PARA UN SALÓN (29/10). El de arriba pregunta «¿Dónde es?», que a
+ * un salón no le sirve: el evento es en el salón. Lo que un salón necesita para
+ * contestar es otra cosa: qué día, en qué horario y para cuánta gente (sin la
+ * cantidad no sabe si entra), así que acá la cantidad es obligatoria.
+ */
+export const TEMPLATE_CONSULTA_SALON: CampoFormulario[] = [
+  {
+    id: "tipo_evento",
+    label: "¿Qué tipo de evento es?",
+    tipo: "opciones",
+    requerido: true,
+    opciones: [
+      "Casamiento",
+      "Cumpleaños de 15",
+      "Cumpleaños",
+      "Evento corporativo",
+      "Fiesta privada",
+      "Otro",
+    ],
+  },
+  {
+    id: "fecha_evento",
+    label: "¿Qué día es?",
+    tipo: "fecha",
+    requerido: true,
+    opciones: [],
+  },
+  {
+    id: "horario",
+    label: "¿En qué horario? (de qué hora a qué hora)",
+    tipo: "texto",
+    requerido: false,
+    opciones: [],
+  },
+  {
+    id: "cantidad",
+    label: "¿Para cuántas personas?",
+    tipo: "numero",
+    requerido: true,
+    opciones: [],
+  },
+  {
+    id: "detalle",
+    label: "Contale cómo te imaginás el evento",
+    tipo: "parrafo",
+    requerido: true,
+    opciones: [],
+  },
+  {
+    id: "presupuesto",
+    label: "¿Tenés un presupuesto aproximado? (opcional)",
+    tipo: "texto",
+    requerido: false,
+    opciones: [],
+  },
+];
+
+/** El template que corresponde a quien recibe la consulta. */
+export function templateConsulta(esSalon = false): CampoFormulario[] {
+  return esSalon ? TEMPLATE_CONSULTA_SALON : TEMPLATE_CONSULTA;
+}
+
 /** Los campos que hay que mostrar: los suyos si armó, si no el template. */
-export function camposAMostrar(campos: CampoFormulario[] | null | undefined): CampoFormulario[] {
-  return campos && campos.length > 0 ? campos : TEMPLATE_CONSULTA;
+export function camposAMostrar(
+  campos: CampoFormulario[] | null | undefined,
+  esSalon = false,
+): CampoFormulario[] {
+  return campos && campos.length > 0 ? campos : templateConsulta(esSalon);
 }
 
 /** ¿Este proveedor armó el suyo, o está usando el nuestro? */
