@@ -33,7 +33,7 @@ export function QuickActions({
           href={waLink(telefono, saludo)}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-1 items-center justify-center gap-2 min-h-[48px] bg-[#e5e2e1] text-black border border-[#e5e2e1] label-tech text-[13px] px-6 transition-colors hover:bg-transparent hover:text-[#e5e2e1]"
+          className="flex flex-1 min-w-0 items-center justify-center gap-2 min-h-[48px] bg-[#e5e2e1] text-black border border-[#e5e2e1] label-tech text-[13px] text-center px-3 sm:px-6 transition-colors hover:bg-transparent hover:text-[#e5e2e1]"
         >
           <WhatsAppGlyph size={18} className="shrink-0" />
           Escribir por WhatsApp
@@ -41,7 +41,7 @@ export function QuickActions({
         <a
           href={telLink(telefono)}
           aria-label="Llamar al candidato"
-          className="flex items-center justify-center gap-2 min-h-[48px] bg-transparent border border-[#4c4546] text-[#e5e2e1] label-tech text-[12px] px-6 transition-colors hover:border-[#e5e2e1] active:scale-[0.98]"
+          className="flex shrink-0 items-center justify-center gap-2 min-h-[48px] bg-transparent border border-[#4c4546] text-[#e5e2e1] label-tech text-[12px] px-4 sm:px-6 transition-colors hover:border-[#e5e2e1] active:scale-[0.98]"
         >
           <Phone size={18} aria-hidden="true" className="shrink-0" />
           <span>Llamar</span>
