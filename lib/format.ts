@@ -15,9 +15,15 @@ const ars = new Intl.NumberFormat("es-AR", {
   maximumFractionDigits: 0,
 });
 
-/** Pesos sin decimales: $12.500 */
+/**
+ * Pesos sin decimales: $12.500
+ *
+ * Intl en es-AR pone un espacio duro entre el signo y el número («$ 12.500»),
+ * y el resto de la app (la oferta, los mails, lo escrito a mano) dice
+ * «$12.500». Se saca para que el mismo monto se vea igual en todos lados (29/10).
+ */
 export function money(n: number): string {
-  return ars.format(n);
+  return ars.format(n).replace(/\$\s+/, "$");
 }
 
 /** Compacto para números grandes: $1.2M, $840K, y $12.500 por debajo de 10K. */

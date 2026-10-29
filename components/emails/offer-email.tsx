@@ -65,7 +65,9 @@ function formatAmount(amount: number): string {
       style: "currency",
       currency: "ARS",
       maximumFractionDigits: 0,
-    }).format(amount);
+    })
+      .format(amount)
+      .replace(/\$\s+/, "$");
   } catch {
     return `$${amount}`;
   }
