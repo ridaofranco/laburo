@@ -78,7 +78,7 @@ export function Consultas({ consultas }: { consultas: ConsultaProveedor[] }) {
                 {c.respuestas.map((r, i) => (
                   <div key={i} className="flex flex-col gap-3xs">
                     <dt className="text-label text-fg-subtle">{r.label}</dt>
-                    <dd className="text-body text-fg break-words">{r.valor || "—"}</dd>
+                    <dd className="text-body text-fg break-words">{r.valor || "Sin respuesta"}</dd>
                   </div>
                 ))}
               </dl>

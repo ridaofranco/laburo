@@ -222,7 +222,7 @@ export function CotizarForm({
                 </span>
               </div>
               <span className="text-[28px] font-semibold text-[#e5e2e1] whitespace-nowrap">
-                {total > 0 ? fmtMonto(total, moneda) : "—"}
+                {total > 0 ? fmtMonto(total, moneda) : fmtMonto(0, moneda)}
               </span>
             </div>
             <label className="flex items-center gap-3">
@@ -284,7 +284,7 @@ export function CotizarForm({
                         className={`${inputCaja} text-[20px] font-semibold`}
                         value={l.monto}
                         onChange={(e) => editarLinea(it.id, { monto: e.target.value })}
-                        placeholder="Tu precio para este ítem"
+                        placeholder="Tu precio"
                         aria-label={`Precio de ${it.titulo}`}
                       />
                     )}
