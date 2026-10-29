@@ -37,13 +37,15 @@ function hora(iso: string | null): string | null {
  * mostrar un botón que va a fallar.
  */
 const H = 3600 * 1000;
-function ventana(gig: FichajeGig, now: number): "antes" | "abierta" | "paso" {
+function ventana(gig: FichajeGig, now: number): "antes" | "abierta" | "paso" | "sin_salida" {
   if (!gig.startsAt) return "abierta";
   const ini = new Date(gig.startsAt).getTime();
   if (Number.isNaN(ini)) return "abierta";
   const finRaw = gig.endsAt ? new Date(gig.endsAt).getTime() : NaN;
   const fin = Number.isNaN(finRaw) ? ini + 12 * H : finRaw;
   if (now < ini - 3 * H) return "antes";
+  // La salida se puede fichar hasta 12 h después del fin (migración 0092).
+  if (now > fin + 12 * H) return "sin_salida";
   if (now > fin + 6 * H) return "paso";
   return "abierta";
 }
@@ -92,6 +94,8 @@ function motivoLegible(reason: string | undefined, salida: boolean): string {
       return "No tenés una entrada abierta en este evento.";
     case "too_early":
       return "Todavía es temprano: la entrada se ficha desde 3 horas antes del evento.";
+    case "too_late_out":
+      return "Ya pasó el horario para fichar la salida. Avisale a la productora a qué hora terminaste.";
     case "too_late":
       return "Ya pasó el horario de este evento. Si trabajaste, avisale a la productora.";
     case "bad_coords":
@@ -181,6 +185,10 @@ function GigCard({ gig }: { gig: FichajeGig }) {
           <CheckCircle2 size={20} />
           Jornada registrada
         </div>
+      ) : entrada && estado === "sin_salida" ? (
+        <p className="border border-[#1A1A1A] px-5 py-4 text-[14px] text-[#cfc4c5] leading-[1.5]">
+          No quedó registrada la salida y ya pasó el horario para ficharla. Avisale a la productora a qué hora terminaste.
+        </p>
       ) : entrada ? (
         <button
           type="button"
@@ -195,7 +203,7 @@ function GigCard({ gig }: { gig: FichajeGig }) {
         <p className="border border-[#1A1A1A] px-5 py-4 text-[14px] text-[#cfc4c5] leading-[1.5]">
           Vas a poder fichar la entrada desde 3 horas antes{abre ? `: el ${abre}` : ""}.
         </p>
-      ) : estado === "paso" ? (
+      ) : estado === "paso" || estado === "sin_salida" ? (
         <p className="border border-[#1A1A1A] px-5 py-4 text-[14px] text-[#cfc4c5] leading-[1.5]">
           Este evento ya pasó y no quedó entrada registrada. Si trabajaste, avisale a la productora.
         </p>
