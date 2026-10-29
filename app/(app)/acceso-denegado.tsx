@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { SOPORTE_EMAIL } from "@/lib/soporte";
 
 /**
  * Pantalla "sin acceso" (D-06, UI-SPEC § Screen States → Access denied).
@@ -27,9 +29,25 @@ export function AccesoDenegado() {
         <h1 className="font-display text-[28px] text-fg">
           Esta cuenta no tiene acceso.
         </h1>
+        {/* 29/10: la pantalla era un callejón. Quien llega acá casi siempre
+         *  entró con un mail que todavía no tiene productora, perfil de staff
+         *  ni de proveedor: lo que necesita es el alta, no solo un mail. */}
         <p className="text-body text-fg-muted">
-          Esta cuenta no está habilitada para el panel. Si creés que es un error,
-          escribinos a hola@laburo.somosder.ar.
+          Con este mail todavía no hay una productora, un perfil para trabajar ni
+          un servicio publicado. Si querés usar LABURO, creá tu cuenta: es gratis.
+        </p>
+        <Link
+          href="/registrarme"
+          className="min-h-[44px] w-full inline-flex items-center justify-center rounded-xl bg-[#0047ff] text-white text-label font-semibold px-lg py-sm transition-transform active:scale-[0.98]"
+        >
+          Crear mi cuenta
+        </Link>
+        <p className="text-[13px] text-fg-muted">
+          Si creés que es un error, escribinos a{" "}
+          <a href={`mailto:${SOPORTE_EMAIL}`} className="underline">
+            {SOPORTE_EMAIL}
+          </a>
+          .
         </p>
         <button
           type="button"

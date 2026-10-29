@@ -26,6 +26,7 @@
  */
 
 import { LaburoWordmark } from "@/components/laburo-wordmark";
+import { notFound } from "next/navigation";
 import { orgActual } from "@/lib/org";
 
 /**
@@ -35,6 +36,11 @@ import { orgActual } from "@/lib/org";
 export async function cortePorContexto(): Promise<React.ReactNode | null> {
   const org = await orgActual();
   if (org?.esPlataforma) return null;
+  // Sin ninguna productora (29/10): alguien logueado que no es miembro de nada
+  // leía «estás operando otra productora», que no es verdad y además le cuenta
+  // que existe un panel de plataforma. Para esa persona la pantalla no existe,
+  // igual que /leads y /rentabilidad.
+  if (!org) notFound();
 
   return (
     <main className="min-h-dvh bg-black text-[#e5e2e1] flex flex-col items-center justify-center px-6 gap-6">
