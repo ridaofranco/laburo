@@ -67,6 +67,21 @@ El primer pedido real es además la única forma de saber si la cotización por
 - ✅ **Duplicar un pedido.** (28/10, `fec7fe4`) «Hacer otro pedido igual», en el
   detalle de cualquier pedido, abre `/cotizaciones/nuevo?desde=<id>` con todo
   cargado menos invitados, presupuestos y fecha de cierre.
+- **Corregir a mano un fichaje (diseñado el 29/10, sin construir).** Desde las
+  migraciones 0091 y 0092 la entrada se ficha solo desde 3 h antes del inicio
+  y la salida hasta 12 h después del fin. Quien se olvida de la salida queda
+  «sin registrar» y hoy la productora no tiene cómo cargarla. Propuesta:
+  - Función `staff_app_corregir_fichaje(p_gig_id, p_staff_profile_id, p_check_in_at, p_check_out_at, p_motivo)`,
+    SECURITY DEFINER, solo para `is_org_writer` de la organización del evento,
+    que exige oferta `accepted` de esa persona en ese evento y que la salida sea
+    posterior a la entrada. Crea la fila de `attendance` si no existe (la
+    persona que nunca fichó). Columnas nuevas, aditivas: `corregido_por uuid`,
+    `corregido_at timestamptz`, `corregido_motivo text`, para que se vea que
+    no lo fichó la persona.
+  - En el tablero, en «Fichaje en el lugar»: un botón «Corregir» por persona
+    confirmada (haya fichado o no) que abre dos campos de hora y el motivo; la
+    fila corregida muestra «corregido» al lado de la hora.
+  - Probarlo con el método de `PRUEBAS.md` sección 10 (no manda mails).
 - **Un pedido sin cuenta.** Hoy el pedido cuelga de una organización.
   `provider_contacts` dejó preparado el `organization_id` nullable para abrirlo
   a un independiente, pero es la Fase 4 y no está decidida.
