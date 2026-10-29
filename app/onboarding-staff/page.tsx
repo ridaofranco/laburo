@@ -72,6 +72,9 @@ export default function OnboardingStaffPage() {
 
       {/* Slides */}
       <main className="w-full max-w-[1440px] px-6 md:px-20 flex-grow flex items-center justify-center relative">
+        {/* Título de la página para el lector de pantalla y los buscadores: cada
+            diapositiva tiene su h2, pero la página no tenía h1. */}
+        <h1 className="sr-only">Cómo funciona LABURO para el staff</h1>
         {SLIDES.map((slide, index) => {
           const active = index === current;
           return (
