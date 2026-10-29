@@ -414,7 +414,7 @@ export function StaffLoginForm() {
               </a>
               <a
                 href="/login"
-                className="mt-2 font-[family-name:var(--font-geist)] text-[11px] uppercase tracking-[0.1em] text-[#6f6f6f] hover:text-[#cfc4c5] transition-colors"
+                className="mt-2 font-[family-name:var(--font-geist)] text-[11px] uppercase tracking-[0.1em] text-[#8a8a8a] hover:text-[#cfc4c5] transition-colors"
               >
                 ¿Sos productor? Ingresá acá
               </a>

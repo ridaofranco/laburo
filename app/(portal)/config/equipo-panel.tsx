@@ -89,6 +89,7 @@ export function EquipoPanel({ equipo, emailPropio }: { equipo: Equipo; emailProp
               <div className="md:col-span-3">
                 {equipo.puede_invitar && m.rol !== "owner" && !soyYo ? (
                   <select
+                    aria-label={`Rol de ${m.email ?? "este miembro"}`}
                     defaultValue={m.rol}
                     disabled={pendiente}
                     onChange={(e) => correr(() => cambiarRol(m.id, e.target.value))}
@@ -177,6 +178,7 @@ export function EquipoPanel({ equipo, emailPropio }: { equipo: Equipo; emailProp
             </div>
             <select
               name="rol"
+              aria-label="Rol de la persona invitada"
               defaultValue="writer"
               className="bg-transparent border border-[#4c4546] text-[#e5e2e1] text-[14px] py-3 px-4 outline-none focus:border-[#e5e2e1]"
             >

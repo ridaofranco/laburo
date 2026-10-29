@@ -546,7 +546,7 @@ export function RegistroProveedorClient() {
             </Link>
             <Link
               href="/sumate"
-              className="font-[family-name:var(--font-geist)] text-[11px] uppercase tracking-[0.1em] text-[#6f6f6f] hover:text-[#cfc4c5] transition-colors"
+              className="font-[family-name:var(--font-geist)] text-[11px] uppercase tracking-[0.1em] text-[#8a8a8a] hover:text-[#cfc4c5] transition-colors"
             >
               ¿Trabajás en eventos? Sumate al pool
             </Link>
