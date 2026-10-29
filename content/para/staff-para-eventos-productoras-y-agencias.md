@@ -97,6 +97,8 @@ El mismo evento necesita sonido, catering, seguridad o estructuras. En LABURO le
 
 Si el evento tiene puerta, [PASE](https://pase.somosder.ar) resuelve la acreditación y el control de accesos con QR, y si vende entradas, [ENTRÁ](https://www.entratickets.com) es la ticketera del mismo ecosistema.
 
+Si tu próximo evento es fuera de Buenos Aires, hay páginas con el pool de cada ciudad: [staff para eventos en Misiones](/para/staff-para-eventos-en-misiones) y [staff para eventos en Bariloche](/para/staff-para-eventos-en-bariloche).
+
 Para arrancar, [entrá a LABURO](/entrar) y cargá tu próximo evento. Si estás del otro lado y trabajás en eventos, el camino es [sumate](/sumate).
 
 ## Fuentes
