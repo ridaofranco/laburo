@@ -12,7 +12,7 @@
  * linea (border-bottom hairline), boton ghost que pasa a solido.
  */
 
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { enviarLeadProductor } from "./actions";
 
@@ -21,19 +21,76 @@ const labelCls =
 const inputCls =
   "w-full bg-transparent border-0 border-b border-[#2a2a2a] focus:border-[#f5f5f5] outline-none text-[17px] leading-[1.6] text-[#f5f5f5] py-3 px-0 rounded-none transition-colors duration-300 placeholder:text-[#565656]";
 
+/*
+ * Si se publica una versión nueva mientras alguien tiene la página abierta, el
+ * envío falla con «Failed to find Server Action» (Vercel: 3 veces, la última el
+ * 29/10) y antes la excepción tiraba la página entera: la consulta se perdía.
+ * Ahora se guarda lo escrito, se recarga UNA vez (con la versión nueva) y se
+ * devuelve cargado para tocar Enviar de nuevo.
+ */
+const GUARDADO = "laburo-lead-pendiente";
+// Marca que ya se recargó una vez en esta pestaña: nunca entra en un bucle.
+const RECARGADO = "laburo-lead-recargado";
+const CAMPOS = ["nombre", "email", "telefono", "empresa", "mensaje"] as const;
+
 export function LeadForm() {
   const [pending, startTransition] = useTransition();
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    let guardado: Record<string, string> | null = null;
+    try {
+      const crudo = sessionStorage.getItem(GUARDADO);
+      sessionStorage.removeItem(GUARDADO);
+      if (crudo) guardado = JSON.parse(crudo);
+    } catch {
+      return;
+    }
+    const form = formRef.current;
+    if (!guardado || !form) return;
+    for (const c of CAMPOS) {
+      const el = form.elements.namedItem(c);
+      if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+        el.value = guardado[c] ?? "";
+      }
+    }
+    setError("Actualizamos la página mientras escribías. Tu consulta sigue acá: tocá Enviar de nuevo.");
+    form.scrollIntoView({ block: "center" });
+  }, []);
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     setError(null);
     startTransition(async () => {
-      const r = await enviarLeadProductor(fd);
-      if (r.ok) setSent(true);
-      else setError(r.reason ?? "No pudimos enviar tu consulta. Probá de nuevo.");
+      let r: Awaited<ReturnType<typeof enviarLeadProductor>>;
+      try {
+        r = await enviarLeadProductor(fd);
+      } catch {
+        let yaRecargo = false;
+        try {
+          yaRecargo = sessionStorage.getItem(RECARGADO) !== null;
+          if (!yaRecargo) {
+            sessionStorage.setItem(RECARGADO, "1");
+            const datos: Record<string, string> = {};
+            for (const c of CAMPOS) datos[c] = String(fd.get(c) ?? "");
+            sessionStorage.setItem(GUARDADO, JSON.stringify(datos));
+          }
+        } catch {
+          yaRecargo = true;
+        }
+        if (!yaRecargo) {
+          window.location.reload();
+          return;
+        }
+        setError("No pudimos enviar tu consulta. Revisá tu conexión y probá de nuevo.");
+        return;
+      }
+      if (r.ok) {
+        setSent(true);
+      } else setError(r.reason ?? "No pudimos enviar tu consulta. Probá de nuevo.");
     });
   }
 
@@ -61,7 +118,7 @@ export function LeadForm() {
     // persona. Comprobado el 7/9/2026 en una prueba automatizada: la consulta se
     // perdía sin decir nada Y Vercel Analytics registraba la URL completa, con
     // los datos personales adentro, como si fuera el nombre de una página.
-    <form onSubmit={onSubmit} method="post" className="flex flex-col gap-8">
+    <form ref={formRef} onSubmit={onSubmit} method="post" className="flex flex-col gap-8">
       {/* Honeypot anti-bots: invisible para humanos, tentador para scripts. */}
       <input
         type="text"
