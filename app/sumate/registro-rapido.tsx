@@ -14,7 +14,7 @@
  * la migración 0034 la agarra a los 5 días y la invita a completarla.
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { toast } from "sonner";
 import { FileUp, Upload } from "lucide-react";
@@ -37,6 +37,19 @@ import { registerApplicant } from "./actions";
 const ALL_OFICIOS = oficios.flatMap((g) => g.items.map((it) => it.es));
 const OFICIOS_SET = new Set(ALL_OFICIOS);
 
+const GUARDADO = "laburo-sumate-pendiente";
+// Marca que ya se recargó una vez en esta pestaña: nunca entra en un bucle.
+const RECARGADO = "laburo-sumate-recargado";
+type Guardado = {
+  nombreVisible: string;
+  email: string;
+  telefono: string;
+  consent: boolean;
+  parsed: CvParsed | null;
+  cv: CvSubido | null;
+  archivo: string | null;
+};
+
 export function RegistroRapido({
   onDone,
   onFormularioLargo,
@@ -44,7 +57,8 @@ export function RegistroRapido({
   onDone: () => void;
   onFormularioLargo: () => void;
 }) {
-  const [file, setFile] = useState<File | null>(null);
+  /** Solo el nombre del archivo elegido: es lo que se muestra (y sobrevive a una recarga). */
+  const [archivo, setArchivo] = useState<string | null>(null);
   /** El CV ya subido a Supabase: es lo único que viaja al servidor al enviar. */
   const [cv, setCv] = useState<CvSubido | null>(null);
   const [subiendo, setSubiendo] = useState(false);
@@ -61,6 +75,34 @@ export function RegistroRapido({
     codigoRef: cvCodigo,
     run: runAutofill,
   } = useCvAutofill();
+
+  // Vuelve lo que la persona había escrito si la página se recargó porque se
+  // publicó una versión nueva en el medio (ver onSubmit).
+  useEffect(() => {
+    let g: Guardado | null = null;
+    try {
+      const crudo = sessionStorage.getItem(GUARDADO);
+      sessionStorage.removeItem(GUARDADO);
+      if (crudo) g = JSON.parse(crudo) as Guardado;
+    } catch {
+      return;
+    }
+    if (!g) return;
+    setNombreVisible(g.nombreVisible ?? "");
+    setEmail(g.email ?? "");
+    setTelefono(g.telefono ?? "");
+    setConsent(Boolean(g.consent));
+    setParsed(g.parsed ?? null);
+    setCv(g.cv ?? null);
+    setArchivo(g.archivo ?? null);
+    setEditar(true);
+    // Con un respiro: recién montada la página, el contenedor de avisos todavía
+    // no está escuchando y el aviso se perdía.
+    setTimeout(
+      () => toast("Actualizamos la página mientras completabas. Tus datos siguen acá: tocá Enviar de nuevo."),
+      600,
+    );
+  }, []);
 
   // "Ocupado" es subiendo O leyendo: son dos pasos seguidos y para la persona es
   // un solo momento de espera. Si solo se mirara la lectura, durante la subida
@@ -85,8 +127,8 @@ export function RegistroRapido({
       ? "Listo, leímos tu CV. Revisá que esté bien y enviá."
       : parserFallo
         ? "No pudimos leer el CV automáticamente, pero se sube igual. Escribí tu nombre y tu mail y ya quedás anotado."
-        : file
-          ? `Adjuntaste ${file.name}.`
+        : archivo
+          ? `Adjuntaste ${archivo}.`
           : "";
 
   /**
@@ -106,10 +148,10 @@ export function RegistroRapido({
     const f = e.target.files?.[0] ?? null;
     setCv(null);
     if (!f) {
-      setFile(null);
+      setArchivo(null);
       return;
     }
-    setFile(f);
+    setArchivo(f.name);
     // try/finally, no dos líneas sueltas: si la subida tira, un `setSubiendo(false)`
     // suelto no corre y la pantalla queda en "Subiendo tu CV…" para siempre, con
     // el botón de enviar deshabilitado. Encerrar a la persona es lo peor que
@@ -126,7 +168,7 @@ export function RegistroRapido({
       // del archivo, así que el mensaje ya viene explicando qué pasó.
       toast.error(sub.reason);
       e.target.value = "";
-      setFile(null);
+      setArchivo(null);
       return;
     }
     setCv(sub.cv);
@@ -208,6 +250,25 @@ export function RegistroRapido({
       if (res.ok) onDone();
       else toast.error(res.reason || "No se pudo enviar.");
     } catch {
+      // Lo más común acá es que se publicó una versión nueva con la página
+      // abierta («Failed to find Server Action»): reintentar falla siempre. Se
+      // guarda todo (el CV ya está subido: viaja su nombre y su firma), se
+      // recarga UNA vez y se restaura. Si vuelve a fallar, el mensaje de siempre.
+      let yaRecargo = true;
+      try {
+        yaRecargo = sessionStorage.getItem(RECARGADO) !== null;
+        if (!yaRecargo) {
+          const g: Guardado = { nombreVisible, email, telefono, consent, parsed, cv, archivo };
+          sessionStorage.setItem(RECARGADO, "1");
+          sessionStorage.setItem(GUARDADO, JSON.stringify(g));
+        }
+      } catch {
+        yaRecargo = true;
+      }
+      if (!yaRecargo) {
+        window.location.reload();
+        return;
+      }
       toast.error("No se pudo enviar. Probá de nuevo.");
     } finally {
       setSending(false);
@@ -270,7 +331,7 @@ export function RegistroRapido({
             htmlFor="cv-rapido"
             className="self-start inline-flex min-h-[44px] items-center gap-2 border border-[#4c4546] px-4 py-3 label-tech text-[11px] uppercase tracking-[0.1em] text-[#e5e2e1] cursor-pointer hover:border-[#e5e2e1] transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-[#b9c3ff] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[#0e0e0e] peer-disabled:opacity-60 peer-disabled:cursor-not-allowed"
           >
-            {file ? "Cambiar archivo" : "Elegir archivo"}
+            {archivo ? "Cambiar archivo" : "Elegir archivo"}
           </label>
           <p
             role="status"
