@@ -18,6 +18,7 @@ import { SOPORTE_EMAIL } from "@/lib/soporte";
 export const metadata: Metadata = {
   title: "LABURO. | Términos de uso",
   description: "Las reglas de uso de LABURO, en criollo.",
+  alternates: { canonical: "/terminos" },
 };
 
 export default function TerminosPage() {

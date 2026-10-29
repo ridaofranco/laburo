@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   title: "LABURO. | Publicá tus servicios para eventos",
   description:
     "Publicá lo que hacés y dónde trabajás, y las productoras te encuentran cuando arman un evento. Estar en el directorio es gratis.",
+  alternates: { canonical: "/registrar-proveedor" },
 };
 
 export default function RegistrarProveedorPage() {

@@ -9,8 +9,22 @@ import Link from "next/link";
 import { SumateClient } from "./sumate-client";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 
+const DESCRIPCION =
+  "Trabajo en eventos: promotoras, bartenders, mozos, seguridad, técnicos y más. Subí tu CV en un minuto y las productoras te llaman cuando arman un evento. Es gratis.";
+
 export const metadata: Metadata = {
-  title: "LABURO. | Sumate al pool",
+  title: "Trabajo en eventos: sumate con tu CV | LABURO",
+  description: DESCRIPCION,
+  alternates: { canonical: "/sumate" },
+  openGraph: {
+    type: "website",
+    url: "/sumate",
+    siteName: "LABURO",
+    locale: "es_AR",
+    title: "Trabajo en eventos: sumate con tu CV | LABURO",
+    description: DESCRIPCION,
+    images: [{ url: "/brand/laburo-og.png", width: 1200, height: 630, alt: "LABURO" }],
+  },
 };
 
 export default function SumatePage() {

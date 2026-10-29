@@ -19,6 +19,7 @@ import { SOPORTE_EMAIL } from "@/lib/soporte";
 export const metadata: Metadata = {
   title: "LABURO. | Privacidad",
   description: "Qué datos guarda LABURO, quién los ve y cómo se borran.",
+  alternates: { canonical: "/privacidad" },
 };
 
 export default function PrivacidadPage() {

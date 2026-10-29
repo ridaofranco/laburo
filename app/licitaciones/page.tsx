@@ -16,11 +16,26 @@ import { ArrowRight, Clock, MapPin, Tag } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 
-export const metadata: Metadata = {
-  title: "Licitaciones abiertas | LABURO",
-  description:
-    "Productoras pidiendo presupuesto ahora. Mirá lo que necesitan y mandá el tuyo, sin cuenta.",
-};
+const DESCRIPCION =
+  "Productoras pidiendo presupuesto ahora. Mirá lo que necesitan y mandá el tuyo, sin cuenta.";
+
+/**
+ * Metadata dinámica por el `noindex`, con la misma regla que /salones y
+ * /servicios: una lista que dice «no hay ninguna licitación abierta» no tiene
+ * que quedar guardada en Google. En cuanto haya una abierta, vuelve a ser
+ * indexable sola (y entra al sitemap).
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const supabase = await createClient();
+  const { data } = await supabase.rpc("staff_app_licitaciones_abiertas", { p_limit: 1 });
+  const hayAlgo = Array.isArray(data) && data.length > 0;
+  return {
+    title: "Licitaciones abiertas | LABURO",
+    description: DESCRIPCION,
+    alternates: { canonical: "/licitaciones" },
+    robots: hayAlgo ? undefined : { index: false, follow: true },
+  };
+}
 
 // Se rearma cada 5 minutos: es una lista pública que cambia poco y la puede
 // abrir cualquiera. Sin esto, cada visita pega contra la base.

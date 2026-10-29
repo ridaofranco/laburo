@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   title: "LABURO. | Publicá tu salón para eventos",
   description:
     "Publicá tu salón y te encuentran los que buscan dónde hacer su fiesta: por cuánta gente entra y por dónde queda. Estar en el directorio es gratis.",
+  alternates: { canonical: "/registrar-salon" },
 };
 
 export default function RegistrarSalonPage() {

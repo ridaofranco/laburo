@@ -34,6 +34,7 @@ export async function generateMetadata({
     description:
       (l.descripcion as string | null)?.slice(0, 160) ??
       `Presupuestá este pedido en LABURO. Cierra el ${l.cierra_at}.`,
+    alternates: { canonical: `/licitaciones/${slug}` },
   };
 }
 

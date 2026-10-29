@@ -30,6 +30,7 @@ export const metadata: Metadata = {
   title: "LABURO. | Registrarme",
   description:
     "Elegí qué querés hacer en LABURO: buscar staff para tus eventos, trabajar en eventos, publicar tus servicios o publicar tu salón. Es gratis.",
+  alternates: { canonical: "/registrarme" },
 };
 
 const OPCIONES = [

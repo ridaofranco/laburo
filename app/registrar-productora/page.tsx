@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: "LABURO. | Creá tu cuenta y armá tu evento",
   description:
     "Productora, agencia, marca, empresa o vos solo: cargá tu evento, publicá qué personal necesitás y recibí a la gente que quiere trabajar. Publicar es gratis.",
+  alternates: { canonical: "/registrar-productora" },
 };
 
 export default function RegistrarProductoraPage() {
