@@ -579,8 +579,8 @@ export function PedidoClient({
                       </span>
                     </Td>
                     <Td>{c.incluye}</Td>
-                    <Td>{c.no_incluye ?? "—"}</Td>
-                    <Td>{c.validez_dias ? `${c.validez_dias} días` : "—"}</Td>
+                    <Td>{c.no_incluye ?? "sin aclarar"}</Td>
+                    <Td>{c.validez_dias ? `${c.validez_dias} días` : "sin aclarar"}</Td>
                     <Td>
                       {sePuedeElegir ? (
                         confirmando === c.quote_id ? (
@@ -683,7 +683,7 @@ export function PedidoClient({
                             return (
                               <Td key={c.quote_id}>
                                 <span className="text-[#4c4546]" title="No lo cargó">
-                                  —
+                                  no lo cargó
                                 </span>
                               </Td>
                             );

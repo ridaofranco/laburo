@@ -161,7 +161,7 @@ export default async function LeadsPage() {
                     )}
                   </div>
                   <span className="label-tech text-[11px] text-[#4c4546] shrink-0">
-                    {fmtFechaHora(l.created_at) ?? "—"}
+                    {fmtFechaHora(l.created_at) ?? "sin fecha"}
                     {(l.origen ?? "").trim() && (l.origen ?? "") !== "landing"
                       ? ` · ${l.origen}`
                       : ""}
@@ -201,7 +201,7 @@ export default async function LeadsPage() {
                   )}
                   {l.contactado_at && (
                     <span className="label-tech text-[11px] text-[#4c4546]">
-                      Contactado el {fmtFechaHora(l.contactado_at) ?? "—"}
+                      Contactado el {fmtFechaHora(l.contactado_at) ?? "sin fecha"}
                     </span>
                   )}
                   <div className="ml-auto">

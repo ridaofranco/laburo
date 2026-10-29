@@ -82,7 +82,7 @@ export function EquipoPanel({ equipo, emailPropio }: { equipo: Equipo; emailProp
             >
               <div className="md:col-span-6 min-w-0">
                 <p className="text-[16px] text-[#e5e2e1] truncate">
-                  {m.email ?? "—"}
+                  {m.email ?? "sin mail"}
                   {soyYo ? <span className="text-[#8a8a8a]"> · vos</span> : null}
                 </p>
               </div>
@@ -182,7 +182,7 @@ export function EquipoPanel({ equipo, emailPropio }: { equipo: Equipo; emailProp
             >
               {ROLES.map((r) => (
                 <option key={r.valor} value={r.valor} className="bg-[#0A0A0A]">
-                  {r.nombre} — {r.que}
+                  {r.nombre}: {r.que}
                 </option>
               ))}
             </select>

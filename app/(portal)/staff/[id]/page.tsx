@@ -414,9 +414,11 @@ export default async function ProfilePage({
                 </span>
               </div>
               <div className="bg-[#0A0A0A] border border-[#1A1A1A] p-6 flex flex-col gap-1">
-                <span className="t-stat-sm text-[#e5e2e1]">
-                  {avgRating ? avgRating.toFixed(1) : "—"}
-                </span>
+                {avgRating ? (
+                  <span className="t-stat-sm text-[#e5e2e1]">{avgRating.toFixed(1)}</span>
+                ) : (
+                  <span className="text-[15px] leading-tight text-[#cfc4c5]">Sin notas todavía</span>
+                )}
                 <span className="label-tech text-[11px] text-[#cfc4c5]">Rating</span>
               </div>
             </div>

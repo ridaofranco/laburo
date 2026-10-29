@@ -58,14 +58,14 @@ interface OfferRow {
 
 
 function fecha(iso: string | null): string {
-  return fmtFecha(iso, {}) ?? "—";
+  return fmtFecha(iso, {}) ?? "sin fecha";
 }
 
 function estadoCobro(s: string | null): { label: string; cls: string } {
   if (s === "approved") return { label: "Aprobado", cls: "text-[#3dd68c]" };
   if (s === "rejected" || s === "cancelled") return { label: "Rechazado", cls: "text-[#ffb4ab]" };
   if (s === "pending" || s === "in_process") return { label: "Pendiente", cls: "text-[#f5a623]" };
-  return { label: s ?? "—", cls: "text-[#cfc4c5]" };
+  return { label: s ?? "sin estado", cls: "text-[#cfc4c5]" };
 }
 
 interface CobroRow {
@@ -203,7 +203,7 @@ export default async function PagosPage() {
                   </div>
                   <div className="flex items-center gap-6 shrink-0">
                     <span className="text-[15px] text-[#cfc4c5]">
-                      {c.amount != null ? money(Number(c.amount)) : "—"}
+                      {c.amount != null ? money(Number(c.amount)) : "sin monto"}
                     </span>
                     <span className={`label-tech text-[12px] w-[80px] text-right ${e.cls}`}>{e.label}</span>
                   </div>

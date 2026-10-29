@@ -217,25 +217,25 @@ export function ControlTotal({
               <tbody className="text-[15px] text-[#cfc4c5]">
                 {ofertas.map((o) => {
                   const e = ESTADOS[o.estado ?? ""] ?? {
-                    texto: o.estado ?? "—",
+                    texto: o.estado ?? "sin estado",
                     color: "text-[#8a8a8a]",
                   };
                   return (
                     <tr key={o.id} className="border-b border-[#1a1a1a] last:border-b-0">
                       <td className="py-4 pl-5 pr-6 align-top whitespace-nowrap text-[#8a8a8a]">
-                        {o.sent_at ? fmtFechaHora(o.sent_at) : "—"}
+                        {o.sent_at ? fmtFechaHora(o.sent_at) : "sin enviar"}
                       </td>
                       <td className="py-4 pr-6 align-top text-[#e5e2e1] [overflow-wrap:anywhere]">
-                        {o.a_quien?.trim() || "—"}
+                        {o.a_quien?.trim() || "sin dato"}
                       </td>
                       <td className="py-4 pr-6 align-top [overflow-wrap:anywhere]">
-                        {o.evento ?? "—"}
+                        {o.evento ?? "sin evento"}
                       </td>
                       <td className="py-4 pr-6 align-top text-[#8a8a8a] [overflow-wrap:anywhere]">
-                        {o.organizacion ?? "—"}
+                        {o.organizacion ?? "sin productora"}
                       </td>
                       <td className="py-4 pr-6 align-top whitespace-nowrap">
-                        {o.monto != null ? money(Number(o.monto)) : "—"}
+                        {o.monto != null ? money(Number(o.monto)) : "sin monto"}
                       </td>
                       <td className={`py-4 pr-6 align-top ${e.color}`}>{e.texto}</td>
                     </tr>

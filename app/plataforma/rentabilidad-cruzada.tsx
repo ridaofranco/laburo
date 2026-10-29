@@ -112,7 +112,7 @@ export function RentabilidadCruzada({ filas }: { filas: RentabilidadOrg[] }) {
                     <Celda>{money(Number(f.costo) || 0)}</Celda>
                     <Celda>
                       {f.margen == null ? (
-                        <span className="text-[#8a8a8a]">—</span>
+                        <span className="text-[#8a8a8a]">sin dato</span>
                       ) : (
                         <span
                           className={

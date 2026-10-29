@@ -381,7 +381,7 @@ export default async function PanelStaffPage() {
                             {o.gig_title?.trim() || "Evento"}
                           </h4>
                           <span className="text-[14px] text-[#cfc4c5]">
-                            {o.role?.trim() || "—"}
+                            {o.role?.trim() || "sin rol"}
                             {dur ? ` • ${dur} fichadas` : ""}
                           </span>
                         </div>

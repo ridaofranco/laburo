@@ -64,11 +64,16 @@ export default async function RentabilidadPage() {
 
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  // Solo los números de la productora activa (29/10). Sin el filtro sumaba todo
+  // lo que la sesión podía leer: con dos membresías se mezclaban las cuentas.
+  const orgId = org.organizationId;
+  let qOffers = supabase
     .from("staff_app_offers")
     .select(
       "id,amount,status,sent_at,responded_at,expires_at,gig_title,staff_nombre,staff_apellido",
     );
+  if (orgId) qOffers = qOffers.eq("organization_id", orgId);
+  const { data, error } = await qOffers;
   const offers = (data ?? []) as OfferRow[];
 
   const total = offers.length;
@@ -79,7 +84,9 @@ export default async function RentabilidadPage() {
 
   // Margen = lo que le cobrás al cliente (suma de client_budget de los gigs)
   // menos el costo del staff confirmado (monto comprometido). Tu ganancia.
-  const { data: gigsData, error: gigsError } = await supabase.from("staff_app_gigs").select("client_budget");
+  let qGigs = supabase.from("staff_app_gigs").select("client_budget");
+  if (orgId) qGigs = qGigs.eq("organization_id", orgId);
+  const { data: gigsData, error: gigsError } = await qGigs;
   if (gigsError) console.error("[rentabilidad] no se pudo leer gigs:", gigsError.message);
   const totalIngreso = (gigsData ?? []).reduce(
     (s, g) => s + (Number((g as { client_budget: number | null }).client_budget) || 0),
@@ -328,10 +335,10 @@ export default async function RentabilidadPage() {
                               {(o.gig_title ?? "").trim() || "Sin evento"}
                             </td>
                             <td className="py-6 px-6 text-[#e5e2e1] text-right">
-                              {o.amount != null ? money(Number(o.amount)) : "—"}
+                              {o.amount != null ? money(Number(o.amount)) : "sin monto"}
                             </td>
                             <td className="py-6 pl-6 text-[#cfc4c5] text-right">
-                              {fmtFecha(o.responded_at, {}) ?? "—"}
+                              {fmtFecha(o.responded_at, {}) ?? "sin fecha"}
                             </td>
                           </tr>
                         );

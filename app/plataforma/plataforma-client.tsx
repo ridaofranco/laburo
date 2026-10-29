@@ -23,7 +23,7 @@ import {
 } from "./actions";
 
 function dia(iso: string | null): string {
-  return fmtFecha(iso, { day: "2-digit", month: "short", year: "numeric" }) ?? "—";
+  return fmtFecha(iso, { day: "2-digit", month: "short", year: "numeric" }) ?? "sin fecha";
 }
 
 /**

@@ -48,7 +48,7 @@ export default async function ConfigPage() {
     qPool, qGigs, qOffers, leerPerfil(), leerEquipo(),
   ]);
 
-  const email = userData?.user?.email ?? "—";
+  const email = userData?.user?.email ?? "sin mail";
   // El nombre de la productora sale de la base, no de un literal. Con una sola
   // organización sigue diciendo SOMOS DER; con dos, cada uno ve la suya.
   const orgNombre = org?.nombre?.trim() || "SOMOS DER";
@@ -56,10 +56,10 @@ export default async function ConfigPage() {
   // exactamente lo que se veía antes escrito a mano.
   const orgSigla = (orgNombre.split(/\s+/).pop() || orgNombre).toUpperCase();
   const nombreUsuario = email.split("@")[0] || "Vos";
-  // "—" si la query falló (desconocido ≠ cero: no mostramos 0 engañoso).
-  const poolCount = pool.error ? "—" : pool.count ?? 0;
-  const gigsCount = gigs.error ? "—" : gigs.count ?? 0;
-  const offersCount = offers.error ? "—" : offers.count ?? 0;
+  // "sin dato" si la query falló (desconocido ≠ cero: no mostramos 0 engañoso).
+  const poolCount = pool.error ? "sin dato" : pool.count ?? 0;
+  const gigsCount = gigs.error ? "sin dato" : gigs.count ?? 0;
+  const offersCount = offers.error ? "sin dato" : offers.count ?? 0;
 
   return (
     <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-16 md:py-24">
