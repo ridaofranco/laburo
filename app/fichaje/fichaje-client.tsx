@@ -18,6 +18,10 @@ export interface FichajeGig {
   gigId: string;
   title: string;
   venue: string | null;
+  /** Dirección del lugar (0095), para quien llega por primera vez. */
+  address: string | null;
+  /** Link a Google Maps ya armado del lado del servidor (punto, dirección o nombre). */
+  mapa: string | null;
   startsAt: string | null;
   endsAt: string | null;
   checkInAt: string | null;
@@ -177,7 +181,20 @@ function GigCard({ gig }: { gig: FichajeGig }) {
           {gig.title}
         </h3>
         {gig.venue && <p className="text-[14px] text-[#cfc4c5]">{gig.venue}</p>}
+        {gig.address && gig.address !== gig.venue && (
+          <p className="text-[14px] text-[#cfc4c5]">{gig.address}</p>
+        )}
         {cuando && <p className="text-[14px] text-[#cfc4c5]">{cuando}</p>}
+        {gig.mapa && (
+          <a
+            href={gig.mapa}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex items-center gap-2 min-h-[44px] w-fit label-tech text-[12px] uppercase tracking-widest text-[#cfc4c5] hover:text-[#e5e2e1] transition-colors"
+          >
+            <MapPin size={14} /> Cómo llegar
+          </a>
+        )}
       </div>
 
       <div className="flex flex-wrap items-center gap-x-6 gap-y-2 label-tech text-[12px] text-[#cfc4c5]">

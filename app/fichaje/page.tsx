@@ -8,7 +8,7 @@
 export const dynamic = "force-dynamic";
 
 import { StaffNav } from "@/components/staff-nav";
-import { requireStaff, getMyStaffOffers } from "@/lib/staff";
+import { requireStaff, getMyStaffOffers, comoLlegarUrl } from "@/lib/staff";
 import { FichajeClient, type FichajeGig } from "./fichaje-client";
 
 
@@ -27,6 +27,8 @@ export default async function FichajePage() {
       gigId: o.gig_id,
       title: o.gig_title?.trim() || "Evento",
       venue: o.gig_venue,
+      address: o.gig_address?.trim() || null,
+      mapa: comoLlegarUrl(o.gig_venue, o.gig_address, o.gig_lat, o.gig_lng),
       startsAt: o.gig_starts_at,
       endsAt: o.gig_ends_at,
       checkInAt: o.check_in_at,

@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { MapPin, ChevronDown } from "lucide-react";
 import { StaffNav } from "@/components/staff-nav";
-import { requireStaff, getMyStaffOffers, type StaffOffer } from "@/lib/staff";
+import { requireStaff, getMyStaffOffers, comoLlegarUrl, type StaffOffer } from "@/lib/staff";
 import { offerLabel } from "@/lib/offers";
 import { PendingOfferActions } from "./pending-offer-actions";
 import { fmtFecha, fmtHora as fmtHoraTz } from "@/lib/dates";
@@ -31,9 +31,9 @@ function fmtHora(iso: string | null): string | null {
   return h ? `${h} hs` : null;
 }
 
-/** Link a Google Maps para llegar al venue (sin API key, deep link universal). */
-function mapsUrl(venue: string): string {
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue)}`;
+/** Link a Google Maps: el punto, la dirección o el nombre (ver comoLlegarUrl). */
+function mapsUrl(o: StaffOffer): string | null {
+  return comoLlegarUrl(o.gig_venue, o.gig_address, o.gig_lat, o.gig_lng);
 }
 
 /** Duración fichada "Xh Ym" a partir de check-in/out, o null si falta alguno. */
@@ -180,9 +180,9 @@ export default async function PanelStaffPage() {
                   Ir a fichar
                 </Link>
               )}
-              {next?.gig_venue?.trim() && (
+              {next && mapsUrl(next) && (
                 <a
-                  href={mapsUrl(next.gig_venue)}
+                  href={mapsUrl(next) ?? undefined}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 label-tech text-[12px] text-[#cfc4c5] hover:text-[#c6c6c6] uppercase tracking-widest transition-colors"
@@ -239,9 +239,9 @@ export default async function PanelStaffPage() {
                         {o.amount != null && Number(o.amount) > 0 ? ` • ${money(Number(o.amount))}` : ""}
                       </span>
                     </div>
-                    {o.gig_venue?.trim() && (
+                    {mapsUrl(o) && (
                       <a
-                        href={mapsUrl(o.gig_venue)}
+                        href={mapsUrl(o) ?? undefined}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 label-tech text-[11px] uppercase tracking-widest text-[#cfc4c5] hover:text-[#c6c6c6] border border-[#4c4546] hover:border-[#c6c6c6] px-4 py-2 transition-colors w-fit shrink-0"

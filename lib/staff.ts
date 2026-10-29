@@ -72,6 +72,10 @@ export interface StaffOffer {
   gig_starts_at: string | null;
   gig_ends_at: string | null;
   gig_venue: string | null;
+  /** Dirección y ubicación del lugar (0095). Pueden venir vacías. */
+  gig_address?: string | null;
+  gig_lat?: number | null;
+  gig_lng?: number | null;
   check_in_at: string | null;
   check_out_at: string | null;
   /**
@@ -126,3 +130,23 @@ export async function requireStaff(): Promise<StaffProfile> {
   return profile;
 }
 
+
+/**
+ * Link a Google Maps para llegar al evento (sin API key). Antes buscaba solo el
+ * NOMBRE del lugar, y con un nombre genérico («Oficina») el mapa llevaba a
+ * cualquier lado. Orden: el punto que ubicó la productora, la dirección y,
+ * si no hay nada más, el nombre (29/10).
+ */
+export function comoLlegarUrl(
+  venue: string | null | undefined,
+  address?: string | null,
+  lat?: number | null,
+  lng?: number | null,
+): string | null {
+  const base = "https://www.google.com/maps/search/?api=1&query=";
+  if (lat != null && lng != null && Number.isFinite(lat) && Number.isFinite(lng)) {
+    return `${base}${lat},${lng}`;
+  }
+  const q = address?.trim() || venue?.trim();
+  return q ? `${base}${encodeURIComponent(q)}` : null;
+}
