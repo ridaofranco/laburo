@@ -19,6 +19,7 @@ import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { initials } from "@/lib/avatar-color";
+import { orgActual } from "@/lib/org";
 import { OfferForm, type OfferFormCandidate, type OfferFormGig } from "./offer-form";
 
 export default async function OfferPage({
@@ -43,10 +44,15 @@ export default async function OfferPage({
   if (!candidateData) notFound();
   const candidate = candidateData as OfferFormCandidate;
 
-  const { data: gigsData, error: gigsError } = await supabase
+  // Solo los eventos de la productora con la que se está trabajando: quien es
+  // miembro de dos veía en el selector los de las dos (mismo filtro que el tablero).
+  const org = await orgActual();
+  let qGigs = supabase
     .from("staff_app_gigs")
     .select("id,title,starts_at,venue_name")
     .order("starts_at", { ascending: false });
+  if (org?.organizationId) qGigs = qGigs.eq("organization_id", org.organizationId);
+  const { data: gigsData, error: gigsError } = await qGigs;
   if (gigsError) console.error("[oferta] no se pudo leer gigs:", gigsError.message);
 
   const gigs = (gigsData ?? []) as OfferFormGig[];

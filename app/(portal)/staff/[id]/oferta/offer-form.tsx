@@ -103,12 +103,16 @@ export function OfferForm({
   // ⚠️ Desde una búsqueda, el evento tiene que ser el de esa búsqueda. Antes
   // quedaba elegido el primero de la lista (el de fecha más lejana), y con dos
   // eventos cargados la oferta podía salir para el equivocado.
+  // Sin evento elegido de antes, el más próximo a futuro (la lista viene de la
+  // fecha más lejana a la más vieja); si no hay ninguno a futuro, el primero.
+  const ahora = Date.now();
+  const proximo = gigs
+    .filter((g) => g.starts_at && new Date(g.starts_at).getTime() >= ahora)
+    .sort((a, b) => new Date(a.starts_at!).getTime() - new Date(b.starts_at!).getTime())[0];
   const [gigChoice, setGigChoice] = useState<string>(
     initialGigId && gigs.some((g) => g.id === initialGigId)
       ? initialGigId
-      : gigs.length
-        ? gigs[0].id
-        : NEW_GIG,
+      : (proximo?.id ?? (gigs.length ? gigs[0].id : NEW_GIG)),
   );
   const [gigTitle, setGigTitle] = useState("");
   const [gigDate, setGigDate] = useState(""); // datetime-local → starts_at

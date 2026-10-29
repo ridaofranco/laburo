@@ -35,7 +35,14 @@ function experienceLabel(c: StaffCard): string | null {
  * El pool no tiene fotos, así que el área superior (aspect 3/4) usa el avatar
  * de iniciales sobre un tono del oficio, en vez de la foto del mockup.
  */
-export function CandidateCard({ candidate }: { candidate: StaffCard }) {
+export function CandidateCard({
+  candidate,
+  gig,
+}: {
+  candidate: StaffCard;
+  /** El evento para el que se está buscando (?gig=): viaja a la ficha y a la oferta. */
+  gig?: string | null;
+}) {
   const c = candidate;
   const nombre = [c.nombre, c.apellido].filter(Boolean).join(" ").trim() || "Sin nombre";
   const primary = c.oficios?.[0] ?? "";
@@ -48,7 +55,7 @@ export function CandidateCard({ candidate }: { candidate: StaffCard }) {
 
   return (
     <Link
-      href={`/staff/${c.id}`}
+      href={gig ? `/staff/${c.id}?gig=${encodeURIComponent(gig)}` : `/staff/${c.id}`}
       className="group border border-[#1A1A1A] bg-[#0A0A0A] overflow-hidden hover:border-[#F5F5F5] transition-colors duration-300 flex flex-col h-full"
     >
       {/* Área superior: avatar de iniciales (reemplaza la foto del mockup) */}

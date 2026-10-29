@@ -112,10 +112,14 @@ function ExternalRow({ label, value }: { label: string; value: string | null | u
 
 export default async function ProfilePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  /** Si se llegó buscando para un evento (?gig=), la oferta abre con ese evento. */
+  searchParams: Promise<{ gig?: string }>;
 }) {
   const { id } = await params;
+  const { gig: gigBuscado } = await searchParams;
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -248,7 +252,7 @@ export default async function ProfilePage({
           </div>
         </div>
         <Link
-          href={`/staff/${id}/oferta`}
+          href={gigBuscado ? `/staff/${id}/oferta?gig=${encodeURIComponent(gigBuscado)}` : `/staff/${id}/oferta`}
           className="shrink-0 bg-[#F5F5F5] text-black border border-[#F5F5F5] hover:bg-transparent hover:text-[#F5F5F5] transition-colors duration-150 label-tech text-[12px] px-8 py-4 flex items-center justify-center gap-3"
         >
           <FilePlus2 size={18} aria-hidden="true" />

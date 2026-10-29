@@ -250,7 +250,7 @@ export function SearchClient({
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2, delay: reduce ? 0 : Math.min(i, 8) * 0.025 }}
                 >
-                  <CandidateCard candidate={c} />
+                  <CandidateCard candidate={c} gig={initialFilters.gig} />
                 </motion.li>
               ))}
             </ul>
