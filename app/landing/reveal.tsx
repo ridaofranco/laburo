@@ -7,7 +7,7 @@
  */
 
 import { motion, useReducedMotion } from "motion/react";
-import type { ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
 export function Reveal({
   children,
@@ -34,13 +34,28 @@ export function Reveal({
    */
   visibleDeArranque?: boolean;
 }) {
+  // 29/10: el HTML del servidor trae TODO visible (sin JS, o con el JS
+  // tardando, la landing ya no queda negra debajo del hero). Recién al montar,
+  // y solo si el bloque está más abajo de la pantalla, se oculta para que
+  // aparezca al scrollear. Lo que ya está a la vista no se toca: nunca parpadea.
   const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const [oculto, setOculto] = useState(false);
+  const [entro, setEntro] = useState(false);
+  useLayoutEffect(() => {
+    if (reduce || visibleDeArranque || !ref.current) return;
+    if (ref.current.getBoundingClientRect().top > window.innerHeight) setOculto(true);
+  }, [reduce, visibleDeArranque]);
   return (
     <motion.div
-      initial={reduce || visibleDeArranque ? false : { opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      ref={ref}
+      initial={false}
+      animate={oculto && !entro ? { opacity: 0, y: 28 } : { opacity: 1, y: 0 }}
+      onViewportEnter={() => setEntro(true)}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={
+        oculto && !entro ? { duration: 0 } : { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }
+      }
       className={className}
     >
       {children}
