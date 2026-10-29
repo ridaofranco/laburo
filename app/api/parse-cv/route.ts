@@ -46,7 +46,10 @@ const ALLOWED_MIME = new Set([
   "image/jpg",
   "image/webp",
 ]);
-const GEMINI_TIMEOUT_MS = 20_000;
+// 29/10: 12 s al principal y, si no contestó, 12 s al liviano (antes 20 s y a
+// mano). Peor caso 24 s, pero casi siempre hay datos en vez de un formulario vacío.
+const GEMINI_TIMEOUT_MS = 12_000;
+const GEMINI_RESPALDO_MS = 12_000;
 
 export async function POST(request: Request) {
   // FRENO DE ABUSO: esta ruta es pública (el formulario /sumate la usa sin cuenta)
@@ -146,7 +149,7 @@ export async function POST(request: Request) {
   // un fallo va a los logs y no a la respuesta, porque esta ruta es pública.
   const g = await pedirleAGemini(
     [{ inline_data: { mime_type: mimeType, data } }, { text: prompt }],
-    { timeoutMs: GEMINI_TIMEOUT_MS, etiqueta: "parse-cv" },
+    { timeoutMs: GEMINI_TIMEOUT_MS, timeoutRespaldoMs: GEMINI_RESPALDO_MS, etiqueta: "parse-cv" },
   );
 
   if (!g.ok) {

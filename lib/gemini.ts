@@ -59,7 +59,18 @@ export interface GeminiResultado {
  */
 export async function pedirleAGemini(
   partes: GeminiParte[],
-  opciones: { timeoutMs?: number; etiqueta?: string } = {},
+  opciones: {
+    timeoutMs?: number;
+    etiqueta?: string;
+    /**
+     * Si viene, un TIMEOUT del modelo principal también cae al siguiente, con
+     * este tiempo. Lo usa el lector de CV (29/10): en Vercel, 7 lecturas en una
+     * semana murieron a los 20 s esperando al grande, y la persona tenía que
+     * tipear todo a mano. El liviano lee un CV en pocos segundos. Sin esta
+     * opción, el comportamiento de siempre: el timeout no se reintenta.
+     */
+    timeoutRespaldoMs?: number;
+  } = {},
 ): Promise<GeminiResultado> {
   const KEY = process.env.GEMINI_API_KEY;
   if (!KEY) return { ok: false, error: "gemini", status: 500 };
@@ -68,9 +79,10 @@ export async function pedirleAGemini(
   const etiqueta = opciones.etiqueta ?? "gemini";
   let ultimoStatus = 0;
 
-  for (const modelo of MODELOS) {
+  for (const [i, modelo] of MODELOS.entries()) {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    const espera = i > 0 && opciones.timeoutRespaldoMs ? opciones.timeoutRespaldoMs : timeoutMs;
+    const timer = setTimeout(() => controller.abort(), espera);
     let r: Response;
     try {
       r = await fetch(
@@ -87,11 +99,15 @@ export async function pedirleAGemini(
       );
     } catch (e) {
       const aborted = e instanceof Error && e.name === "AbortError";
+      // Un timeout no se reintenta en otro modelo, salvo que quien llama lo
+      // pida con `timeoutRespaldoMs` (ver arriba) y quede un modelo por probar.
+      if (aborted && opciones.timeoutRespaldoMs && i < MODELOS.length - 1) {
+        console.warn(`[${etiqueta}] ${modelo} tardó más de ${espera} ms, pruebo con ${MODELOS[i + 1]}`);
+        continue;
+      }
       console.error(
         `[${etiqueta}] ${modelo} ${aborted ? "timeout" : "fetch_failed"}: ${e instanceof Error ? e.message : String(e)}`,
       );
-      // Un timeout tampoco se reintenta en otro modelo: si el grande tardó 25
-      // segundos, el chico va a tardar parecido y el usuario ya se fue.
       return { ok: false, error: aborted ? "timeout" : "fetch_failed" };
     } finally {
       clearTimeout(timer);
