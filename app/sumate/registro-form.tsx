@@ -33,6 +33,7 @@ export function RegistroForm({
   onVolver: () => void;
 }) {
   const [sending, setSending] = useState(false);
+  const [cvNombre, setCvNombre] = useState<string | null>(null);
   const [consent, setConsent] = useState(false);
   const [oficiosSel, setOficiosSel] = useState<Set<string>>(new Set());
   const [regionsSel, setRegionsSel] = useState<Set<string>>(new Set());
@@ -234,8 +235,15 @@ export function RegistroForm({
           <div className="flex flex-col sm:flex-row gap-3">
             {/* Cambiar de archivo invalida el que ya se había subido: si no, se
                 guardaría el CV viejo con el formulario nuevo. */}
-            <input ref={cvRef} type="file" accept=".pdf,image/*" onChange={() => setCv(null)}
-              className="text-[14px] text-[#cfc4c5] file:mr-3 file:border file:border-[#4c4546] file:bg-transparent file:text-[#e5e2e1] file:px-4 file:py-2 file:label-tech file:text-[11px] file:uppercase" />
+            {/* Botón propio: el del navegador sale en el idioma del teléfono
+                («Choose file»). El input sigue ahí para teclado (29/10). */}
+            <input ref={cvRef} id="cv-completo" type="file" accept=".pdf,image/*"
+              onChange={(e) => { setCv(null); setCvNombre(e.target.files?.[0]?.name ?? null); }}
+              className="peer sr-only" />
+          <label htmlFor="cv-completo"
+            className="inline-flex min-h-[44px] max-w-full items-center gap-2 border border-[#4c4546] px-4 py-2.5 label-tech text-[11px] uppercase tracking-wide text-[#e5e2e1] cursor-pointer hover:border-[#e5e2e1] transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-[#b9c3ff] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[#0e0e0e]">
+            <span className="truncate">{cvNombre ?? "Elegir archivo"}</span>
+          </label>
             <button type="button" onClick={autofill} disabled={afStatus === "loading" || subiendo}
               className="inline-flex shrink-0 items-center justify-center gap-2 border border-[#b9c3ff]/50 text-[#b9c3ff] label-tech text-[11px] uppercase tracking-wide px-5 py-2.5 hover:bg-[#b9c3ff] hover:text-black transition-colors disabled:opacity-60">
               <Sparkles size={14} />

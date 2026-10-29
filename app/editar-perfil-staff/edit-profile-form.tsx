@@ -35,6 +35,7 @@ import type { StaffProfile } from "@/lib/staff";
 export function EditProfileForm({ profile }: { profile: StaffProfile }) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
+  const [afNombre, setAfNombre] = useState<string | null>(null);
   const [oficiosSel, setOficiosSel] = useState<Set<string>>(
     new Set((profile.oficios ?? []).filter(Boolean)),
   );
@@ -205,8 +206,15 @@ export function EditProfileForm({ profile }: { profile: StaffProfile }) {
           Subí un CV (PDF o imagen) y la IA completa los campos que pueda. Revisá antes de guardar.
         </p>
         <div className="flex flex-col sm:flex-row gap-3">
-          <input ref={afRef} type="file" accept=".pdf,image/*"
-            className="text-[14px] text-[#cfc4c5] file:mr-3 file:border file:border-[#4c4546] file:bg-transparent file:text-[#e5e2e1] file:px-4 file:py-2 file:label-tech file:text-[11px] file:uppercase" />
+          {/* Botón propio: el del navegador sale en el idioma del teléfono
+              («Choose file»). El input sigue ahí para teclado (29/10). */}
+          <input ref={afRef} id="cv-autofill" type="file" accept=".pdf,image/*"
+            onChange={(e) => setAfNombre(e.target.files?.[0]?.name ?? null)}
+            className="peer sr-only" />
+          <label htmlFor="cv-autofill"
+            className="inline-flex min-h-[44px] max-w-full items-center gap-2 border border-[#4c4546] px-4 py-2.5 label-tech text-[11px] uppercase tracking-wide text-[#e5e2e1] cursor-pointer hover:border-[#e5e2e1] transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-[#b9c3ff] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[#0e0e0e]">
+            <span className="truncate">{afNombre ?? "Elegir archivo"}</span>
+          </label>
           <button type="button" onClick={autofill} disabled={afStatus === "loading" || subiendo}
             className="inline-flex shrink-0 items-center justify-center gap-2 border border-[#b9c3ff]/50 text-[#b9c3ff] label-tech text-[11px] uppercase tracking-wide px-5 py-2.5 hover:bg-[#b9c3ff] hover:text-black transition-colors disabled:opacity-60">
             <Sparkles size={14} />
