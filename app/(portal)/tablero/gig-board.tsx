@@ -191,7 +191,11 @@ function GigCard({ item }: { item: BoardGig }) {
   }
   // Abierto por defecto si hay un rol para volver a buscar (necesita atención) o
   // si ya hay gente fichada (para ver el check-in de un vistazo).
-  const [open, setOpen] = useState(resumen.abierto > 0 || attendance.length > 0);
+  // También abierta si el evento ya arrancó y hay confirmados sin salida: así
+  // se ve a quién falta fichar (o corregir) sin tener que abrir la tarjeta.
+  const yaArranco = gig.starts_at ? new Date(gig.starts_at).getTime() <= Date.now() : false;
+  const faltaFichar = yaArranco && filasFichaje.some((f) => !f.checkOutAt);
+  const [open, setOpen] = useState(resumen.abierto > 0 || attendance.length > 0 || faltaFichar);
 
 
   const titulo = (gig.title ?? "").trim() || "Gig sin título";
