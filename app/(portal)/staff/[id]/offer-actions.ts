@@ -191,6 +191,23 @@ export async function createAndSendOffer(
   let mail: MailResult;
   const to = input.email?.trim();
   if (to) {
+    // La dirección del evento (29/10): el mail decía «Dónde: Oficina» y la
+    // persona no sabía si le quedaba lejos. Solo si el evento ya existía (el
+    // rápido del formulario no tiene dirección); si la lectura falla, el mail
+    // sale igual con el nombre.
+    let address: string | null = null;
+    if (input.gigId) {
+      const { data: gigRow, error: gigErr } = await supabase
+        .from("staff_app_gigs")
+        .select("venue_address")
+        .eq("id", input.gigId)
+        .maybeSingle();
+      if (gigErr) console.error("[oferta] no se pudo leer la dirección:", gigErr.message);
+      address = (gigRow as { venue_address: string | null } | null)?.venue_address?.trim() || null;
+    }
+    const venueName = input.gigVenue?.trim() || null;
+    const lugar =
+      venueName && address && address !== venueName ? `${venueName}, ${address}` : venueName ?? address;
     const html = await render(
       createElement(OfferEmail, {
         firstName: input.firstName,
@@ -202,7 +219,7 @@ export async function createAndSendOffer(
         link,
         // Los tres datos que faltaban (26/7). El lugar ya lo teníamos acá, solo
         // que no se lo mandábamos: quedaba del otro lado del link.
-        venue: input.gigVenue?.trim() || null,
+        venue: lugar,
         expiresText: formatWhen(res.expires_at),
         paymentText: PAGO_TEXTO,
       }),
