@@ -23,10 +23,14 @@ import { OfferForm, type OfferFormCandidate, type OfferFormGig } from "./offer-f
 
 export default async function OfferPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  /** Desde una búsqueda llegan el evento, el rol y el pago para precargar. */
+  searchParams: Promise<{ gig?: string; rol?: string; monto?: string }>;
 }) {
   const { id } = await params;
+  const sp = await searchParams;
   const supabase = await createClient();
 
   const { data: candidateData, error: candidateError } = await supabase
@@ -78,7 +82,13 @@ export default async function OfferPage({
         </div>
       </header>
 
-      <OfferForm candidate={candidate} gigs={gigs} />
+      <OfferForm
+        candidate={candidate}
+        gigs={gigs}
+        initialGigId={sp.gig}
+        initialRole={sp.rol}
+        initialAmount={sp.monto}
+      />
     </div>
   );
 }

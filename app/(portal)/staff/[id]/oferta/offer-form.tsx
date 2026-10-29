@@ -86,21 +86,37 @@ function Field({
 export function OfferForm({
   candidate,
   gigs,
+  initialGigId,
+  initialRole,
+  initialAmount,
 }: {
   candidate: OfferFormCandidate;
   gigs: OfferFormGig[];
+  initialGigId?: string;
+  initialRole?: string;
+  initialAmount?: string;
 }) {
-  // Rol pre-cargado con el primer oficio del candidato (editable).
-  const defaultRole = (candidate.oficios ?? []).filter(Boolean)[0] ?? "";
+  // Rol: el de la búsqueda si viene de una; si no, el primer oficio del candidato (editable).
+  const defaultRole =
+    initialRole?.trim() || (candidate.oficios ?? []).filter(Boolean)[0] || "";
 
+  // ⚠️ Desde una búsqueda, el evento tiene que ser el de esa búsqueda. Antes
+  // quedaba elegido el primero de la lista (el de fecha más lejana), y con dos
+  // eventos cargados la oferta podía salir para el equivocado.
   const [gigChoice, setGigChoice] = useState<string>(
-    gigs.length ? gigs[0].id : NEW_GIG,
+    initialGigId && gigs.some((g) => g.id === initialGigId)
+      ? initialGigId
+      : gigs.length
+        ? gigs[0].id
+        : NEW_GIG,
   );
   const [gigTitle, setGigTitle] = useState("");
   const [gigDate, setGigDate] = useState(""); // datetime-local → starts_at
   const [gigVenue, setGigVenue] = useState("");
   const [role, setRole] = useState(defaultRole);
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(
+    initialAmount && /^\d+(\.\d+)?$/.test(initialAmount) ? initialAmount : "",
+  );
   const [conditions, setConditions] = useState("");
 
   const [submitting, setSubmitting] = useState(false);

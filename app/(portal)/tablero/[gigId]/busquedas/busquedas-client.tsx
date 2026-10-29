@@ -142,9 +142,12 @@ function NuevaBusqueda({ gigId }: { gigId: string }) {
 
 function Postulado({
   gigId,
+  busqueda,
   p,
 }: {
   gigId: string;
+  /** La búsqueda a la que se postuló: su rol y su pago van precargados en la oferta. */
+  busqueda: Busqueda;
   p: Postulacion;
 }) {
   const router = useRouter();
@@ -189,7 +192,11 @@ function Postulado({
       </div>
       <div className="flex flex-wrap items-center gap-2 shrink-0">
         <Link
-          href={`/staff/${p.staff_profile_id}/oferta`}
+          href={`/staff/${p.staff_profile_id}/oferta?${new URLSearchParams({
+            gig: gigId,
+            rol: busqueda.role,
+            ...(busqueda.pago != null ? { monto: String(busqueda.pago) } : {}),
+          }).toString()}`}
           onClick={() => marcar("ofertada")}
           className="inline-flex items-center gap-2 label-tech text-[11px] uppercase tracking-widest px-5 py-3 border border-[#e5e2e1] text-[#e5e2e1] hover:bg-[#e5e2e1] hover:text-black transition-colors"
         >
@@ -313,7 +320,7 @@ export function BusquedasClient({
               ) : (
                 <div className="flex flex-col">
                   {suyas.map((p) => (
-                    <Postulado key={p.id} gigId={gigId} p={p} />
+                    <Postulado key={p.id} gigId={gigId} busqueda={b} p={p} />
                   ))}
                 </div>
               )}
