@@ -22,6 +22,7 @@ export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import { jsonLdSeguro, schemaSalon } from "@/lib/schema-vidriera";
 import { notFound } from "next/navigation";
 import { BadgeCheck, MapPin, Users, Maximize2, ArrowLeft } from "lucide-react";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
@@ -318,6 +319,11 @@ export default async function FichaSalonPage({ params }: Props) {
           </Link>
         </div>
       </footer>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdSeguro(schemaSalon(s)) }}
+      />
     </div>
   );
 }

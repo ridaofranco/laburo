@@ -20,6 +20,7 @@ export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import { jsonLdSeguro, schemaProveedor } from "@/lib/schema-vidriera";
 import { notFound } from "next/navigation";
 import { BadgeCheck, MapPin, ArrowLeft } from "lucide-react";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
@@ -215,6 +216,11 @@ export default async function FichaProveedorPage({ params }: Props) {
           </Link>
         </div>
       </footer>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdSeguro(schemaProveedor(p)) }}
+      />
     </div>
   );
 }
