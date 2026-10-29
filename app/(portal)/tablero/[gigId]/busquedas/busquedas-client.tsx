@@ -212,10 +212,13 @@ export function BusquedasClient({
   gigId,
   busquedas,
   postulaciones,
+  errorCarga = false,
 }: {
   gigId: string;
   busquedas: Busqueda[];
   postulaciones: Postulacion[];
+  /** La lectura falló: no decir «no publicaste ninguna» cuando no lo sabemos. */
+  errorCarga?: boolean;
 }) {
   const router = useRouter();
   const [busy, setBusy] = useState<string | null>(null);
@@ -236,7 +239,12 @@ export function BusquedasClient({
     <div className="flex flex-col gap-10">
       <NuevaBusqueda gigId={gigId} />
 
-      {busquedas.length === 0 ? (
+      {errorCarga ? (
+        <p role="alert" className="border border-[#5c2b2b] px-5 py-4 text-[16px] text-[#e5e2e1] leading-[1.6] max-w-[600px]">
+          No pudimos cargar las búsquedas de este evento. Recargá la página y, si
+          sigue igual, avisanos por WhatsApp.
+        </p>
+      ) : busquedas.length === 0 ? (
         <p className="text-[16px] text-[#cfc4c5] leading-[1.6] max-w-[600px]">
           Todavía no publicaste ninguna búsqueda para este evento. Cuando
           publiques una, le aparece a todo el pool de staff y se pueden postular

@@ -35,7 +35,7 @@ export default async function BusquedasPage({
     .maybeSingle();
   if (!gig) redirect("/tablero");
 
-  const [{ data: busquedas }, { data: postulaciones }] = await Promise.all([
+  const [{ data: busquedas, error: errB }, { data: postulaciones, error: errP }] = await Promise.all([
     supabase
       .from("staff_app_busquedas")
       .select("id,role,cupo,pago,notas,publicado_at,cerrado_at,postulados,sin_mirar")
@@ -47,6 +47,13 @@ export default async function BusquedasPage({
       .eq("gig_id", gigId)
       .order("created_at", { ascending: true }),
   ]);
+
+  // ⚠️ Hasta la 0093 estas dos lecturas fallaban con «permission denied» y la
+  // pantalla decía «Todavía no publicaste ninguna búsqueda». Que un error no se
+  // vuelva a disfrazar de estado vacío: queda en los logs y se avisa en pantalla.
+  if (errB || errP) {
+    console.error("[busquedas] no se pudo leer:", errB?.message ?? "", errP?.message ?? "");
+  }
 
   return (
     <div className="w-full max-w-[1200px] mx-auto px-6 md:px-10 py-10 md:py-16 flex flex-col gap-10">
@@ -72,6 +79,7 @@ export default async function BusquedasPage({
         gigId={gigId}
         busquedas={(busquedas as Busqueda[] | null) ?? []}
         postulaciones={(postulaciones as Postulacion[] | null) ?? []}
+        errorCarga={Boolean(errB || errP)}
       />
     </div>
   );
