@@ -33,6 +33,11 @@ LABURO nace adentro de SOMOS DER (https://www.somosder.ar) y es el mismo sistema
 - [Proveedores para eventos](${BLOG_ORIGIN}/servicios): directorio público de proveedores.
 - [Salones para eventos](${BLOG_ORIGIN}/salones): directorio público de salones por capacidad y zona.
 - [Para quién es](${BLOG_ORIGIN}/para): páginas por público.
+- [Crear cuenta](${BLOG_ORIGIN}/registrarme): elegir el camino (buscar staff, trabajar, publicar un servicio o un salón).
+- [Cuenta de productora](${BLOG_ORIGIN}/registrar-productora): alta gratis para cargar eventos y contratar staff.
+- [Publicar un servicio](${BLOG_ORIGIN}/registrar-proveedor): alta gratis de proveedores en el directorio.
+- [Publicar un salón](${BLOG_ORIGIN}/registrar-salon): alta gratis de salones en el directorio.
+- [Licitaciones abiertas](${BLOG_ORIGIN}/licitaciones): pedidos de presupuesto abiertos; cualquier proveedor cotiza sin cuenta.
 
 ## Páginas por público
 ${para.map((p) => `- [${p.title}](${p.canonical}): ${p.description}`).join("\n")}
