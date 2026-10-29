@@ -254,14 +254,24 @@ export function RegistroRapido({
             <FileUp size={18} className="text-[#b9c3ff]" />
             Tu CV, en PDF o foto (opcional)
           </label>
+          {/* El input nativo sigue ahí (teclado y lector de pantalla), pero
+              escondido a la vista: el botón del navegador sale en el idioma del
+              teléfono («Choose file / No file chosen») y desentonaba. El botón
+              visible es su label; el foco se ve igual (peer-focus-visible). 29/10. */}
           <input
             id="cv-rapido"
             type="file"
             accept=".pdf,image/*"
             onChange={onPick}
             disabled={leyendo || sending}
-            className="w-full text-[14px] text-[#cfc4c5] rounded-none file:mr-3 file:border file:border-[#4c4546] file:bg-transparent file:text-[#e5e2e1] file:px-4 file:py-3 file:label-tech file:text-[11px] file:uppercase file:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b9c3ff] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e0e0e] disabled:opacity-60"
+            className="peer sr-only"
           />
+          <label
+            htmlFor="cv-rapido"
+            className="self-start inline-flex min-h-[44px] items-center gap-2 border border-[#4c4546] px-4 py-3 label-tech text-[11px] uppercase tracking-[0.1em] text-[#e5e2e1] cursor-pointer hover:border-[#e5e2e1] transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-[#b9c3ff] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[#0e0e0e] peer-disabled:opacity-60 peer-disabled:cursor-not-allowed"
+          >
+            {file ? "Cambiar archivo" : "Elegir archivo"}
+          </label>
           <p
             role="status"
             aria-live="polite"
