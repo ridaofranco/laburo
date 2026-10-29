@@ -27,6 +27,8 @@ export interface PublicOffer {
     starts_at: string | null;
     ends_at: string | null;
     venue: string | null;
+    /** Dirección del lugar (0096). Puede faltar en ofertas viejas. */
+    address?: string | null;
   };
   org: { name: string | null };
   applicant: { first_name: string | null };

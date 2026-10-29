@@ -141,6 +141,11 @@ export default async function OfferPage({
   const firstName = (d.applicant?.first_name ?? "").trim();
   const orgName = (d.org?.name ?? "").trim();
   const when = fmtWhen(d.gig?.starts_at ?? null, d.gig?.ends_at ?? null);
+  // Nombre del lugar y dirección (0096): para decidir, importa dónde queda.
+  const venue = d.gig?.venue?.trim() || null;
+  const address = d.gig?.address?.trim() || null;
+  const lugar =
+    venue && address && address !== venue ? `${venue}, ${address}` : venue ?? address;
   const amount = fmtAmount(d.offer?.amount ?? null);
 
   return (
@@ -163,7 +168,7 @@ export default async function OfferPage({
           <OfferRow label="Rol" value={d.offer?.role} />
           <OfferRow label="Evento" value={d.gig?.title} />
           <OfferRow label="Cuándo" value={when} />
-          <OfferRow label="Lugar" value={d.gig?.venue} />
+          <OfferRow label="Lugar" value={lugar} />
           <OfferRow label="Pago" value={amount} />
           <OfferRow label="Condiciones" value={d.offer?.conditions} />
         </div>
