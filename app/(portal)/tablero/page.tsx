@@ -60,8 +60,18 @@ export default async function TableroPage() {
   let qSlots = supabase.from("staff_app_gig_slots").select("gig_id,role,quantity");
   if (orgId) qSlots = qSlots.eq("organization_id", orgId);
 
-  const [{ data: gigsData }, { data: offersData }, { data: attData }, { data: slotsData }] =
-    await Promise.all([qGigs, qOffers, qAtt, qSlots]);
+  const [
+    { data: gigsData, error: errGigs },
+    { data: offersData, error: errOffers },
+    { data: attData, error: errAtt },
+    { data: slotsData, error: errSlots },
+  ] = await Promise.all([qGigs, qOffers, qAtt, qSlots]);
+
+  // Un error de lectura acá se ve como «Todavía no hay eventos» o «0 cubiertos»
+  // (así pasó con las búsquedas hasta la 0093). Que por lo menos quede en los logs.
+  for (const [que, e] of [["gigs", errGigs], ["offers", errOffers], ["attendance", errAtt], ["slots", errSlots]] as const) {
+    if (e) console.error(`[tablero] no se pudo leer ${que}:`, e.message);
+  }
 
   const gigs = (gigsData ?? []) as BoardGigMeta[];
   const offers = (offersData ?? []) as BoardOffer[];
