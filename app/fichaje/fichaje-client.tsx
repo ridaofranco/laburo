@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { MapPin, LogIn, LogOut, CheckCircle2 } from "lucide-react";
 import { checkIn, checkOut } from "./actions";
-import { fmtHora as fmtHoraTz, fmtFechaHora } from "@/lib/dates";
+import { fmtHora as fmtHoraTz, fmtFecha } from "@/lib/dates";
 
 export interface FichajeGig {
   gigId: string;
@@ -46,6 +46,13 @@ function ventana(gig: FichajeGig, now: number): "antes" | "abierta" | "paso" {
   if (now < ini - 3 * H) return "antes";
   if (now > fin + 6 * H) return "paso";
   return "abierta";
+}
+
+/** «lunes, 2 de noviembre, a las 22:27» (hora AR). */
+function diaYHora(iso: string | null): string | null {
+  const dia = fmtFecha(iso, { weekday: "long", day: "numeric", month: "long" });
+  const h = fmtHoraTz(iso);
+  return dia && h ? `${dia}, a las ${h}` : null;
 }
 
 function getCoords(): Promise<{ lat: number | null; lng: number | null }> {
@@ -150,8 +157,9 @@ function GigCard({ gig }: { gig: FichajeGig }) {
 
   const done = Boolean(entrada && salida);
   const estado = ventana(gig, Date.now());
-  const abre = gig.startsAt ? fmtFechaHora(new Date(new Date(gig.startsAt).getTime() - 3 * H).toISOString(), { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }) : null;
-  const cuando = gig.startsAt ? fmtFechaHora(gig.startsAt, { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }) : null;
+  const abreIso = gig.startsAt ? new Date(new Date(gig.startsAt).getTime() - 3 * H).toISOString() : null;
+  const abre = diaYHora(abreIso);
+  const cuando = diaYHora(gig.startsAt);
 
   return (
     <div className="border border-[#1A1A1A] bg-[#0e0e0e] p-6 md:p-8 flex flex-col gap-6">
