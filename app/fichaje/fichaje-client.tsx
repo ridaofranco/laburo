@@ -110,6 +110,10 @@ function motivoLegible(reason: string | undefined, salida: boolean): string {
 function GigCard({ gig }: { gig: FichajeGig }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
+  // La salida cierra la jornada y la persona no la puede deshacer: un toque sin
+  // querer (con el teléfono en el bolsillo, o al rato de fichar la entrada)
+  // dejaba la jornada terminada. Se pide confirmar (29/10).
+  const [confirmarSalida, setConfirmarSalida] = useState(false);
   const entrada = hora(gig.checkInAt);
   const salida = hora(gig.checkOutAt);
 
@@ -140,6 +144,7 @@ function GigCard({ gig }: { gig: FichajeGig }) {
 
   async function doCheckOut() {
     if (busy) return;
+    setConfirmarSalida(false);
     setBusy(true);
     try {
       const { lat, lng } = await getCoords();
@@ -175,9 +180,9 @@ function GigCard({ gig }: { gig: FichajeGig }) {
         {cuando && <p className="text-[14px] text-[#cfc4c5]">{cuando}</p>}
       </div>
 
-      <div className="flex items-center gap-6 label-tech text-[12px] text-[#cfc4c5]">
-        <span>Entrada: <span className="text-[#e5e2e1]">{entrada ?? "sin registrar"}</span></span>
-        <span>Salida: <span className="text-[#e5e2e1]">{salida ?? "sin registrar"}</span></span>
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 label-tech text-[12px] text-[#cfc4c5]">
+        <span className="whitespace-nowrap">Entrada: <span className="text-[#e5e2e1]">{entrada ?? "sin registrar"}</span></span>
+        <span className="whitespace-nowrap">Salida: <span className="text-[#e5e2e1]">{salida ?? "sin registrar"}</span></span>
       </div>
 
       {done ? (
@@ -189,10 +194,31 @@ function GigCard({ gig }: { gig: FichajeGig }) {
         <p className="border border-[#1A1A1A] px-5 py-4 text-[14px] text-[#cfc4c5] leading-[1.5]">
           No quedó registrada la salida y ya pasó el horario para ficharla. Avisale a la productora a qué hora terminaste.
         </p>
+      ) : entrada && confirmarSalida && !busy ? (
+        <div className="flex flex-col gap-3 border border-[#c6c6c6] p-5">
+          <p className="text-[15px] text-[#e5e2e1] leading-[1.5]">
+            ¿Terminaste? La salida queda con la hora de ahora y no se puede deshacer.
+          </p>
+          <button
+            type="button"
+            onClick={doCheckOut}
+            className="flex items-center justify-center gap-3 bg-[#c6c6c6] text-black border border-[#c6c6c6] label-tech text-[12px] uppercase tracking-widest py-5 hover:bg-transparent hover:text-[#c6c6c6] transition-colors"
+          >
+            <LogOut size={18} />
+            Sí, fichar salida
+          </button>
+          <button
+            type="button"
+            onClick={() => setConfirmarSalida(false)}
+            className="min-h-[44px] label-tech text-[12px] uppercase tracking-widest text-[#cfc4c5] hover:text-[#e5e2e1] transition-colors"
+          >
+            Todavía no
+          </button>
+        </div>
       ) : entrada ? (
         <button
           type="button"
-          onClick={doCheckOut}
+          onClick={() => setConfirmarSalida(true)}
           disabled={busy}
           className="flex items-center justify-center gap-3 bg-transparent text-[#e5e2e1] border border-[#c6c6c6] label-tech text-[12px] uppercase tracking-widest py-5 hover:bg-[#c6c6c6] hover:text-black transition-colors disabled:opacity-50"
         >
