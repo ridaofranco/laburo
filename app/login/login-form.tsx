@@ -26,7 +26,9 @@ import { GoogleLogo } from "@/components/google-logo";
 import { CampoContrasena } from "@/components/campo-contrasena";
 
 const up = (delay: number) => ({
-  initial: { opacity: 0, y: 20 },
+  // Sin opacity 0 de entrada: el HTML tiene que salir visible aunque el JS
+  // tarde o no cargue (queda solo la subida corta).
+  initial: { y: 20 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] as const, delay },
 });
