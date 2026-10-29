@@ -763,6 +763,20 @@ noche, sin que le llegue nada a nadie. Los scripts están en el servidor, en
   `gig_openings`, `offers`, `gigs`, la ficha; `quote_invites`,
   `quote_request_items`, `quote_requests`; `provider_services`, el perfil) y
   contar antes y después. Todo SQL con `/root/scripts/supabase-sql.sh`.
+- **Trampas que costaron tiempo (29/10, 2:44):**
+  - La organización es la de `staff_app.organizations` (SOMOS DER, slug
+    `somos-der`, `aa29aa2f-…`), no la de `public.organizations` (eso es HITO).
+    Los miembros están en `staff_app.members`; Franco entra como `franco@somosder.ar`.
+  - `der_admin_sql` no acepta `WITH … INSERT` (un insert por llamada) y la base
+    no tiene `gen_random_bytes`: el `token_hash` de prueba sale de `md5(random()::text)||md5(random()::text)`.
+  - Para que el tablero cuente al confirmado, insertar también la fila de
+    `staff_app.crew` (con `reminder_sent_at` puesto para que no salga el recordatorio).
+  - `laburo-sesion.js` con un mail nuevo **crea un usuario en `auth.users`**: borrarlo
+    al terminar (`delete from auth.users where email=… and created_at > <hoy>`).
+  - Fichaje con GPS: Playwright con `geolocation` + `permissions:['geolocation']`
+    y el evento con `venue_lat/venue_lng`; el tablero muestra la distancia. No manda mail.
+  - Playwright no está en `trabajo/noche/scripts`: correr con
+    `NODE_PATH=$(dirname $(find /root/.npm/_npx -maxdepth 3 -type d -name playwright | head -1))`.
 - **Si una pantalla dice «no hay nada» y sí hay:** probá la vista con la sesión
   de esa persona y mirá el `error`. Las pantallas no lo muestran (así se encontró
   la 0093).
