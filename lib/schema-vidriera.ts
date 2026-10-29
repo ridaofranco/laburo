@@ -150,3 +150,29 @@ export function schemaSalon(s: FichaSalon) {
     ],
   };
 }
+
+/** El listado de una vidriera (/servicios o /salones) como CollectionPage +
+ *  ItemList. Solo sin filtros: una búsqueda filtrada no es «la» lista. */
+export function schemaListado(
+  titulo: string,
+  path: string,
+  items: { slug: string; display_name: string | null }[],
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: titulo,
+    url: `${BLOG_ORIGIN}${path}`,
+    inLanguage: "es-AR",
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: items.length,
+      itemListElement: items.map((it, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: it.display_name?.trim() || it.slug,
+        url: `${BLOG_ORIGIN}${path}/${it.slug}`,
+      })),
+    },
+  };
+}

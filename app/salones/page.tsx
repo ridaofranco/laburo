@@ -21,6 +21,7 @@ export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import { jsonLdSeguro, schemaListado } from "@/lib/schema-vidriera";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { PROVINCIAS } from "@/lib/provincias";
 import { buscarSalones } from "./actions";
@@ -237,6 +238,15 @@ export default async function SalonesPage({ searchParams }: Props) {
           </div>
         </div>
       </footer>
+
+      {!hayFiltros && salones.length > 0 ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: jsonLdSeguro(schemaListado("Salones para eventos", "/salones", salones)),
+          }}
+        />
+      ) : null}
     </div>
   );
 }

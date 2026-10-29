@@ -24,6 +24,7 @@ export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import { jsonLdSeguro, schemaListado } from "@/lib/schema-vidriera";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { PROVINCIAS } from "@/lib/provincias";
 import { buscarPublico, getCategoriasPublicas } from "./actions";
@@ -249,6 +250,15 @@ export default async function ServiciosPage({ searchParams }: Props) {
           </div>
         </div>
       </footer>
+
+      {!hayFiltros && proveedores.length > 0 ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: jsonLdSeguro(schemaListado("Proveedores para eventos", "/servicios", proveedores)),
+          }}
+        />
+      ) : null}
     </div>
   );
 }
