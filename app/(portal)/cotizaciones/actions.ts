@@ -143,7 +143,8 @@ export async function listarPedidos(): Promise<PedidoResumen[]> {
     p_org: org.organizationId,
   });
   if (error) console.error("[cotizaciones] no se pudo leer mis_pedidos:", error.message);
-  const r = data as { ok?: boolean; pedidos?: PedidoResumen[] } | null;
+  const r = data as { ok?: boolean; reason?: string; pedidos?: PedidoResumen[] } | null;
+  if (r && !r.ok) console.error("[cotizaciones] mis_pedidos devolvió ok:false:", r.reason);
   return r?.ok ? (r.pedidos ?? []) : [];
 }
 
@@ -155,7 +156,8 @@ export async function getPedido(requestId: string): Promise<PedidoDetalle | null
     p_org: org.organizationId,
   });
   if (error) console.error("[cotizaciones] no se pudo leer pedido_detalle:", error.message);
-  const r = data as { ok?: boolean; pedido?: PedidoDetalle } | null;
+  const r = data as { ok?: boolean; reason?: string; pedido?: PedidoDetalle } | null;
+  if (r && !r.ok) console.error("[cotizaciones] pedido_detalle devolvió ok:false:", r.reason);
   return r?.ok ? (r.pedido ?? null) : null;
 }
 
@@ -171,8 +173,14 @@ export async function getCotizaciones(requestId: string): Promise<{
   });
   if (error) console.error("[cotizaciones] no se pudo leer listar_cotizaciones:", error.message);
   const r = data as
-    | { ok?: boolean; cotizaciones?: CotizacionFila[]; sin_cotizar?: InvitadoSinCotizar[] }
+    | {
+        ok?: boolean;
+        reason?: string;
+        cotizaciones?: CotizacionFila[];
+        sin_cotizar?: InvitadoSinCotizar[];
+      }
     | null;
+  if (r && !r.ok) console.error("[cotizaciones] listar_cotizaciones devolvió ok:false:", r.reason);
   if (!r?.ok) return { cotizaciones: [], sinCotizar: [] };
   return { cotizaciones: r.cotizaciones ?? [], sinCotizar: r.sin_cotizar ?? [] };
 }
@@ -225,7 +233,10 @@ export async function pedidosEnOtrasCuentas(): Promise<PedidosEnOtraCuenta[]> {
           p_org: o.organizationId,
         });
         if (error) console.error("[cotizaciones] no se pudo leer mis_pedidos de otra cuenta:", error.message);
-        const r = data as { ok?: boolean; pedidos?: unknown[] } | null;
+        const r = data as { ok?: boolean; reason?: string; pedidos?: unknown[] } | null;
+        if (r && !r.ok) {
+          console.error("[cotizaciones] mis_pedidos de otra cuenta devolvió ok:false:", r.reason);
+        }
         return {
           organizationId: o.organizationId,
           nombre: o.nombre,
@@ -257,7 +268,8 @@ export async function proveedoresParaInvitar(
     p_org: org.organizationId,
   });
   if (error) console.error("[cotizaciones] no se pudo leer proveedores_para_invitar:", error.message);
-  const r = data as { ok?: boolean; proveedores?: ProveedorInvitable[] } | null;
+  const r = data as { ok?: boolean; reason?: string; proveedores?: ProveedorInvitable[] } | null;
+  if (r && !r.ok) console.error("[cotizaciones] proveedores_para_invitar devolvió ok:false:", r.reason);
   return r?.ok ? (r.proveedores ?? []) : [];
 }
 
