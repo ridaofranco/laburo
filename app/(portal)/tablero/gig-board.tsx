@@ -23,6 +23,7 @@ import { offerLabel } from "@/lib/offers";
 import { createClientCheckout } from "./payment-actions";
 import { COBRO_AL_CLIENTE_ACTIVO } from "@/lib/cobros";
 import { fmtFecha, fmtHora } from "@/lib/dates";
+import { FichajeCorregir, type FilaFichaje } from "./fichaje-corregir";
 
 export interface BoardOffer {
   id: string;
@@ -51,6 +52,8 @@ export interface BoardGigMeta {
 
 export interface BoardAttendance {
   gig_id: string | null;
+  staff_profile_id: string | null;
+  corregido_at: string | null;
   staff_nombre: string | null;
   staff_apellido: string | null;
   check_in_at: string | null;
@@ -129,6 +132,37 @@ function resumenDe(offers: BoardOffer[]): Resumen {
 
 function GigCard({ item }: { item: BoardGig }) {
   const { gig, offers, attendance, requiredTotal } = item;
+
+  // Filas de fichaje: confirmados (oferta aceptada) + quien haya fichado.
+  const filasFichaje: FilaFichaje[] = (() => {
+    const porPersona = new Map<string, FilaFichaje>();
+    for (const o of offers) {
+      if (o.status !== "accepted" || !o.staff_profile_id || porPersona.has(o.staff_profile_id)) continue;
+      porPersona.set(o.staff_profile_id, {
+        staffProfileId: o.staff_profile_id,
+        nombre: [o.staff_nombre, o.staff_apellido].filter(Boolean).join(" ").trim() || "Staff",
+        entrada: null, salida: null, checkInAt: null, checkOutAt: null, distancia: null, corregido: false,
+      });
+    }
+    for (const a of attendance) {
+      if (!a.staff_profile_id) continue;
+      const base = porPersona.get(a.staff_profile_id) ?? {
+        staffProfileId: a.staff_profile_id,
+        nombre: [a.staff_nombre, a.staff_apellido].filter(Boolean).join(" ").trim() || "Staff",
+        entrada: null, salida: null, checkInAt: null, checkOutAt: null, distancia: null, corregido: false,
+      };
+      porPersona.set(a.staff_profile_id, {
+        ...base,
+        entrada: shortTime(a.check_in_at),
+        salida: shortTime(a.check_out_at),
+        checkInAt: a.check_in_at,
+        checkOutAt: a.check_out_at,
+        distancia: a.check_in_at ? distanciaFichaje(a.check_in_distance_m) : null,
+        corregido: Boolean(a.corregido_at),
+      });
+    }
+    return [...porPersona.values()];
+  })();
   const reduce = useReducedMotion();
   const resumen = resumenDe(offers);
   const faltan = Math.max(0, requiredTotal - resumen.cubierto);
@@ -158,6 +192,7 @@ function GigCard({ item }: { item: BoardGig }) {
   // Abierto por defecto si hay un rol para volver a buscar (necesita atención) o
   // si ya hay gente fichada (para ver el check-in de un vistazo).
   const [open, setOpen] = useState(resumen.abierto > 0 || attendance.length > 0);
+
 
   const titulo = (gig.title ?? "").trim() || "Gig sin título";
   const fecha = shortDate(gig.starts_at);
@@ -299,44 +334,14 @@ function GigCard({ item }: { item: BoardGig }) {
                 </ul>
               )}
 
-              {/* Asistencia (check-ins reales del staff) */}
-              {attendance.length > 0 && (
+              {/* Asistencia: una fila por persona confirmada (haya fichado o no) y por
+                * quien fichó; la productora puede corregir a mano (0094). */}
+              {filasFichaje.length > 0 && (
                 <div className="mt-4 border-t border-[#1A1A1A] pt-4">
                   <div className="flex items-center gap-2 label-tech text-[11px] text-[#cfc4c5] mb-3">
                     <MapPin size={14} /> Fichaje en el lugar
                   </div>
-                  <ul className="flex flex-col gap-2">
-                    {attendance.map((a, i) => {
-                      const nombre =
-                        [a.staff_nombre, a.staff_apellido].filter(Boolean).join(" ").trim() ||
-                        "Staff";
-                      const entrada = shortTime(a.check_in_at);
-                      const salida = shortTime(a.check_out_at);
-                      const dist = a.check_in_at ? distanciaFichaje(a.check_in_distance_m) : null;
-                      return (
-                        <li
-                          key={i}
-                          className="flex items-center justify-between gap-3 bg-[#131313] border border-[#1A1A1A] px-4 py-3"
-                        >
-                          <div className="flex flex-col min-w-0">
-                            <span className="text-[15px] text-[#e5e2e1] uppercase truncate">{nombre}</span>
-                            {dist && (
-                              <span
-                                className={`label-tech text-[10px] ${dist.lejos ? "text-[#f5a623]" : "text-[#3dd68c]"}`}
-                              >
-                                {dist.lejos ? `lejos del predio (${dist.text})` : `en el lugar (${dist.text})`}
-                              </span>
-                            )}
-                          </div>
-                          <span className="shrink-0 label-tech text-[11px] text-[#cfc4c5]">
-                            <span className="text-[#3dd68c]">↓ {entrada ?? "—"}</span>
-                            <span className="mx-2 opacity-40">|</span>
-                            <span>↑ {salida ?? "—"}</span>
-                          </span>
-                        </li>
-                      );
-                    })}
-                  </ul>
+                  <FichajeCorregir gigId={gig.id} filas={filasFichaje} />
                 </div>
               )}
             </div>

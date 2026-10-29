@@ -210,3 +210,43 @@ export async function updateGig(
   revalidatePath("/calendario");
   return { ok: true };
 }
+
+/**
+ * Corrige a mano la entrada y/o la salida de una persona confirmada (0094).
+ * Para quien se olvidó de fichar: desde la 0091/0092 hay horario y fuera de él
+ * la persona ya no puede. Queda marcado como corregido, con el motivo.
+ */
+export async function corregirFichaje(input: {
+  gigId: string;
+  staffProfileId: string;
+  checkInAt: string | null;
+  checkOutAt: string | null;
+  motivo: string;
+}): Promise<{ ok: boolean; reason?: string }> {
+  const org = await orgDeEscritura();
+  if (!org.ok) return org;
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("staff_app_corregir_fichaje", {
+    p_gig_id: input.gigId,
+    p_staff_profile_id: input.staffProfileId,
+    p_check_in_at: input.checkInAt,
+    p_check_out_at: input.checkOutAt,
+    p_motivo: input.motivo,
+  });
+  const res = data as { ok: boolean; reason?: string } | null;
+  if (error || !res?.ok) {
+    const motivos: Record<string, string> = {
+      forbidden: "No podés corregir fichajes de este evento.",
+      not_confirmed: "Esa persona no está confirmada en este evento.",
+      nada_que_corregir: "Cargá la entrada, la salida o las dos.",
+      salida_antes_de_entrada: "La salida tiene que ser después de la entrada.",
+      falta_motivo: "Contá en una línea por qué lo corregís.",
+    };
+    const r = res?.reason ?? (error?.message?.includes("salida_antes_de_entrada") ? "salida_antes_de_entrada" : undefined);
+    if (error) console.error("[tablero] corregir fichaje falló:", error.message);
+    return { ok: false, reason: (r && motivos[r]) || "No se pudo guardar la corrección." };
+  }
+  revalidatePath("/tablero");
+  return { ok: true };
+}

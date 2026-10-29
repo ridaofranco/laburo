@@ -54,7 +54,7 @@ export default async function TableroPage() {
 
   let qAtt = supabase
     .from("staff_app_attendance")
-    .select("gig_id,staff_nombre,staff_apellido,check_in_at,check_out_at,check_in_distance_m");
+    .select("gig_id,staff_profile_id,staff_nombre,staff_apellido,check_in_at,check_out_at,check_in_distance_m,corregido_at");
   if (orgId) qAtt = qAtt.eq("organization_id", orgId);
 
   let qSlots = supabase.from("staff_app_gig_slots").select("gig_id,role,quantity");
