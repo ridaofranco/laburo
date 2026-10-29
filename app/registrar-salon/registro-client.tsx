@@ -188,7 +188,7 @@ export function RegistroSalonClient() {
             <LaburoWordmark className="h-[48px] md:h-[64px] w-auto" priority />
           </div>
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="w-full flex flex-col items-center gap-6"

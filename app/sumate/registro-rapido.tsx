@@ -216,7 +216,7 @@ export function RegistroRapido({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="max-w-[560px] mx-auto w-full px-6 md:px-0 py-10 md:py-20"
