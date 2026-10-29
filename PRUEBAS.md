@@ -732,3 +732,37 @@ SELECT (SELECT count(*) FROM staff_app.quote_requests)  AS pedidos,
        (SELECT count(*) FROM staff_app.quote_invites)   AS invitaciones,
        (SELECT count(*) FROM staff_app.quotes)          AS cotizaciones;
 ```
+
+---
+
+## 10. Probar sin mandar ningún mail (turno noche, 29/10/2026)
+
+Lo que se usó para recorrer staff, proveedor y búsquedas en producción de
+noche, sin que le llegue nada a nadie. Los scripts están en el servidor, en
+`/root/somosder/trabajo/noche/scripts/`.
+
+- **Sesión de cualquier mail, sin mail:** `laburo-sesion.js <mail> .env.local`
+  arma las cookies con `generateLink` + `verifyOtp` del lado del servidor. Sirve
+  para Playwright (cargar las cookies) o para llamar funciones como esa persona.
+- **Ficha de staff de prueba:** insertarla por SQL con `source='prueba_noche'`,
+  `organization_id` = la productora (sin eso **no ve las búsquedas**: las filtra
+  `orgs_de_la_persona`) y todos los avisos marcados (`bienvenida_enviada_at`,
+  `recordatorio_perfil_enviado_at`, `visibilidad_*`). Mail: uno de Franco con `+`.
+- **Evento y oferta:** por SQL, con `fichaje_resumen_enviado_at` y `reminded_at`
+  ya puestos. El token se guarda como `sha256` hex. ⚠️ Aceptar la oferta con un
+  UPDATE **no crea el `crew`**: el tablero va a decir «0 cubiertos». Eso no es un
+  error de la app; el aceptar de verdad (la función) sí lo crea.
+- **Pedido de precio:** `visibilidad='privada'`, invitación con `recordado_at`.
+- **Proveedor:** `marketplace_profiles` con `is_public=false` (no aparece en la
+  vidriera) y `origen='prueba_noche'`. Para el canario de reinscribirse, llamar
+  `staff_app_registrar_proveedor` con la llave de servicio: la pantalla manda mail.
+- **Lo que SÍ manda mail y no se toca de noche:** mandar una oferta desde el
+  portal, aceptar o rechazar desde `/o/<token>`, pedir acceso en `/acceso-staff`,
+  registrarse en `/registrar-proveedor` o `/sumate`.
+- **Al terminar:** borrar en orden (`attendance`, `gig_applications`,
+  `gig_openings`, `offers`, `gigs`, la ficha; `quote_invites`,
+  `quote_request_items`, `quote_requests`; `provider_services`, el perfil) y
+  contar antes y después. Todo SQL con `/root/scripts/supabase-sql.sh`.
+- **Si una pantalla dice «no hay nada» y sí hay:** probá la vista con la sesión
+  de esa persona y mirá el `error`. Las pantallas no lo muestran (así se encontró
+  la 0093).
