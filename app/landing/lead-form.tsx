@@ -15,6 +15,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { enviarLeadProductor } from "./actions";
+import { revisarAntesDeEnviar } from "@/lib/revisar-email";
 
 const labelCls =
   "block mb-2 font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.1em] text-[#8a8a8a] transition-colors group-focus-within:text-[#f5f5f5]";
@@ -37,6 +38,8 @@ export function LeadForm() {
   const [pending, startTransition] = useTransition();
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  /** Último mail dudoso que se le corrigió: si lo vuelve a poner, pasa. */
+  const emailInsistido = useRef<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -64,6 +67,15 @@ export function LeadForm() {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     setError(null);
+    // gmail.con, gamil.com: con el mail mal no hay cómo contestarle.
+    const rev = revisarAntesDeEnviar(String(fd.get("email") ?? ""), emailInsistido);
+    if ("corregir" in rev) {
+      const campo = e.currentTarget.elements.namedItem("email") as HTMLInputElement | null;
+      if (rev.corregir && campo) campo.value = rev.corregir;
+      setError(rev.mensaje);
+      return;
+    }
+    fd.set("email", rev.enviar);
     startTransition(async () => {
       let r: Awaited<ReturnType<typeof enviarLeadProductor>>;
       try {

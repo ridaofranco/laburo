@@ -30,8 +30,9 @@
  * cruce carpetas es más barato que tener dos puertas de entrada al mismo INSERT.
  */
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { guardarYRecargar, useRecuperarGuardado } from "@/lib/recarga-por-version";
+import { revisarAntesDeEnviar } from "@/lib/revisar-email";
 import Link from "next/link";
 import { Send, Check } from "lucide-react";
 import {
@@ -133,6 +134,8 @@ export function ConsultaPublicaForm({
     setEmail(g.email ?? "");
     setTelefono(g.telefono ?? "");
   });
+  /** Último mail dudoso que se le corrigió: si lo vuelve a poner, pasa. */
+  const emailInsistido = useRef<string | null>(null);
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [listo, setListo] = useState<{ mailEnviado: boolean } | null>(null);
@@ -156,6 +159,14 @@ export function ConsultaPublicaForm({
       return;
     }
 
+    // gmail.con, gamil.com: con el mail mal el proveedor no tiene cómo contestar.
+    const rev = revisarAntesDeEnviar(email, emailInsistido);
+    if ("corregir" in rev) {
+      if (rev.corregir) setEmail(rev.corregir);
+      setError(rev.mensaje);
+      return;
+    }
+
     const respuestas = aRespuestas(campos, valores);
     if (respuestas.length === 0) {
       setError("Completá al menos una pregunta antes de mandar.");
@@ -167,7 +178,7 @@ export function ConsultaPublicaForm({
     // ni salir. Es el mismo encierro que dejó a alguien en "Subiendo tu CV…".
     setEnviando(true);
     try {
-      const r = await consultarPublico({ profileId, respuestas, nombre, email, telefono });
+      const r = await consultarPublico({ profileId, respuestas, nombre, email: rev.enviar, telefono });
       if (!r.ok) {
         setError(r.error ?? "No se pudo enviar. Probá de nuevo.");
         return;
