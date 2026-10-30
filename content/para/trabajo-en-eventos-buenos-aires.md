@@ -111,6 +111,8 @@ Si no trabajás como staff sino que tenés una empresa de sonido, catering o seg
 
 Es gratis y toma unos minutos: elegís tus puestos, tu zona y tu disponibilidad, contás tu experiencia y quedás en el pool. Cuando haya un evento que necesite lo que hacés, te llega la oferta con el pago y los horarios escritos: [sumate a LABURO](/sumate).
 
+¿Ya estás en los portales de empleo de siempre? Mirá qué cambia en [portales de empleo o LABURO](/para/portales-de-empleo-o-laburo-para-trabajar-en-eventos).
+
 ## Fuentes
 
 - Ley de Contrato de Trabajo, artículo 99 (contrato de trabajo eventual): https://servicios.infoleg.gob.ar/infolegInternet/anexos/25000-29999/25552/texact.htm

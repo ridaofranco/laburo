@@ -78,6 +78,8 @@ LABURO es la plataforma de SOMOS DER para conseguir staff, proveedores y salones
 
 No es perfecto ni pretende serlo: los términos mismos dicen que es un producto joven y que no prometen que nunca se caiga. Pero todas las preguntas de esta nota tienen respuesta escrita.
 
+Si estás comparando con los portales de empleo de siempre, la comparación punto por punto está en [portales de empleo o LABURO](/para/portales-de-empleo-o-laburo-para-trabajar-en-eventos).
+
 ## Antes de cargar tu perfil
 
 Si ya decidiste dónde anotarte, lo que sigue es armar un buen perfil. En [qué poner en tu perfil para trabajar en eventos](/blog/que-poner-en-tu-perfil-para-trabajar-en-eventos) está cómo hacerlo, y si recién arrancás, mirá [trabajar en eventos sin experiencia](/blog/trabajar-en-eventos-sin-experiencia). Si buscás en Buenos Aires, está [trabajo en eventos en Buenos Aires](/para/trabajo-en-eventos-buenos-aires), y si te interesa el trabajo en activaciones, [trabajar de promotora o azafata](/para/trabajar-de-promotora-o-azafata).
