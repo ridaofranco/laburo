@@ -81,4 +81,4 @@ Del otro lado de esta página estás vos. Cargar tu perfil en LABURO es gratis y
 
 ¿Vivís en la zona y querés trabajar en eventos? Tu página es [trabajo en eventos en Posadas y Misiones](/para/trabajo-en-eventos-en-posadas-y-misiones).
 
-Para arrancar a contratar, [creá tu cuenta gratis en LABURO](/registrar-productora) (si ya tenés una, [entrá](/entrar)) y cargá tu evento en Misiones. Todas las páginas por público están en [/para](/para).
+Para arrancar a contratar, [creá tu cuenta gratis en LABURO](/registrar-productora) (si ya tenés una, [entrá](/entrar)) y cargá tu evento en Misiones. Si el evento es en otra provincia del norte, también hay gente local en [Formosa](/para/staff-para-eventos-en-formosa) y en [Catamarca](/para/staff-para-eventos-en-catamarca). Todas las páginas por público están en [/para](/para).
