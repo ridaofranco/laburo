@@ -27,6 +27,7 @@ import { createElement } from "react";
 import { revalidatePath } from "next/cache";
 import { render } from "@react-email/components";
 import { createClient } from "@/lib/supabase/server";
+import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { exigirOrg } from "@/lib/org";
 import { sendMail } from "@/lib/email/mailer";
 import { siteUrl } from "@/lib/site";
@@ -93,7 +94,10 @@ export async function pedirLinkParaCotizar(
     return { ok: false, error: "Ese email no parece válido. Revisalo." };
   }
 
-  const { data, error } = await supabase.rpc("staff_app_quiero_cotizar", {
+  // La función devuelve el link crudo para mandarlo por mail: solo la puede
+  // llamar el servidor (service_role). Si la llamara anon directo, cualquiera
+  // podía pedir el link de otro proveedor poniendo su mail (migración 0103).
+  const { data, error } = await createServiceRoleClient().rpc("staff_app_quiero_cotizar", {
     p_slug: slug,
     p_email: email,
     p_nombre: nombre || null,
