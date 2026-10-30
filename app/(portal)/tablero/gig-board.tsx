@@ -131,7 +131,10 @@ function resumenDe(offers: BoardOffer[]): Resumen {
 }
 
 function GigCard({ item }: { item: BoardGig }) {
-  const { gig, offers, attendance, requiredTotal } = item;
+  const { gig, attendance, requiredTotal } = item;
+  // Cada oferta lleva las fechas de su evento: sin responder y con el evento
+  // terminado, offerLabel la da por vencida (0099: ya no se puede aceptar).
+  const offers = item.offers.map((o) => ({ ...o, gig_starts_at: gig.starts_at, gig_ends_at: gig.ends_at }));
 
   // Filas de fichaje: confirmados (oferta aceptada) + quien haya fichado.
   const filasFichaje: FilaFichaje[] = (() => {

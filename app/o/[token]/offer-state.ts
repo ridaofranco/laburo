@@ -12,6 +12,8 @@
  * aunque la oferta ya haya vencido. El vencimiento es puramente derivado.
  */
 
+import { eventoTerminado } from "@/lib/offers";
+
 /** Forma del jsonb que devuelve public.staff_app_get_public_offer (token match). */
 export interface PublicOffer {
   ok: boolean;
@@ -55,6 +57,9 @@ export function deriveView(data: unknown): OfferView {
   if (offer.status === "declined") return "rechazada";
   const expired = new Date(offer.expires_at).getTime() <= Date.now();
   if (expired) return "vencida";
+  // 0099: con el evento terminado la base ya no deja aceptar; no mostrar botones.
+  const gig = (data as Partial<PublicOffer>).gig;
+  if (eventoTerminado(gig?.starts_at, gig?.ends_at)) return "vencida";
   return "activa";
 }
 
