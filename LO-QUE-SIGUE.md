@@ -63,7 +63,9 @@ El primer pedido real es además la única forma de saber si la cotización por
 
 - ✅ **¿Qué pasa si nadie cotiza?** (28/10, `e432038`) La lista dice «Venció
   sin presupuestos» o «Falta elegir», y el detalle explica y ofrece correr el
-  cierre o cancelar. Sigue sin mandar ningún aviso por mail: eso no está decidido.
+  cierre o cancelar. Y desde el 30/10 (`48525ed`, migración 0098) a quien hizo el
+  pedido le llega UN mail cuando cierra: cuántos presupuestos y «Comparar y
+  elegir», o que cerró vacío y cómo darle más tiempo.
 - ✅ **Duplicar un pedido.** (28/10, `fec7fe4`) «Hacer otro pedido igual», en el
   detalle de cualquier pedido, abre `/cotizaciones/nuevo?desde=<id>` con todo
   cargado menos invitados, presupuestos y fecha de cierre.
