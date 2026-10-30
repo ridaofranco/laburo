@@ -1,5 +1,5 @@
 ---
-title: "Staff para eventos en Bariloche: gente de la ciudad, con perfil a la vista"
+title: "Staff para eventos en Bariloche: gente de la ciudad, con el equipo armado por LABURO"
 description: "Cómo armar el staff de un evento en San Carlos de Bariloche: qué roles hay en el pool de LABURO en Río Negro, cómo dimensionar el equipo y cómo confirmarlo cuando producís a distancia."
 metaTitle: "Staff para Eventos en Bariloche | LABURO"
 slug: "staff-para-eventos-en-bariloche"
@@ -55,6 +55,10 @@ Para que funcione, el equipo local tiene que llegar sabiendo lo mismo que el que
 La cantidad de asistentes es el dato menos útil para dimensionar. Lo que importa es cuántos puntos tenés que atender al mismo tiempo (cada puerta, cada posición de barra, cada caja), a qué ritmo despacha cada uno y cuántos turnos cubre la duración del evento. Partí el evento en momentos (montaje, apertura, operación y desmontaje) y calculá cada uno por separado. La cuenta completa está en [cuánta gente necesitás para tu evento](/blog/cuanta-gente-necesito-para-mi-evento).
 
 En una ciudad con un pool más chico que el de Buenos Aires, dejá margen en puerta, caja y barra. Si alguien falta, el reemplazo no está a diez cuadras. El plan para ese caso está en [qué hacer si te falla un staff el día del evento](/blog/si-te-falla-un-staff-el-dia-del-evento), y si el evento dura varios días, mirá [turnos y horarios del staff en un evento largo](/blog/turnos-y-horarios-del-staff-en-un-evento-largo).
+
+## Otras ciudades
+
+Si también producís en otras ciudades, mirá [staff para eventos en el interior](/para/staff-para-eventos-en-el-interior): en qué ciudades hay gente en el pool de LABURO, con los números reales de cada una.
 
 ## Cómo se hace en LABURO
 

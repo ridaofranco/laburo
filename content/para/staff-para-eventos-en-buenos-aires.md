@@ -93,6 +93,10 @@ Si el evento es en un hotel, hay una guía específica en [staff para un evento 
 
 El número de invitados es el dato menos útil para dimensionar. Lo que importa es cuántos puntos tenés que atender al mismo tiempo (cada acceso, cada barra, cada puesto de acreditación), a qué ritmo despacha cada uno y cuántos turnos cubre el evento. En Buenos Aires, además, sumá margen en los roles que dependen de gente que viene de lejos: si alguien se demora en el viaje, el puesto queda vacío. La cuenta está en [cuánta gente necesitás para tu evento](/blog/cuanta-gente-necesito-para-mi-evento) y el plan para un faltazo, en [qué hacer si te falla un staff el día del evento](/blog/si-te-falla-un-staff-el-dia-del-evento).
 
+## Otras ciudades
+
+Si también producís en otras ciudades, mirá [staff para eventos en el interior](/para/staff-para-eventos-en-el-interior): en qué ciudades hay gente en el pool de LABURO, con los números reales de cada una.
+
 ## Cómo se hace en LABURO
 
 Crear la cuenta es gratis. El recorrido:

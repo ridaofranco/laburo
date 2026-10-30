@@ -1,5 +1,5 @@
 ---
-title: "Staff para eventos en Formosa: gente de la ciudad, con perfil a la vista"
+title: "Staff para eventos en Formosa: gente de la ciudad, con el equipo armado por LABURO"
 description: "Cómo armar el staff de un evento en Formosa: qué gente hay en el pool de LABURO en la provincia, cómo dimensionar el equipo y cómo confirmarlo por escrito."
 metaTitle: "Staff para Eventos en Formosa | LABURO"
 slug: "staff-para-eventos-en-formosa"
@@ -57,7 +57,7 @@ Lo que conviene hacer:
 - **Para lo que falte, buscá en provincias vecinas** a quien acepte viajar, y dejalo claro en la oferta (horario de convocatoria, traslado, dónde se presenta).
 - **No vayas con la dotación justa.** Si alguien falta, no hay un banco de reemplazos a diez cuadras.
 
-LABURO no garantiza cobertura total: cada persona decide si acepta la oferta. Lo que hace es que la busques por rol y zona, con el perfil a la vista, y que la confirmación quede por escrito.
+LABURO no garantiza cobertura total: cada persona decide si acepta la oferta. Lo que hace es que el equipo de LABURO convoque por rol y zona a gente que vive ahí, y que la confirmación quede por escrito.
 
 ## Cuánta gente pedir
 
@@ -74,6 +74,10 @@ Lo que funciona:
 - **El briefing antes, no en la puerta.** Mandá el horario, la vestimenta, la ubicación exacta y a quién se presentan con días de anticipación.
 
 El resto de la logística de producir lejos de tu base está en [staff para un evento en otra provincia](/blog/staff-para-un-evento-en-otra-provincia). Si estás armando la carpeta para contratar personal eventual, mirá [qué documentación mirar al contratar personal eventual](/blog/documentacion-para-contratar-personal-eventual). Con qué figura contratás a cada persona lo define tu asesor según tu caso.
+
+## Otras ciudades
+
+Si también producís en otras ciudades, mirá [staff para eventos en el interior](/para/staff-para-eventos-en-el-interior): en qué ciudades hay gente en el pool de LABURO, con los números reales de cada una.
 
 ## Cómo se hace en LABURO
 

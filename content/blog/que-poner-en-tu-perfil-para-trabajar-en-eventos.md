@@ -26,7 +26,7 @@ Todo lo que sigue es para que en esa pantalla aparezcas, y para que cuando apare
 
 ## Primero: los campos que son filtros
 
-Esta es la parte que casi nadie sabe. **Varios campos de tu perfil no son decorativos: son los filtros con los que te buscan.** Si están vacíos o mal cargados, no aparecés en la lista, por más experiencia que tengas.
+Esta es la parte que casi nadie sabe. **Varios campos de tu perfil no son decorativos: son los filtros con los que se arma el staff de cada evento.** Si están vacíos o mal cargados, no aparecés en la lista, por más experiencia que tengas.
 
 **Los puestos a los que aplicás.** Se eligen de una lista concreta, organizada por familias: bar y gastronomía, accesos y acreditación, producción y logística, técnica de sonido, luces y video, audiovisual, atención y experiencia, comercial y ventas, limpieza y mantenimiento, salud y seguridad, transporte, y otros perfiles. El productor busca por rol, así que si no marcaste el puesto, para esa búsqueda no existís.
 

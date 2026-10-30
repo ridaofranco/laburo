@@ -1,5 +1,5 @@
 ---
-title: "Staff para eventos en Catamarca: gente de la provincia, con perfil a la vista"
+title: "Staff para eventos en Catamarca: gente de la provincia, con el equipo armado por LABURO"
 description: "Cómo armar el staff de un evento en San Fernando del Valle de Catamarca y el resto de la provincia: quién hay en el pool de LABURO y cómo confirmarlo."
 metaTitle: "Staff para Eventos en Catamarca | LABURO"
 slug: "staff-para-eventos-en-catamarca"
@@ -75,6 +75,10 @@ Lo que funciona:
 - **La vuelta pensada.** Si el lugar queda fuera de la capital o el evento termina tarde, pedí gente con movilidad propia o resolvé el traslado de antemano.
 
 Si estás armando la carpeta para contratar personal eventual, está explicada en [qué documentación mirar al contratar personal eventual](/blog/documentacion-para-contratar-personal-eventual). Con qué figura contratás a cada persona lo define tu asesor según tu caso.
+
+## Otras ciudades
+
+Si también producís en otras ciudades, mirá [staff para eventos en el interior](/para/staff-para-eventos-en-el-interior): en qué ciudades hay gente en el pool de LABURO, con los números reales de cada una.
 
 ## Cómo se hace en LABURO
 

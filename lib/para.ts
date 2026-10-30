@@ -69,6 +69,10 @@ export function ctaDe(audiencia: string | undefined) {
  * lo convierte, y Google ve el camino entre las dos.
  */
 export const PARA_POR_NOTA: Record<string, string[]> = {
+  "banos-quimicos-para-un-evento-cuantos-y-que-pedir": ["staff-para-festivales-y-recitales", "seguridad-limpieza-y-servicios-de-operacion-para-eventos-publicar"],
+  "grupo-electrogeno-para-un-evento-que-pedir": ["staff-para-festivales-y-recitales", "seguridad-limpieza-y-servicios-de-operacion-para-eventos-publicar"],
+  "food-trucks-en-un-evento-como-contratarlos": ["staff-para-festivales-y-recitales", "staff-para-eventos-corporativos", "proveedores-para-eventos-publicar-servicio"],
+  "cuanto-cobrar-el-alquiler-de-tu-salon-de-eventos": ["publicar-salon-para-eventos", "espacios-para-eventos-corporativos-publicar"],
   "carnet-de-manipulador-de-alimentos-para-eventos": ["trabajar-en-gastronomia-de-eventos", "mozos-y-bartenders-para-eventos"],
   "como-armar-staff-evento-roles": ["staff-para-eventos-productoras-y-agencias", "staff-para-eventos-corporativos"],
   "como-elegir-salon-para-un-evento-por-capacidad": ["publicar-salon-para-eventos", "staff-para-eventos-corporativos"],
@@ -135,7 +139,7 @@ export const PARA_POR_NOTA: Record<string, string[]> = {
   "alquiler-de-mobiliario-para-eventos-como-conseguir-mas-pedidos": ["proveedores-para-eventos-publicar-servicio", "trabajar-en-montaje-tecnica-y-produccion-de-eventos"],
   "catering-para-eventos-como-aparecer-y-que-te-pidan-precio": ["proveedores-para-eventos-publicar-servicio", "mozos-y-bartenders-para-eventos"],
   "staff-para-una-activacion-en-un-shopping": ["promotoras-y-azafatas-para-activaciones", "staff-para-eventos-productoras-y-agencias"],
-  "staff-para-un-evento-en-otra-provincia": ["staff-para-eventos-en-buenos-aires", "staff-para-eventos-en-misiones"],
+  "staff-para-un-evento-en-otra-provincia": ["staff-para-eventos-en-el-interior", "staff-para-eventos-en-buenos-aires", "staff-para-eventos-en-misiones"],
   "trabajar-de-recepcionista-o-host-en-eventos": ["personal-de-control-de-accesos-y-acreditacion", "trabajar-de-promotora-o-azafata"],
   "trabajar-de-seguridad-o-control-en-eventos": ["trabajar-en-control-de-accesos-y-acreditacion", "personal-de-control-de-accesos-y-acreditacion"],
   "sonido-e-iluminacion-para-eventos-como-conseguir-clientes": ["proveedores-para-eventos-publicar-servicio", "trabajar-en-montaje-tecnica-y-produccion-de-eventos"],

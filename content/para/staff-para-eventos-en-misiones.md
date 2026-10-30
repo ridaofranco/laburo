@@ -1,5 +1,5 @@
 ---
-title: "Staff para eventos en Misiones: gente de Posadas y alrededores, con perfil a la vista"
+title: "Staff para eventos en Misiones: gente de Posadas y alrededores, con el equipo armado por LABURO"
 description: "Cómo armar el staff de un evento en Posadas y el resto de Misiones: qué roles hay en el pool de LABURO en la provincia, cómo dimensionar el equipo y cómo confirmarlo sin perseguir a nadie por WhatsApp."
 metaTitle: "Staff para Eventos en Misiones y Posadas | LABURO"
 slug: "staff-para-eventos-en-misiones"
@@ -61,6 +61,10 @@ Lo que funciona:
 - **El briefing antes, no en la puerta.** Mandá el horario, la vestimenta, la ubicación exacta y a quién se presentan con días de anticipación.
 
 Si estás armando la carpeta para contratar personal eventual, está explicada en [qué documentación mirar al contratar personal eventual](/blog/documentacion-para-contratar-personal-eventual). Con qué figura contratás a cada persona lo define tu asesor según tu caso.
+
+## Otras ciudades
+
+Si también producís en otras ciudades, mirá [staff para eventos en el interior](/para/staff-para-eventos-en-el-interior): en qué ciudades hay gente en el pool de LABURO, con los números reales de cada una.
 
 ## Cómo se hace en LABURO
 

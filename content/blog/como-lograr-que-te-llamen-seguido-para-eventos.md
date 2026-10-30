@@ -76,7 +76,7 @@ Pero antes de eso hay algo más barato y más rápido: **tomá los turnos que na
 
 ## 6. Mantené tu perfil vivo
 
-Si te mudaste, si sumaste un oficio, si ahora tenés movilidad propia o podés viajar, actualizalo. Los filtros con los que te buscan son literales: zona, disponibilidad de fin de semana, disposición a viajar, movilidad propia y con cuánta anticipación podés tomar un trabajo.
+Si te mudaste, si sumaste un oficio, si ahora tenés movilidad propia o podés viajar, actualizalo. Los filtros con los que se arma el staff de cada evento son literales: zona, disponibilidad de fin de semana, disposición a viajar, movilidad propia y con cuánta anticipación podés tomar un trabajo.
 
 Un perfil desactualizado no te deja afuera por tu trabajo: te deja afuera antes de que alguien lo vea. Si nunca lo armaste bien, [acá está cómo](/blog/que-poner-en-tu-perfil-para-trabajar-en-eventos).
 
