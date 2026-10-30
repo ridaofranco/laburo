@@ -108,6 +108,8 @@ export const PARA_POR_NOTA: Record<string, string[]> = {
   "staff-para-un-casamiento": ["mozos-y-bartenders-para-eventos", "staff-para-eventos-productoras-y-agencias"],
   "staff-para-un-festival-al-aire-libre": ["personal-de-control-de-accesos-y-acreditacion", "mozos-y-bartenders-para-eventos"],
   "trabajar-de-bartender-en-eventos": ["trabajar-en-gastronomia-de-eventos", "mozos-y-bartenders-para-eventos"],
+  "staff-para-un-evento-deportivo": ["personal-de-control-de-accesos-y-acreditacion", "staff-para-eventos-productoras-y-agencias"],
+  "trabajar-de-mozo-en-eventos": ["trabajar-en-gastronomia-de-eventos", "mozos-y-bartenders-para-eventos"],
   "como-describir-tu-salon-para-que-te-encuentren": ["publicar-salon-para-eventos", "staff-para-eventos-corporativos"],
   "reservar-staff-para-diciembre-temporada-alta": ["staff-para-eventos-productoras-y-agencias", "staff-para-eventos-corporativos"],
   "cuando-hace-falta-un-coordinador-de-staff": ["staff-para-eventos-corporativos", "staff-para-eventos-productoras-y-agencias"],
