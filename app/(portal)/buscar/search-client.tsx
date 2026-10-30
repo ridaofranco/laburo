@@ -11,7 +11,7 @@ import {
   type SearchFilters,
 } from "@/lib/search-params";
 import { CandidateCard, type StaffCard } from "./candidate-card";
-import { EmptyResults, ErrorResults, LoadingResults } from "./results-states";
+import { EmptyResults, ErrorResults, LoadingResults, PoolVacio } from "./results-states";
 import { FiltrosSheet, type FineFilters } from "./filtros-sheet";
 
 interface Props {
@@ -52,6 +52,12 @@ export function SearchClient({
   const [pending, startTransition] = useTransition();
 
   const pagina = initialFilters.pagina;
+  /** Sin texto, oficios, filtros finos ni evento: si así da 0, el pool está vacío. */
+  const sinFiltros =
+    !initialFilters.q &&
+    initialFilters.oficios.length === 0 &&
+    activeFineFilterCount(initialFilters) === 0 &&
+    !initialFilters.gig;
   const totalPaginas = Math.max(1, Math.ceil(total / porPagina));
   /** Ancla para subir al principio de los resultados al cambiar de página. */
   const resultadosRef = useRef<HTMLDivElement | null>(null);
@@ -235,6 +241,8 @@ export function SearchClient({
                 Volver a la primera página
               </button>
             </div>
+          ) : sinFiltros ? (
+            <PoolVacio />
           ) : (
             <EmptyResults onClear={clearAll} />
           )

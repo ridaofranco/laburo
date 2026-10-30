@@ -3,7 +3,9 @@
  * Copy exacta del contrato. Sin em dash en copy visible (regla dura de Franco).
  */
 
+import Link from "next/link";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
+import { SOPORTE_WHATSAPP } from "@/lib/soporte";
 
 /** Loading: 3-5 skeleton cards con shimmer (estáticas bajo reduced-motion). */
 export function LoadingResults() {
@@ -45,6 +47,47 @@ export function EmptyResults({ onClear }: { onClear: () => void }) {
       >
         Limpiar filtros
       </button>
+    </div>
+  );
+}
+
+/**
+ * POOL VACÍO (30/10): la productora entra sin ningún filtro puesto y no hay
+ * nadie. Es el caso de toda productora nueva: las fichas de LABURO son de la
+ * organización de la plataforma y la RLS no se las muestra (ACTORES.md, «el
+ * pool no se comparte»). Antes le decíamos «Sin resultados. Probá con otro
+ * oficio o sacá algún filtro», con cero filtros: un callejón sin salida justo
+ * en la primera pantalla que abre. Ahora dice la verdad y le da la salida que
+ * hoy existe: pedirle el equipo a LABURO, que sí tiene a la gente.
+ */
+export function PoolVacio() {
+  const wa = `https://wa.me/${SOPORTE_WHATSAPP}?text=${encodeURIComponent(
+    "Hola, necesito staff para un evento (te escribo desde Buscar en LABURO).",
+  )}`;
+  return (
+    <div className="flex flex-col items-center text-center gap-md py-2xl">
+      <LaburoWordmark className="h-[20px] w-auto opacity-80" />
+      <h2 className="font-display text-[28px] text-fg">Todavía no tenés gente en tu pool</h2>
+      <p className="text-body text-fg-muted max-w-[340px]">
+        El staff anotado en LABURO lo coordina el equipo de LABURO. Contanos qué evento
+        tenés, cuántas personas y para qué roles, y te armamos el equipo.
+      </p>
+      <div className="flex flex-wrap justify-center gap-sm">
+        <a
+          href={wa}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="min-h-[44px] inline-flex items-center rounded-xl bg-accent text-white text-label font-semibold px-lg py-sm transition-transform active:scale-[0.98]"
+        >
+          Pedir staff por WhatsApp
+        </a>
+        <Link
+          href="/tablero/nuevo"
+          className="min-h-[44px] inline-flex items-center rounded-xl bg-surface-2 border border-border text-fg text-label font-semibold px-lg py-sm transition-transform active:scale-[0.98]"
+        >
+          Cargar mi evento
+        </Link>
+      </div>
     </div>
   );
 }
