@@ -33,7 +33,7 @@ LABURO **no garantiza trabajo**. No te podemos decir cuántos eventos vas a hace
 
 Lo que sí es real:
 
-- **Cargás tu perfil una vez** y queda a la vista de quien busca gente en tu zona.
+- **Cargás tu perfil una vez** y cuando un evento pide tu rol en tu zona, te llega la oferta.
 - **Las ofertas llegan con el pago, la fecha y los horarios escritos.** No hay que preguntar "¿y cuánto pagan?" por WhatsApp.
 - **Aceptás o rechazás desde el celular**, con un click.
 - **Es gratis.** No pagás por estar ni por recibir ofertas.
@@ -42,7 +42,7 @@ Lo que sí es real:
 
 En LABURO hay **más de 40 fichas de personas que viven en la provincia de Catamarca**. Más de 20 están en **San Fernando del Valle de Catamarca**, y el resto se reparte en otras localidades. **Más de 25 marcaron movilidad propia.**
 
-Es un pool chico, y eso juega a tu favor: cuando una productora de otra provincia arma un evento en Catamarca, busca primero a quien ya vive ahí, porque no le tiene que pagar pasaje ni hotel. Si estás cargado, sos de los pocos que aparecen.
+Es un pool chico, y eso juega a tu favor: cuando una productora de otra provincia arma un evento en Catamarca, conviene armar el staff con gente que ya vive ahí, porque no hay que pagar pasaje ni hotel. Si estás cargado, tenés menos gente con quien compartir esas ofertas.
 
 Los oficios que más marcó la gente de la provincia:
 
@@ -86,7 +86,7 @@ Si terminás tarde, pensá de antemano cómo volvés: [volver a casa después de
 
 ## Cómo te encuentran en LABURO
 
-LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar), una productora de eventos de Buenos Aires, para armar eventos con staff, proveedores y salones. Del otro lado hay productoras, agencias y organizadores que buscan gente por **rol, zona y experiencia**.
+LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar), una productora de eventos de Buenos Aires, para armar eventos con staff, proveedores y salones. Del otro lado hay productoras, agencias y organizadores que cargan sus eventos, y el staff de cada uno se arma por **rol, zona y experiencia**.
 
 1. **Cargás tu perfil una vez** en [/sumate](/sumate): los puestos que sabés hacer, tu ciudad, tu disponibilidad y tu experiencia. Podés subir tu CV para completar más rápido.
 2. **Cuando alguien carga un evento en Catamarca** que necesita tu rol, te puede mandar una oferta con el pago, la fecha y los horarios.
@@ -113,6 +113,21 @@ La guía completa está en [qué poner en tu perfil para trabajar en eventos](/b
 ## ¿Contratás staff en Catamarca?
 
 Si estás del otro lado y armás eventos en la provincia, la página para vos es [staff para eventos en Catamarca](/para/staff-para-eventos-en-catamarca).
+
+## Otras ciudades con pool de LABURO
+
+El funcionamiento es el mismo en todo el país. Si vivís en otra zona, o te mudás, cada ciudad tiene su página con los números reales de su pool:
+
+- [Trabajo en eventos en Buenos Aires y el AMBA](/para/trabajo-en-eventos-buenos-aires)
+- [Trabajo en eventos en La Plata, Berisso y Ensenada](/para/trabajo-en-eventos-en-la-plata)
+- [Trabajo en eventos en Mar del Plata](/para/trabajo-en-eventos-en-mar-del-plata)
+- [Trabajo en eventos en Bahía Blanca](/para/trabajo-en-eventos-en-bahia-blanca)
+- [Trabajo en eventos en Rosario y Santa Fe](/para/trabajo-en-eventos-en-rosario)
+- [Trabajo en eventos en Córdoba](/para/trabajo-en-eventos-en-cordoba)
+- [Trabajo en eventos en Posadas y Misiones](/para/trabajo-en-eventos-en-posadas-y-misiones)
+- [Trabajo en eventos en Resistencia y Corrientes](/para/trabajo-en-eventos-en-resistencia-y-corrientes)
+- [Trabajo en eventos en Formosa](/para/trabajo-en-eventos-en-formosa)
+- [Trabajo en eventos en Bariloche](/para/trabajo-en-eventos-en-bariloche)
 
 ## Cargá tu perfil
 

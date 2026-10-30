@@ -27,7 +27,7 @@ Casi todo evento con público tiene algo para tomar o algo para comer. Por eso l
 
 ## Los puestos
 
-En LABURO la familia **Bar y gastronomía** incluye estos oficios, que son los que usan las productoras para buscarte:
+En LABURO la familia **Bar y gastronomía** incluye estos oficios, que son los que se usan para armar el staff de cada evento:
 
 | Puesto | Qué hace en un evento |
 |---|---|

@@ -33,7 +33,7 @@ LABURO **no garantiza trabajo**, ni en temporada alta ni en baja. No te podemos 
 
 Lo que sí es real:
 
-- **Cargás tu perfil una vez** y queda a la vista de quien busca gente en la ciudad.
+- **Cargás tu perfil una vez** y cuando un evento pide tu rol en la ciudad, te llega la oferta.
 - **Las ofertas llegan con el pago, la fecha y los horarios escritos.**
 - **Aceptás o rechazás desde el celular**, con un click.
 - **Es gratis.** No pagás por estar ni por recibir ofertas.
@@ -80,7 +80,7 @@ Si el evento dura varios días, como un congreso, leé [turnos y horarios del st
 
 ## Cómo te encuentran en LABURO
 
-LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar), una productora de eventos de Buenos Aires, para armar eventos con staff, proveedores y salones. Del otro lado hay productoras, agencias y organizadores que buscan gente por **rol, zona y experiencia**, muchas veces desde otra ciudad.
+LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar), una productora de eventos de Buenos Aires, para armar eventos con staff, proveedores y salones. Del otro lado hay productoras, agencias y organizadores que cargan sus eventos, muchas veces desde otra ciudad, y el staff de cada uno se arma por **rol, zona y experiencia**.
 
 1. **Cargás tu perfil una vez** en [/sumate](/sumate): los puestos que sabés hacer, tu ciudad, tu disponibilidad y tu experiencia. Podés subir tu CV para completar más rápido.
 2. **Cuando alguien carga un evento en Bariloche** que necesita tu rol, te puede mandar una oferta con el pago, la fecha y los horarios.
@@ -103,6 +103,21 @@ Para cada familia de puestos hay una guía: [gastronomía de eventos](/para/trab
 ## ¿Contratás staff en Bariloche?
 
 Si estás del otro lado y armás eventos en la ciudad, la página para vos es [staff para eventos en Bariloche](/para/staff-para-eventos-en-bariloche).
+
+## Otras ciudades con pool de LABURO
+
+El funcionamiento es el mismo en todo el país. Si vivís en otra zona, o te mudás, cada ciudad tiene su página con los números reales de su pool:
+
+- [Trabajo en eventos en Buenos Aires y el AMBA](/para/trabajo-en-eventos-buenos-aires)
+- [Trabajo en eventos en La Plata, Berisso y Ensenada](/para/trabajo-en-eventos-en-la-plata)
+- [Trabajo en eventos en Mar del Plata](/para/trabajo-en-eventos-en-mar-del-plata)
+- [Trabajo en eventos en Bahía Blanca](/para/trabajo-en-eventos-en-bahia-blanca)
+- [Trabajo en eventos en Rosario y Santa Fe](/para/trabajo-en-eventos-en-rosario)
+- [Trabajo en eventos en Córdoba](/para/trabajo-en-eventos-en-cordoba)
+- [Trabajo en eventos en Posadas y Misiones](/para/trabajo-en-eventos-en-posadas-y-misiones)
+- [Trabajo en eventos en Resistencia y Corrientes](/para/trabajo-en-eventos-en-resistencia-y-corrientes)
+- [Trabajo en eventos en Formosa](/para/trabajo-en-eventos-en-formosa)
+- [Trabajo en eventos en Catamarca](/para/trabajo-en-eventos-en-catamarca)
 
 ## Cargá tu perfil
 

@@ -41,7 +41,7 @@ Mucha gente vive de esto o lo usa para complementar otro ingreso. Funciona cuand
 
 ## Qué puestos hay
 
-En LABURO los oficios están agrupados en familias. Esta es la lista con la que te buscan las productoras:
+En LABURO los oficios están agrupados en familias. Esta es la lista con la que se arma el staff de cada evento:
 
 | Familia | Algunos puestos |
 |---|---|
@@ -66,7 +66,7 @@ Para cada familia hay una guía más puntual:
 
 ## Cómo te encuentran en LABURO
 
-LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar), una productora de eventos de Buenos Aires, para armar eventos con staff, proveedores y salones. Del otro lado hay productoras que buscan gente por **rol, zona y experiencia**, con tu perfil y tu CV a la vista.
+LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar), una productora de eventos de Buenos Aires, para armar eventos con staff, proveedores y salones. Del otro lado hay productoras, agencias y organizadores que cargan sus eventos, y el staff de cada uno se arma por **rol, zona y experiencia**.
 
 El recorrido es este:
 
@@ -114,6 +114,21 @@ Es gratis y toma unos minutos: elegís tus puestos, tu zona y tu disponibilidad,
 ¿Organizás vos el evento y buscás gente en el AMBA? Mirá [staff para eventos en Buenos Aires](/para/staff-para-eventos-en-buenos-aires). Si lo tuyo es la puerta, está la guía para [trabajar en control de accesos y acreditación](/para/trabajar-en-control-de-accesos-y-acreditacion).
 
 ¿Ya estás en los portales de empleo de siempre? Mirá qué cambia en [portales de empleo o LABURO](/para/portales-de-empleo-o-laburo-para-trabajar-en-eventos).
+
+## Otras ciudades con pool de LABURO
+
+El funcionamiento es el mismo en todo el país. Si vivís en otra zona, o te mudás, cada ciudad tiene su página con los números reales de su pool:
+
+- [Trabajo en eventos en La Plata, Berisso y Ensenada](/para/trabajo-en-eventos-en-la-plata)
+- [Trabajo en eventos en Mar del Plata](/para/trabajo-en-eventos-en-mar-del-plata)
+- [Trabajo en eventos en Bahía Blanca](/para/trabajo-en-eventos-en-bahia-blanca)
+- [Trabajo en eventos en Rosario y Santa Fe](/para/trabajo-en-eventos-en-rosario)
+- [Trabajo en eventos en Córdoba](/para/trabajo-en-eventos-en-cordoba)
+- [Trabajo en eventos en Posadas y Misiones](/para/trabajo-en-eventos-en-posadas-y-misiones)
+- [Trabajo en eventos en Resistencia y Corrientes](/para/trabajo-en-eventos-en-resistencia-y-corrientes)
+- [Trabajo en eventos en Formosa](/para/trabajo-en-eventos-en-formosa)
+- [Trabajo en eventos en Catamarca](/para/trabajo-en-eventos-en-catamarca)
+- [Trabajo en eventos en Bariloche](/para/trabajo-en-eventos-en-bariloche)
 
 ## Fuentes
 

@@ -1,6 +1,6 @@
 ---
 title: "Trabajo en eventos en Córdoba: cómo entrar al pool de LABURO y que te lleguen ofertas"
-description: "Estamos armando el pool de staff de eventos en Córdoba, capital e interior. Cargá tu perfil gratis y sé de los primeros que ve quien produce ahí."
+description: "Estamos armando el pool de staff de eventos en Córdoba, capital e interior. Cargá tu perfil gratis y sé de los primeros del pool cuando haya eventos ahí."
 metaTitle: "Trabajo en Eventos en Córdoba | LABURO"
 slug: "trabajo-en-eventos-en-cordoba"
 canonical: "https://laburo.somosder.ar/para/trabajo-en-eventos-en-cordoba"
@@ -12,7 +12,7 @@ lang: es
 audiencia: trabaja
 faqs:
   - q: "¿Hay trabajo en eventos en Córdoba a través de LABURO?"
-    a: "Las ofertas llegan cuando alguien carga un evento que necesita tu rol en tu zona. El pool de Córdoba recién se está armando: hoy hay unas 25 fichas en toda la provincia. Por eso no te prometemos una cantidad de eventos; lo que sí te damos es que, si te sumás ahora, sos de los primeros perfiles que ve quien produzca en Córdoba."
+    a: "Las ofertas llegan cuando alguien carga un evento que necesita tu rol en tu zona. El pool de Córdoba recién se está armando: hoy hay unas 25 fichas en toda la provincia. Por eso no te prometemos una cantidad de eventos; lo que sí te decimos es que, si te sumás ahora, cuando haya un evento en Córdoba vas a tener menos gente con quien compartir las ofertas."
   - q: "¿Sirve si vivo en el interior de Córdoba y no en la capital?"
     a: "Sí. En tu perfil cargás tu ciudad, y el staff de cada evento se arma por rol y zona. De hecho, hoy la mayoría de las fichas de la provincia son de San Francisco, no de la capital. Vale para Córdoba capital, Villa Allende o cualquier otra localidad."
   - q: "¿Cuánto cuesta estar en LABURO?"
@@ -32,13 +32,13 @@ LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar), una productora 
 Te lo decimos así porque es la verdad y porque te conviene saberlo:
 
 - **No te vamos a prometer trabajo.** Las ofertas llegan cuando alguien carga un evento que necesita tu rol en tu zona. Si no hay evento, no hay oferta.
-- **Sí te podemos decir dónde quedás parado.** Con un pool chico, cuando alguien produzca en Córdoba y busque gente, tu perfil está entre los primeros que ve. En una ciudad con cientos de perfiles cargados, competís con muchos más.
+- **Sí te podemos decir dónde quedás parado.** Con un pool chico, cuando haya un evento en Córdoba, tenés menos gente con quien compartir las ofertas. En una ciudad con cientos de perfiles cargados, competís con muchos más.
 
 Por eso el mensaje es simple: **estamos armando el pool de Córdoba, y si te sumás ahora sos de los primeros**. Podés hacerlo en [/sumate](/sumate).
 
 ## Capital e interior: los dos cuentan
 
-Quien contrata en LABURO busca por **rol, zona y experiencia**. La zona es tu ciudad, no solo la provincia. Eso significa que:
+En LABURO el staff de cada evento se arma por **rol, zona y experiencia**. La zona es tu ciudad, no solo la provincia. Eso significa que:
 
 - Si vivís en **Córdoba capital** o en el Gran Córdoba (Villa Allende, por ejemplo), aparecés para eventos que se hagan ahí.
 - Si vivís en el **interior** (San Francisco, Río Cuarto, Villa María, las sierras o donde sea), cargá tu ciudad tal cual. Un evento en tu localidad se arma mejor con gente que vive cerca que con gente que tiene que viajar horas.
@@ -81,7 +81,7 @@ Es gratis: no pagás por estar ni por recibir ofertas.
 Con un pool chico, tu perfil se ve. Que se elija depende de lo que tenga adentro:
 
 - **Puestos marcados.** Si no marcaste "mozo", para una búsqueda de mozos no existís.
-- **Ciudad bien cargada.** Es lo primero que se filtra.
+- **Ciudad bien cargada.** Es lo primero que se mira al armar el staff de un evento.
 - **Experiencia concreta.** "Tres temporadas de barra en casamientos de 150 a 300 personas" le gana a "tengo experiencia en gastronomía".
 - **Disponibilidad real.** Si podés fines de semana, decilo. Si no, también.
 - **Contestar.** Rechazar una oferta no te juega en contra. Dejarla vencer sin responder, sí.
@@ -91,6 +91,21 @@ La guía completa está en [qué poner en tu perfil para trabajar en eventos](/b
 ## Si estás en Buenos Aires o en otra provincia
 
 El funcionamiento es el mismo en todo el país. Si vivís en el AMBA, mirá la guía de [trabajo en eventos en Buenos Aires](/para/trabajo-en-eventos-buenos-aires), y si estás más cerca de la otra punta de la región centro, la de [trabajo en eventos en Rosario](/para/trabajo-en-eventos-en-rosario). Y si querés comparar con los portales de empleo de siempre, mirá [portales de empleo o LABURO](/para/portales-de-empleo-o-laburo-para-trabajar-en-eventos).
+
+## Otras ciudades con pool de LABURO
+
+El funcionamiento es el mismo en todo el país. Si vivís en otra zona, o te mudás, cada ciudad tiene su página con los números reales de su pool:
+
+- [Trabajo en eventos en Buenos Aires y el AMBA](/para/trabajo-en-eventos-buenos-aires)
+- [Trabajo en eventos en La Plata, Berisso y Ensenada](/para/trabajo-en-eventos-en-la-plata)
+- [Trabajo en eventos en Mar del Plata](/para/trabajo-en-eventos-en-mar-del-plata)
+- [Trabajo en eventos en Bahía Blanca](/para/trabajo-en-eventos-en-bahia-blanca)
+- [Trabajo en eventos en Rosario y Santa Fe](/para/trabajo-en-eventos-en-rosario)
+- [Trabajo en eventos en Posadas y Misiones](/para/trabajo-en-eventos-en-posadas-y-misiones)
+- [Trabajo en eventos en Resistencia y Corrientes](/para/trabajo-en-eventos-en-resistencia-y-corrientes)
+- [Trabajo en eventos en Formosa](/para/trabajo-en-eventos-en-formosa)
+- [Trabajo en eventos en Catamarca](/para/trabajo-en-eventos-en-catamarca)
+- [Trabajo en eventos en Bariloche](/para/trabajo-en-eventos-en-bariloche)
 
 ## Sumate al pool de Córdoba
 

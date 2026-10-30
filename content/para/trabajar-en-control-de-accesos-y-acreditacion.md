@@ -29,7 +29,7 @@ Esta guía es para vos si querés trabajar en la puerta de eventos: qué se hace
 
 ## Los roles de la puerta
 
-En LABURO están agrupados en la familia **Accesos y acreditación**. Estos son los roles con los que te buscan:
+En LABURO están agrupados en la familia **Accesos y acreditación**. Estos son los roles con los que se arma el staff de cada evento:
 
 | Rol | Qué hacés |
 |---|---|

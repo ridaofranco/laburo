@@ -27,7 +27,7 @@ Promotora, azafata, host, brand ambassador, sampling. Son los puestos que el pú
 
 ## Los puestos de atención y experiencia
 
-En LABURO están agrupados en una misma familia, **Atención y experiencia**. Estos son los que figuran en la lista con la que te buscan:
+En LABURO están agrupados en una misma familia, **Atención y experiencia**. Estos son los que figuran en la lista con la que se arma el staff de cada evento:
 
 - **Promotor o promotora.** Representa a una marca: explica un producto, cuenta una promoción, invita a participar de una acción, a veces junta datos.
 - **Azafata o edecán.** Recibe, orienta y acompaña a los invitados. Es el puesto clásico de congresos, eventos corporativos y lanzamientos.
@@ -62,7 +62,7 @@ Cuando se arma un equipo de promotoras o azafatas para un evento, se filtra prim
 4. **Experiencia concreta.** Qué tipo de evento, qué tamaño, qué hacías exactamente.
 5. **Idiomas.** En congresos y eventos con invitados de afuera, inglés o portugués suman mucho. Si los hablás, decilo en tu experiencia.
 
-Del lado de quien contrata, la búsqueda funciona igual que en cualquier otro puesto: por rol, zona y experiencia, con el perfil y el CV a la vista. Si querés ver cómo lo piensa la otra parte, está en [promotoras y azafatas para activaciones](/para/promotoras-y-azafatas-para-activaciones).
+Del lado de quien contrata, funciona igual que en cualquier otro puesto: carga el evento con los roles que necesita y el equipo de LABURO arma el staff por rol, zona y experiencia. Si querés ver cómo lo piensa la otra parte, está en [promotoras y azafatas para activaciones](/para/promotoras-y-azafatas-para-activaciones).
 
 ## Cómo escribir tu experiencia
 

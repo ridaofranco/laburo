@@ -27,7 +27,7 @@ Antes de que se encienda la primera luz hay horas de trabajo que el público nun
 
 ## Los puestos, por familia
 
-En LABURO estos oficios están en tres familias. Esta es la lista con la que te buscan:
+En LABURO estos oficios están en tres familias. Esta es la lista con la que se arma el staff de cada evento:
 
 **Producción y logística**
 - Asistente de producción
