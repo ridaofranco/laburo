@@ -106,6 +106,13 @@ export const PARA_POR_NOTA: Record<string, string[]> = {
   "monotributo-para-trabajar-en-eventos": ["trabajo-en-eventos-buenos-aires", "trabajar-de-promotora-o-azafata"],
   "personal-de-limpieza-en-un-evento": ["staff-para-eventos-corporativos", "staff-para-eventos-productoras-y-agencias"],
   "como-describir-tu-salon-para-que-te-encuentren": ["publicar-salon-para-eventos", "staff-para-eventos-corporativos"],
+  "reservar-staff-para-diciembre-temporada-alta": ["staff-para-eventos-productoras-y-agencias", "staff-para-eventos-corporativos"],
+  "cuando-hace-falta-un-coordinador-de-staff": ["staff-para-eventos-corporativos", "staff-para-eventos-productoras-y-agencias"],
+  "staff-para-un-congreso-o-convencion": ["personal-de-control-de-accesos-y-acreditacion", "staff-para-eventos-corporativos"],
+  "dress-code-del-staff-de-eventos": ["trabajar-de-promotora-o-azafata", "trabajar-en-gastronomia-de-eventos"],
+  "ficha-de-proveedor-de-eventos-que-te-pidan-precio": ["proveedores-para-eventos-publicar-servicio", "trabajar-en-montaje-tecnica-y-produccion-de-eventos"],
+  "habilitacion-de-salon-de-eventos-en-caba": ["publicar-salon-para-eventos", "personal-de-control-de-accesos-y-acreditacion"],
+  "como-responder-un-pedido-de-presupuesto-de-evento": ["proveedores-para-eventos-publicar-servicio", "publicar-salon-para-eventos"],
 };
 
 /** Las páginas por público de una nota, solo las que existen. */
