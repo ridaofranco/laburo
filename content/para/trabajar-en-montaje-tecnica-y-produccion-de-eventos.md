@@ -128,6 +128,8 @@ Detrás de LABURO está [SOMOS DER](https://www.somosder.ar), productora de even
 
 Marcá los puestos de montaje, técnica o producción que sabés hacer, tu zona, si tenés movilidad y tu disponibilidad nocturna. Es gratis y toma unos minutos: [sumate a LABURO](/sumate).
 
+¿Sos vos quien arma el equipo de montaje? Mirá [personal de montaje y armado para eventos](/para/personal-de-montaje-y-armado-para-eventos).
+
 ## Fuentes
 
 - Inscribirme como monotributista (Argentina.gob.ar): https://www.argentina.gob.ar/inscribirme-como-monotributista
