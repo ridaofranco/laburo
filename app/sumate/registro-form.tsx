@@ -22,8 +22,11 @@ import {
 import { subirCvDirecto, type CvSubido } from "@/lib/cv-subida-cliente";
 import { PAGO_TEXTO } from "@/lib/pago";
 import { registerApplicant } from "./actions";
+import { guardarYRecargar, useRecuperarGuardado } from "@/lib/recarga-por-version";
 
 const SYNE = "font-[family-name:var(--font-syne)]";
+
+export const GUARDADO_COMPLETO = "sumate-completo";
 
 export function RegistroForm({
   onDone,
@@ -58,6 +61,22 @@ export function RegistroForm({
     situacion_legal: "", oficios_otro: "", experiencia: "", anios_experiencia: "",
     experiencia_detalle: "", disponibilidad_finde: false, disponibilidad_viajar: false,
     movilidad_propia: false, disponibilidad_aviso: "", linkedin_url: "", portfolio_url: "", motivacion: "",
+  });
+  type Guardado = {
+    f: typeof f;
+    oficios: string[];
+    regions: string[];
+    consent: boolean;
+    cv: CvSubido | null;
+    cvNombre: string | null;
+  };
+  useRecuperarGuardado<Guardado>(GUARDADO_COMPLETO, (g) => {
+    if (g.f) setF((p) => ({ ...p, ...g.f }));
+    setOficiosSel(new Set(g.oficios ?? []));
+    setRegionsSel(new Set(g.regions ?? []));
+    setConsent(Boolean(g.consent));
+    setCv(g.cv ?? null);
+    setCvNombre(g.cvNombre ?? null);
   });
   const set = <K extends keyof typeof f>(k: K, v: (typeof f)[K]) => setF((p) => ({ ...p, [k]: v }));
   const toggle = (s: Set<string>, setter: (n: Set<string>) => void, val: string) => {
@@ -176,6 +195,13 @@ export function RegistroForm({
       if (res.ok) onDone();
       else toast.error(res.reason || "No se pudo enviar.");
     } catch {
+      // Lo más común acá es una versión nueva publicada con la página abierta:
+      // se guarda todo (el CV ya subido viaja por su nombre y su firma), se
+      // recarga una vez y se devuelve. Ver lib/recarga-por-version.ts.
+      const g: Guardado = {
+        f, oficios: [...oficiosSel], regions: [...regionsSel], consent, cv: subido, cvNombre,
+      };
+      if (guardarYRecargar(GUARDADO_COMPLETO, g)) return;
       toast.error("No se pudo enviar. Probá de nuevo.");
     } finally {
       setSending(false);

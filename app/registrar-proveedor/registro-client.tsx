@@ -30,6 +30,7 @@
  */
 
 import { useState } from "react";
+import { guardarYRecargar, useRecuperarGuardado } from "@/lib/recarga-por-version";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight, Plus, X } from "lucide-react";
@@ -66,6 +67,18 @@ export function RegistroProveedorClient() {
   const [instagram, setInstagram] = useState("");
   const [servicios, setServicios] = useState<ServicioInput[]>([servicioVacio()]);
 
+  useRecuperarGuardado<Parameters<typeof registrarProveedor>[0]>("registrar-proveedor", (g) => {
+    if (g.nombre !== undefined) setNombre(g.nombre);
+    if (g.email !== undefined) setEmail(g.email);
+    if (g.telefono !== undefined) setTelefono(g.telefono);
+    if (g.headline !== undefined) setHeadline(g.headline);
+    if (g.bio !== undefined) setBio(g.bio);
+    if (g.ciudad !== undefined) setCiudad(g.ciudad);
+    if (g.provincia !== undefined) setProvincia(g.provincia);
+    if (g.website !== undefined) setWebsite(g.website);
+    if (g.instagram !== undefined) setInstagram(g.instagram);
+    if (g.servicios !== undefined) setServicios(g.servicios);
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // null = todavía no se mandó. true/false = ya se mandó, y dice si el mail YA
@@ -98,22 +111,26 @@ export function RegistroProveedorClient() {
     if (loading) return;
     setLoading(true);
     setError(null);
+    const datos = {
+      nombre,
+      email,
+      telefono,
+      headline,
+      bio,
+      ciudad,
+      provincia,
+      website,
+      instagram,
+      servicios,
+    };
     try {
-      const r = await registrarProveedor({
-        nombre,
-        email,
-        telefono,
-        headline,
-        bio,
-        ciudad,
-        provincia,
-        website,
-        instagram,
-        servicios,
-      });
+      const r = await registrarProveedor(datos);
       if (r.ok) setYaExistia(!!r.yaExistia);
       else setError(r.error ?? "No se pudo. Probá de nuevo.");
     } catch {
+      // Versión nueva publicada con la página abierta: se guarda lo cargado,
+      // se recarga una vez y se devuelve. Ver lib/recarga-por-version.ts.
+      if (guardarYRecargar("registrar-proveedor", datos)) return;
       setError("No se pudo. Probá de nuevo.");
     } finally {
       setLoading(false);

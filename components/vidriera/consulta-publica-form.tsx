@@ -31,6 +31,7 @@
  */
 
 import { useState } from "react";
+import { guardarYRecargar, useRecuperarGuardado } from "@/lib/recarga-por-version";
 import Link from "next/link";
 import { Send, Check } from "lucide-react";
 import {
@@ -123,6 +124,15 @@ export function ConsultaPublicaForm({
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
+  // Cada vidriera guarda lo suyo: dos pestañas abiertas no se mezclan.
+  const claveGuardado = `consulta-${profileId}`;
+  type Guardado = { valores: Record<string, string>; nombre: string; email: string; telefono: string };
+  useRecuperarGuardado<Guardado>(claveGuardado, (g) => {
+    setValores(g.valores ?? {});
+    setNombre(g.nombre ?? "");
+    setEmail(g.email ?? "");
+    setTelefono(g.telefono ?? "");
+  });
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [listo, setListo] = useState<{ mailEnviado: boolean } | null>(null);
@@ -164,6 +174,9 @@ export function ConsultaPublicaForm({
       }
       setListo({ mailEnviado: Boolean(r.mailEnviado) });
     } catch {
+      // Versión nueva publicada con la página abierta: se guarda lo escrito,
+      // se recarga una vez y se devuelve. Ver lib/recarga-por-version.ts.
+      if (guardarYRecargar(claveGuardado, { valores, nombre, email, telefono })) return;
       setError("No se pudo enviar. Probá de nuevo.");
     } finally {
       setEnviando(false);

@@ -9,12 +9,13 @@
  * el mismo lugar y no se van despegando con el tiempo.
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { CheckCircle2 } from "lucide-react";
 import { RegistroRapido } from "./registro-rapido";
-import { RegistroForm } from "./registro-form";
+import { RegistroForm, GUARDADO_COMPLETO } from "./registro-form";
+import { hayGuardado } from "@/lib/recarga-por-version";
 
 
 type Modo = "rapido" | "completo";
@@ -50,6 +51,11 @@ export function RegistroListo({ modo }: { modo: Modo }) {
 export function SumateClient() {
   const [modo, setModo] = useState<Modo>("rapido");
   const [done, setDone] = useState<Modo | null>(null);
+  // Si la página se recargó a mitad del formulario largo (versión nueva
+  // publicada), se vuelve a abrir el largo para devolver lo escrito.
+  useEffect(() => {
+    if (hayGuardado(GUARDADO_COMPLETO)) setModo("completo");
+  }, []);
 
   if (done) return <RegistroListo modo={done} />;
 

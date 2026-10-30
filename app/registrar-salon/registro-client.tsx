@@ -36,6 +36,7 @@
  */
 
 import { useState } from "react";
+import { guardarYRecargar, useRecuperarGuardado } from "@/lib/recarga-por-version";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
@@ -132,6 +133,25 @@ export function RegistroSalonClient() {
   const [cateringPropio, setCateringPropio] = useState<boolean | null>(null);
   const [estacionamiento, setEstacionamiento] = useState<boolean | null>(null);
 
+  useRecuperarGuardado<Parameters<typeof registrarSalon>[0]>("registrar-salon", (g) => {
+    if (g.nombre !== undefined) setNombre(g.nombre);
+    if (g.email !== undefined) setEmail(g.email);
+    if (g.provincia !== undefined) setProvincia(g.provincia);
+    if (g.capacidadMax !== undefined) setCapacidadMax(g.capacidadMax);
+    if (g.capacidadMin !== undefined) setCapacidadMin(g.capacidadMin);
+    if (g.telefono !== undefined) setTelefono(g.telefono);
+    if (g.headline !== undefined) setHeadline(g.headline);
+    if (g.bio !== undefined) setBio(g.bio);
+    if (g.ciudad !== undefined) setCiudad(g.ciudad);
+    if (g.direccion !== undefined) setDireccion(g.direccion);
+    if (g.website !== undefined) setWebsite(g.website);
+    if (g.instagram !== undefined) setInstagram(g.instagram);
+    if (g.superficieM2 !== undefined) setSuperficieM2(g.superficieM2);
+    if (g.amenities !== undefined) setAmenities(g.amenities);
+    if (g.tiposEvento !== undefined) setTiposEvento(g.tiposEvento);
+    if (g.cateringPropio !== undefined) setCateringPropio(g.cateringPropio);
+    if (g.estacionamiento !== undefined) setEstacionamiento(g.estacionamiento);
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // null = todavía no se mandó. true/false = ya se mandó, y dice si el mail YA
@@ -147,31 +167,35 @@ export function RegistroSalonClient() {
     if (loading) return;
     setLoading(true);
     setError(null);
+    const datos = {
+      nombre,
+      email,
+      provincia,
+      capacidadMax,
+      capacidadMin,
+      telefono,
+      headline,
+      bio,
+      ciudad,
+      direccion,
+      website,
+      instagram,
+      superficieM2,
+      amenities,
+      tiposEvento,
+      cateringPropio,
+      estacionamiento,
+    };
     // try/finally: si el await tira, sin el finally el botón queda deshabilitado
     // para siempre y la persona no puede ni reintentar ni salir.
     try {
-      const r = await registrarSalon({
-        nombre,
-        email,
-        provincia,
-        capacidadMax,
-        capacidadMin,
-        telefono,
-        headline,
-        bio,
-        ciudad,
-        direccion,
-        website,
-        instagram,
-        superficieM2,
-        amenities,
-        tiposEvento,
-        cateringPropio,
-        estacionamiento,
-      });
+      const r = await registrarSalon(datos);
       if (r.ok) setYaExistia(!!r.yaExistia);
       else setError(r.error ?? "No se pudo. Probá de nuevo.");
     } catch {
+      // Versión nueva publicada con la página abierta: se guarda lo cargado,
+      // se recarga una vez y se devuelve. Ver lib/recarga-por-version.ts.
+      if (guardarYRecargar("registrar-salon", datos)) return;
       setError("No se pudo. Probá de nuevo.");
     } finally {
       setLoading(false);

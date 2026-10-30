@@ -28,6 +28,7 @@
  */
 
 import { useState } from "react";
+import { guardarYRecargar, useRecuperarGuardado } from "@/lib/recarga-por-version";
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
@@ -64,6 +65,13 @@ export function RegistroProductoraClient() {
   const [telefono, setTelefono] = useState("");
   const [queEventos, setQueEventos] = useState("");
   const [volumen, setVolumen] = useState("");
+  useRecuperarGuardado<Parameters<typeof registrarProductora>[0]>("registrar-productora", (g) => {
+    if (g.productora !== undefined) setProductora(g.productora);
+    if (g.email !== undefined) setEmail(g.email);
+    if (g.telefono !== undefined) setTelefono(g.telefono);
+    if (g.queEventos !== undefined) setQueEventos(g.queEventos);
+    if (g.volumen !== undefined) setVolumen(g.volumen);
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   /**
@@ -79,17 +87,21 @@ export function RegistroProductoraClient() {
     if (loading) return;
     setLoading(true);
     setError(null);
+    const datos = {
+      productora,
+      email,
+      telefono,
+      queEventos,
+      volumen,
+    };
     try {
-      const r = await registrarProductora({
-        productora,
-        email,
-        telefono,
-        queEventos,
-        volumen,
-      });
+      const r = await registrarProductora(datos);
       if (r.ok) setMailOk(r.mailOk ?? false);
       else setError(r.error ?? "No se pudo. Probá de nuevo.");
     } catch {
+      // Versión nueva publicada con la página abierta: se guarda lo cargado,
+      // se recarga una vez y se devuelve. Ver lib/recarga-por-version.ts.
+      if (guardarYRecargar("registrar-productora", datos)) return;
       setError("No se pudo. Probá de nuevo.");
     } finally {
       setLoading(false);
