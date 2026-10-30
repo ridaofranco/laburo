@@ -17,7 +17,7 @@ faqs:
   - q: "¿Qué te piden para trabajar de técnico en eventos?"
     a: "Puntualidad, porque el armado arranca horas antes que el evento. Saber pedir ayuda y no tocar lo que no conocés. Y aguante para jornadas largas que terminan con el desarme, cuando todos ya se fueron."
   - q: "¿Qué roles técnicos hay en LABURO?"
-    a: "En la categoría Técnica (sonido, luces, video) están Técnico/a de sonido, Técnico/a de luces, Técnico/a de video / LED, Operador/a de switcher, Stagehand, Rigger, Electricista y Backline. Marcá solo los que hacés de verdad, porque quien contrata filtra por esos roles."
+    a: "En la categoría Técnica (sonido, luces, video) están Técnico/a de sonido, Técnico/a de luces, Técnico/a de video / LED, Operador/a de switcher, Stagehand, Rigger, Electricista y Backline. Marcá solo los que hacés de verdad, porque el equipo que arma el staff busca por esos roles."
   - q: "¿Puedo marcar varios roles técnicos en mi perfil?"
     a: "Sí. El perfil de LABURO permite elegir varios oficios. Si hacés sonido y además armás como stagehand, marcá los dos y explicá en tu experiencia qué hiciste en cada uno."
 ---
@@ -91,7 +91,7 @@ Lo que más se valora en un técnico, más allá del equipo que conozcas:
 
 ## Cómo cargar tus roles técnicos en LABURO
 
-Quien contrata busca por rol, zona y experiencia. Para que te encuentren:
+El equipo que arma el staff busca por rol, zona y experiencia. Para que te encuentren:
 
 1. **Marcá los roles que hacés de verdad.** En tu perfil podés elegir varios oficios. Si operás sonido y además armás como stagehand, marcá los dos. Si algo que hacés no está en la lista, usá el campo «Otro (especificá)».
 2. **Contá tu experiencia con detalle.** En «Contanos tu experiencia» poné en qué tipo de eventos trabajaste (corporativos, recitales, fiestas, ferias), qué hacías en cada uno y qué equipos conocés. «Operé sonido en eventos corporativos de hasta 300 personas» dice mucho más que «tengo experiencia en sonido».

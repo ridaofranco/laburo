@@ -39,7 +39,7 @@ En LABURO están agrupados en la familia **Accesos y acreditación**. Estos son 
 | Pulseras y credenciales | Colocás pulseras, entregás y controlás credenciales |
 | Guardarropa | Recibís y devolvés abrigos y bultos con control |
 
-Son puestos distintos aunque estén pegados. Si sabés hacer varios, marcalos todos: quien contrata busca por rol, y si no marcaste uno, no aparecés en esa búsqueda.
+Son puestos distintos aunque estén pegados. Si sabés hacer varios, marcalos todos: el staff se arma por rol, y si no marcaste uno, no aparecés en esa búsqueda.
 
 ## Qué se hace de verdad en un turno
 

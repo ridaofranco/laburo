@@ -17,7 +17,7 @@ faqs:
   - q: "¿Cómo consigo referencias si es mi primer trabajo en eventos?"
     a: "Sirven las referencias de trabajos fuera del rubro, si tienen que ver con lo que vas a hacer: un encargado de un bar, un jefe de depósito, un local con atención al público. Pedile permiso a esa persona antes de darla como contacto. Después del primer evento, la referencia más fuerte es tu propio historial: haber llegado a horario y haber cumplido el turno."
   - q: "¿Me garantiza trabajo cargar el perfil en LABURO?"
-    a: "No. Cargar el perfil te deja en el pool donde productores buscan staff por rol, zona y experiencia. Cuando un evento necesita tu rol en tu zona, te puede llegar una propuesta por mail con el rol, la fecha, los horarios y el pago, y vos decidís si la aceptás. No hay una cantidad de eventos asegurada."
+    a: "No. Cargar el perfil te deja en el pool con el que se arma el staff de los eventos, por rol, zona y experiencia. Cuando un evento necesita tu rol en tu zona, te puede llegar una propuesta por mail con el rol, la fecha, los horarios y el pago, y vos decidís si la aceptás. No hay una cantidad de eventos asegurada."
   - q: "¿Cuándo se cobra el primer evento?"
     a: "Lo define quien te contrata, y tiene que estar claro antes de aceptar. El monto ya viene escrito en la propuesta; la fecha y la forma de pago preguntalas antes de decir que sí, no después del evento."
 ---
@@ -47,7 +47,7 @@ Si querés ver qué tipo de trabajo hay en tu ciudad, tenés el panorama en [tra
 
 ## Qué cargar en el perfil cuando no tenés experiencia
 
-Del otro lado hay un productor que filtra por rol, zona y disponibilidad. Sin experiencia, esos tres campos pesan todavía más, porque son lo único que tiene para decidir.
+Del otro lado, quien arma el equipo filtra por rol, zona y disponibilidad. Sin experiencia, esos tres campos pesan todavía más, porque son lo único que tiene para decidir.
 
 - **Pocos puestos, bien elegidos.** Marcá los de entrada que de verdad harías. Veinte oficios marcados te hacen aparecer en búsquedas donde no encajás.
 - **Ciudad y provincia.** Muchas búsquedas se hacen por zona, justamente para no convocar a alguien que vive a dos horas del predio.
@@ -72,7 +72,7 @@ Lo que no conviene hacer: inventar eventos que no trabajaste. En este rubro la g
 
 ## Antes de aceptar: leé la propuesta
 
-Cuando te llega una propuesta, trae el rol, el evento, la fecha, el lugar, los horarios y el pago. Aceptás o rechazás con un click desde el teléfono. Si no podés, rechazala: así la productora busca a otra persona a tiempo.
+Cuando te llega una propuesta, trae el rol, el evento, la fecha, el lugar, los horarios y el pago. Aceptás o rechazás con un click desde el teléfono. Si no podés, rechazala: así se busca a otra persona a tiempo.
 
 Tres cosas que conviene mirar antes de decir que sí:
 

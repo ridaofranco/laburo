@@ -14,7 +14,7 @@ faqs:
   - q: "¿Hay trabajo en eventos en Rosario a través de LABURO?"
     a: "Las ofertas llegan cuando alguien carga un evento que necesita tu rol en tu zona. El pool de Santa Fe se está armando: hoy hay 24 fichas en Rosario y 29 en toda la provincia. No te prometemos una cantidad de eventos; lo que sí te damos es que, si te sumás ahora, sos de los primeros perfiles que ve quien produzca en Rosario."
   - q: "¿Sirve si vivo en el Gran Rosario o en otra ciudad de Santa Fe?"
-    a: "Sí. En tu perfil cargás tu ciudad, y quien contrata busca por rol y zona. Vale para Rosario, Villa Gobernador Gálvez, Capitán Bermúdez, la ciudad de Santa Fe o cualquier otra localidad de la provincia."
+    a: "Sí. En tu perfil cargás tu ciudad, y el staff de cada evento se arma por rol y zona. Vale para Rosario, Villa Gobernador Gálvez, Capitán Bermúdez, la ciudad de Santa Fe o cualquier otra localidad de la provincia."
   - q: "¿Cuánto cuesta estar en LABURO?"
     a: "Nada. Cargar tu perfil es gratis y no pagás por recibir ofertas. Si alguien te pide plata para darte un trabajo en un evento, desconfiá."
   - q: "¿Cómo me llega una oferta?"

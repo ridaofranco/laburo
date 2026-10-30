@@ -63,3 +63,4 @@ Cada nota y cada página /para genera sola su imagen con el título (`app/blog/[
 
 ## Publicadas el 30/10 a la mañana, relevo C8 (no repetir)
 Staff para un evento de gaming o esports, valet parking en un evento (Ley 24.449 abierta), trabajar de animador/a en eventos infantiles, trabajar en eventos los fines de semana con otro trabajo, plan B de lluvia para el staff de un evento al aire libre (alertas del SMN), staff para un desfile o evento de moda. El cierre de cada nota (BlogCta) ya no dice «CV a la vista»: dice que el equipo de LABURO arma el staff.
+Tanda 2 del C8 (oficios para quien trabaja): barista, cocinero/a o ayudante de cocina, técnico/a de video, LED o switcher, valet parking o chofer, maître o jefe de salón, sommelier. Además se corrigieron 20 páginas que decían «la productora te busca o filtra por rol»: el staff lo arma el equipo de LABURO con el pool. Decir «el equipo que arma el staff busca por rol» o «te llegan ofertas».

@@ -14,7 +14,7 @@ faqs:
   - q: "¿Hay trabajo en eventos en Córdoba a través de LABURO?"
     a: "Las ofertas llegan cuando alguien carga un evento que necesita tu rol en tu zona. El pool de Córdoba recién se está armando: hoy hay unas 25 fichas en toda la provincia. Por eso no te prometemos una cantidad de eventos; lo que sí te damos es que, si te sumás ahora, sos de los primeros perfiles que ve quien produzca en Córdoba."
   - q: "¿Sirve si vivo en el interior de Córdoba y no en la capital?"
-    a: "Sí. En tu perfil cargás tu ciudad, y quien contrata busca por rol y zona. De hecho, hoy la mayoría de las fichas de la provincia son de San Francisco, no de la capital. Vale para Córdoba capital, Villa Allende o cualquier otra localidad."
+    a: "Sí. En tu perfil cargás tu ciudad, y el staff de cada evento se arma por rol y zona. De hecho, hoy la mayoría de las fichas de la provincia son de San Francisco, no de la capital. Vale para Córdoba capital, Villa Allende o cualquier otra localidad."
   - q: "¿Cuánto cuesta estar en LABURO?"
     a: "Nada. Cargar tu perfil es gratis y no pagás por recibir ofertas. Si alguien te pide plata para darte un trabajo en un evento, desconfiá."
   - q: "¿Cómo me llega una oferta?"

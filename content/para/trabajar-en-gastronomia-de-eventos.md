@@ -81,7 +81,7 @@ Más sobre qué hace que un puesto valga más en [qué oficios de eventos tienen
 
 ## Qué mira quien contrata
 
-La productora que arma el equipo de barra o de salón filtra por rol, zona y experiencia, y después abre los perfiles. Lo que pesa:
+Quien arma el equipo de barra o de salón filtra por rol, zona y experiencia, y después abre los perfiles. Lo que pesa:
 
 1. **El puesto exacto marcado.** "Gastronomía" no dice nada. "Bartender" o "mozo" dice mucho.
 2. **Experiencia concreta.** "Barra en fiestas de 500 a 2.000 personas, armado y cierre, tragos clásicos" le gana a "experiencia en gastronomía".

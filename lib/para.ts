@@ -154,6 +154,12 @@ export const PARA_POR_NOTA: Record<string, string[]> = {
   "trabajar-en-eventos-los-fines-de-semana-con-otro-trabajo": ["portales-de-empleo-o-laburo-para-trabajar-en-eventos", "trabajar-de-promotora-o-azafata"],
   "plan-b-de-lluvia-para-el-staff-de-un-evento-al-aire-libre": ["staff-para-festivales-y-recitales", "staff-para-eventos-deportivos-y-carreras"],
   "staff-para-un-desfile-o-evento-de-moda": ["personal-de-control-de-accesos-y-acreditacion", "staff-para-eventos-corporativos"],
+  "trabajar-de-barista-en-eventos": ["trabajar-en-gastronomia-de-eventos", "mozos-y-bartenders-para-eventos"],
+  "trabajar-de-cocinero-o-ayudante-de-cocina-en-eventos": ["trabajar-en-gastronomia-de-eventos", "mozos-y-bartenders-para-eventos"],
+  "trabajar-de-tecnico-de-video-led-o-switcher-en-eventos": ["trabajar-en-montaje-tecnica-y-produccion-de-eventos", "streaming-y-transmision-de-eventos-publicar"],
+  "trabajar-de-valet-parking-o-chofer-en-eventos": ["portales-de-empleo-o-laburo-para-trabajar-en-eventos", "trabajo-en-eventos-buenos-aires"],
+  "trabajar-de-maitre-o-jefe-de-salon-en-eventos": ["trabajar-en-gastronomia-de-eventos", "mozos-y-bartenders-para-eventos"],
+  "trabajar-de-sommelier-en-eventos": ["trabajar-en-gastronomia-de-eventos", "mozos-y-bartenders-para-eventos"],
 };
 
 /** Las páginas por público de una nota, solo las que existen. */

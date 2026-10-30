@@ -87,7 +87,7 @@ Si querés ver qué hace que un puesto valga más (responsabilidad, certificaci�
 
 ## Qué mira quien contrata
 
-Cuando una productora arma el equipo de montaje o técnica, filtra por rol, zona y experiencia, y abre el perfil de quien encaja. Lo que pesa:
+Cuando se arma el equipo de montaje o técnica, se filtra por rol, zona y experiencia, y se abre el perfil de quien encaja. Lo que pesa:
 
 1. **Que hayas marcado el puesto exacto.** "Técnica" en general dice poco; "técnico de luces" o "stagehand" dice mucho.
 2. **La zona y la movilidad propia.** Por los horarios de este trabajo, pesan más que en otros rubros.

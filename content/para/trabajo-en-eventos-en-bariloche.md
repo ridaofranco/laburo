@@ -12,7 +12,7 @@ lang: es
 audiencia: trabaja
 faqs:
   - q: "¿Cómo consigo trabajo en eventos en Bariloche?"
-    a: "Cargando un perfil donde las productoras buscan gente: tus oficios, tu zona, tu disponibilidad y tu experiencia. En LABURO lo hacés una vez desde /sumate y es gratis. Cuando alguien carga un evento en Bariloche que necesita tu rol, te llega una oferta con el pago, la fecha y los horarios, y la aceptás desde el celular."
+    a: "Cargando un perfil en el pool con el que se arma el staff de los eventos: tus oficios, tu zona, tu disponibilidad y tu experiencia. En LABURO lo hacés una vez desde /sumate y es gratis. Cuando alguien carga un evento en Bariloche que necesita tu rol, te llega una oferta con el pago, la fecha y los horarios, y la aceptás desde el celular."
   - q: "¿LABURO me garantiza trabajo en la temporada?"
     a: "No. LABURO no garantiza trabajo ni una cantidad de eventos, ni en temporada alta ni en baja. Las ofertas llegan cuando alguien carga un evento en Bariloche que necesita lo que vos hacés. Lo que sí hace es que, cuando ese evento existe, te encuentren y te manden la oferta con todo por escrito."
   - q: "¿Qué tipo de eventos hay en Bariloche?"

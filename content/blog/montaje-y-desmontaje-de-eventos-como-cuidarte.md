@@ -87,7 +87,7 @@ Para los papeles de una contratación por evento está [documentación para cont
 
 ## Cómo se cubre en LABURO
 
-En LABURO, **Montaje y desmontaje** y **Carga y descarga** son roles del catálogo, junto con Stagehand y Rigger. Quien contrata busca por rol y zona, manda la oferta con el pago y los horarios, y la persona la acepta desde el teléfono. Quien trabaja también puede postularse a los trabajos disponibles.
+En LABURO, **Montaje y desmontaje** y **Carga y descarga** son roles del catálogo, junto con Stagehand y Rigger. Cuando un evento pide esos roles, el equipo de LABURO arma el staff por rol y zona, cada persona recibe la oferta con el pago y los horarios y la acepta desde el teléfono. Quien trabaja también puede postularse a los trabajos disponibles.
 
 ## Empezá
 

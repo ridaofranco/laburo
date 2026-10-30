@@ -37,7 +37,7 @@ Si estás por primera vez en la ciudad, que al menos una persona de tu equipo ll
 
 ## Cómo buscar staff por provincia y ciudad
 
-En LABURO el buscador filtra por rol, provincia y ciudad, y cada perfil muestra dónde vive la persona y su experiencia. Algunas recomendaciones:
+En LABURO el equipo arma el staff filtrando el pool por rol, provincia y ciudad, y cada perfil muestra dónde vive la persona y su experiencia. Algunas recomendaciones:
 
 1. **Empezá antes que en tu ciudad.** En una capital provincial hay más gente que en una localidad chica, y no sabés de antemano cuántos perfiles vas a encontrar para cada rol.
 2. **Mirá las ciudades cercanas.** Si el evento es en una localidad chica, puede haber gente a poca distancia. Preguntá en la oferta cómo llegaría.

@@ -19,7 +19,7 @@ faqs:
   - q: "¿Tengo que cobrar menos para que me elijan?"
     a: "No hace falta. Bajar el precio te pone a competir contra cualquiera; lo que te diferencia es ser la persona que llega antes, sabe qué hacer y no genera problemas. Eso se muestra con un perfil claro, disponibilidad honesta y cumplir siempre lo que confirmaste."
   - q: "¿Cómo me postulo en LABURO?"
-    a: "Te sumás gratis desde /sumate, cargás tus oficios, tus años de experiencia, una descripción de lo que hiciste y tu disponibilidad. Las productoras buscan por rol, zona y experiencia y te mandan ofertas con el monto y las condiciones, que aceptás desde el teléfono."
+    a: "Te sumás gratis desde /sumate, cargás tus oficios, tus años de experiencia, una descripción de lo que hiciste y tu disponibilidad. El equipo que arma el staff busca por rol, zona y experiencia y te mandan ofertas con el monto y las condiciones, que aceptás desde el teléfono."
 ---
 
 Hay una idea instalada de que los eventos son cosa de gente de 20 años que aguanta trasnochar. Una parte del trabajo sí es así. Pero hay muchos puestos donde quien contrata prefiere a alguien que ya trabajó con público, que tuvo gente a cargo o que sabe manejar un problema sin llamar a nadie. Esta nota es para vos si tenés más de 40 y querés entrar o volver a trabajar en eventos.

@@ -12,7 +12,7 @@ lang: es
 audiencia: trabaja
 faqs:
   - q: "¿Cómo consigo trabajo en eventos en Buenos Aires?"
-    a: "Cargando un perfil donde las productoras buscan gente: tus oficios, tu zona, tu disponibilidad y tu experiencia. En LABURO lo hacés una vez desde /sumate y es gratis. Cuando un evento necesita tu rol en tu zona, te llega una oferta con el pago, la fecha y los horarios, y la aceptás con un click desde el teléfono."
+    a: "Cargando un perfil en el pool con el que se arma el staff de los eventos: tus oficios, tu zona, tu disponibilidad y tu experiencia. En LABURO lo hacés una vez desde /sumate y es gratis. Cuando un evento necesita tu rol en tu zona, te llega una oferta con el pago, la fecha y los horarios, y la aceptás con un click desde el teléfono."
   - q: "¿Necesito experiencia para trabajar en eventos?"
     a: "No siempre. Hay puestos que se aprenden trabajando, como ayudante de barra, runner, acreditación o montaje y desmontaje, y son la puerta de entrada más común. Lo que sí importa es cargar bien la zona y la disponibilidad, y contar con precisión lo que hiciste antes, aunque haya sido en gastronomía, atención al público o logística."
   - q: "¿El trabajo en eventos es fijo?"

@@ -19,7 +19,7 @@ faqs:
   - q: "¿Qué me piden para trabajar de mozo en un evento?"
     a: "Lo que más se repite es puntualidad, presencia cuidada y el uniforme que indique quien contrata, muchas veces camisa blanca o negra, pantalón negro y zapatos negros cerrados. Confirmalo siempre antes del evento. También se valora conocer los pasos del servicio y saber trabajar en equipo con cocina y barra."
   - q: "¿Cómo consigo trabajo de mozo en eventos con LABURO?"
-    a: "Cargás tu perfil gratis en LABURO desde la página Sumate: adjuntás tu CV y la app saca los datos. Después elegís el rol Mozo / Camarero y completás tu disponibilidad. Las productoras buscan por rol y zona, y te mandan ofertas con el pago y los horarios que aceptás desde el teléfono."
+    a: "Cargás tu perfil gratis en LABURO desde la página Sumate: adjuntás tu CV y la app saca los datos. Después elegís el rol Mozo / Camarero y completás tu disponibilidad. El staff de cada evento se arma por rol y zona, y te llegan ofertas con el pago y los horarios que aceptás desde el teléfono."
 ---
 
 Si ya trabajaste de mozo en un restaurante, en un evento vas a usar casi todo lo que sabés. Lo que cambia es el ritmo: en lugar de mesas que piden cada una a su tiempo, tenés un salón entero que come junto. Esta nota cuenta qué formatos de servicio vas a encontrar, qué te piden quienes contratan y cómo cargar tu perfil para que te lleguen fechas.

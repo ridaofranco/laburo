@@ -19,7 +19,7 @@ faqs:
   - q: "¿Quién me paga el alojamiento si trabajo en eventos en la costa?"
     a: "Depende de cada trabajo y no hay una regla general. Algunas ofertas lo incluyen y muchas no, así que preguntalo antes de aceptar y que quede escrito en la oferta junto con el pago y los horarios. Si no está incluido, hacé la cuenta de cuánto te queda después de pagar dónde dormir."
   - q: "¿Cómo encuentro trabajos de eventos para la temporada en LABURO?"
-    a: "Creás tu perfil gratis en /sumate, marcás los puestos que sabés hacer y las zonas donde querés trabajar, y completás tu disponibilidad. Desde tu cuenta ves los trabajos disponibles y te postulás, y las productoras te pueden mandar ofertas que aceptás desde el teléfono."
+    a: "Creás tu perfil gratis en /sumate, marcás los puestos que sabés hacer y las zonas donde querés trabajar, y completás tu disponibilidad. Desde tu cuenta ves los trabajos disponibles y te postulás, y te pueden llegar ofertas que aceptás desde el teléfono."
 ---
 
 El verano mueve el trabajo en eventos hacia donde está la gente de vacaciones: activaciones de marca, fiestas, recitales, paradores, casamientos. Las fechas existen, pero los equipos se arman antes, y quien llega en enero a preguntar suele encontrar los lugares ocupados. Esta nota es para que llegues a la temporada con todo resuelto: perfil, disponibilidad, papeles y dónde vas a dormir.
@@ -90,7 +90,7 @@ Si vas a trabajar en activaciones de marca, que son de lo más común en verano,
 
 1. **Cargás tu perfil gratis** con puestos, zonas y disponibilidad.
 2. **Mirás los trabajos disponibles** desde tu cuenta y te postulás a los que te sirven.
-3. **Las productoras te pueden mandar ofertas** con el pago y los horarios, y las aceptás desde el teléfono.
+3. **Te pueden llegar ofertas** con el pago y los horarios, y las aceptás desde el teléfono.
 
 ## Empezá ahora
 

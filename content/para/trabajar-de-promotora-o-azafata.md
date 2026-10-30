@@ -54,7 +54,7 @@ En las activaciones de marca suele haber alguien de la marca mirando. En los con
 
 ## Qué mira quien contrata
 
-Cuando una productora busca promotoras o azafatas para un evento, filtra primero por cosas muy concretas y después lee:
+Cuando se arma un equipo de promotoras o azafatas para un evento, se filtra primero por cosas muy concretas y después se lee:
 
 1. **Rol marcado.** Si no marcaste "promotor" o "azafata", no aparecés en esa búsqueda.
 2. **Zona.** Para un evento en Palermo un sábado a la noche, alguien que vive cerca resuelve más que alguien a dos horas.
