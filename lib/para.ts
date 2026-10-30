@@ -32,7 +32,7 @@ export const CTA_POR_AUDIENCIA: Record<
   contrata: {
     titulo: "Armá tu equipo.",
     texto:
-      "Creá tu cuenta gratis, cargá tu evento y qué roles te faltan, y mandá las ofertas con pago y horario. Si preferís que lo veamos juntos, dejanos tu consulta.",
+      "Creá tu cuenta gratis, cargá tu evento y qué roles te faltan, y el equipo de LABURO te arma el staff con gente de su pool. Si preferís que lo veamos juntos, dejanos tu consulta.",
     principal: { label: "Crear mi cuenta gratis", href: "/registrar-productora" },
     secundario: { label: "Prefiero que me escriban", href: "/#productores" },
   },

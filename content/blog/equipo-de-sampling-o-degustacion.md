@@ -98,7 +98,7 @@ Cómo armar el brief que alimenta todo esto está en la nota sobre [el brief par
 
 ## Armá el equipo
 
-Si sos agencia, productora o marca, [registrate gratis](/registrar-productora), buscá por el rol Sampling / degustación, filtrá por zona y experiencia, y mandá la oferta con el pago y los horarios a cada persona. Ellas confirman desde el teléfono.
+Si sos agencia, productora o marca, [registrate gratis](/registrar-productora), cargá tu evento con el rol Sampling / degustación y la zona, y el equipo de LABURO te arma el equipo con gente de su pool. Cada persona recibe la oferta con el pago y los horarios y confirma desde el teléfono.
 
 ## Fuentes
 

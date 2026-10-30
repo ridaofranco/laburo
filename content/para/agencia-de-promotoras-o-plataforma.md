@@ -12,7 +12,7 @@ lang: es
 audiencia: contrata
 faqs:
   - q: "¿Qué diferencia hay entre una agencia de promotoras y una plataforma de staff?"
-    a: "La agencia te entrega el equipo resuelto: elige a las personas, las capacita, muchas veces pone el uniforme y un coordinador, y te factura todo junto. Con una plataforma la selección y la convocatoria las hacés vos: buscás perfiles, mandás las ofertas y ves quién confirmó. Una compra un servicio cerrado; la otra te da la herramienta para armarlo."
+    a: "La agencia te entrega el equipo resuelto: elige a las personas, las capacita, muchas veces pone el uniforme y un coordinador, y te factura todo junto. Con una plataforma la convocatoria pasa por una herramienta: cada persona recibe la oferta con pago y horario, la acepta desde el teléfono y ves quién confirmó. En LABURO, además, el equipo de LABURO te arma el equipo con gente de su pool según tu pedido. Una compra un servicio cerrado; la otra te ordena el proceso y te deja todo por escrito."
   - q: "¿Cuándo conviene contratar una agencia de promotoras?"
     a: "Cuando no tenés a nadie que pueda dedicarle tiempo a seleccionar y coordinar, cuando la acción necesita capacitación de producto, uniforme y supervisión en el lugar, o cuando tu empresa necesita un solo proveedor que facture y responda por todo el equipo. En esos casos estás pagando por tiempo y por responsabilidad que no querés asumir."
   - q: "¿Cuándo conviene convocar el staff con una plataforma?"
@@ -38,14 +38,14 @@ Si tenés que poner promotoras, azafatas o staff en un evento, hay dos caminos: 
 
 Qué incluye exactamente cambia de agencia a agencia: pedilo por escrito antes de cerrar.
 
-**Con una plataforma comprás control.** La selección, la convocatoria y la coordinación las hacés vos (o tu productora), con una herramienta que te ordena el proceso: ves los perfiles, mandás las ofertas y sabés en todo momento quién confirmó.
+**Con una plataforma comprás control.** La coordinación en el lugar es tuya (o de tu productora), y la convocatoria queda ordenada en una herramienta: cada persona recibe la oferta por escrito y sabés en todo momento quién confirmó. En LABURO, el equipo de LABURO arma la convocatoria con gente de su pool según lo que pediste.
 
 ## Punto por punto
 
 | Tema | Agencia de promotoras o staff | Plataforma de staff |
 |---|---|---|
 | Quién elige a las personas | La agencia | Vos, viendo cada perfil (en LABURO, el equipo de LABURO con tu pedido) |
-| Tiempo que te lleva | Poco: pasás el brief | Más: buscás, convocás y seguís las respuestas |
+| Tiempo que te lleva | Poco: pasás el brief | Menos que armarlo a mano: pasás el pedido y seguís las confirmaciones |
 | Capacitación y uniforme | Suele estar incluido | Lo organizás vos |
 | Coordinación en el lugar | Suele haber un supervisor de la agencia | Tu coordinador |
 | Bajas | Las cubre la agencia | Ves la baja en el tablero y pedís reemplazo |
