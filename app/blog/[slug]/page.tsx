@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BLOG_ORIGIN, formatBlogDate, getAllPosts, getPost } from "@/lib/blog";
-import { paraDeNota } from "@/lib/para";
+import { ctaDe, paraDeNota } from "@/lib/para";
 import { BlogCta, BlogFooter, BlogHeader, WRAP } from "../chrome";
 import { Faq } from "../faq";
 
@@ -65,6 +65,8 @@ export default async function BlogPostPage({
 
   const otros = getAllPosts().filter((p) => p.slug !== post.slug);
   const relacionadas = paraDeNota(post.slug);
+  // La barra fija del celular habla al público de la primera página «Para tu caso».
+  const ctaFija = relacionadas.length > 0 ? ctaDe(relacionadas[0].audiencia).principal : null;
 
   const schema = [
     {
@@ -217,6 +219,34 @@ export default async function BlogPostPage({
       </main>
 
       <BlogFooter />
+
+      {/* Barra fija en el celular (30/10): el registro siempre a mano mientras se lee. */}
+      <div className="h-[76px] md:hidden" aria-hidden="true" />
+      <div className="fixed inset-x-0 bottom-0 z-40 md:hidden border-t border-[#1a1a1a] bg-black/95 backdrop-blur px-4 py-3 pb-[max(12px,env(safe-area-inset-bottom))]">
+        {ctaFija ? (
+          <Link
+            href={ctaFija.href}
+            className="flex w-full items-center justify-center bg-[#f5f5f5] text-black px-6 py-3.5 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest active:bg-[#0047ff] active:text-white"
+          >
+            {ctaFija.label}
+          </Link>
+        ) : (
+          <div className="grid grid-cols-2 gap-3">
+            <Link
+              href="/#productores"
+              className="flex items-center justify-center bg-[#f5f5f5] text-black px-3 py-3.5 font-[family-name:var(--font-syne)] font-bold text-[11px] uppercase tracking-widest active:bg-[#0047ff] active:text-white"
+            >
+              Necesito staff
+            </Link>
+            <Link
+              href="/sumate"
+              className="flex items-center justify-center border border-[#f5f5f5] text-[#f5f5f5] px-3 py-3.5 font-[family-name:var(--font-syne)] font-bold text-[11px] uppercase tracking-widest active:border-[#0047ff] active:text-[#0047ff]"
+            >
+              Quiero trabajar
+            </Link>
+          </div>
+        )}
+      </div>
 
       <script
         type="application/ld+json"

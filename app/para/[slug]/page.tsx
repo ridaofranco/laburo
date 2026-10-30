@@ -225,6 +225,17 @@ export default async function ParaPage({
 
       <BlogFooter />
 
+      {/* Barra fija en el celular (30/10): el registro siempre a mano mientras se lee. */}
+      <div className="h-[76px] md:hidden" aria-hidden="true" />
+      <div className="fixed inset-x-0 bottom-0 z-40 md:hidden border-t border-[#1a1a1a] bg-black/95 backdrop-blur px-4 py-3 pb-[max(12px,env(safe-area-inset-bottom))]">
+        <Link
+          href={cta.principal.href}
+          className="flex w-full items-center justify-center bg-[#f5f5f5] text-black px-6 py-3.5 font-[family-name:var(--font-syne)] font-bold text-[12px] uppercase tracking-widest active:bg-[#0047ff] active:text-white"
+        >
+          {cta.principal.label}
+        </Link>
+      </div>
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}

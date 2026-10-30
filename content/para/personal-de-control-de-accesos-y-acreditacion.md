@@ -119,7 +119,7 @@ Si preferís que lo vea el equipo de [SOMOS DER](https://www.somosder.ar), dejá
 
 Antes de sumar gente en la puerta, mirá el sistema. [PASE](https://pase.somosder.ar) es la herramienta de acreditación y control de accesos con QR del ecosistema SOMOS DER, y si el evento vende entradas, [ENTRÁ](https://www.entratickets.com) emite los tickets. Un ritmo por puesto más alto es la forma más barata de achicar la fila.
 
-Para empezar, [entrá a LABURO](/entrar). Si el evento es de empresa, mirá también [staff para eventos corporativos](/para/staff-para-eventos-corporativos).
+Para empezar, [entrá a LABURO](/entrar). Si el evento es de empresa, mirá también [staff para eventos corporativos](/para/staff-para-eventos-corporativos); si es un festival o un recital, [staff para festivales y recitales](/para/staff-para-festivales-y-recitales); si es una carrera, [staff para eventos deportivos y carreras](/para/staff-para-eventos-deportivos-y-carreras). Y si buscás trabajo en la puerta, [trabajar en control de accesos y acreditación](/para/trabajar-en-control-de-accesos-y-acreditacion).
 
 ## Fuentes
 

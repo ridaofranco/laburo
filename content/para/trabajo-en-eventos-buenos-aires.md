@@ -111,6 +111,8 @@ Si no trabajás como staff sino que tenés una empresa de sonido, catering o seg
 
 Es gratis y toma unos minutos: elegís tus puestos, tu zona y tu disponibilidad, contás tu experiencia y quedás en el pool. Cuando haya un evento que necesite lo que hacés, te llega la oferta con el pago y los horarios escritos: [sumate a LABURO](/sumate).
 
+¿Organizás vos el evento y buscás gente en el AMBA? Mirá [staff para eventos en Buenos Aires](/para/staff-para-eventos-en-buenos-aires). Si lo tuyo es la puerta, está la guía para [trabajar en control de accesos y acreditación](/para/trabajar-en-control-de-accesos-y-acreditacion).
+
 ¿Ya estás en los portales de empleo de siempre? Mirá qué cambia en [portales de empleo o LABURO](/para/portales-de-empleo-o-laburo-para-trabajar-en-eventos).
 
 ## Fuentes

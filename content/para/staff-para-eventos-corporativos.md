@@ -59,7 +59,7 @@ En un evento corporativo el staff es parte de la marca por unas horas. Eso cambi
 - **Disponibilidad real para el horario.** Los eventos de empresa suelen empezar temprano y el montaje es el día anterior.
 - **Zona y traslado.** Un predio en las afueras con convocatoria a las 7 no es lo mismo para todos.
 
-Si la parte más pesada es la recepción, mirá también [promotoras y azafatas para activaciones](/para/promotoras-y-azafatas-para-activaciones) y [personal de control de accesos y acreditación](/para/personal-de-control-de-accesos-y-acreditacion). Si es el catering, [mozos y bartenders para eventos](/para/mozos-y-bartenders-para-eventos).
+Si la parte más pesada es la recepción, mirá también [promotoras y azafatas para activaciones](/para/promotoras-y-azafatas-para-activaciones) y [personal de control de accesos y acreditación](/para/personal-de-control-de-accesos-y-acreditacion). Si es el catering, [mozos y bartenders para eventos](/para/mozos-y-bartenders-para-eventos). Si el evento es una feria o una exposición con varios días, mirá [staff para ferias y exposiciones](/para/staff-para-ferias-y-exposiciones).
 
 ## El brief: lo que se escribe antes, no en la puerta
 
