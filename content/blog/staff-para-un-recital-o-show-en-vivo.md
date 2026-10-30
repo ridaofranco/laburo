@@ -19,7 +19,7 @@ faqs:
   - q: "¿Por qué hace falta un punto de encuentro para el staff?"
     a: "Porque en un show la radio puede fallar, hay ruido y la gente se dispersa por la sala. Un punto de encuentro fijo, que todos conozcan antes de abrir puertas, sirve para el briefing, para los relevos y para reunir al equipo si algo sale mal. Conviene que esté lejos de la circulación del público."
   - q: "¿Cómo convoco staff para un recital en LABURO?"
-    a: "Creás la cuenta de productora gratis, cargás el evento con la dotación por rol y buscás perfiles por rol, zona y experiencia entre más de 1.100 postulantes. Mandás la oferta con pago y horarios, y la persona la acepta desde el teléfono. El día del show, el staff confirmado ficha entrada y salida desde el celular."
+    a: "Creás la cuenta de productora gratis, cargás el show con la dotación por rol y le contás al equipo de LABURO qué te falta: te arma el equipo con gente del pool de tu zona. Cada persona recibe la oferta con pago y horarios y la acepta desde el teléfono. El día del show, el staff confirmado ficha entrada y salida desde el celular."
 ---
 
 Un recital o un show en vivo concentra mucho en pocas horas: el público llega casi junto, la banda tiene un horario que no se mueve y la técnica necesita espacio para cargar y descargar sin que nadie se cruce. Esta nota repasa los puestos que casi siempre hacen falta, cómo calcularlos por ritmo medido y cómo se organiza la comunicación para que el equipo no se pierda en la sala. Si tu evento es de día y a la intemperie, también te sirve [staff para un festival al aire libre](/blog/staff-para-un-festival-al-aire-libre).
@@ -72,9 +72,11 @@ La venta y el control de entradas se pueden resolver con [ENTRÁ](https://www.en
 ## Cómo se arma en LABURO
 
 1. **Creás la cuenta de productora gratis** y cargás el show con la dotación por rol: control de accesos, sala, bartenders, producción, runners, carga y descarga.
-2. **Buscás por rol, zona y experiencia** entre más de 1.100 postulantes.
-3. **Mandás la oferta con pago y horarios.** Escribí la hora de llegada, la hora estimada de fin y el punto de encuentro.
+2. **El equipo de LABURO te arma el equipo** con gente de un pool de más de 1.200 fichas; el pedido se lo hacés por el WhatsApp de soporte o la [consulta de la home](/#productores).
+3. **Cada persona recibe la oferta con pago y horarios.** Que diga la hora de llegada, la hora estimada de fin y el punto de encuentro.
 4. **La persona la acepta desde el teléfono** y queda confirmada.
 5. **El día del show, el staff confirmado ficha entrada y salida** desde el celular, y ves quién ya llegó.
 
 Si estás armando el equipo de tu próximo show, [registrá tu productora](/registrar-productora) y empezá por el plano de la sala.
+
+Si organizás varias fechas o un ciclo, la guía general está en [staff para festivales y recitales](/para/staff-para-festivales-y-recitales).

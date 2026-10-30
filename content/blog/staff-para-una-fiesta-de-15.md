@@ -19,7 +19,7 @@ faqs:
   - q: "¿Cómo se organiza la salida de los menores?"
     a: "Se acuerda antes con la familia: quién retira a cada menor, por qué puerta y a qué hora. La recepción puede usar la misma lista de la entrada para marcar quién se fue y con quién. Lo importante es que ningún menor salga solo del salón si la familia no lo autorizó."
   - q: "¿Cómo contrato staff para una fiesta de 15 en LABURO?"
-    a: "Creás la cuenta de productora gratis, buscás por rol y zona en un pool de más de 1.100 postulantes y mandás una propuesta con el pago, el horario y las condiciones. La persona la acepta con un click desde el teléfono y queda confirmada. El día del evento el staff ficha entrada y salida desde el celular."
+    a: "Creás la cuenta de productora gratis y cargás la fiesta con los roles que te faltan. El equipo de LABURO te arma el equipo con gente del pool de tu zona, y cada persona recibe una propuesta con el pago, el horario y las condiciones. La acepta con un click desde el teléfono y queda confirmada. El día del evento el staff ficha entrada y salida desde el celular."
 ---
 
 Una fiesta de 15 se parece a un casamiento en el armado, pero tiene una diferencia que cambia casi todo: la mayoría de los invitados son menores. Eso define cómo se controla la puerta, qué sirve la barra y, sobre todo, cómo se van al final. Esta nota repasa cada rol y lo que conviene dejar acordado con el salón y con la familia antes de la fecha.
@@ -97,11 +97,11 @@ La cuenta por rol está en [staff para un casamiento](/blog/staff-para-un-casami
 
 ## Cómo se cubre en LABURO
 
-En LABURO buscás por rol y zona en un pool de más de 1.100 postulantes y ves el perfil de cada persona: Recepcionista, Mozo / Camarero, Bartender, Guardarropa y Coordinador/a de invitados están en el catálogo. Mandás una propuesta con el pago, el horario (incluido el de cierre) y las condiciones, donde va la regla de la barra y el procedimiento de salida. La persona la acepta con un click desde el teléfono y queda confirmada. El día del evento el staff ficha entrada y salida desde el celular. Para el equipo de servicio, mirá [mozos y bartenders para eventos](/para/mozos-y-bartenders-para-eventos).
+En LABURO cargás la fiesta con los roles (Recepcionista, Mozo / Camarero, Bartender, Guardarropa y Coordinador/a de invitados están en el catálogo) y el equipo de LABURO te arma la gente con su pool de más de 1.200 fichas. Cada persona recibe una propuesta con el pago, el horario (incluido el de cierre) y las condiciones, donde va la regla de la barra y el procedimiento de salida. La persona la acepta con un click desde el teléfono y queda confirmada. El día del evento el staff ficha entrada y salida desde el celular. Para el equipo de servicio, mirá [mozos y bartenders para eventos](/para/mozos-y-bartenders-para-eventos).
 
 ## Empezá a armar tu equipo
 
-Si estás armando el staff de una fiesta de 15, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, buscás por rol y zona, y mandás las propuestas con el pago y el horario.
+Si estás armando el staff de una fiesta de 15, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, cargás los roles y LABURO te arma el equipo, con el pago y el horario escritos en cada propuesta.
 
 ## Fuentes
 

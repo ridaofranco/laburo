@@ -18,7 +18,7 @@ faqs:
   - q: "¿Cuándo conviene convocar el staff con una plataforma?"
     a: "Cuando ya tenés un coordinador o una productora que sabe armar equipos, cuando hacés eventos seguido y querés construir tu propia lista de gente de confianza, o cuando necesitás ver a cada persona antes de convocarla. También cuando el equipo cambia por fecha y querés saber en todo momento cuántos lugares están cubiertos."
   - q: "¿LABURO es una agencia?"
-    a: "No. LABURO es la plataforma de SOMOS DER para armar eventos: buscás staff en un pool de más de 1.100 postulantes, mandás ofertas con rol, horario y pago, y la persona acepta con un click desde el teléfono. Crear la cuenta es gratis. Si preferís que el equipo lo arme SOMOS DER con vos, podés dejar la consulta desde la home."
+    a: "No es una agencia clásica. LABURO es la plataforma de SOMOS DER para armar eventos: creás tu cuenta gratis, cargás el evento con los roles que te faltan, y el equipo de LABURO te arma el staff con gente de un pool de más de 1.200 fichas. Cada persona recibe la oferta con rol, horario y pago y la acepta con un click desde el teléfono. Para pedir el equipo, escribí por WhatsApp o dejá la consulta desde la home."
   - q: "¿Se pueden combinar las dos cosas?"
     a: "Sí, y es bastante común. Muchas producciones dejan en una agencia la acción de marca con capacitación y supervisión, y convocan por su cuenta los roles operativos que ya conocen, como acreditación, runners o guardarropa. Lo importante es que cada rol tenga un único responsable de cubrirlo."
 ---
@@ -42,13 +42,13 @@ Qué incluye exactamente cambia de agencia a agencia: pedilo por escrito antes d
 
 ## Punto por punto
 
-| Tema | Agencia de promotoras o staff | Plataforma como LABURO |
+| Tema | Agencia de promotoras o staff | Plataforma de staff |
 |---|---|---|
-| Quién elige a las personas | La agencia | Vos, viendo cada perfil |
+| Quién elige a las personas | La agencia | Vos, viendo cada perfil (en LABURO, el equipo de LABURO con tu pedido) |
 | Tiempo que te lleva | Poco: pasás el brief | Más: buscás, convocás y seguís las respuestas |
 | Capacitación y uniforme | Suele estar incluido | Lo organizás vos |
 | Coordinación en el lugar | Suele haber un supervisor de la agencia | Tu coordinador |
-| Bajas | Las cubre la agencia | Ves la baja en el tablero y buscás reemplazo |
+| Bajas | Las cubre la agencia | Ves la baja en el tablero y pedís reemplazo |
 | Lista de gente de confianza | Queda en la agencia | Queda en tu cuenta (favoritos con nota privada) |
 | Facturación | Una factura de la agencia | La arreglás con cada persona o con quien la contrate |
 | Costo de la herramienta | Lo que cobre la agencia por el servicio | Crear la cuenta y usarla es gratis |
@@ -72,11 +72,11 @@ Antes de convocar a alguien nuevo, repasá [qué mirar antes de contratar person
 
 ## Cómo se hace en LABURO
 
-LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar) para armar eventos. Esto es lo que hace hoy:
+LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar) para armar eventos, y queda a mitad de camino: el staff anotado lo coordina el equipo de LABURO, y vos seguís todo desde tu cuenta. Esto es lo que hace hoy:
 
 1. **Cargás el evento y la dotación**: qué roles y cuántas personas de cada uno.
-2. **Buscás en un pool de más de 1.100 postulantes**, por rol, provincia y ciudad, viendo la experiencia de cada perfil, y podés ocultar a quienes ya están asignados a un evento que se superpone.
-3. **Mandás la oferta** con rol, horario y pago. La persona la abre en un link propio y la acepta o la rechaza con un click desde el teléfono, sin crear contraseña.
+2. **Le pedís el equipo a LABURO.** El staff anotado lo coordina el equipo de LABURO: con tu dotación a la vista arma el equipo con gente del pool de tu zona, un pool de más de 1.200 fichas.
+3. **Cada persona recibe la oferta** con rol, horario y pago. La abre en un link propio y la acepta o la rechaza con un click desde el teléfono, sin crear contraseña.
 4. **Mirás el tablero**: cuántos lugares están cubiertos sobre el total. Lo rechazado o vencido vuelve a quedar abierto, con un botón para buscar reemplazo.
 5. **Guardás favoritos con una nota privada**, para la próxima fecha.
 

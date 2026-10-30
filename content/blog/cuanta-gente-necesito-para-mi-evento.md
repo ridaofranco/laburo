@@ -108,4 +108,4 @@ Si una parte grande de la cuenta es la puerta, el detalle de ese equipo está en
 
 ## Armá la dotación de tu próximo evento
 
-En LABURO declarás cuántas personas necesitás por rol, buscás sobre más de 1.100 perfiles con experiencia y CV cargados, filtrás por zona y disponibilidad, y ves en un tablero cuántos lugares están cubiertos y cuántos faltan. Contanos fecha, lugar y roles en un formulario de dos minutos, sin crear ninguna cuenta: [pedí tu staff](/).
+En LABURO declarás cuántas personas necesitás por rol, el equipo de LABURO te arma el staff con gente de tu zona, de un pool de más de 1.200 fichas, y ves en un tablero cuántos lugares están cubiertos y cuántos faltan. Contanos fecha, lugar y roles en un formulario de dos minutos, sin crear ninguna cuenta: [pedí tu staff](/).

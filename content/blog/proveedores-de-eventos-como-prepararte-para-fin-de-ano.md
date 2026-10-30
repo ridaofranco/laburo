@@ -43,7 +43,7 @@ En temporada alta, el que falla no es el equipo técnico: es la gente. Alguien s
 - **Tené un reemplazo pensado para cada puesto clave,** no para todos: el técnico principal, el jefe de cocina, la persona que maneja la estructura.
 - **Revisá el equipo físico** antes de la primera fecha: cables, luces, vajilla, carpas, baterías y tarjetas de memoria. Lo que se rompe en diciembre se repara en enero.
 
-Si necesitás sumar personal para técnica, montaje o gastronomía, en LABURO hay un pool de más de 1.100 postulantes con perfiles de [montaje, técnica y producción](/para/trabajar-en-montaje-tecnica-y-produccion-de-eventos), y el método para reservar gente con tiempo está en [reservar staff para diciembre](/blog/reservar-staff-para-diciembre-temporada-alta).
+Si necesitás sumar personal para técnica, montaje o gastronomía, en LABURO hay un pool de más de 1.200 fichas, y el equipo de LABURO te arma el equipo con gente de [montaje, técnica y producción](/para/trabajar-en-montaje-tecnica-y-produccion-de-eventos), y el método para reservar gente con tiempo está en [reservar staff para diciembre](/blog/reservar-staff-para-diciembre-temporada-alta).
 
 ## Las condiciones, escritas antes de cotizar
 

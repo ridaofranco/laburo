@@ -15,13 +15,13 @@ export function GET() {
 
   const texto = `# LABURO
 
-> LABURO es la plataforma de SOMOS DER (productora de eventos de Buenos Aires, Argentina) para armar un evento entero en un solo lugar: staff eventual con perfil y CV a la vista, proveedores de todos los rubros y salones por capacidad. Crear la cuenta y usarlo es gratis.
+> LABURO es la plataforma de SOMOS DER (productora de eventos de Buenos Aires, Argentina) para armar un evento entero en un solo lugar: staff eventual de un pool real que coordina el equipo de LABURO, proveedores de todos los rubros y salones por capacidad. Crear la cuenta y usarlo es gratis.
 
-LABURO nace adentro de SOMOS DER (https://www.somosder.ar) y es el mismo sistema con el que la productora arma sus propias operaciones. Respaldo de SOMOS DER: más de 100 eventos operados, más de 150.000 asistentes, 6 países. Más de 1.100 postulantes con perfil en el pool.
+LABURO nace adentro de SOMOS DER (https://www.somosder.ar) y es el mismo sistema con el que la productora arma sus propias operaciones. Respaldo de SOMOS DER: más de 100 eventos operados, más de 150.000 asistentes, 6 países. Más de 1.200 postulantes con perfil en el pool.
 
 ## Cómo funciona
 - Quien arma un evento (productora, agencia, marca, empresa) crea su cuenta gratis, carga fecha, lugar y qué le falta, y declara la dotación por rol.
-- Busca staff por rol, zona y experiencia, con perfil y CV a la vista, y manda la oferta con pago y horarios. La persona la acepta con un click desde el teléfono, sin crear contraseña. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
+- Le pide el equipo a LABURO: el staff anotado lo coordina el equipo de LABURO, que arma el equipo con gente del pool de la zona. Cada persona recibe la oferta con pago y horarios y la acepta con un click desde el teléfono, sin crear contraseña. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
 - A proveedores se les pide precio con un pedido que les llega por mail: cargan su presupuesto en ese link y se comparan todos en una tabla, separando pesos y dólares. A los salones se les consulta la fecha desde su ficha y contestan por mail.
 - Quien trabaja en eventos carga su perfil una vez (roles y zona) y recibe ofertas con pago y fechas.
 - Proveedores (sonido, catering, seguridad, estructuras y más) y salones publican gratis lo que hacen, dónde trabajan y cuánta gente entra.

@@ -87,8 +87,8 @@ Crear la cuenta es gratis. El recorrido:
 
 1. **Cargás el evento** con fecha, lugar y lo que falta.
 2. **Declarás la dotación por rol**: por ejemplo, 5 acreditadores, 3 hosts, 8 mozos, 1 técnico de sonido. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
-3. **Buscás por rol, zona y experiencia** en un pool de más de 1.100 postulantes con perfil y CV a la vista. Podés filtrar por provincia y ciudad, movilidad propia o disponibilidad el fin de semana.
-4. **Mandás la oferta** con pago y horarios. La persona la acepta con un click desde el teléfono. Cada oferta tiene estado (enviada, vista, aceptada, rechazada o vencida) y solo las aceptadas cubren un lugar. Si una oferta está por vencer, a la persona le llega un recordatorio.
+3. **LABURO te arma el equipo** con gente del pool de más de 1.200 fichas. El staff anotado lo coordina el equipo de LABURO: le contás qué necesitás y elige a cada persona por rol, zona y experiencia.
+4. **Cada persona recibe la oferta** con pago y horarios y la acepta con un click desde el teléfono. Cada oferta tiene estado (enviada, vista, aceptada, rechazada o vencida) y solo las aceptadas cubren un lugar. Si una oferta está por vencer, a la persona le llega un aviso.
 5. **El día del evento** el staff puede fichar entrada y salida desde el celular, y las horas quedan guardadas.
 
 Si además necesitás proveedores (catering, sonido, mobiliario), les pedís precio por formulario, contestan por mail y comparás los presupuestos. Los proveedores están en [servicios](/servicios) y los salones, con capacidad y zona, en [salones](/salones).

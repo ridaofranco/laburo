@@ -19,7 +19,7 @@ faqs:
   - q: "¿Qué errores son los más comunes en un brief de activación?"
     a: "Mandar la presentación de la campaña en lugar de un brief operativo, no fijar una métrica, olvidar los descansos, no decir quién provee el vestuario, no dejar un contacto para incidentes y no explicar cómo se cierra el día. Otro error frecuente es no aclarar qué no se puede prometer: lo que la promotora dice en nombre de la marca puede terminar obligándola."
   - q: "¿Cómo convoco promotoras para una activación en LABURO?"
-    a: "Creás la cuenta de productora gratis, cargás el evento con la dotación por rol (por ejemplo, promotoras, sampling o brand ambassador) y buscás por rol, zona y experiencia. A cada persona le mandás una oferta con el monto, la fecha, el lugar y las condiciones, y ella la acepta con un click desde el teléfono."
+    a: "Creás la cuenta de productora gratis, cargás el evento con la dotación por rol (por ejemplo, promotoras, sampling o brand ambassador) y le pasás el pedido al equipo de LABURO, que coordina al staff anotado y te arma el equipo con gente de tu zona. Cada persona recibe la oferta con el monto, la fecha, el lugar y las condiciones, y la acepta con un click desde el teléfono."
 ---
 
 En una activación de marca, durante esas horas la marca es la promotora. Lo que diga y cómo resuelva un imprevisto depende de algo que se arma antes: el brief. Esta nota es para agencias, marcas y productoras que contratan promotoras: qué tiene que tener el brief, un modelo para copiar y los errores que más se repiten.
@@ -108,8 +108,8 @@ Para elegir a quién mandarle el brief, mirá [promotoras y azafatas para activa
 En LABURO, Promotor/a, Sampling / degustación, Azafata / Edecán y Brand ambassador son roles separados del catálogo, dentro de Atención y experiencia.
 
 1. **Cargás el evento** con fecha, lugar y la dotación por rol. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
-2. **Buscás por rol, zona y experiencia** en un pool de más de 1.100 postulantes.
-3. **Mandás la oferta** con el monto, la fecha, el lugar y las condiciones. En el campo de condiciones va lo operativo del brief: horarios, descansos, tareas y vestuario.
+2. **Le pedís el equipo a LABURO,** que lo arma con gente de un pool de más de 1.200 fichas.
+3. **Cada persona recibe la oferta** con el monto, la fecha, el lugar y las condiciones. En el campo de condiciones va lo operativo del brief: horarios, descansos, tareas y vestuario.
 4. **La persona la acepta con un click** desde el teléfono, y antes del turno le llega un recordatorio.
 5. **Después,** marcás como favoritas a las que rindieron, con una nota privada, para la próxima fecha.
 

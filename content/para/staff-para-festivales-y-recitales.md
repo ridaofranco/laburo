@@ -93,8 +93,8 @@ Crear la cuenta es gratis. El recorrido:
 
 1. **Cargás el evento** con fecha, lugar y días de montaje y show.
 2. **Declarás la dotación por rol**: por ejemplo, para ver la mecánica, 20 de control de accesos, 4 acreditadores, 12 en barra, 6 runners, 10 de montaje. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
-3. **Buscás en el pool por oficio y zona**, con el perfil a la vista: experiencia, foto y en qué tipo de eventos trabajó cada persona.
-4. **Mandás la oferta** con el pago, la fecha y el horario. La persona la acepta con un click desde el celular, y solo las aceptadas cubren un lugar.
+3. **Le pedís el equipo a LABURO.** El equipo de LABURO coordina el pool y lo arma con gente de la zona del predio, mirando la experiencia de cada persona.
+4. **Cada persona recibe la oferta** con el pago, la fecha y el horario, y la acepta con un click desde el celular. Solo las aceptadas cubren un lugar.
 5. **El día del show**, el staff ficha entrada y salida desde el celular y las horas quedan registradas, algo que pesa en jornadas largas con varios turnos.
 
 Si producís varios shows a la vez, mirá [staff para eventos: productoras y agencias](/para/staff-para-eventos-productoras-y-agencias). Si preferís no armarlo vos, dejás tu consulta para que la vea el equipo de [SOMOS DER](https://www.somosder.ar).

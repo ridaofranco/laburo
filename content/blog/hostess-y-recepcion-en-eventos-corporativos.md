@@ -84,7 +84,7 @@ Si estás armando la recepción de un evento corporativo o un congreso:
 - **Definí un canal para los cambios** y una persona que decida.
 - **Pedí el idioma que necesitás** si tenés invitados de afuera.
 
-En LABURO, Host / Anfitrión, Recepcionista y Azafata / Edecán son roles del catálogo, dentro de atención y experiencia. Buscás por rol, zona y experiencia en un pool de más de 1.100 postulantes, mandás la oferta con el pago y los horarios, y la persona la acepta con un click desde el teléfono. Si es parte de un equipo más grande, mirá [staff para eventos corporativos](/para/staff-para-eventos-corporativos).
+En LABURO, Host / Anfitrión, Recepcionista y Azafata / Edecán son roles del catálogo, dentro de atención y experiencia. Los cargás en tu evento y el equipo de LABURO te arma la recepción con gente de un pool de más de 1.200 fichas. Cada persona recibe la oferta con el pago y los horarios y la acepta con un click desde el teléfono. Si es parte de un equipo más grande, mirá [staff para eventos corporativos](/para/staff-para-eventos-corporativos).
 
 ## Sumate
 

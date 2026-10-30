@@ -58,7 +58,7 @@ Para un trabajo fijo o de temporada larga, un portal general es un buen lugar.
 LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar) para armar eventos. Esto es lo que hace hoy para vos:
 
 1. **Te sumás una vez.** Subís tu CV, elegís los puestos a los que aplicás, tu zona y tu disponibilidad. Está en [sumate](/sumate).
-2. **Te encuentran.** Las productoras buscan en el pool de más de 1.100 postulantes por rol, provincia y ciudad.
+2. **Te tienen en cuenta.** Cuando una productora pide staff, el equipo de LABURO arma el equipo con gente del pool (más de 1.200 postulantes) según rol, provincia y ciudad.
 3. **Te llega la oferta** con el rol, las fechas, el horario y el pago, en un link propio. La aceptás o la rechazás con un click.
 4. **Ves las búsquedas abiertas** en la pantalla de trabajos disponibles y tocás «Me postulo» en las que te interesan.
 5. **El día del evento fichás** entrada y salida desde el celular.

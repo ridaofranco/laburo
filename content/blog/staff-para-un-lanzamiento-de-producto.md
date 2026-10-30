@@ -19,7 +19,7 @@ faqs:
   - q: "¿Para qué sirve el ensayo previo de un lanzamiento?"
     a: "Para que cada rol sepa dónde está, qué hace en cada momento del cronograma y a quién responde. En el ensayo se prueban los cambios de técnica, las entradas de los oradores y la presentación del producto. Lo que no se ensaya se improvisa con la prensa mirando."
   - q: "¿Cómo contrato staff para un lanzamiento en LABURO?"
-    a: "Creás la cuenta de productora gratis, buscás por rol y zona en un pool de más de 1.100 postulantes y mandás una propuesta con el pago, el horario y las condiciones, incluido el horario del ensayo. La persona la acepta con un click desde el teléfono y queda confirmada."
+    a: "Creás la cuenta de productora gratis y cargás el lanzamiento con los roles. El staff anotado lo coordina el equipo de LABURO, que te arma el equipo con gente de tu zona; cada persona recibe una propuesta con el pago, el horario y las condiciones, incluido el horario del ensayo, y la acepta con un click desde el teléfono y queda confirmada."
 ---
 
 Un lanzamiento de producto dura poco y tiene mucha gente mirando: prensa, invitados de la marca, a veces creadores de contenido que están transmitiendo. No hay segunda toma. Por eso el staff de un lanzamiento se arma distinto que el de una fiesta: menos gente sirviendo y más gente que tiene que saber exactamente qué decir, dónde pararse y a quién derivar. Esta nota repasa cada rol, el brief y el ensayo.
@@ -105,8 +105,8 @@ Si el lanzamiento es dentro de una feria, sumale lo de [staff para stand en feri
 
 ## Cómo se cubre en LABURO
 
-En LABURO buscás por rol y zona en un pool de más de 1.100 postulantes y ves el perfil de cada persona: Acreditador/a, Hostess / Brand host, Promotor/a, Runner y los técnicos de sonido, luces y video están en el catálogo. Mandás una propuesta con el pago, el horario (incluido el del ensayo) y las condiciones, donde va la regla de prensa. La persona la acepta con un click desde el teléfono y queda confirmada. El día del evento el staff ficha entrada y salida desde el celular, y a quienes trabajaron bien los podés guardar en favoritos para el próximo lanzamiento. Para el equipo de presentación, mirá [promotoras y azafatas para activaciones](/para/promotoras-y-azafatas-para-activaciones).
+En LABURO cargás el lanzamiento con los roles (Acreditador/a, Azafata / Edecán, Brand ambassador, Promotor/a, Runner y los técnicos de sonido, luces y video están en el catálogo) y le pedís el equipo a LABURO por el WhatsApp de soporte o la [consulta de la home](/#productores): lo arma con gente de su pool de más de 1.200 fichas. Cada persona recibe una propuesta con el pago, el horario (incluido el del ensayo) y las condiciones, donde va la regla de prensa. La persona la acepta con un click desde el teléfono y queda confirmada. El día del evento el staff ficha entrada y salida desde el celular, y a quienes trabajaron bien los podés guardar en favoritos para el próximo lanzamiento. Para el equipo de presentación, mirá [promotoras y azafatas para activaciones](/para/promotoras-y-azafatas-para-activaciones).
 
 ## Empezá a armar tu equipo
 
-Si estás armando el staff de un lanzamiento, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, buscás por rol y zona, y mandás las propuestas con el pago y el horario.
+Si estás armando el staff de un lanzamiento, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, cargás los roles y LABURO te arma el equipo, con el pago y el horario escritos en cada propuesta.

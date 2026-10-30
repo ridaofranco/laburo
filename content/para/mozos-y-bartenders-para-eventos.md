@@ -96,8 +96,8 @@ Crear la cuenta es gratis. Para armar la gastronomía:
 
 1. **Cargás el evento** con fecha, lugar y qué falta.
 2. **Declarás la dotación por rol**: por ejemplo, 12 mozos, 4 bartenders, 3 ayudantes de barra, 2 runners, 1 bachero. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
-3. **Buscás por rol, zona y experiencia** en un pool de más de 1.100 postulantes con perfil y CV a la vista. Filtrás por provincia y ciudad, movilidad propia y disponibilidad el fin de semana, y podés ocultar a quienes ya están asignados a un evento que se solapa.
-4. **Mandás la oferta** con pago y horarios. La persona la acepta con un click desde el teléfono. Ves el estado de cada una: enviada, vista, aceptada, rechazada o vencida.
+3. **LABURO te arma el equipo.** Le contás qué necesitás por WhatsApp o desde la consulta de la home, y el equipo de LABURO, que coordina el pool de más de 1.200 fichas, elige a la gente por rol, zona y experiencia.
+4. **Cada persona recibe la oferta** con pago y horarios y la acepta con un click desde el teléfono. Ves el estado de cada una: enviada, vista, aceptada, rechazada o vencida.
 5. **Antes del turno** le llega un recordatorio. El día del evento ficha entrada y salida desde el celular y las horas quedan guardadas.
 6. **Después** marcás como favoritos a quienes rindieron, con una nota, para la próxima.
 

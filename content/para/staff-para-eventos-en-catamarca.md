@@ -16,9 +16,9 @@ faqs:
   - q: "¿Alcanza el pool de Catamarca para un evento grande?"
     a: "Depende del evento. Es un pool chico: sirve para cubrir un evento chico o mediano con gente de la provincia, sin pasajes ni hotel. Para una dotación grande, conviene combinarlo con gente de provincias vecinas que acepte viajar. LABURO no garantiza que se cubran todos los lugares."
   - q: "¿Cómo contrato staff para un evento en Catamarca si mi productora es de otra provincia?"
-    a: "Cargás el evento en LABURO con el lugar en Catamarca, declarás cuánta gente necesitás por rol y buscás por zona. A cada persona le mandás una oferta con el pago, la fecha y los horarios, y la acepta con un click desde el teléfono. No dependés de conocer a alguien en la ciudad para que te arme el equipo."
+    a: "Creás tu cuenta gratis, cargás el evento con el lugar en Catamarca y los roles que te faltan, y LABURO, que coordina el staff anotado, te arma el equipo con gente de la provincia. Cada persona recibe una oferta con el pago, la fecha y los horarios, y la acepta con un click desde el teléfono. No dependés de conocer a alguien en la ciudad para que te arme el equipo."
   - q: "¿Hay staff con movilidad propia en Catamarca?"
-    a: "Sí. Más de 25 de las fichas de la provincia marcaron movilidad propia, y es un filtro que podés usar al buscar. Sirve si el evento es fuera de la capital o termina tarde."
+    a: "Sí. Más de 25 de las fichas de la provincia marcaron movilidad propia, y es un dato que el equipo de LABURO mira al armarte el equipo. Sirve si el evento es fuera de la capital o termina tarde."
   - q: "¿Cuánto cuesta usar LABURO para contratar staff en Catamarca?"
     a: "Crear la cuenta y usar LABURO es gratis. El pago al staff lo definís vos en cada oferta."
 ---
@@ -72,7 +72,7 @@ Lo que funciona:
 - **Una oferta escrita con todo adentro.** Rol, fecha, lugar, horario de convocatoria y pago. Y una aceptación explícita de la persona.
 - **Un responsable en el lugar.** Aunque el equipo sea chico, alguien del staff tiene que ser el punto de contacto para los demás el día del evento. Si en el pool hay alguien con experiencia en producción, ofrecele ese rol.
 - **El briefing antes, no en la puerta.** Mandá el horario, la vestimenta, la ubicación exacta y a quién se presentan con días de anticipación.
-- **La vuelta pensada.** Si el lugar queda fuera de la capital o el evento termina tarde, filtrá por movilidad propia o resolvé el traslado de antemano.
+- **La vuelta pensada.** Si el lugar queda fuera de la capital o el evento termina tarde, pedí gente con movilidad propia o resolvé el traslado de antemano.
 
 Si estás armando la carpeta para contratar personal eventual, está explicada en [qué documentación mirar al contratar personal eventual](/blog/documentacion-para-contratar-personal-eventual). Con qué figura contratás a cada persona lo define tu asesor según tu caso.
 
@@ -82,8 +82,8 @@ LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar) para armar event
 
 1. **Cargás el evento** con la fecha y el lugar en Catamarca.
 2. **Declarás la dotación por rol**, con cantidad. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
-3. **Buscás staff** por rol, zona y experiencia, con el perfil y el CV a la vista. Podés filtrar por movilidad propia o disponibilidad el fin de semana.
-4. **Mandás la oferta** con pago y horarios. La persona la acepta con un click desde el teléfono. Solo las aceptadas cuentan como lugar cubierto.
+3. **Le pedís el equipo a LABURO.** El staff anotado lo coordina el equipo de LABURO, que te arma el equipo con gente de la provincia que marcó los roles que te faltan.
+4. **Cada persona recibe la oferta** con pago y horarios y la acepta con un click desde el teléfono. Solo las aceptadas cuentan como lugar cubierto.
 5. **Antes del turno**, a quien está confirmado le llega un recordatorio. El día del evento, el staff puede fichar entrada y salida desde el celular, así sabés quién llegó aunque no estés ahí.
 6. **Después**, marcás como favoritos a quienes rindieron, para tener tu lista de confianza en Catamarca para el próximo evento.
 

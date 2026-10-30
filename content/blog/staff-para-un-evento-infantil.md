@@ -19,7 +19,7 @@ faqs:
   - q: "¿Los adultos se quedan o se van en un evento infantil?"
     a: "Lo define quien organiza y cambia todo el armado. Si los adultos se quedan, el staff acompaña y la responsabilidad se comparte. Si los dejan y se van, el staff queda a cargo de los chicos durante todo el evento, y la recepción y el control de retiro pasan a ser lo más importante."
   - q: "¿Cómo contrato staff para un evento infantil en LABURO?"
-    a: "Creás la cuenta de productora gratis, buscás por rol (Animador/a, Recepcionista, Host / Anfitrión, Personal de limpieza) y por zona en un pool de más de 1.100 postulantes, y mandás la oferta con el pago y los horarios. La persona la acepta con un click desde el teléfono y queda confirmada para ese evento."
+    a: "Creás la cuenta de productora gratis y cargás el evento con los roles (Animador/a, Recepcionista, Host / Anfitrión, Personal de limpieza). El equipo de LABURO coordina al staff anotado y te arma el equipo con gente de tu zona. Cada persona recibe la oferta con el pago y los horarios, la acepta con un click desde el teléfono y queda confirmada para ese evento."
 ---
 
 Un evento infantil grande (un cumpleaños con mucho público, una jornada de marca para familias, una fiesta de fin de año de colegio o de club) tiene una regla que ordena todo lo demás: **cada chico que entra tiene que salir con la persona correcta.** La animación, la comida y la decoración importan, pero el staff se arma alrededor de esa regla. Esta nota repasa los roles, lo que conviene decidir antes y cómo elegir a la gente.
@@ -103,10 +103,10 @@ Para la cuenta por rol y por ritmo, la lógica completa está en [cuánta gente 
 
 ## Cómo se cubre en LABURO
 
-1. **Buscás por rol y zona** (Animador/a, Recepcionista, Host / Anfitrión, Personal de limpieza) en un pool de más de 1.100 postulantes, con el perfil a la vista.
-2. **Mandás la oferta con el pago, los horarios y las reglas del puesto,** incluida la del retiro.
+1. **Cargás el evento con los roles** (Animador/a, Recepcionista, Host / Anfitrión, Personal de limpieza) y el equipo de LABURO te arma la gente con el pool de más de 1.200 fichas.
+2. **Cada persona recibe la oferta con el pago, los horarios y las reglas del puesto,** incluida la del retiro.
 3. **La persona la acepta con un click** desde el teléfono y queda confirmada. El día del evento ficha entrada y salida desde el celular.
 
 ## Empezá a armar tu equipo
 
-Si organizás eventos para familias, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, buscás por rol y zona, y mandás las ofertas con el pago y el horario.
+Si organizás eventos para familias, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis: cargás los roles y LABURO te arma el equipo, con el pago y el horario claros en cada oferta.

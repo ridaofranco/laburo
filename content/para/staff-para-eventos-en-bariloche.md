@@ -16,7 +16,7 @@ faqs:
   - q: "¿Qué roles puedo cubrir con gente de Bariloche?"
     a: "En el pool de Bariloche hay sobre todo catering y gastronomía, control de accesos, producción y asistencia de producción, fotografía y audiovisual. También hay atención al público, recepción, caja, barra, logística y algunos perfiles de coordinación y stage manager."
   - q: "¿Cómo contrato staff en Bariloche si produzco desde Buenos Aires?"
-    a: "Cargás el evento en LABURO con el lugar en Bariloche, declarás cuánta gente necesitás por rol y buscás por zona. A cada persona le mandás una oferta con el pago, la fecha y los horarios, y la acepta con un click desde el teléfono. El día del evento el staff ficha entrada y salida desde el celular, así sabés quién llegó aunque no estés ahí."
+    a: "Cargás el evento en LABURO con el lugar en Bariloche y cuánta gente necesitás por rol, y el equipo de LABURO te arma el equipo con gente de la zona. Cada persona recibe una oferta con el pago, la fecha y los horarios, y la acepta con un click desde el teléfono. El día del evento el staff ficha entrada y salida desde el celular, así sabés quién llegó aunque no estés ahí."
   - q: "¿Cuánto cuesta usar LABURO para contratar staff en Bariloche?"
     a: "Crear la cuenta y usar LABURO es gratis. El pago al staff lo definís vos en cada oferta."
 ---
@@ -62,8 +62,8 @@ LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar) para armar event
 
 1. **Cargás el evento** con la fecha y el lugar en Bariloche.
 2. **Declarás la dotación por rol**, con cantidad. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
-3. **Buscás staff** por rol, zona y experiencia, con el perfil y el CV a la vista. Podés filtrar por movilidad propia o disponibilidad el fin de semana.
-4. **Mandás la oferta** con pago y horarios. La persona la acepta con un click desde el teléfono. Solo las aceptadas cuentan como lugar cubierto.
+3. **Le pedís el equipo a LABURO.** El staff anotado lo coordina el equipo de LABURO, que te arma el equipo con gente de la provincia que marcó los roles que te faltan.
+4. **Cada persona recibe la oferta** con pago y horarios y la acepta con un click desde el teléfono. Solo las aceptadas cuentan como lugar cubierto.
 5. **Antes del turno**, a quien está confirmado le llega un recordatorio. El día del evento, el staff puede fichar entrada y salida desde el celular.
 6. **Después**, marcás como favoritos a quienes rindieron, para tener tu lista de confianza en Bariloche para la próxima vez.
 

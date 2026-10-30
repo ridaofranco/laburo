@@ -20,7 +20,7 @@ faqs:
   - q: "¿Puedo armar la carrera solo con voluntarios?"
     a: "Muchas carreras combinan personal pago y voluntarios. Qué figura corresponde a cada tarea y qué obligaciones tenés con cada grupo es una consulta para tu asesor legal o laboral. Lo operativo vale siempre: los puestos críticos (acreditación, llegada, coordinación) con gente de experiencia y horario confirmado por escrito."
   - q: "¿Cómo armo el staff de un evento deportivo en LABURO?"
-    a: "Creás la cuenta gratis, cargás el evento, declarás la dotación por rol y buscás por rol y zona en un pool de más de 1.200 fichas. A cada persona le mandás una oferta con el pago, la fecha y los horarios de su bloque, y la acepta con un click desde el teléfono. Solo las aceptadas cuentan como lugar cubierto."
+    a: "Creás la cuenta gratis, cargás el evento con la dotación por rol y le contás a LABURO qué te falta. El staff anotado lo coordina el equipo de LABURO, que te arma el equipo con gente de un pool de más de 1.200 fichas. Cada persona recibe la oferta con el pago, la fecha y los horarios de su bloque, y la acepta con un click desde el teléfono. Solo las aceptadas cuentan como lugar cubierto."
 ---
 
 Una carrera de calle o un torneo no pasan en un solo lugar. Pasan en la carpa de kits el día anterior, en la largada a primera hora, en cada cruce del circuito y en la llegada cuando entra el grueso. Cada uno de esos lugares tiene su pico en un momento distinto, y si el staff se piensa como un solo bloque, siempre falta gente en algún punto.
@@ -96,12 +96,12 @@ Crear la cuenta es gratis. El recorrido:
 
 1. **Cargás el evento** con la fecha y el lugar.
 2. **Declarás la dotación por rol**: por ejemplo, 6 en montaje, 5 en kits, 2 en acreditación, 12 orientadores, 8 en hidratación, 3 en guardarropa. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
-3. **Buscás por rol y zona** en un pool de más de 1.200 fichas, con el perfil y la experiencia a la vista. Más de 470 están en el AMBA.
-4. **Mandás la oferta** con el pago y el horario de cada bloque, incluido el del montaje y el desarme. La persona la acepta con un click desde el teléfono, y solo las aceptadas cubren un lugar.
+3. **Le pedís el equipo a LABURO**, que coordina un pool de más de 1.200 fichas (más de 470 en el AMBA) y lo arma con gente de la zona de la largada.
+4. **Cada persona recibe la oferta** con el pago y el horario de cada bloque, incluido el del montaje y el desarme, y la acepta con un click desde el teléfono. Solo las aceptadas cubren un lugar.
 5. **El día del evento** el staff puede fichar entrada y salida desde el celular, así sabés quién llegó a cada punto aunque estés en la largada.
 
 Si la carrera es en otra provincia, mirá [staff para eventos en Misiones](/para/staff-para-eventos-en-misiones) o [staff para eventos en Bariloche](/para/staff-para-eventos-en-bariloche). Si producís varios eventos al año, está [staff para eventos para productoras y agencias](/para/staff-para-eventos-productoras-y-agencias).
 
 ## Armá tu equipo
 
-Si organizás una carrera, una maratón o un torneo, [creá tu cuenta gratis en LABURO](/registrar-productora) (si ya tenés una, [entrá](/entrar)) y cargá tu evento: es gratis, buscás por rol y zona, y mandás las ofertas con el pago y el horario de cada bloque. Todas las páginas por público están en [/para](/para).
+Si organizás una carrera, una maratón o un torneo, [creá tu cuenta gratis en LABURO](/registrar-productora) (si ya tenés una, [entrá](/entrar)) y cargá tu evento: es gratis, LABURO te arma el equipo con gente de tu zona y cada persona recibe la oferta con el pago y el horario de su bloque. Todas las páginas por público están en [/para](/para).

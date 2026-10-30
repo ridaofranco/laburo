@@ -19,7 +19,7 @@ faqs:
   - q: "¿Cómo se organiza la separación de residuos en un evento?"
     a: "Con puntos de residuos señalizados y un contenedor por tipo, ubicados donde se genera la basura (barras, comida, ingreso). Las reglas sobre qué se separa y cómo se entrega dependen del municipio y del salón, así que conviene consultarlas antes del armado."
   - q: "¿Cómo contrato personal de limpieza en LABURO?"
-    a: "Creás la cuenta gratis de productora, buscás por el rol Personal de limpieza, por zona y experiencia, y le mandás a cada persona una oferta con el pago y los horarios. La persona la acepta con un click desde el teléfono. Si buscás una empresa de limpieza o baños químicos, en Servicios filtrás proveedores por rubro y provincia."
+    a: "Creás la cuenta gratis de productora y cargás el evento con el rol Personal de limpieza. Le pedís el equipo a LABURO, que coordina al staff anotado y te lo arma con gente de tu zona. Cada persona recibe la oferta con el pago y los horarios y la acepta con un click desde el teléfono. Si buscás una empresa de limpieza o baños químicos, en Servicios filtrás proveedores por rubro y provincia."
 ---
 
 La limpieza es el puesto que nadie mira cuando funciona y todos notan cuando falla: un baño sin papel a la hora del brindis, una barra pegajosa, una bolsa reventada en el pasillo. Esta nota es para quien contrata y para quien trabaja de esto: qué pasa antes, durante y después, cuáles son los puntos críticos y cómo calcular el equipo sin inventar una regla.
@@ -92,17 +92,17 @@ Si es tu primera fecha, [tu primer día trabajando en un evento](/blog/primer-di
 
 En LABURO, **Personal de limpieza**, **Mantenimiento** y **Sanitarios** son roles del catálogo, dentro de limpieza y mantenimiento.
 
-1. **Buscás por rol, zona y experiencia** en un pool de más de 1.100 postulantes.
-2. **Mandás la oferta con el pago y los horarios,** incluido el de cierre.
+1. **Cargás el evento con la dotación** y le pedís el equipo a LABURO, que lo arma con gente de un pool de más de 1.200 fichas.
+2. **Cada persona recibe la oferta con el pago y los horarios,** incluido el de cierre.
 3. **La persona la acepta con un click** desde el teléfono.
 
 Si necesitás una empresa, en [Servicios](/servicios) filtrás proveedores por rubro (Limpieza, Baños químicos) y provincia. Para el equipo completo de un evento de empresa, mirá [staff para eventos corporativos](/para/staff-para-eventos-corporativos), y si producís seguido, [staff para eventos: productoras y agencias](/para/staff-para-eventos-productoras-y-agencias).
 
 ## Empezá a armar tu equipo
 
-Si contratás staff para eventos, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, buscás por rol y zona, y mandás las ofertas con el pago y el horario.
+Si contratás staff para eventos, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, cargás tu evento y LABURO te arma el equipo con gente del pool de tu zona.
 
 ## Fuentes
 
 - Catálogo de roles y rubros de LABURO (Personal de limpieza, Mantenimiento, Sanitarios; rubros Limpieza y Baños químicos).
-- No se citan normas de residuos: las páginas oficiales de buenosaires.gob.ar no respondieron al momento de escribir esta nota. Consultá la normativa de tu municipio.
+- Las normas sobre residuos dependen de cada municipio: consultá la de tu ciudad.

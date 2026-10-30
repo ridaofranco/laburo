@@ -103,4 +103,4 @@ Si el evento es de una empresa, en [staff para eventos corporativos](/para/staff
 
 ## Pedí tu presupuesto de staff
 
-En LABURO declarás cuántas personas necesitás por rol, buscás sobre más de 1.100 perfiles con experiencia y CV cargados, y ves en un tablero cuántos lugares están cubiertos y cuántos faltan. Contanos fecha, lugar y roles en un formulario de dos minutos, sin crear ninguna cuenta: [pedí tu staff](/).
+En LABURO declarás cuántas personas necesitás por rol, el equipo de LABURO te arma el staff con gente de un pool de más de 1.200 fichas, y ves en un tablero cuántos lugares están cubiertos y cuántos faltan. Contanos fecha, lugar y roles en un formulario de dos minutos, sin crear ninguna cuenta: [pedí tu staff](/).

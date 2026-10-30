@@ -88,8 +88,8 @@ Crear la cuenta en LABURO es gratis. Así se arma una activación:
 
 1. **Cargás el evento** con fecha, lugar y qué falta.
 2. **Declarás la dotación por rol:** por ejemplo, 4 promotoras, 2 de sampling, 1 brand ambassador. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
-3. **Buscás por rol, zona y experiencia** en un pool de más de 1.100 postulantes con perfil y CV a la vista. Filtrás por provincia y ciudad, disponibilidad el fin de semana, movilidad propia o si está dispuesta a viajar, y podés ocultar a quienes ya están asignados a un evento que se solapa.
-4. **Mandás la oferta** con pago y horarios. La persona la acepta con un click desde el teléfono, sin crear contraseña. Ves el estado de cada oferta: enviada, vista, aceptada, rechazada o vencida.
+3. **LABURO te arma el equipo.** Las promotoras anotadas las coordina el equipo de LABURO: le pasás la dotación y elige gente del pool de tu zona, con experiencia en activaciones.
+4. **Cada persona recibe la oferta** con pago y horarios y la acepta con un click desde el teléfono, sin crear contraseña. Ves el estado de cada oferta: enviada, vista, aceptada, rechazada o vencida.
 5. **Antes del turno** le llega un recordatorio. El día de la acción puede fichar entrada y salida desde el celular.
 6. **Después** marcás como favoritas a las que rindieron, con una nota, para la próxima fecha.
 

@@ -22,7 +22,7 @@ faqs:
   - q: "¿Cómo confirmo al personal de montaje para que no falte nadie?"
     a: "Contá como confirmado solo a quien aceptó por escrito una oferta con fecha, horario de ingreso, horario estimado de salida, lugar y pago. Dejá uno o dos de margen en el desarme, que es donde más faltazos aparecen, y convocá un rato antes de la hora en que realmente necesitás a la gente. En LABURO cada oferta tiene estado y solo las aceptadas cubren un lugar."
   - q: "¿Cuánta gente de montaje hay en LABURO?"
-    a: "Al 30 de octubre de 2026, más de 50 fichas del pool tienen marcado Montaje y desmontaje o Carga y descarga. Sumando stagehand, rigger, runner y pañolero son más de 70, y más de 140 marcaron Asistente de producción. Podés buscarlas por rol y zona con una cuenta gratis."
+    a: "Al 30 de octubre de 2026, más de 50 fichas del pool tienen marcado Montaje y desmontaje o Carga y descarga. Sumando stagehand, rigger, runner y pañolero son más de 70, y más de 140 marcaron Asistente de producción. Con una cuenta gratis cargás el evento y el equipo de LABURO te arma el equipo con esa gente."
 ---
 
 Un montaje que sale bien no se nota: el público entra y todo está en su lugar. Uno que sale mal se nota a las siete de la mañana, cuando falta gente para descargar el camión, o a las tres de la madrugada, cuando el desarme lo hacen cuatro personas que ya llevan dieciséis horas trabajando.
@@ -118,8 +118,8 @@ El recorrido, con una cuenta gratis:
 
 1. **Cargás el evento** con fecha y lugar.
 2. **Declarás la dotación por rol**: por ejemplo, para ver la mecánica, 4 de carga y descarga, 6 de montaje, 2 stagehands y 1 runner. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
-3. **Buscás por rol y zona**, con el perfil y la experiencia a la vista. Podés filtrar por movilidad propia o disponibilidad el fin de semana.
-4. **Mandás la oferta** con pago y horarios (armado y desarme, si son turnos distintos, en ofertas separadas). La persona la acepta con un click desde el teléfono. Cada oferta tiene estado y solo las aceptadas cubren un lugar.
+3. **Pedís el equipo.** El staff anotado en LABURO lo coordina el equipo de LABURO: le pasás la dotación y te arma el equipo con gente de tu zona que marcó esos roles.
+4. **Cada persona recibe la oferta** con pago y horarios (armado y desarme, si son turnos distintos, en ofertas separadas) y la acepta con un click desde el teléfono. Cada oferta tiene estado y solo las aceptadas cubren un lugar.
 5. **El día del armado** el staff puede fichar entrada y salida desde el celular, y las horas quedan registradas aunque no estés en la puerta de carga.
 6. **Después**, marcás como favoritos a quienes armaron bien, para la próxima.
 

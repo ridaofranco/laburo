@@ -12,7 +12,7 @@ lang: es
 audiencia: contrata
 faqs:
   - q: "¿Cómo consigue staff para eventos una productora?"
-    a: "Lo habitual es combinar una base propia de gente que ya trabajó con vos con búsquedas puntuales por rol y zona para cada evento. Lo que define si funciona no es dónde encontrás a la gente sino cómo la confirmás: con una oferta escrita que diga rol, fecha, horario y pago, y una aceptación explícita de la persona. En LABURO buscás por rol, zona y experiencia en un pool de más de 1.100 postulantes con perfil, y la persona acepta la oferta con un click desde el teléfono."
+    a: "Lo habitual es combinar una base propia de gente que ya trabajó con vos con búsquedas puntuales por rol y zona para cada evento. Lo que define si funciona no es dónde encontrás a la gente sino cómo la confirmás: con una oferta escrita que diga rol, fecha, horario y pago, y una aceptación explícita de la persona. En LABURO el equipo de LABURO te arma el staff con gente de un pool de más de 1.200 fichas, elegida por rol, zona y experiencia, y cada persona acepta la oferta con un click desde el teléfono."
   - q: "¿Cuánto staff necesito para un evento?"
     a: "No sale de la cantidad de asistentes sino de los puntos de servicio que tenés que atender al mismo tiempo, el ritmo de cada punto, los turnos que cubre la duración y el margen que dejás por ausencias. Calculá cada momento del evento por separado (montaje, apertura, operación y desmontaje) y después sumá. Esa cuenta, escrita por rol y cantidad, es la dotación que declarás antes de salir a buscar gente."
   - q: "¿Cómo evito que el staff confirmado no se presente?"
@@ -20,7 +20,7 @@ faqs:
   - q: "¿Qué contrato corresponde para el personal eventual de un evento en Argentina?"
     a: "La Ley de Contrato de Trabajo regula el contrato de trabajo eventual en su artículo 99, para servicios extraordinarios o exigencias transitorias, y pone en cabeza del empleador la prueba de esa eventualidad. También existe la contratación a través de empresas de servicios eventuales habilitadas, con responsabilidad solidaria de la empresa usuaria. Qué figura te corresponde lo define tu asesor legal o contable según tu caso."
   - q: "¿Cuánto cuesta usar LABURO para contratar staff?"
-    a: "Crear la cuenta y usar LABURO es gratis. Cargás el evento, declarás la dotación por rol, buscás perfiles y mandás ofertas desde la misma cuenta. Si preferís que el equipo lo vea SOMOS DER, podés dejar tu consulta o escribir por WhatsApp."
+    a: "Crear la cuenta y usar LABURO es gratis. Cargás el evento y declarás la dotación por rol desde tu cuenta, y le pedís el equipo a LABURO por WhatsApp o desde la consulta de la home: el staff anotado lo coordina el equipo de LABURO."
 ---
 
 Si producís eventos, el staff es la parte de la operación que más se ve y la que peor se controla. Un sábado tenés una activación de marca con doce personas, un congreso con treinta y un casamiento con diez, y los tres viven en grupos de WhatsApp distintos, con una planilla que quedó vieja el jueves. (Si querés ver punto por punto qué resuelve la planilla y dónde se rompe, está en [planilla y WhatsApp o LABURO](/para/planilla-y-whatsapp-o-laburo-para-convocar-staff).)
@@ -84,8 +84,8 @@ LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar) para armar event
 
 1. **Cargás el evento** con la fecha, el lugar y qué te falta.
 2. **Declarás la dotación por rol**, con cantidad. Desde ahí el tablero muestra cuántos lugares están cubiertos y cuántos faltan.
-3. **Buscás staff** por rol, zona y experiencia en un pool de más de 1.100 postulantes con perfil y CV a la vista. Podés filtrar por movilidad propia, disponibilidad el fin de semana o si está dispuesto a viajar, y ocultar a quienes ya están asignados a un evento que se solapa.
-4. **Mandás la oferta** con pago y horarios. La persona la acepta con un click desde el teléfono, sin crear contraseña. Cada oferta muestra su estado: enviada, vista, aceptada, rechazada o vencida. Solo las aceptadas cuentan como lugar cubierto.
+3. **LABURO te arma el equipo.** El staff anotado, más de 1.200 fichas, lo coordina el equipo de LABURO: le contás roles, zona y fecha, y elige a cada persona por experiencia.
+4. **Cada persona recibe la oferta** con pago y horarios y la acepta con un click desde el teléfono, sin crear contraseña. Cada oferta muestra su estado: enviada, vista, aceptada, rechazada o vencida. Solo las aceptadas cuentan como lugar cubierto.
 5. **Antes del turno**, a quien está confirmado le llega un recordatorio. El día del evento, el staff puede fichar entrada y salida desde el celular.
 6. **Después**, marcás como favoritos a quienes rindieron y les dejás una nota, para tener la lista de confianza a mano en el próximo evento.
 

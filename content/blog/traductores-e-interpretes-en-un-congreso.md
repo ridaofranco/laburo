@@ -19,7 +19,7 @@ faqs:
   - q: "¿La cabina de interpretación la trae el intérprete?"
     a: "En general no: la cabina, la consola, los receptores y los auriculares para el público son equipamiento técnico que se contrata a un proveedor aparte. Conviene pedirlo junto con el sonido del salón y coordinar entre ambos que la señal llegue limpia a la cabina."
   - q: "¿Cómo encuentro traductores o intérpretes en LABURO?"
-    a: "Creás la cuenta gratis de productora, buscás por el rol Traductor/a / intérprete, por zona y por experiencia, y le mandás a cada persona una oferta con el pago y los horarios. La persona la acepta desde el teléfono y queda confirmada para ese evento."
+    a: "Creás la cuenta gratis de productora y cargás el congreso con el rol Traductor/a / intérprete. El equipo de LABURO coordina al staff anotado y te busca a la persona en el pool; recibe la oferta con el pago y los horarios, la acepta desde el teléfono y queda confirmada para ese evento."
 ---
 
 Un congreso con invitados de afuera necesita resolver el idioma en varios lugares a la vez: el escenario, los materiales impresos, la mesa de acreditación y la delegación que llega al aeropuerto. Cada uno pide un perfil distinto, y el error más común es contratar «un traductor» para cubrir todo. Esta nota es para quien organiza: qué perfil pedir, cuántos hacen falta y qué tenés que preparar vos para que el trabajo salga bien.
@@ -92,8 +92,8 @@ En [servicios de LABURO](/servicios) podés buscar proveedores de sonido y técn
 
 En LABURO, Traductor/a / intérprete es uno de los roles del catálogo, dentro de otros perfiles, junto con coordinación de voluntarios, community manager en vivo y locución.
 
-1. **Buscás por rol, zona y experiencia** en un pool de más de 1.100 postulantes, con el perfil a la vista.
-2. **Mandás la oferta con el pago y los horarios,** aclarando en la descripción si es simultánea, consecutiva, traducción escrita o acompañamiento, y en qué idiomas.
+1. **Cargás el evento con el rol** y le pedís a LABURO que te arme el equipo con gente de un pool de más de 1.200 fichas.
+2. **Cada persona recibe la oferta con el pago y los horarios,** aclarando en la descripción si es simultánea, consecutiva, traducción escrita o acompañamiento, y en qué idiomas.
 3. **La persona la acepta** desde el teléfono y queda confirmada para ese evento.
 
 Si estás armando todo el equipo de un congreso o una jornada de empresa, mirá [staff para eventos corporativos](/para/staff-para-eventos-corporativos).

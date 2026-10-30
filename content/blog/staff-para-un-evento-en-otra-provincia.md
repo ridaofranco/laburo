@@ -13,7 +13,7 @@ faqs:
   - q: "¿Conviene contratar staff local o llevar mi equipo a otra provincia?"
     a: "Depende del puesto. Los roles que definen el evento y que necesitan conocer tu forma de trabajar (coordinación, referentes de área) suelen viajar, y los puestos de atención, barra, armado o accesos se pueden cubrir con gente de la ciudad. El equipo local se ahorra el viaje y conoce el lugar, y el equipo propio llega con el método aprendido."
   - q: "¿Cómo encuentro staff en otra provincia?"
-    a: "En LABURO buscás por rol, provincia y ciudad, y ves el perfil de cada persona antes de mandarle una oferta. Conviene empezar con tiempo, porque en ciudades chicas el pool es más corto que en una capital, y dejar armada una lista de suplentes."
+    a: "En LABURO cargás el evento con los roles y el equipo de LABURO te arma el equipo con gente del pool que vive en esa provincia y ciudad; cada persona recibe la oferta y la acepta desde el teléfono. Conviene empezar con tiempo, porque en ciudades chicas el pool es más corto que en una capital, y dejar armada una lista de suplentes."
   - q: "¿Qué tengo que aclarar sobre viáticos y alojamiento?"
     a: "Todo, y antes de que la persona acepte: quién paga el traslado, quién reserva el alojamiento, si las comidas están cubiertas o se pagan aparte y si el viaje cuenta como horas de trabajo. Lo que no está escrito en la oferta se discute en la ruta, y nadie trabaja bien así."
   - q: "¿Cómo coordino a distancia a un equipo que no conozco?"
@@ -85,12 +85,12 @@ Es el día que más importa cuando el evento queda lejos:
 
 ## Cómo se cubre en LABURO
 
-1. **Buscás por rol, provincia y ciudad** en un pool de más de 1.100 postulantes, con el perfil a la vista.
-2. **Mandás la oferta con el pago, el horario y lo que cubrís** de traslado y alojamiento.
+1. **Cargás el evento con los roles** y le pedís el equipo a LABURO, que busca en un pool de más de 1.200 fichas a la gente de esa provincia y ciudad.
+2. **Cada persona recibe la oferta con el pago, el horario y lo que cubrís** de traslado y alojamiento.
 3. **La persona la acepta con un click** desde el teléfono y queda confirmada.
 
 Si sos productora o agencia y trabajás en varias provincias, mirá [staff para eventos: productoras y agencias](/para/staff-para-eventos-productoras-y-agencias).
 
 ## Empezá a armar tu equipo
 
-Si vas a producir lejos de tu base, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, buscás por rol, provincia y ciudad, y mandás las ofertas con el pago y el horario.
+Si vas a producir lejos de tu base, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, cargás el evento con los roles y LABURO te arma el equipo en destino, con el pago y el horario en cada oferta.

@@ -19,7 +19,7 @@ faqs:
   - q: "¿Quién atiende a la prensa en una inauguración?"
     a: "Conviene que haya una persona definida, con la lista de medios y creadores invitados, que los reciba aparte y los acompañe a quien va a hablar por la marca. El resto del staff no da declaraciones: si alguien de prensa le pregunta algo, lo deriva a esa persona."
   - q: "¿Cómo contrato staff para una inauguración en LABURO?"
-    a: "Creás la cuenta de productora gratis, buscás por rol (Recepcionista, Promotor/a, Bartender, Host / Anfitrión) y por zona en un pool de más de 1.100 postulantes, y mandás la oferta con el pago y los horarios. La persona la acepta con un click desde el teléfono y queda confirmada para ese evento."
+    a: "Creás la cuenta de productora gratis y cargás la apertura con los roles que te faltan (Recepcionista, Promotor/a, Bartender, Host / Anfitrión). El staff anotado lo coordina el equipo de LABURO, que te arma el equipo con gente del pool de tu zona. Cada persona recibe la oferta con el pago y los horarios, la acepta con un click desde el teléfono y queda confirmada para ese evento."
 ---
 
 La inauguración de un local o de un showroom es un evento corto: dos, tres, cuatro horas. Eso parece simplificar todo, pero hace lo contrario. **No hay tiempo para corregir sobre la marcha**: si la fila de la vereda se arma en la primera media hora, ya es la foto del evento. Esta nota repasa los roles, cómo pensar el pico y qué dejar acordado con la marca y con el local.
@@ -99,10 +99,10 @@ En un evento de tres horas casi no hay relevos: el equipo entero trabaja todo el
 
 ## Cómo se cubre en LABURO
 
-1. **Buscás por rol y zona** (Recepcionista, Promotor/a, Host / Anfitrión, Bartender, Mozo / Camarero) en un pool de más de 1.100 postulantes, con el perfil a la vista.
-2. **Mandás la oferta con el pago y los horarios,** incluida la hora de citación previa.
+1. **Cargás el evento con los roles** (Recepcionista, Promotor/a, Host / Anfitrión, Bartender, Mozo / Camarero) y se lo pasás al equipo de LABURO, que te arma el equipo con gente del pool de más de 1.200 fichas.
+2. **Cada persona recibe la oferta con el pago y los horarios,** incluida la hora de citación previa.
 3. **La persona la acepta con un click** desde el teléfono y queda confirmada. El día del evento ficha entrada y salida desde el celular.
 
 ## Empezá a armar tu equipo
 
-Si organizás aperturas de locales o showrooms, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, buscás por rol y zona, y mandás las ofertas con el pago y el horario.
+Si organizás aperturas de locales o showrooms, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, cargás los roles que necesitás y el equipo de LABURO te arma la gente con el pago y el horario en cada oferta.

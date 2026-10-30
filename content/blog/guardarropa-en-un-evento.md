@@ -19,7 +19,7 @@ faqs:
   - q: "¿Qué cosas no se reciben en un guardarropa?"
     a: "Lo habitual es no recibir objetos de valor: dinero, documentos, celulares, notebooks, joyas o llaves sueltas. Lo define quien organiza el evento y tiene que estar escrito en un cartel visible antes de que la persona llegue al mostrador, para que nadie discuta en la fila."
   - q: "¿Cómo contrato personal de guardarropa en LABURO?"
-    a: "Creás la cuenta gratis, buscás por el rol Guardarropa, por zona y por experiencia, y le mandás a cada persona una oferta con el pago y los horarios. La persona la acepta con un click desde el teléfono y queda confirmada para ese evento."
+    a: "Creás la cuenta gratis y cargás el evento con los puestos de guardarropa. Le pedís el equipo a LABURO, que coordina al staff anotado y te lo arma con gente de tu zona. Cada persona recibe la oferta con el pago y los horarios, la acepta con un click desde el teléfono y queda confirmada para ese evento."
 ---
 
 El guardarropa parece el puesto más simple de un evento hasta que, a la salida, todos quieren su abrigo al mismo tiempo. Esta nota explica cómo se organiza, cómo calcular cuánta gente hace falta y qué hacer cuando algo se pierde. Al final hay una sección para quien trabaja de esto.
@@ -93,12 +93,12 @@ Si querés trabajar de esto, cargá tu perfil en [LABURO](/sumate) y elegí el r
 
 En LABURO, Guardarropa es uno de los roles del catálogo, dentro de accesos y acreditación.
 
-1. **Buscás por rol, zona y experiencia** en un pool de más de 1.100 postulantes, con el perfil a la vista.
-2. **Mandás la oferta con el pago y los horarios,** incluido el de cierre, que en guardarropa es de los más tardíos.
+1. **Cargás el evento con la dotación** y LABURO te arma el equipo con gente de un pool de más de 1.200 fichas.
+2. **Cada persona recibe la oferta con el pago y los horarios,** incluido el de cierre, que en guardarropa es de los más tardíos.
 3. **La persona la acepta con un click** desde el teléfono y queda confirmada para ese evento.
 
 Si estás armando la puerta completa, mirá [personal de control de accesos y acreditación](/para/personal-de-control-de-accesos-y-acreditacion). Si es parte de un equipo para una empresa, está [staff para eventos corporativos](/para/staff-para-eventos-corporativos), y si se trata de la fiesta de diciembre, en [fiesta de fin de año de empresa: cómo armar el staff](/blog/fiesta-de-fin-de-ano-de-empresa-como-armar-el-staff) está el equipo entero.
 
 ## Empezá a armar tu equipo
 
-Si contratás staff para eventos, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, buscás por rol y zona, y mandás las ofertas con el pago y el horario.
+Si contratás staff para eventos, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis: cargás el evento, le contás a LABURO qué te falta y te arma el equipo.

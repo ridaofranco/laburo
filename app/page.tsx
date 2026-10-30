@@ -33,7 +33,7 @@ import { PAGO_TEXTO } from "@/lib/pago";
 import { createClient } from "@/lib/supabase/server";
 
 const DESCRIPCION =
-  "Todo lo que necesita tu evento en un solo lugar: staff con perfil y CV a la vista, proveedores de todos los rubros y salones por capacidad. Buscás vos y cerrás directo. Y si trabajás en eventos, tenés un servicio o un salón, publicate gratis.";
+  "Todo lo que necesita tu evento en un solo lugar: staff de un pool real que te arma el equipo de LABURO, proveedores de todos los rubros y salones por capacidad. Y si trabajás en eventos, tenés un servicio o un salón, publicate gratis.";
 
 export const metadata: Metadata = {
   title: "LABURO. Todo lo que necesita tu evento",
@@ -125,15 +125,15 @@ const PASOS = [
   },
   {
     n: "PASO 02",
-    titulo: "Buscás vos",
+    titulo: "Te armamos el equipo",
     texto:
-      "El pool completo con experiencia y CV a la vista, más los proveedores y los salones publicados. Filtrás por rol, por zona y por cuánta gente entra.",
+      "El staff anotado en LABURO lo coordina el equipo de LABURO: le contás qué roles te faltan y te arma el equipo con gente del pool de tu zona. Los proveedores y los salones los buscás vos, por rubro, zona y capacidad.",
   },
   {
     n: "PASO 03",
     titulo: "Cerrás directo",
     texto:
-      "Mandás la oferta con pago y horarios, y la persona la acepta con un click desde el teléfono. Al proveedor y al salón les consultás por formulario y te contestan por mail. Todo queda registrado.",
+      "Cada persona recibe la oferta con pago y horarios y la acepta con un click desde el teléfono. Al proveedor y al salón les consultás por formulario y te contestan por mail. Todo queda registrado.",
   },
 ];
 
@@ -312,9 +312,9 @@ export default async function LandingPage() {
                 className="md:col-span-6 lg:col-start-7 lg:col-span-6"
               >
                 <p className="text-[18px] md:text-[21px] leading-[1.6] text-[#8a8a8a] max-w-[560px]">
-                  El staff, los proveedores y el salón, en un solo lugar. Buscás
-                  vos, con perfiles reales y datos a la vista, y cerrás directo
-                  con cada uno. Sin planillas eternas ni cadenas de WhatsApp.
+                  El staff, los proveedores y el salón, en un solo lugar. El equipo
+                  te lo armamos con gente real del pool, y a proveedores y
+                  salones les escribís directo. Sin planillas eternas ni cadenas de WhatsApp.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 mt-10">
                   <Link
@@ -467,9 +467,9 @@ export default async function LandingPage() {
                 </h3>
                 <p className="text-[16px] md:text-[17px] leading-[1.7] text-[#8a8a8a]">
                   Productora, agencia, marca o empresa: da igual. Creá tu cuenta
-                  y entrá a probarlo. Cargás tu evento, mirás el pool con
-                  experiencia y CV a la vista, y mandás la oferta vos mismo. No
-                  hace falta hablar con nadie para empezar.
+                  y entrá a probarlo. Cargás tu evento con los roles que te
+                  faltan y el equipo de LABURO te arma el staff con gente del
+                  pool. Cada persona acepta la oferta desde el teléfono.
                 </p>
                 {/* PRIMERO ENTRAR, DESPUES LA CONSULTA (decision de Franco,
                  * 6/8): "una productora tiene que poder entrar gratis para
@@ -764,7 +764,7 @@ const HOME_SCHEMA = [
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web",
     description:
-      "Staff, proveedores y salones para eventos en un solo lugar. Buscás por rol y zona, mandás la oferta con pago y horarios, y la persona la acepta con un click.",
+      "Staff, proveedores y salones para eventos en un solo lugar. LABURO te arma el equipo con gente de su pool, cada persona recibe la oferta con pago y horarios y la acepta con un click.",
     offers: { "@type": "Offer", price: "0", priceCurrency: "ARS" },
     publisher: { "@id": "https://laburo.somosder.ar/#organization" },
   },

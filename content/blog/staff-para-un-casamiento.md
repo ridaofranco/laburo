@@ -1,7 +1,7 @@
 ---
-title: "Staff para un casamiento: qué roles hacen falta y cómo calcular cada uno"
+title: "Cuánta gente necesita un casamiento: el cálculo rol por rol"
 description: "Recepción, mozos, barra, guardarropa, coordinación y limpieza en un casamiento: cómo calcular cada rol, armar relevos y no duplicar lo que trae el salón."
-metaTitle: "Staff para un Casamiento: Roles y Cálculo | LABURO"
+metaTitle: "Cuánto Staff Necesita un Casamiento | LABURO"
 slug: "staff-para-un-casamiento"
 canonical: "https://laburo.somosder.ar/blog/staff-para-un-casamiento"
 kicker: "Armar el equipo"
@@ -19,7 +19,7 @@ faqs:
   - q: "¿Qué tengo que preguntarle al salón y al catering antes de contratar staff?"
     a: "Qué personal incluyen, en qué horario, con qué uniforme y quién los coordina. También quién limpia antes, durante y después, quién atiende la barra y si hay guardarropa. Con eso escrito sabés qué roles te faltan y no duplicás ninguno."
   - q: "¿Cómo contrato staff para un casamiento en LABURO?"
-    a: "Creás la cuenta de productora gratis, buscás por rol y zona en un pool de más de 1.100 postulantes y mandás a cada persona una propuesta con el pago, el horario y las condiciones. La persona la acepta con un click desde el teléfono y queda confirmada para ese evento."
+    a: "Creás la cuenta de productora gratis y cargás el casamiento con los roles que te faltan. El equipo de LABURO, que coordina al staff anotado, te arma el equipo con gente del pool de tu zona, y cada persona recibe una propuesta con el pago, el horario y las condiciones. La acepta con un click desde el teléfono y queda confirmada para ese evento."
 ---
 
 Un casamiento es un evento largo, con momentos muy marcados (llegada, cena, brindis, baile, salida) y con varios proveedores que ya traen gente propia. Por eso el error más común no es que falte personal sino que sobre en un lado y falte en otro. Esta nota repasa los roles, cómo calcular cada uno y qué preguntar antes para no pagar dos veces lo mismo.
@@ -99,8 +99,10 @@ Lo que no está escrito se discute el día del evento. Y tené un plan si alguie
 
 ## Cómo se cubre en LABURO
 
-En LABURO buscás por rol y zona en un pool de más de 1.100 postulantes y ves el perfil de cada persona. Mandás una propuesta con el rol, la fecha, el lugar, el pago y un campo de condiciones donde va el horario, las tareas y la vestimenta. La persona la acepta con un click desde el teléfono y queda confirmada. El día del evento el staff ficha entrada y salida desde el celular, así al final sabés quién estuvo y en qué horario. Si buscás el equipo de servicio, mirá [mozos y bartenders para eventos](/para/mozos-y-bartenders-para-eventos); si organizás casamientos seguido, está [staff para productoras y agencias](/para/staff-para-eventos-productoras-y-agencias).
+En LABURO cargás el casamiento con los roles y le contás al equipo de LABURO qué necesitás: con el pool de más de 1.200 fichas te arma el equipo de tu zona. Cada persona recibe una propuesta con el rol, la fecha, el lugar, el pago y un campo de condiciones donde va el horario, las tareas y la vestimenta. La persona la acepta con un click desde el teléfono y queda confirmada. El día del evento el staff ficha entrada y salida desde el celular, así al final sabés quién estuvo y en qué horario. Si buscás el equipo de servicio, mirá [mozos y bartenders para eventos](/para/mozos-y-bartenders-para-eventos); si organizás casamientos seguido, está [staff para productoras y agencias](/para/staff-para-eventos-productoras-y-agencias).
 
 ## Empezá a armar tu equipo
 
-Si estás armando el staff de un casamiento, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, buscás por rol y zona, y mandás las propuestas con el pago y el horario.
+Si también tenés fiestas de 15, aniversarios o cumpleaños grandes, mirá [staff para casamientos y fiestas](/para/staff-para-casamientos-y-fiestas).
+
+Si estás armando el staff de un casamiento, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, cargás los roles y LABURO te arma el equipo, con el pago y el horario escritos en cada propuesta.

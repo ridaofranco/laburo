@@ -87,4 +87,4 @@ Si estás decidiendo entre tercerizar el equipo o convocarlo vos, la comparació
 
 ## Contratá staff con las condiciones a la vista
 
-En LABURO buscás sobre más de 1.100 perfiles reales con experiencia y CV cargados, filtrás por rol, zona y disponibilidad, y cada persona recibe una oferta con pago, fechas y horarios que acepta con un click. Contanos qué necesita tu evento en un formulario de dos minutos, sin crear cuenta: [pedí tu staff](/).
+En LABURO hay más de 1.200 fichas reales con experiencia y CV cargados, el equipo de LABURO te arma el staff con gente de tu zona, y cada persona recibe una oferta con pago, fechas y horarios que acepta con un click. Contanos qué necesita tu evento en un formulario de dos minutos, sin crear cuenta: [pedí tu staff](/).

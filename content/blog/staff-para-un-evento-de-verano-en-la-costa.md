@@ -19,7 +19,7 @@ faqs:
   - q: "¿Con cuánta anticipación reservar staff para un evento de verano?"
     a: "Lo antes posible, porque en temporada la gente con experiencia toma compromisos para todo el verano y lo que queda libre se reparte entre muchos eventos. Lo práctico es confirmar primero los roles clave y los que viajan, y dejar para después los puestos que se pueden cubrir con gente local."
   - q: "¿Cómo busco staff para la costa en LABURO?"
-    a: "Creás tu cuenta de productora gratis y filtrás por rol, provincia y ciudad para ver a la gente que ya está en la zona. Si necesitás que alguien viaje, sumás el filtro dispuesto a viajar. A cada persona le mandás la oferta con el pago, los horarios y lo que incluye, y la acepta desde el teléfono."
+    a: "Creás tu cuenta de productora gratis y cargás el evento con los roles. El staff anotado lo coordina el equipo de LABURO: te arma el equipo con gente que ya está en la costa y, si hace falta, suma a quienes marcaron que pueden viajar. Cada persona recibe la oferta con el pago, los horarios y lo que incluye, y la acepta desde el teléfono."
 ---
 
 Un evento de verano en la costa tiene todo lo que tiene cualquier evento, más tres complicaciones: la ciudad está llena, la gente que sabe trabajar ya tiene la temporada comprometida y el clima decide más que en cualquier salón. Esta nota es para quien contrata: cómo armar el equipo, qué resolver si la gente viaja y qué dejar decidido antes. Si sos staff y querés trabajar en la costa, la nota para vos es [trabajar en eventos en verano en la costa](/blog/trabajar-en-eventos-en-verano-en-la-costa).
@@ -95,18 +95,18 @@ La misma lógica de reservar antes de que se llene la agenda está en [reservar 
 
 ## Cómo se arma en LABURO
 
-En LABURO buscás en un pool de más de 1.100 postulantes, con el perfil a la vista. Los filtros que más sirven para la costa:
+LABURO tiene un pool de más de 1.200 fichas, y el equipo de LABURO arma el equipo de la costa mirando, sobre todo, estos datos de cada persona:
 
 1. **Provincia y ciudad**, para encontrar a la gente que ya está en la zona.
 2. **Dispuesto a viajar**, para quienes indicaron que pueden moverse a otra ciudad.
 3. **Disponible el finde** y **movilidad propia**, si el evento es de fin de semana o el predio queda lejos.
 4. **Rol**, con el catálogo de oficios.
 
-Después le mandás a cada persona la oferta con el pago, los horarios y lo que incluye, y la acepta desde el teléfono. Si el equipo es para una marca en la playa, mirá [promotoras y azafatas para activaciones](/para/promotoras-y-azafatas-para-activaciones), y si es para una productora, [staff para eventos para productoras y agencias](/para/staff-para-eventos-productoras-y-agencias).
+Vos cargás el evento con los roles y le pasás el pedido por el WhatsApp de soporte o la [consulta de la home](/#productores). Cada persona recibe la oferta con el pago, los horarios y lo que incluye, y la acepta desde el teléfono. Si el equipo es para una marca en la playa, mirá [promotoras y azafatas para activaciones](/para/promotoras-y-azafatas-para-activaciones), y si es para una productora, [staff para eventos para productoras y agencias](/para/staff-para-eventos-productoras-y-agencias).
 
 ## Empezá a armar tu equipo
 
-Si estás preparando un evento para el verano, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, buscás por rol, provincia y ciudad, y mandás las ofertas con el pago y el horario.
+Si estás preparando un evento para el verano, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, cargás el evento y el equipo de LABURO te arma la gente de la zona, con el pago y el horario en cada oferta.
 
 ## Fuentes
 

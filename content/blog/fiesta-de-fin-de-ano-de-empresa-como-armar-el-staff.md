@@ -102,7 +102,7 @@ El paso a paso para cuando la baja ya pasó está en [qué hacer si te falla un 
 
 ## Cómo se arma en LABURO
 
-En LABURO cargás el evento con la dotación por rol (mozos, bartenders, acreditación, guardarropa, seguridad de puerta, técnica) y buscás por rol, zona y experiencia en un pool de más de 1.100 postulantes. A cada persona le mandás una oferta con el pago y los horarios, la acepta con un click desde el teléfono y el tablero te muestra cuántos lugares están cubiertos y cuántos faltan. La gente que ya trabajó con vos la podés marcar como favorita para tenerla a mano cuando necesites un reemplazo.
+En LABURO cargás el evento con la dotación por rol (mozos, bartenders, acreditación, guardarropa, seguridad de puerta, técnica) y el equipo de LABURO te arma el staff con gente de un pool de más de 1.200 fichas. Cada persona recibe la oferta con el pago y los horarios, la acepta con un click desde el teléfono y el tablero te muestra cuántos lugares están cubiertos y cuántos faltan. La gente que ya trabajó con vos la podés marcar como favorita para tenerla a mano cuando necesites un reemplazo.
 
 ## Empezá ahora
 

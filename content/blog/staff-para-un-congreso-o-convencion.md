@@ -19,7 +19,7 @@ faqs:
   - q: "¿Los intérpretes de un congreso se contratan como staff?"
     a: "Los intérpretes son un perfil profesional propio y la cabina de simultánea suele ser un proveedor aparte, con su equipo técnico. Lo que sí se coordina con el resto del staff es la entrega de receptores al público, la señalética y los tiempos de cada bloque. En LABURO existe el rol Traductor/a / intérprete para buscar ese perfil."
   - q: "¿Cómo armo el staff de un congreso en LABURO?"
-    a: "Creás la cuenta de productora gratis, declarás la dotación por rol del evento y buscás por rol, zona y experiencia: Acreditador/a, Recepcionista, Orientador/a, Runner, Traductor/a / intérprete, técnica y gastronomía están en el catálogo. Mandás cada oferta con el pago y el horario, y en el tablero ves cuántos lugares están cubiertos."
+    a: "Creás la cuenta de productora gratis y declarás la dotación por rol del evento: Acreditador/a, Recepcionista, Orientador/a, Runner, Traductor/a / intérprete, técnica y gastronomía están en el catálogo. El equipo de LABURO te arma el equipo con gente del pool, cada persona recibe la oferta con el pago y el horario, y en el tablero ves cuántos lugares están cubiertos."
 ---
 
 Un congreso o una convención no es un evento grande: son varios eventos chicos que pasan a la vez, en salas distintas, con un mismo público que se mueve entre ellos cada cuarenta minutos. Por eso el staff no se arma como el de una fiesta. Esta nota repasa los puestos que hacen falta, cómo se reparten por momento y por sala, y qué errores se repiten.
@@ -95,10 +95,10 @@ Ese movimiento tiene que estar escrito en la grilla y explicado en el briefing. 
 
 ## Cómo se arma en LABURO
 
-En LABURO declarás la dotación por rol del congreso y buscás por rol, zona y experiencia en un pool de más de 1.100 postulantes. Acreditador/a, Recepcionista, Host / Anfitrión, Orientador/a, Runner, Stage manager, Traductor/a / intérprete, técnica y gastronomía están en el catálogo. Mandás cada oferta con el rol, el pago y el horario, la persona la acepta desde el teléfono, y en el tablero ves cuántos lugares están cubiertos y cuántos siguen abiertos.
+En LABURO declarás la dotación por rol del congreso, y el equipo de LABURO la cubre con gente de un pool de más de 1.200 fichas. Acreditador/a, Recepcionista, Host / Anfitrión, Orientador/a, Runner, Stage manager, Traductor/a / intérprete, técnica y gastronomía están en el catálogo. Cada persona recibe la oferta con el rol, el pago y el horario, la acepta desde el teléfono, y en el tablero ves cuántos lugares están cubiertos y cuántos siguen abiertos.
 
 Para la puerta completa, mirá [personal de control de accesos y acreditación](/para/personal-de-control-de-accesos-y-acreditacion). Si el congreso es de una empresa o una cámara, está [staff para eventos corporativos](/para/staff-para-eventos-corporativos).
 
 ## Armá el equipo de tu congreso
 
-[Creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, buscás por rol y zona, y mandás las ofertas con el pago y el horario de cada turno.
+[Creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, cargás la dotación y LABURO te arma el equipo, con el pago y el horario de cada turno en la oferta.

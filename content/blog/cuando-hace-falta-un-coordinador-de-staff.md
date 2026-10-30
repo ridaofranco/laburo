@@ -19,7 +19,7 @@ faqs:
   - q: "¿Cuál es la diferencia entre coordinador y referente de sector?"
     a: "El referente está a cargo de un solo sector (una barra, una puerta, un grupo de promotoras) y trabaja dentro de él. El coordinador está por encima de los referentes, mira todo el evento y habla con producción. En equipos chicos el coordinador es el único escalón; en equipos grandes la cadena tiene los dos."
   - q: "¿Hay coordinadores en LABURO?"
-    a: "Sí. En el catálogo de puestos están Coordinador/a de logística, Coordinador/a de invitados y Coordinador/a de voluntarios, además de Productor/a de campo y Stage manager. Los buscás por rol y zona y les mandás la oferta con el pago, el horario y las condiciones, igual que a cualquier otro puesto."
+    a: "Sí. En el catálogo de puestos están Coordinador/a de logística, Coordinador/a de invitados y Coordinador/a de voluntarios, además de Productor/a de campo y Stage manager. Los cargás en la dotación de tu evento y el equipo de LABURO te propone gente del pool para cubrirlos. Cada persona recibe la oferta con el pago, el horario y las condiciones, igual que en cualquier otro puesto."
 ---
 
 Hay un momento en que el evento deja de entrar en tu cabeza. Estás con el cliente, te llaman del escenario, falta hielo en una barra y alguien de la puerta te pregunta si puede salir a comer. Si todo eso pasa por vos, el equipo queda sin nadie a cargo justo cuando más lo necesita. Para eso existe el coordinador o coordinadora de staff. Esta nota explica qué hace, las señales de que tu evento lo necesita y cómo armar la cadena de mando para que funcione.
@@ -86,7 +86,7 @@ Un coordinador sin información es un staff más. Antes del evento, pasale:
 
 ## Cómo se cubre en LABURO
 
-En el catálogo de LABURO hay tres puestos de coordinación: **Coordinador/a de logística**, **Coordinador/a de invitados** y **Coordinador/a de voluntarios**, y por encima, en producción, **Productor/a de campo** y **Stage manager**. Buscás por rol, zona y experiencia, mirás el perfil y le mandás la oferta con el pago, el horario de convocatoria y las condiciones. La persona la acepta desde el teléfono y queda confirmada para ese evento.
+En el catálogo de LABURO hay tres puestos de coordinación: **Coordinador/a de logística**, **Coordinador/a de invitados** y **Coordinador/a de voluntarios**, y por encima, en producción, **Productor/a de campo** y **Stage manager**. Los pedís al cargar tu evento, y el equipo de LABURO, que coordina al staff anotado, busca a quien tenga experiencia en tu zona. La persona recibe la oferta con el pago, el horario de convocatoria y las condiciones, la acepta desde el teléfono y queda confirmada para ese evento.
 
 Si a alguien de tu equipo lo calificaste bien varias veces y lo tenés en Favoritos, también es un buen candidato para empezar como referente de sector.
 
@@ -94,4 +94,4 @@ Para equipos de empresa, mirá [staff para eventos corporativos](/para/staff-par
 
 ## Sumá a quien coordine tu equipo
 
-[Creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, buscás por rol y zona en un pool de más de 1.100 postulantes, y mandás las ofertas con el pago y el horario.
+[Creá tu cuenta de productora en LABURO](/registrar-productora): es gratis. Cargás tu evento con los roles que te faltan y LABURO te arma el equipo con gente de un pool de más de 1.200 fichas.

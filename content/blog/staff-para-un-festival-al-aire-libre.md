@@ -19,7 +19,7 @@ faqs:
   - q: "¿Qué se hace con el staff si llueve en un festival al aire libre?"
     a: "Se decide antes, no en el momento: qué puestos se refuerzan, cuáles se cubren o se mueven y dónde se resguarda el equipo. Conviene avisar en la convocatoria que el evento es a la intemperie para que cada persona venga preparada. Y la limpieza y los accesos suelen necesitar más manos después de una lluvia."
   - q: "¿Cómo convoco staff para un festival en LABURO?"
-    a: "Creás la cuenta de productora gratis, cargás el evento con la dotación por rol y buscás perfiles por rol, zona y experiencia entre más de 1.100 postulantes. Mandás la oferta con pago y horarios, y la persona la acepta desde el teléfono. El día del evento, el staff confirmado puede fichar entrada y salida desde el celular."
+    a: "Creás la cuenta de productora gratis y cargás el evento con la dotación por rol. El equipo de LABURO te arma el equipo con gente de su pool de más de 1.200 fichas, cada persona recibe la oferta con pago y horarios y la acepta desde el teléfono. El día del evento, el staff confirmado puede fichar entrada y salida desde el celular."
 ---
 
 Un festival al aire libre tiene todo lo difícil de un evento grande y le suma el clima: muchas horas, un predio extenso, sol o lluvia y un equipo repartido en puntos que no se ven entre sí. Esta nota repasa los puestos que casi siempre hacen falta, cómo armar los turnos y qué prever para que el equipo llegue entero al final.
@@ -77,12 +77,14 @@ En un predio grande la gente se pierde, los celulares se quedan sin batería y l
 ## Cómo se arma en LABURO
 
 1. **Creás la cuenta de productora gratis** y cargás el festival con la dotación por rol: accesos, bartenders, ayudantes de barra, limpieza, runners, montaje.
-2. **Buscás por rol, zona y experiencia** entre más de 1.100 postulantes.
-3. **Mandás la oferta con pago y horarios.** Si es a la intemperie y hay que traer algo, escribilo en la oferta.
+2. **Le pedís el equipo a LABURO** por el WhatsApp de soporte o la [consulta de la home](/#productores): el staff anotado lo coordina el equipo de LABURO y te arma la grilla con gente del pool de tu zona.
+3. **Cada persona recibe la oferta con pago y horarios.** Si es a la intemperie y hay que traer algo, que quede escrito en la oferta.
 4. **La persona la acepta desde el teléfono** y queda confirmada.
 5. **El día del evento, el staff confirmado ficha entrada y salida** desde el celular, y ves quién ya llegó.
 
 Si estás armando el equipo de tu próximo festival, [registrá tu productora](/registrar-productora) y empezá por la grilla.
+
+Si organizás varias fechas o un ciclo, la guía general está en [staff para festivales y recitales](/para/staff-para-festivales-y-recitales).
 
 ## Fuentes
 

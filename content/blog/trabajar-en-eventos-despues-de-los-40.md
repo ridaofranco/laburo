@@ -77,4 +77,4 @@ Si vivís en el AMBA, la página de [trabajo en eventos en Buenos Aires](/para/t
 
 ## Sumate a LABURO
 
-LABURO es gratis para quien trabaja. Cargás tu perfil con tus oficios, tu experiencia y tu disponibilidad real, y las productoras te encuentran cuando buscan por rol y por zona. Ya hay más de 1.100 postulantes y más de 100 eventos hechos. [Sumate acá](/sumate).
+LABURO es gratis para quien trabaja. Cargás tu perfil con tus oficios, tu experiencia y tu disponibilidad real, y cuando un evento pide tu rol en tu zona, te llega la oferta. Ya hay más de 1.200 postulantes y más de 100 eventos hechos. [Sumate acá](/sumate).

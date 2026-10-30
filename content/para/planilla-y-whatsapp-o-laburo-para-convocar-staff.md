@@ -62,17 +62,17 @@ Los problemas aparecen cuando convocás seguido, con gente que va rotando y con 
 | Cuántos faltan | Contar a mano | «X de Y cubiertos» por evento |
 | Datos personales | Todos ven el teléfono de todos | Cada persona recibe su oferta en un link propio |
 | Bajas | Te enterás cuando te avisan | La oferta rechazada o vencida vuelve a ser un lugar abierto, con botón para buscar reemplazo |
-| Gente que se superpone | Revisar planillas de otros eventos | Filtro para ocultar a quienes ya están asignados a un evento que se solapa |
+| Gente que se superpone | Revisar planillas de otros eventos | Lo mira el equipo de LABURO al armarte el equipo |
 | Historial | En la cabeza del coordinador | Favoritos con nota privada |
 | Flexibilidad | Total | La que da la plataforma |
 
 ## Cómo se resuelve en LABURO
 
-LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar) para armar eventos. Crear la cuenta es gratis. Esto es lo que hace hoy, sin promesas de más:
+LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar) para armar eventos. Crear la cuenta es gratis y el staff anotado lo coordina el equipo de LABURO. Esto es lo que hace hoy, sin promesas de más:
 
 1. **Cargás el evento y la dotación requerida**: filas de rol y cantidad. Esa es la cuenta contra la que se mide la cobertura.
-2. **Buscás staff** en un pool de más de 1.100 postulantes, por rol o habilidad, provincia y ciudad, viendo la experiencia de cada perfil. Podés filtrar por disponibilidad el fin de semana, movilidad propia o si está dispuesto a viajar, y ocultar a quienes ya están asignados a un evento que se solapa.
-3. **Mandás la oferta** con el rol, el horario y el pago. A la persona le llega un link propio: abre la oferta, la acepta o la rechaza con un click desde el teléfono, sin crear contraseña. Esa página muestra la oferta y el evento, no los datos de los demás convocados.
+2. **Le pedís el staff a LABURO.** La gente anotada en LABURO, más de 1.200 fichas, la coordina el equipo de LABURO: le contás qué roles te faltan y te arma el equipo con gente de tu zona.
+3. **Cada persona recibe su oferta** con el rol, el horario y el pago en un link propio: la abre y la acepta o la rechaza con un click desde el teléfono, sin crear contraseña. Esa página muestra la oferta y el evento, no los datos de los demás.
 4. **Mirás el tablero.** Cada oferta tiene su estado y el evento muestra cuántos lugares están cubiertos sobre el total. Solo cuenta como cubierto quien aceptó. Lo rechazado o vencido aparece como abierto, con un botón para buscar reemplazo que oculta a quienes ya recibieron oferta.
 5. **Recordatorios por mail.** A quien tiene una oferta a punto de vencer le llega un aviso, y a quien tiene un turno confirmado, un recordatorio el día anterior o el mismo día.
 6. **Fichaje.** El día del evento, el staff confirmado puede fichar entrada y salida desde el celular.
@@ -102,7 +102,7 @@ Conviene cambiar cuando aparece gente nueva en cada fecha, cuando producís vari
 
 ## Para arrancar
 
-Si querés probarlo con tu próximo evento, [creá tu cuenta gratis](/registrar-productora), cargá la dotación y mandá las primeras ofertas. Para ver el recorrido completo de cómo arman el staff las productoras, está [staff para eventos para productoras y agencias](/para/staff-para-eventos-productoras-y-agencias).
+Si querés probarlo con tu próximo evento, [creá tu cuenta gratis](/registrar-productora), cargá la dotación y pedile el equipo a LABURO. Para ver el recorrido completo de cómo arman el staff las productoras, está [staff para eventos para productoras y agencias](/para/staff-para-eventos-productoras-y-agencias).
 
 ## Fuentes
 

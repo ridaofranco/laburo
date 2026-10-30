@@ -19,7 +19,7 @@ faqs:
   - q: "¿Qué tengo que acordar con los bartenders antes del evento?"
     a: "Rol, horario de convocatoria y de salida, pago, vestimenta, carta y quién pone cada cosa: bebidas, hielo, cristalería, barra física, herramientas y descartables. También a quién se avisa si falta algo durante el servicio. Todo escrito antes de que la persona acepte."
   - q: "¿Cómo contrato bartenders en LABURO?"
-    a: "Creás la cuenta de productora gratis, cargás el evento y declarás la dotación por rol, por ejemplo bartenders y ayudantes de barra por separado. Buscás por rol, zona y experiencia, mandás la oferta con pago y horarios, y la persona la acepta con un click desde el teléfono."
+    a: "Creás la cuenta de productora gratis, cargás el evento y declarás la dotación por rol, por ejemplo bartenders y ayudantes de barra por separado. El staff anotado lo coordina el equipo de LABURO: le contás qué barra necesitás y te arma el equipo con gente de tu zona. Cada persona recibe la oferta con pago y horarios y la acepta con un click desde el teléfono."
 ---
 
 En un evento de empresa la barra es el lugar donde los invitados hacen fila sin que nadie se lo haya pedido.. Si se traba, es lo primero que se comenta. Esta nota es para quien contrata (productoras, agencias, áreas de marketing o recursos humanos): qué perfil pedir, cómo calcular cuántas barras y bartenders, qué preguntar antes y qué tiene que poner cada parte.
@@ -100,8 +100,8 @@ En LABURO, Bartender y Ayudante de barra son roles distintos dentro de Bar y gas
 
 1. **Creás la cuenta de productora** gratis en [registrar productora](/registrar-productora).
 2. **Cargás el evento y declarás la dotación por rol:** cuántos bartenders y cuántos ayudantes de barra. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
-3. **Buscás por rol, zona y experiencia** en un pool de más de 1.100 postulantes, con el perfil a la vista.
-4. **Mandás la oferta con pago, horarios y lo que tiene que traer.** La persona la acepta con un click desde el teléfono.
+3. **Le pedís la barra a LABURO,** por WhatsApp o desde la consulta de la [home](/#productores), y el equipo la arma con gente de un pool de más de 1.200 fichas.
+4. **Cada persona recibe la oferta con pago, horarios y lo que tiene que traer.** La persona la acepta con un click desde el teléfono.
 
 Si la barra es parte de un equipo más grande, tenés todo el panorama en [mozos y bartenders para eventos](/para/mozos-y-bartenders-para-eventos) y en [staff para eventos corporativos](/para/staff-para-eventos-corporativos).
 

@@ -96,4 +96,4 @@ Si producís seguido y querés ver el recorrido completo, desde la dotación has
 
 ## Armá el staff de tu próximo evento
 
-En LABURO hay más de 1.100 postulantes con perfil y CV cargados, filtrables por rol, zona y disponibilidad. Contanos fecha, lugar y qué roles necesitás en un formulario de dos minutos, sin crear ninguna cuenta: [pedí tu staff](/).
+En LABURO hay más de 1.200 fichas de gente que trabaja en eventos, y el equipo de LABURO te arma el staff con gente de tu zona. Contanos fecha, lugar y qué roles necesitás en un formulario de dos minutos, sin crear ninguna cuenta: [pedí tu staff](/).

@@ -19,7 +19,7 @@ faqs:
   - q: "¿Para qué sirven los runners en una feria gastronómica?"
     a: "Llevan reposición desde el depósito o la zona de carga hasta los puestos, mueven hielo, bolsas y insumos de limpieza, y avisan a coordinación cuando algo falta. Evitan que cada puesto tenga que dejar su lugar en el pico para ir a buscar cosas."
   - q: "¿Cómo contrato staff para una feria en LABURO?"
-    a: "Creás tu cuenta de productora gratis, buscás por rol (Runner, Control de accesos, Personal de limpieza, Cajero/a y otros del catálogo), por provincia y por ciudad, y le mandás a cada persona una oferta con el pago y los horarios. La persona la acepta desde el teléfono y queda confirmada para ese evento."
+    a: "Creás tu cuenta de productora gratis y cargás la feria con los roles (Runner, Control de accesos, Personal de limpieza, Cajero/a y otros del catálogo). El equipo de LABURO coordina al staff anotado y te arma el equipo con gente de tu provincia y tu ciudad; cada persona recibe la oferta con el pago y los horarios, la acepta desde el teléfono y queda confirmada para ese evento."
 ---
 
 Una feria gastronómica tiene dos equipos que trabajan a la vez: el de cada puesto, que cocina y vende, y el de la organización, que hace que el predio funcione. Esta nota es sobre el segundo. Si armás un mercado con puestos y food trucks, acá están los roles que casi siempre hacen falta, qué hace cada uno y qué conviene dejar escrito antes de abrir.
@@ -90,18 +90,18 @@ Calor, sombra para los puestos fijos, agua para el staff y un plan de lluvia dec
 
 ## Cómo se arma en LABURO
 
-En LABURO buscás en un pool de más de 1.100 postulantes, con el perfil a la vista:
+LABURO tiene un pool de más de 1.200 fichas, y el equipo de LABURO te arma el equipo con esa gente:
 
-1. **Filtrás por rol.** El catálogo tiene, entre otros, Acreditador/a, Control de accesos, Pulseras y credenciales, Runner, Personal de limpieza, Cajero/a y Operador de food truck.
-2. **Filtrás por provincia y ciudad**, y si la feria es de fin de semana, por disponible el finde.
-3. **Mandás la oferta con el pago y los horarios** de cada turno, incluido el de armado y el de cierre.
+1. **Cargás la feria con los roles.** El catálogo tiene, entre otros, Acreditador/a, Control de accesos, Pulseras y credenciales, Runner, Personal de limpieza, Cajero/a y Operador de food truck.
+2. **LABURO busca gente de tu provincia y ciudad**, y si la feria es de fin de semana, a quienes marcaron que están disponibles el finde.
+3. **Cada persona recibe la oferta con el pago y los horarios** de cada turno, incluido el de armado y el de cierre.
 4. **La persona la acepta desde el teléfono** y queda confirmada para ese evento.
 
 Si también necesitás gente de gastronomía para un puesto propio, mirá [mozos y bartenders para eventos](/para/mozos-y-bartenders-para-eventos).
 
 ## Empezá a armar tu equipo
 
-Si estás organizando una feria o un mercado, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, buscás por rol y zona, y mandás las ofertas con el pago y el horario.
+Si estás organizando una feria o un mercado, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, cargás los roles de la feria y LABURO te arma el equipo, con el pago y el horario en cada oferta.
 
 ## Fuentes
 

@@ -88,4 +88,4 @@ Si las bajas te agarran porque las confirmaciones están en un grupo de WhatsApp
 
 ## Cubrí tu evento con la cobertura a la vista
 
-En LABURO declarás la dotación por rol, mandás propuestas con pago, fechas y horarios que se aceptan con un click, y ves en un tablero cuántos lugares están cubiertos y cuántos faltan, con más de 1.100 perfiles para cubrir el hueco. Contanos qué necesita tu evento en un formulario de dos minutos, sin crear cuenta: [pedí tu staff](/).
+En LABURO declarás la dotación por rol y ves en un tablero cuántos lugares están cubiertos y cuántos faltan. El equipo de LABURO coordina un pool de más de 1.200 fichas y te ayuda a cubrir el hueco con gente de tu zona; cada persona recibe la propuesta con pago, fecha y horario y la acepta con un click. Contanos qué necesita tu evento en un formulario de dos minutos, sin crear cuenta: [pedí tu staff](/).

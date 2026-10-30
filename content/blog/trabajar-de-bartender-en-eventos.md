@@ -19,7 +19,7 @@ faqs:
   - q: "¿Puedo servir alcohol a un menor de 18 si el evento lo permite?"
     a: "No. La Ley 24.788 prohíbe en todo el territorio nacional el expendio de cualquier bebida alcohólica a menores de dieciocho años, y eso no depende de lo que diga el evento. Si tenés dudas sobre la edad de alguien, no servís y avisás a tu responsable."
   - q: "¿Cómo consigo trabajo de bartender en eventos con LABURO?"
-    a: "Te sumás gratis en /sumate subiendo tu CV, marcás Bartender o Ayudante de barra, tu zona y tu disponibilidad, y quedás en el pool de más de 1.100 postulantes. Cuando una productora busca ese rol en tu zona, te llega una propuesta con fechas, horarios y pago, y decidís si la aceptás."
+    a: "Te sumás gratis en /sumate subiendo tu CV, marcás Bartender o Ayudante de barra, tu zona y tu disponibilidad, y quedás en el pool de más de 1.200 postulantes. Cuando hay un evento que pide ese rol en tu zona, te llega una propuesta con fechas, horarios y pago, y decidís si la aceptás."
 ---
 
 Si ya trabajaste detrás de una barra, el oficio lo tenés. Lo que cambia en un evento es todo lo demás: el lugar, la carta, el ritmo y quién te contrata. Esta nota es para quien quiere trabajar de bartender en eventos: qué es distinto, qué te van a pedir, qué papeles conviene tener y cómo cargar el perfil para que te encuentren.
@@ -79,7 +79,7 @@ Si algo de eso no está en la oferta, preguntalo antes de aceptar.
 
 Más detalle en [qué poner en tu perfil para trabajar en eventos](/blog/que-poner-en-tu-perfil-para-trabajar-en-eventos), y una mirada general del rubro en [trabajar en gastronomía de eventos](/para/trabajar-en-gastronomia-de-eventos).
 
-Cuando una productora busca bartenders en tu zona, te llega una propuesta con el rol, las fechas, los horarios y el pago antes de que aceptes. Estás en un pool de más de 1.100 postulantes, así que lo que te diferencia es un perfil completo y claro. Es gratis: [sumate a LABURO](/sumate).
+Cuando hay un evento que pide bartenders en tu zona, te llega una propuesta con el rol, las fechas, los horarios y el pago antes de que aceptes. Estás en un pool de más de 1.200 postulantes, así que lo que te diferencia es un perfil completo y claro. Es gratis: [sumate a LABURO](/sumate).
 
 ## Fuentes
 

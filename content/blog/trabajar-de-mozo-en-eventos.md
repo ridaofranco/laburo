@@ -84,7 +84,7 @@ Cómo se saca, cuánto dura y qué dice la norma está en [carnet de manipulador
 3. **Completás tu disponibilidad.** En el perfil podés marcar si estás disponible fines de semana, si podés viajar y si tenés movilidad propia.
 4. **Contá tu experiencia concreta.** Qué formatos hiciste (por pasos, banquete, cóctel), en qué tipo de eventos y si tenés el carnet. En [qué poner en tu perfil para trabajar en eventos](/blog/que-poner-en-tu-perfil-para-trabajar-en-eventos) hay ejemplos.
 
-Las productoras buscan por rol y zona en un pool de más de 1.100 postulantes. Cuando te eligen, te llega una oferta con el pago y los horarios, y la aceptás desde el teléfono.
+El equipo se arma por rol y zona con gente de un pool de más de 1.200 postulantes. Cuando te eligen, te llega una oferta con el pago y los horarios, y la aceptás desde el teléfono.
 
 Para que te vuelvan a llamar, lo que más pesa es cumplir: llegar, hacer bien el servicio y quedarte hasta el cierre. Las productoras pueden guardarte como favorito para la próxima. Más ideas en [cómo lograr que te llamen seguido para eventos](/blog/como-lograr-que-te-llamen-seguido-para-eventos).
 

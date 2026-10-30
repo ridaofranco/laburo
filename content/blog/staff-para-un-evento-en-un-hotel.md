@@ -19,7 +19,7 @@ faqs:
   - q: "¿Cómo se hace un montaje de noche en un hotel?"
     a: "Se coordina con el área de eventos el horario de ingreso, el acceso de servicio, el montacargas y el nivel de ruido permitido, porque hay huéspedes durmiendo. Al equipo hay que pasarle por escrito por dónde entra, a qué hora y con quién se presenta, y armar el turno con el descanso que corresponde."
   - q: "¿Cómo convoco staff para un evento en un hotel con LABURO?"
-    a: "Creás la cuenta de productora gratis, buscás por rol, zona y experiencia, y mandás a cada persona una oferta con el pago y los horarios, incluido el de ingreso por servicio. La persona la acepta con un click desde el teléfono y queda confirmada para ese evento."
+    a: "Creás la cuenta de productora gratis y cargás el evento con los roles. El staff anotado lo coordina el equipo de LABURO, que te arma el equipo con gente de tu zona; cada persona recibe una oferta con el pago y los horarios, incluido el de ingreso por servicio, la acepta con un click desde el teléfono y queda confirmada para ese evento."
 ---
 
 Un evento en un hotel tiene una ventaja y una trampa. La ventaja: hay cocina, salones, baños, personal propio y alguien que conoce el edificio. La trampa: el hotel es una casa con sus reglas y sus huéspedes, y si no está claro quién hace qué, el día del evento aparecen huecos (nadie en la acreditación) o choques (tus mozos y los del hotel en el mismo salón). Esta nota ordena qué suele poner el hotel, qué suele traer la productora y cómo coordinar para que no haya sorpresas.
@@ -87,12 +87,12 @@ Cada hotel tiene las suyas y conviene pedirlas por escrito para pasárselas al e
 
 ## Cómo se arma en LABURO
 
-1. **Buscás por rol, zona y experiencia** en un pool de más de 1.100 postulantes: Acreditador/a, Host / Anfitrión, Recepcionista, Runner, Técnica, entre otros roles del catálogo.
-2. **Mandás la oferta con el pago y los horarios,** incluido el de ingreso por servicio y, si hay montaje nocturno, el de esa jornada.
+1. **Cargás el evento con los roles** (Acreditador/a, Host / Anfitrión, Recepcionista, Runner, Técnica, entre otros del catálogo) y LABURO te arma el equipo con gente de un pool de más de 1.200 fichas.
+2. **Cada persona recibe la oferta con el pago y los horarios,** incluido el de ingreso por servicio y, si hay montaje nocturno, el de esa jornada.
 3. **La persona la acepta con un click** desde el teléfono y queda confirmada para ese evento.
 
 Si el evento es de una empresa, mirá [staff para eventos corporativos](/para/staff-para-eventos-corporativos). Si es un congreso en un hotel, en [staff para un congreso o convención](/blog/staff-para-un-congreso-o-convencion) está el equipo por área, y para calcular cuántas personas hacen falta, [cuánta gente necesito para mi evento](/blog/cuanta-gente-necesito-para-mi-evento).
 
 ## Armá tu equipo para el hotel
 
-Si producís eventos, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, buscás por rol y zona, y mandás las ofertas con el pago y el horario.
+Si producís eventos, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, cargás los roles y LABURO te arma el equipo, con el pago y el horario en cada oferta.

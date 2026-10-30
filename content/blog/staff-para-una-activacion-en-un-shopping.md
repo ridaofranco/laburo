@@ -19,7 +19,7 @@ faqs:
   - q: "¿Cómo organizo los turnos si el shopping abre muchas horas?"
     a: "Partí el día en turnos y no le pidas a la misma persona que cubra de la apertura al cierre. Solapá los relevos unos minutos para que quien entra reciba el stand, el material y las novedades de quien sale, y dejá escritos los descansos para que el espacio nunca quede vacío."
   - q: "¿Cómo convoco staff para una activación en un shopping en LABURO?"
-    a: "Creás la cuenta gratis, buscás por rol (Promotor/a, Sampling / degustación, Montaje y desmontaje), por provincia y ciudad, y mandás a cada persona una oferta con el pago y el horario de su turno. La persona la acepta con un click desde el teléfono y queda confirmada."
+    a: "Creás la cuenta gratis y cargás la activación con los roles (Promotor/a, Sampling / degustación, Montaje y desmontaje). El staff anotado lo coordina el equipo de LABURO, que te arma el equipo con gente de tu ciudad; cada persona recibe la oferta con el pago y el horario de su turno, la acepta con un click desde el teléfono y queda confirmada."
 ---
 
 Una activación en un shopping parece fácil de producir: el público ya está ahí, hay luz, hay techo y hay seguridad. Pero el centro comercial tiene sus propios horarios y sus propias reglas, y el equipo trabaja jornadas largas parado en un pasillo. Esta nota repasa qué gente hace falta, cómo se arma el stand y cómo se organizan los turnos para que el último día se vea igual que el primero.
@@ -84,13 +84,13 @@ El paso a paso de la grilla está en [cómo organizar los turnos y horarios del 
 
 En LABURO, Promotor/a, Sampling / degustación y Montaje y desmontaje son roles del catálogo.
 
-1. **Buscás por rol, provincia y ciudad** en un pool de más de 1.100 postulantes, con el perfil de cada persona a la vista.
-2. **Mandás la oferta con el pago y el horario de cada turno,** incluido el armado fuera de hora.
-3. **La persona la acepta con un click** desde el teléfono y queda confirmada. Para coordinar, tenés su WhatsApp desde el perfil.
+1. **Cargás la activación con los roles** y le pedís el equipo a LABURO por el WhatsApp de soporte o la [consulta de la home](/#productores); lo arma con gente de un pool de más de 1.200 fichas.
+2. **Cada persona recibe la oferta con el pago y el horario de su turno,** incluido el armado fuera de hora.
+3. **La persona la acepta con un click** desde el teléfono y queda confirmada.
 4. **Guardás en favoritos** a quienes funcionaron bien, para la próxima activación.
 
 Si estás eligiendo el perfil de atención al público, mirá [promotoras y azafatas para activaciones](/para/promotoras-y-azafatas-para-activaciones). Si sos agencia y armás activaciones seguido, está [staff para eventos: productoras y agencias](/para/staff-para-eventos-productoras-y-agencias).
 
 ## Empezá a armar tu equipo
 
-Si contratás staff para activaciones, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, buscás por rol y zona, y mandás las ofertas con el pago y el horario.
+Si contratás staff para activaciones, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, cargás la activación y LABURO te arma el equipo, con el pago y el horario en cada oferta.

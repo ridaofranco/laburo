@@ -1,7 +1,7 @@
 ---
-title: "Trabajar de seguridad o control en eventos: qué roles hay y qué te piden"
+title: "Trabajar de seguridad en eventos: admisión y permanencia, seguridad privada y qué te piden"
 description: "Qué roles de control hay en un evento, en qué se diferencian de la seguridad privada y la admisión, qué te piden y cómo tratar al público y usar la radio."
-metaTitle: "Trabajar de Seguridad o Control en Eventos | LABURO"
+metaTitle: "Trabajar de Seguridad en Eventos | LABURO"
 slug: "trabajar-de-seguridad-o-control-en-eventos"
 canonical: "https://laburo.somosder.ar/blog/trabajar-de-seguridad-o-control-en-eventos"
 kicker: "Oficios"
@@ -97,6 +97,8 @@ Separá en el pedido lo que es accesos, lo que es admisión y lo que es segurida
 ## Sumate
 
 Si querés trabajar en accesos o control de eventos, [cargá tu perfil en LABURO](/sumate): es gratis, elegís el rol y la zona, y si tenés una habilitación, ponela en tu experiencia.
+
+Si lo tuyo es la puerta sin la parte de seguridad (escanear entradas, acreditar, orientar), mirá [trabajar en control de accesos y acreditación](/para/trabajar-en-control-de-accesos-y-acreditacion).
 
 ## Fuentes
 

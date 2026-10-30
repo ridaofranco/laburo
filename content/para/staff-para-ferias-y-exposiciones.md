@@ -86,8 +86,8 @@ Crear la cuenta es gratis. El recorrido:
 
 1. **Cargás la feria** con las fechas de armado, apertura y desarme, y el lugar.
 2. **Declarás la dotación por rol**: por ejemplo, para ver la mecánica, 3 acreditadores de expositores, 6 de visitantes, 10 orientadores, 8 de control de accesos, 2 en guardarropa. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
-3. **Buscás en el pool por oficio y zona**, con el perfil a la vista: experiencia, foto y en qué tipo de eventos trabajó cada persona.
-4. **Mandás la oferta** con el pago, la fecha y el horario. La persona la acepta con un click desde el celular, y solo las aceptadas cubren un lugar.
+3. **Pedís el equipo a LABURO**, que coordina el pool y lo arma con gente de tu zona, mirando la experiencia y en qué tipo de eventos trabajó cada persona.
+4. **Cada persona recibe la oferta** con el pago, la fecha y el horario, y la acepta con un click desde el celular. Solo las aceptadas cubren un lugar.
 5. **Cada jornada**, el staff ficha entrada y salida desde el celular y las horas quedan registradas, día por día.
 
 Si además necesitás proveedores para la feria, están en [servicios](/servicios), y los salones y predios, en [salones](/salones). Si la feria tiene un perfil de evento de empresa, mirá también [staff para eventos corporativos](/para/staff-para-eventos-corporativos). Y si preferís no armarlo vos, dejás tu consulta para que la vea el equipo de [SOMOS DER](https://www.somosder.ar).

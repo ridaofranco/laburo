@@ -1,7 +1,7 @@
 ---
-title: "Staff para un evento deportivo: maratón, carrera o torneo"
+title: "Cómo calcular el staff de una maratón, carrera o torneo: kits, hidratación y circuito"
 description: "Qué puestos necesita una maratón, una carrera o un torneo: kits, acreditación, hidratación, largada, llegada, recorrido y guardarropa, calculados por ritmo."
-metaTitle: "Staff para un Evento Deportivo | LABURO"
+metaTitle: "Staff para una Maratón o Carrera: el Cálculo | LABURO"
 slug: "staff-para-un-evento-deportivo"
 canonical: "https://laburo.somosder.ar/blog/staff-para-un-evento-deportivo"
 kicker: "Armar el equipo"
@@ -19,7 +19,7 @@ faqs:
   - q: "¿Por qué el guardarropa de una carrera es distinto al de una fiesta?"
     a: "Porque se llena en la hora previa a la largada y se vacía de golpe cuando llegan los corredores, cansados y con frío. Además, la gente deja mochilas y no solo abrigos. Se organiza por número de dorsal y se dimensiona por el pico de retiro, no por el de entrega."
   - q: "¿Cómo armo el staff de un evento deportivo en LABURO?"
-    a: "Creás la cuenta de productora gratis, buscás por rol y zona en un pool de más de 1.100 postulantes y le mandás a cada persona una oferta con el pago y los horarios. La persona la acepta desde el teléfono y queda confirmada para esa fecha."
+    a: "Creás la cuenta de productora gratis y cargás la carrera o el torneo con los roles. El equipo de LABURO coordina al staff anotado y te arma el equipo con gente del pool de tu zona; cada persona recibe la oferta con el pago y los horarios, la acepta desde el teléfono y queda confirmada para esa fecha."
 ---
 
 Una maratón, una carrera de calle o un torneo tienen algo que no tiene una fiesta: el evento pasa en varios lugares a la vez y cada lugar tiene su propio horario de presión. La entrega de kits explota el día anterior, el guardarropa una hora antes de la largada, la llegada cuando entra el grueso de los corredores. Esta nota ordena los puestos, cómo calcularlos y qué decidir antes de convocar.
@@ -78,12 +78,14 @@ Si el evento es al aire libre y largo, muchas cosas se parecen a las de [staff p
 
 ## Cómo se arma en LABURO
 
-1. **Buscás por rol y zona** en un pool de más de 1.100 postulantes, con el perfil a la vista.
-2. **Mandás la oferta con el pago y los horarios** de cada estación, incluido el de desarme.
+1. **Cargás el evento con los roles por estación** y LABURO te arma el equipo con gente de un pool de más de 1.200 fichas.
+2. **Cada persona recibe la oferta con el pago y los horarios** de su estación, incluido el de desarme.
 3. **La persona la acepta desde el teléfono** y queda confirmada para esa fecha.
 
 Si la entrada y la acreditación son el centro del armado, mirá [personal de control de accesos y acreditación](/para/personal-de-control-de-accesos-y-acreditacion). Si sos productora o agencia y hacés varios eventos al año, está [staff para eventos para productoras y agencias](/para/staff-para-eventos-productoras-y-agencias).
 
 ## Empezá a armar tu equipo
 
-Si organizás una carrera, una maratón o un torneo, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, buscás por rol y zona, y mandás las ofertas con el pago y el horario.
+La guía por tipo de evento, con roles, tiempos y cómo se convoca, está en [staff para eventos deportivos y carreras](/para/staff-para-eventos-deportivos-y-carreras).
+
+Si organizás una carrera, una maratón o un torneo, [creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, cargás los roles y el equipo de LABURO te arma la gente, con el pago y el horario en cada oferta.

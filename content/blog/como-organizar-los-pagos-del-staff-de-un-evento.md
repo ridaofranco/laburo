@@ -19,7 +19,7 @@ faqs:
   - q: "¿Qué hago si alguien se baja antes del evento?"
     a: "Lo más sano es que la regla esté escrita en la oferta: hasta cuándo se puede avisar sin problema y qué pasa si alguien no se presenta. El día del evento lo urgente es cubrir el puesto; la cuenta de la baja se hace en la planilla de cierre, con la misma regla para todos."
   - q: "¿LABURO paga al staff por mí?"
-    a: "No. En LABURO mandás ofertas con el monto y las condiciones, y la persona las acepta desde el teléfono. El pago lo hacés vos, por el medio que acordaron. LABURO te ayuda a dejar todo por escrito, a medir la jornada con el fichaje y a bajar en CSV la lista de staff confirmado con montos."
+    a: "No. En LABURO mandás ofertas con el monto y las condiciones, y la persona las acepta desde el teléfono. El pago lo hacés vos, por el medio que acordaron. LABURO te ayuda a dejar todo por escrito, a medir la jornada con el fichaje y a ver en la pantalla de Pagos lo comprometido con cada persona confirmada."
 ---
 
 Casi todas las discusiones con el staff después de un evento son por plata, y casi ninguna es por mala fe. Son por cosas que no se dijeron: si la comida estaba incluida, si el desmontaje se pagaba aparte, a partir de qué hora corría la extra. Esta nota es para quien contrata y quiere cerrar el evento con una cuenta clara, no con un grupo de WhatsApp enojado.
@@ -87,7 +87,7 @@ Al terminar el evento, armá una planilla con una fila por persona. Las columnas
 | Total | La suma |
 | Pagado | Fecha y medio |
 
-En LABURO, desde la pantalla de rentabilidad bajás en CSV la lista del staff confirmado con evento, monto y fecha. Ese archivo es la base: le sumás las columnas de extras y viáticos en tu planilla y tenés el cierre armado.
+En LABURO, la pantalla de Pagos te muestra lo comprometido con el staff que te confirmó: el monto por persona y por evento, y el total. Esa es la base: la pasás a tu planilla, le sumás las columnas de extras y viáticos en tu planilla y tenés el cierre armado.
 
 Mandale a cada persona su fila antes de pagar. Si alguien ve un error, se corrige antes y no después.
 
@@ -101,4 +101,4 @@ Si hoy convocás por planilla y WhatsApp, en [planilla y WhatsApp o LABURO](/par
 
 ## Registrá tu productora
 
-LABURO es gratis. Mandás ofertas con monto y condiciones por escrito, el staff ficha desde el teléfono y bajás la lista de confirmados para tu cierre. [Registrá tu productora](/registrar-productora).
+LABURO es gratis. Mandás ofertas con monto y condiciones por escrito, el staff ficha desde el teléfono y en Pagos ves lo comprometido con cada confirmado para tu cierre. [Registrá tu productora](/registrar-productora).

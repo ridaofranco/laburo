@@ -19,7 +19,7 @@ faqs:
   - q: "¿Qué tengo que preguntarle al organizador de la feria sobre el staff?"
     a: "Cómo se acredita al personal del expositor, hasta cuándo se cargan los nombres, qué datos piden de cada persona, si hay un cupo de credenciales por stand y en qué horarios se permite el ingreso para armado y desarme. Cada feria tiene su reglamento: pedilo por escrito antes de confirmar al equipo."
   - q: "¿Cómo contrato staff para un stand en LABURO?"
-    a: "Creás tu cuenta gratis como productora o empresa, buscás por rol (por ejemplo Azafata / Edecán, Promotor/a, Recepcionista o Montaje y desmontaje), zona y experiencia, y mandás a cada persona una oferta con el pago, los horarios y las condiciones. La persona la acepta con un click desde el teléfono y queda confirmada para ese evento."
+    a: "Creás tu cuenta gratis como productora o empresa y cargás el stand con los roles (por ejemplo Azafata / Edecán, Promotor/a, Recepcionista o Montaje y desmontaje). El staff anotado lo coordina el equipo de LABURO, que te arma el equipo con gente del pool de tu zona. Cada persona recibe una oferta con el pago, los horarios y las condiciones, la acepta con un click desde el teléfono y queda confirmada para ese evento."
 ---
 
 Un stand en una feria es un evento chico adentro de uno grande. Tenés poco espacio, muchas horas de puertas abiertas, un público que pasa caminando y unos segundos para que se detenga. El equipo que pongas adentro es lo que decide si esos segundos se convierten en una charla, en un contacto o en nada. Esta nota es para marcas y agencias que exponen: qué roles hacen falta, cómo calcular cuántas personas y cómo sostener el equipo cuando la feria dura varios días.
@@ -86,7 +86,7 @@ Cada feria tiene su reglamento para expositores, y no conviene suponer que es ig
 
 ## Cómo se arma el equipo en LABURO
 
-En LABURO buscás por rol, zona y experiencia en un pool de más de 1.100 postulantes, con el perfil a la vista. A cada persona le mandás una oferta con el pago, los horarios y las condiciones (convocatoria, vestimenta, tareas), y la acepta con un click desde el teléfono. En el buscador podés ocultar a quienes ya están asignados a un evento que se pisa, algo útil cuando la feria coincide con otras fechas de temporada. Si el stand es parte de una participación más grande de tu empresa, mirá [staff para eventos corporativos](/para/staff-para-eventos-corporativos).
+En LABURO cargás el stand con los roles y le pedís el equipo a LABURO, que lo arma con gente de un pool de más de 1.200 fichas y deja afuera a quien ya está asignado a un evento que se pisa, algo útil cuando la feria coincide con otras fechas de temporada. Cada persona recibe una oferta con el pago, los horarios y las condiciones (convocatoria, vestimenta, tareas), y la acepta con un click desde el teléfono. Si el stand es parte de una participación más grande de tu empresa, mirá [staff para eventos corporativos](/para/staff-para-eventos-corporativos).
 
 ## Registrá tu productora
 

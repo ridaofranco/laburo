@@ -20,7 +20,7 @@ faqs:
   - q: "¿Cómo se organiza la vuelta del staff que sale de madrugada?"
     a: "Escribiendo el horario de salida real en la oferta, avisando si hay transporte público a esa hora o si la vuelta corre por cuenta de cada uno, y armando grupos para salir juntos. Lo que conviene preguntar y organizar está en la nota del blog sobre volver a casa después de un evento de madrugada."
   - q: "¿Hay staff disponible para trabajar los fines de semana en LABURO?"
-    a: "Sí. Al 30 de octubre de 2026, de las más de 1.200 fichas del pool, más de 850 marcaron disponibilidad para el fin de semana. Podés filtrar por ese dato, además de oficio, provincia y ciudad."
+    a: "Sí. Al 30 de octubre de 2026, de las más de 1.200 fichas del pool, más de 850 marcaron disponibilidad para el fin de semana. Cuando le pedís la gente a LABURO, ese dato pesa para armar el equipo, junto con el oficio y la zona."
 ---
 
 La noche tiene su propia lógica. El evento dura seis horas o más, el pico no es a la entrada sino a las dos de la mañana en la barra, y el cierre es cuando más gente quiere irse al mismo tiempo. Un boliche que funciona de jueves a sábado no necesita el mismo equipo un jueves tranquilo que un sábado de fin de semana largo.
@@ -46,7 +46,7 @@ En la barra el detalle está en [mozos y bartenders para eventos](/para/mozos-y-
 
 Acá conviene separar dos cosas que en la noche se mezclan.
 
-- **Control de accesos**: valida entradas, controla listas, pone pulseras, orienta y ordena la fila. Es el perfil que buscás en LABURO como control de accesos, operador de escáner o pulseras y credenciales.
+- **Control de accesos**: valida entradas, controla listas, pone pulseras, orienta y ordena la fila. Es el perfil que le pedís a LABURO como control de accesos, operador de escáner o pulseras y credenciales.
 - **Control de admisión y permanencia**: es una actividad regulada por la **Ley 26.370**. La hace personal habilitado, con carnet profesional y credencial visible, y el **artículo 28** fija una dotación mínima según el público presente al mismo tiempo. Requisitos, categorías y esa dotación están explicados en [Ley 26.370: qué le pide al personal de admisión y permanencia](/blog/ley-26370-admision-y-permanencia-personal-de-puerta).
 
 Si tu lugar entra en lo que pide esa ley, el equipo de admisión y permanencia se arma aparte, con personal habilitado que lo acredite. El staff de accesos trabaja al lado, no en su lugar. Esto no es asesoramiento legal: qué te corresponde en tu jurisdicción lo confirmás con la autoridad local o con tu asesor.
@@ -104,8 +104,8 @@ LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar) para armar event
 
 1. **Cargás la fecha** con lugar y horario. Si hacés fiestas todas las semanas, cada noche es un evento.
 2. **Declarás la dotación por rol**: por ejemplo, 4 bartenders, 2 ayudantes de barra, 2 cajeros, 3 de accesos, 2 de guardarropa, 2 de limpieza. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
-3. **Buscás por oficio y zona**, con perfil, experiencia y foto a la vista. Podés filtrar por provincia, ciudad, movilidad propia o disponibilidad el fin de semana.
-4. **Mandás la oferta** con pago, fecha y horario de entrada y salida. La persona la acepta con un click desde el celular, y solo las aceptadas cuentan como lugar cubierto.
+3. **Le pedís la gente a LABURO.** El equipo de LABURO coordina el pool y te arma la noche con gente de tu zona que puede el fin de semana.
+4. **Cada persona recibe la oferta** con pago, fecha y horario de entrada y salida, y la acepta con un click desde el celular. Solo las aceptadas cuentan como lugar cubierto.
 5. **La noche del evento**, el staff puede fichar entrada y salida desde el celular y las horas quedan registradas.
 6. **Después**, marcás como favoritos a quienes rindieron: esa es tu lista de refuerzos para la próxima fecha fuerte.
 

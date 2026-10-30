@@ -57,7 +57,7 @@ En el perfil de LABURO, en la sección «Experiencia y disponibilidad», hay opc
 - **Movilidad propia.**
 - **Con cuánta anticipación podés tomar un trabajo:** disponibilidad inmediata, con 24 a 48 horas de aviso, con una semana de aviso o a coordinar.
 
-Además elegís **dónde querés trabajar** y **los puestos a los que aplicás.** La regla es una sola: **marcá lo que podés cumplir, no lo que suena mejor.** Si cursás los sábados a la mañana, no tildes fines de semana sin aclararlo en tu experiencia. Si vivís lejos y dependés del transporte público, no marques movilidad propia. Quien contrata busca por rol y zona en un pool de más de 1.100 postulantes y arma el equipo con lo que dice tu perfil: si después no podés, el problema es de los dos.
+Además elegís **dónde querés trabajar** y **los puestos a los que aplicás.** La regla es una sola: **marcá lo que podés cumplir, no lo que suena mejor.** Si cursás los sábados a la mañana, no tildes fines de semana sin aclararlo en tu experiencia. Si vivís lejos y dependés del transporte público, no marques movilidad propia. El equipo se arma por rol y zona con gente de un pool de más de 1.200 postulantes, con lo que dice tu perfil: si después no podés, el problema es de los dos.
 
 Para el resto del perfil (foto, experiencia, CV), mirá [qué poner en tu perfil para trabajar en eventos](/blog/que-poner-en-tu-perfil-para-trabajar-en-eventos).
 

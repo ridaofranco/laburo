@@ -20,7 +20,7 @@ faqs:
   - q: "¿Cómo reduzco la cantidad de gente que necesito en la puerta?"
     a: "Subiendo el ritmo por puesto. Escanear un QR es mucho más rápido que buscar un apellido en una lista impresa, y separar la fila de casos especiales evita que un invitado sin registro frene a todos. Con un sistema de acreditación por QR como PASE, la misma fila se resuelve con menos puestos."
   - q: "¿Dónde consigo personal de acreditación para un evento en Buenos Aires?"
-    a: "En LABURO buscás por rol (control de accesos, acreditador, operador de escáner, pulseras y credenciales, guardarropa), por zona y por experiencia, en un pool de más de 1.100 postulantes con perfil y CV a la vista. Les mandás la oferta con pago y horarios y la aceptan con un click desde el teléfono. Crear la cuenta es gratis."
+    a: "Creás tu cuenta gratis, cargás el evento con los puestos (control de accesos, acreditador, operador de escáner, pulseras y credenciales, guardarropa) y le pedís la gente a LABURO. El equipo de LABURO coordina un pool de más de 1.200 fichas y te arma la puerta con gente de tu zona. Cada persona recibe la oferta con pago y horarios y la acepta con un click desde el teléfono."
 ---
 
 La puerta es el único lugar del evento que ve todo el mundo. Si la acreditación se traba, la fila llega a la calle, el cliente lo ve desde adentro y el evento arranca tarde. Y es, además, el momento que mejor se puede calcular.
@@ -108,8 +108,8 @@ Crear la cuenta es gratis. Para armar la puerta:
 
 1. **Cargás el evento** con fecha, lugar y qué te falta.
 2. **Declarás la dotación por rol**: por ejemplo, 6 de control de accesos, 2 de pulseras, 1 de guardarropa. El tablero te muestra cuántos están cubiertos y cuántos faltan.
-3. **Buscás por rol, zona y experiencia** en más de 1.100 postulantes con perfil y CV a la vista, con filtros de provincia y ciudad, movilidad propia y disponibilidad el fin de semana. Podés ocultar a quienes ya están asignados a un evento que se solapa.
-4. **Mandás la oferta** con pago y horarios, que se acepta con un click desde el teléfono. Cada oferta muestra su estado: enviada, vista, aceptada, rechazada o vencida.
+3. **Pedís la gente a LABURO.** El equipo de LABURO coordina un pool de más de 1.200 fichas y te arma la puerta con gente de tu zona que marcó accesos, acreditación o escáner.
+4. **Cada persona recibe la oferta** con pago y horarios y la acepta con un click desde el teléfono. Cada oferta muestra su estado: enviada, vista, aceptada, rechazada o vencida.
 5. **Antes del turno** le llega un recordatorio a quien está confirmado, y el día del evento puede fichar entrada y salida desde el celular.
 6. **Después** guardás como favoritos a quienes resolvieron bien la puerta, con una nota.
 

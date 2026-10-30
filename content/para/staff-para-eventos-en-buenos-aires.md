@@ -14,7 +14,7 @@ faqs:
   - q: "¿Hay staff para eventos en Buenos Aires en LABURO?"
     a: "Sí. LABURO tiene más de 170 fichas de personas que viven en la Ciudad de Buenos Aires y más de 300 en la Provincia de Buenos Aires: juntas, más de 470. En la Provincia hay gente del conurbano (zona norte, sur y oeste) y de La Plata, y también del interior, como Bahía Blanca, Mar del Plata o Tandil. Los oficios que más se repiten son control de accesos, producción, acreditación, recepción y coordinación de invitados."
   - q: "¿Conviene contratar staff que viva cerca del predio?"
-    a: "Casi siempre sí, sobre todo cuando la convocatoria es temprano o el evento termina de madrugada. Un predio en zona norte con citación a las 7 no es lo mismo para alguien que vive a diez minutos que para alguien que cruza toda el área metropolitana. En LABURO podés filtrar por provincia y ciudad, y ver si la persona tiene movilidad propia."
+    a: "Casi siempre sí, sobre todo cuando la convocatoria es temprano o el evento termina de madrugada. Un predio en zona norte con citación a las 7 no es lo mismo para alguien que vive a diez minutos que para alguien que cruza toda el área metropolitana. Cuando le pedís el equipo a LABURO, se arma con gente de la zona del evento y se mira si tiene movilidad propia."
   - q: "¿Cómo resuelvo la vuelta del staff si el evento termina de madrugada?"
     a: "Lo primero es saberlo antes: poné el horario de salida en la oferta y preguntá cómo vuelve cada persona. Después hay tres caminos habituales: priorizar gente que vive cerca o tiene movilidad propia, organizar un traslado de regreso desde el predio, o escalonar las salidas para que no todos terminen a la misma hora. Lo que se defina tiene que estar escrito antes de que la persona acepte."
   - q: "¿Cuánto cuesta usar LABURO para contratar staff en Buenos Aires?"
@@ -29,7 +29,7 @@ Esta página es para quien contrata staff en la Ciudad de Buenos Aires y el conu
 
 ## Quién hay en Buenos Aires
 
-LABURO tiene **más de 170 fichas de personas que viven en la Ciudad de Buenos Aires** y **más de 300 en la Provincia de Buenos Aires**: juntas, más de 470. En la Provincia hay gente del conurbano (zona norte, sur y oeste), de La Plata y también del interior, como Bahía Blanca, Mar del Plata o Tandil, así que para un evento en el AMBA filtrá por ciudad y no solo por provincia.
+LABURO tiene **más de 170 fichas de personas que viven en la Ciudad de Buenos Aires** y **más de 300 en la Provincia de Buenos Aires**: juntas, más de 470. En la Provincia hay gente del conurbano (zona norte, sur y oeste), de La Plata y también del interior, como Bahía Blanca, Mar del Plata o Tandil, así que para un evento en el AMBA lo que cuenta es la ciudad, no solo la provincia: pedí gente cerca del lugar.
 
 Los oficios que más se repiten entre la gente de CABA y Provincia, según lo que marcó cada persona:
 
@@ -99,8 +99,8 @@ Crear la cuenta es gratis. El recorrido:
 
 1. **Cargás el evento** con fecha y lugar.
 2. **Declarás la dotación por rol**, con cantidad. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
-3. **Buscás staff por oficio y zona**, filtrando por provincia y ciudad, movilidad propia o disponibilidad el fin de semana, con el perfil, la foto y la experiencia a la vista.
-4. **Mandás la oferta** con pago, fecha y horarios de entrada y salida. La persona la acepta con un click desde el celular. Solo las aceptadas cuentan como lugar cubierto.
+3. **Pedís el staff.** La gente anotada en LABURO la coordina el equipo de LABURO, que te arma el equipo con personas que viven cerca del evento.
+4. **Cada persona recibe la oferta** con pago, fecha y horarios de entrada y salida, y la acepta con un click desde el celular. Solo las aceptadas cuentan como lugar cubierto.
 5. **El día del evento**, el staff ficha entrada y salida desde el celular y las horas quedan registradas.
 
 Si querés comparar con la planilla y el grupo de WhatsApp, está en [planilla y WhatsApp o LABURO](/para/planilla-y-whatsapp-o-laburo-para-convocar-staff). Según el formato, también te sirven [staff para eventos corporativos](/para/staff-para-eventos-corporativos), [personal de control de accesos y acreditación](/para/personal-de-control-de-accesos-y-acreditacion) y [mozos y bartenders para eventos](/para/mozos-y-bartenders-para-eventos).

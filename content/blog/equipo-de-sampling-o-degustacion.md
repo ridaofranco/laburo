@@ -19,7 +19,7 @@ faqs:
   - q: "¿Qué cambia si la degustación es de bebidas con alcohol?"
     a: "La Ley 24.788 prohíbe en todo el país el expendio de bebidas alcohólicas a menores de 18 años, prohíbe la publicidad dirigida a menores y prohíbe los eventos que requieran ingerir alcohol desnaturalizando los principios de la degustación. En la práctica, el equipo tiene que pedir la edad con una regla escrita, servir medidas de degustación y saber cortar sin discutir."
   - q: "¿Cómo armo el equipo de sampling en LABURO?"
-    a: "Creás la cuenta gratis como productora o marca, buscás por el rol Sampling / degustación (o Promotor/a y Brand ambassador, según la acción), por zona y experiencia, y le mandás a cada persona una oferta con el pago y los horarios. La persona la acepta desde el teléfono y queda confirmada para esa fecha."
+    a: "Creás la cuenta gratis como productora o marca y cargás la acción con el rol Sampling / degustación (o Promotor/a y Brand ambassador, según el caso). El staff anotado lo coordina el equipo de LABURO: le contás qué necesitás y te arma el equipo con gente de tu zona. Cada persona recibe la oferta con el pago y los horarios, la acepta desde el teléfono y queda confirmada para esa fecha."
 ---
 
 Una acción de sampling parece simple: alguien con una bandeja y una sonrisa. En la práctica es una operación con stock, ritmo, mensaje y reporte. Si el equipo está bien armado, la marca sabe al final del día cuántas unidades salieron, dónde y qué dijo la gente. Si está mal armado, sobran cajas en un punto, faltan en otro y nadie sabe qué pasó. Esta nota es para agencias y marcas que tienen que armar ese equipo.

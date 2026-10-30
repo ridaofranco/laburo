@@ -90,8 +90,8 @@ Crear la cuenta es gratis, sirva para una sola fiesta o para una temporada enter
 
 1. **Cargás el evento** con fecha y lugar.
 2. **Declarás la dotación por rol**: por ejemplo, 2 en recepción, 2 en guardarropa, 10 mozos, 3 en barra, 1 coordinación, 4 en montaje. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
-3. **Buscás staff por oficio y zona**, con el perfil, la foto y la experiencia de cada persona a la vista.
-4. **Mandás la oferta** con pago, fecha y horarios. La persona la acepta con un click desde el celular. Solo las aceptadas cubren un lugar.
+3. **LABURO te arma el equipo** con gente del pool de tu zona: el staff anotado lo coordina el equipo de LABURO, y vos le contás qué necesita la fiesta.
+4. **Cada persona recibe la oferta** con pago, fecha y horarios y la acepta con un click desde el celular. Solo las aceptadas cubren un lugar.
 5. **El día de la fiesta**, el staff ficha entrada y salida desde el celular y las horas quedan registradas.
 
 Si además buscás dónde hacerla, los salones con capacidad y zona están en [salones](/salones), y los proveedores (catering, sonido, mobiliario) en [servicios](/servicios). Y si sos organizadora y manejás varias fiestas a la vez, [staff para eventos: productoras y agencias](/para/staff-para-eventos-productoras-y-agencias).

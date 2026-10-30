@@ -19,7 +19,7 @@ faqs:
   - q: "¿Cómo se organizan los puestos de acreditación en el pico de entrada?"
     a: "Separando tareas: puestos de escaneo para quien trae el QR, un puesto aparte para excepciones y, si hay credenciales impresas, alguien dedicado a imprimir y entregar. Las categorías especiales (ponentes, prensa, sponsors) conviene atenderlas en un mostrador propio para que no esperen en la fila general."
   - q: "¿Cómo contrato acreditadores en LABURO?"
-    a: "Creás la cuenta gratis, buscás por el rol Acreditador/a, por zona y por experiencia, y le mandás a cada persona una oferta con el pago y los horarios. La persona la acepta con un click desde el teléfono y queda confirmada para ese evento."
+    a: "Creás la cuenta gratis y cargás el congreso con cuántos acreditadores necesitás. El equipo de LABURO, que coordina al staff anotado, te arma la puerta con gente de tu zona. Cada persona recibe la oferta con el pago y los horarios, la acepta con un click desde el teléfono y queda confirmada para ese evento."
 ---
 
 En un congreso o un evento corporativo, la primera impresión no la da el escenario: la da la mesa de acreditación. Si la fila avanza, el evento arranca bien. Si se traba, la primera charla empieza con la mitad de la sala vacía. Esta nota explica qué hace un acreditador o acreditadora, qué perfil se busca y cómo se organiza el trabajo para que la apertura no se convierta en un embudo.
@@ -98,8 +98,8 @@ Antes de sumar gente en la puerta, mirá el sistema. [PASE](https://pase.somosde
 
 En LABURO, Acreditador/a es uno de los roles del catálogo, dentro de accesos y acreditación, junto con control de accesos, operador de escáner o ticketing, pulseras y credenciales, seguridad de puerta y guardarropa.
 
-1. **Buscás por rol, zona y experiencia** en un pool de más de 1.100 postulantes, con el perfil a la vista.
-2. **Mandás la oferta con el pago y los horarios,** incluido el horario de convocatoria, que en acreditación es anterior a la apertura.
+1. **Cargás el evento y le pedís el equipo a LABURO,** que lo arma con gente de un pool de más de 1.200 fichas.
+2. **Cada persona recibe la oferta con el pago y los horarios,** incluido el horario de convocatoria, que en acreditación es anterior a la apertura.
 3. **La persona la acepta con un click** desde el teléfono y queda confirmada para ese evento.
 
 Si estás armando la puerta completa, mirá [personal de control de accesos y acreditación](/para/personal-de-control-de-accesos-y-acreditacion). Si es parte de un equipo más grande para una empresa, está [staff para eventos corporativos](/para/staff-para-eventos-corporativos).

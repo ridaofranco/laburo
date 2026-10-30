@@ -19,7 +19,7 @@ faqs:
   - q: "¿Qué feriados hay en diciembre de 2026?"
     a: "Según el calendario oficial de argentina.gob.ar, el lunes 7 de diciembre es día no laborable con fines turísticos, el martes 8 es feriado inamovible por la Inmaculada Concepción de María y el viernes 25 es Navidad. El viernes 1 de enero de 2027 es Año Nuevo. Conviene revisar la fuente oficial antes de cerrar fechas, porque el calendario puede cambiar por norma."
   - q: "¿Cómo evito ofrecerle dos eventos la misma noche a la misma persona?"
-    a: "En la búsqueda de LABURO podés ocultar a quienes ya están asignados a un evento tuyo, así no le mandás una segunda oferta a alguien que ya tiene la noche ocupada con vos. Además, en el Calendario ves todos tus eventos del mes con cuántos confirmados tiene cada uno."
+    a: "En LABURO cada evento tiene su tablero con quién confirmó, y en el Calendario ves todos tus eventos del mes con cuántos confirmados tiene cada uno."
 ---
 
 Si tenés un solo evento en diciembre, el desafío es llegar a tiempo. Si tenés cinco, ocho o doce, el desafío es otro: que no se pisen entre ellos, que la gente clave no quede repartida al azar y que cada baja tenga un reemplazo pensado. Esta nota es para productoras y agencias que encaran la temporada de fin de año con varias fechas. Si lo tuyo es una sola fiesta de empresa, el paso a paso está en [fiesta de fin de año de empresa: cómo armar el staff](/blog/fiesta-de-fin-de-ano-de-empresa-como-armar-el-staff).
@@ -46,13 +46,16 @@ Según el calendario oficial de feriados de argentina.gob.ar:
 
 | Fecha | Qué es | Tipo |
 | --- | --- | --- |
+| Lunes 9 de noviembre | Visita del Papa León XIV | Feriado inamovible |
+| Martes 10 de noviembre | Visita del Papa León XIV | Feriado en Córdoba y CABA |
+| Miércoles 11 de noviembre | Visita del Papa León XIV | Feriado en provincia de Buenos Aires |
 | Lunes 23 de noviembre | Día de la Soberanía Nacional (20/11) | Feriado trasladable |
 | Lunes 7 de diciembre | Día no laborable con fines turísticos | Turístico |
 | Martes 8 de diciembre | Inmaculada Concepción de María | Feriado inamovible |
 | Viernes 25 de diciembre | Navidad | Feriado inamovible |
 | Viernes 1 de enero de 2027 | Año Nuevo | Feriado inamovible |
 
-Qué mirar para el staff: **el fin de semana del 5 al 8 de diciembre** queda largo, y mucha gente que trabaja en eventos también se va o prefiere no trabajar. **Navidad y Año Nuevo caen viernes**, así que los jueves 24 y 31 son noches con menos disponibilidad. Revisá la fuente oficial antes de cerrar, porque el calendario puede cambiar por norma.
+Qué mirar para el staff: **del sábado 7 al miércoles 11 de noviembre** hay un fin de semana largo, con más días según la provincia, y **el fin de semana del 5 al 8 de diciembre** queda largo, y mucha gente que trabaja en eventos también se va o prefiere no trabajar. **Navidad y Año Nuevo caen viernes**, así que los jueves 24 y 31 son noches con menos disponibilidad. Revisá la fuente oficial antes de cerrar, porque el calendario puede cambiar por norma.
 
 ## Paso 3: la gente clave primero
 
@@ -90,7 +93,7 @@ Si convocás para varias fechas, mirá [staff para eventos: productoras y agenci
 
 ## Llegá a diciembre con el equipo cerrado
 
-[Creá tu cuenta de productora en LABURO](/registrar-productora): es gratis, buscás por rol y zona en un pool de más de 1.100 postulantes, mandás las ofertas con el pago y el horario, y ves en el tablero cuántos lugares tenés cubiertos en cada evento.
+[Creá tu cuenta de productora en LABURO](/registrar-productora): es gratis. Cargás cada evento con sus roles, LABURO te arma el equipo con gente de un pool de más de 1.200 fichas, y ves en el tablero cuántos lugares tenés cubiertos en cada evento.
 
 ## Fuentes
 

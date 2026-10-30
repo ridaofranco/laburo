@@ -16,7 +16,7 @@ faqs:
   - q: "¿Qué roles puedo cubrir con gente de Posadas?"
     a: "En el pool de Misiones hay sobre todo personal de control de accesos, atención al cliente y al público, catering, caja y cobro. También hay perfiles de producción, técnica, fotografía y audiovisual, en menor cantidad. Si necesitás un rol muy específico, conviene buscarlo con tiempo y dejar margen."
   - q: "¿Cómo contrato staff para un evento en Posadas si mi productora es de otra provincia?"
-    a: "Cargás el evento en LABURO con el lugar en Misiones, declarás cuánta gente necesitás por rol y buscás por zona. A cada persona le mandás una oferta con el pago, la fecha y los horarios, y la acepta con un click desde el teléfono. Así no dependés de conocer a alguien en la ciudad para que te arme el equipo."
+    a: "Cargás el evento en LABURO con el lugar en Misiones y la dotación por rol, y le pedís el equipo a LABURO, que lo arma con gente que vive en la provincia. Cada persona recibe una oferta con el pago, la fecha y los horarios, y la acepta con un click desde el teléfono. Así no dependés de conocer a alguien en la ciudad para que te arme el equipo."
   - q: "¿Cuánto cuesta usar LABURO para contratar staff en Misiones?"
     a: "Crear la cuenta y usar LABURO es gratis. El pago al staff lo definís vos en cada oferta."
 ---
@@ -68,8 +68,8 @@ LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar) para armar event
 
 1. **Cargás el evento** con la fecha y el lugar en Misiones.
 2. **Declarás la dotación por rol**, con cantidad. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
-3. **Buscás staff** por rol, zona y experiencia, con el perfil y el CV a la vista. Podés filtrar por movilidad propia o disponibilidad el fin de semana.
-4. **Mandás la oferta** con pago y horarios. La persona la acepta con un click desde el teléfono. Solo las aceptadas cuentan como lugar cubierto.
+3. **Le pedís el equipo a LABURO.** El staff anotado lo coordina el equipo de LABURO, que te arma el equipo con gente de la provincia que marcó los roles que te faltan.
+4. **Cada persona recibe la oferta** con pago y horarios y la acepta con un click desde el teléfono. Solo las aceptadas cuentan como lugar cubierto.
 5. **Antes del turno**, a quien está confirmado le llega un recordatorio. El día del evento, el staff puede fichar entrada y salida desde el celular, así sabés quién llegó aunque no estés ahí.
 6. **Después**, marcás como favoritos a quienes rindieron, para tener tu lista de confianza en Misiones para el próximo evento.
 
