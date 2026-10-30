@@ -20,6 +20,8 @@ interface Props {
   initialFilters: SearchFilters;
   /** Total REAL de fichas que matchean los filtros (no las de esta página). */
   total: number;
+  /** La organización no tiene NINGUNA ficha, con o sin filtros (lo cuenta el server). */
+  poolVacio?: boolean;
   /** Cuántas fichas entran en una página (lo define el server component). */
   porPagina: number;
 }
@@ -39,6 +41,7 @@ export function SearchClient({
   error,
   initialFilters,
   total,
+  poolVacio = false,
   porPagina,
 }: Props) {
   const router = useRouter();
@@ -241,7 +244,7 @@ export function SearchClient({
                 Volver a la primera página
               </button>
             </div>
-          ) : sinFiltros ? (
+          ) : sinFiltros || poolVacio ? (
             <PoolVacio />
           ) : (
             <EmptyResults onClear={clearAll} />

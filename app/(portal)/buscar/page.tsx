@@ -158,6 +158,18 @@ export default async function SearchPage({
   const fueraDeRango = Boolean(error) && filters.pagina > 1;
   const total = count ?? candidates.length;
 
+  // ¿El pool está vacío del todo? Solo se pregunta cuando la búsqueda dio 0 y
+  // había algo puesto: con el pool vacío, «probá con otro oficio» manda a dar
+  // vueltas sin salida (toda productora nueva, ver ACTORES.md). Cuenta sin traer filas.
+  let poolVacio = false;
+  if (!error && total === 0) {
+    let qPool = supabase.from("staff_app_profiles").select("id", { count: "exact", head: true });
+    if (org?.organizationId) qPool = qPool.eq("organization_id", org.organizationId);
+    const { count: enElPool, error: poolError } = await qPool;
+    if (poolError) console.error("[buscar] no se pudo contar el pool:", poolError.message);
+    else poolVacio = (enElPool ?? 0) === 0;
+  }
+
   return (
     <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-16 md:py-24">
       {filters.gig && (
@@ -178,6 +190,7 @@ export default async function SearchPage({
         error={Boolean(error) && !fueraDeRango}
         initialFilters={filters}
         total={total}
+        poolVacio={poolVacio}
         porPagina={POR_PAGINA}
       />
     </div>
