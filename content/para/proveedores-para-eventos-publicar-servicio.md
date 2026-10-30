@@ -96,6 +96,13 @@ Muchos clientes de eventos, sobre todo empresas, te van a pedir factura. Si toda
 
 Lo que pida cada evento en particular (seguros, habilitaciones, documentación del personal) lo vas a acordar con cada cliente. Tenerlo ordenado antes te hace más fácil de contratar.
 
+## Guías según tu rubro
+
+- [Artistas, DJ y animación](/para/artistas-dj-y-animacion-para-eventos-publicar): bandas, shows, DJ y entretenimiento.
+- [Gráfica, señalética y merchandising](/para/grafica-senaletica-y-merchandising-para-eventos-publicar): imprentas, ploteos, branding y regalos empresariales.
+- [Seguridad, limpieza y operación](/para/seguridad-limpieza-y-servicios-de-operacion-para-eventos-publicar): seguridad, servicio médico, limpieza, baños químicos, vallado, energía y logística.
+- [Productoras que trabajan para otras productoras](/para/productoras-como-proveedoras-subcontratacion-de-eventos): la parte local de un evento que arma otra agencia.
+
 ## Si además trabajás como staff
 
 Si sos técnico, fotógrafo o bartender y trabajás por tu cuenta en eventos de otros, además de publicar tu servicio podés cargar tu perfil de staff en [/sumate](/sumate). Son dos cosas distintas: el directorio es para tu empresa o tu servicio; el pool de staff es para que te convoquen a trabajar en un evento con pago y horario. Tenés más detalle en [trabajar en montaje, técnica y producción](/para/trabajar-en-montaje-tecnica-y-produccion-de-eventos) y [trabajar en gastronomía de eventos](/para/trabajar-en-gastronomia-de-eventos).

@@ -99,6 +99,11 @@ Lo que no te vamos a prometer: una cantidad de consultas. Depende de que haya ev
 - **Tus condiciones de reserva**: seña, cancelación, horarios de armado y desarme.
 - **La documentación del lugar** que te suelen pedir las empresas y productoras. Cada municipio tiene sus propias reglas de habilitación, así que lo que corresponda lo sabés vos mejor que nadie.
 
+## Guías según tu espacio
+
+- [Espacios para eventos corporativos](/para/espacios-para-eventos-corporativos-publicar): auditorios, terrazas, coworkings, hoteles y restaurantes con salón privado.
+- [Estancias, bodegas y espacios no tradicionales](/para/estancias-bodegas-y-espacios-no-tradicionales-para-eventos): lugares que no son salón pero se alquilan para casamientos, rodajes o eventos de marca.
+
 ## Si además ofrecés servicios
 
 Si tu salón tiene catering propio, sonido o ambientación que también ofrecés fuera del salón, podés publicarlos aparte en el directorio de proveedores. Mirá cómo en [proveedores para eventos](/para/proveedores-para-eventos-publicar-servicio).
