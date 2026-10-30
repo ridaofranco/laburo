@@ -108,6 +108,7 @@ const MOTIVOS: Record<string, string> = {
   gig_required: "Elegí un evento o escribí el nombre de uno nuevo.",
   gig_starts_at_required: "Poné cuándo arranca el evento.",
   gig_not_found: "Ese evento no existe o no es de tu productora.",
+  gig_terminado: "Ese evento ya terminó: la persona no podría aceptar la oferta. Elegí un evento a futuro.",
   candidate_not_found: "Ese candidato no existe o no es de tu productora.",
 };
 
