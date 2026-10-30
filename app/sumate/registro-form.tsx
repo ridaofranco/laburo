@@ -22,6 +22,7 @@ import {
 import { subirCvDirecto, type CvSubido } from "@/lib/cv-subida-cliente";
 import { PAGO_TEXTO } from "@/lib/pago";
 import { registerApplicant } from "./actions";
+import { revisarAntesDeEnviar } from "@/lib/revisar-email";
 import { guardarYRecargar, useRecuperarGuardado } from "@/lib/recarga-por-version";
 
 const SYNE = "font-[family-name:var(--font-syne)]";
@@ -41,6 +42,8 @@ export function RegistroForm({
   const [oficiosSel, setOficiosSel] = useState<Set<string>>(new Set());
   const [regionsSel, setRegionsSel] = useState<Set<string>>(new Set());
   const cvRef = useRef<HTMLInputElement>(null);
+  /** Último mail dudoso que se le corrigió: si lo vuelve a poner, pasa. */
+  const emailInsistido = useRef<string | null>(null);
   /**
    * El CV ya subido a Supabase. Se llena al autocompletar, y si la persona no
    * autocompletó, al enviar. Se limpia cuando cambia el archivo elegido, porque
@@ -151,9 +154,17 @@ export function RegistroForm({
       toast.error("Necesitás aceptar el tratamiento de datos.");
       return;
     }
+    // gmail.con, gamil.com: la bienvenida rebota y la persona nunca entra.
+    const rev = revisarAntesDeEnviar(f.email, emailInsistido);
+    if ("corregir" in rev) {
+      if (rev.corregir) set("email", rev.corregir);
+      toast.error(rev.mensaje);
+      return;
+    }
     setSending(true);
     const payload = {
       ...f,
+      email: rev.enviar,
       donde_trabajar: [...regionsSel],
       oficios: [...oficiosSel],
       fecha_nacimiento: f.fecha_nacimiento || null,

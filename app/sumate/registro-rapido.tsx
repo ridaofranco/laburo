@@ -14,7 +14,7 @@
  * la migración 0034 la agarra a los 5 días y la invita a completarla.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { toast } from "sonner";
 import { FileUp, Upload } from "lucide-react";
@@ -31,6 +31,7 @@ import {
 import { subirCvDirecto, type CvSubido } from "@/lib/cv-subida-cliente";
 import { PAGO_TEXTO } from "@/lib/pago";
 import { registerApplicant } from "./actions";
+import { revisarAntesDeEnviar } from "@/lib/revisar-email";
 
 
 /** Catálogo plano de oficios: es lo que se le pasa al parser y la allowlist del payload. */
@@ -59,6 +60,8 @@ export function RegistroRapido({
 }) {
   /** Solo el nombre del archivo elegido: es lo que se muestra (y sobrevive a una recarga). */
   const [archivo, setArchivo] = useState<string | null>(null);
+  /** Último mail dudoso que se le corrigió: si lo vuelve a poner, pasa. */
+  const emailInsistido = useRef<string | null>(null);
   /** El CV ya subido a Supabase: es lo único que viaja al servidor al enviar. */
   const [cv, setCv] = useState<CvSubido | null>(null);
   const [subiendo, setSubiendo] = useState(false);
@@ -211,6 +214,14 @@ export function RegistroRapido({
       toast.error("Necesitás aceptar el tratamiento de datos.");
       return;
     }
+    // gmail.con, gamil.com: la bienvenida rebota y la persona nunca entra.
+    const rev = revisarAntesDeEnviar(email, emailInsistido);
+    if ("corregir" in rev) {
+      if (rev.corregir) setEmail(rev.corregir);
+      setEditar(true);
+      toast.error(rev.mensaje);
+      return;
+    }
     setSending(true);
     // Split first-token / resto, la misma convención con la que entró todo el
     // pool viejo. Sin pérdida: lo que no es el primer token va a apellido.
@@ -219,7 +230,7 @@ export function RegistroRapido({
     const payload = {
       nombre: primero,
       apellido: resto.join(" "),
-      email: email.trim(),
+      email: rev.enviar,
       telefono: telefono.trim(),
       ciudad: d?.ciudad ?? "",
       pais_residencia: d?.pais && paises.includes(d.pais) ? d.pais : "",
