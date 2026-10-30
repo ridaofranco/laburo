@@ -193,7 +193,7 @@ export function ConsultaProveedor({
             <Text style={{ margin: 0, fontSize: "13px", lineHeight: 1.5, color: FG_MUTED }}>
               Recibís esto porque tu perfil está publicado en el marketplace de
               LABURO. Las preguntas de arriba son las de tu formulario: si querés
-              cambiarlas, entrá con tu link de proveedor.
+              cambiarlas, entrá con este mail en laburo.somosder.ar/entrar.
             </Text>
           </Section>
         </Container>
