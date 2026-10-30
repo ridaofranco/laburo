@@ -99,6 +99,7 @@ Lo que pida cada evento en particular (seguros, habilitaciones, documentación d
 ## Guías según tu rubro
 
 - [Artistas, DJ y animación](/para/artistas-dj-y-animacion-para-eventos-publicar): bandas, shows, DJ y entretenimiento.
+- [Escenografía, ambientación y decoración](/para/escenografia-ambientacion-y-decoracion-para-eventos-publicar): escenógrafos, ambientadores, floristas y decoradores.
 - [Gráfica, señalética y merchandising](/para/grafica-senaletica-y-merchandising-para-eventos-publicar): imprentas, ploteos, branding y regalos empresariales.
 - [Seguridad, limpieza y operación](/para/seguridad-limpieza-y-servicios-de-operacion-para-eventos-publicar): seguridad, servicio médico, limpieza, baños químicos, vallado, energía y logística.
 - [Productoras que trabajan para otras productoras](/para/productoras-como-proveedoras-subcontratacion-de-eventos): la parte local de un evento que arma otra agencia.
