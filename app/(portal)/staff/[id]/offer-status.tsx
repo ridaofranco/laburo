@@ -27,6 +27,9 @@ export interface OfferRow {
   sent_at: string | null;
   viewed_at: string | null;
   responded_at: string | null;
+  /** Fechas del evento (las trae la página aparte): con el evento terminado, vencida. */
+  gig_starts_at?: string | null;
+  gig_ends_at?: string | null;
 }
 
 /** Clases del badge por etiqueta: verde aceptada, ámbar vencida, apagado rechazada, gris enviada/vista. */
@@ -57,6 +60,10 @@ function offerSubline(o: OfferRow, label: string): string | null {
     return when ? `Respondió el ${when}` : null;
   }
   if (label === "Vencida") {
+    // Si venció porque el evento ya pasó, la fecha del link (a futuro) confunde.
+    if (o.expires_at && new Date(o.expires_at).getTime() > Date.now()) {
+      return "Sin respuesta: el evento ya pasó";
+    }
     const when = shortDate(o.expires_at);
     return when ? `Venció el ${when}` : null;
   }

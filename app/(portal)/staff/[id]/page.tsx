@@ -150,7 +150,25 @@ export default async function ProfilePage({
   if (orgId) qOffers = qOffers.eq("organization_id", orgId);
   const { data: offersData, error: offersError } = await qOffers;
   if (offersError) console.error("[staff] no se pudo leer offers:", offersError.message);
-  const offers = (offersData ?? []) as OfferRow[];
+  const offersSinFechas = (offersData ?? []) as (OfferRow & { gig_id: string | null })[];
+  // Fechas del evento de cada oferta: sin responder y con el evento terminado,
+  // offerLabel la da por vencida (0099: ya no se puede aceptar).
+  const gigIds = [...new Set(offersSinFechas.map((o) => o.gig_id).filter((v): v is string => Boolean(v)))];
+  const fechasGig = new Map<string, { starts_at: string | null; ends_at: string | null }>();
+  if (gigIds.length) {
+    const { data: gigsData, error: gigsError } = await supabase
+      .from("staff_app_gigs")
+      .select("id,starts_at,ends_at")
+      .in("id", gigIds);
+    if (gigsError) console.error("[staff] no se pudo leer las fechas de los eventos:", gigsError.message);
+    for (const g of (gigsData ?? []) as { id: string; starts_at: string | null; ends_at: string | null }[]) {
+      fechasGig.set(g.id, { starts_at: g.starts_at, ends_at: g.ends_at });
+    }
+  }
+  const offers: OfferRow[] = offersSinFechas.map((o) => {
+    const f = o.gig_id ? fechasGig.get(o.gig_id) : undefined;
+    return { ...o, gig_starts_at: f?.starts_at ?? null, gig_ends_at: f?.ends_at ?? null };
+  });
 
   let qNote = supabase
     .from("staff_app_candidate_notes")
