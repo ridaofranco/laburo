@@ -70,6 +70,7 @@ import { GET as quienFicho } from "../quien-ficho/route";
 import { GET as recordatorioPerfil } from "../recordatorio-perfil/route";
 import { GET as visibilidad } from "../visibilidad/route";
 import { GET as recordatorioCotizacion } from "../recordatorio-cotizacion/route";
+import { GET as avisoCierreCotizacion } from "../aviso-cierre-cotizacion/route";
 
 // Nunca cachear: cada disparo del cron debe ejecutar de verdad.
 export const dynamic = "force-dynamic";
@@ -107,6 +108,10 @@ const TANDAS: Tanda[] = [
   // no sale hoy pierde su ventana (el pedido cierra igual), y la pregunta de
   // visibilidad no vence nunca.
   { nombre: "recordatorio-cotizacion", handler: recordatorioCotizacion },
+  // El aviso a quien hizo el pedido de que cerró (0098): cuántos presupuestos
+  // llegaron y que falta elegir, o que cerró vacío. Mira los últimos 7 días, así
+  // que si un día se saltea, sale al siguiente.
+  { nombre: "aviso-cierre-cotizacion", handler: avisoCierreCotizacion },
   // ⚠️ VA ÚLTIMA, Y NO ES CAPRICHO. Es la única tanda que le escribe al pool
   // entero por un tema que no es trabajo, así que si el presupuesto de tiempo
   // alcanza para una sola, tiene que ganar la que manda una propuesta o un

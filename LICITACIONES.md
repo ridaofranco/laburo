@@ -343,8 +343,13 @@ decisión.
    pedido mismo en dos sigue siendo a mano, y ahora al menos el lector de briefs
    avisa cuando el texto trae dos trabajos distintos adentro. Falta ver si vale
    un "duplicar este pedido".
-3. **¿Qué pasa si nadie cotiza?** Hay que decidir qué muestra la pantalla y si
-   avisa. Un pedido vencido y vacío no puede quedar en silencio.
+3. ✅ **¿Qué pasa si nadie cotiza?** Contestada. La pantalla (28/10) dice
+   «Venció sin presupuestos» o «Falta elegir» y ofrece darle más tiempo o
+   cancelar. Y desde el 30/10 (migración 0098, tanda `aviso-cierre-cotizacion`
+   del cron diario) a quien hizo el pedido le llega UN mail cuando cierra:
+   cuántos presupuestos llegaron y «Comparar y elegir», o que cerró vacío y cómo
+   darle más tiempo. Solo pedidos cerrados en los últimos 7 días, uno por
+   pedido (`quote_requests.cierre_avisado_at`).
 4. **¿Se adjudica por ítem?** O sea, darle la cena a uno y los coffees a otro. El
    modelo de la 0087 lo aguanta y la matriz de comparación ya muestra cuánto se
    ahorraría, pero adjudicar por línea cambia los mails (hoy hay UN ganador). La
