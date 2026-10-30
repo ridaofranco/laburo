@@ -17,6 +17,7 @@ import { Publicar } from "./publicar";
 import { createClient } from "@/lib/supabase/server";
 import { orgActual } from "@/lib/org";
 import { SITE_URL } from "@/lib/site";
+import { sinOrgAlPanel } from "@/lib/portal-sin-org";
 
 export const metadata: Metadata = {
   title: "LABURO. | Pedido de precio",
@@ -27,6 +28,8 @@ export default async function PedidoPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  // Sin productora: a su panel (ver lib/portal-sin-org.ts).
+  if (await sinOrgAlPanel()) return null;
   const { id } = await params;
   const pedido = await getPedido(id);
   if (!pedido) notFound();

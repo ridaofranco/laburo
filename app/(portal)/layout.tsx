@@ -4,6 +4,7 @@ import { orgActual, orgsDelUsuario } from "@/lib/org";
 import { AccesoDenegado } from "../(app)/acceso-denegado";
 import { PortalNav } from "./portal-nav";
 import { BannerSuplantacion } from "./banner-suplantacion";
+import { sinOrgAlPanel } from "@/lib/portal-sin-org";
 
 /**
  * Layout del portal del productor (porteo del SideNavBar de Stitch). Mismo gate
@@ -34,12 +35,7 @@ export default async function PortalLayout({
     // click. Se lo manda a SU panel. Se usan solo las lecturas, no
     // /auth/callback: ese provisiona membresías y vincula proveedores, y desde
     // un layout no corresponde escribir nada.
-    const { data: ficha, error: fichaError } = await supabase.rpc("staff_app_my_staff_profile");
-    if (fichaError) console.error("[portal] no se pudo leer my_staff_profile:", fichaError.message);
-    if (ficha) redirect("/panel-staff");
-    const { data: proveedor, error: proveedorError } = await supabase.rpc("staff_app_mi_perfil_proveedor");
-    if (proveedorError) console.error("[portal] no se pudo leer mi_perfil_proveedor:", proveedorError.message);
-    if (proveedor) redirect("/mi-proveedor");
+    await sinOrgAlPanel();
     return <AccesoDenegado />;
   }
 

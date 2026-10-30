@@ -23,6 +23,7 @@ import { permisos } from "@/lib/permisos";
 import { OfferStatusList, type OfferRow } from "./offer-status";
 import { FavoriteNote } from "./favorite-note";
 import { Rating, type RatingGig } from "./rating";
+import { sinOrgAlPanel } from "@/lib/portal-sin-org";
 
 const PROFILE_COLUMNS =
   "id,nombre,apellido,oficios,oficios_otro,provincia,ciudad,experiencia,anios_experiencia,eventos_trabajados,experiencia_detalle,disponibilidad_finde,disponibilidad_viajar,movilidad_propia,disponibilidad_aviso,estado,cv_url,portfolio_url,linkedin_url,telefono,email,documento,fecha_nacimiento,situacion_legal,donde_trabajar,pais_residencia,motivacion,cv_data";
@@ -119,6 +120,8 @@ export default async function ProfilePage({
   /** Si se llegó buscando para un evento (?gig=), la oferta abre con ese evento. */
   searchParams: Promise<{ gig?: string }>;
 }) {
+  // Sin productora: a su panel (ver lib/portal-sin-org.ts).
+  if (await sinOrgAlPanel()) return null;
   const { id } = await params;
   const { gig: gigBuscado } = await searchParams;
   const supabase = await createClient();

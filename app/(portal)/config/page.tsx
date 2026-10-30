@@ -23,9 +23,12 @@ import { leerPerfil } from "./perfil-actions";
 import { leerEquipo } from "./equipo-actions";
 import { EquipoPanel } from "./equipo-panel";
 import { PerfilForm } from "./perfil-form";
+import { sinOrgAlPanel } from "@/lib/portal-sin-org";
 
 
 export default async function ConfigPage() {
+  // Sin productora: a su panel (ver lib/portal-sin-org.ts).
+  if (await sinOrgAlPanel()) return null;
   const supabase = await createClient();
 
   // ⚠️ Los tres conteos salían de vistas con RLS por MEMBRESÍA, así que a quien

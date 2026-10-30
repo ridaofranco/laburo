@@ -14,6 +14,7 @@ import { listarPedidos, pedidosEnOtrasCuentas } from "./actions";
 import { OtrasCuentas } from "./otras-cuentas";
 import { fmtMonto } from "@/lib/cotizaciones";
 import { fmtFechaHora } from "@/lib/dates";
+import { sinOrgAlPanel } from "@/lib/portal-sin-org";
 
 export const metadata: Metadata = {
   title: "LABURO. | Pedidos de precio",
@@ -59,6 +60,8 @@ function Estado({
 }
 
 export default async function CotizacionesPage() {
+  // Sin productora: a su panel (ver lib/portal-sin-org.ts).
+  if (await sinOrgAlPanel()) return null;
   const pedidos = await listarPedidos();
   // Solo con la lista vacía: con pedidos a la vista, contar los de las otras
   // productoras no cambia ninguna decisión y agrega ruido.

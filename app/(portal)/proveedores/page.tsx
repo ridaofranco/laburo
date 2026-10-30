@@ -17,6 +17,7 @@ export const dynamic = "force-dynamic";
 import type { Metadata } from "next";
 import { buscarProveedores, getCategorias, getMiEmail } from "./actions";
 import { ProveedoresClient } from "./proveedores-client";
+import { sinOrgAlPanel } from "@/lib/portal-sin-org";
 
 export const metadata: Metadata = {
   title: "LABURO. | Proveedores",
@@ -27,6 +28,8 @@ export default async function ProveedoresPage({
 }: {
   searchParams: Promise<{ q?: string; cat?: string; prov?: string }>;
 }) {
+  // Sin productora: a su panel (ver lib/portal-sin-org.ts).
+  if (await sinOrgAlPanel()) return null;
   const sp = await searchParams;
   const filtros = {
     texto: sp.q ?? "",

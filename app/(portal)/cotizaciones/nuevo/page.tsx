@@ -13,6 +13,7 @@ import { NuevoPedidoForm } from "./nuevo-client";
 import { getPedido } from "../actions";
 import { CATEGORIAS_PROVEEDOR } from "@/lib/categorias-proveedor";
 import { PROVINCIAS } from "@/lib/provincias";
+import { sinOrgAlPanel } from "@/lib/portal-sin-org";
 
 export const metadata: Metadata = {
   title: "LABURO. | Nuevo pedido de precio",
@@ -23,6 +24,8 @@ export default async function NuevoPedidoPage({
 }: {
   searchParams: Promise<{ desde?: string }>;
 }) {
+  // Sin productora: a su panel (ver lib/portal-sin-org.ts).
+  if (await sinOrgAlPanel()) return null;
   // `?desde=<id>`: "Hacer otro pedido igual". Se lee con el cliente de la
   // sesión, así que un id de otra productora (o inventado) vuelve null por RLS
   // y la pantalla queda como un pedido nuevo vacío, sin error.

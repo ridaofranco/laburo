@@ -32,6 +32,7 @@ import { waLink } from "@/lib/wa";
 import { WhatsAppGlyph } from "@/components/icons/whatsapp-glyph";
 import { LeadEstadoBoton } from "./lead-estado-boton";
 import type { LeadEstado } from "./lead-actions";
+import { sinOrgAlPanel } from "@/lib/portal-sin-org";
 
 interface LeadRow {
   id: string;
@@ -57,6 +58,8 @@ function esEstado(v: string | null): LeadEstado {
 }
 
 export default async function LeadsPage() {
+  // Sin productora: a su panel (ver lib/portal-sin-org.ts).
+  if (await sinOrgAlPanel()) return null;
   // PANTALLA DE PLATAFORMA: solo la org dueña del producto (migración 0044).
   // Se devuelve 404 y no un cartel de "no tenés permiso" porque el punto es que
   // esta pantalla no forme parte del producto que ve una productora cliente: un
