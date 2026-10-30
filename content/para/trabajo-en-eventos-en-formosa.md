@@ -14,7 +14,7 @@ faqs:
   - q: "¿Cómo consigo trabajo en eventos en Formosa?"
     a: "Cargando un perfil en el pool con el que se arma el staff de los eventos: tus oficios, tu zona, tu disponibilidad y tu experiencia. En LABURO lo hacés una vez desde /sumate y es gratis. Cuando alguien carga un evento en Formosa que necesita tu rol, te llega una oferta con el pago, la fecha y los horarios, y la aceptás desde el celular."
   - q: "¿LABURO me garantiza trabajo en eventos en Formosa?"
-    a: "No. LABURO no garantiza trabajo ni una cantidad de eventos por mes. Las ofertas llegan cuando alguien carga un evento en tu zona que necesita lo que vos hacés. Lo que sí hace es que, cuando ese evento existe, te encuentren con tu perfil a la vista y te manden la oferta con todo por escrito."
+    a: "No. LABURO no garantiza trabajo ni una cantidad de eventos por mes. Las ofertas llegan cuando alguien carga un evento en tu zona que necesita lo que vos hacés. Lo que sí hace es que, cuando ese evento existe, te llegue la oferta con todo por escrito."
   - q: "¿Hay gente de Formosa en LABURO?"
     a: "Sí, todavía poca. Hoy hay más de 20 fichas de personas que viven en la provincia, casi todas en la ciudad de Formosa. Los oficios que más se repiten son control de accesos, producción, catering y técnica. Que el pool sea chico también quiere decir que, si sabés hacer algo, hay menos perfiles compitiendo con el tuyo."
   - q: "¿Necesito experiencia para trabajar en eventos en Formosa?"

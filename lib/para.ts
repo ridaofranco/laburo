@@ -69,6 +69,8 @@ export function ctaDe(audiencia: string | undefined) {
  * lo convierte, y Google ve el camino entre las dos.
  */
 export const PARA_POR_NOTA: Record<string, string[]> = {
+  "vallado-para-un-evento-que-pedir": ["personal-de-control-de-accesos-y-acreditacion", "staff-para-festivales-y-recitales"],
+  "pantallas-led-para-un-evento-que-pedir": ["staff-para-eventos-corporativos", "streaming-y-transmision-de-eventos-publicar"],
   "banos-quimicos-para-un-evento-cuantos-y-que-pedir": ["staff-para-festivales-y-recitales", "seguridad-limpieza-y-servicios-de-operacion-para-eventos-publicar"],
   "grupo-electrogeno-para-un-evento-que-pedir": ["staff-para-festivales-y-recitales", "seguridad-limpieza-y-servicios-de-operacion-para-eventos-publicar"],
   "food-trucks-en-un-evento-como-contratarlos": ["staff-para-festivales-y-recitales", "staff-para-eventos-corporativos", "proveedores-para-eventos-publicar-servicio"],

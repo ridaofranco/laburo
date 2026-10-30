@@ -14,7 +14,7 @@ faqs:
   - q: "¿Cómo consigo trabajo en eventos en Catamarca?"
     a: "Cargando un perfil en el pool con el que se arma el staff de los eventos: tus oficios, tu zona, tu disponibilidad y tu experiencia. En LABURO lo hacés una vez desde /sumate y es gratis. Cuando alguien carga un evento en Catamarca que necesita tu rol, te llega una oferta con el pago, la fecha y los horarios, y la aceptás desde el celular."
   - q: "¿LABURO me garantiza trabajo en eventos en Catamarca?"
-    a: "No. LABURO no garantiza trabajo ni una cantidad de eventos por mes. Las ofertas llegan cuando alguien carga un evento en tu zona que necesita lo que vos hacés. Lo que sí hace es que, cuando ese evento existe, te encuentren con tu perfil a la vista y te manden la oferta con todo por escrito."
+    a: "No. LABURO no garantiza trabajo ni una cantidad de eventos por mes. Las ofertas llegan cuando alguien carga un evento en tu zona que necesita lo que vos hacés. Lo que sí hace es que, cuando ese evento existe, te llegue la oferta con todo por escrito."
   - q: "¿Hay gente de Catamarca en LABURO?"
     a: "Sí. Hoy hay más de 40 fichas de personas que viven en la provincia, más de 20 en San Fernando del Valle de Catamarca. Los oficios que más se repiten son control de accesos, producción y catering."
   - q: "¿Necesito experiencia para trabajar en eventos en Catamarca?"

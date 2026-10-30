@@ -14,7 +14,7 @@ faqs:
   - q: "¿Cómo consigo trabajo en eventos en Posadas?"
     a: "Cargando un perfil en el pool con el que se arma el staff de los eventos: tus oficios, tu zona, tu disponibilidad y tu experiencia. En LABURO lo hacés una vez desde /sumate y es gratis. Cuando alguien carga un evento en Misiones que necesita tu rol, te llega una oferta con el pago, la fecha y los horarios, y la aceptás desde el celular."
   - q: "¿LABURO me garantiza trabajo en eventos en Misiones?"
-    a: "No. LABURO no garantiza trabajo ni una cantidad de eventos por mes. Las ofertas llegan cuando alguien carga un evento en tu zona que necesita lo que vos hacés. Lo que sí hace es que, cuando ese evento existe, te encuentren con tu perfil a la vista y te manden la oferta con todo por escrito."
+    a: "No. LABURO no garantiza trabajo ni una cantidad de eventos por mes. Las ofertas llegan cuando alguien carga un evento en tu zona que necesita lo que vos hacés. Lo que sí hace es que, cuando ese evento existe, te llegue la oferta con todo por escrito."
   - q: "¿Hay gente de Misiones en LABURO?"
     a: "Sí. Hoy hay más de 140 fichas de personas que viven en Misiones, más de 110 en Posadas, y también hay gente de Garupá, Oberá, Candelaria y Eldorado. Los oficios que más se repiten son control de accesos, catering y atención al cliente."
   - q: "¿Necesito experiencia para trabajar en eventos en Posadas?"
