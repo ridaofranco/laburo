@@ -90,6 +90,8 @@ En LABURO la propuesta llega por mail con un link propio e incluye el rol, la fe
 
 La demanda que se describe acá es la que ve [SOMOS DER](https://somosder.ar) al armar el equipo de cada evento. Los puestos que mejor se pagan son casi siempre los que resuelven un problema puntual bajo presión: la puerta, el sonido y la coordinación.
 
+Si te interesa la gastronomía de eventos (mozo, bartender, bachero, cocina), está todo en [trabajar en gastronomía de eventos](/para/trabajar-en-gastronomia-de-eventos).
+
 ## Sumate al pool
 
 Cargá tu perfil, subí tu CV, elegí de la lista los puestos que sabés hacer y marcá tu zona y tu disponibilidad. Es gratis y toma unos minutos: [sumate a LABURO](/sumate).

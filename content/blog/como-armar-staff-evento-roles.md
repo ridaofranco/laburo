@@ -92,6 +92,8 @@ Lo que hace que ese modelo funcione no es la velocidad para conseguir gente. Es 
 
 Este reparto de roles no sale de un manual. Es cómo arma el staff [SOMOS DER](https://somosder.ar), la productora que construyó LABURO y que la usa para sus propios eventos. La familia de accesos y acreditación, que es la que más suele quedarse corta, la resolvemos con [PASE](https://pase.somosder.ar).
 
+Si producís seguido y querés ver el recorrido completo, desde la dotación hasta el tablero de cobertura, está en [staff para eventos para productoras y agencias](/para/staff-para-eventos-productoras-y-agencias).
+
 ## Armá el staff de tu próximo evento
 
-En LABURO hay más de 680 postulantes con perfil y CV cargados, filtrables por rol, zona y disponibilidad. Contanos fecha, lugar y qué roles necesitás en un formulario de dos minutos, sin crear ninguna cuenta: [pedí tu staff](/).
+En LABURO hay más de 1.100 postulantes con perfil y CV cargados, filtrables por rol, zona y disponibilidad. Contanos fecha, lugar y qué roles necesitás en un formulario de dos minutos, sin crear ninguna cuenta: [pedí tu staff](/).

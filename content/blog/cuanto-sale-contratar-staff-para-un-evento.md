@@ -99,6 +99,8 @@ Mandá siempre esto, y vas a recibir números que se pueden auditar:
 
 Estos rangos salen de lo que paga [SOMOS DER](https://somosder.ar) en sus propios eventos. Por eso incluyen las cosas que casi ningún presupuesto contempla y que después aparecen igual: el desmontaje de madrugada, los relevos y la coordinación en piso.
 
+Si el evento es de una empresa, en [staff para eventos corporativos](/para/staff-para-eventos-corporativos) está qué roles se repiten y cómo se arma el pedido.
+
 ## Pedí tu presupuesto de staff
 
-En LABURO declarás cuántas personas necesitás por rol, buscás sobre más de 680 perfiles con experiencia y CV cargados, y ves en un tablero cuántos lugares están cubiertos y cuántos faltan. Contanos fecha, lugar y roles en un formulario de dos minutos, sin crear ninguna cuenta: [pedí tu staff](/).
+En LABURO declarás cuántas personas necesitás por rol, buscás sobre más de 1.100 perfiles con experiencia y CV cargados, y ves en un tablero cuántos lugares están cubiertos y cuántos faltan. Contanos fecha, lugar y roles en un formulario de dos minutos, sin crear ninguna cuenta: [pedí tu staff](/).

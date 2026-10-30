@@ -80,6 +80,8 @@ LABURO es la plataforma de [SOMOS DER](https://www.somosder.ar) para armar event
 
 Si una baja te agarra igual, el plan está en [qué hacer si te falla un staff el día del evento](/blog/si-te-falla-un-staff-el-dia-del-evento). Y si el evento es largo y tiene varios turnos, conviene armar la grilla antes de convocar: [turnos y horarios del staff en un evento largo](/blog/turnos-y-horarios-del-staff-en-un-evento-largo).
 
+Si en vez de convocar vos estás pensando en tercerizar el equipo, mirá [agencia de promotoras o plataforma](/para/agencia-de-promotoras-o-plataforma).
+
 ## Los datos personales del staff
 
 Esto no es asesoramiento legal. La Ley 25.326 de Protección de los Datos Personales define como dato personal la información de cualquier tipo referida a personas determinadas o determinables, pide en general un consentimiento libre, expreso e informado para tratarlos y obliga a quien los maneja a tomar las medidas técnicas y organizativas necesarias para cuidarlos, además de un deber de confidencialidad para quienes intervienen.

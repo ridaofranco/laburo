@@ -83,6 +83,8 @@ Nadie miente. Simplemente **no hay una sola versión de la verdad**, y el día d
 
 Este filtro es el que aplica [SOMOS DER](https://somosder.ar) antes de confirmar a alguien. Sirve igual si contratás por tu cuenta: lo que cambia el resultado no es el currículum, es tener referencias verificables y una confirmación por escrito.
 
+Si estás decidiendo entre tercerizar el equipo o convocarlo vos, la comparación está en [agencia de promotoras o plataforma](/para/agencia-de-promotoras-o-plataforma).
+
 ## Contratá staff con las condiciones a la vista
 
-En LABURO buscás sobre más de 680 perfiles reales con experiencia y CV cargados, filtrás por rol, zona y disponibilidad, y cada persona recibe una oferta con pago, fechas y horarios que acepta con un click. Contanos qué necesita tu evento en un formulario de dos minutos, sin crear cuenta: [pedí tu staff](/).
+En LABURO buscás sobre más de 1.100 perfiles reales con experiencia y CV cargados, filtrás por rol, zona y disponibilidad, y cada persona recibe una oferta con pago, fechas y horarios que acepta con un click. Contanos qué necesita tu evento en un formulario de dos minutos, sin crear cuenta: [pedí tu staff](/).

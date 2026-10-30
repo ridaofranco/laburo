@@ -109,6 +109,8 @@ En un rubro donde la mayoría de los problemas son de gente que no aparece, ser 
 
 Todo esto pasa en cualquier productora seria. Lo escribimos desde [SOMOS DER](https://somosder.ar), que produce eventos y contrata staff eventual todas las semanas, así que es lo que vas a encontrar del otro lado el día que te toque.
 
+Si tu primer trabajo va a ser en una activación de marca, leé también [trabajar de promotora o azafata](/para/trabajar-de-promotora-o-azafata).
+
 ## Sumate al pool
 
 Cargá tu perfil, subí tu CV, elegí tus puestos y tu disponibilidad. Es gratis y toma unos minutos: [sumate a LABURO](/sumate).

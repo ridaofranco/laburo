@@ -85,6 +85,8 @@ Lo que sí es cierto, y es lo único que realmente controlás: **a la gente que 
 
 Del otro lado de estas contrataciones hay una productora concreta: [SOMOS DER](https://somosder.ar), que produce eventos en Buenos Aires y arma su staff con LABURO. Los plazos y las formas de pago que aparecen en esta nota son los que maneja de verdad, no un promedio del mercado.
 
+Si estás en AMBA y querés ver qué roles se piden y cómo te llegan las ofertas, mirá [trabajo en eventos en Buenos Aires](/para/trabajo-en-eventos-buenos-aires).
+
 ## Sumate al pool
 
 Cargá tu perfil, subí tu CV, elegí tus oficios y tu disponibilidad. Es gratis y toma unos minutos: [sumate a LABURO](/sumate).

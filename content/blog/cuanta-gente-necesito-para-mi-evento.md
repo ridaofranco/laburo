@@ -104,6 +104,8 @@ Esa distinción es la parte que más plata ahorra. Una propuesta **enviada** no 
 
 Los números de arriba son los que usa [SOMOS DER](https://somosder.ar) al presupuestar, después de 40 eventos y más de 150.000 asistentes. Si el cuello de botella te da en la puerta, antes de sumar gente conviene mirar el sistema de acreditación: con [PASE](https://pase.somosder.ar) una fila que pedía cuatro personas se resuelve con dos.
 
+Si una parte grande de la cuenta es la puerta, el detalle de ese equipo está en [personal de control de accesos y acreditación](/para/personal-de-control-de-accesos-y-acreditacion).
+
 ## Armá la dotación de tu próximo evento
 
-En LABURO declarás cuántas personas necesitás por rol, buscás sobre más de 680 perfiles con experiencia y CV cargados, filtrás por zona y disponibilidad, y ves en un tablero cuántos lugares están cubiertos y cuántos faltan. Contanos fecha, lugar y roles en un formulario de dos minutos, sin crear ninguna cuenta: [pedí tu staff](/).
+En LABURO declarás cuántas personas necesitás por rol, buscás sobre más de 1.100 perfiles con experiencia y CV cargados, filtrás por zona y disponibilidad, y ves en un tablero cuántos lugares están cubiertos y cuántos faltan. Contanos fecha, lugar y roles en un formulario de dos minutos, sin crear ninguna cuenta: [pedí tu staff](/).

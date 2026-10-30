@@ -100,6 +100,12 @@ export const PARA_POR_NOTA: Record<string, string[]> = {
   "equipo-de-sampling-o-degustacion": ["promotoras-y-azafatas-para-activaciones", "trabajar-de-promotora-o-azafata"],
   "traductores-e-interpretes-en-un-congreso": ["staff-para-eventos-corporativos", "personal-de-control-de-accesos-y-acreditacion"],
   "que-es-un-stage-manager-en-un-evento": ["trabajar-en-montaje-tecnica-y-produccion-de-eventos", "trabajo-en-eventos-buenos-aires"],
+  "como-evaluar-al-staff-despues-del-evento": ["staff-para-eventos-productoras-y-agencias", "planilla-y-whatsapp-o-laburo-para-convocar-staff"],
+  "montaje-y-desmontaje-de-eventos-como-cuidarte": ["trabajar-en-montaje-tecnica-y-produccion-de-eventos", "staff-para-eventos-productoras-y-agencias"],
+  "trabajar-en-eventos-en-verano-en-la-costa": ["trabajar-en-gastronomia-de-eventos", "trabajar-de-promotora-o-azafata"],
+  "monotributo-para-trabajar-en-eventos": ["trabajo-en-eventos-buenos-aires", "trabajar-de-promotora-o-azafata"],
+  "personal-de-limpieza-en-un-evento": ["staff-para-eventos-corporativos", "staff-para-eventos-productoras-y-agencias"],
+  "como-describir-tu-salon-para-que-te-encuentren": ["publicar-salon-para-eventos", "staff-para-eventos-corporativos"],
 };
 
 /** Las páginas por público de una nota, solo las que existen. */

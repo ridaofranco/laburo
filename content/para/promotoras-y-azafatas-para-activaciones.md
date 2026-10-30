@@ -95,6 +95,8 @@ Crear la cuenta en LABURO es gratis. Así se arma una activación:
 
 Todo queda registrado. Si preferís que lo coordine el equipo de [SOMOS DER](https://www.somosder.ar), dejás tu consulta o escribís por WhatsApp al 11 7154-0675. SOMOS DER tiene más de 100 eventos operados y más de 150.000 asistentes en 6 países.
 
+¿Dudás entre una agencia de promotoras o convocar vos? Está la comparación en [agencia de promotoras o plataforma](/para/agencia-de-promotoras-o-plataforma).
+
 ## El resto de la activación
 
 Una activación también necesita estructura, sonido o catering. En LABURO les pedís precio a los proveedores por formulario, contestan por mail y comparás presupuestos; están publicados en [servicios](/servicios). Si buscás espacio, los salones figuran con capacidad y zona en [salones](/salones). Y si la acción tiene acceso con invitación, [PASE](https://pase.somosder.ar) resuelve la acreditación con QR.

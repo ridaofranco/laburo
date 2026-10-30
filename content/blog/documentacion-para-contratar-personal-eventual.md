@@ -90,6 +90,8 @@ Si de alguien no podés abrir esa carpeta, esa persona no debería estar en tu g
 
 Esta es la carpeta que arma [SOMOS DER](https://somosder.ar) antes de cada evento. No es un consejo teórico: es lo que hay que poder mostrar si aparece una inspección o si alguien se lastima trabajando.
 
+Para el recorrido completo de cómo se convoca y se confirma a cada persona, mirá [staff para eventos para productoras y agencias](/para/staff-para-eventos-productoras-y-agencias).
+
 ## Contratá con la carpeta armada de entrada
 
 En LABURO cada persona del pool se registró con sus datos, su documento y su consentimiento, y cada confirmación queda escrita con rol, horario, monto y plazo de pago. Contanos qué necesita tu evento en un formulario de dos minutos, sin crear cuenta: [pedí tu staff](/).

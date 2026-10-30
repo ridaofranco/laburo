@@ -84,6 +84,8 @@ Eso sirve para dos cosas: para que la liquidación no se arme de memoria, y para
 
 El plan B de arriba es el que usa [SOMOS DER](https://somosder.ar) cuando pasa, que pasa. La diferencia entre un reemplazo en dos horas y un puesto vacío toda la noche casi nunca es la suerte: es tener a quién llamar antes de necesitarlo.
 
+Si las bajas te agarran porque las confirmaciones están en un grupo de WhatsApp, mirá [planilla y WhatsApp o LABURO](/para/planilla-y-whatsapp-o-laburo-para-convocar-staff).
+
 ## Cubrí tu evento con la cobertura a la vista
 
-En LABURO declarás la dotación por rol, mandás propuestas con pago, fechas y horarios que se aceptan con un click, y ves en un tablero cuántos lugares están cubiertos y cuántos faltan, con más de 680 perfiles para cubrir el hueco. Contanos qué necesita tu evento en un formulario de dos minutos, sin crear cuenta: [pedí tu staff](/).
+En LABURO declarás la dotación por rol, mandás propuestas con pago, fechas y horarios que se aceptan con un click, y ves en un tablero cuántos lugares están cubiertos y cuántos faltan, con más de 1.100 perfiles para cubrir el hueco. Contanos qué necesita tu evento en un formulario de dos minutos, sin crear cuenta: [pedí tu staff](/).

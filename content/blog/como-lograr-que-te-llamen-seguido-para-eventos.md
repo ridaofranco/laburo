@@ -94,6 +94,8 @@ Lo que sí es cierto es esto: en un rubro donde el problema número uno es la ge
 
 Vale aclarar de dónde sale este criterio: es el que usa [SOMOS DER](https://somosder.ar) para decidir a quién vuelve a convocar. Es una productora, no una bolsa de trabajo, así que lo que mira es lo mismo que va a mirar cualquiera que te contrate para un evento.
 
+Si lo tuyo es el armado, la técnica o la producción, tu página es [trabajar en montaje, técnica y producción de eventos](/para/trabajar-en-montaje-tecnica-y-produccion-de-eventos).
+
 ## Sumate al pool
 
 Cargá tu perfil, subí tu CV, elegí tus puestos y marcá tu disponibilidad. Cuando haya un evento que necesite tu rol en tu zona, te llega una propuesta con el rol, las fechas, los horarios y el pago antes de que aceptes: [sumate a LABURO](/sumate).

@@ -90,6 +90,8 @@ Cargá bien el email y el teléfono o WhatsApp. Y revisá el correo no deseado l
 
 Quien lee tu perfil del otro lado es una productora como [SOMOS DER](https://somosder.ar), que busca por rol, zona y disponibilidad. Por eso esos tres campos pesan más que cualquier texto de presentación.
 
+Si buscás fechas en AMBA, en [trabajo en eventos en Buenos Aires](/para/trabajo-en-eventos-buenos-aires) está qué se pide y cómo te llegan las ofertas.
+
 ## Cargá tu perfil
 
 Es gratis y toma unos minutos: subís tu CV, elegís los puestos a los que aplicás, marcás tu zona y tu disponibilidad, y quedás en el pool. Cuando haya un evento que necesite tu rol en tu zona, te llega una propuesta por mail con el rol, las fechas, los horarios y el pago antes de que aceptes: [sumate a LABURO](/sumate).
