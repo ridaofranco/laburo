@@ -44,7 +44,7 @@ En LABURO el buscador filtra por rol, provincia y ciudad, y cada perfil muestra 
 3. **Leé el perfil antes de ofrecer.** Lo que conviene mirar está en [qué mirar antes de contratar personal para un evento](/blog/que-mirar-antes-de-contratar-personal-evento).
 4. **Armá suplentes desde el principio.** A distancia no podés salir a buscar a alguien a último momento. Qué hacer si pasa está en [si te falla un staff el día del evento](/blog/si-te-falla-un-staff-el-dia-del-evento).
 
-Hay páginas por zona para dos lugares donde se trabaja seguido: [staff para eventos en Misiones](/para/staff-para-eventos-en-misiones) y [staff para eventos en Bariloche](/para/staff-para-eventos-en-bariloche).
+Hay páginas por zona para los lugares donde LABURO ya tiene gente local: [Buenos Aires](/para/staff-para-eventos-en-buenos-aires), [Misiones](/para/staff-para-eventos-en-misiones), [Bariloche](/para/staff-para-eventos-en-bariloche), [Catamarca](/para/staff-para-eventos-en-catamarca) y [Formosa](/para/staff-para-eventos-en-formosa).
 
 ## Viáticos y alojamiento, dichos claros
 
