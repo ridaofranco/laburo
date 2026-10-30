@@ -99,7 +99,7 @@ Crear la cuenta es gratis. El recorrido:
 
 Si producís varios shows a la vez, mirá [staff para eventos: productoras y agencias](/para/staff-para-eventos-productoras-y-agencias). Si preferís no armarlo vos, dejás tu consulta para que la vea el equipo de [SOMOS DER](https://www.somosder.ar).
 
-Para empezar, [entrá a LABURO](/entrar) y cargá tu festival. Todas las páginas por público están en [/para](/para).
+Para empezar, [creá tu cuenta gratis en LABURO](/registrar-productora) (si ya tenés una, [entrá](/entrar)) y cargá tu festival. Todas las páginas por público están en [/para](/para).
 
 ## Fuentes
 

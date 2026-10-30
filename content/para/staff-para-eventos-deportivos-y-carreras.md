@@ -104,4 +104,4 @@ Si la carrera es en otra provincia, mirá [staff para eventos en Misiones](/para
 
 ## Armá tu equipo
 
-Si organizás una carrera, una maratón o un torneo, [entrá a LABURO](/entrar) y cargá tu evento: es gratis, buscás por rol y zona, y mandás las ofertas con el pago y el horario de cada bloque. Todas las páginas por público están en [/para](/para).
+Si organizás una carrera, una maratón o un torneo, [creá tu cuenta gratis en LABURO](/registrar-productora) (si ya tenés una, [entrá](/entrar)) y cargá tu evento: es gratis, buscás por rol y zona, y mandás las ofertas con el pago y el horario de cada bloque. Todas las páginas por público están en [/para](/para).

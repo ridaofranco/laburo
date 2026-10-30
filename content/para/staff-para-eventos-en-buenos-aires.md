@@ -109,4 +109,4 @@ Si querés comparar con la planilla y el grupo de WhatsApp, está en [planilla y
 
 Del otro lado de esta página estás vos. Qué puestos hay, cómo es el trabajo y cómo cargar tu perfil gratis está en [trabajo en eventos en Buenos Aires](/para/trabajo-en-eventos-buenos-aires).
 
-Para arrancar a contratar, [entrá a LABURO](/entrar) y cargá tu evento. Todas las páginas por público están en [/para](/para).
+Para arrancar a contratar, [creá tu cuenta gratis en LABURO](/registrar-productora) (si ya tenés una, [entrá](/entrar)) y cargá tu evento. Todas las páginas por público están en [/para](/para).

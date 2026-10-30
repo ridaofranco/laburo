@@ -101,4 +101,4 @@ Todo queda registrado. Si preferís que lo coordine el equipo de [SOMOS DER](htt
 
 Una activación también necesita estructura, sonido o catering. En LABURO les pedís precio a los proveedores por formulario, contestan por mail y comparás presupuestos; están publicados en [servicios](/servicios). Si buscás espacio, los salones figuran con capacidad y zona en [salones](/salones). Y si la acción tiene acceso con invitación, [PASE](https://pase.somosder.ar) resuelve la acreditación con QR.
 
-Para empezar, [entrá a LABURO](/entrar). Si sos promotora o azafata y querés trabajar en activaciones, tu página es [trabajar de promotora o azafata](/para/trabajar-de-promotora-o-azafata), y el registro está en [sumate](/sumate).
+Para empezar, [creá tu cuenta gratis en LABURO](/registrar-productora) (si ya tenés una, [entrá](/entrar)). Si sos promotora o azafata y querés trabajar en activaciones, tu página es [trabajar de promotora o azafata](/para/trabajar-de-promotora-o-azafata), y el registro está en [sumate](/sumate).

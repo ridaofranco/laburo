@@ -109,4 +109,4 @@ Si preferís que lo arme el equipo de [SOMOS DER](https://www.somosder.ar), dej�
 
 La gastronomía es una parte. Para la puerta, mirá [personal de control de accesos y acreditación](/para/personal-de-control-de-accesos-y-acreditacion), y si el evento es de empresa, [staff para eventos corporativos](/para/staff-para-eventos-corporativos). Para acreditar con QR está [PASE](https://pase.somosder.ar), y para vender entradas, [ENTRÁ](https://www.entratickets.com).
 
-Para empezar, [entrá a LABURO](/entrar). Si trabajás de mozo o bartender, tu página es [trabajar en gastronomía de eventos](/para/trabajar-en-gastronomia-de-eventos) y el registro está en [sumate](/sumate).
+Para empezar, [creá tu cuenta gratis en LABURO](/registrar-productora) (si ya tenés una, [entrá](/entrar)). Si trabajás de mozo o bartender, tu página es [trabajar en gastronomía de eventos](/para/trabajar-en-gastronomia-de-eventos) y el registro está en [sumate](/sumate).

@@ -99,7 +99,7 @@ Si el evento tiene puerta, [PASE](https://pase.somosder.ar) resuelve la acredita
 
 Si tu próximo evento es fuera de Buenos Aires, hay páginas con el pool de cada ciudad: [staff para eventos en Misiones](/para/staff-para-eventos-en-misiones) y [staff para eventos en Bariloche](/para/staff-para-eventos-en-bariloche).
 
-Para arrancar, [entrá a LABURO](/entrar) y cargá tu próximo evento. Si estás del otro lado y trabajás en eventos, el camino es [sumate](/sumate).
+Para arrancar, [creá tu cuenta gratis en LABURO](/registrar-productora) (si ya tenés una, [entrá](/entrar)) y cargá tu próximo evento. Si estás del otro lado y trabajás en eventos, el camino es [sumate](/sumate).
 
 ## Fuentes
 

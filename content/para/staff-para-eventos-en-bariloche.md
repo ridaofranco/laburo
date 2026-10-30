@@ -73,4 +73,6 @@ Si querés ver punto por punto qué cambia frente a la planilla y el grupo de Wh
 
 Del otro lado de esta página estás vos. Cargar tu perfil en LABURO es gratis y lo hacés una vez desde [sumate](/sumate): tus oficios, tu zona y tu disponibilidad. Qué conviene poner está en [qué poner en tu perfil para trabajar en eventos](/blog/que-poner-en-tu-perfil-para-trabajar-en-eventos).
 
-Para arrancar a contratar, [entrá a LABURO](/entrar) y cargá tu evento en Bariloche. Todas las páginas por público están en [/para](/para).
+¿Vivís en la zona y querés trabajar en eventos? Tu página es [trabajo en eventos en Bariloche](/para/trabajo-en-eventos-en-bariloche).
+
+Para arrancar a contratar, [creá tu cuenta gratis en LABURO](/registrar-productora) (si ya tenés una, [entrá](/entrar)) y cargá tu evento en Bariloche. Todas las páginas por público están en [/para](/para).

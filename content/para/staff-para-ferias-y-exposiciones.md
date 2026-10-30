@@ -92,4 +92,4 @@ Crear la cuenta es gratis. El recorrido:
 
 Si además necesitás proveedores para la feria, están en [servicios](/servicios), y los salones y predios, en [salones](/salones). Si la feria tiene un perfil de evento de empresa, mirá también [staff para eventos corporativos](/para/staff-para-eventos-corporativos). Y si preferís no armarlo vos, dejás tu consulta para que la vea el equipo de [SOMOS DER](https://www.somosder.ar).
 
-Para empezar, [entrá a LABURO](/entrar) y cargá tu feria. Todas las páginas por público están en [/para](/para).
+Para empezar, [creá tu cuenta gratis en LABURO](/registrar-productora) (si ya tenés una, [entrá](/entrar)) y cargá tu feria. Todas las páginas por público están en [/para](/para).

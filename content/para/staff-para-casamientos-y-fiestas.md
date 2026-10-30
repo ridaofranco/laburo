@@ -100,4 +100,4 @@ Si preferís no armarlo vos, dejás tu consulta para que la vea el equipo de [SO
 
 Si la fiesta es en la Ciudad o el conurbano, mirá cómo pensar zonas y traslados en [staff para eventos en Buenos Aires](/para/staff-para-eventos-en-buenos-aires).
 
-Para empezar, [entrá a LABURO](/entrar) y cargá tu fiesta. Todas las páginas por público están en [/para](/para).
+Para empezar, [creá tu cuenta gratis en LABURO](/registrar-productora) (si ya tenés una, [entrá](/entrar)) y cargá tu fiesta. Todas las páginas por público están en [/para](/para).

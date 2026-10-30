@@ -103,7 +103,7 @@ Esto no es asesoramiento legal. Si contratás staff a través de una empresa de 
 
 Si tu evento tiene acreditación, [PASE](https://pase.somosder.ar) hace la acreditación y el control de accesos con QR, que acelera el ritmo por puesto. Y si tenés que cobrar entradas, [ENTRÁ](https://www.entratickets.com) es la ticketera del mismo ecosistema.
 
-Para empezar, [entrá a LABURO](/entrar) y cargá tu evento. Si sos productora y manejás varios eventos a la vez, mirá [staff para eventos para productoras y agencias](/para/staff-para-eventos-productoras-y-agencias).
+Para empezar, [creá tu cuenta gratis en LABURO](/registrar-productora) (si ya tenés una, [entrá](/entrar)) y cargá tu evento. Si sos productora y manejás varios eventos a la vez, mirá [staff para eventos para productoras y agencias](/para/staff-para-eventos-productoras-y-agencias).
 
 ## Fuentes
 
