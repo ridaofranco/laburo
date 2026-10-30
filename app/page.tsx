@@ -693,6 +693,23 @@ export default async function LandingPage() {
             >
               somosder.ar
             </a>
+            {/* Los otros productos de SOMOS DER (30/10): acreditación y entradas. */}
+            <a
+              href="https://pase.somosder.ar"
+              target="_blank"
+              rel="noopener"
+              className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
+            >
+              PASE · Acreditación
+            </a>
+            <a
+              href="https://www.entratickets.com"
+              target="_blank"
+              rel="noopener"
+              className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
+            >
+              ENTRÁ · Entradas
+            </a>
             <Link
               href="/sumate"
               className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"

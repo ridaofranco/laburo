@@ -60,3 +60,6 @@ Cada nota y cada página /para genera sola su imagen con el título (`app/blog/[
 8. Temporada de verano en la costa: cómo conseguir trabajo en eventos (publicar en noviembre, sin datos inventados).
 9. Cómo evaluar al staff después del evento (favoritas con nota en LABURO).
 10. Para salones: cómo describir tu espacio para que te encuentren (capacidad, zona, fotos).
+
+## Publicadas el 30/10 a la mañana, relevo C8 (no repetir)
+Staff para un evento de gaming o esports, valet parking en un evento (Ley 24.449 abierta), trabajar de animador/a en eventos infantiles, trabajar en eventos los fines de semana con otro trabajo, plan B de lluvia para el staff de un evento al aire libre (alertas del SMN), staff para un desfile o evento de moda. El cierre de cada nota (BlogCta) ya no dice «CV a la vista»: dice que el equipo de LABURO arma el staff.

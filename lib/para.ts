@@ -148,6 +148,12 @@ export const PARA_POR_NOTA: Record<string, string[]> = {
   "ficha-de-proveedor-de-eventos-que-te-pidan-precio": ["proveedores-para-eventos-publicar-servicio", "trabajar-en-montaje-tecnica-y-produccion-de-eventos"],
   "habilitacion-de-salon-de-eventos-en-caba": ["publicar-salon-para-eventos", "personal-de-control-de-accesos-y-acreditacion"],
   "como-responder-un-pedido-de-presupuesto-de-evento": ["proveedores-para-eventos-publicar-servicio", "publicar-salon-para-eventos"],
+  "staff-para-un-evento-de-gaming-o-esports": ["personal-de-control-de-accesos-y-acreditacion", "staff-para-ferias-y-exposiciones"],
+  "valet-parking-en-un-evento-que-pedir": ["staff-para-casamientos-y-fiestas", "staff-para-eventos-corporativos"],
+  "trabajar-de-animador-en-eventos-infantiles": ["trabajar-de-promotora-o-azafata", "artistas-dj-y-animacion-para-eventos-publicar"],
+  "trabajar-en-eventos-los-fines-de-semana-con-otro-trabajo": ["portales-de-empleo-o-laburo-para-trabajar-en-eventos", "trabajar-de-promotora-o-azafata"],
+  "plan-b-de-lluvia-para-el-staff-de-un-evento-al-aire-libre": ["staff-para-festivales-y-recitales", "staff-para-eventos-deportivos-y-carreras"],
+  "staff-para-un-desfile-o-evento-de-moda": ["personal-de-control-de-accesos-y-acreditacion", "staff-para-eventos-corporativos"],
 };
 
 /** Las páginas por público de una nota, solo las que existen. */

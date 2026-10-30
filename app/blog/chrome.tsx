@@ -76,6 +76,23 @@ export function BlogFooter() {
           >
             somosder.ar
           </a>
+          {/* Los otros productos de SOMOS DER (30/10): acreditación y entradas. */}
+          <a
+            href="https://pase.somosder.ar"
+            target="_blank"
+            rel="noopener"
+            className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
+          >
+            PASE · Acreditación
+          </a>
+          <a
+            href="https://www.entratickets.com"
+            target="_blank"
+            rel="noopener"
+            className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
+          >
+            ENTRÁ · Entradas
+          </a>
           <Link
             href="/sumate"
             className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
@@ -111,9 +128,9 @@ export function BlogCta() {
           para tu evento.
         </h2>
         <p className="text-[16px] md:text-[18px] leading-[1.7] text-[#8a8a8a] max-w-[560px] mt-8">
-          Contanos qué necesitás y te acercamos perfiles del pool, con
-          experiencia y CV a la vista. Y si trabajás en eventos, cargá tu perfil
-          una vez y recibí propuestas con pago y fechas.
+          Contanos qué roles te faltan y te armamos el equipo con gente real
+          del pool de tu zona. Y si trabajás en eventos, cargá tu perfil una
+          vez y recibí propuestas con pago y fechas.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 mt-10">
           <Link
