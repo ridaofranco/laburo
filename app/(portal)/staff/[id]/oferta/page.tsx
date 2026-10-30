@@ -14,6 +14,7 @@
  * directo del cliente (Pitfall 1: staff_app no está en PostgREST + REVOKE).
  */
 
+import { eventoTerminado } from "@/lib/offers";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
@@ -49,13 +50,16 @@ export default async function OfferPage({
   const org = await orgActual();
   let qGigs = supabase
     .from("staff_app_gigs")
-    .select("id,title,starts_at,venue_name")
+    .select("id,title,starts_at,ends_at,venue_name")
     .order("starts_at", { ascending: false });
   if (org?.organizationId) qGigs = qGigs.eq("organization_id", org.organizationId);
   const { data: gigsData, error: gigsError } = await qGigs;
   if (gigsError) console.error("[oferta] no se pudo leer gigs:", gigsError.message);
 
-  const gigs = (gigsData ?? []) as OfferFormGig[];
+  // Solo eventos que no terminaron: a uno pasado la base ya no deja mandar la
+  // oferta (0101, gig_terminado) y la persona no la podría aceptar (0099).
+  const gigs: OfferFormGig[] = ((gigsData ?? []) as (OfferFormGig & { ends_at: string | null })[])
+    .filter((g) => !eventoTerminado(g.starts_at, g.ends_at));
 
   const nombreCompleto =
     [candidate.nombre, candidate.apellido].filter(Boolean).join(" ").trim() ||
