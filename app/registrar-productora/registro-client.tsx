@@ -27,7 +27,8 @@
  * CUIT, dirección y web siguen sin pedirse: esas sí se piden cuando sirvan.
  */
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { revisarAntesDeEnviar } from "@/lib/revisar-email";
 import { guardarYRecargar, useRecuperarGuardado } from "@/lib/recarga-por-version";
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
@@ -72,6 +73,8 @@ export function RegistroProductoraClient() {
     if (g.queEventos !== undefined) setQueEventos(g.queEventos);
     if (g.volumen !== undefined) setVolumen(g.volumen);
   });
+  /** Último mail dudoso que se le corrigió: si lo vuelve a poner, pasa. */
+  const emailInsistido = useRef<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   /**
@@ -85,11 +88,18 @@ export function RegistroProductoraClient() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (loading) return;
-    setLoading(true);
     setError(null);
+    // gmail.con, gamil.com: el mail con el link de acceso rebota y no entra nunca.
+    const rev = revisarAntesDeEnviar(email, emailInsistido);
+    if ("corregir" in rev) {
+      if (rev.corregir) setEmail(rev.corregir);
+      setError(rev.mensaje);
+      return;
+    }
+    setLoading(true);
     const datos = {
       productora,
-      email,
+      email: rev.enviar,
       telefono,
       queEventos,
       volumen,

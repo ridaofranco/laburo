@@ -35,7 +35,8 @@
  * directorio y no recibe una sola consulta.
  */
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { revisarAntesDeEnviar } from "@/lib/revisar-email";
 import { guardarYRecargar, useRecuperarGuardado } from "@/lib/recarga-por-version";
 import Link from "next/link";
 import { motion } from "motion/react";
@@ -152,6 +153,8 @@ export function RegistroSalonClient() {
     if (g.cateringPropio !== undefined) setCateringPropio(g.cateringPropio);
     if (g.estacionamiento !== undefined) setEstacionamiento(g.estacionamiento);
   });
+  /** Último mail dudoso que se le corrigió: si lo vuelve a poner, pasa. */
+  const emailInsistido = useRef<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // null = todavía no se mandó. true/false = ya se mandó, y dice si el mail YA
@@ -165,11 +168,18 @@ export function RegistroSalonClient() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (loading) return;
-    setLoading(true);
     setError(null);
+    // gmail.con, gamil.com: el mail con el link de acceso rebota y no entra nunca.
+    const rev = revisarAntesDeEnviar(email, emailInsistido);
+    if ("corregir" in rev) {
+      if (rev.corregir) setEmail(rev.corregir);
+      setError(rev.mensaje);
+      return;
+    }
+    setLoading(true);
     const datos = {
       nombre,
-      email,
+      email: rev.enviar,
       provincia,
       capacidadMax,
       capacidadMin,
