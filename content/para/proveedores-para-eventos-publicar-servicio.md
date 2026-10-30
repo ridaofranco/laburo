@@ -16,7 +16,7 @@ faqs:
   - q: "¿Qué datos tengo que cargar para publicarme como proveedor?"
     a: "El nombre de tu empresa o el tuyo, un email, teléfono o WhatsApp, una línea que diga qué hacés, una descripción más larga, tu provincia y ciudad, y web o Instagram si tenés. Después cargás un servicio por cada cosa distinta que ofrecés, con rubro, qué incluye, un precio orientativo opcional y las provincias donde trabajás."
   - q: "¿Tengo que poner precios?"
-    a: "No es obligatorio. Podés cargar un precio desde, en pesos y por la unidad que uses (por evento, por día, por persona), y es orientativo: el precio final lo arreglás vos con cada cliente. Si lo dejás vacío, igual te pueden pedir presupuesto."
+    a: "No es obligatorio. Podés cargar un precio desde, en pesos y por la unidad que uses (por evento, por jornada, por persona o por hora), y es orientativo: el precio final lo arreglás vos con cada cliente. Si lo dejás vacío, igual te pueden pedir presupuesto."
   - q: "¿Cómo me llegan los pedidos de presupuesto?"
     a: "Quien está armando un evento entra a tu ficha y te manda un pedido de presupuesto por formulario, sin necesidad de crear cuenta. Ese pedido te llega por mail y lo ves también en tu panel. Contestás directo a esa persona."
   - q: "¿Puedo editar o sacar mi publicación?"
@@ -61,7 +61,7 @@ Cargás **un servicio por cada cosa distinta que hacés**. Cada servicio tiene:
 | Qué ofrecés | El título del servicio, por ejemplo "Equipo completo para 500 personas" |
 | Detalle | Qué incluye, qué equipo, si va con operador |
 | Precio desde (ARS) | Orientativo y opcional |
-| Por qué unidad | Por evento, por día, por persona |
+| Por qué unidad | Por evento, por jornada, por persona, por hora |
 | Dónde trabajás | Las provincias donde prestás ese servicio |
 
 Un dato importante: **si no marcás ninguna provincia, no aparecés en las búsquedas**. Es el campo que más se olvida y el que más pesa.
