@@ -1,6 +1,6 @@
 ---
 title: "Staff para eventos en Misiones: gente de Posadas y alrededores, con el equipo armado por LABURO"
-description: "Cómo armar el staff de un evento en Posadas y el resto de Misiones: qué roles hay en el pool de LABURO en la provincia, cómo dimensionar el equipo y cómo confirmarlo sin perseguir a nadie por WhatsApp."
+description: "Staff para eventos en Posadas y Misiones: qué roles hay en el pool de LABURO en la provincia, cómo dimensionar el equipo y confirmarlo sin WhatsApp."
 metaTitle: "Staff para Eventos en Misiones y Posadas | LABURO"
 slug: "staff-para-eventos-en-misiones"
 canonical: "https://laburo.somosder.ar/para/staff-para-eventos-en-misiones"

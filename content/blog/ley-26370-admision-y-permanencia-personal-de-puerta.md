@@ -1,6 +1,6 @@
 ---
 title: "Ley 26.370: qué le pide al personal de control de admisión y permanencia en eventos"
-description: "Qué dicen la Ley 26.370 y su Decreto 1824/2009 sobre el personal de puerta: requisitos, carnet, credencial, cuántos controladores hacen falta y qué tiene que exigir quien contrata."
+description: "Qué dicen la Ley 26.370 y el Decreto 1824/2009 del personal de puerta: requisitos, credencial, cuántos controladores y qué exigir al contratar."
 metaTitle: "Ley 26.370: Admisión y Permanencia en Eventos | LABURO"
 slug: "ley-26370-admision-y-permanencia-personal-de-puerta"
 canonical: "https://laburo.somosder.ar/blog/ley-26370-admision-y-permanencia-personal-de-puerta"

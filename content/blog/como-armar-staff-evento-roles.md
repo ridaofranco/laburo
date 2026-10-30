@@ -1,7 +1,7 @@
 ---
 title: "Cómo se arma el staff de un evento y qué roles hacen falta"
-description: "Las familias de roles que necesita un evento, cómo se decide la cantidad de gente por punto de servicio y turno, y los puestos que casi siempre se olvidan al presupuestar."
-metaTitle: "Cómo Armar el Staff de un Evento y Qué Roles Hacen Falta | LABURO"
+description: "Las familias de roles que necesita un evento, cómo se calcula la gente por punto de servicio y turno, y los puestos que se olvidan al presupuestar."
+metaTitle: "Cómo Armar el Staff de un Evento y Qué Roles Hacen Falta"
 slug: "como-armar-staff-evento-roles"
 canonical: "https://laburo.somosder.ar/blog/como-armar-staff-evento-roles"
 kicker: "Guía"

@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const capacidad = textoCapacidad(s.capacidad_min, s.capacidad_max);
   const donde = [s.ciudad, s.provincia].filter(Boolean).join(", ");
   const descripcion =
-    s.headline?.trim() ||
+    recortarDescripcion(s.headline) ||
     [capacidad, donde].filter(Boolean).join(" · ") ||
     "Consultá la fecha para tu evento.";
 
@@ -328,4 +328,12 @@ export default async function FichaSalonPage({ params }: Props) {
       />
     </div>
   );
+}
+
+/** La descripción de la ficha va entera en la página; en el meta se corta a ~160 para que Google no la trunque a la mitad de una palabra. */
+function recortarDescripcion(texto: string | null | undefined): string {
+  const t = (texto ?? "").trim().replace(/\s+/g, " ");
+  if (t.length <= 160) return t;
+  const corte = t.slice(0, 157);
+  return corte.slice(0, corte.lastIndexOf(" ")).replace(/[,;:.]$/, "") + "…";
 }

@@ -1,6 +1,6 @@
 ---
 title: "Cuánto sale contratar staff para un evento y qué estás pagando"
-description: "Cómo se arma de verdad el costo del staff de un evento: las cinco variables que lo componen, los cinco costos que nadie presupuesta y cómo calcular tu margen sin adivinar."
+description: "Cómo se arma el costo del staff de un evento: las cinco variables que lo componen, los cinco costos que nadie presupuesta y cómo calcular tu margen."
 metaTitle: "Cuánto Sale Contratar Staff para un Evento | LABURO"
 slug: "cuanto-sale-contratar-staff-para-un-evento"
 canonical: "https://laburo.somosder.ar/blog/cuanto-sale-contratar-staff-para-un-evento"

@@ -1,7 +1,7 @@
 ---
 title: "Cuánta gente necesitás para tu evento y cómo se calcula"
 description: "La cuenta real para dimensionar el staff de un evento: puntos de servicio, ritmo, turnos y margen. Sin ratios mágicos por cantidad de asistentes."
-metaTitle: "Cuánta Gente Necesitás para tu Evento y Cómo se Calcula | LABURO"
+metaTitle: "Cuánta Gente Necesitás para tu Evento y Cómo Calcularla"
 slug: "cuanta-gente-necesito-para-mi-evento"
 canonical: "https://laburo.somosder.ar/blog/cuanta-gente-necesito-para-mi-evento"
 kicker: "Guía"

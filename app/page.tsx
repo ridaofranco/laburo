@@ -33,7 +33,7 @@ import { PAGO_TEXTO } from "@/lib/pago";
 import { createClient } from "@/lib/supabase/server";
 
 const DESCRIPCION =
-  "Todo lo que necesita tu evento en un solo lugar: staff de un pool real que te arma el equipo de LABURO, proveedores de todos los rubros y salones por capacidad. Y si trabajás en eventos, tenés un servicio o un salón, publicate gratis.";
+  "Staff para eventos de un pool real, con el equipo armado por LABURO, más proveedores y salones. Si trabajás en eventos o tenés un servicio, sumate gratis.";
 
 export const metadata: Metadata = {
   title: "LABURO. Todo lo que necesita tu evento",

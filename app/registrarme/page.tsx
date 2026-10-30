@@ -31,6 +31,16 @@ export const metadata: Metadata = {
   description:
     "Elegí qué querés hacer en LABURO: buscar staff para tus eventos, trabajar en eventos, publicar tus servicios o publicar tu salón. Es gratis.",
   alternates: { canonical: "/registrarme" },
+  // Sin openGraph propio, el link compartido por WhatsApp salía sin imagen.
+  openGraph: {
+    type: "website",
+    url: "/registrarme",
+    siteName: "LABURO",
+    locale: "es_AR",
+    title: "LABURO. | Registrarme",
+    description: "Elegí qué querés hacer en LABURO: buscar staff para tus eventos, trabajar en eventos, publicar tus servicios o publicar tu salón. Es gratis.",
+    images: [{ url: "/brand/laburo-og.png", width: 1200, height: 630, alt: "LABURO" }],
+  },
 };
 
 const OPCIONES = [

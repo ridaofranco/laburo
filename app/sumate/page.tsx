@@ -10,7 +10,7 @@ import { SumateClient } from "./sumate-client";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 
 const DESCRIPCION =
-  "Trabajo en eventos: promotoras, bartenders, mozos, seguridad, técnicos y más. Subí tu CV en un minuto y, cuando un evento pide tu rol en tu zona, te llega la oferta con el pago escrito. Es gratis.";
+  "Promotoras, bartenders, mozos, seguridad y técnicos: subí tu CV y, cuando un evento pide tu rol en tu zona, te llega la oferta con el pago escrito. Gratis.";
 
 export const metadata: Metadata = {
   title: "Trabajo en eventos: sumate con tu CV | LABURO",

@@ -1,7 +1,7 @@
 ---
 title: "Qué documentación mirar cuando contratás personal eventual"
-description: "La carpeta mínima que tenés que tener de cada persona que trabaja en tu evento: identidad, situación para trabajar, condiciones aceptadas, registro de horas y datos personales bien guardados."
-metaTitle: "Qué Documentación Mirar al Contratar Personal Eventual | LABURO"
+description: "La carpeta mínima de cada persona que trabaja en tu evento: identidad, situación para trabajar, condiciones aceptadas, horas y datos bien guardados."
+metaTitle: "Documentación al Contratar Personal Eventual | LABURO"
 slug: "documentacion-para-contratar-personal-eventual"
 canonical: "https://laburo.somosder.ar/blog/documentacion-para-contratar-personal-eventual"
 kicker: "Guía"

@@ -11,8 +11,18 @@ import { RegistroProductoraClient } from "./registro-client";
 export const metadata: Metadata = {
   title: "LABURO. | Creá tu cuenta y armá tu evento",
   description:
-    "Productora, agencia, marca, empresa o vos solo: cargá tu evento, publicá qué personal necesitás y recibí a la gente que quiere trabajar. Publicar es gratis.",
+    "Productora, agencia, marca, empresa o vos solo: creá tu cuenta gratis, contá qué staff te falta y LABURO te arma el equipo con gente del pool de tu zona.",
   alternates: { canonical: "/registrar-productora" },
+  // Sin openGraph propio, el link compartido por WhatsApp salía sin imagen.
+  openGraph: {
+    type: "website",
+    url: "/registrar-productora",
+    siteName: "LABURO",
+    locale: "es_AR",
+    title: "LABURO. | Creá tu cuenta y armá tu evento",
+    description: "Productora, agencia, marca, empresa o vos solo: creá tu cuenta gratis, contá qué staff te falta y LABURO te arma el equipo con gente del pool de tu zona.",
+    images: [{ url: "/brand/laburo-og.png", width: 1200, height: 630, alt: "LABURO" }],
+  },
 };
 
 export default function RegistrarProductoraPage() {

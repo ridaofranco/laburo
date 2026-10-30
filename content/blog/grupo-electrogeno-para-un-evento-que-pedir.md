@@ -1,6 +1,6 @@
 ---
 title: "Grupo electrógeno para un evento: qué pedir y cómo calcular la potencia"
-description: "Cuándo hace falta un generador en un evento, cómo pasarle al proveedor la lista de consumos, respaldo, combustible, ubicación por ruido y gases, tablero y quién lo opera."
+description: "Cuándo hace falta un generador en un evento y qué pasarle al proveedor: lista de consumos, respaldo, combustible, ubicación, tablero y quién lo opera."
 metaTitle: "Grupo Electrógeno para un Evento | LABURO"
 slug: "grupo-electrogeno-para-un-evento-que-pedir"
 canonical: "https://laburo.somosder.ar/blog/grupo-electrogeno-para-un-evento-que-pedir"

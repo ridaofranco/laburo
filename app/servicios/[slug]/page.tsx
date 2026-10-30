@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const rubros = Array.from(new Set(p.servicios.map((s) => s.categoria))).join(", ");
   const descripcion =
-    p.headline?.trim() ||
+    recortarDescripcion(p.headline) ||
     (rubros ? `${rubros} para tu evento.` : "Pedile presupuesto para tu evento.");
 
   return {
@@ -223,4 +223,12 @@ export default async function FichaProveedorPage({ params }: Props) {
       />
     </div>
   );
+}
+
+/** La descripción de la ficha va entera en la página; en el meta se corta a ~160 para que Google no la trunque a la mitad de una palabra. */
+function recortarDescripcion(texto: string | null | undefined): string {
+  const t = (texto ?? "").trim().replace(/\s+/g, " ");
+  if (t.length <= 160) return t;
+  const corte = t.slice(0, 157);
+  return corte.slice(0, corte.lastIndexOf(" ")).replace(/[,;:.]$/, "") + "…";
 }

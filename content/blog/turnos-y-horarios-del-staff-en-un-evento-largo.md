@@ -1,6 +1,6 @@
 ---
 title: "Cómo organizar los turnos y horarios del staff en un evento largo"
-description: "Cómo se arma la grilla de turnos de un evento de muchas horas o varios días: bloques, solapamiento en los relevos, convocatoria escrita y control de que nadie quede doblado."
+description: "Cómo armar la grilla de turnos de un evento largo o de varios días: bloques, solapamiento en los relevos, convocatoria escrita y nadie doblado."
 metaTitle: "Turnos y Horarios del Staff en un Evento Largo | LABURO"
 slug: "turnos-y-horarios-del-staff-en-un-evento-largo"
 canonical: "https://laburo.somosder.ar/blog/turnos-y-horarios-del-staff-en-un-evento-largo"

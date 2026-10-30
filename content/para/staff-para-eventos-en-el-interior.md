@@ -1,6 +1,6 @@
 ---
 title: "Staff para eventos en el interior: en qué ciudades hay gente de verdad en LABURO"
-description: "Si producís un evento fuera de Buenos Aires, mirá en qué ciudades el pool de LABURO tiene gente que vive ahí, con los números reales, y cómo pedir el equipo sin conocer a nadie en la ciudad."
+description: "¿Producís fuera de Buenos Aires? En qué ciudades el pool de LABURO tiene gente que vive ahí, con números reales, y cómo pedir el equipo."
 metaTitle: "Staff para Eventos en el Interior | LABURO"
 slug: "staff-para-eventos-en-el-interior"
 canonical: "https://laburo.somosder.ar/para/staff-para-eventos-en-el-interior"

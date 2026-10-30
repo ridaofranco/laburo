@@ -13,7 +13,7 @@ import { BlogCta, BlogFooter, BlogHeader, WRAP } from "./chrome";
 
 const TITULO = "Blog de LABURO. Staff para eventos";
 const DESCRIPCION =
-  "Guías prácticas sobre cómo se arma el staff de un evento, qué verificar antes de contratar personal eventual y cómo es trabajar en eventos. Escritas desde la operación real de SOMOS DER.";
+  "Guías prácticas para armar el staff de un evento, contratar personal eventual y trabajar en eventos, escritas desde la operación real de SOMOS DER.";
 
 export const metadata: Metadata = {
   title: TITULO,

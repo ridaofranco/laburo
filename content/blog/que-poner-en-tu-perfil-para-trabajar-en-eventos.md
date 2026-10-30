@@ -1,6 +1,6 @@
 ---
 title: "Qué poner en tu perfil para que te elijan para trabajar en eventos"
-description: "Cómo te busca un productor, qué campos de tu perfil son filtros de búsqueda y cómo escribir tu experiencia para que te convoquen. Con los errores que dejan un perfil invisible."
+description: "Qué datos de tu perfil importan para que te convoquen a eventos, cómo escribir tu experiencia y los errores que dejan un perfil sin llamados."
 metaTitle: "Qué Poner en tu Perfil para Trabajar en Eventos | LABURO"
 slug: "que-poner-en-tu-perfil-para-trabajar-en-eventos"
 canonical: "https://laburo.somosder.ar/blog/que-poner-en-tu-perfil-para-trabajar-en-eventos"

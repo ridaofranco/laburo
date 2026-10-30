@@ -18,6 +18,16 @@ export const metadata: Metadata = {
   description:
     "Publicá lo que hacés y dónde trabajás, y las productoras te encuentran cuando arman un evento. Estar en el directorio es gratis.",
   alternates: { canonical: "/registrar-proveedor" },
+  // Sin openGraph propio, el link compartido por WhatsApp salía sin imagen.
+  openGraph: {
+    type: "website",
+    url: "/registrar-proveedor",
+    siteName: "LABURO",
+    locale: "es_AR",
+    title: "LABURO. | Publicá tus servicios para eventos",
+    description: "Publicá lo que hacés y dónde trabajás, y las productoras te encuentran cuando arman un evento. Estar en el directorio es gratis.",
+    images: [{ url: "/brand/laburo-og.png", width: 1200, height: 630, alt: "LABURO" }],
+  },
 };
 
 export default function RegistrarProveedorPage() {

@@ -9,7 +9,7 @@ import { BlogCta, BlogFooter, BlogHeader, WRAP } from "../blog/chrome";
  * Agrupa por audiencia: quien contrata, quien trabaja, quien publica.
  */
 
-const TITULO = "Para quién es LABURO. Staff, trabajo, proveedores y salones para eventos";
+const TITULO = "Para quién es LABURO: staff, trabajo, proveedores y salones";
 const DESCRIPCION =
   "LABURO sirve a los cuatro lados de un evento: quien contrata staff, quien trabaja en eventos, quien presta un servicio y quien tiene un salón. Elegí el tuyo.";
 

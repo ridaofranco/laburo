@@ -1,6 +1,6 @@
 ---
 title: "Staff para eventos en Bariloche: gente de la ciudad, con el equipo armado por LABURO"
-description: "Cómo armar el staff de un evento en San Carlos de Bariloche: qué roles hay en el pool de LABURO en Río Negro, cómo dimensionar el equipo y cómo confirmarlo cuando producís a distancia."
+description: "Staff para eventos en Bariloche: qué roles hay en el pool de LABURO en Río Negro, cómo dimensionar el equipo y confirmarlo si producís a distancia."
 metaTitle: "Staff para Eventos en Bariloche | LABURO"
 slug: "staff-para-eventos-en-bariloche"
 canonical: "https://laburo.somosder.ar/para/staff-para-eventos-en-bariloche"

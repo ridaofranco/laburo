@@ -17,6 +17,16 @@ export const metadata: Metadata = {
   description:
     "Publicá tu salón y te encuentran los que buscan dónde hacer su fiesta: por cuánta gente entra y por dónde queda. Estar en el directorio es gratis.",
   alternates: { canonical: "/registrar-salon" },
+  // Sin openGraph propio, el link compartido por WhatsApp salía sin imagen.
+  openGraph: {
+    type: "website",
+    url: "/registrar-salon",
+    siteName: "LABURO",
+    locale: "es_AR",
+    title: "LABURO. | Publicá tu salón para eventos",
+    description: "Publicá tu salón y te encuentran los que buscan dónde hacer su fiesta: por cuánta gente entra y por dónde queda. Estar en el directorio es gratis.",
+    images: [{ url: "/brand/laburo-og.png", width: 1200, height: 630, alt: "LABURO" }],
+  },
 };
 
 export default function RegistrarSalonPage() {

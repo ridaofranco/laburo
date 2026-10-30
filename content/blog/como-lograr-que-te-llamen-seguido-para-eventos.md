@@ -1,7 +1,7 @@
 ---
 title: "Cómo pasar de trabajar suelto a que te llamen seguido"
-description: "Qué mira un productor cuando decide a quién vuelve a convocar, por qué responder rápido pesa más de lo que creés y las siete cosas que convierten un evento suelto en una convocatoria estable."
-metaTitle: "Cómo Lograr que te Llamen Seguido para Trabajar en Eventos | LABURO"
+description: "Qué se mira al decidir a quién volver a convocar, por qué responder rápido pesa tanto y siete cosas que vuelven estable un trabajo suelto en eventos."
+metaTitle: "Cómo Lograr que te Llamen Seguido para Eventos | LABURO"
 slug: "como-lograr-que-te-llamen-seguido-para-eventos"
 canonical: "https://laburo.somosder.ar/blog/como-lograr-que-te-llamen-seguido-para-eventos"
 kicker: "Guía"

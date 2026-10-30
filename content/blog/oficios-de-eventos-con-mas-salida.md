@@ -1,6 +1,6 @@
 ---
 title: "Qué oficios de eventos tienen más salida y qué hace que un puesto se pague mejor"
-description: "Las 11 familias de puestos que se contratan en eventos, cuáles aparecen en casi todos y cuáles son de nicho, y las seis cosas que hacen que un rol valga más. Sin tarifas inventadas."
+description: "Las 11 familias de puestos que se contratan en eventos, cuáles aparecen en casi todos, cuáles son de nicho y qué hace que un rol valga más."
 metaTitle: "Qué Oficios de Eventos Tienen Más Salida | LABURO"
 slug: "oficios-de-eventos-con-mas-salida"
 canonical: "https://laburo.somosder.ar/blog/oficios-de-eventos-con-mas-salida"
