@@ -39,6 +39,8 @@ interface OfferRow {
   viewed_at: string | null;
   responded_at: string | null;
   expires_at: string | null;
+  /** Fin del evento (fin, o inicio + 12 h), lo arma la página aparte. */
+  gig_fin_ms?: number | null;
 }
 
 type Severity = "accepted" | "viewed" | "sent" | "expired" | "declined";
@@ -129,6 +131,18 @@ function toFeed(o: OfferRow): Feed | null {
     expMs <= Date.now() &&
     o.status !== "accepted" &&
     o.status !== "declined";
+  // 0099: sin responder y con el evento ya terminado, tampoco se puede aceptar.
+  const finMs = o.gig_fin_ms ?? null;
+  if (!vencida && finMs !== null && finMs <= Date.now() && o.status !== "accepted" && o.status !== "declined") {
+    return {
+      key: o.id,
+      at: finMs,
+      label: "OFERTA VENCIDA",
+      title: `${nombre} no respondió tu oferta`,
+      body: `El evento ya pasó${paraRol} en ${gig} y la oferta quedó sin respuesta.`,
+      severity: "expired",
+    };
+  }
   if (vencida) {
     return {
       key: o.id,
@@ -227,7 +241,36 @@ export default async function NotificacionesPage() {
   if (orgId) q = q.eq("organization_id", orgId);
   const { data, error } = await q;
 
-  const offers = (data ?? []) as OfferRow[];
+  const offersSinFin = (data ?? []) as OfferRow[];
+  // Fin de cada evento con ofertas sin responder (para darlas por vencidas si pasó).
+  const gigIdsAbiertas = [
+    ...new Set(
+      offersSinFin
+        .filter((o) => o.status === "sent" || o.status === "viewed")
+        .map((o) => o.gig_id)
+        .filter((v): v is string => Boolean(v)),
+    ),
+  ];
+  const finPorGig = new Map<string, number | null>();
+  if (gigIdsAbiertas.length) {
+    const { data: gigsData, error: gigsError } = await supabase
+      .from("staff_app_gigs")
+      .select("id,starts_at,ends_at")
+      .in("id", gigIdsAbiertas);
+    if (gigsError) console.error("[notificaciones] no se pudo leer las fechas de los eventos:", gigsError.message);
+    for (const g of (gigsData ?? []) as { id: string; starts_at: string | null; ends_at: string | null }[]) {
+      const fin = g.ends_at
+        ? new Date(g.ends_at).getTime()
+        : g.starts_at
+          ? new Date(g.starts_at).getTime() + 12 * 3600 * 1000
+          : NaN;
+      finPorGig.set(g.id, Number.isFinite(fin) ? fin : null);
+    }
+  }
+  const offers: OfferRow[] = offersSinFin.map((o) => ({
+    ...o,
+    gig_fin_ms: o.gig_id ? (finPorGig.get(o.gig_id) ?? null) : null,
+  }));
 
   // Las cotizaciones que entraron a los pedidos de precio. Van por RPC porque
   // staff_app no está expuesto por PostgREST, y con p_org por la misma razón
