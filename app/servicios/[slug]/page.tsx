@@ -24,7 +24,7 @@ import { jsonLdSeguro, schemaProveedor } from "@/lib/schema-vidriera";
 import { notFound } from "next/navigation";
 import { BadgeCheck, MapPin, ArrowLeft } from "lucide-react";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
-import { money } from "@/lib/format";
+import { money, normalizarWebsite } from "@/lib/format";
 import { getFichaProveedor } from "../actions";
 // El formulario se mudó a components/vidriera cuando entró el pool de salones:
 // es el mismo para las dos vidrieras. Acá no cambió nada de lo que muestra.
@@ -163,7 +163,7 @@ export default async function FichaProveedorPage({ params }: Props) {
               <div className="border-t border-[#1a1a1a] pt-6 flex flex-wrap gap-x-8 gap-y-3">
                 {p.website?.trim() ? (
                   <a
-                    href={p.website}
+                    href={normalizarWebsite(p.website)}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
                     className="label-tech text-[11px] uppercase tracking-[0.2em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"

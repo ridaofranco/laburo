@@ -28,6 +28,7 @@ import { BadgeCheck, MapPin, Users, Maximize2, ArrowLeft } from "lucide-react";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { ConsultaPublicaForm } from "@/components/vidriera/consulta-publica-form";
 import { textoCapacidad, urlDeFotoSalon } from "@/lib/salones";
+import { normalizarWebsite } from "@/lib/format";
 import { getFichaSalon } from "../actions";
 
 const WRAP = "max-w-[1440px] mx-auto w-full px-6 md:px-20";
@@ -263,7 +264,7 @@ export default async function FichaSalonPage({ params }: Props) {
               <div className="border-t border-[#1a1a1a] pt-6 flex flex-wrap gap-x-8 gap-y-3">
                 {s.website?.trim() ? (
                   <a
-                    href={s.website}
+                    href={normalizarWebsite(s.website)}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
                     className="label-tech text-[11px] uppercase tracking-[0.2em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"

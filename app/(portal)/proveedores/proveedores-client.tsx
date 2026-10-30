@@ -21,7 +21,7 @@ import { toast } from "sonner";
 import { Dialog } from "@base-ui/react/dialog";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Search, BadgeCheck, MapPin, Check, X, Send } from "lucide-react";
-import { money } from "@/lib/format";
+import { money, normalizarWebsite } from "@/lib/format";
 import {
   camposAMostrar,
   validarRespuestas,
@@ -390,7 +390,7 @@ function Tarjeta({ p, miEmail }: { p: Proveedor; miEmail: string }) {
         </button>
         {p.website?.trim() ? (
           <a
-            href={p.website}
+            href={normalizarWebsite(p.website)}
             target="_blank"
             rel="noopener noreferrer"
             className="label-tech text-[11px] uppercase tracking-widest text-[#988e90] hover:text-[#e5e2e1] transition-colors"
