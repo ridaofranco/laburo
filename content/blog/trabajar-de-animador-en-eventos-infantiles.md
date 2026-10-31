@@ -88,6 +88,8 @@ Si algo de eso no está, preguntalo antes de aceptar. Si ya aceptaste y no podé
 
 Más ideas en [qué poner en tu perfil para trabajar en eventos](/blog/que-poner-en-tu-perfil-para-trabajar-en-eventos). Si también hacés show propio o tenés un equipo de animación, mirá [artistas, DJ y animación para eventos](/para/artistas-dj-y-animacion-para-eventos-publicar), que es la página para publicarte como proveedor.
 
+Si tu idea es armar tu propio servicio de animación, con precio por hora o por paquete y clientes en salones y colegios, está esta nota de hito.agency: [el negocio de la animación infantil, precio y clientes](https://hito.agency/blog/negocio-de-animacion-infantil-precio-y-clientes/).
+
 ## Sumate
 
 Cuando hay un evento que pide Animador/a en tu zona, te llega una propuesta con el rol, las fechas, los horarios y el pago, y la aceptás o la rechazás desde el teléfono. El día del evento fichás entrada y salida desde el celular. Estás en un pool de más de 1.200 postulantes, así que lo que te diferencia es un perfil completo y claro. Es gratis: [sumate a LABURO](/sumate).

@@ -99,6 +99,8 @@ Al contestar:
 
 Si te invita una productora a un pedido de cotización, te llega un link para cargar tu presupuesto renglón por renglón, con lo que incluye y lo que no. Cómo hacerlo bien, en [cómo responder un pedido de presupuesto](/blog/como-responder-un-pedido-de-presupuesto-de-evento).
 
+Para el otro lado del negocio, el precio y los clientes que no llegan por LABURO, hay dos notas de hito.agency: [cómo poner precio a un catering para eventos](https://hito.agency/blog/como-poner-precio-a-un-catering-para-eventos/), desde tus costos (insumos por persona, personal, traslado, merma y margen), y [cómo conseguir clientes para un catering de eventos](https://hito.agency/blog/como-conseguir-clientes-para-un-catering-de-eventos/).
+
 ## Publicá tu catering
 
 Publicarte en LABURO es gratis. Cargá tus formatos, tu menú tipo, lo que incluye y tus provincias. Empezá en [registrar tu servicio](/registrar-proveedor).

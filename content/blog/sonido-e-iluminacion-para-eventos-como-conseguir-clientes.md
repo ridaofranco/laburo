@@ -67,6 +67,8 @@ Cuando te llega el pedido, contestá rápido y en orden, con las preguntas que f
 
 Si en temporada alta te falta gente para armar o para operar, en LABURO también hay personas que trabajan en técnica y montaje de eventos. Lo que tienen que saber y cómo se presentan está en [trabajar de técnico de sonido o luces](/blog/trabajar-de-tecnico-de-sonido-o-luces-en-eventos) y en [trabajar en montaje, técnica y producción](/para/trabajar-en-montaje-tecnica-y-produccion-de-eventos). Y si diciembre te agarra con la agenda llena, mirá [cómo prepararte para fin de año](/blog/proveedores-de-eventos-como-prepararte-para-fin-de-ano).
 
+Para cotizar con margen (equipo y desgaste, flete, armado, personal, horas extra y viáticos) hay una nota de hito.agency: [cómo cotizar sonido, iluminación o foto para un evento](https://hito.agency/blog/como-cotizar-sonido-iluminacion-o-foto-para-un-evento/). Si lo tuyo son las luces, también [cómo hacer crecer un servicio de iluminación para eventos](https://hito.agency/blog/iluminacion-para-eventos-como-hacer-crecer-el-negocio/).
+
 ## Publicá tu servicio
 
 Revisá tu ficha con esta lista: un servicio por rubro, provincias marcadas, detalle con escala y tipo de evento, si va con técnico, y un formulario con lugar, gente, horarios y energía. Publicar es gratis: empezá en [registrar tu servicio](/registrar-proveedor).

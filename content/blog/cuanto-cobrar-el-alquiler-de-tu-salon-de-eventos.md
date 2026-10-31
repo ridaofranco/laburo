@@ -123,6 +123,8 @@ Si te falta un dato para cotizar (horario, cantidad, si traen catering), pregunt
 - **Cobrar por persona sin mínimo.**
 - **Horas extra sin precio** acordado antes.
 
+Para saber cuántos eventos por mes necesita tu salón para cubrir los costos fijos, con un ejemplo, está [el punto de equilibrio de un salón de eventos](https://hito.agency/blog/punto-de-equilibrio-de-un-salon-de-eventos/), una nota de hito.agency. Y si querés probar números de un evento, su [calculadora de margen](https://hito.agency/acompanamiento/calculadora-de-margen/) te muestra cuánto te queda; es gratis y no guarda nada.
+
 ## Publicá tu salón
 
 Publicar tu salón en LABURO es gratis: cargás el máximo de personas, la zona, para qué se alquila y qué tiene, y las consultas te llegan a tu mail. Empezá desde [/registrar-salon](/registrar-salon) y mirá qué conviene cargar en [publicar tu salón para eventos](/para/publicar-salon-para-eventos).

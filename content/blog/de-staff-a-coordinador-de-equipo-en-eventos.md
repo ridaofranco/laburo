@@ -90,6 +90,8 @@ En el catálogo de LABURO hay tres puestos de coordinación: **Coordinador/a de 
 
 Si recién arrancás en producción, mirá [trabajar en montaje, técnica y producción de eventos](/para/trabajar-en-montaje-tecnica-y-produccion-de-eventos). Si estás en Buenos Aires, tenés todo junto en [trabajo en eventos en Buenos Aires](/para/trabajo-en-eventos-buenos-aires).
 
+El paso siguiente para algunos coordinadores es trabajar por su cuenta. Lo que hay que resolver antes de salir a vender (riesgo, qué vendés, números y de quién depende el negocio) está en [cómo independizarte como productor de eventos](https://hito.agency/blog/como-independizarte-como-productor-de-eventos/), una nota de hito.agency.
+
 ## Sumate
 
 Si querés dar el salto a coordinar, cargá tu perfil en [LABURO](/sumate): es gratis, elegís tus puestos y tu zona, y las ofertas te llegan con el pago y el horario antes de decidir.

@@ -87,6 +87,8 @@ Cuando alguien te pide presupuesto desde tu ficha, te llega por mail y lo ves en
 
 Contestá con la disponibilidad para esa fecha, el precio desglosado (piezas, flete, armado) y tus condiciones pegadas abajo. Cómo armar esa respuesta está en [cómo responder un pedido de presupuesto](/blog/como-responder-un-pedido-de-presupuesto-de-evento). Y si tu equipo arma y desarma, compartiles [montaje y desmontaje: cómo cuidarte](/blog/montaje-y-desmontaje-de-eventos-como-cuidarte); si buscás gente para eso, mirá [trabajar en montaje, técnica y producción](/para/trabajar-en-montaje-tecnica-y-produccion-de-eventos).
 
+Para armar el tarifario que mandás cuando te piden precio (paquetes o a la carta, extras, traslados y vigencia) está [cómo armar la lista de precios de un proveedor de eventos](https://hito.agency/blog/lista-de-precios-de-proveedor-de-eventos-como-armarla/), una nota de hito.agency.
+
 ## Publicá tu servicio
 
 Si alquilás mobiliario, carpas o vajilla para eventos, publicarte en LABURO es gratis. Cargá un servicio por rubro, marcá tus provincias, escribí tus condiciones y tu Instagram de trabajos. Empezá en [registrar tu servicio](/registrar-proveedor).

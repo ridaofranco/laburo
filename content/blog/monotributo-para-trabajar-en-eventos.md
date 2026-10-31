@@ -99,6 +99,8 @@ En LABURO, la oferta que recibís llega con el rol, las fechas, los horarios y e
 
 Si trabajás en Buenos Aires, mirá [trabajo en eventos en Buenos Aires](/para/trabajo-en-eventos-buenos-aires). Si sos proveedor y tus clientes son empresas, en [proveedores para eventos: publicá tu servicio](/para/proveedores-para-eventos-publicar-servicio) está lo que te van a pedir. Y si arrancás de cero, [trabajar en eventos sin experiencia](/blog/trabajar-en-eventos-sin-experiencia) te ordena los primeros pasos.
 
+Si ya no trabajás solo por jornada sino que tenés tu propio negocio de eventos, hito.agency explica [cuándo alcanza el monotributo y cuándo pensar otra forma](https://hito.agency/blog/monotributo-o-sociedad-para-tu-negocio-de-eventos/) y [cómo separar la plata del negocio de la tuya](https://hito.agency/blog/separar-la-plata-del-negocio-de-la-tuya-en-eventos/).
+
 ## Sumate
 
 Si querés trabajar en eventos, [cargá tu perfil en LABURO](/sumate): es gratis, elegís tus roles y tu zona, y las ofertas te llegan con el pago y el horario a la vista.

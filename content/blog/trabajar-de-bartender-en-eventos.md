@@ -81,6 +81,8 @@ Más detalle en [qué poner en tu perfil para trabajar en eventos](/blog/que-pon
 
 Cuando hay un evento que pide bartenders en tu zona, te llega una propuesta con el rol, las fechas, los horarios y el pago antes de que aceptes. Estás en un pool de más de 1.200 postulantes, así que lo que te diferencia es un perfil completo y claro. Es gratis: [sumate a LABURO](/sumate).
 
+Si más adelante querés dejar de trabajar suelto y tener tu propio servicio de barra, hito.agency explica [cómo pasar de bartender independiente a tener tu servicio](https://hito.agency/blog/bartender-independiente-para-eventos-como-crecer/) y [cómo poner precio a una barra de tragos para eventos](https://hito.agency/blog/como-poner-precio-a-una-barra-de-tragos-para-eventos/) (por persona o por hora, rendimiento de cada botella, hielo y roturas).
+
 ## Fuentes
 
 - Ley 24.788 de Lucha contra el Alcoholismo, artículos 1 y 7 (InfoLeg): https://servicios.infoleg.gob.ar/infolegInternet/anexos/40000-44999/42480/norma.htm

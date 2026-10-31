@@ -86,6 +86,8 @@ Quien contrata fotografía o video quiere ver trabajos parecidos al suyo antes d
 
 En los dos casos: que el link lleve a trabajos de eventos reales, separados de lo personal, y que el material que muestres sea uno que tengas permiso de mostrar.
 
+Si la foto de eventos ya es tu negocio y no solo fechas sueltas, hito.agency tiene [cómo hacer crecer tu negocio de fotografía de eventos](https://hito.agency/blog/como-hacer-crecer-tu-negocio-de-fotografia-de-eventos/): paquetes, precio por cobertura, entrega con fecha, contrato y seña.
+
 ## Sumate
 
 Si trabajás de fotógrafo, camarógrafo o editor para otros, [cargá tu perfil en LABURO](/sumate) y elegí tus roles audiovisuales. Si tenés tu propio servicio, [publicalo gratis](/registrar-proveedor) en el rubro Fotografía y video.

@@ -88,6 +88,8 @@ Desde el bloque "Cómo quiero que me consulten" podés armar el tuyo: texto, pá
 
 La ficha de proveedor no tiene galería de fotos (esa es de la ficha de salones). Lo que muestra tus trabajos son tu **Instagram** y tu **web**, que se cargan en tus datos. Si tu Instagram mezcla lo personal con lo laboral, pensá en uno de trabajos: quien contrata quiere ver cómo quedó lo que hiciste, no tus vacaciones.
 
+Cuando el pedido llega por WhatsApp y no por la ficha, sirve [qué preguntar primero y cuándo mandar un «desde»](https://hito.agency/blog/responder-un-pedido-de-presupuesto-por-whatsapp/), y para tener el precio listo, [cómo armar tu lista de precios de proveedor](https://hito.agency/blog/lista-de-precios-de-proveedor-de-eventos-como-armarla/). Las dos son notas de hito.agency.
+
 ## Publicá o mejorá tu ficha
 
 Revisá tu ficha con esta lista: un servicio por rubro, provincias marcadas en cada uno, línea corta con escala y zona, detalle con lo que se pregunta siempre y tu formulario de consulta. Si todavía no estás, publicar es gratis: empezá en [registrar tu servicio](/registrar-proveedor). Cuando te llegue el primer pedido, seguí con [cómo responder un pedido de presupuesto](/blog/como-responder-un-pedido-de-presupuesto-de-evento).
