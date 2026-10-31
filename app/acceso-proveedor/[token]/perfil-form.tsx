@@ -114,7 +114,12 @@ export function PerfilForm({
         />
       </Campo>
 
-      <Campo label="En una línea" ayuda="Qué hacés, corto y claro.">
+      {/* Pegar un texto largo lo cortaba en silencio a los 200 (la ficha de DER
+          quedó en «… Control de Accesos Gestio», 31/10): se muestra la cuenta. */}
+      <Campo
+        label="En una línea"
+        ayuda={`Qué hacés, corto y claro. ${f.headline.length} de 200 letras${f.headline.length >= 200 ? ": llegaste al tope, lo que sigue se corta" : ""}.`}
+      >
         <input
           type="text"
           value={f.headline}
