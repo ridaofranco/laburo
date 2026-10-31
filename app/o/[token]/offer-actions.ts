@@ -50,9 +50,12 @@ async function freshTerminalView(
   supabase: SupabaseClient,
   token: string,
 ): Promise<TerminalView> {
-  const { data } = await supabase.rpc("staff_app_get_public_offer", {
+  const { data, error } = await supabase.rpc("staff_app_get_public_offer", {
     p_token: token,
   });
+  // Con error, tirar: el cliente muestra «Algo falló. Probá de nuevo» y deja los
+  // botones, en vez de decirle «link no válido» a quien acaba de tocar Aceptar.
+  if (error) throw new Error(`[oferta] no se pudo releer: ${error.message}`);
   const v = deriveView(data);
   return v === "activa" ? "invalida" : v;
 }
@@ -66,10 +69,11 @@ export async function acceptOffer(token: string): Promise<OfferActionResult> {
   const supabase = await createClient();
   const ua = (await headers()).get("user-agent") ?? "";
 
-  const { data } = await supabase.rpc("staff_app_accept_offer", {
+  const { data, error } = await supabase.rpc("staff_app_accept_offer", {
     p_token: token,
     p_user_agent: ua,
   });
+  if (error) throw new Error(`[oferta] no se pudo aceptar: ${error.message}`);
 
   if ((data as RpcAck | null)?.ok) {
     await avisarRespuesta(token, true);
@@ -82,9 +86,10 @@ export async function acceptOffer(token: string): Promise<OfferActionResult> {
 export async function declineOffer(token: string): Promise<OfferActionResult> {
   const supabase = await createClient();
 
-  const { data } = await supabase.rpc("staff_app_decline_offer", {
+  const { data, error } = await supabase.rpc("staff_app_decline_offer", {
     p_token: token,
   });
+  if (error) throw new Error(`[oferta] no se pudo rechazar: ${error.message}`);
 
   if ((data as RpcAck | null)?.ok) {
     await avisarRespuesta(token, false);
