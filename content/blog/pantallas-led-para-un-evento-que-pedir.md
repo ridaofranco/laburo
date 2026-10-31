@@ -1,6 +1,6 @@
 ---
 title: "Pantallas LED para un evento: qué pedir y qué datos pasar"
-description: "Cuándo conviene una pantalla LED y cuándo un proyector, qué datos pasarle al proveedor, cómo se monta y se alimenta, cómo preparar el contenido y quién la opera."
+description: "Cuándo conviene una pantalla LED o un proyector, qué datos pasarle al proveedor, cómo se monta y se alimenta, cómo preparar el contenido y quién la opera."
 metaTitle: "Pantallas LED para un Evento: Qué Pedir | LABURO"
 slug: "pantallas-led-para-un-evento-que-pedir"
 canonical: "https://laburo.somosder.ar/blog/pantallas-led-para-un-evento-que-pedir"

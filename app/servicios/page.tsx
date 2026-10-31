@@ -32,7 +32,7 @@ import { FiltrosVidriera } from "./filtros";
 import { TarjetaProveedor } from "./tarjeta";
 
 const DESCRIPCION =
-  "Catering, sonido, fotografía, seguridad y todo lo que necesita tu fiesta, en un solo lugar. Pedile presupuesto directo a cada proveedor, sin cuenta y sin vueltas.";
+  "Catering, sonido, fotografía, seguridad y todo lo que necesita tu fiesta, en un solo lugar. Pedí presupuesto directo a cada proveedor, sin cuenta y sin vueltas.";
 
 /**
  * La metadata es dinámica por UNA razón concreta: el `noindex` de abajo.

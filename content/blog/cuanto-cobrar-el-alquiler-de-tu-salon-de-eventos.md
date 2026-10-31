@@ -1,6 +1,6 @@
 ---
 title: "Cuánto cobrar el alquiler de tu salón de eventos: un método para armar la tarifa"
-description: "Cómo armar la tarifa de tu salón o quinta: por evento, por hora o por persona, qué incluye, temporada, día de semana, horas extra, seña y los costos fijos a cubrir."
+description: "Cómo armar la tarifa de tu salón o quinta: por evento, por hora o por persona, qué incluye, temporada, día de semana, horas extra, seña y costos fijos."
 metaTitle: "Cuánto Cobrar el Alquiler de tu Salón | LABURO"
 slug: "cuanto-cobrar-el-alquiler-de-tu-salon-de-eventos"
 canonical: "https://laburo.somosder.ar/blog/cuanto-cobrar-el-alquiler-de-tu-salon-de-eventos"

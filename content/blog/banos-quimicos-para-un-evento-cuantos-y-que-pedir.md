@@ -1,6 +1,6 @@
 ---
 title: "Baños químicos para un evento: cuántos alquilar y qué pedir"
-description: "Cómo calcular cuántos baños químicos alquilar para un evento al aire libre, dónde ubicarlos, cada cuánto limpiarlos y qué pedirle al proveedor antes de contratar."
+description: "Cómo calcular cuántos baños químicos alquilar para un evento al aire libre, dónde ubicarlos, cada cuánto limpiarlos y qué pedirle al proveedor."
 metaTitle: "Baños Químicos para un Evento | LABURO"
 slug: "banos-quimicos-para-un-evento-cuantos-y-que-pedir"
 canonical: "https://laburo.somosder.ar/blog/banos-quimicos-para-un-evento-cuantos-y-que-pedir"

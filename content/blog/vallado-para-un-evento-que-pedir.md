@@ -1,6 +1,6 @@
 ---
 title: "Vallado para un evento: qué pedir y cómo armar la fila"
-description: "Qué tipos de vallas sirven para filas e ingresos, cómo planear el recorrido y los puntos de control, cómo calcular cuánto vallado pedir y quién controla la fila."
+description: "Qué tipos de vallas sirven para filas e ingresos, cómo planear el recorrido y los puntos de control, cómo calcular cuánto vallado pedir y quién la controla."
 metaTitle: "Vallado para un Evento: Qué Pedir | LABURO"
 slug: "vallado-para-un-evento-que-pedir"
 canonical: "https://laburo.somosder.ar/blog/vallado-para-un-evento-que-pedir"

@@ -1,7 +1,7 @@
 ---
 title: "Qué mirar antes de contratar personal para un evento"
 description: "Las seis cosas que hay que verificar antes de confirmar staff eventual, y qué sale mal en la práctica cuando se resuelve por cadena de WhatsApp y planilla."
-metaTitle: "Qué Mirar Antes de Contratar Personal para un Evento | LABURO"
+metaTitle: "Qué Mirar Antes de Contratar Personal de Evento | LABURO"
 slug: "que-mirar-antes-de-contratar-personal-evento"
 canonical: "https://laburo.somosder.ar/blog/que-mirar-antes-de-contratar-personal-evento"
 kicker: "Guía"

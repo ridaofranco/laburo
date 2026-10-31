@@ -1,7 +1,7 @@
 ---
 title: "Portales de empleo o LABURO: dónde buscar trabajo en eventos"
 description: "Qué te dan los portales de empleo generales y qué cambia en una plataforma hecha para eventos como LABURO, para que elijas dónde poner tu perfil (o los dos)."
-metaTitle: "Portales de Empleo o LABURO para Trabajar en Eventos | LABURO"
+metaTitle: "Portales de Empleo o LABURO: Trabajo en Eventos | LABURO"
 slug: "portales-de-empleo-o-laburo-para-trabajar-en-eventos"
 canonical: "https://laburo.somosder.ar/para/portales-de-empleo-o-laburo-para-trabajar-en-eventos"
 kicker: "Para quien trabaja en eventos"

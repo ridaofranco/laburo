@@ -1,6 +1,6 @@
 ---
 title: "Personal de montaje y armado para eventos: horarios, turnos y cómo confirmarlo"
-description: "Armadores, ayudantes de montaje, carga y descarga y runners: cómo escribir los horarios de armado y desarme, armar relevos, qué perfil pedir y cómo confirmarlos."
+description: "Armadores, ayudantes de montaje, carga y descarga y runners: cómo escribir los horarios de armado y desarme, armar relevos, qué perfil pedir y cómo confirmar."
 metaTitle: "Personal de Montaje y Armado para Eventos | LABURO"
 slug: "personal-de-montaje-y-armado-para-eventos"
 canonical: "https://laburo.somosder.ar/para/personal-de-montaje-y-armado-para-eventos"

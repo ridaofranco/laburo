@@ -1,6 +1,6 @@
 ---
 title: "Agencia de promotoras o plataforma: qué conviene para tu evento"
-description: "Comparación honesta entre contratar una agencia de promotoras o staff y convocar vos mismo con una plataforma como LABURO: qué resuelve cada una y cuándo elegirla."
+description: "Comparación honesta entre contratar una agencia de promotoras o staff y convocar vos con una plataforma como LABURO: qué resuelve cada una y cuándo elegirla."
 metaTitle: "Agencia de Promotoras o Plataforma de Staff | LABURO"
 slug: "agencia-de-promotoras-o-plataforma"
 canonical: "https://laburo.somosder.ar/para/agencia-de-promotoras-o-plataforma"

@@ -1,6 +1,6 @@
 ---
 title: "Cómo es trabajar en eventos y cómo se cobra"
-description: "Cómo es realmente el trabajo eventual en eventos, cómo se entra al pool, cómo llegan las propuestas y cuándo se cobra. Sin vueltas y sin promesas que no se cumplen."
+description: "Cómo es realmente el trabajo eventual en eventos, cómo se entra al pool, cómo llegan las propuestas y cuándo se cobra. Sin vueltas y sin promesas vacías."
 metaTitle: "Cómo es Trabajar en Eventos y Cómo se Cobra | LABURO"
 slug: "como-es-trabajar-en-eventos-y-como-se-cobra"
 canonical: "https://laburo.somosder.ar/blog/como-es-trabajar-en-eventos-y-como-se-cobra"
