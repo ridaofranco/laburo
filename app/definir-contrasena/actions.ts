@@ -31,6 +31,17 @@ export async function guardarContrasena(
   if (p.length < MINIMO) {
     return { ok: false, error: `La contraseña tiene que tener al menos ${MINIMO} caracteres.` };
   }
+  // Las obvias (31/10): «12345678», «aaaaaaaa», «password», «laburo123»
+  // pasaban el mínimo de largo. No es una política dura, solo frena lo peor.
+  const baja = p.toLowerCase();
+  if (
+    /^(.)\1+$/.test(p) ||
+    "01234567890".includes(p) ||
+    "98765432109876543210".includes(p) ||
+    /^(password|contrase(ñ|n)a|laburo|qwerty|somosder)\d*$/.test(baja)
+  ) {
+    return { ok: false, error: "Esa contraseña es muy fácil de adivinar. Probá con otra." };
+  }
   if (p !== r) {
     return { ok: false, error: "Las dos contraseñas no coinciden." };
   }
