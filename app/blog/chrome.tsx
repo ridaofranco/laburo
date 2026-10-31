@@ -54,6 +54,12 @@ export function BlogFooter() {
           <span className="label-tech text-[10px] tracking-[0.25em] text-[#8a8a8a]">
             © 2026 LABURO · SOMOS DER. Todos los derechos reservados.
           </span>
+          <span className="label-tech text-[10px] tracking-[0.25em] text-[#8a8a8a]">
+            Desarrollo:{" "}
+            <a href="https://hito.agency" className="hover:text-[#0047ff] transition-colors">
+              hito.agency
+            </a>
+          </span>
         </div>
         <div className="flex flex-wrap gap-x-10 gap-y-3">
           <Link
