@@ -115,7 +115,7 @@ export function ResultadoCotizacionEmail({
       <Preview>{`Novedades de tu presupuesto${titulo?.trim() ? ` para ${titulo.trim()}` : ""}.`}</Preview>
       <Body style={{ margin: 0, padding: 0, backgroundColor: SURFACE_0, color: FG, fontFamily: FONT_STACK }}>
         <Container style={{ maxWidth: "480px", margin: "0 auto", padding: "32px 20px" }}>
-          <Encabezado />
+          <Encabezado bajada="Pedidos de precio · LABURO" />
           <Section
             style={{
               backgroundColor: SURFACE_1,

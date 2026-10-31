@@ -297,7 +297,7 @@ export function OfferForm({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-lg">
       {/* Gig: elegir existente o crear uno rápido */}
-      <Field label="Gig / evento">
+      <Field label="Evento">
         <Select.Root
           value={gigChoice}
           onValueChange={(v: string | null) => setGigChoice(v ?? NEW_GIG)}
@@ -305,7 +305,7 @@ export function OfferForm({
           <Select.Trigger className="flex items-center justify-between gap-3 min-h-[44px] rounded-none bg-[#131313] border border-[#4c4546] text-[#e5e2e1] text-[16px] px-4 outline-none focus-visible:border-[#e5e2e1] transition-colors">
             <Select.Value>
               {(v: string) => {
-                if (v === NEW_GIG) return "Crear gig nuevo";
+                if (v === NEW_GIG) return "Crear evento nuevo";
                 const g = gigs.find((x) => x.id === v);
                 return g ? gigLabel(g) : "Elegí un gig";
               }}
@@ -327,7 +327,7 @@ export function OfferForm({
                   value={NEW_GIG}
                   className="flex items-center justify-between gap-3 min-h-[40px] rounded-none px-3 text-[15px] text-[#b9c3ff] font-semibold cursor-pointer outline-none data-[highlighted]:bg-[#131313]"
                 >
-                  <Select.ItemText>Crear gig nuevo</Select.ItemText>
+                  <Select.ItemText>Crear evento nuevo</Select.ItemText>
                   <Select.ItemIndicator>
                     <Check size={16} className="text-[#b9c3ff]" />
                   </Select.ItemIndicator>

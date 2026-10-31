@@ -75,6 +75,7 @@ export async function POST(request: Request) {
       datos: { ficha: p },
       detalle: "El detalle con nombre salió por mail a MAIL_ADMIN_TO. Vino por el one-click del cliente de correo (sin motivo).",
       clave: "baja-pool",
+      aviso: true,
       sinMail: true,
     });
   }

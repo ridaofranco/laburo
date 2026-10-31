@@ -70,8 +70,8 @@ export function PagoListoEmail({
 }: PagoListoEmailProps) {
   const evento = gigTitle?.trim();
   const saludo = firstName?.trim()
-    ? `${firstName.trim()}, tu pago${evento ? ` por ${evento}` : ""} está listo`
-    : `Tu pago${evento ? ` por ${evento}` : ""} está listo`;
+    ? `${firstName.trim()}, tu pago${evento ? ` por ${evento}` : ""} ya está en marcha`
+    : `Tu pago${evento ? ` por ${evento}` : ""} ya está en marcha`;
 
   return (
     <Html lang="es">

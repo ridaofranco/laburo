@@ -378,7 +378,7 @@ export function NuevoPedidoForm({
           className={`${inputCaja} min-h-[120px]`}
           value={brief}
           onChange={(e) => setBrief(e.target.value)}
-          placeholder="Hola Franco, necesitamos llevar un pallet desde Villa Soldati a siete puntos del país entre el 20 y el 25. Son cajas de 30 kilos..."
+          placeholder="Hola, necesitamos llevar un pallet desde Villa Soldati a siete puntos del país entre el 20 y el 25. Son cajas de 30 kilos..."
           maxLength={40000}
         />
 

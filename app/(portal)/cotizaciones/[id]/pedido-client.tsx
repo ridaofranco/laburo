@@ -392,11 +392,11 @@ export function PedidoClient({
             Sin esto había que cancelar y rehacer, perdiendo lo que ya entró. */}
         {abierto || vencido ? (
           <div className="flex flex-wrap items-end gap-3 pt-2 border-t border-[#1A1A1A] mt-2">
-            <label className="flex flex-col gap-2">
+            <label className="flex flex-col gap-2 w-full min-w-0 sm:w-auto">
               <span className={labelCls}>Darle más tiempo</span>
               <input
                 type="datetime-local"
-                className={`${inputCaja} max-w-[260px]`}
+                className={`${inputCaja} w-full min-w-0 max-w-[260px]`}
                 value={nuevaFecha || aInputLocal(pedido.cierra_at)}
                 onChange={(e) => setNuevaFecha(e.target.value)}
               />

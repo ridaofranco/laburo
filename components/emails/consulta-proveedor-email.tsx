@@ -87,7 +87,7 @@ export function ConsultaProveedor({
         <Container
           style={{ width: "100%", maxWidth: "560px", margin: "0 auto", padding: "0 16px" }}
         >
-          <Encabezado bajada="Proveedores · SOMOS DER" />
+          <Encabezado bajada="Proveedores · LABURO" />
 
           <Section
             style={{
@@ -194,7 +194,7 @@ export function ConsultaProveedor({
             <Hr style={{ borderColor: BORDER, margin: "24px 0 16px 0" }} />
 
             <Text style={{ margin: 0, fontSize: "13px", lineHeight: 1.5, color: FG_MUTED }}>
-              Recibís esto porque tu perfil está publicado en el marketplace de
+              Recibís esto porque tu perfil está publicado en el directorio de
               LABURO. Las preguntas de arriba son las de tu formulario: si querés
               cambiarlas, entrá con este mail en laburo.somosder.ar/entrar.
             </Text>

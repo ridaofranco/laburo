@@ -48,7 +48,7 @@ export function Encabezado({ bajada = "Staff para eventos · SOMOS DER" }: { baj
       <Text
         style={{
           margin: "8px 0 0 0",
-          fontSize: "10px",
+          fontSize: "11px",
           letterSpacing: "0.2em",
           textTransform: "uppercase",
           color: FG_MUTED,

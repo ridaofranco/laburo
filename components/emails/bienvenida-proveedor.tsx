@@ -102,7 +102,7 @@ export function BienvenidaProveedor({
         <Container
           style={{ width: "100%", maxWidth: "560px", margin: "0 auto", padding: "0 16px" }}
         >
-          <Encabezado />
+          <Encabezado bajada="Proveedores · LABURO" />
           <Section
             style={{
               backgroundColor: SURFACE_1,

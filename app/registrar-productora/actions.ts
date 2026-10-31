@@ -148,6 +148,7 @@ export async function registrarProductora(input: {
     // Cada alta es su propio aviso: agrupadas por título, dos altas seguidas se
     // comerían la segunda por el anti-repetición de 10 minutos.
     clave: `productora-alta:${email}`,
+    aviso: true,
     datos: {
       productora,
       email,

@@ -117,7 +117,7 @@ export default async function ConfigPage() {
                       Plan
                     </p>
                     <h4 className="font-[family-name:var(--font-syne)] text-[28px] font-semibold text-[#e5e2e1] leading-tight">
-                      Interno
+                      {org?.esPlataforma ? "Interno" : "Gratis"}
                     </h4>
                   </div>
                   {/* ⚠️ `shrink-0 whitespace-nowrap` NO ES DECORATIVO. Lo marcó

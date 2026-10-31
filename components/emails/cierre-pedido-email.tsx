@@ -19,6 +19,7 @@ import {
   Container,
   Heading,
   Html,
+  Preview,
   Section,
   Text,
 } from "@react-email/components";
@@ -67,9 +68,12 @@ export function CierrePedido({
 
   return (
     <Html lang="es">
+      <Preview>{hay
+        ? `Cotizaron ${cotizaron} de ${invitados}. Compará los presupuestos y elegí.`
+        : "No llegó ningún presupuesto. Podés darle más tiempo o cancelarlo."}</Preview>
       <Body style={{ margin: 0, padding: 0, backgroundColor: SURFACE_0, color: FG, fontFamily: FONT_STACK }}>
         <Container style={{ maxWidth: "480px", margin: "0 auto", padding: "32px 20px" }}>
-          <Encabezado />
+          <Encabezado bajada="Pedidos de precio · LABURO" />
           <Section
             style={{
               backgroundColor: SURFACE_1,

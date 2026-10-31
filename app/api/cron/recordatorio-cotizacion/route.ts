@@ -79,6 +79,48 @@ function cuandoCierra(iso: string | null): string {
   );
 }
 
+/**
+ * Mail de quien armó cada pedido, por invitación. El recordatorio dice «si te
+ * falta un dato, respondé este mail»: sin replyTo la respuesta le caía a la
+ * casilla de SOMOS DER aunque el pedido fuera de otra productora. Si algo falla,
+ * devuelve lo que tenga (el recordatorio sale igual, con el reply-to de siempre).
+ */
+async function replyToPorInvitacion(
+  supabase: ReturnType<typeof createServiceRoleClient>,
+  inviteIds: string[],
+): Promise<Map<string, string>> {
+  const out = new Map<string, string>();
+  if (!inviteIds.length) return out;
+  try {
+    const db = supabase.schema("staff_app");
+    const { data: invs, error: e1 } = await db
+      .from("quote_invites")
+      .select("id, request_id")
+      .in("id", inviteIds);
+    if (e1 || !invs?.length) return out;
+    const reqIds = [...new Set(invs.map((i) => i.request_id as string))];
+    const { data: reqs, error: e2 } = await db
+      .from("quote_requests")
+      .select("id, created_by")
+      .in("id", reqIds);
+    if (e2 || !reqs?.length) return out;
+    const creadorPorReq = new Map(reqs.map((r) => [r.id as string, r.created_by as string | null]));
+    const mailPorUsuario = new Map<string, string | null>();
+    for (const uid of new Set([...creadorPorReq.values()].filter(Boolean) as string[])) {
+      const { data } = await supabase.auth.admin.getUserById(uid);
+      mailPorUsuario.set(uid, data?.user?.email ?? null);
+    }
+    for (const i of invs) {
+      const uid = creadorPorReq.get(i.request_id as string);
+      const mail = uid ? mailPorUsuario.get(uid) : null;
+      if (mail) out.set(i.id as string, mail);
+    }
+  } catch (e) {
+    console.error("[cron/recordatorio-cotizacion] replyTo:", e instanceof Error ? e.message : String(e));
+  }
+  return out;
+}
+
 export async function GET(request: Request) {
   const aceptados = [process.env.CRON_SECRET, process.env.CF_CRON_SECRET].filter(Boolean);
   const auth = request.headers.get("authorization");
@@ -125,6 +167,10 @@ export async function GET(request: Request) {
   let sent = 0;
   let failed = 0;
   let skipped = 0;
+  const replyTo = await replyToPorInvitacion(
+    supabase,
+    filas.map((f) => f.invite_id).filter(Boolean),
+  );
 
   for (const f of filas) {
     const to = f.email?.trim();
@@ -151,6 +197,7 @@ export async function GET(request: Request) {
         to,
         subject: `Cierra ${cuandoCierra(f.cierra_at)} · ${f.titulo ?? "pedido de presupuesto"}`,
         html,
+        replyTo: replyTo.get(f.invite_id),
       });
       if (res.ok) sent += 1;
       else failed += 1;

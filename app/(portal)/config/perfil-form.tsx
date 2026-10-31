@@ -72,7 +72,7 @@ export function PerfilForm({
       <div className="flex items-center justify-between mb-8 pb-2 border-b border-[#1A1A1A] gap-4">
         <h3 className="t-section text-[#e5e2e1] flex items-center gap-3">
           <Building2 size={24} className="shrink-0" />
-          Perfil de la agencia
+          Perfil de la productora
         </h3>
 
         {datos.puede_editar ? (
@@ -170,7 +170,7 @@ export function PerfilForm({
           ) : (
             <div className="flex flex-col gap-8">
               <div>
-                <p className={LABEL}>Nombre de la agencia</p>
+                <p className={LABEL}>Nombre de la productora</p>
                 <p className={VALOR}>{datos.name}</p>
               </div>
               <div>

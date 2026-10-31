@@ -27,6 +27,7 @@ import { createClient } from "@/lib/supabase/server";
 import { exigirOrg } from "@/lib/org";
 import { sendMail } from "@/lib/email/mailer";
 import { siteUrl } from "@/lib/site";
+import { fmtFecha } from "@/lib/dates";
 import { InvitacionEquipo } from "@/components/emails/invitacion-equipo-email";
 
 export interface Miembro {
@@ -75,16 +76,12 @@ const MENSAJES: Record<string, string> = {
 };
 const traducir = (r?: string) => MENSAJES[r ?? ""] ?? "No pudimos hacerlo. Probá de nuevo.";
 
-/** Fecha larga en castellano, para el mail. */
+/**
+ * Fecha larga en castellano, para el mail. Por lib/dates (opciones AR fijas):
+ * armada a mano con Intl, el Node de Vercel puede sacar «sábado, 14-noviembre».
+ */
 const fechaLarga = (iso: string | null) =>
-  iso
-    ? new Intl.DateTimeFormat("es-AR", {
-        weekday: "long",
-        day: "2-digit",
-        month: "long",
-        timeZone: "America/Argentina/Buenos_Aires",
-      }).format(new Date(iso))
-    : null;
+  fmtFecha(iso, { weekday: "long", day: "numeric", month: "long" });
 
 export async function invitarMiembro(
   formData: FormData,

@@ -52,6 +52,10 @@ const VENTANA_REPETICION_MS = 10 * 60 * 1000;
  * manda cincuenta mails.
  */
 
+function icono(opts: AlertaOpts): string {
+  return opts.plata ? "💸" : opts.aviso ? "🟢" : "🔴";
+}
+
 const ultimoAviso = new Map<string, number>();
 
 function telegramHabilitado(): boolean {
@@ -78,7 +82,7 @@ async function mandarMail(opts: AlertaOpts, filas: string): Promise<boolean> {
       `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;` +
       `background:#0d0d0d;color:#e9e6e4;padding:24px">` +
       `<p style="margin:0 0 6px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;` +
-      `color:${opts.plata ? "#ffcc00" : "#ff5c5c"}">${esc(PRODUCTO)} · algo se rompió</p>` +
+      `color:${opts.plata ? "#ffcc00" : opts.aviso ? "#3ddc84" : "#ff5c5c"}">${esc(PRODUCTO)} · ${opts.aviso ? "aviso" : "algo se rompió"}</p>` +
       `<h1 style="margin:0 0 14px;font-size:20px;line-height:1.3">${esc(opts.titulo)}</h1>` +
       (filas ? `<p style="margin:0 0 14px;font-size:14px;line-height:1.7;color:#cfcbca">${filas.replace(/\n/g, "<br>")}</p>` : "") +
       (opts.detalle
@@ -89,7 +93,7 @@ async function mandarMail(opts: AlertaOpts, filas: string): Promise<boolean> {
 
     const r = await sendMail({
       to,
-      subject: `${opts.plata ? "💸" : "🔴"} ${PRODUCTO}: ${opts.titulo}`,
+      subject: `${icono(opts)} ${PRODUCTO}: ${opts.titulo}`,
       html: cuerpo,
     });
     return !!r.ok;
@@ -127,6 +131,12 @@ export interface AlertaOpts {
    * mismo evento, el dedicado y el genérico de "algo se rompió".
    */
   sinMail?: boolean;
+  /**
+   * true = es una novedad, no una falla (alta de proveedor, salón o productora;
+   * baja del pool). Sale con 🟢 y «aviso» en vez de 🔴 «algo se rompió»: si las
+   * buenas noticias también llegan en rojo, se aprende a ignorar el rojo.
+   */
+  aviso?: boolean;
 }
 
 /**
@@ -149,7 +159,7 @@ export async function alerta(opts: AlertaOpts): Promise<boolean> {
       .join("\n");
 
     const texto =
-      `${opts.plata ? "💸" : "🔴"} <b>${esc(PRODUCTO)}</b>\n` +
+      `${icono(opts)} <b>${esc(PRODUCTO)}</b>\n` +
       `${esc(opts.titulo)}\n` +
       (filas ? `\n${filas}\n` : "") +
       (opts.detalle ? `\n<pre>${esc(String(opts.detalle).slice(0, 600))}</pre>` : "");

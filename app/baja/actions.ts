@@ -55,6 +55,7 @@ async function setBaja(
       datos: { ficha: profileId, motivo: motivo?.trim() || "(no dejó motivo)" },
       detalle: "El detalle con nombre y motivo salió por mail a MAIL_ADMIN_TO.",
       clave: "baja-pool",
+      aviso: true,
       sinMail: true,
     });
   }

@@ -248,6 +248,7 @@ export async function registrarSalon(
     // Cada alta es un aviso propio: si se agrupan por título, dos altas seguidas
     // de salones distintos se comerían la segunda por el anti-repetición.
     clave: `salon-alta:${r.profile_id}`,
+    aviso: true,
     sinMail: false,
     datos: {
       nombre,

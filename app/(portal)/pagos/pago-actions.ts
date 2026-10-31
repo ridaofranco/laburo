@@ -157,7 +157,7 @@ export async function avisarPagoListo(offerId: string): Promise<PagoListoResult>
   const gig = res.gig_title?.trim();
   const mail = await sendMail({
     to,
-    subject: `Tu pago está listo${gig ? ` · ${gig}` : ""}`,
+    subject: `Tu pago está en marcha${gig ? ` · ${gig}` : ""}`,
     html,
   });
   if (!mail.ok) console.error("[pagos] el aviso de pago no salió:", mail.error);

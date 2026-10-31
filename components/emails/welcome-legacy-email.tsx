@@ -153,7 +153,7 @@ export function WelcomeLegacyEmail({ firstName, link, bajaLink }: WelcomeLegacyE
               llega una propuesta con el rol, las fechas y cuánto se paga.
             </Item>
             <Item>
-              La aceptás o la rechazás desde el mail. Si aceptás, quedás confirmado/a para ese
+              La aceptás o la rechazás desde el link que te llega en ese mail. Si aceptás, quedás confirmado/a para ese
               evento, fichás entrada y salida desde el celular y el pago queda registrado ahí.
             </Item>
             <Item>
