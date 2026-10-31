@@ -27,7 +27,7 @@ export function QuickActions({
     // Full-bleed dentro del contenedor del perfil: -mx-6/-mx-20 compensa el
     // padding px-6 md:px-20 del wrapper, y el padding interno lo vuelve a alinear
     // con el contenido. Tokens Stitch (negro, hairline #1A1A1A, radio 0).
-    <div className="sticky bottom-0 z-20 -mx-6 md:-mx-20 mt-12 border-t border-[#1A1A1A] bg-black/95 backdrop-blur px-6 md:px-20 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+    <div className="sticky bottom-[96px] md:bottom-0 z-20 -mx-6 md:-mx-20 mt-12 border-t border-[#1A1A1A] bg-black/95 backdrop-blur px-6 md:px-20 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
       <div className="flex items-center gap-3">
         <a
           href={waLink(telefono, saludo)}
