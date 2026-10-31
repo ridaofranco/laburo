@@ -79,6 +79,8 @@ export function DefinirContrasenaForm() {
       <div className="relative z-10 w-full max-w-[448px] flex flex-col items-center">
         <motion.h1 {...up(0)} className="mb-4">
           <LaburoWordmark className="h-[64px] md:h-[88px] w-auto" priority />
+          {/* El h1 era solo el logo (31/10): título para lectores y buscadores. */}
+          <span className="sr-only">Elegí tu contraseña</span>
         </motion.h1>
         <motion.p
           {...up(0.05)}

@@ -58,7 +58,9 @@ export default async function BajaPage({
   const { p = "", t = "", estado } = await searchParams;
 
   // Estado terminal después de una acción, o link inválido.
-  if (estado === "baja") {
+  // Solo con un link válido (31/10): sin esto, /baja?estado=baja decía «te
+  // sacamos» a cualquiera (no cambiaba nada, pero servía para un link falso).
+  if (estado === "baja" && bajaTokenOk(p, t)) {
     return (
       <Shell>
         <Card>
@@ -89,7 +91,7 @@ export default async function BajaPage({
     );
   }
 
-  if (estado === "alta") {
+  if (estado === "alta" && bajaTokenOk(p, t)) {
     return (
       <Shell>
         <Card>

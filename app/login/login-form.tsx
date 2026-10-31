@@ -145,6 +145,8 @@ export function LoginForm() {
           className="mb-[80px] md:mb-[120px]"
         >
           <LaburoWordmark className="h-[64px] md:h-[88px] w-auto" priority />
+          {/* El h1 era solo el logo (31/10): título para lectores y buscadores. */}
+          <span className="sr-only">Entrar a tu cuenta</span>
         </motion.h1>
 
         {rebote ? (
