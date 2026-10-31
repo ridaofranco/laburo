@@ -345,7 +345,7 @@ export default async function PanelStaffPage() {
                   >
                     <div className="flex flex-col gap-1">
                       <span className="label-tech text-[12px] text-[#cfc4c5] uppercase">
-                        {fmtDia(p.gig_starts_at)}
+                        {[fmtDia(p.gig_starts_at), fmtHora(p.gig_starts_at)].filter(Boolean).join(" · ")}
                       </span>
                       <h4 className="text-[18px] font-semibold text-[#e5e2e1]">
                         {p.gig_title?.trim() || "Evento"}

@@ -172,7 +172,12 @@ function GigCard({ gig }: { gig: FichajeGig }) {
   const estado = ventana(gig, Date.now());
   const abreIso = gig.startsAt ? new Date(new Date(gig.startsAt).getTime() - 3 * H).toISOString() : null;
   const abre = diaYHora(abreIso);
-  const cuando = diaYHora(gig.startsAt);
+  // Con la hora de fin a la vista (31/10): ayuda a no fichar la salida antes
+  // de tiempo por error.
+  const fin = hora(gig.endsAt);
+  const cuando = [diaYHora(gig.startsAt), fin ? `termina ${fin}` : null].filter(Boolean).join(" · ");
+  const salidaTemprana =
+    gig.endsAt != null && new Date(gig.endsAt).getTime() - Date.now() > 30 * 60 * 1000;
 
   return (
     <div className="border border-[#1A1A1A] bg-[#0e0e0e] p-6 md:p-8 flex flex-col gap-6">
@@ -215,6 +220,7 @@ function GigCard({ gig }: { gig: FichajeGig }) {
         <div className="flex flex-col gap-3 border border-[#c6c6c6] p-5">
           <p className="text-[15px] text-[#e5e2e1] leading-[1.5]">
             ¿Terminaste? La salida queda con la hora de ahora y no se puede deshacer.
+            {salidaTemprana && fin ? ` Ojo: el evento termina a las ${fin}.` : ""}
           </p>
           <button
             type="button"
