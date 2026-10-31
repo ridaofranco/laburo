@@ -38,6 +38,7 @@ import {
   Html,
   Section,
   Text,
+  Preview,
 } from "@react-email/components";
 import { Encabezado } from "./encabezado";
 import { PieWhatsApp } from "./pie-whatsapp";
@@ -78,6 +79,8 @@ export function ReminderEmail({
 
   return (
     <Html lang="es">
+      {/* Lo que se lee debajo del asunto en la bandeja. */}
+      <Preview>{expiresText ? `Tu propuesta vence el ${expiresText}. Contestá desde el link.` : "Tenés una propuesta sin contestar. Contestá desde el link."}</Preview>
       <Body
         style={{
           margin: 0,

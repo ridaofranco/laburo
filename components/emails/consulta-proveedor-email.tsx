@@ -34,6 +34,7 @@ import {
   Link,
   Section,
   Text,
+  Preview,
 } from "@react-email/components";
 import { Encabezado } from "./encabezado";
 import type { RespuestaConsulta } from "@/lib/formulario-consulta";
@@ -73,6 +74,8 @@ export function ConsultaProveedor({
 
   return (
     <Html lang="es">
+      {/* Lo que se lee debajo del asunto en la bandeja. */}
+      <Preview>{`${productora?.trim() || "Una productora"} completó tu formulario. Contestale respondiendo este mail.`}</Preview>
       <Body
         style={{
           margin: 0,

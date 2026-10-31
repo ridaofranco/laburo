@@ -32,6 +32,7 @@ import {
   Html,
   Section,
   Text,
+  Preview,
 } from "@react-email/components";
 import { Encabezado } from "./encabezado";
 import { PieWhatsApp } from "./pie-whatsapp";
@@ -88,6 +89,8 @@ export function BienvenidaProveedor({
 }: BienvenidaProveedorProps) {
   return (
     <Html lang="es">
+      {/* Lo que se lee debajo del asunto en la bandeja. */}
+      <Preview>{esSalon ? "Tu salón ya está en LABURO. Acá tenés el link a tu panel." : "Tu perfil ya está en LABURO. Acá tenés el link a tu panel."}</Preview>
       <Body
         style={{
           margin: 0,

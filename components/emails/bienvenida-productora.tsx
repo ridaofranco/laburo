@@ -17,6 +17,7 @@ import {
   Html,
   Section,
   Text,
+  Preview,
 } from "@react-email/components";
 import { Encabezado } from "./encabezado";
 import { PieWhatsApp } from "./pie-whatsapp";
@@ -45,6 +46,8 @@ export function BienvenidaProductora({
 }: BienvenidaProductoraProps) {
   return (
     <Html lang="es">
+      {/* Lo que se lee debajo del asunto en la bandeja. */}
+      <Preview>Elegí tu contraseña y cargá tu primer evento.</Preview>
       <Body
         style={{
           margin: 0,
