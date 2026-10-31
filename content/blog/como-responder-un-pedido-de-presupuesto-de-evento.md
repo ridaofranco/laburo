@@ -75,6 +75,8 @@ Un presupuesto de evento que se puede comparar tiene, como mínimo:
 - **El precio por WhatsApp sin detalle.** Si el pedido llegó por un formulario o un link de cotización, contestá por ahí: es lo que quien organiza va a comparar.
 - **Prometer lo que no tenés.** Capacidad, equipo o documentación que no podés mostrar si te la piden. Se cae en la visita técnica o el día del evento.
 
+Y si mandaste el presupuesto y no contestan, hay una nota de hito.agency sobre [cuándo y cómo hacer el seguimiento sin ser pesado](https://hito.agency/blog/seguimiento-de-presupuestos-enviados-sin-ser-pesado/): a los cuántos días escribir según la fecha del evento, qué decir y cuándo darlo por perdido.
+
 ## Cómo te llegan los pedidos en LABURO
 
 Hay dos formas, y cada una se contesta distinto.

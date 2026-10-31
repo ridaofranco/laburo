@@ -85,6 +85,8 @@ Por eso, dos campos de texto valen oro:
 
 En [publicar tu salón para eventos gratis](/para/publicar-salon-para-eventos) está el paso a paso del directorio y cómo te llegan las consultas.
 
+La misma descripción te sirve fuera de LABURO. Mucha gente busca salón en Google Maps: cómo armar esa ficha (categoría, fotos, horarios, servicios y preguntas) está en [el Perfil de Empresa de Google para un salón de eventos](https://hito.agency/blog/perfil-de-empresa-de-google-para-un-salon-de-eventos/), una nota de hito.agency.
+
 ## Publicá tu salón
 
 Publicar es gratis y las consultas te llegan al mail. Tené a mano la capacidad, la dirección y lo que incluye el alquiler, y [cargá tu salón](/registrar-salon). Después entrá al panel y subí las fotos.

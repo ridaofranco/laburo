@@ -76,6 +76,8 @@ Si estás organizando, sumá estas preguntas a las de capacidad y formato que ya
 
 Tené la documentación de habilitación lista para mandar en PDF el mismo día que te la pidan, y decí en tu ficha para qué tipo de eventos es tu espacio. Si una empresa te la pide y tardás una semana en conseguirla, la consulta se va a otro salón. En [cómo describir tu salón](/blog/como-describir-tu-salon-para-que-te-encuentren) está qué escribir para que te consulten los eventos que podés hacer, y en [publicar tu salón para eventos](/para/publicar-salon-para-eventos) cómo funciona el directorio.
 
+Si estás por abrir un salón o firmar un alquiler, [qué revisar de la habilitación de un salón de fiestas](https://hito.agency/blog/habilitacion-de-un-salon-de-fiestas-que-tener-en-cuenta/) (rubro, trámite, capacidad, plan de evacuación y seguro) es una nota de hito.agency que lo mira desde el lado del dueño.
+
 ## Buscá o publicá un salón
 
 Si estás buscando dónde hacer tu evento, en [salones de LABURO](/salones) filtrás por cuántos son y dónde, y consultás directo. Si tenés un salón, publicarlo es gratis: empezá en [registrar tu salón](/registrar-salon).

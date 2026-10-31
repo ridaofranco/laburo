@@ -110,6 +110,8 @@ Si tu salón tiene catering propio, sonido o ambientación que también ofrecés
 
 Y si necesitás personal para los eventos que hacés en tu salón (mozos, barra, seguridad, limpieza), en LABURO también podés buscar staff por rol y zona. Mirá cómo lo piensan del otro lado en [mozos y bartenders para eventos](/para/mozos-y-bartenders-para-eventos) y [personal de control de accesos y acreditación](/para/personal-de-control-de-accesos-y-acreditacion).
 
+Para hacer crecer el salón más allá del directorio (llenar más fechas, precios por temporada según tus costos y aparecer en Google) hay una nota de hito.agency: [cómo hacer crecer un salón de fiestas](https://hito.agency/blog/como-hacer-crecer-un-salon-de-fiestas/).
+
 ## El ecosistema SOMOS DER
 
 LABURO es parte de un conjunto de herramientas de SOMOS DER para eventos: PASE (pase.somosder.ar) para acreditación y control de accesos con QR, y ENTRÁ (www.entratickets.com) para venta de entradas. Detrás está una productora con más de 100 eventos operados y más de 150.000 asistentes, en 6 países.

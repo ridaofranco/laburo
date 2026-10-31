@@ -79,6 +79,8 @@ Quien busca salón para fin de año suele consultar varios a la vez y elegir rá
 
 Todo eso lo actualizás desde tu panel, con el link que te llega por mail. El paso a paso de qué poner está en [cómo describir tu salón para que te encuentren](/blog/como-describir-tu-salon-para-que-te-encuentren). Y si querés saber cómo buscan del otro lado, en LABURO quien consulta filtra por zona y por cantidad de personas: lo que cargues en capacidad es lo que define si aparecés.
 
+Para el lado comercial de la temporada (fiestas de empresa, egresados y cumpleaños, paquetes, días de semana y clientes viejos) está [cómo llenar un salón en diciembre](https://hito.agency/blog/llenar-un-salon-en-diciembre/), una nota de hito.agency.
+
 ## Para cerrar
 
 La temporada de fin de año se gana en octubre y noviembre: calendario ordenado, horarios escritos, turnos dobles solo cuando entran con margen y una ficha que diga la verdad. Lo que necesitás para publicarte está en [publicar tu salón para eventos](/para/publicar-salon-para-eventos). Si todavía no estás, [registrá tu salón](/registrar-salon) gratis y empezá a recibir las consultas en tu mail.

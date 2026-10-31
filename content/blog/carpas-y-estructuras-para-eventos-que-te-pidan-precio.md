@@ -72,6 +72,8 @@ Una estructura al aire libre depende del clima, y eso no se negocia el día del 
 
 En un evento al aire libre, el plan de lluvia es de todos: mirá cómo lo piensa quien organiza en [staff para un festival al aire libre](/blog/staff-para-un-festival-al-aire-libre).
 
+Para tener el precio listo cuando te lo piden (paquetes o a la carta, extras, traslados y vigencia) está [cómo armar la lista de precios de un proveedor de eventos](https://hito.agency/blog/lista-de-precios-de-proveedor-de-eventos-como-armarla/), una nota de hito.agency.
+
 ## Contestá rápido y publicá
 
 Cuando te llega un pedido, contestá con las preguntas que faltan primero y con las condiciones a la vista. El paso a paso está en [cómo responder un pedido de presupuesto](/blog/como-responder-un-pedido-de-presupuesto-de-evento). Publicar es gratis: empezá en [registrar tu servicio](/registrar-proveedor).

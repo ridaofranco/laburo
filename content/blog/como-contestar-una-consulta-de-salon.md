@@ -86,6 +86,8 @@ Si mandaste el precio y no te contestaron, un mensaje de seguimiento no molesta:
 
 Si te dicen que no, preguntá por qué con una sola línea: precio, fecha, capacidad o ubicación. Esa respuesta te dice qué cambiar en tu ficha. Y revisá cada tanto que tu ficha diga lo que contestás en los mails: [cómo describir tu salón para que te encuentren](/blog/como-describir-tu-salon-para-que-te-encuentren) tiene el paso a paso.
 
+Si te pasa seguido que preguntan el precio y desaparecen, [por qué un salón pierde consultas y qué hacer para que terminen en reserva](https://hito.agency/blog/consultas-de-un-salon-que-no-se-cierran/) es una nota de hito.agency pensada para dueños de salones.
+
 ## Si tu salón todavía no está en LABURO
 
 Publicarlo es gratis y lleva unos minutos: capacidad, zona, fotos, qué incluye y la casilla donde querés recibir las consultas. Lo que conviene cargar está en [publicar tu salón para eventos](/para/publicar-salon-para-eventos). Cuando estés listo, [registrá tu salón](/registrar-salon).

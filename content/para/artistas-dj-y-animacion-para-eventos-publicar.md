@@ -93,6 +93,8 @@ Publicarte como artista es distinto de sumarte al pool de staff. El directorio e
 
 Diciembre concentra fiestas de fin de año, casamientos y egresos. Si querés tener la ficha lista antes, mirá [cómo prepararte para fin de año como proveedor](/blog/proveedores-de-eventos-como-prepararte-para-fin-de-ano).
 
+Para ponerle precio a tu show hay dos notas de hito.agency: [cuánto cobrar como DJ para eventos](https://hito.agency/blog/cuanto-cobrar-como-dj-para-eventos/) y [el negocio de la animación infantil, precio y clientes](https://hito.agency/blog/negocio-de-animacion-infantil-precio-y-clientes/).
+
 ## Publicá tu show
 
 Cargá tu proyecto, un servicio por cada cosa que hacés y las provincias donde tocás o animás. Es gratis y quedás en el directorio: empezá en [/registrar-proveedor](/registrar-proveedor).
