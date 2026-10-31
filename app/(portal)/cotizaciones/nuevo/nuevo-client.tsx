@@ -573,11 +573,13 @@ export function NuevoPedidoForm({
 
         <ul className="flex flex-col gap-3">
           {campos.map((c, i) => (
-            <li key={c.clave} className="flex items-center gap-3">
-              <input
-                className={inputCaja}
+            <li key={c.clave} className="flex items-start gap-3">
+              {/* Dos renglones: a 320 px una pregunta larga se leía cortada. */}
+              <textarea
+                className={`${inputCaja} resize-none leading-[1.4]`}
+                rows={2}
                 value={c.etiqueta}
-                onChange={(e) => editarCampo(i, e.target.value)}
+                onChange={(e) => editarCampo(i, e.target.value.replace(/\n/g, " "))}
                 placeholder="Otra pregunta"
                 maxLength={200}
               />

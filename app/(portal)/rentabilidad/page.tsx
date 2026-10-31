@@ -309,7 +309,31 @@ export default async function RentabilidadPage() {
                   Todavía nadie aceptó una oferta. Cuando confirmen, aparecen acá.
                 </p>
               ) : (
-                <div className="w-full overflow-x-auto">
+                <>
+                {/* Celular: filas apiladas. La tabla de 720 px dejaba ver solo # y
+                    Staff, con evento, monto y fecha detrás de un scroll sin pista. */}
+                <ul className="md:hidden flex flex-col">
+                  {roster.map((o) => {
+                    const nombre =
+                      [o.staff_nombre, o.staff_apellido].filter(Boolean).join(" ").trim() ||
+                      "Sin nombre";
+                    return (
+                      <li key={o.id} className="py-5 border-b border-[#2a2a2a] flex flex-col gap-1 min-w-0">
+                        <span className="text-[17px] text-[#e5e2e1] font-medium uppercase break-words">{nombre}</span>
+                        <span className="text-[15px] text-[#cfc4c5] break-words">
+                          {(o.gig_title ?? "").trim() || "Sin evento"}
+                        </span>
+                        <span className="flex justify-between gap-4 text-[15px]">
+                          <span className="text-[#e5e2e1]">
+                            {o.amount != null ? money(Number(o.amount)) : "sin monto"}
+                          </span>
+                          <span className="text-[#cfc4c5]">{fmtFecha(o.responded_at, {}) ?? "sin fecha"}</span>
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="hidden md:block w-full overflow-x-auto">
                   <table className="w-full text-left border-collapse min-w-[720px]">
                     <thead>
                       <tr className="border-b border-[#2a2a2a]">
@@ -361,6 +385,7 @@ export default async function RentabilidadPage() {
                     </tbody>
                   </table>
                 </div>
+                </>
               )}
             </section>
           </>
