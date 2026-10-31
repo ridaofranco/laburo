@@ -53,6 +53,7 @@ interface OfferRow {
   responded_at: string | null;
   sent_at: string | null;
   gig_id: string | null;
+  staff_profile_id: string | null;
   gig_title: string | null;
   staff_nombre: string | null;
   staff_apellido: string | null;
@@ -89,7 +90,7 @@ export default async function PagosPage() {
 
   let qOfertas = supabase
     .from("staff_app_offers")
-    .select("id,amount,status,responded_at,sent_at,gig_id,gig_title,staff_nombre,staff_apellido")
+    .select("id,amount,status,responded_at,sent_at,gig_id,staff_profile_id,gig_title,staff_nombre,staff_apellido")
     .eq("status", "accepted");
   if (orgId) qOfertas = qOfertas.eq("organization_id", orgId);
   const { data, error } = await qOfertas;
@@ -121,6 +122,9 @@ export default async function PagosPage() {
     return g ? eventoTerminado(g.starts_at, g.ends_at) || (!g.starts_at && !g.ends_at) : true;
   };
   const totalComprometido = rows.reduce((s, r) => s + (Number(r.amount) || 0), 0);
+  // Personas distintas: la misma persona confirmada en dos eventos (o dos roles)
+  // son dos ofertas, y el cuadro decía «Staff confirmado: 2» por una sola persona.
+  const personas = new Set(rows.map((r) => r.staff_profile_id ?? r.id)).size;
   const conMonto = rows.filter((r) => r.amount != null && Number(r.amount) > 0).length;
 
   // Estado "pago avisado" por oferta (offers.pago_listo_at, migración 0032).
@@ -290,10 +294,11 @@ export default async function PagosPage() {
                 Staff confirmado
               </span>
               <span className="t-stat text-[#c6c6c6]">
-                {rows.length}
+                {personas}
               </span>
               <span className="text-[13px] text-[#cfc4c5]">
-                {conMonto} con monto cargado
+                {personas === 1 ? "persona" : "personas"}
+                {rows.length !== personas ? ` en ${rows.length} confirmaciones` : ""} · {conMonto} con monto cargado
               </span>
             </div>
           </div>

@@ -302,7 +302,15 @@ export default async function NotificacionesPage() {
 
       {/* Feed */}
       <div className="col-span-12 md:col-span-8 lg:col-span-6 md:col-start-3 lg:col-start-4">
-        {error ? (
+        {/* Si falló solo la lectura de presupuestos, el feed de ofertas se
+            muestra igual, pero avisando que falta una parte: sin el aviso,
+            «No hay actividad» parecía que no había entrado ningún precio. */}
+        {!error && cotizacionesError && feed.length > 0 ? (
+          <p className="mb-6 border border-[#4c4546] px-4 py-3 text-[14px] text-[#cfc4c5]">
+            No pudimos cargar los presupuestos que entraron. Lo demás está al día; probá de nuevo en un rato.
+          </p>
+        ) : null}
+        {error || (cotizacionesError && feed.length === 0) ? (
           <LoadError what="las notificaciones" />
         ) : feed.length === 0 ? (
           <div className="border-t border-b border-[#353535] py-20 text-center">
