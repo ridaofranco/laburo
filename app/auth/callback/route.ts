@@ -121,9 +121,19 @@ export async function GET(request: Request) {
     if (!user) return NextResponse.redirect(`${origin}/entrar?motivo=sin_sesion`);
   }
 
+  // Si alguna lectura falla (la base caída o lenta), la persona NO es "sin
+  // perfil": mandarla a registrarse le hacía crear una ficha duplicada (31/10).
+  let fallo = false;
+  function anotar(rama: string, error: { message: string } | null) {
+    if (!error) return;
+    fallo = true;
+    console.error(`[auth/callback] no se pudo leer ${rama}: ${error.message}`);
+  }
+
   /** ¿Es productora? True si quedó (o ya era) miembro de una organización. */
   async function esProductora(): Promise<boolean> {
     const membership = await supabase.rpc("staff_app_provision_member");
+    anotar("productora", membership.error);
     if (membership.data) return true;
     // ⚠️ NO leer staff_app_my_membership con .maybeSingle() acá: PostgREST tira
     // PGRST116 apenas el usuario pertenece a más de una organización, y ahí el
@@ -133,13 +143,15 @@ export async function GET(request: Request) {
   }
 
   async function esStaff(): Promise<boolean> {
-    const { data } = await supabase.rpc("staff_app_my_staff_profile");
+    const { data, error } = await supabase.rpc("staff_app_my_staff_profile");
+    anotar("staff", error);
     return !!data;
   }
 
   /** Vincula la cuenta con su perfil de proveedor por mail (idempotente, 0045). */
   async function esProveedor(): Promise<boolean> {
-    const { data } = await supabase.rpc("staff_app_vincular_proveedor");
+    const { data, error } = await supabase.rpc("staff_app_vincular_proveedor");
+    anotar("proveedor", error);
     return !!(data as { ok?: boolean } | null)?.ok;
   }
 
@@ -160,7 +172,11 @@ export async function GET(request: Request) {
   if (await esStaff()) return NextResponse.redirect(`${origin}/panel-staff`);
   if (await esProveedor()) return NextResponse.redirect(`${origin}/mi-proveedor`);
 
-  // 3. La sesión es válida pero este mail no está en ninguna de las tres bases.
+  // 3. Algo no se pudo leer: no sabemos quién es, así que no se lo manda a
+  // registrarse. La sesión queda abierta y "Probá de nuevo" entra directo.
+  if (fallo) return NextResponse.redirect(`${origin}/entrar?motivo=falla`);
+
+  // 4. La sesión es válida pero este mail no está en ninguna de las tres bases.
   // No es un error de contraseña, y decirle "no tenés acceso" no le sirve de
   // nada: lo que necesita es registrarse, así que se lo manda a elegir dónde.
   return NextResponse.redirect(`${origin}/entrar?motivo=sin_perfil`);

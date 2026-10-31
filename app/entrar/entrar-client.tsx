@@ -79,6 +79,8 @@ const MOTIVOS: Record<string, string> = {
   sin_sesion: "Se cerró tu sesión antes de terminar de entrar. Probá de nuevo.",
   sin_perfil:
     "Entraste bien, pero con este mail todavía no hay ningún perfil. Registrate abajo y en un minuto estás adentro.",
+  falla:
+    "Entraste bien, pero no pudimos leer tu perfil por un problema nuestro. No te registres de nuevo: esperá un minuto y volvé a entrar.",
 };
 
 /** A dónde manda el botón de registrarse, según lo que la persona dijo que es. */
