@@ -27,6 +27,32 @@ import { toast } from "sonner";
 import { fmtFecha, desdeInputLocal } from "@/lib/dates";
 import { WhatsAppGlyph } from "@/components/icons/whatsapp-glyph";
 import { createAndSendOffer } from "../offer-actions";
+import { guardarYRecargar, useRecuperarGuardado } from "@/lib/recarga-por-version";
+
+/**
+ * Lo que se guarda si hay que recargar por una versión nueva (ver abajo).
+ * No se guarda nada del candidato: viene de la página.
+ */
+interface OfertaEnPantalla {
+  gigChoice: string;
+  gigTitle: string;
+  gigDate: string;
+  gigVenue: string;
+  role: string;
+  amount: string;
+  conditions: string;
+}
+
+/**
+ * ¿La acción del servidor ya no existe (se publicó una versión nueva con la
+ * página abierta)? Next contesta 404 y el cliente tira este mensaje. Solo en
+ * ese caso se recarga: la acción no llegó a correr, así que no hay oferta ni
+ * mail. Con cualquier otro error (red, timeout) la oferta PUDO haber salido y
+ * recargar invitaría a mandarla dos veces: ahí sigue el «Probá de nuevo».
+ */
+function esAccionVieja(err: unknown): boolean {
+  return err instanceof Error && /unexpected response was received from the server|Failed to find Server Action/i.test(err.message);
+}
 
 export interface OfferFormCandidate {
   id: string;
@@ -130,6 +156,17 @@ export function OfferForm({
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<SendResult | null>(null);
 
+  const claveGuardado = `oferta:${candidate.id}`;
+  useRecuperarGuardado<OfertaEnPantalla>(claveGuardado, (g) => {
+    if (g.gigChoice === NEW_GIG || gigs.some((x) => x.id === g.gigChoice)) setGigChoice(g.gigChoice);
+    setGigTitle(g.gigTitle ?? "");
+    setGigDate(g.gigDate ?? "");
+    setGigVenue(g.gigVenue ?? "");
+    setRole(g.role ?? "");
+    setAmount(g.amount ?? "");
+    setConditions(g.conditions ?? "");
+  });
+
   const isNewGig = gigChoice === NEW_GIG;
   const primerNombre = (candidate.nombre ?? "").trim().split(/\s+/)[0] ?? "";
 
@@ -217,6 +254,14 @@ export function OfferForm({
         toast.warning("Oferta creada, pero el email no salió");
       }
     } catch (err) {
+      if (
+        esAccionVieja(err) &&
+        guardarYRecargar(claveGuardado, {
+          gigChoice, gigTitle, gigDate, gigVenue, role, amount, conditions,
+        } satisfies OfertaEnPantalla)
+      ) {
+        return;
+      }
       setError(
         err instanceof Error && err.message === "forbidden"
           ? "No tenés permiso para crear ofertas."

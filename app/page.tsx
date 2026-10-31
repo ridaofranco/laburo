@@ -689,6 +689,15 @@ export default async function LandingPage() {
             >
               Blog
             </Link>
+            {/* El directorio público de proveedores (31/10): la home no enlazaba
+                ninguna página de la vidriera, y es la más fuerte para buscadores.
+                Salones y pedidos de precio no: con la lista vacía son noindex. */}
+            <Link
+              href="/servicios"
+              className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
+            >
+              Proveedores
+            </Link>
             {/* Las páginas por público (28/10): entrada discreta, como el blog. */}
             <Link
               href="/para"
