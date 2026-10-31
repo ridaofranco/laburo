@@ -61,6 +61,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BLOG_ORIGIN}/registrar-productora`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BLOG_ORIGIN}/registrar-proveedor`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BLOG_ORIGIN}/registrar-salon`, changeFrequency: "monthly", priority: 0.7 },
+    // Privacidad y términos (31/10): indexables y con canonical, pero solo se
+    // llegaba por el pie. Google y las IA las miran para confiar en un sitio que pide datos.
+    { url: `${BLOG_ORIGIN}/privacidad`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BLOG_ORIGIN}/terminos`, changeFrequency: "yearly", priority: 0.3 },
     ...(licitaciones.length > 0
       ? [
           { url: `${BLOG_ORIGIN}/licitaciones`, changeFrequency: "daily" as const, priority: 0.8 },
