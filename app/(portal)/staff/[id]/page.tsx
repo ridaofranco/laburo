@@ -236,7 +236,11 @@ export default async function ProfilePage({
 
   const hasExperiencia = Boolean(expLine || (p.experiencia_detalle ?? "").trim());
   const hasDisponibilidad = dispPills.length > 0 || Boolean((p.disponibilidad_aviso ?? "").trim());
-  const dondeTrabajar = (p.donde_trabajar ?? []).filter(Boolean).join(", ");
+  const dondeTrabajar = (p.donde_trabajar ?? []).filter(Boolean)
+    // Sin guion largo al mostrar (el valor guardado sigue igual; ver etiquetaRegion
+    // en components/staff-form-shared.tsx, que es de cliente y no se importa acá).
+    .map((r) => r.replace(/\s*\u2014\s*/g, ": "))
+    .join(", ");
   const hasSituacion = Boolean(
     (p.situacion_legal ?? "").trim() || dondeTrabajar || (p.pais_residencia ?? "").trim(),
   );

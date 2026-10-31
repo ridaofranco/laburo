@@ -20,6 +20,15 @@ export const WORK_REGIONS = [
   "Medio Oriente",
   "Cualquier país — dispuesto/a a viajar",
 ];
+/**
+ * Cómo se MUESTRA una región. El valor guardado no se toca: «Cualquier país —
+ * dispuesto/a a viajar» está en 77 fichas (31/10) y cambiarlo destildaría esa
+ * casilla al editar. Solo cambia lo que se lee: sin guion largo.
+ */
+export function etiquetaRegion(r: string): string {
+  return r.replace(/\s*\u2014\s*/g, ": ");
+}
+
 export const LEGAL_OPTS = [
   "Ciudadano/a o residente con permiso",
   "Tengo permiso de trabajo",

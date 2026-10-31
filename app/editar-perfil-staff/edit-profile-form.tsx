@@ -18,6 +18,7 @@ import {
   useCvAutofill,
   mensajeCv,
   WORK_REGIONS,
+  etiquetaRegion,
   LEGAL_OPTS,
   AVISO_OPTS,
   YEARS_OPTS,
@@ -281,7 +282,7 @@ export function EditProfileForm({ profile }: { profile: StaffProfile }) {
       <Section title="Dónde querés trabajar">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {WORK_REGIONS.map((r) => (
-            <Check key={r} label={r} checked={regionsSel.has(r)} onChange={() => toggleSet(regionsSel, setRegionsSel, r)} />
+            <Check key={r} label={etiquetaRegion(r)} checked={regionsSel.has(r)} onChange={() => toggleSet(regionsSel, setRegionsSel, r)} />
           ))}
         </div>
         <div>

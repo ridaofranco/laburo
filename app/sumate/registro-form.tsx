@@ -15,7 +15,7 @@ import { Sparkles, Upload, ArrowLeft } from "lucide-react";
 import { oficios } from "@/lib/data/oficios";
 import { paises, provinciasAr } from "@/lib/data/paises";
 import {
-  WORK_REGIONS, LEGAL_OPTS, AVISO_OPTS, YEARS_OPTS,
+  WORK_REGIONS, LEGAL_OPTS, AVISO_OPTS, YEARS_OPTS, etiquetaRegion,
   labelCls, inputCls, selectCls, Section, Check, OficiosPicker, useCvAutofill,
   mensajeCv,
 } from "@/components/staff-form-shared";
@@ -325,7 +325,7 @@ export function RegistroForm({
         {/* Dónde querés trabajar */}
         <Section title="Dónde querés trabajar">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {WORK_REGIONS.map((r) => <Check key={r} label={r} checked={regionsSel.has(r)} onChange={() => toggle(regionsSel, setRegionsSel, r)} />)}
+            {WORK_REGIONS.map((r) => <Check key={r} label={etiquetaRegion(r)} checked={regionsSel.has(r)} onChange={() => toggle(regionsSel, setRegionsSel, r)} />)}
           </div>
           <div><label className={labelCls}>Situación para trabajar</label>
             <select className={selectCls} value={f.situacion_legal} onChange={(e) => set("situacion_legal", e.target.value)}>
