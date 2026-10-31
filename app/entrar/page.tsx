@@ -22,6 +22,8 @@ export const metadata: Metadata = {
   title: "LABURO. | Entrar",
   description:
     "Entrá a LABURO: armás eventos, trabajás en eventos, prestás un servicio o tenés un salón. Una sola puerta.",
+  // Sin canonical, /entrar?motivo=… y /entrar?como=… contaban como páginas distintas (31/10).
+  alternates: { canonical: "https://laburo.somosder.ar/entrar" },
 };
 
 export default async function EntrarPage({
