@@ -177,5 +177,16 @@ export async function POST(request: Request) {
   } catch {
     parsed = {};
   }
+  // Lo que la pantalla muestra como «no pudimos sacar datos» no dejaba rastro
+  // (así pasó inadvertido el [{…}] del 30/10). Ahora queda en los logs, con el
+  // modelo y el comienzo de la respuesta, sin datos de la persona.
+  const util = ["nombre", "apellido", "email", "telefono", "ciudad", "experiencia_detalle"].some(
+    (k) => typeof parsed[k] === "string" && (parsed[k] as string).trim(),
+  );
+  if (!util) {
+    console.warn(
+      `[parse-cv] respuesta sin datos · modelo=${g.modelo} · forma=${text.trim().slice(0, 1)} · largo=${text.length}`,
+    );
+  }
   return NextResponse.json({ ok: true, data: parsed });
 }
