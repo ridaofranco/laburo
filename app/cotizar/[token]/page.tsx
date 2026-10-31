@@ -140,7 +140,13 @@ export default async function CotizarPage({
             valor={p.necesario_para ? fmtFecha(p.necesario_para, { day: "2-digit", month: "long", year: "numeric" }) : null}
           />
           <Dato
-            label={cerrado ? "Cerró" : "Podés cargarlo hasta"}
+            label={
+              cerrado
+                ? p.cierra_at && new Date(p.cierra_at) > new Date()
+                  ? "Iba a cerrar"
+                  : "Cerró"
+                : "Podés cargarlo hasta"
+            }
             valor={fmtFechaHora(p.cierra_at, {
               weekday: "long", day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit",
             })}

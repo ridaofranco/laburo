@@ -29,7 +29,15 @@ type DateInput = string | number | Date | null | undefined;
 
 function toDate(v: DateInput): Date | null {
   if (v === null || v === undefined || v === "") return null;
-  const d = v instanceof Date ? v : new Date(v);
+  // Una columna `date` llega como "2026-11-20", que JavaScript lee como la
+  // medianoche UTC: en Argentina es el 19 a las 21. Se toma el mediodía
+  // argentino de ese día, así cualquier formato muestra el día que se cargó.
+  const d =
+    v instanceof Date
+      ? v
+      : typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v)
+        ? new Date(`${v}T12:00:00-03:00`)
+        : new Date(v);
   return Number.isNaN(d.getTime()) ? null : d;
 }
 

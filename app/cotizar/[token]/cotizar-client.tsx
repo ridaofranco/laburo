@@ -48,6 +48,7 @@ import { guardarCotizacion, type LineaAGuardar } from "./actions";
 import {
   fmtCantidad,
   fmtMonto,
+  montoParaInput,
   parsearMonto,
   type ItemPedido,
   type LineaCotizacion,
@@ -93,7 +94,7 @@ export function CotizarForm({
   const [pending, startTransition] = useTransition();
   const porItems = items.length > 0;
 
-  const [monto, setMonto] = useState(inicial && !porItems ? String(inicial.monto) : "");
+  const [monto, setMonto] = useState(inicial && !porItems ? montoParaInput(inicial.monto) : "");
   const [moneda, setMoneda] = useState(inicial?.moneda ?? "ARS");
   const [incluye, setIncluye] = useState(inicial?.incluye ?? "");
   const [noIncluye, setNoIncluye] = useState(inicial?.no_incluye ?? "");
@@ -108,7 +109,7 @@ export function CotizarForm({
     const inicio: Record<string, LineaEnPantalla> = {};
     for (const l of inicial?.lineas ?? []) {
       inicio[l.item_id] = {
-        monto: l.monto == null ? "" : String(l.monto),
+        monto: montoParaInput(l.monto),
         no_cotiza: l.no_cotiza,
         comentario: l.comentario ?? "",
       };

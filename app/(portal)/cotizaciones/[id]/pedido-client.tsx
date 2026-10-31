@@ -277,7 +277,13 @@ export function PedidoClient({
             valor={pedido.necesario_para ? fmtFecha(pedido.necesario_para, { day: "2-digit", month: "long", year: "numeric" }) : null}
           />
           <Dato
-            label={pedido.cerrado ? "Cerró" : "Cierra"}
+            label={
+              pedido.cerrado
+                ? pedido.cierra_at && new Date(pedido.cierra_at) > new Date()
+                  ? "Iba a cerrar"
+                  : "Cerró"
+                : "Cierra"
+            }
             valor={fmtFechaHora(pedido.cierra_at, {
               weekday: "long", day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit",
             })}
@@ -658,11 +664,16 @@ export function PedidoClient({
                   {pedido.items.map((it) => {
                     // El más barato de la fila. Solo entre los que pusieron un
                     // número: el que no lo hace no compite por ese renglón.
-                    const montos = cotizaciones
-                      .map((c) => (c.lineas ?? []).find((l) => l.item_id === it.id))
-                      .filter((l) => l && !l.no_cotiza && l.monto != null)
-                      .map((l) => Number(l!.monto));
-                    const minimo = montos.length ? Math.min(...montos) : null;
+                    // Y dentro de cada moneda: USD 1.200 no es «más barato» que $1.500.000.
+                    const minimoPorMoneda = new Map<string, number>();
+                    for (const c of cotizaciones) {
+                      const l = (c.lineas ?? []).find((x) => x.item_id === it.id);
+                      if (!l || l.no_cotiza || l.monto == null) continue;
+                      const m = moneda(c);
+                      const n = Number(l.monto);
+                      const previo = minimoPorMoneda.get(m);
+                      if (previo == null || n < previo) minimoPorMoneda.set(m, n);
+                    }
 
                     return (
                       <tr key={it.id} className="border-b border-[#1A1A1A] align-top">
@@ -698,6 +709,7 @@ export function PedidoClient({
                               </Td>
                             );
                           }
+                          const minimo = minimoPorMoneda.get(moneda(c));
                           const esMinimo = minimo != null && Number(l.monto) === minimo;
                           return (
                             <Td key={c.quote_id}>

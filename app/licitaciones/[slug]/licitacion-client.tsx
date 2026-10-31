@@ -17,7 +17,9 @@ const up = (delay = 0) => ({
 
 const fmt = (iso: unknown, conHora = false) => {
   if (!iso) return null;
-  const d = new Date(String(iso));
+  // "2026-12-05" (columna date) es medianoche UTC = el 4 a la noche acá.
+  const texto = String(iso);
+  const d = /^\d{4}-\d{2}-\d{2}$/.test(texto) ? new Date(`${texto}T12:00:00-03:00`) : new Date(texto);
   const tz = "America/Argentina/Buenos_Aires";
   const dia = new Intl.DateTimeFormat("es-AR", { day: "numeric", timeZone: tz }).format(d);
   const mes = new Intl.DateTimeFormat("es-AR", { month: "long", timeZone: tz }).format(d);
@@ -74,7 +76,7 @@ export function LicitacionClient({
           <p className="label-tech text-[11px] uppercase tracking-[0.2em] text-[#0047ff]">
             {String(lic.quien)} está pidiendo presupuesto
           </p>
-          <h1 className="font-[family-name:var(--font-syne)] text-[30px] md:text-[44px] font-bold uppercase tracking-tight leading-[1.05]">
+          <h1 className="font-[family-name:var(--font-syne)] text-[30px] md:text-[44px] font-bold uppercase tracking-tight leading-[1.05] break-words [overflow-wrap:anywhere]">
             {String(lic.titulo)}
           </h1>
 

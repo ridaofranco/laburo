@@ -93,6 +93,18 @@ export function parsearMonto(texto: string): number | null {
   return limpio && !Number.isNaN(n) && n > 0 ? n : null;
 }
 
+/**
+ * Un monto guardado, escrito como lo tiene que leer `parsearMonto` al volver a
+ * guardar: coma decimal y sin puntos. Con `String(850000.5)` salía "850000.5",
+ * y parsearMonto (que toma el punto como miles) lo guardaba como 8500005.
+ */
+export function montoParaInput(monto: number | string | null | undefined): string {
+  if (monto == null || monto === "") return "";
+  const n = Number(monto);
+  if (Number.isNaN(n)) return "";
+  return String(n).replace(".", ",");
+}
+
 /** "100 personas", "100", "personas", o vacío. Nunca inventa una unidad. */
 export function fmtCantidad(item: Pick<ItemPedido, "cantidad" | "unidad">): string {
   const n = item.cantidad == null ? "" : Number(item.cantidad).toLocaleString("es-AR");
@@ -328,5 +340,7 @@ export function fmtMonto(monto: number | string | null | undefined, moneda = "AR
   const n = typeof monto === "string" ? Number(monto) : monto;
   if (n == null || Number.isNaN(n)) return "";
   const simbolo = moneda === "USD" ? "USD " : "$";
-  return `${simbolo}${n.toLocaleString("es-AR", { maximumFractionDigits: 2 })}`;
+  // Con centavos, siempre dos: «$2.350.000,50» y no «$2.350.000,5».
+  const centavos = !Number.isInteger(n);
+  return `${simbolo}${n.toLocaleString("es-AR", { minimumFractionDigits: centavos ? 2 : 0, maximumFractionDigits: 2 })}`;
 }
