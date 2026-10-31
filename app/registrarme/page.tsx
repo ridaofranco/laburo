@@ -27,7 +27,7 @@ import { ArrowRight } from "lucide-react";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 
 export const metadata: Metadata = {
-  title: "LABURO. | Registrarme",
+  title: "Crear tu cuenta gratis en LABURO | Staff y proveedores",
   description:
     "Elegí qué querés hacer en LABURO: buscar staff para tus eventos, trabajar en eventos, publicar tus servicios o publicar tu salón. Es gratis.",
   alternates: { canonical: "/registrarme" },
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     url: "/registrarme",
     siteName: "LABURO",
     locale: "es_AR",
-    title: "LABURO. | Registrarme",
+    title: "Crear tu cuenta gratis en LABURO | Staff y proveedores",
     description: "Elegí qué querés hacer en LABURO: buscar staff para tus eventos, trabajar en eventos, publicar tus servicios o publicar tu salón. Es gratis.",
     images: [{ url: "/brand/laburo-og.png", width: 1200, height: 630, alt: "LABURO" }],
   },

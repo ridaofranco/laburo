@@ -191,6 +191,15 @@ export default async function ParaPage({
                 {cta.secundario.label}
               </Link>
             </div>
+            <p className="text-[14px] text-[#8a8a8a] mt-6">
+              ¿Venís por otra cosa?{" "}
+              <Link
+                href="/registrarme"
+                className="text-[#f5f5f5] underline underline-offset-4 hover:text-[#0047ff] transition-colors"
+              >
+                Elegí tu tipo de cuenta
+              </Link>
+            </p>
           </div>
         </section>
 

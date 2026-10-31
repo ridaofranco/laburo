@@ -12,6 +12,7 @@
  * la cobertura NO se calculan acá: las deriva el client reusando offerLabel().
  */
 
+import { LoadError } from "@/components/load-error";
 import Link from "next/link";
 import { CalendarPlus } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
@@ -111,6 +112,17 @@ export default async function TableroPage() {
     attendance: attByGig.get(gig.id) ?? [],
     requiredTotal: requiredByGig.get(gig.id) ?? 0,
   }));
+
+  // Con la base caída, el resto de la pantalla diría «no hay eventos» o «0
+  // cubiertos»: mejor decir que no se pudo leer (recorrido de plataforma, 31/10).
+  if (errGigs || errOffers) {
+    return (
+      <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-12 md:py-20">
+        <h1 className="t-display uppercase text-[#e5e2e1] mb-10">Gestión de Eventos</h1>
+        <LoadError what="los eventos" />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-12 md:py-20 pb-32 md:pb-20">

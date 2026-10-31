@@ -215,7 +215,7 @@ function GigCard({ item }: { item: BoardGig }) {
         className="w-full flex items-start gap-4 text-left min-h-[44px] px-6 py-5 hover:bg-[#131313]/40 transition-colors"
       >
         <div className="flex-1 min-w-0 flex flex-col gap-2">
-          <span className="font-[family-name:var(--font-syne)] text-[22px] md:text-[26px] font-semibold uppercase tracking-tight leading-tight text-[#e5e2e1] truncate">
+          <span className="font-[family-name:var(--font-syne)] text-[22px] md:text-[26px] font-semibold uppercase tracking-tight leading-tight text-[#e5e2e1] break-words line-clamp-2 md:line-clamp-1">
             {titulo}
           </span>
           {meta && <span className="label-tech text-[11px] text-[#cfc4c5] truncate">{meta}</span>}

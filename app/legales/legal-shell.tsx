@@ -53,6 +53,12 @@ export function LegalShell({
             Privacidad
           </Link>
           <Link
+            href="/registrarme"
+            className="label-tech text-[11px] tracking-[0.2em] text-[#cfc4c5] hover:text-[#e5e2e1] border-b border-[#4c4546] hover:border-[#e5e2e1] pb-1 transition-colors"
+          >
+            Crear cuenta
+          </Link>
+          <Link
             href="/"
             className="label-tech text-[11px] tracking-[0.2em] text-[#cfc4c5] hover:text-[#e5e2e1] border-b border-[#4c4546] hover:border-[#e5e2e1] pb-1 transition-colors"
           >

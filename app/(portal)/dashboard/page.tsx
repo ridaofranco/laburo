@@ -11,6 +11,7 @@
  * el producto de la productora.
  */
 
+import { LoadError } from "@/components/load-error";
 import Link from "next/link";
 import { UserPlus, ArrowRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
@@ -114,6 +115,17 @@ export default async function DashboardPage() {
             ? `${nextGig.title ?? "Próximo evento"} arranca mañana.`
             : `${nextGig.title ?? "Próximo evento"} arranca en ${days} días.`;
     }
+  }
+
+  // Con la base caída, el resto de la pantalla diría «no hay eventos» o «0
+  // cubiertos»: mejor decir que no se pudo leer (recorrido de plataforma, 31/10).
+  if (errGigs || errOffers) {
+    return (
+      <div className="max-w-[1440px] mx-auto w-full px-6 md:px-20 py-12 md:py-20">
+        <h1 className="t-display uppercase text-[#e5e2e1] mb-10">Tus eventos</h1>
+        <LoadError what="tus eventos" />
+      </div>
+    );
   }
 
   return (

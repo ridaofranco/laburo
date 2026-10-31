@@ -58,9 +58,9 @@ function categoriaDe(o: OrgPlataforma): string {
 
 function Dato({ n, label }: { n: number | undefined; label: string }) {
   return (
-    <div className="flex flex-col gap-1 border border-[#4c4546]/40 px-5 py-4">
-      <span className="t-stat text-[#e5e2e1] text-[28px] leading-none">{n ?? 0}</span>
-      <span className="label-tech text-[11px] uppercase tracking-widest text-[#988e90]">
+    <div className="flex flex-col gap-1 min-w-0 border border-[#4c4546]/40 px-5 py-4">
+      <span className="t-stat text-[#e5e2e1] text-[28px] leading-none">{(n ?? 0).toLocaleString("es-AR")}</span>
+      <span className="label-tech text-[11px] uppercase tracking-widest text-[#988e90] break-words">
         {label}
       </span>
     </div>

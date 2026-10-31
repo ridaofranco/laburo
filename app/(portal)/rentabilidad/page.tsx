@@ -259,7 +259,7 @@ export default async function RentabilidadPage() {
                   <div className="text-[15px] leading-[1.6] text-[#cfc4c5] mt-3 max-w-[448px]">
                     {acceptedCount} de {total}{" "}
                     {total === 1 ? "oferta enviada fue aceptada" : "ofertas enviadas fueron aceptadas"}.
-                    El resto sigue abierta, vista o vencida.
+                    Las demás siguen abiertas, vistas o vencidas.
                   </div>
                 </div>
               </div>
