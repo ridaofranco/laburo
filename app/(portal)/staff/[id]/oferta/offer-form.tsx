@@ -45,13 +45,14 @@ interface OfertaEnPantalla {
 
 /**
  * ¿La acción del servidor ya no existe (se publicó una versión nueva con la
- * página abierta)? Next contesta 404 y el cliente tira este mensaje. Solo en
+ * página abierta)? Next contesta 404 «Server action not found.» y el cliente
+ * tira ese texto como error (o el genérico si no vino texto). Solo en
  * ese caso se recarga: la acción no llegó a correr, así que no hay oferta ni
  * mail. Con cualquier otro error (red, timeout) la oferta PUDO haber salido y
  * recargar invitaría a mandarla dos veces: ahí sigue el «Probá de nuevo».
  */
 function esAccionVieja(err: unknown): boolean {
-  return err instanceof Error && /unexpected response was received from the server|Failed to find Server Action/i.test(err.message);
+  return err instanceof Error && /Server action not found|unexpected response was received from the server|Failed to find Server Action/i.test(err.message);
 }
 
 export interface OfferFormCandidate {
