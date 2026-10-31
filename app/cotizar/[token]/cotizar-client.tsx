@@ -44,6 +44,7 @@
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { guardarYRecargar, useRecuperarGuardado } from "@/lib/recarga-por-version";
 import { guardarCotizacion, type LineaAGuardar } from "./actions";
 import {
   fmtCantidad,
@@ -73,6 +74,17 @@ interface LineaEnPantalla {
   monto: string;
   no_cotiza: boolean;
   comentario: string;
+}
+
+/** Todo lo que se ve en el formulario, para guardarlo si hay que recargar. */
+interface EnPantalla {
+  monto: string;
+  moneda: string;
+  incluye: string;
+  noIncluye: string;
+  validez: string;
+  respuestas: Record<string, string>;
+  lineas: Record<string, LineaEnPantalla>;
 }
 
 const VACIA: LineaEnPantalla = { monto: "", no_cotiza: false, comentario: "" };
@@ -115,6 +127,20 @@ export function CotizarForm({
       };
     }
     return inicio;
+  });
+
+  // Si se publicó una versión nueva con la página abierta, el envío falla
+  // siempre («Failed to find Server Action»): se guarda lo cargado, se recarga
+  // una vez y acá se devuelve. Ver lib/recarga-por-version.ts.
+  const claveGuardado = `cotizar:${token.slice(0, 16)}`;
+  useRecuperarGuardado<EnPantalla>(claveGuardado, (g) => {
+    if (g.monto !== undefined) setMonto(g.monto);
+    if (g.moneda) setMoneda(g.moneda);
+    if (g.incluye !== undefined) setIncluye(g.incluye);
+    if (g.noIncluye !== undefined) setNoIncluye(g.noIncluye);
+    if (g.validez !== undefined) setValidez(g.validez);
+    if (g.respuestas) setRespuestas(g.respuestas);
+    if (g.lineas) setLineas(g.lineas);
   });
 
   function editarLinea(itemId: string, cambio: Partial<LineaEnPantalla>) {
@@ -181,16 +207,24 @@ export function CotizarForm({
     }
 
     startTransition(async () => {
-      const r = await guardarCotizacion({
-        token,
-        monto: montoSuelto,
-        incluye,
-        noIncluye,
-        moneda,
-        validezDias: validez ? Number(validez) : null,
-        respuestas,
-        lineas: paraMandar,
-      });
+      let r: Awaited<ReturnType<typeof guardarCotizacion>>;
+      try {
+        r = await guardarCotizacion({
+          token,
+          monto: montoSuelto,
+          incluye,
+          noIncluye,
+          moneda,
+          validezDias: validez ? Number(validez) : null,
+          respuestas,
+          lineas: paraMandar,
+        });
+      } catch {
+        const enPantalla: EnPantalla = { monto, moneda, incluye, noIncluye, validez, respuestas, lineas };
+        if (guardarYRecargar(claveGuardado, enPantalla)) return;
+        toast.error("No pudimos mandar el presupuesto. Probá de nuevo en un momento.");
+        return;
+      }
       if (!r.ok) {
         toast.error(r.error);
         return;
