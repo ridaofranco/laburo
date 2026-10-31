@@ -10,6 +10,7 @@
  * que hacer la misma y la estaba salteando. Ver el header de ese archivo.
  */
 
+import { parsearMonto, montoParaInput, fmtMonto } from "@/lib/cotizaciones";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -45,7 +46,7 @@ export function GigForm({ initial }: { initial?: GigInitial }) {
     endsAt: aInputLocal(initial?.ends_at ?? null),
     venue: initial?.venue_name ?? "",
     address: initial?.venue_address ?? "",
-    budget: initial?.client_budget != null ? String(initial.client_budget) : "",
+    budget: initial?.client_budget != null ? montoParaInput(initial.client_budget) : "",
   });
   // Dotación requerida: filas {rol, cantidad} (cantidad como string editable).
   const [slots, setSlots] = useState<{ role: string; qty: string }[]>(
@@ -99,7 +100,9 @@ export function GigForm({ initial }: { initial?: GigInitial }) {
       // BORRAR una ubicación, que es una operación legítima. Quien sabe si la
       // dirección cambió es este formulario, porque tiene `initial`.
       const gigId = editing ? initial!.id : (res as { gigId?: string }).gigId;
-      const budgetNum = f.budget.trim() ? Number(f.budget.replace(/[^\d.]/g, "")) : null;
+      // Formato argentino: «1.500.000» antes daba NaN y se guardaba vacío, y
+      // «800.000» quedaba en 800.
+      const budgetNum = parsearMonto(f.budget);
       if (gigId) {
         const addr = f.address.trim();
         const addrAnterior = (initial?.venue_address ?? "").trim();
@@ -210,11 +213,16 @@ export function GigForm({ initial }: { initial?: GigInitial }) {
             className={inputCls}
             value={f.budget}
             onChange={(e) => set("budget", e.target.value)}
-            placeholder="Ej: 800000"
+            placeholder="Ej: 800.000"
           />
           <p className="mt-2 text-[13px] text-[#8a8a8a] leading-[1.5]">
-            Lo que le cobrás al cliente por este evento. Sirve para calcular tu margen en Rentabilidad (ingreso menos costo del staff). No se comparte con el staff.
+            Lo que le cobrás al cliente por este evento. Queda guardado con el evento para calcular tu margen (ingreso menos costo del staff). No se comparte con el staff.
           </p>
+          {f.budget.trim() ? (
+            <p className="mt-1 text-[13px] text-[#cfc4c5]">
+              {parsearMonto(f.budget) != null ? `Se lee: ${fmtMonto(parsearMonto(f.budget))}` : "No es un monto válido."}
+            </p>
+          ) : null}
         </div>
         <div>
           <label className={labelCls}>Dotación requerida (opcional)</label>

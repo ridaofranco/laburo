@@ -29,7 +29,7 @@ import { exigirOrg } from "@/lib/org";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { sendMail, type MailResult } from "@/lib/email/mailer";
 import { PagoListoEmail } from "@/components/emails/pago-listo-email";
-import { PAGO_TEXTO } from "@/lib/pago";
+import { pagoTexto } from "@/lib/pago";
 import { money } from "@/lib/format";
 import { eventoTerminado } from "@/lib/offers";
 
@@ -151,7 +151,7 @@ export async function avisarPagoListo(offerId: string): Promise<PagoListoResult>
       role: res.role,
       amountText:
         res.amount != null && Number(res.amount) > 0 ? money(Number(res.amount)) : null,
-      paymentText: PAGO_TEXTO,
+      paymentText: pagoTexto(org.nombre),
     }),
   );
   const gig = res.gig_title?.trim();

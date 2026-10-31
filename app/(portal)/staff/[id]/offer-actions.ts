@@ -45,7 +45,7 @@ import { OfferEmail } from "@/components/emails/offer-email";
 import { waLink } from "@/lib/wa";
 import { fmtFechaHora } from "@/lib/dates";
 import { siteUrl } from "@/lib/site";
-import { PAGO_TEXTO } from "@/lib/pago";
+import { pagoTexto } from "@/lib/pago";
 
 export interface CreateOfferInput {
   staffProfileId: string;
@@ -222,7 +222,7 @@ export async function createAndSendOffer(
         // que no se lo mandábamos: quedaba del otro lado del link.
         venue: lugar,
         expiresText: formatWhen(res.expires_at),
-        paymentText: PAGO_TEXTO,
+        paymentText: pagoTexto(org.nombre),
       }),
     );
     mail = await sendMail({

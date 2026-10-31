@@ -83,6 +83,19 @@ export function fmtHora(
   return d ? d.toLocaleTimeString("es-AR", { timeZone: AR_TZ, ...opcionesAR(options) }) : null;
 }
 
+/**
+ * Día y horario de un turno: «viernes, 20 de noviembre, de 20:30 a 23:00», o
+ * «viernes, 20 de noviembre, a las 20:30» sin fin. Antes los mails pegaban
+ * «${inicio} a ${fin}» sobre un inicio que ya decía «a las»: «… a las 20:30 a 23:00».
+ */
+export function fmtHorario(inicio: DateInput, fin?: DateInput): string | null {
+  const dia = fmtFecha(inicio, { weekday: "long", day: "numeric", month: "long" });
+  const desde = fmtHora(inicio);
+  if (!dia || !desde) return null;
+  const hasta = fin ? fmtHora(fin) : null;
+  return hasta ? `${dia}, de ${desde} a ${hasta}` : `${dia}, a las ${desde}`;
+}
+
 /** Fecha + hora (por defecto "19 de julio a las 21:00"). */
 export function fmtFechaHora(
   v: DateInput,

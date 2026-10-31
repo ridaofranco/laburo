@@ -147,20 +147,12 @@ async function avisarRespuesta(token: string, accepted: boolean): Promise<void> 
       | undefined;
     if (!row) return;
 
-    const { fmtFechaHora } = await import("@/lib/dates");
+    const { fmtHorario } = await import("@/lib/dates");
     const { createElement } = await import("react");
     const { render } = await import("@react-email/components");
     const { siteUrl } = await import("@/lib/site");
-
-    const inicio = fmtFechaHora(row.starts_at, {
-      weekday: "long",
-      day: "2-digit",
-      month: "long",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    const fin = fmtFechaHora(row.ends_at, { hour: "2-digit", minute: "2-digit" });
-    const whenText = inicio && fin ? `${inicio} a ${fin}` : inicio;
+    // «viernes, 20 de noviembre, de 20:30 a 23:00» (antes «… a las 20:30 a 23:00»).
+    const whenText = fmtHorario(row.starts_at, row.ends_at);
     const amountText =
       row.amount != null && !Number.isNaN(Number(row.amount))
         ? `$${Number(row.amount).toLocaleString("es-AR")}`

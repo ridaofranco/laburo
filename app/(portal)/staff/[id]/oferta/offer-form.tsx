@@ -18,6 +18,7 @@
  * una segunda oferta). El botón wa.me usa el glifo OFICIAL de WhatsApp (D-03).
  */
 
+import { parsearMonto, montoParaInput, fmtMonto } from "@/lib/cotizaciones";
 import { useState } from "react";
 import { Select } from "@base-ui/react/select";
 import { Check, ChevronDown, ArrowLeft } from "lucide-react";
@@ -119,7 +120,9 @@ export function OfferForm({
   const [gigVenue, setGigVenue] = useState("");
   const [role, setRole] = useState(defaultRole);
   const [amount, setAmount] = useState(
-    initialAmount && /^\d+(\.\d+)?$/.test(initialAmount) ? initialAmount : "",
+    // ?monto= viene con punto decimal («80000.5»); el campo se lee en formato
+    // argentino (punto = miles), así que se pasa a coma antes de mostrarlo.
+    initialAmount && /^\d+(\.\d+)?$/.test(initialAmount) ? montoParaInput(initialAmount) : "",
   );
   const [conditions, setConditions] = useState("");
 
@@ -141,7 +144,9 @@ export function OfferForm({
       setError("Poné el rol de la oferta.");
       return;
     }
-    const montoNum = amount.trim() ? Number(amount.replace(/[^\d.]/g, "")) : NaN;
+    // Formato argentino: «80.000» son ochenta mil (antes quedaba en $80) y
+    // «1.500.000,50» se lee entero (antes daba NaN).
+    const montoNum = parsearMonto(amount) ?? NaN;
     if (!(montoNum > 0)) {
       setError("Poné el monto de la oferta.");
       return;
@@ -167,9 +172,7 @@ export function OfferForm({
     const pickedGig = isNewGig
       ? null
       : (gigs.find((g) => g.id === gigChoice) ?? null);
-    const parsedAmount = amount.trim()
-      ? Number(amount.replace(/[^\d.]/g, ""))
-      : null;
+    const parsedAmount = parsearMonto(amount);
 
     setSubmitting(true);
     try {
@@ -399,10 +402,15 @@ export function OfferForm({
           inputMode="numeric"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
-          placeholder="Ej: 80000"
+          placeholder="Ej: 80.000"
           required
           className={inputCls}
         />
+        {amount.trim() ? (
+          <p className="mt-1 text-[13px] text-[#cfc4c5]">
+            {parsearMonto(amount) != null ? `Le llega: ${fmtMonto(parsearMonto(amount))}` : "No es un monto válido."}
+          </p>
+        ) : null}
       </Field>
 
       {/* Condiciones (opcional) */}

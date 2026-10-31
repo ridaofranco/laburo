@@ -122,7 +122,12 @@ export function EquipoPanel({ equipo, emailPropio }: { equipo: Equipo; emailProp
         })}
 
         {/* ── Las invitaciones que todavía no aceptaron ── */}
-        {equipo.invitaciones.map((i) => (
+        {/* Una invitación de alguien que YA es miembro no está pendiente: pasaba
+            con el alta de cada productora (la invitación del dueño quedaba
+            «pendiente» y con «El mail no salió» debajo de su propia fila). */}
+        {equipo.invitaciones
+          .filter((i) => !equipo.miembros.some((m) => m.email && i.email && m.email.toLowerCase() === i.email.toLowerCase()))
+          .map((i) => (
           <div
             key={i.id}
             className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center py-4 border-b border-[#1A1A1A]"

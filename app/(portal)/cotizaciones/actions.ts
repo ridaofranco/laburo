@@ -136,6 +136,23 @@ export interface ProveedorInvitable {
 
 /* ────────────────────────────── lecturas ────────────────────────────── */
 
+
+/**
+ * El mail de quien está usando la productora, para el «responder» de los mails
+ * a proveedores. Los textos dicen «respondé este mail y les llega» y, sin esto,
+ * la respuesta le caía a la casilla de SOMOS DER aunque el pedido fuera de otra
+ * productora. Mismo criterio que proveedores/actions.ts (consulta).
+ */
+async function replyToDeLaSesion(): Promise<string | undefined> {
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.auth.getUser();
+    return data.user?.email ?? undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export async function listarPedidos(): Promise<PedidoResumen[]> {
   const supabase = await createClient();
   const org = await exigirOrg();
@@ -523,6 +540,7 @@ export async function invitar(
         // este mail compite con otros veinte.
         subject: `${productora} te pide un presupuesto · ${pedido.titulo}`,
         html,
+        replyTo: await replyToDeLaSesion(),
       });
       if (res.ok) salieron.push(inv.invite_id);
       else fallados += 1;
@@ -637,7 +655,7 @@ export async function adjudicar(
           montoTexto: d.montoTexto ?? null,
         }),
       );
-      const res = await sendMail({ to: d.email, subject: ASUNTO[d.resultado], html });
+      const res = await sendMail({ to: d.email, subject: ASUNTO[d.resultado], html, replyTo: await replyToDeLaSesion() });
       if (res.ok) avisados += 1;
       else fallados += 1;
     } catch (e) {
@@ -724,6 +742,7 @@ export async function cerrarPedido(
           ? `Se dio de baja · ${titulo}`
           : `Se cerró la recepción de presupuestos · ${titulo}`,
         html,
+        replyTo: await replyToDeLaSesion(),
       });
       if (res.ok) avisados += 1;
       else fallados += 1;
@@ -812,6 +831,7 @@ export async function reenviarInvitacion(
       to: r.email,
       subject: `${org.nombre ?? "Una productora"} te pide un presupuesto · ${p.titulo}`,
       html,
+      replyTo: await replyToDeLaSesion(),
     });
     if (!res.ok) {
       // El token nuevo ya está guardado: el link sirve igual y se puede volver a

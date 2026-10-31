@@ -282,6 +282,8 @@ export async function enviarLeadProductor(formData: FormData): Promise<LeadResul
     to,
     subject: `LABURO: consulta de productor · ${nombre}`,
     html,
+    // «Respondele directo»: que apretar responder le escriba al productor.
+    replyTo: email,
   });
 
   if (!r.ok) {

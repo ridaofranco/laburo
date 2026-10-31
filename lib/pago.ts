@@ -12,3 +12,14 @@
  */
 export const PAGO_TEXTO =
   "El pago se coordina con SOMOS DER dentro de los 10 días hábiles de realizado el trabajo.";
+
+/**
+ * Lo mismo, con el nombre de la productora que manda la oferta (31/10). LABURO
+ * ya tiene alta de productoras, y una propuesta de otra productora le decía al
+ * staff que le pagaba SOMOS DER. PAGO_TEXTO queda para las pantallas del pool
+ * (sumate, panel), que son de SOMOS DER.
+ */
+export function pagoTexto(productora?: string | null): string {
+  const quien = productora?.trim() || "la productora";
+  return `El pago se coordina con ${quien} dentro de los 10 días hábiles de realizado el trabajo.`;
+}

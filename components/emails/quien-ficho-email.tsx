@@ -65,7 +65,7 @@ const LEJOS_M = 500;
 
 function distanciaTexto(m?: number | null): string | null {
   if (m == null || m < LEJOS_M) return null;
-  return m >= 1000 ? `fichó a ${(m / 1000).toFixed(1)} km del predio` : `fichó a ${Math.round(m)} m del predio`;
+  return m >= 1000 ? `fichó a ${(m / 1000).toLocaleString("es-AR", { maximumFractionDigits: 1 })} km del predio` : `fichó a ${Math.round(m)} m del predio`;
 }
 
 export function QuienFichoEmail({

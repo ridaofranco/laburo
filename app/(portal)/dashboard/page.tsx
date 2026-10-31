@@ -164,6 +164,16 @@ export default async function DashboardPage() {
                 ? `${confirmedNext === 1 ? "persona confirmada" : "personas confirmadas"} ${nextEnCurso ? "en el evento en curso" : "para tu próximo evento"}.`
                 : "eventos por delante. Creá uno y empezá a armar el equipo."}
             </p>
+            {/* El texto decía «Creá uno» y no había cómo: el botón grande lleva
+                a /buscar, que para una productora nueva está vacío. */}
+            {!nextGig ? (
+              <Link
+                href="/tablero/nuevo"
+                className="mt-6 inline-block label-tech text-[12px] text-[#e5e2e1] border-b border-[#4c4546] pb-1 hover:opacity-70"
+              >
+                Crear un evento
+              </Link>
+            ) : null}
           </div>
         </article>
 

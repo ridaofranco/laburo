@@ -39,7 +39,7 @@ import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { sendMail, smtpEnabled } from "@/lib/email/mailer";
 import { ReminderEmail } from "@/components/emails/reminder-email";
 import { ShiftReminderEmail } from "@/components/emails/shift-reminder-email";
-import { fmtFechaHora } from "@/lib/dates";
+import { fmtFechaHora, fmtHorario } from "@/lib/dates";
 import { siteUrl } from "@/lib/site";
 import { alerta } from "@/lib/alerta";
 
@@ -189,25 +189,21 @@ export async function GET(request: Request) {
       const to = fila.email?.trim();
       if (!to) continue;
       try {
-        const inicio = fmtFechaHora(fila.starts_at, {
-          weekday: "long",
-          day: "2-digit",
-          month: "long",
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-        const fin = fmtFechaHora(fila.ends_at, { hour: "2-digit", minute: "2-digit" });
+        const horario = fmtHorario(fila.starts_at, fila.ends_at);
         // La ventana es de 30 h, así que puede caer un evento de HOY: el mail se
         // adapta en vez de decirle "mañana" a alguien que trabaja en 3 horas.
+        // El día se compara en hora de Argentina: Vercel corre en UTC y un turno
+        // de hoy a las 22 (01 UTC de mañana) salía como «Mañana».
+        const diaAR = (d: Date) => d.toLocaleDateString("en-CA", { timeZone: "America/Argentina/Buenos_Aires" });
         const esHoy = fila.starts_at
-          ? new Date(fila.starts_at).toDateString() === new Date().toDateString()
+          ? diaAR(new Date(fila.starts_at)) === diaAR(new Date())
           : false;
         const html = await render(
           createElement(ShiftReminderEmail, {
             firstName: fila.first_name ?? "",
             gigTitle: fila.gig_title ?? "",
             role: fila.role ?? "",
-            whenText: inicio && fin ? `${inicio} a ${fin}` : inicio,
+            whenText: horario,
             venue: fila.venue_name,
             esHoy,
             link: siteUrl("/panel-staff"),

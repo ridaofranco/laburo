@@ -64,7 +64,7 @@ export function OfferAnswerEmail({
   const equipo =
     total > 0
       ? faltan > 0
-        ? `${cubiertos} de ${total} roles cubiertos. Faltan ${faltan}.`
+        ? `${cubiertos} de ${total} roles cubiertos. ${faltan === 1 ? "Falta 1" : `Faltan ${faltan}`}.`
         : `${cubiertos} de ${total} roles cubiertos. El equipo está completo.`
       : null;
 
