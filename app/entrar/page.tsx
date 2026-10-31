@@ -43,9 +43,13 @@ export default async function EntrarPage({
     } = await supabase.auth.getUser();
     if (user) {
       if (await orgActual()) redirect("/dashboard");
-      const { data: ficha } = await supabase.rpc("staff_app_my_staff_profile");
+      // Si la base falla se muestra «¿Qué sos?» igual (no se pierde nada: elegir
+      // un camino vuelve a mirar la sesión), pero queda en los logs.
+      const { data: ficha, error: fichaError } = await supabase.rpc("staff_app_my_staff_profile");
+      if (fichaError) console.error(`[entrar] no se pudo leer la ficha de staff: ${fichaError.message}`);
       if (ficha) redirect("/panel-staff");
-      const { data: proveedor } = await supabase.rpc("staff_app_mi_perfil_proveedor");
+      const { data: proveedor, error: proveedorError } = await supabase.rpc("staff_app_mi_perfil_proveedor");
+      if (proveedorError) console.error(`[entrar] no se pudo leer el perfil de proveedor: ${proveedorError.message}`);
       if (proveedor) redirect("/mi-proveedor");
     }
   }

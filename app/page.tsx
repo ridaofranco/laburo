@@ -153,10 +153,12 @@ const POOL_FALLBACK = 1000;
 async function poolPublico(): Promise<number> {
   try {
     const supabase = await createClient();
-    const { data } = await supabase.rpc("staff_app_pool_publico");
+    const { data, error } = await supabase.rpc("staff_app_pool_publico");
+    if (error) console.error(`[landing] no se pudo leer el pool: ${error.message}`);
     const n = Number(data);
     return Number.isFinite(n) && n > 0 ? n : POOL_FALLBACK;
-  } catch {
+  } catch (e) {
+    console.error(`[landing] no se pudo leer el pool: ${(e as Error).message}`);
     return POOL_FALLBACK;
   }
 }

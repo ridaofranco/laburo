@@ -169,6 +169,12 @@ function desdeFila(fila: FilaMyOrgs, elegida: boolean): OrgActual {
  * FAIL-CLOSED: ante cualquier error devuelve `[]`, y sin organizaciones no hay
  * selector ni cookie válida posible.
  */
+/** Lo que Next tira a propósito al leer cookies en un render estático: no es una falla. */
+function esAvisoDeNext(e: unknown): boolean {
+  const digest = (e as { digest?: unknown } | null)?.digest;
+  return typeof digest === "string" && (digest === "DYNAMIC_SERVER_USAGE" || digest.startsWith("NEXT_"));
+}
+
 export async function orgsDelUsuario(): Promise<OrgActual[]> {
   try {
     const supabase = await createClient();
@@ -177,9 +183,11 @@ export async function orgsDelUsuario(): Promise<OrgActual[]> {
       .select("organization_id, role, org_name, org_slug, es_plataforma")
       .order("created_at", { ascending: true });
 
+    if (error) console.error(`[org] no se pudieron leer las organizaciones: ${error.message}`);
     if (error || !data) return [];
     return (data as FilaMyOrgs[]).map((f) => desdeFila(f, false));
-  } catch {
+  } catch (e) {
+    if (!esAvisoDeNext(e)) console.error(`[org] no se pudieron leer las organizaciones: ${(e as Error).message}`);
     return [];
   }
 }
@@ -246,12 +254,16 @@ export async function orgActual(): Promise<OrgActual | null> {
       return desdeFila(filas[0], false);
     }
 
-    // Fallback: la 0035 (o la 0044) todavía no está aplicada.
-    const { data: vieja } = await supabase
+    // Fallback: la 0035 (o la 0044) todavía no está aplicada. Hoy están las dos,
+    // así que llegar acá casi siempre es una falla de la base: queda en los logs
+    // (la pantalla sigue cerrando del lado seguro).
+    console.error(`[org] staff_app_my_orgs falló, pruebo la vista vieja: ${error.message}`);
+    const { data: vieja, error: viejaError } = await supabase
       .from("staff_app_my_membership")
       .select("organization_id, role")
       .limit(1)
       .maybeSingle();
+    if (viejaError) console.error(`[org] staff_app_my_membership también falló: ${viejaError.message}`);
     const fila = vieja as { organization_id?: string; role?: string } | null;
     if (!fila) return null;
     return {
@@ -268,7 +280,8 @@ export async function orgActual(): Promise<OrgActual | null> {
       suplantada: false,
       suplantacionId: null,
     };
-  } catch {
+  } catch (e) {
+    if (!esAvisoDeNext(e)) console.error(`[org] orgActual falló: ${(e as Error).message}`);
     return null;
   }
 }
