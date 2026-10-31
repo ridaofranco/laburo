@@ -20,6 +20,7 @@
  * cliente service-role ni llama al schema staff_app directo (siempre el wrapper).
  */
 
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { fmtFecha, fmtFechaHora, fmtHora } from "@/lib/dates";
 import { AcceptDecline } from "./accept-decline";
@@ -108,6 +109,12 @@ function TerminalScreen({ view }: { view: TerminalView }) {
     </div>
   );
 }
+
+// Link personal con token: que ningún buscador lo indexe (31/10).
+export const metadata: Metadata = {
+  title: "LABURO. | Tu propuesta de trabajo",
+  robots: { index: false, follow: false },
+};
 
 export default async function OfferPage({
   params,

@@ -26,6 +26,7 @@
  * Toda mutación vive en actions.ts (Server Actions, POST). Esta página sólo lee.
  */
 
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { PanelProveedor } from "@/components/proveedor/panel-proveedor";
 import type { ConsultaProveedor } from "@/components/proveedor/consultas";
@@ -64,6 +65,12 @@ function SinAcceso() {
     </div>
   );
 }
+
+// Link personal con token: que ningún buscador lo indexe (31/10).
+export const metadata: Metadata = {
+  title: "LABURO. | Tu panel de proveedor",
+  robots: { index: false, follow: false },
+};
 
 export default async function AccesoProveedorPage({
   params,

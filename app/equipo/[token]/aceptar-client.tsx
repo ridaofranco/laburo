@@ -55,7 +55,7 @@ export function AceptarInvitacion({
   const MOTIVOS: Record<string, string> = {
     no_existe: "Este link no es válido. Pedile a la productora que te invite de nuevo.",
     revocada: "La productora canceló esta invitación.",
-    ya_aceptada: "Esta invitación ya la usaste. Entrá con tu cuenta.",
+    ya_aceptada: "Esta invitación ya está aceptada. Entrá con tu cuenta y vas directo al panel de la productora.",
     vencida: "Esta invitación venció. Pedile a la productora que te invite de nuevo.",
   };
 
@@ -184,7 +184,9 @@ export function AceptarInvitacion({
         ) : (
           <div className="flex flex-col gap-5">
             <h1 className="font-[family-name:var(--font-syne)] text-[28px] md:text-[34px] font-bold uppercase tracking-tight leading-[1.05]">
-              Este link no sirve
+              {/* Ya aceptada no es un error: pasa sola si la persona entró a
+                  LABURO con ese mail antes de tocar el link (31/10). */}
+              {invitacion?.reason === "ya_aceptada" ? "Ya sos parte del equipo" : "Este link no sirve"}
             </h1>
             <p className="text-[17px] leading-[1.7] text-[#8a8a8a]">
               {MOTIVOS[String(invitacion?.reason ?? "")] ??
