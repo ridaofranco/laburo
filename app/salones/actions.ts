@@ -111,9 +111,11 @@ export async function getFichaSalon(slug: string): Promise<FichaSalon | null> {
   const r = data as (FichaSalon & { ok?: boolean }) | null;
   if (!r?.ok) return null;
 
-  const { data: dataForm } = await supabase.rpc("staff_app_formulario_proveedor", {
+  const { data: dataForm, error: formError } = await supabase.rpc("staff_app_formulario_proveedor", {
     p_profile_id: r.profile_id,
   });
+  // Sin formulario propio se usa el de siempre: no rompe, pero que quede en los logs.
+  if (formError) console.error("[salones] no se pudo leer el formulario:", formError.message);
   const form = dataForm as {
     ok?: boolean;
     campos?: FichaSalon["campos"];

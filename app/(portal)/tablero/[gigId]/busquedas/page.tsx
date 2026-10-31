@@ -28,11 +28,14 @@ export default async function BusquedasPage({
 
   // El gig se lee por la vista con RLS: si no es de su organización, no existe
   // para esta persona y volvemos al tablero. No hace falta un chequeo aparte.
-  const { data: gig } = await supabase
+  const { data: gig, error: gigError } = await supabase
     .from("staff_app_gigs")
     .select("id,title,starts_at,venue_name")
     .eq("id", gigId)
     .maybeSingle();
+  // Un id mal formado también da error (22P02): se sigue volviendo al tablero,
+  // pero que quede en los logs por si es la base.
+  if (gigError) console.error("[busquedas] no se pudo leer el evento:", gigError.message);
   if (!gig) redirect("/tablero");
 
   const [{ data: busquedas, error: errB }, { data: postulaciones, error: errP }] = await Promise.all([
