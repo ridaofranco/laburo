@@ -40,9 +40,10 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { orgActual } from "@/lib/org";
 import { fmtFecha } from "@/lib/dates";
-import { money, moneyCompact } from "@/lib/format";
+import { money } from "@/lib/format";
 import { LoadError } from "@/components/load-error";
 import { COBRO_AL_CLIENTE_ACTIVO, COBRO_APAGADO_MOTIVO } from "@/lib/cobros";
+import { eventoTerminado } from "@/lib/offers";
 import { PagoListoBoton } from "./pago-listo-boton";
 
 interface OfferRow {
@@ -51,6 +52,7 @@ interface OfferRow {
   status: string | null;
   responded_at: string | null;
   sent_at: string | null;
+  gig_id: string | null;
   gig_title: string | null;
   staff_nombre: string | null;
   staff_apellido: string | null;
@@ -87,7 +89,7 @@ export default async function PagosPage() {
 
   let qOfertas = supabase
     .from("staff_app_offers")
-    .select("id,amount,status,responded_at,sent_at,gig_title,staff_nombre,staff_apellido")
+    .select("id,amount,status,responded_at,sent_at,gig_id,gig_title,staff_nombre,staff_apellido")
     .eq("status", "accepted");
   if (orgId) qOfertas = qOfertas.eq("organization_id", orgId);
   const { data, error } = await qOfertas;
@@ -99,6 +101,25 @@ export default async function PagosPage() {
     return tb - ta;
   });
 
+  // Fechas de cada evento: «Avisar pago listo» manda un mail «tu pago está
+  // listo», y antes salía también para un evento que todavía no pasó.
+  const gigIds = [...new Set(rows.map((r) => r.gig_id).filter((x): x is string => !!x))];
+  const fechasGig = new Map<string, { starts_at: string | null; ends_at: string | null }>();
+  if (gigIds.length > 0) {
+    const { data: gigsData, error: gigsError } = await supabase
+      .from("staff_app_gigs")
+      .select("id,starts_at,ends_at")
+      .in("id", gigIds);
+    if (gigsError) console.error("[pagos] no se pudieron leer las fechas de los eventos:", gigsError.message);
+    for (const g of (gigsData ?? []) as Array<{ id: string; starts_at: string | null; ends_at: string | null }>) {
+      fechasGig.set(g.id, g);
+    }
+  }
+  const terminado = (r: OfferRow) => {
+    const g = r.gig_id ? fechasGig.get(r.gig_id) : undefined;
+    // Sin fechas leídas no se esconde el botón: mejor que dejar a alguien sin poder avisar.
+    return g ? eventoTerminado(g.starts_at, g.ends_at) || (!g.starts_at && !g.ends_at) : true;
+  };
   const totalComprometido = rows.reduce((s, r) => s + (Number(r.amount) || 0), 0);
   const conMonto = rows.filter((r) => r.amount != null && Number(r.amount) > 0).length;
 
@@ -118,6 +139,11 @@ export default async function PagosPage() {
   for (const a of (avisosData ?? []) as Array<{ id: string; pago_listo_at: string | null }>) {
     avisadoPor.set(a.id, !!a.pago_listo_at);
   }
+  // Lo que falta pagar = comprometido menos lo que ya avisaste como pagado.
+  const totalAvisado = rows
+    .filter((r) => avisadoPor.get(r.id))
+    .reduce((s, r) => s + (Number(r.amount) || 0), 0);
+  const totalPendiente = totalComprometido - totalAvisado;
 
   // Panel de cobros al cliente (cada intento de pago por MercadoPago).
   let qCobros = supabase
@@ -251,8 +277,13 @@ export default async function PagosPage() {
                 Total comprometido
               </span>
               <span className="t-stat text-[#c6c6c6]">
-                {moneyCompact(totalComprometido)}
+                {money(totalComprometido)}
               </span>
+              {totalAvisado > 0 ? (
+                <span className="text-[13px] text-[#cfc4c5]">
+                  Falta pagar {money(totalPendiente)} · ya avisaste {money(totalAvisado)}
+                </span>
+              ) : null}
             </div>
             <div className="flex flex-col gap-2 p-6 border border-[#4c4546] bg-[#131313]">
               <span className="label-tech text-[12px] text-[#cfc4c5]">
@@ -307,10 +338,16 @@ export default async function PagosPage() {
                         : "A convenir"}
                     </div>
                     <div className="col-span-2 text-left md:text-right">
-                      <PagoListoBoton
-                        offerId={r.id}
-                        yaAvisado={avisadoPor.get(r.id) ?? false}
-                      />
+                      {avisadoPor.get(r.id) || terminado(r) ? (
+                        <PagoListoBoton
+                          offerId={r.id}
+                          yaAvisado={avisadoPor.get(r.id) ?? false}
+                        />
+                      ) : (
+                        <span className="text-[13px] text-[#8A8A8A]">
+                          Se avisa cuando termine el evento
+                        </span>
+                      )}
                     </div>
                   </div>
                 );

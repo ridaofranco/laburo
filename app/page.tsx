@@ -158,7 +158,10 @@ async function poolPublico(): Promise<number> {
     const n = Number(data);
     return Number.isFinite(n) && n > 0 ? n : POOL_FALLBACK;
   } catch (e) {
-    console.error(`[landing] no se pudo leer el pool: ${(e as Error).message}`);
+    // Al compilar, Next avisa que leer cookies vuelve la página dinámica: no es una falla.
+    if ((e as { digest?: string })?.digest !== "DYNAMIC_SERVER_USAGE") {
+      console.error(`[landing] no se pudo leer el pool: ${(e as Error).message}`);
+    }
     return POOL_FALLBACK;
   }
 }

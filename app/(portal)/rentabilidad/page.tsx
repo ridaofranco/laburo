@@ -94,6 +94,9 @@ export default async function RentabilidadPage() {
   );
   const tieneIngreso = totalIngreso > 0;
   const margen = totalIngreso - montoComprometido;
+  // Staff confirmado «a convenir»: su costo no está en la cuenta, así que el
+  // margen sale más alto de lo que es. Se avisa en vez de esconderlo.
+  const sinMonto = accepted.filter((o) => !(Number(o.amount) > 0)).length;
 
   // Ofertas por mes: últimos 4 meses (incluye el actual), por sent_at.
   const now = new Date();
@@ -192,6 +195,11 @@ export default async function RentabilidadPage() {
                         ? "Lo que te queda después de pagarle al staff que ya confirmó."
                         : "Hoy estás poniendo plata: el staff confirmado cuesta más de lo que cargaste como ingreso."}
                     </div>
+                    {sinMonto > 0 ? (
+                      <div className="text-[14px] leading-[1.6] text-[#e3c77f] mt-3 max-w-[448px]">
+                        Falta el costo de {sinMonto} {sinMonto === 1 ? "persona confirmada" : "personas confirmadas"} «a convenir»: el margen real es menor.
+                      </div>
+                    ) : null}
                   </div>
                 </div>
 

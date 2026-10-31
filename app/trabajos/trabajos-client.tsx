@@ -149,7 +149,7 @@ export function TrabajosClient({ trabajos }: { trabajos: TrabajoAbierto[] }) {
     return (
       <div className="py-10">
         <p className="text-[18px] text-[#cfc4c5] leading-[1.6] max-w-[560px]">
-          Ahora mismo no hay búsquedas abiertas. Cuando SOMOS DER publique una que
+          Ahora mismo no hay búsquedas abiertas. Cuando una productora publique una que
           vaya con lo tuyo, va a aparecer acá y te vas a poder postular sin
           esperar a que te escriban.
         </p>

@@ -26,9 +26,10 @@ export function money(n: number): string {
   return ars.format(n).replace(/\$\s+/, "$");
 }
 
-/** Compacto para números grandes: $1.2M, $840K, y $12.500 por debajo de 10K. */
+/** Compacto para números grandes: $1,2M, $840K, y $12.500 por debajo de 10K. */
 export function moneyCompact(n: number): string {
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
+  // Coma decimal, como se escribe acá: «$1.2M» se lee como mil doscientos.
+  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1).replace(".", ",")}M`;
   if (n >= 10_000) return `$${Math.round(n / 1000)}K`;
   return money(n);
 }

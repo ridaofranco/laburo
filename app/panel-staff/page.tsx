@@ -99,8 +99,10 @@ export default async function PanelStaffPage() {
   const totalACobrar = aCobrar.reduce((s, o) => s + (Number(o.amount) || 0), 0);
 
   const nombre = (profile.nombre ?? "").trim() || "Hola";
-  const eventosRealizados = profile.eventos_trabajados ?? 0;
-  const confirmados = accepted.length;
+  // `eventos_trabajados` es el número cargado a mano (lo de antes de la app);
+  // si en la app ya trabajó más, gana lo que trabajó. Confirmados = los que vienen.
+  const eventosRealizados = Math.max(profile.eventos_trabajados ?? 0, past.length);
+  const confirmados = upcoming.length;
 
   return (
     <div className="min-h-dvh bg-[#131313] text-[#e5e2e1] antialiased flex flex-col md:flex-row">
@@ -295,7 +297,7 @@ export default async function PanelStaffPage() {
                 {confirmados}
               </span>
               <span className="label-tech text-[12px] uppercase text-[#cfc4c5] tracking-widest">
-                {confirmados === 1 ? "Evento confirmado" : "Eventos confirmados"}
+                {confirmados === 1 ? "Evento por venir" : "Eventos por venir"}
               </span>
             </div>
           </section>
@@ -363,7 +365,7 @@ export default async function PanelStaffPage() {
                       <span className="text-[15px] text-[#cfc4c5]">
                         Ganaste{" "}
                         <span className="text-[#c6c6c6] font-semibold">{money(totalGanado)}</span>{" "}
-                        con SOMOS DER
+                        en eventos
                       </span>
                     ) : (
                       <span className="text-[15px] text-[#cfc4c5]">
