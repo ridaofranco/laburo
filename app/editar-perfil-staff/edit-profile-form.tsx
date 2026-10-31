@@ -377,7 +377,7 @@ export function EditProfileForm({ profile }: { profile: StaffProfile }) {
         </div>
       </Section>
 
-      <div className="flex justify-end border-t border-[#1A1A1A] pt-8 sticky bottom-0 bg-[#131313]/90 backdrop-blur -mx-6 md:-mx-20 px-6 md:px-20 py-4">
+      <div className="flex justify-end border-t border-[#1A1A1A] pt-8 sticky bottom-[80px] md:bottom-0 z-10 bg-[#131313]/90 backdrop-blur -mx-6 md:-mx-20 px-6 md:px-20 py-4">
         <button
           type="submit"
           disabled={saving}

@@ -166,7 +166,7 @@ export default async function PanelStaffPage() {
                 </div>
               ) : (
                 <p className="text-[18px] text-[#cfc4c5] mt-4 max-w-[520px] leading-[1.6]">
-                  Cuando una agencia te mande una oferta y la confirmes, tu próximo
+                  Cuando una productora te mande una oferta y la confirmes, tu próximo
                   evento aparece acá con la fecha, el lugar y tu rol.
                 </p>
               )}

@@ -28,7 +28,7 @@ export default async function EditarPerfilStaffPage() {
               Editar perfil
             </h1>
             <p className="text-[16px] text-[#cfc4c5] mt-4 max-w-[560px] leading-[1.6]">
-              Mantené tus datos al día para que las agencias te encuentren y te
+              Mantené tus datos al día para que las productoras te encuentren y te
               manden las ofertas que van con vos.
             </p>
           </header>

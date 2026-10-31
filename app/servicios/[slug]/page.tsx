@@ -67,7 +67,11 @@ export default async function FichaProveedorPage({ params }: Props) {
   const p = await getFichaProveedor(slug);
   if (!p) notFound();
 
-  const ubicacion = [p.ciudad, p.provincia].filter(Boolean).join(", ");
+  // Sin comas sueltas: una ciudad cargada como «Palermo,» salía «Palermo,, CABA» (31/10).
+  const ubicacion = [p.ciudad, p.provincia]
+    .map((x) => (x ?? "").trim().replace(/[\s,]+$/, ""))
+    .filter(Boolean)
+    .join(", ");
 
   return (
     <div className="min-h-dvh bg-black text-[#f5f5f5] selection:bg-[#0047ff] selection:text-white">

@@ -14,7 +14,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { oficioColor } from "@/lib/avatar-color";
-import { fmtHora } from "@/lib/dates";
+import { fmtHora, AR_TZ } from "@/lib/dates";
 
 export interface CalGig {
   id: string;
@@ -36,7 +36,24 @@ function mondayIndex(d: Date): number {
   return (d.getDay() + 6) % 7;
 }
 
-/** Clave YYYY-M-D en hora local (sin desplazamiento de zona). */
+/**
+ * Año, mes (0-11) y día de un instante EN HORA ARGENTINA (31/10). Antes se usaba
+ * la hora local de quien corre el código: en Vercel (UTC) un evento de las 21 h
+ * caía al día siguiente, el HTML del servidor no coincidía con el navegador
+ * (error 418 de React) y desde afuera del país el evento salía en otro día.
+ */
+const partesFmt = new Intl.DateTimeFormat("en-CA", {
+  timeZone: AR_TZ,
+  year: "numeric",
+  month: "numeric",
+  day: "numeric",
+});
+function partesAR(d: Date): { y: number; m: number; d: number } {
+  const p = Object.fromEntries(partesFmt.formatToParts(d).map((x) => [x.type, x.value]));
+  return { y: Number(p.year), m: Number(p.month) - 1, d: Number(p.day) };
+}
+
+/** Clave YYYY-M-D (en hora argentina, ver partesAR). */
 function dayKey(y: number, m: number, d: number): string {
   return `${y}-${m}-${d}`;
 }
@@ -49,8 +66,10 @@ function gigDayKeys(g: CalGig): string[] {
   const endSrc = g.ends_at ? new Date(g.ends_at) : start;
   const end = Number.isNaN(endSrc.getTime()) ? start : endSrc;
   const keys: string[] = [];
-  const cur = new Date(start.getFullYear(), start.getMonth(), start.getDate());
-  const last = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+  const a = partesAR(start);
+  const b = partesAR(end);
+  const cur = new Date(a.y, a.m, a.d);
+  const last = new Date(b.y, b.m, b.d);
   // Cap defensivo para no iterar rangos absurdos.
   let guard = 0;
   while (cur <= last && guard < 366) {
@@ -62,7 +81,10 @@ function gigDayKeys(g: CalGig): string[] {
 }
 
 export function CalendarioClient({ gigs }: { gigs: CalGig[] }) {
-  const today = useMemo(() => new Date(), []);
+  const today = useMemo(() => {
+    const t = partesAR(new Date());
+    return new Date(t.y, t.m, t.d);
+  }, []);
   const [view, setView] = useState({ y: today.getFullYear(), m: today.getMonth() });
   const [selected, setSelected] = useState<string | null>(
     dayKey(today.getFullYear(), today.getMonth(), today.getDate()),

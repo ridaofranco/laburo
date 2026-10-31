@@ -50,6 +50,12 @@ export function VisibilidadClient({
         >
           {pendiente ? "Cambiando…" : "Cambiar de opinión"}
         </button>
+        <a
+          href="/panel-staff"
+          className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#988e90] hover:text-[#e5e2e1] transition-colors"
+        >
+          ← Ir a mi panel
+        </a>
       </main>
     );
   }
@@ -76,7 +82,7 @@ export function VisibilidadClient({
             : las ofertas te llegan por LABURO, como siempre.
           </p>
           <p className="text-[15px] text-[#988e90]">
-            Podés cambiar de opinión cuando quieras con este mismo link.
+            Podés cambiar de opinión cuando quieras, desde Mi perfil o con este mismo link.
           </p>
         </div>
 
@@ -106,6 +112,14 @@ export function VisibilidadClient({
           </button>
         </div>
       </div>
+        <div className="mt-10">
+          <a
+            href="/panel-staff"
+            className="label-tech text-[12px] uppercase tracking-[0.2em] text-[#988e90] hover:text-[#e5e2e1] transition-colors"
+          >
+            ← Ir a mi panel
+          </a>
+        </div>
     </main>
   );
 }
