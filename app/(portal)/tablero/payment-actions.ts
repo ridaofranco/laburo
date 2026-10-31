@@ -44,11 +44,16 @@ export async function createClientCheckout(
   if (!accessToken) return { ok: false, reason: "MercadoPago no está configurado todavía." };
 
   const supabase = await createClient();
-  const { data: gig } = await supabase
+  const { data: gig, error: gigError } = await supabase
     .from("staff_app_gigs")
     .select("id,title,client_budget")
     .eq("id", gigId)
     .maybeSingle();
+  // Una falla de la base no es «el evento no existe»: se dice distinto y queda en los logs.
+  if (gigError) {
+    console.error(`[pago] no se pudo leer el evento ${gigId}: ${gigError.message}`);
+    return { ok: false, reason: "No pudimos leer el evento. Probá de nuevo en un rato." };
+  }
   if (!gig) return { ok: false, reason: "Evento no encontrado." };
 
   const amount = Number((gig as { client_budget: number | null }).client_budget) || 0;

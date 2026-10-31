@@ -117,7 +117,9 @@ export async function pedirLinkParaCotizar(
   }
 
   // El pedido, para armar el mail con los mismos datos que ve la página.
-  const { data: lic } = await supabase.rpc("staff_app_licitacion", { p_slug: slug });
+  const { data: lic, error: licError } = await supabase.rpc("staff_app_licitacion", { p_slug: slug });
+  // Si falla, el mail sale igual con los datos que ya devolvió quiero_cotizar.
+  if (licError) console.error(`[licitacion] no se pudo leer ${slug} para el mail: ${licError.message}`);
   const l = (lic as Record<string, unknown> | null) ?? {};
 
   try {
