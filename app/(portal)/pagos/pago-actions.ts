@@ -31,6 +31,7 @@ import { sendMail, type MailResult } from "@/lib/email/mailer";
 import { PagoListoEmail } from "@/components/emails/pago-listo-email";
 import { PAGO_TEXTO } from "@/lib/pago";
 import { money } from "@/lib/format";
+import { eventoTerminado } from "@/lib/offers";
 
 export type PagoListoResult =
   | { ok: false; reason: string }
@@ -66,6 +67,30 @@ export async function avisarPagoListo(offerId: string): Promise<PagoListoResult>
   //    marcara como pagada una propuesta DE DER. Ahora la organización viaja
   //    desde la membresía del que hizo clic.
   const admin = createServiceRoleClient();
+
+  // 2a. El mail dice «tu pago está listo»: no sale antes de que termine el
+  //     evento (la pantalla ya no ofrece el botón; esto frena el resto).
+  const { data: oferta, error: ofertaError } = await admin
+    .from("staff_app_offers")
+    .select("gig_id")
+    .eq("id", offerId)
+    .eq("organization_id", org.organizationId)
+    .maybeSingle();
+  if (ofertaError) console.error("[pagos] no se pudo leer la oferta:", ofertaError.message);
+  const gigId = (oferta as { gig_id?: string | null } | null)?.gig_id;
+  if (gigId) {
+    const { data: gig, error: gigError } = await admin
+      .from("staff_app_gigs")
+      .select("starts_at,ends_at")
+      .eq("id", gigId)
+      .maybeSingle();
+    if (gigError) console.error("[pagos] no se pudo leer el evento:", gigError.message);
+    const g = gig as { starts_at: string | null; ends_at: string | null } | null;
+    if (g && (g.starts_at || g.ends_at) && !eventoTerminado(g.starts_at, g.ends_at)) {
+      return { ok: false, reason: "El evento todavía no terminó: el pago se avisa después." };
+    }
+  }
+
   let { data, error } = await admin.rpc("staff_app_marcar_pago_listo", {
     p_offer_id: offerId,
     p_org: org.organizationId,
