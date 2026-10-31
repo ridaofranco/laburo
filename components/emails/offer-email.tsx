@@ -22,6 +22,7 @@ import {
   Html,
   Section,
   Text,
+  Preview,
 } from "@react-email/components";
 import { Encabezado } from "./encabezado";
 import { PieWhatsApp } from "./pie-whatsapp";
@@ -89,6 +90,8 @@ export function OfferEmail({
 
   return (
     <Html lang="es">
+      {/* Lo que se lee debajo del asunto en la bandeja (antes, en todos: «LABURO STAFF PARA EVENTOS · SOMOS DER»). */}
+      <Preview>{`${role?.trim() ? `${role.trim()}${gigTitle?.trim() ? ` en ${gigTitle.trim()}` : ""}` : "Tenés una propuesta"}. Mirá el pago y contestá desde el link.`}</Preview>
       <Body
         style={{
           margin: 0,

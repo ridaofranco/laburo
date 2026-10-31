@@ -55,6 +55,7 @@ import {
   Html,
   Section,
   Text,
+  Preview,
 } from "@react-email/components";
 import { Encabezado } from "./encabezado";
 import { PieWhatsApp } from "./pie-whatsapp";
@@ -104,6 +105,8 @@ export function WelcomeEmail({
 
   return (
     <Html lang="es">
+      {/* Lo que se lee debajo del asunto en la bandeja (antes, en todos: «LABURO STAFF PARA EVENTOS · SOMOS DER»). */}
+      <Preview>Tu perfil ya está en LABURO. Entrá a revisarlo y completarlo.</Preview>
       <Body
         style={{
           margin: 0,

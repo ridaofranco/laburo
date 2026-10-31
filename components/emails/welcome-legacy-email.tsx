@@ -43,6 +43,7 @@ import {
   Html,
   Section,
   Text,
+  Preview,
 } from "@react-email/components";
 import { Encabezado } from "./encabezado";
 
@@ -91,6 +92,8 @@ export function WelcomeLegacyEmail({ firstName, link, bajaLink }: WelcomeLegacyE
 
   return (
     <Html lang="es">
+      {/* Lo que se lee debajo del asunto en la bandeja (antes, en todos: «LABURO STAFF PARA EVENTOS · SOMOS DER»). */}
+      <Preview>Tu perfil ya está en LABURO. Entrá a revisarlo y completarlo.</Preview>
       <Body style={{ margin: 0, padding: 0, backgroundColor: SURFACE_0, color: FG, fontFamily: FONT_STACK }}>
         <Container style={{ maxWidth: "480px", margin: "0 auto", padding: "32px 20px" }}>
           <Encabezado />

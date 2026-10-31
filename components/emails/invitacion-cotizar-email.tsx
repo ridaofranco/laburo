@@ -44,6 +44,7 @@ import {
   Html,
   Section,
   Text,
+  Preview,
 } from "@react-email/components";
 import { Encabezado } from "./encabezado";
 
@@ -111,6 +112,8 @@ export function InvitacionCotizar({
 
   return (
     <Html lang="es">
+      {/* Lo que se lee debajo del asunto en la bandeja (antes, en todos: «LABURO STAFF PARA EVENTOS · SOMOS DER»). */}
+      <Preview>{`${productora?.trim() || "Una productora"} te pide precio${titulo?.trim() ? ` para ${titulo.trim()}` : ""}.${cierra ? ` Podés cargarlo hasta ${cierra}.` : ""}`}</Preview>
       <Body style={{ margin: 0, padding: 0, backgroundColor: SURFACE_0, color: FG, fontFamily: FONT_STACK }}>
         <Container style={{ maxWidth: "480px", margin: "0 auto", padding: "32px 20px" }}>
           <Encabezado />

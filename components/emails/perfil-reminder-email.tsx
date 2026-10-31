@@ -27,6 +27,7 @@ import {
   Html,
   Section,
   Text,
+  Preview,
 } from "@react-email/components";
 import { Encabezado } from "./encabezado";
 import { PieWhatsApp } from "./pie-whatsapp";
@@ -53,6 +54,8 @@ export function PerfilReminderEmail({ firstName, link, bajaLink }: PerfilReminde
 
   return (
     <Html lang="es">
+      {/* Lo que se lee debajo del asunto en la bandeja (antes, en todos: «LABURO STAFF PARA EVENTOS · SOMOS DER»). */}
+      <Preview>Tu perfil de LABURO sigue sin revisar: entrá y completalo.</Preview>
       <Body
         style={{
           margin: 0,

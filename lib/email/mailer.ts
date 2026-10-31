@@ -1,4 +1,5 @@
 import "server-only";
+import { htmlATexto } from "./texto-plano";
 import nodemailer from "nodemailer";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -40,6 +41,8 @@ export interface MailOptions {
   to: string;
   subject: string;
   html: string;
+  /** Versión en texto plano. Si no viene, se arma sola desde el HTML (texto-plano.ts). */
+  text?: string;
   attachments?: MailAttachment[];
   /**
    * A dónde contesta el que recibe, cuando NO somos nosotros.
@@ -148,6 +151,17 @@ export function adminEmails(): string[] {
 const errMsg = (e: unknown): string =>
   e instanceof Error ? e.message : String(e);
 
+
+/** El texto plano del envío: el que viene, o el armado desde el HTML. Nunca tira. */
+function textoDe(opts: MailOptions): string | undefined {
+  if (opts.text) return opts.text;
+  try {
+    return htmlATexto(opts.html) || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 // ─── Resend (vía API HTTP, sin dependencia extra) ─────────────────────────
 
 async function sendViaResend(opts: MailOptions): Promise<void> {
@@ -169,6 +183,7 @@ async function sendViaResend(opts: MailOptions): Promise<void> {
         : opts.to,
       subject: opts.subject,
       html: opts.html,
+      ...(textoDe(opts) ? { text: textoDe(opts) } : {}),
       ...(replyTo ? { reply_to: replyTo } : {}),
       ...(opts.headers ? { headers: opts.headers } : {}),
       attachments: opts.attachments?.map((a) => ({
@@ -213,6 +228,7 @@ async function sendViaSmtp(opts: MailOptions): Promise<void> {
   await transporter().sendMail({
     from: fromHeader(),
     ...opts,
+    ...(textoDe(opts) ? { text: textoDe(opts) } : {}),
     ...(replyTo ? { replyTo } : {}),
   });
 }

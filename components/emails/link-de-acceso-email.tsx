@@ -39,6 +39,7 @@ import {
   Html,
   Section,
   Text,
+  Preview,
 } from "@react-email/components";
 import { Encabezado } from "./encabezado";
 import { PieWhatsApp } from "./pie-whatsapp";
@@ -82,6 +83,8 @@ export function LinkDeAccesoEmail({
 }: LinkDeAccesoEmailProps) {
   return (
     <Html lang="es">
+      {/* Lo que se lee debajo del asunto en la bandeja (antes, en todos: «LABURO STAFF PARA EVENTOS · SOMOS DER»). */}
+      <Preview>{paraElegirContrasena ? "Tocá el botón para elegir tu contraseña de LABURO." : "Tocá el botón para entrar a LABURO."}</Preview>
       <Body
         style={{
           margin: 0,
