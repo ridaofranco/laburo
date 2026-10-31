@@ -33,7 +33,9 @@ export interface TrabajoAbierto {
 /** Las búsquedas abiertas para el caller. Vacío si no es staff. */
 export async function getTrabajosAbiertos(): Promise<TrabajoAbierto[]> {
   const supabase = await createClient();
-  const { data } = await supabase.rpc("staff_app_trabajos_abiertos");
+  const { data, error } = await supabase.rpc("staff_app_trabajos_abiertos");
+  // Un error no es «no hay búsquedas abiertas».
+  if (error) throw new Error(`[trabajos] no se pudo leer la lista: ${error.message}`);
   return (data as TrabajoAbierto[] | null) ?? [];
 }
 

@@ -83,7 +83,8 @@ export async function buscarPublico(filtros: {
 
 export async function getCategoriasPublicas(): Promise<string[]> {
   const supabase = await createClient();
-  const { data } = await supabase.rpc("staff_app_vidriera_categorias");
+  const { data, error } = await supabase.rpc("staff_app_vidriera_categorias");
+  if (error) console.error("[servicios] no se pudo leer categorías:", error.message);
   return (data as string[] | null) ?? [];
 }
 

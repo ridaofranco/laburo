@@ -27,8 +27,9 @@ const DESCRIPCION =
  */
 export async function generateMetadata(): Promise<Metadata> {
   const supabase = await createClient();
-  const { data } = await supabase.rpc("staff_app_licitaciones_abiertas", { p_limit: 1 });
-  const hayAlgo = Array.isArray(data) && data.length > 0;
+  const { data, error } = await supabase.rpc("staff_app_licitaciones_abiertas", { p_limit: 1 });
+  // Con error no se sabe si hay algo: no marcar noindex por una falla de la base.
+  const hayAlgo = Boolean(error) || (Array.isArray(data) && data.length > 0);
   return {
     title: "Licitaciones abiertas | LABURO",
     description: DESCRIPCION,
@@ -59,7 +60,8 @@ const fmt = (iso: unknown, conHora = false) => {
 
 export default async function LicitacionesPage() {
   const supabase = await createClient();
-  const { data } = await supabase.rpc("staff_app_licitaciones_abiertas", { p_limit: 40 });
+  const { data, error } = await supabase.rpc("staff_app_licitaciones_abiertas", { p_limit: 40 });
+  if (error) throw new Error(`[licitaciones] no se pudo leer la lista: ${error.message}`);
   const lista = (Array.isArray(data) ? data : []) as Record<string, unknown>[];
 
   return (

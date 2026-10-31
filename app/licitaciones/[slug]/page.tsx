@@ -16,7 +16,10 @@ import { LicitacionClient } from "./licitacion-client";
 
 async function traer(slug: string) {
   const supabase = await createClient();
-  const { data } = await supabase.rpc("staff_app_licitacion", { p_slug: slug });
+  const { data, error } = await supabase.rpc("staff_app_licitacion", { p_slug: slug });
+  // Con error, tirar (sale la pantalla de error, 500): un 404 por una falla de la
+  // base le diría a Google que la licitación ya no existe.
+  if (error) throw new Error(`[licitacion] no se pudo leer ${slug}: ${error.message}`);
   const l = data as Record<string, unknown> | null;
   return l?.ok ? l : null;
 }
