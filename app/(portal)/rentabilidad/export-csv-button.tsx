@@ -20,8 +20,10 @@ function toCsv(rows: CsvRow[]): string {
   const deFormula = (v: string) => (/^[=+\-@\t\r]/.test(v) ? `'${v}` : v);
   const esc = (v: string) => `"${deFormula(v).replace(/"/g, '""')}"`;
   const lines = [
-    header.map(esc).join(","),
-    ...rows.map((r) => [r.nombre, r.gig, r.monto, r.fecha].map(esc).join(",")),
+    // Punto y coma: el Excel en castellano usa la coma para los decimales y
+    // abría todo en una sola columna.
+    header.map(esc).join(";"),
+    ...rows.map((r) => [r.nombre, r.gig, r.monto, r.fecha].map(esc).join(";")),
   ];
   return lines.join("\n");
 }

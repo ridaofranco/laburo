@@ -98,19 +98,25 @@ export default async function RentabilidadPage() {
   // margen sale más alto de lo que es. Se avisa en vez de esconderlo.
   const sinMonto = accepted.filter((o) => !(Number(o.amount) > 0)).length;
 
-  // Ofertas por mes: últimos 4 meses (incluye el actual), por sent_at.
-  const now = new Date();
+  // Ofertas por mes: últimos 4 meses (incluye el actual), por sent_at, en hora
+  // argentina (el servidor está en UTC: una oferta del 31 a las 22 caía en el
+  // mes siguiente). Se corre todo 3 horas y se leen los campos en UTC.
+  const AR_OFFSET_MS = 3 * 3600 * 1000;
+  const enAR = (d: Date) => {
+    const x = new Date(d.getTime() - AR_OFFSET_MS);
+    return { y: x.getUTCFullYear(), m: x.getUTCMonth() };
+  };
+  const hoyAR = enAR(new Date());
   const buckets: { label: string; count: number }[] = [];
   for (let i = 3; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    buckets.push({ label: MES_ABR[d.getMonth()], count: 0 });
+    buckets.push({ label: MES_ABR[(((hoyAR.m - i) % 12) + 12) % 12], count: 0 });
   }
-  const firstBucket = new Date(now.getFullYear(), now.getMonth() - 3, 1).getTime();
   for (const o of offers) {
     if (!o.sent_at) continue;
     const t = new Date(o.sent_at);
-    if (Number.isNaN(t.getTime()) || t.getTime() < firstBucket) continue;
-    const idx = (t.getFullYear() - now.getFullYear()) * 12 + (t.getMonth() - now.getMonth()) + 3;
+    if (Number.isNaN(t.getTime())) continue;
+    const ar = enAR(t);
+    const idx = (ar.y - hoyAR.y) * 12 + (ar.m - hoyAR.m) + 3;
     if (idx >= 0 && idx < 4) buckets[idx].count++;
   }
   const maxCount = Math.max(1, ...buckets.map((b) => b.count));
@@ -124,7 +130,8 @@ export default async function RentabilidadPage() {
   const csvRows: CsvRow[] = roster.map((o) => ({
     nombre: [o.staff_nombre, o.staff_apellido].filter(Boolean).join(" ").trim() || "Sin nombre",
     gig: (o.gig_title ?? "").trim() || "Sin evento",
-    monto: o.amount != null ? money(Number(o.amount)) : "",
+    // Número pelado (sin «$» ni puntos de miles) para que la planilla lo sume.
+    monto: o.amount != null ? String(Number(o.amount)).replace(".", ",") : "",
     fecha: fmtFecha(o.responded_at, {}) ?? "",
   }));
 

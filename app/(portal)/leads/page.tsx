@@ -76,6 +76,7 @@ export default async function LeadsPage() {
       "id,nombre,empresa,email,telefono,mensaje,origen,estado,contactado_at,created_at",
     )
     .order("created_at", { ascending: false });
+  if (error) console.error("[leads] no se pudieron leer:", error.message);
 
   const leads = (data ?? []) as LeadRow[];
   const nuevos = leads.filter((l) => esEstado(l.estado) === "nuevo").length;
@@ -100,26 +101,16 @@ export default async function LeadsPage() {
       </div>
 
       {error ? (
-        // No es un LoadError genérico a propósito: el motivo casi seguro es que
-        // la 0039 no está aplicada, y eso se arregla en dos minutos si se sabe.
+        // No es un LoadError genérico a propósito: aclara que las consultas no se
+        // pierden (siguen llegando por mail). La 0039 ya está aplicada.
         <div className="border border-[#4c4546] bg-[#0e0e0e] p-8">
           <p className="text-[16px] text-[#e5e2e1]">
-            Todavía no se pueden mostrar los leads.
+            No pudimos cargar los leads. Probá de nuevo en un rato.
           </p>
           <p className="mt-3 text-[14px] leading-[1.7] text-[#cfc4c5] max-w-[640px]">
-            Lo más probable es que falte aplicar la migración{" "}
-            <span className="label-tech text-[12px] text-[#e5e2e1]">
-              staff_app_0039_producer_leads
-            </span>{" "}
-            en Supabase (está como archivo en{" "}
-            <span className="label-tech text-[12px] text-[#e5e2e1]">
-              supabase/migrations/
-            </span>
-            , sin aplicar). Hasta que se corra, las consultas de la landing
-            siguen llegando por mail a las casillas internas: no se pierde
-            ninguna, pero no se listan acá.
+            Las consultas de la landing siguen llegando por mail a las casillas
+            internas: no se pierde ninguna. El detalle del error quedó en los logs.
           </p>
-          <p className="mt-3 label-tech text-[11px] text-[#4c4546]">{error.message}</p>
         </div>
       ) : leads.length === 0 ? (
         <div className="border-t border-b border-[#353535] py-20 text-center">
