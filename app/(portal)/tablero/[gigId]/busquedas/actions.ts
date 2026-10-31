@@ -43,10 +43,36 @@ async function llamar(
   return { ok: true };
 }
 
+/**
+ * ¿El evento ya terminó? (31/10) Publicar una búsqueda de un evento pasado la
+ * mostraba al pool para algo que ya no existe. Fin cargado: terminó si ya pasó.
+ * Sin fin: 12 h después del inicio (la misma regla del panel del staff).
+ */
+export async function eventoTerminado(gig: { starts_at: string | null; ends_at: string | null }): Promise<boolean> {
+  const ahora = Date.now();
+  if (gig.ends_at) return new Date(gig.ends_at).getTime() < ahora;
+  if (gig.starts_at) return new Date(gig.starts_at).getTime() < ahora - 12 * 3600 * 1000;
+  return false;
+}
+
+const YA_TERMINO = "Ese evento ya terminó: no se puede publicar una búsqueda. Si es otra fecha, creá un evento nuevo.";
+
+async function gigTerminado(gigId: string): Promise<boolean> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("staff_app_gigs")
+    .select("starts_at,ends_at")
+    .eq("id", gigId)
+    .maybeSingle();
+  if (error) console.error("[busquedas] no se pudo leer la fecha del evento:", error.message);
+  return data ? eventoTerminado(data as { starts_at: string | null; ends_at: string | null }) : false;
+}
+
 export async function crearBusqueda(
   gigId: string,
   input: { role: string; cupo: number; pago: number | null; notas: string | null; publicar: boolean },
 ) {
+  if (input.publicar && (await gigTerminado(gigId))) return { ok: false, error: YA_TERMINO };
   return llamar(
     "staff_app_crear_busqueda",
     {
@@ -62,6 +88,7 @@ export async function crearBusqueda(
 }
 
 export async function publicarBusqueda(gigId: string, openingId: string, publicar: boolean) {
+  if (publicar && (await gigTerminado(gigId))) return { ok: false, error: YA_TERMINO };
   return llamar(
     "staff_app_publicar_busqueda",
     { p_opening_id: openingId, p_publicar: publicar },

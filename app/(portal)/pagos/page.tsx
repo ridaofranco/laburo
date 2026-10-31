@@ -280,7 +280,7 @@ export default async function PagosPage() {
               <span className="label-tech text-[12px] text-[#cfc4c5]">
                 Total comprometido
               </span>
-              <span className="t-stat text-[#c6c6c6]">
+              <span className="t-stat-sm sm:t-stat text-[#c6c6c6] break-words">
                 {money(totalComprometido)}
               </span>
               {totalAvisado > 0 ? (
@@ -329,7 +329,9 @@ export default async function PagosPage() {
                     className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 py-6 border-b border-[#4c4546] items-center"
                   >
                     <div className="col-span-2 text-[15px] text-[#cfc4c5]">
-                      {fecha(r.responded_at)}
+                      {/* La fecha del EVENTO (31/10): antes la de cuando se
+                          aceptó la oferta, sin decir qué fecha era. */}
+                      {fecha((r.gig_id ? fechasGig.get(r.gig_id)?.starts_at : null) ?? r.responded_at)}
                     </div>
                     <div className="col-span-3 text-[18px] text-[#c6c6c6] uppercase font-[family-name:var(--font-syne)] font-semibold">
                       {nombre}

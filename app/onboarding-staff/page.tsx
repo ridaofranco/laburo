@@ -64,7 +64,9 @@ export default function OnboardingStaffPage() {
   };
 
   return (
-    <div className="min-h-dvh bg-black text-[#e5e2e1] flex flex-col items-center justify-center overflow-hidden relative">
+    // Sin overflow-hidden y con aire arriba y abajo (31/10): a 320 el párrafo
+    // quedaba debajo de la barra fija de controles y no se podía scrollear.
+    <div className="min-h-dvh bg-black text-[#e5e2e1] flex flex-col items-center justify-center relative pt-24 pb-32 md:py-0">
       {/* TopNav minimalista */}
       <header className="fixed top-0 left-0 w-full z-50 flex justify-center py-6">
         <LaburoWordmark className="h-[26px] w-auto" />
@@ -88,7 +90,7 @@ export default function OnboardingStaffPage() {
               {/* Sin la imagen mock de Stitch (googleusercontent): quedaba una foto
                   ajena de fondo y en móvil ocupaba media pantalla. Panel más bajo,
                   degradado propio, el ícono manda. */}
-              <div className="mb-12 relative w-full h-[220px] md:h-[320px] border border-[#1A1A1A] overflow-hidden bg-[#0e0e0e]">
+              <div className="mb-8 md:mb-12 relative w-full h-[160px] sm:h-[220px] md:h-[320px] border border-[#1A1A1A] overflow-hidden bg-[#0e0e0e]">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#161616] via-[#0e0e0e] to-[#0e0e0e]" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <slide.Icon

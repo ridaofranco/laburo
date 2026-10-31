@@ -67,12 +67,22 @@ export default async function PanelStaffPage() {
     return l === "Enviada" || l === "Vista";
   });
 
+  // ¿Ya pasó? Con hora de fin cargada, cuenta como realizado 2 h después del
+  // fin (margen para fichar la salida desde el panel). Antes se miraba solo el
+  // inicio + 12 h: un evento terminado seguía como «Tu evento de hoy · Ir a
+  // fichar», con 0 realizados y sin «a cobrar» (recorrido del 31/10).
+  // Sin hora de fin, la regla de siempre.
+  const terminado = (o: StaffOffer) =>
+    o.gig_ends_at
+      ? ts(o.gig_ends_at) < now - 2 * 3600 * 1000
+      : o.gig_starts_at != null && ts(o.gig_starts_at) < cutoff;
+
   // Confirmados a futuro (incluye hoy) y pasados, ordenados.
   const upcoming = accepted
-    .filter((o) => ts(o.gig_starts_at) >= cutoff)
+    .filter((o) => !terminado(o))
     .sort((a, b) => ts(a.gig_starts_at) - ts(b.gig_starts_at));
   const past = accepted
-    .filter((o) => o.gig_starts_at != null && ts(o.gig_starts_at) < cutoff)
+    .filter((o) => terminado(o))
     .sort((a, b) => ts(b.gig_starts_at) - ts(a.gig_starts_at));
 
   // Próximo = el confirmado futuro más cercano. Si no hay ninguno a futuro, NO
@@ -117,7 +127,9 @@ export default async function PanelStaffPage() {
                 {next
                   ? enCurso
                     ? "Evento en curso"
-                    : ts(next.gig_starts_at) <= now
+                    : next.gig_ends_at && ts(next.gig_ends_at) <= now
+                      ? "Terminó: fichá tu salida si no lo hiciste"
+                      : ts(next.gig_starts_at) <= now
                       ? "Tu evento de hoy"
                       : "Próximo evento"
                   : `Hola, ${nombre}`}
@@ -289,7 +301,7 @@ export default async function PanelStaffPage() {
                 {eventosRealizados}
               </span>
               <span className="label-tech text-[12px] uppercase text-[#cfc4c5] tracking-widest">
-                Eventos realizados
+                {eventosRealizados === 1 ? "Evento realizado" : "Eventos realizados"}
               </span>
             </div>
             <div className="flex flex-col gap-4 items-center justify-center pt-10 md:pt-0">
@@ -321,7 +333,8 @@ export default async function PanelStaffPage() {
             {pending.length === 0 ? (
               <p className="text-[16px] text-[#cfc4c5] py-6">
                 No tenés propuestas pendientes. Cuando te llegue una oferta, la
-                confirmás desde el link que te mandan por email o WhatsApp.
+                vas a ver acá para aceptarla o rechazarla (también te llega el
+                link por email o WhatsApp).
               </p>
             ) : (
               <div className="flex flex-col">

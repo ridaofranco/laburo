@@ -13,6 +13,7 @@
 export const dynamic = "force-dynamic";
 
 import { redirect } from "next/navigation";
+import { eventoTerminado } from "./actions";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
@@ -30,7 +31,7 @@ export default async function BusquedasPage({
   // para esta persona y volvemos al tablero. No hace falta un chequeo aparte.
   const { data: gig, error: gigError } = await supabase
     .from("staff_app_gigs")
-    .select("id,title,starts_at,venue_name")
+    .select("id,title,starts_at,ends_at,venue_name")
     .eq("id", gigId)
     .maybeSingle();
   // Un id mal formado también da error (22P02): se sigue volviendo al tablero,
@@ -77,6 +78,13 @@ export default async function BusquedasPage({
           uno.
         </p>
       </header>
+
+      {(await eventoTerminado(gig)) && (
+        <p role="status" className="border border-[#f5a623]/40 bg-[#f5a623]/10 px-4 py-3 text-[14px] text-[#f5a623] leading-[1.5]">
+          Este evento ya terminó: las búsquedas quedan para consultar, pero no se
+          pueden publicar. Si es otra fecha, creá un evento nuevo.
+        </p>
+      )}
 
       <BusquedasClient
         gigId={gigId}

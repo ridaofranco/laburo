@@ -59,8 +59,10 @@ function Fila({ gigId, f }: { gigId: string; f: FilaFichaje }) {
 
   return (
     <li className="bg-[#131313] border border-[#1A1A1A] px-4 py-3 flex flex-col gap-3">
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex flex-col min-w-0">
+      {/* flex-wrap (31/10): a 320 la columna de horas se comía el ancho y el
+          nombre quedaba en una letra; ahora las horas bajan a otro renglón. */}
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+        <div className="flex flex-col min-w-[9rem] flex-1">
           <span className="text-[15px] text-[#e5e2e1] uppercase truncate">{f.nombre}</span>
           {f.distancia && (
             <span className={`label-tech text-[10px] ${f.distancia.lejos ? "text-[#f5a623]" : "text-[#3dd68c]"}`}>
@@ -69,7 +71,7 @@ function Fila({ gigId, f }: { gigId: string; f: FilaFichaje }) {
           )}
           {f.corregido && <span className="label-tech text-[10px] text-[#988e90]">corregido a mano</span>}
         </div>
-        <div className="shrink-0 flex flex-col items-end gap-1">
+        <div className="flex flex-col items-start sm:items-end gap-1">
           <span className="label-tech text-[11px] text-[#cfc4c5]">
             <span className="text-[#3dd68c]">↓ {f.entrada ?? "sin marcar"}</span>
             <span className="mx-2 opacity-40">|</span>

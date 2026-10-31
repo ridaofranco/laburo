@@ -16,7 +16,7 @@ export default function BilleteraPage() {
         <p className="label-tech text-[12px] text-[#cfc4c5] mb-4 tracking-[0.2em]">
           Próximamente
         </p>
-        <h1 className="t-display uppercase text-[#e5e2e1] break-words">
+        <h1 className="t-display uppercase text-[#e5e2e1] break-words max-sm:text-[28px]">
           Billetera de
           <br />
           documentos

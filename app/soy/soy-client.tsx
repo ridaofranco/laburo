@@ -100,7 +100,7 @@ export function SoyClient({
             </h1>
             <p className="text-[17px] leading-[1.7] text-[#8a8a8a] mt-4 max-w-[560px]">
               Una misma cuenta puede ser varias cosas a la vez. Con{" "}
-              <span className="text-[#e5e2e1]">{email}</span> podés armar tus
+              <span className="text-[#e5e2e1] break-all">{email}</span> podés armar tus
               eventos, trabajar en los de otros y ofrecer tus servicios, sin
               registrarte de nuevo.
             </p>

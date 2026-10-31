@@ -40,6 +40,7 @@ interface OfferRow {
   status: string | null;
   sent_at: string | null;
   responded_at: string | null;
+  gig_id: string | null;
   expires_at: string | null;
   gig_title: string | null;
   staff_nombre: string | null;
@@ -70,11 +71,28 @@ export default async function RentabilidadPage() {
   let qOffers = supabase
     .from("staff_app_offers")
     .select(
-      "id,amount,status,sent_at,responded_at,expires_at,gig_title,staff_nombre,staff_apellido",
+      "id,gig_id,amount,status,sent_at,responded_at,expires_at,gig_title,staff_nombre,staff_apellido",
     );
   if (orgId) qOffers = qOffers.eq("organization_id", orgId);
   const { data, error } = await qOffers;
   const offers = (data ?? []) as OfferRow[];
+
+  // La fecha que se muestra es la del EVENTO (31/10): antes la de cuando se
+  // aceptó la oferta, y un evento del 30 aceptado el 31 decía «31/10».
+  const gigIds = [...new Set(offers.map((o) => o.gig_id).filter((x): x is string => !!x))];
+  const inicioGig = new Map<string, string | null>();
+  if (gigIds.length > 0) {
+    const { data: gigsData, error: gigsError } = await supabase
+      .from("staff_app_gigs")
+      .select("id,starts_at")
+      .in("id", gigIds);
+    if (gigsError) console.error("[rentabilidad] no se pudieron leer las fechas de los eventos:", gigsError.message);
+    for (const g of (gigsData ?? []) as Array<{ id: string; starts_at: string | null }>) {
+      inicioGig.set(g.id, g.starts_at);
+    }
+  }
+  const fechaEvento = (o: OfferRow) =>
+    fmtFecha((o.gig_id ? inicioGig.get(o.gig_id) : null) ?? o.responded_at, {});
 
   const total = offers.length;
   const accepted = offers.filter((o) => o.status === "accepted");
@@ -132,7 +150,7 @@ export default async function RentabilidadPage() {
     gig: (o.gig_title ?? "").trim() || "Sin evento",
     // Número pelado (sin «$» ni puntos de miles) para que la planilla lo sume.
     monto: o.amount != null ? String(Number(o.amount)).replace(".", ",") : "",
-    fecha: fmtFecha(o.responded_at, {}) ?? "",
+    fecha: fechaEvento(o) ?? "",
   }));
 
   const sinDatos = total === 0;
@@ -327,7 +345,7 @@ export default async function RentabilidadPage() {
                           <span className="text-[#e5e2e1]">
                             {o.amount != null ? money(Number(o.amount)) : "sin monto"}
                           </span>
-                          <span className="text-[#cfc4c5]">{fmtFecha(o.responded_at, {}) ?? "sin fecha"}</span>
+                          <span className="text-[#cfc4c5]">{fechaEvento(o) ?? "sin fecha"}</span>
                         </span>
                       </li>
                     );
@@ -377,7 +395,7 @@ export default async function RentabilidadPage() {
                               {o.amount != null ? money(Number(o.amount)) : "sin monto"}
                             </td>
                             <td className="py-6 pl-6 text-[#cfc4c5] text-right">
-                              {fmtFecha(o.responded_at, {}) ?? "sin fecha"}
+                              {fechaEvento(o) ?? "sin fecha"}
                             </td>
                           </tr>
                         );
