@@ -35,7 +35,7 @@ export default async function MiVisibilidadPage({
   // perfil» aunque haya perdido el mail. El token se firma acá, del lado del
   // servidor, solo para el id de la sesión: no abre la ficha de nadie más.
   if (!id || !t || !visibilidadTokenOk(id, t)) {
-    const propia = visibilidadReady() ? await getMyStaffProfile() : null;
+    const propia = visibilidadReady() ? await getMyStaffProfile().catch(() => null) : null;
     if (propia?.id && propia.id !== id) {
       redirect(`/mi-visibilidad?id=${encodeURIComponent(propia.id)}&t=${visibilidadToken(propia.id)}`);
     }

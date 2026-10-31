@@ -127,7 +127,8 @@ export async function uploadMyCv(
   cvFirma: string,
 ): Promise<{ ok: boolean; reason?: string }> {
   // Solo un staff logueado puede subir su CV.
-  const profile = await getMyStaffProfile();
+  const profile = await getMyStaffProfile().catch(() => undefined);
+  if (profile === undefined) return { ok: false, reason: "No pudimos leer tu ficha. Probá de nuevo en un momento." };
   if (!profile) return { ok: false, reason: "No sos staff." };
 
   const v = await verificarCvSubido(cvPath, cvFirma);

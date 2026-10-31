@@ -94,14 +94,19 @@ export async function getMyStaffProfile(): Promise<StaffProfile | null> {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return null;
-  const { data } = await supabase.rpc("staff_app_my_staff_profile");
+  const { data, error } = await supabase.rpc("staff_app_my_staff_profile");
+  // Con error NO devolver null: requireStaff lo mandaría a /acceso-staff como si no
+  // tuviera ficha. Que salga la pantalla de error con «Probar de nuevo».
+  if (error) throw new Error(`[staff] no se pudo leer la ficha: ${error.message}`);
   return (data as StaffProfile | null) ?? null;
 }
 
 /** Ofertas del staff (con gig + asistencia). Vacío si no es staff. */
 export async function getMyStaffOffers(): Promise<StaffOffer[]> {
   const supabase = await createClient();
-  const { data } = await supabase.rpc("staff_app_my_staff_offers");
+  const { data, error } = await supabase.rpc("staff_app_my_staff_offers");
+  // Un error no es «sin eventos»: el día del evento la persona no vería su trabajo.
+  if (error) throw new Error(`[staff] no se pudo leer las ofertas: ${error.message}`);
   return (data as StaffOffer[] | null) ?? [];
 }
 

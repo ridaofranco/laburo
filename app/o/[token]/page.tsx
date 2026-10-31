@@ -117,9 +117,12 @@ export default async function OfferPage({
   const { token } = await params;
   const supabase = await createClient();
 
-  const { data } = await supabase.rpc("staff_app_get_public_offer", {
+  const { data, error } = await supabase.rpc("staff_app_get_public_offer", {
     p_token: token,
   });
+  // Un token malo devuelve null (no error). Un error es la base que no respondió:
+  // antes caía en «link inválido» y la persona daba la oferta por perdida.
+  if (error) throw new Error(`[oferta] no se pudo leer la oferta: ${error.message}`);
 
   // deriveView (offer-state.ts, compartido con offer-actions) decide la vista:
   // 'accepted'/'declined' por status, y "vencida" SIEMPRE por now() > offer.expires_at

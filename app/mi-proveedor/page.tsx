@@ -72,7 +72,9 @@ export default async function MiProveedorPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/entrar?como=proveedor");
 
-  const { data } = await supabase.rpc("staff_app_mi_perfil_proveedor");
+  const { data, error } = await supabase.rpc("staff_app_mi_perfil_proveedor");
+  // Sin error y sin datos = no es proveedor. Con error, no decirle que no lo es.
+  if (error) throw new Error(`[mi-proveedor] no se pudo leer el perfil: ${error.message}`);
 
   // Sin perfil de proveedor: la sesión es válida pero esta persona no es
   // proveedora. No se la deja en una pantalla vacía sin explicación, y no se

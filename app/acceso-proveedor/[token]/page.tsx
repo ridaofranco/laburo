@@ -76,11 +76,13 @@ export default async function AccesoProveedorPage({
   // Dos lecturas, las dos por token y las dos validadas adentro de su RPC. Van
   // en paralelo porque son independientes: el formulario de consulta (0058) se
   // guarda en su propia tabla y no cuelga del perfil.
-  const [{ data }, { data: dataForm }, { data: dataConsultas }] = await Promise.all([
+  const [{ data, error }, { data: dataForm }, { data: dataConsultas }] = await Promise.all([
     supabase.rpc("staff_app_proveedor_perfil", { p_token: token }),
     supabase.rpc("staff_app_proveedor_formulario", { p_token: token }),
     supabase.rpc("staff_app_proveedor_consultas", { p_token: token }),
   ]);
+  // Token malo = null. Un error es la base que no respondió: que no diga «sin acceso».
+  if (error) throw new Error(`[acceso-proveedor] no se pudo leer el perfil: ${error.message}`);
 
   if (!data) {
     return (

@@ -24,10 +24,11 @@ export default async function EquipoInvitacionPage({
   const { token } = await params;
   const supabase = await createClient();
 
-  const [{ data: invitacion }, { data: userData }] = await Promise.all([
+  const [{ data: invitacion, error }, { data: userData }] = await Promise.all([
     supabase.rpc("staff_app_ver_invitacion_miembro", { p_token: token }),
     supabase.auth.getUser(),
   ]);
+  if (error) throw new Error(`[equipo] no se pudo leer la invitación: ${error.message}`);
 
   return (
     <AceptarInvitacion

@@ -96,7 +96,9 @@ export default async function CotizarPage({
   const { token } = await params;
   const supabase = await createClient();
 
-  const { data } = await supabase.rpc("staff_app_ver_invitacion", { p_token: token });
+  const { data, error } = await supabase.rpc("staff_app_ver_invitacion", { p_token: token });
+  // Token malo = {ok:false}. Un error es la base que no respondió: que no diga «link no válido».
+  if (error) throw new Error(`[cotizar] no se pudo leer la invitación: ${error.message}`);
   const inv = (data as Invitacion | null) ?? { ok: false };
 
   if (!inv.ok || !inv.pedido) {
