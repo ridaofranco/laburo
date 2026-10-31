@@ -1,5 +1,6 @@
 "use client";
 
+import { recargarUnaVez } from "@/lib/recarga-por-version";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -61,7 +62,15 @@ export function AceptarInvitacion({
   function onAceptar() {
     setError(null);
     startTransition(async () => {
-      const r = await aceptarInvitacion(token);
+      let r: Awaited<ReturnType<typeof aceptarInvitacion>>;
+      try {
+        r = await aceptarInvitacion(token);
+      } catch {
+        // Versión nueva publicada con la página abierta: recargar una vez.
+        if (recargarUnaVez(`equipo:${token.slice(0, 16)}`)) return;
+        setError("No pudimos sumarte. Probá de nuevo en un momento.");
+        return;
+      }
       if (r.ok) {
         setListo(true);
         // Un respiro para que se lea el "listo" antes de mandarlo adentro.

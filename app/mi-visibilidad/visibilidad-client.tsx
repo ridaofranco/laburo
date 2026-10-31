@@ -4,6 +4,7 @@
  * Las dos respuestas, con el mismo peso visual. Ver el header de page.tsx.
  */
 
+import { recargarUnaVez } from "@/lib/recarga-por-version";
 import { useState, useTransition } from "react";
 import { responderVisibilidad } from "./actions";
 
@@ -25,7 +26,15 @@ export function VisibilidadClient({
   const responder = (quiere: boolean) => {
     setError(null);
     startTransition(async () => {
-      const r = await responderVisibilidad(profileId, token, quiere);
+      let r: Awaited<ReturnType<typeof responderVisibilidad>>;
+      try {
+        r = await responderVisibilidad(profileId, token, quiere);
+      } catch {
+        // Versión nueva publicada con la página abierta: recargar una vez.
+        if (recargarUnaVez(`visibilidad:${profileId}`)) return;
+        setError("No se pudo guardar. Probá de nuevo en un momento.");
+        return;
+      }
       if (!r.ok) setError(r.error ?? "No se pudo guardar.");
       else setResultado(quiere);
     });

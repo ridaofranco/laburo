@@ -65,3 +65,20 @@ export function hayGuardado(clave: string): boolean {
     return false;
   }
 }
+
+/**
+ * Para las pantallas de un solo botón (aceptar la oferta, sumarse a un equipo,
+ * contestar la visibilidad): no hay nada escrito que guardar, pero si la acción
+ * vieja ya no existe, «Probá de nuevo» falla siempre. Recarga UNA vez por clave
+ * (la página vuelve a mostrar el estado real) y devuelve true si recargó.
+ */
+export function recargarUnaVez(clave: string): boolean {
+  try {
+    if (sessionStorage.getItem(RECARGADO + clave) !== null) return false;
+    sessionStorage.setItem(RECARGADO + clave, "1");
+  } catch {
+    return false;
+  }
+  window.location.reload();
+  return true;
+}

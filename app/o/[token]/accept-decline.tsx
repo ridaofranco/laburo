@@ -22,6 +22,7 @@
 import { useState, useTransition } from "react";
 import { motion } from "motion/react";
 import { toast } from "sonner";
+import { recargarUnaVez } from "@/lib/recarga-por-version";
 import { acceptOffer, declineOffer } from "./offer-actions";
 import { TERMINAL_COPY, type TerminalView } from "./offer-state";
 import { WhatsAppCta, PortalStaffLink } from "./wa-cta";
@@ -103,6 +104,9 @@ export function AcceptDecline({
           setScreen({ kind: "terminal", view: res.view });
         }
       } catch {
+        // Lo más común: se publicó una versión nueva con la página abierta y
+        // reintentar falla siempre. Una recarga muestra el estado real.
+        if (recargarUnaVez(`oferta:${token.slice(0, 16)}`)) return;
         toast.error("Algo falló. Probá de nuevo en un momento.");
       }
     });
