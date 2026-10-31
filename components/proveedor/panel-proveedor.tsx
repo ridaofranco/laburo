@@ -105,6 +105,17 @@ export function PanelProveedor({
           La verificación la activa DER después de trabajar con vos. No es algo
           que puedas cambiar desde acá.
         </p>
+        {/* Sin esto no había cómo ver la ficha como la ve una productora (31/10). */}
+        {perfil.is_public && perfil.slug && (
+          <a
+            href={`/${esSalon ? "salones" : "servicios"}/${perfil.slug}`}
+            target="_blank"
+            rel="noopener"
+            className="text-label font-semibold text-fg underline underline-offset-4 self-start"
+          >
+            Ver mi ficha pública ↗
+          </a>
+        )}
       </div>
 
       {/* LAS CONSULTAS VAN PRIMERO, arriba de todo (6/8). Es lo unico que puede
