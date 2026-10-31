@@ -79,25 +79,30 @@ export interface OrgPlataforma {
 
 export async function getResumen(): Promise<Resumen> {
   const supabase = await createClient();
-  const { data } = await supabase.rpc("staff_app_plataforma_resumen");
+  const { data, error } = await supabase.rpc("staff_app_plataforma_resumen");
+  // Un error no es «no hay nada» ni «sin permiso»: que salga la pantalla de error.
+  if (error) throw new Error(`[plataforma] resumen: ${error.message}`);
   return (data as Resumen | null) ?? { ok: false };
 }
 
 export async function getBusquedas(): Promise<BusquedaPlataforma[]> {
   const supabase = await createClient();
-  const { data } = await supabase.rpc("staff_app_plataforma_busquedas");
+  const { data, error } = await supabase.rpc("staff_app_plataforma_busquedas");
+  if (error) throw new Error(`[plataforma] busquedas: ${error.message}`);
   return (data as BusquedaPlataforma[] | null) ?? [];
 }
 
 export async function getContrataciones(): Promise<Contratacion[]> {
   const supabase = await createClient();
-  const { data } = await supabase.rpc("staff_app_plataforma_contrataciones");
+  const { data, error } = await supabase.rpc("staff_app_plataforma_contrataciones");
+  if (error) throw new Error(`[plataforma] contrataciones: ${error.message}`);
   return (data as Contratacion[] | null) ?? [];
 }
 
 export async function getOrganizaciones(): Promise<OrgPlataforma[]> {
   const supabase = await createClient();
-  const { data } = await supabase.rpc("staff_app_plataforma_organizaciones");
+  const { data, error } = await supabase.rpc("staff_app_plataforma_organizaciones");
+  if (error) throw new Error(`[plataforma] organizaciones: ${error.message}`);
   return (data as OrgPlataforma[] | null) ?? [];
 }
 
@@ -179,7 +184,8 @@ export interface ProveedorPlataforma {
 
 export async function getProveedores(): Promise<ProveedorPlataforma[]> {
   const supabase = await createClient();
-  const { data } = await supabase.rpc("staff_app_plataforma_proveedores");
+  const { data, error } = await supabase.rpc("staff_app_plataforma_proveedores");
+  if (error) throw new Error(`[plataforma] proveedores: ${error.message}`);
   return (data as ProveedorPlataforma[] | null) ?? [];
 }
 
@@ -240,7 +246,8 @@ export interface RentabilidadOrg {
  */
 export async function getRentabilidadCruzada(): Promise<RentabilidadOrg[]> {
   const supabase = await createClient();
-  const { data } = await supabase.rpc("staff_app_plataforma_rentabilidad");
+  const { data, error } = await supabase.rpc("staff_app_plataforma_rentabilidad");
+  if (error) throw new Error(`[plataforma] rentabilidad: ${error.message}`);
   return (data as RentabilidadOrg[] | null) ?? [];
 }
 
@@ -286,13 +293,15 @@ export interface HechoPlataforma {
 
 export async function getConsultasPlataforma(): Promise<ConsultaPlataforma[]> {
   const supabase = await createClient();
-  const { data } = await supabase.rpc("staff_app_plataforma_consultas");
+  const { data, error } = await supabase.rpc("staff_app_plataforma_consultas");
+  if (error) throw new Error(`[plataforma] consultas: ${error.message}`);
   return (data as ConsultaPlataforma[] | null) ?? [];
 }
 
 export async function getOfertasPlataforma(): Promise<OfertaPlataforma[]> {
   const supabase = await createClient();
-  const { data } = await supabase.rpc("staff_app_plataforma_ofertas");
+  const { data, error } = await supabase.rpc("staff_app_plataforma_ofertas");
+  if (error) throw new Error(`[plataforma] ofertas: ${error.message}`);
   return (data as OfertaPlataforma[] | null) ?? [];
 }
 
@@ -304,6 +313,7 @@ export async function getOfertasPlataforma(): Promise<OfertaPlataforma[]> {
  */
 export async function getTimelinePlataforma(dias = 30): Promise<HechoPlataforma[]> {
   const supabase = await createClient();
-  const { data } = await supabase.rpc("staff_app_plataforma_timeline", { p_dias: dias });
+  const { data, error } = await supabase.rpc("staff_app_plataforma_timeline", { p_dias: dias });
+  if (error) throw new Error(`[plataforma] timeline: ${error.message}`);
   return (data as HechoPlataforma[] | null) ?? [];
 }
