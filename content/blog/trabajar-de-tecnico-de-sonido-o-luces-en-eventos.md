@@ -100,6 +100,8 @@ El equipo que arma el staff busca por rol, zona y experiencia. Para que te encue
 
 Más ideas para el perfil en [qué poner en tu perfil para trabajar en eventos](/blog/que-poner-en-tu-perfil-para-trabajar-en-eventos), y para que te sigan llamando, [cómo lograr que te llamen seguido para eventos](/blog/como-lograr-que-te-llamen-seguido-para-eventos).
 
+Si algún día querés tener tu propio equipo, hito.agency tiene una nota sobre [alquilar sonido y luces sin operador como negocio](https://hito.agency/blog/alquiler-de-sonido-sin-operador-como-negocio/) (equipos, depósito y daños, contrato, entrega y retiro) y otra sobre [lo que mira un productor al elegir a quién llamar](https://hito.agency/blog/como-conseguir-que-las-productoras-te-llamen/).
+
 ## Sumate
 
 Si trabajás de técnico o querés empezar, [cargá tu perfil en LABURO](/sumate): es gratis, elegís tus roles técnicos y te llegan las ofertas con el pago y los horarios al teléfono.

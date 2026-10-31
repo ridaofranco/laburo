@@ -109,6 +109,8 @@ Lo que pida cada evento en particular (seguros, habilitaciones, documentación d
 
 Si sos técnico, fotógrafo o bartender y trabajás por tu cuenta en eventos de otros, además de publicar tu servicio podés cargar tu perfil de staff en [/sumate](/sumate). Son dos cosas distintas: el directorio es para tu empresa o tu servicio; el pool de staff es para que te convoquen a trabajar en un evento con pago y horario. Tenés más detalle en [trabajar en montaje, técnica y producción](/para/trabajar-en-montaje-tecnica-y-produccion-de-eventos) y [trabajar en gastronomía de eventos](/para/trabajar-en-gastronomia-de-eventos).
 
+Del otro lado, lo que mira un productor al elegir sonido, luces, foto o mobiliario (respuesta rápida, cotización clara, armado a tiempo) está en [cómo conseguir que las productoras te llamen](https://hito.agency/blog/como-conseguir-que-las-productoras-te-llamen/), y para tener el precio listo, [cómo armar tu lista de precios de proveedor](https://hito.agency/blog/lista-de-precios-de-proveedor-de-eventos-como-armarla/). Las dos son notas de hito.agency.
+
 ## ¿Tenés un salón?
 
 Los salones tienen su propio directorio, con búsqueda por capacidad y zona. Mirá cómo publicarlo en [publicar tu salón para eventos](/para/publicar-salon-para-eventos).

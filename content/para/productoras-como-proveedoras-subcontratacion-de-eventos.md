@@ -77,6 +77,8 @@ Cargás el evento con fecha y lugar, declarás la dotación por rol y **el equip
 
 El recorrido completo está en [staff para eventos para productoras y agencias](/para/staff-para-eventos-productoras-y-agencias). Si el evento es lejos de tu base, sirve [staff para un evento en otra provincia](/blog/staff-para-un-evento-en-otra-provincia).
 
+Para conseguir clientes fuera del directorio (rutina de ventas, una propuesta tipo y seguimiento) está [cómo conseguir clientes para tu productora de eventos](https://hito.agency/blog/como-conseguir-clientes-para-tu-productora-de-eventos/), y para ponerle precio a tu trabajo, [cuánto cobrar por organizar un evento](https://hito.agency/blog/cuanto-cobrar-por-organizar-un-evento-honorarios-de-productor/). Las dos son notas de hito.agency.
+
 ## Publicá tu productora
 
 Cargá tu productora en el rubro Producción de eventos, con un servicio por cosa que resolvés y las provincias donde trabajás de verdad. Es gratis: empezá en [/registrar-proveedor](/registrar-proveedor).

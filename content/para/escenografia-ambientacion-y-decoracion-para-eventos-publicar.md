@@ -88,6 +88,8 @@ Lo que no te vamos a prometer: una cantidad de pedidos. Depende de los eventos q
 
 Casamientos y fiestas de 15 son los eventos donde más se cuida la ambientación. Si querés ver cómo los piensa quien los organiza, mirá [staff para un casamiento](/blog/staff-para-un-casamiento), [staff para una fiesta de 15](/blog/staff-para-una-fiesta-de-15) y [staff para casamientos y fiestas](/para/staff-para-casamientos-y-fiestas). En lo corporativo, [staff para stand en feria o exposición](/blog/staff-para-stand-en-feria-o-exposicion). Para el día del armado, [montaje y desmontaje de eventos: cómo cuidarte](/blog/montaje-y-desmontaje-de-eventos-como-cuidarte). Y para llegar con todo listo a diciembre, [cómo prepararte para fin de año como proveedor](/blog/proveedores-de-eventos-como-prepararte-para-fin-de-ano).
 
+Para ordenar el negocio según lo que hacés, hito.agency tiene notas sobre [alquiler de mobiliario y ambientación](https://hito.agency/blog/negocio-de-alquiler-de-mobiliario-y-ambientacion-para-eventos/) (catálogo, flete, roturas y depósito), [ambientación floral](https://hito.agency/blog/negocio-de-ambientacion-floral-para-eventos/) (centros de mesa, merma y seña) y [decoración con globos](https://hito.agency/blog/decoracion-con-globos-para-eventos-como-negocio/) (cómo cobrar el armado y llegar a salones).
+
 ## Publicá tu servicio
 
 Cargá tu empresa, un servicio por cada cosa que hacés y las provincias donde montás. Es gratis y quedás en el directorio: empezá en [/registrar-proveedor](/registrar-proveedor).
