@@ -17,9 +17,11 @@
 import { NextResponse } from "next/server";
 import { clientIpFrom, rateLimitOr429 } from "@/lib/rate-limit";
 import { verificarCvSubido } from "@/lib/cv-servidor";
-import { pedirleAGemini } from "@/lib/gemini";
+import { MODELOS_CV, pedirleAGemini } from "@/lib/gemini";
 
 export const runtime = "nodejs";
+// Tres modelos de 10 s en el peor caso, más leer el CV de Supabase.
+export const maxDuration = 45;
 // ⚠️ 7/9: LA LLAMADA SE MUDÓ A lib/gemini.ts, CON CAÍDA AL MODELO LIVIANO.
 // Probando el lector de briefs apareció que `gemini-flash-latest` topea en 20
 // requests POR MINUTO en el tier gratuito, y ese límite es del PROYECTO: lo
@@ -48,8 +50,10 @@ const ALLOWED_MIME = new Set([
 ]);
 // 29/10: 12 s al principal y, si no contestó, 12 s al liviano (antes 20 s y a
 // mano). Peor caso 24 s, pero casi siempre hay datos en vez de un formulario vacío.
-const GEMINI_TIMEOUT_MS = 12_000;
-const GEMINI_RESPALDO_MS = 12_000;
+// 31/10: con el liviano primero (MODELOS_CV), 10 s a cada uno de los tres.
+// Un CV normal vuelve en 1 a 3 s; peor caso 30 s si los tres están caídos.
+const GEMINI_TIMEOUT_MS = 10_000;
+const GEMINI_RESPALDO_MS = 10_000;
 
 export async function POST(request: Request) {
   // FRENO DE ABUSO: esta ruta es pública (el formulario /sumate la usa sin cuenta)
@@ -149,7 +153,12 @@ export async function POST(request: Request) {
   // un fallo va a los logs y no a la respuesta, porque esta ruta es pública.
   const g = await pedirleAGemini(
     [{ inline_data: { mime_type: mimeType, data } }, { text: prompt }],
-    { timeoutMs: GEMINI_TIMEOUT_MS, timeoutRespaldoMs: GEMINI_RESPALDO_MS, etiqueta: "parse-cv" },
+    {
+      timeoutMs: GEMINI_TIMEOUT_MS,
+      timeoutRespaldoMs: GEMINI_RESPALDO_MS,
+      etiqueta: "parse-cv",
+      modelos: MODELOS_CV,
+    },
   );
 
   if (!g.ok) {
@@ -159,7 +168,12 @@ export async function POST(request: Request) {
   const text = g.texto || "{}";
   let parsed: Record<string, unknown>;
   try {
-    parsed = JSON.parse(text);
+    const crudo: unknown = JSON.parse(text);
+    // 31/10: el modelo liviano a veces devuelve el objeto adentro de una lista
+    // (`[{"nombre":…}]`, visto probando). La pantalla leía `d.nombre` de la
+    // lista, no encontraba nada y le decía a la persona que no pudo leer el CV.
+    const objeto = Array.isArray(crudo) ? crudo[0] : crudo;
+    parsed = objeto && typeof objeto === "object" ? (objeto as Record<string, unknown>) : {};
   } catch {
     parsed = {};
   }

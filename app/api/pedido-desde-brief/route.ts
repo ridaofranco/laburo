@@ -201,7 +201,10 @@ export async function POST(request: Request) {
 
   let parsed: Record<string, unknown>;
   try {
-    parsed = JSON.parse(g.texto || "{}");
+    const crudo: unknown = JSON.parse(g.texto || "{}");
+    // El modelo liviano a veces lo devuelve adentro de una lista (`[{…}]`).
+    const objeto = Array.isArray(crudo) ? crudo[0] : crudo;
+    parsed = objeto && typeof objeto === "object" ? (objeto as Record<string, unknown>) : {};
   } catch {
     console.error("[pedido-desde-brief] Gemini devolvió algo que no es JSON");
     return NextResponse.json({ error: "respuesta_ilegible" }, { status: 502 });

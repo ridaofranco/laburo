@@ -34,6 +34,19 @@ import "server-only";
 /** El principal y su respaldo. El orden importa: se prueba de mejor a más liviano. */
 export const MODELOS = ["gemini-flash-latest", "gemini-flash-lite-latest"] as const;
 
+/**
+ * Orden para el lector de CV (31/10). En Vercel, del 28 al 30/10: 11 lecturas
+ * murieron por 429 del principal y 2 por timeout del liviano (9 personas que se
+ * anotaban tuvieron que tipear todo). Medido el 30/10 a la noche con un PDF de
+ * prueba: `gemini-flash-latest` no contestó en 25 s; `gemini-flash-lite-latest`
+ * y `gemini-3.1-flash-lite` leyeron perfecto en 1,2 s. Para un CV el liviano
+ * alcanza, así que va PRIMERO (la persona espera 1 s y no 12), después otro
+ * liviano con su propia cuota del tier gratuito, y el grande al final.
+ * `gemini-2.5-flash-lite` ya da 404 «no longer available»: por eso un 404
+ * también pasa al siguiente (ver abajo) y un modelo retirado no corta la cadena.
+ */
+export const MODELOS_CV = ["gemini-flash-lite-latest", "gemini-3.1-flash-lite", "gemini-flash-latest"] as const;
+
 export interface GeminiParte {
   text?: string;
   inline_data?: { mime_type: string; data: string };
@@ -70,6 +83,8 @@ export async function pedirleAGemini(
      * opción, el comportamiento de siempre: el timeout no se reintenta.
      */
     timeoutRespaldoMs?: number;
+    /** Qué modelos probar, en orden. Por defecto `MODELOS`. */
+    modelos?: readonly string[];
   } = {},
 ): Promise<GeminiResultado> {
   const KEY = process.env.GEMINI_API_KEY;
@@ -78,8 +93,9 @@ export async function pedirleAGemini(
   const timeoutMs = opciones.timeoutMs ?? 25_000;
   const etiqueta = opciones.etiqueta ?? "gemini";
   let ultimoStatus = 0;
+  const modelos = opciones.modelos?.length ? opciones.modelos : MODELOS;
 
-  for (const [i, modelo] of MODELOS.entries()) {
+  for (const [i, modelo] of modelos.entries()) {
     const controller = new AbortController();
     const espera = i > 0 && opciones.timeoutRespaldoMs ? opciones.timeoutRespaldoMs : timeoutMs;
     const timer = setTimeout(() => controller.abort(), espera);
@@ -101,8 +117,8 @@ export async function pedirleAGemini(
       const aborted = e instanceof Error && e.name === "AbortError";
       // Un timeout no se reintenta en otro modelo, salvo que quien llama lo
       // pida con `timeoutRespaldoMs` (ver arriba) y quede un modelo por probar.
-      if (aborted && opciones.timeoutRespaldoMs && i < MODELOS.length - 1) {
-        console.warn(`[${etiqueta}] ${modelo} tardó más de ${espera} ms, pruebo con ${MODELOS[i + 1]}`);
+      if (aborted && opciones.timeoutRespaldoMs && i < modelos.length - 1) {
+        console.warn(`[${etiqueta}] ${modelo} tardó más de ${espera} ms, pruebo con ${modelos[i + 1]}`);
         continue;
       }
       console.error(
@@ -119,7 +135,7 @@ export async function pedirleAGemini(
       // Se loguea qué modelo contestó: si empiezan a aparecer solo respuestas
       // del liviano, es que el principal está sin cuota todo el tiempo y hay
       // que mirarlo, no esperar a que alguien se queje.
-      if (modelo !== MODELOS[0]) console.warn(`[${etiqueta}] respondió el modelo de respaldo (${modelo})`);
+      if (modelo !== modelos[0]) console.warn(`[${etiqueta}] respondió el modelo de respaldo (${modelo})`);
       return { ok: true, texto, modelo, status: r.status };
     }
 
@@ -132,9 +148,16 @@ export async function pedirleAGemini(
     } catch {
       detalle = "(sin cuerpo)";
     }
-    console.error(`[${etiqueta}] ${modelo} devolvió ${r.status}: ${detalle}`);
+    const quedaOtro = i < modelos.length - 1;
+    // Si otro modelo lo va a intentar, es un aviso y no un error: el error es
+    // solo cuando la persona se queda sin datos.
+    const linea = `[${etiqueta}] ${modelo} devolvió ${r.status}: ${detalle}`;
+    if (quedaOtro && (r.status === 429 || r.status === 503 || r.status === 404)) console.warn(linea);
+    else console.error(linea);
 
-    if (r.status !== 429 && r.status !== 503) break; // no es falta de cuota: no insistir
+    // 404 = el alias o la versión ya no existe: el pedido está bien, el modelo
+    // no. Se sigue con el próximo en vez de dejar a la persona sin autollenado.
+    if (r.status !== 429 && r.status !== 503 && r.status !== 404) break; // no es falta de cuota: no insistir
   }
 
   return { ok: false, error: "gemini", status: ultimoStatus };
