@@ -78,7 +78,7 @@ No hay un número de acreditaciones por minuto que sirva para todos los eventos:
 
 - En la prueba previa, **cronometrá varias acreditaciones reales** de punta a punta (desde que la persona llega al mostrador hasta que se va con la credencial) y sacá el promedio.
 - **Separá los tiempos:** uno para quien trae QR, otro para una excepción. Suelen ser muy distintos.
-- Con el ritmo por puesto y la cantidad de gente que esperás en la hora pico, calculás cuántos puestos necesitás para que la espera no pase de lo que querés.
+- Con el ritmo por puesto y la cantidad de gente que esperás en la hora pico, calculás cuántos puestos necesitás para que la espera no pase de lo que querés. La [calculadora de puntos de acceso de PASE](https://pase.somosder.ar/para/calculadora-de-puntos-de-acceso) hace esa cuenta y trae ritmos medidos en eventos reales como punto de partida.
 
 La cuenta completa, puesto por puesto, está en [cuánta gente necesito para mi evento](/blog/cuanta-gente-necesito-para-mi-evento).
 

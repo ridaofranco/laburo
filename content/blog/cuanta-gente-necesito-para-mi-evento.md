@@ -68,6 +68,8 @@ Ejemplo solo para ver la mecánica: si tenés que hacer entrar 800 personas en 4
 
 **El ritmo por puesto es tuyo, no nuestro.** Escanear un QR no es lo mismo que buscar un apellido en una lista impresa, y ninguna de las dos es lo mismo que además entregar una pulsera. Medilo una vez en tu propio evento y ese número te sirve para siempre.
 
+Si querés hacer la cuenta sin papel, la [calculadora de puntos de acceso de PASE](https://pase.somosder.ar/para/calculadora-de-puntos-de-acceso) la hace sola, te muestra la fila que se arma si ponés menos puestos y trae como referencia los ritmos que midió PASE en eventos reales: entre 4 y 10 personas por minuto por puesto escaneando QR.
+
 La misma lógica aplica a la barra: estimás cuántas consumiciones se despachan por hora en el pico y lo dividís por lo que despacha una posición de barra por hora. Los dos números los ponés vos.
 
 ## Paso 4: multiplicá por turnos
