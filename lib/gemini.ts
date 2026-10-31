@@ -32,7 +32,9 @@ import "server-only";
  */
 
 /** El principal y su respaldo. El orden importa: se prueba de mejor a más liviano. */
-export const MODELOS = ["gemini-flash-latest", "gemini-flash-lite-latest"] as const;
+// 31/10: se suma `gemini-3.1-flash-lite`, otro liviano con cuota propia (esa
+// noche el grande daba 429/503 seguido; ver MODELOS_CV).
+export const MODELOS = ["gemini-flash-latest", "gemini-flash-lite-latest", "gemini-3.1-flash-lite"] as const;
 
 /**
  * Orden para el lector de CV (31/10). En Vercel, del 28 al 30/10: 11 lecturas

@@ -53,6 +53,8 @@ import { PROVINCIAS } from "@/lib/provincias";
 import { pedirleAGemini } from "@/lib/gemini";
 
 export const runtime = "nodejs";
+// Grande (25 s) y dos livianos (12 s cada uno) en el peor caso.
+export const maxDuration = 60;
 
 const GEMINI_TIMEOUT_MS = 25_000;
 
@@ -191,6 +193,9 @@ export async function POST(request: Request) {
   // el mismo PDF sin problema. Ver lib/gemini.ts.
   const g = await pedirleAGemini(parts, {
     timeoutMs: GEMINI_TIMEOUT_MS,
+    // 31/10: si el grande no contesta, los livianos (un brief lo leen en
+    // pocos segundos) en vez de dejar a la productora con el formulario vacío.
+    timeoutRespaldoMs: 12_000,
     etiqueta: "pedido-desde-brief",
   });
 
