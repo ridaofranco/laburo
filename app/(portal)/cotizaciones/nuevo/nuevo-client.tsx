@@ -28,6 +28,7 @@
 import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { guardarYRecargar, useRecuperarGuardado } from "@/lib/recarga-por-version";
 import { crearPedido, editarPedido, type PedidoDetalle } from "../actions";
 import { plantillaDe, type CampoDesglose, type ItemNuevo } from "@/lib/cotizaciones";
 import { desdeInputLocal } from "@/lib/dates";
@@ -123,6 +124,40 @@ export function NuevoPedidoForm({
         }))
       : [],
   );
+
+  // Versión nueva publicada con el formulario abierto: el envío falla siempre
+  // («Failed to find Server Action»). Se guarda lo cargado, se recarga una vez
+  // y acá se devuelve. Ver lib/recarga-por-version.ts.
+  const claveGuardado = pedido ? `pedido-editar:${pedido.id}` : "pedido-nuevo";
+  type EnPantalla = {
+    titulo: string;
+    descripcion: string;
+    categoria: string;
+    provincia: string;
+    ciudad: string;
+    necesarioPara: string;
+    cierraAt: string;
+    campos: CampoDesglose[];
+    items: ItemNuevo[];
+  };
+  useRecuperarGuardado<EnPantalla>(claveGuardado, (g) => {
+    setTitulo(g.titulo ?? "");
+    setDescripcion(g.descripcion ?? "");
+    setCategoria(g.categoria ?? "");
+    setProvincia(g.provincia ?? "");
+    setCiudad(g.ciudad ?? "");
+    setNecesarioPara(g.necesarioPara ?? "");
+    if (g.cierraAt) setCierraAt(g.cierraAt);
+    if (Array.isArray(g.campos)) setCampos(g.campos);
+    if (Array.isArray(g.items)) setItems(g.items);
+    setTocoElDesglose(true);
+  });
+  function guardarSiHayQueRecargar(): boolean {
+    const g: EnPantalla = {
+      titulo, descripcion, categoria, provincia, ciudad, necesarioPara, cierraAt, campos, items,
+    };
+    return guardarYRecargar(claveGuardado, g);
+  }
 
   // ── El brief ──────────────────────────────────────────────────────────────
   const [brief, setBrief] = useState("");
@@ -294,19 +329,26 @@ export function NuevoPedidoForm({
 
     if (editando) {
       startTransition(async () => {
-        const r = await editarPedido(pedido!.id, {
-          titulo,
-          descripcion,
-          categoria,
-          provincia,
-          ciudad,
-          necesarioPara,
-          campos: limpios,
-          // ⚠️ null, no [], cuando ya cotizó alguien: null significa "no los
-          // toques" y un array vacío significa "borralos todos". Mandar el
-          // segundo por descuido borraría el desglose del pedido.
-          items: itemsBloqueados ? null : itemsLimpios,
-        });
+        let r: Awaited<ReturnType<typeof editarPedido>>;
+        try {
+          r = await editarPedido(pedido!.id, {
+            titulo,
+            descripcion,
+            categoria,
+            provincia,
+            ciudad,
+            necesarioPara,
+            campos: limpios,
+            // ⚠️ null, no [], cuando ya cotizó alguien: null significa "no los
+            // toques" y un array vacío significa "borralos todos". Mandar el
+            // segundo por descuido borraría el desglose del pedido.
+            items: itemsBloqueados ? null : itemsLimpios,
+          });
+        } catch {
+          if (guardarSiHayQueRecargar()) return;
+          toast.error("No pudimos guardar los cambios. Probá de nuevo en un momento.");
+          return;
+        }
         if (!r.ok) {
           toast.error(r.error);
           return;
@@ -332,17 +374,24 @@ export function NuevoPedidoForm({
     }
 
     startTransition(async () => {
-      const r = await crearPedido({
-        titulo,
-        descripcion,
-        categoria,
-        provincia,
-        ciudad,
-        necesarioPara,
-        cierraAt: cierra,
-        campos: limpios,
-        items: itemsLimpios,
-      });
+      let r: Awaited<ReturnType<typeof crearPedido>>;
+      try {
+        r = await crearPedido({
+          titulo,
+          descripcion,
+          categoria,
+          provincia,
+          ciudad,
+          necesarioPara,
+          cierraAt: cierra,
+          campos: limpios,
+          items: itemsLimpios,
+        });
+      } catch {
+        if (guardarSiHayQueRecargar()) return;
+        toast.error("No pudimos crear el pedido. Probá de nuevo en un momento.");
+        return;
+      }
       if (!r.ok) {
         toast.error(r.error);
         return;
