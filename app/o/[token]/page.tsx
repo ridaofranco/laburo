@@ -24,6 +24,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { fmtFecha, fmtFechaHora, fmtHora } from "@/lib/dates";
 import { AcceptDecline } from "./accept-decline";
+import { DenunciaPorToken } from "./denuncia";
 import { AvisoNoIntermediamos, avisoLargo } from "@/components/aviso-no-intermediamos";
 import { WhatsAppCta, PortalStaffLink } from "./wa-cta";
 import {
@@ -192,6 +193,8 @@ export default async function OfferPage({
         <p className="text-label text-fg-subtle text-center">
           Al aceptar quedás confirmado/a para este laburo.
         </p>
+
+        <DenunciaPorToken token={token} />
       </div>
     </Shell>
   );

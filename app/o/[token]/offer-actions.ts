@@ -29,7 +29,8 @@
 import { headers } from "next/headers";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
-import { deriveView, type TerminalView } from "./offer-state";
+import { deriveView, type TerminalView, type PublicOffer } from "./offer-state";
+import { avisarDenuncia, motivoValido } from "@/lib/denuncias";
 
 export type OfferActionResult =
   | { ok: true }
@@ -222,4 +223,32 @@ async function avisarRespuesta(token: string, accepted: boolean): Promise<void> 
     // mails son secundarios. Que nunca tire.
     console.error("[offer-actions] aviso de respuesta falló:", e instanceof Error ? e.message : String(e));
   }
+}
+
+/**
+ * Denunciar la oferta que llegó por link (Franco 31/10). El token identifica la
+ * oferta: se relee con el mismo RPC público y solo se avisa si existe.
+ */
+export async function denunciarOfertaPorToken(
+  token: string,
+  motivoDenuncia: string,
+  detalle: string,
+): Promise<{ ok: boolean; error?: string }> {
+  if (!motivoValido(motivoDenuncia)) return { ok: false, error: "Elegí un motivo." };
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("staff_app_get_public_offer", { p_token: token });
+  const d = data as PublicOffer | null;
+  if (error || !d?.ok) return { ok: false, error: "No encontramos esa oferta. Escribí a hola@laburo.somosder.ar." };
+  const ok = await avisarDenuncia({
+    motivo: motivoDenuncia,
+    detalle,
+    donde: "Oferta por link (/o/…)",
+    rol: d.offer?.role,
+    evento: d.gig?.title,
+    quienPublica: d.org?.name,
+    referencia: `token …${token.slice(-6)}`,
+    denunciante: (d.applicant?.first_name ?? "").trim() || null,
+  });
+  if (!ok) return { ok: false, error: "No se pudo mandar. Escribí a hola@laburo.somosder.ar." };
+  return { ok: true };
 }

@@ -15,7 +15,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { MapPin, Check } from "lucide-react";
 import { motion } from "motion/react";
-import { postularme, despostularme, type TrabajoAbierto } from "./actions";
+import { postularme, despostularme, denunciarTrabajo, type TrabajoAbierto } from "./actions";
+import { DenunciarOferta } from "@/components/denunciar-oferta";
 import { fmtFecha, fmtHora as fmtHoraTz } from "@/lib/dates";
 import { money } from "@/lib/format";
 import { AvisoNoIntermediamos, AVISO_CORTO } from "@/components/aviso-no-intermediamos";
@@ -95,6 +96,7 @@ function Tarjeta({ t }: { t: TrabajoAbierto }) {
           </p>
         ) : null}
         <AvisoNoIntermediamos texto={AVISO_CORTO} className="text-[11px] max-w-[560px] mt-1" />
+        <DenunciarOferta onDenunciar={(m, det) => denunciarTrabajo(t.opening_id, m, det)} />
         {t.gig_venue?.trim() ? (
           <a
             href={mapsUrl(t.gig_venue)}

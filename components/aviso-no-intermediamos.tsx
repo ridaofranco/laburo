@@ -12,8 +12,11 @@ export const AVISO_CORTO =
   "Ni LABURO ni SOMOS DER contratan ni son intermediarios. La responsable es quien publica. Nunca pagues para trabajar.";
 
 export function avisoLargo(quienPublica?: string | null) {
-  const quien = quienPublica?.trim() ? quienPublica.trim() : "quien la publica";
-  return `Ni LABURO ni SOMOS DER contratan, emplean ni son intermediarios. Esta oferta la publica ${quien}, que es la única responsable de lo que ofrece y de contratar, registrar, asegurar y pagarle a quien trabaje. Lo que acuerden es una relación privada entre ustedes. LABURO nunca te va a cobrar por postularte ni por conseguir trabajo: si te piden plata, la oferta discrimina o parece falsa, denunciala.`;
+  // Sin nombre (la lista de ofertas): se habla de cada oferta, no de «esta».
+  const quien = quienPublica?.trim()
+    ? `Esta oferta la publica ${quienPublica.trim()}, que es la única responsable`
+    : "Cada oferta la publica una productora o empresa, que es la única responsable";
+  return `Ni LABURO ni SOMOS DER contratan, emplean ni son intermediarios. ${quien} de lo que ofrece y de contratar, registrar, asegurar y pagarle a quien trabaje. Lo que acuerden es una relación privada entre ustedes. LABURO nunca te va a cobrar por postularte ni por conseguir trabajo: si te piden plata, la oferta discrimina o parece falsa, denunciala.`;
 }
 
 export const AVISO_PUBLICAR =

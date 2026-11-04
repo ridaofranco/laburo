@@ -14,6 +14,8 @@
  */
 
 import { createClient } from "@/lib/supabase/server";
+import { getMyStaffProfile } from "@/lib/staff";
+import { avisarDenuncia, motivoValido } from "@/lib/denuncias";
 
 export interface TrabajoAbierto {
   opening_id: string;
@@ -86,5 +88,38 @@ export async function despostularme(
   }
   const r = data as { ok?: boolean; reason?: string } | null;
   if (!r?.ok) return { ok: false, error: motivo(r?.reason) };
+  return { ok: true };
+}
+
+/**
+ * Denunciar una búsqueda abierta (Franco 31/10). Solo para staff con sesión, y
+ * solo sobre una búsqueda que ESA persona ve abierta: el id que manda el browser
+ * se busca en su propia lista, así no se puede usar para mandar avisos al voleo.
+ */
+export async function denunciarTrabajo(
+  openingId: string,
+  motivoDenuncia: string,
+  detalle: string,
+): Promise<{ ok: boolean; error?: string }> {
+  if (!motivoValido(motivoDenuncia)) return { ok: false, error: "Elegí un motivo." };
+  const perfil = await getMyStaffProfile();
+  if (!perfil) return { ok: false, error: "Se cerró tu sesión. Entrá de nuevo y probá otra vez." };
+  let trabajo: TrabajoAbierto | undefined;
+  try {
+    trabajo = (await getTrabajosAbiertos()).find((t) => t.opening_id === openingId);
+  } catch {
+    trabajo = undefined;
+  }
+  if (!trabajo) return { ok: false, error: "Esa búsqueda ya no está abierta. Si igual querés denunciarla, escribí a hola@laburo.somosder.ar." };
+  const ok = await avisarDenuncia({
+    motivo: motivoDenuncia,
+    detalle,
+    donde: "Trabajos disponibles (portal de staff)",
+    rol: trabajo.role,
+    evento: trabajo.gig_title,
+    referencia: `búsqueda ${trabajo.opening_id} · evento ${trabajo.gig_id}`,
+    denunciante: [perfil.nombre, perfil.apellido].filter(Boolean).join(" ") + (perfil.email ? ` <${perfil.email}>` : ""),
+  });
+  if (!ok) return { ok: false, error: "No se pudo mandar. Escribí a hola@laburo.somosder.ar." };
   return { ok: true };
 }
