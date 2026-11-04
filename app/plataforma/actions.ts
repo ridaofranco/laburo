@@ -317,3 +317,64 @@ export async function getTimelinePlataforma(dias = 30): Promise<HechoPlataforma[
   if (error) throw new Error(`[plataforma] timeline: ${error.message}`);
   return (data as HechoPlataforma[] | null) ?? [];
 }
+
+/**
+ * ── DENUNCIAS (0105, 4/11) ─────────────────────────────────────────────────
+ * Las que mandan staff y candidatos desde «Denunciar esta oferta». Si la 0105
+ * todavía no se aplicó, la RPC no existe: se devuelve `sinTabla` y la pantalla
+ * lo dice, en vez de mostrar «no hay denuncias».
+ */
+export interface DenunciaPlataforma {
+  id: string;
+  created_at: string;
+  tipo: "busqueda" | "oferta" | "perfil";
+  opening_id: string | null;
+  offer_id: string | null;
+  motivo: string;
+  detalle: string | null;
+  urgente: boolean;
+  donde: string | null;
+  rol: string | null;
+  evento: string | null;
+  quien_publica: string | null;
+  denunciante: string | null;
+  estado: "revision" | "baja" | "descartada";
+  organizacion: string | null;
+  busqueda_moderada_at: string | null;
+  oferta_estado: string | null;
+}
+
+export async function getDenuncias(): Promise<{ ok: boolean; sinTabla?: boolean; denuncias: DenunciaPlataforma[] }> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("staff_app_plataforma_denuncias", { p_solo_pendientes: true });
+  if (error) {
+    console.error("[plataforma] denuncias:", error.message);
+    return { ok: false, sinTabla: true, denuncias: [] };
+  }
+  const r = data as { ok?: boolean; denuncias?: DenunciaPlataforma[] } | null;
+  return { ok: !!r?.ok, denuncias: r?.denuncias ?? [] };
+}
+
+export async function resolverDenuncia(
+  id: string,
+  estado: "baja" | "descartada",
+  nota?: string,
+): Promise<{ ok: boolean; error?: string }> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("staff_app_plataforma_resolver_denuncia", {
+    p_id: id,
+    p_estado: estado,
+    p_nota: nota?.trim() || null,
+  });
+  if (error) {
+    console.error("[plataforma] resolverDenuncia:", error.message);
+    return { ok: false, error: "No se pudo. Probá de nuevo." };
+  }
+  const r = data as { ok?: boolean; reason?: string } | null;
+  if (!r?.ok) {
+    return { ok: false, error: r?.reason === "sin_permiso" ? "No sos administrador de la plataforma." : "No se pudo. Probá de nuevo." };
+  }
+  revalidatePath("/plataforma/denuncias");
+  revalidatePath("/plataforma");
+  return { ok: true };
+}

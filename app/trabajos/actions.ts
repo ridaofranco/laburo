@@ -15,7 +15,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { getMyStaffProfile } from "@/lib/staff";
-import { avisarDenuncia, motivoValido } from "@/lib/denuncias";
+import { registrarDenuncia, motivoValido } from "@/lib/denuncias";
 
 export interface TrabajoAbierto {
   opening_id: string;
@@ -111,7 +111,7 @@ export async function denunciarTrabajo(
     trabajo = undefined;
   }
   if (!trabajo) return { ok: false, error: "Esa búsqueda ya no está abierta. Si igual querés denunciarla, escribí a hola@laburo.somosder.ar." };
-  const ok = await avisarDenuncia({
+  const ok = await registrarDenuncia({ tipo: "busqueda", openingId: trabajo.opening_id }, {
     motivo: motivoDenuncia,
     detalle,
     donde: "Trabajos disponibles (portal de staff)",

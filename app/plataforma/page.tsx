@@ -108,6 +108,12 @@ export default async function PlataformaPage() {
            * sea que lo ve justamente el que NO llegó hasta acá. */}
           <div className="flex flex-wrap items-center gap-x-8 gap-y-3 mt-3">
             <Link
+              href="/plataforma/denuncias"
+              className="label-tech text-[11px] tracking-[0.2em] text-[#cfc4c5] hover:text-[#0047ff] border-b border-[#4c4546] hover:border-[#0047ff] pb-1 transition-colors"
+            >
+              Denuncias por revisar
+            </Link>
+            <Link
               href="/plataforma/proveedores"
               className="label-tech text-[11px] tracking-[0.2em] text-[#cfc4c5] hover:text-[#0047ff] border-b border-[#4c4546] hover:border-[#0047ff] pb-1 transition-colors"
             >

@@ -30,7 +30,7 @@ import { headers } from "next/headers";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { deriveView, type TerminalView, type PublicOffer } from "./offer-state";
-import { avisarDenuncia, motivoValido } from "@/lib/denuncias";
+import { registrarDenuncia, motivoValido } from "@/lib/denuncias";
 
 export type OfferActionResult =
   | { ok: true }
@@ -239,7 +239,7 @@ export async function denunciarOfertaPorToken(
   const { data, error } = await supabase.rpc("staff_app_get_public_offer", { p_token: token });
   const d = data as PublicOffer | null;
   if (error || !d?.ok) return { ok: false, error: "No encontramos esa oferta. Escribí a hola@laburo.somosder.ar." };
-  const ok = await avisarDenuncia({
+  const ok = await registrarDenuncia({ tipo: "oferta", offerToken: token }, {
     motivo: motivoDenuncia,
     detalle,
     donde: "Oferta por link (/o/…)",
