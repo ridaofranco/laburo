@@ -159,7 +159,7 @@ export default async function SalonesPage({ searchParams }: Props) {
               <p className="text-[16px] md:text-[17px] leading-[1.7] text-[#8a8a8a] max-w-[560px]">
                 {hayFiltros
                   ? "Probá con menos filtros, o con un número redondo de invitados. Si no aparece lo que buscás, escribinos y te lo conseguimos nosotros: SOMOS DER produce eventos hace años y trabaja con salones de todo el país."
-                  : "Todavía no hay salones publicados acá. Mientras tanto, escribinos y te conseguimos el lugar con los salones con los que ya trabajamos."}
+                  : "Todavía no hay salones publicados acá. Mientras tanto, volvé pronto: los salones se suman solos y gratis."}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mt-2">
                 {hayFiltros ? (

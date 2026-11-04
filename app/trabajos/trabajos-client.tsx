@@ -18,6 +18,7 @@ import { motion } from "motion/react";
 import { postularme, despostularme, type TrabajoAbierto } from "./actions";
 import { fmtFecha, fmtHora as fmtHoraTz } from "@/lib/dates";
 import { money } from "@/lib/format";
+import { AvisoNoIntermediamos, AVISO_CORTO } from "@/components/aviso-no-intermediamos";
 
 function fmtDia(iso: string | null): string {
   return fmtFecha(iso, { day: "2-digit", month: "short", year: "numeric" }) ?? "Fecha a confirmar";
@@ -93,6 +94,7 @@ function Tarjeta({ t }: { t: TrabajoAbierto }) {
             {t.notas}
           </p>
         ) : null}
+        <AvisoNoIntermediamos texto={AVISO_CORTO} className="text-[11px] max-w-[560px] mt-1" />
         {t.gig_venue?.trim() ? (
           <a
             href={mapsUrl(t.gig_venue)}

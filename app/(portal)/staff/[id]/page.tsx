@@ -302,11 +302,9 @@ export default async function ProfilePage({
         {/* Izquierda */}
         <div className="md:col-span-7 flex flex-col gap-10">
           {/* ⭐ CONTACTO: solo para los roles de la casa (lib/permisos.ts).
-              El modelo de LABURO es de intermediación: la ficha se ve, el contacto
-              no, y a la persona se llega a través de SOMOS DER. Hasta hoy eso estaba
-              garantizado por el ACCESO y no por el producto, así que el día que
-              alguien de afuera entre, el contacto quedaba a la vista y la comisión
-              se podía saltear. El default ahora es NO mostrarlo. */}
+              El contacto es un dato personal de cada persona (Ley 25.326): la ficha
+              se ve, el contacto solo con permiso. LABURO no intermedia (Franco
+              31/10). El default es NO mostrarlo. */}
           {verContacto &&
             ((p.email ?? "").trim() || (p.telefono ?? "").trim() || (p.documento ?? "").trim() || edad) && (
             <Section title="Contacto y datos">

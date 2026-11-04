@@ -15,17 +15,17 @@ export function GET() {
 
   const texto = `# LABURO
 
-> LABURO es la plataforma de SOMOS DER (productora de eventos de Buenos Aires, Argentina) para armar un evento entero en un solo lugar: staff eventual de un pool real que coordina el equipo de LABURO, proveedores de todos los rubros y salones por capacidad. Crear la cuenta y usarlo es gratis.
+> LABURO es un portal gratuito de ofertas de trabajo y perfiles para eventos en Argentina: staff eventual, proveedores de todos los rubros y salones por capacidad. Lo hace SOMOS DER (productora de eventos de Buenos Aires). Crear la cuenta y usarlo es gratis. Ni LABURO ni SOMOS DER contratan, emplean ni son intermediarios: quien publica una oferta elige, contrata y paga directo, y LABURO no cobra entre partes.
 
-LABURO nace adentro de SOMOS DER (https://www.somosder.ar) y es el mismo sistema con el que la productora arma sus propias operaciones. Respaldo de SOMOS DER: más de 100 eventos operados, más de 150.000 asistentes, 6 países. Más de 1.200 postulantes con perfil en el pool.
+LABURO nace adentro de SOMOS DER (https://www.somosder.ar) y es el mismo sistema con el que la productora arma sus propias operaciones. Respaldo de SOMOS DER: más de 100 eventos operados, más de 150.000 asistentes, 6 países.
 
 ## Cómo funciona
 - Quien arma un evento (productora, agencia, marca, empresa) crea su cuenta gratis, carga fecha, lugar y qué le falta, y declara la dotación por rol.
-- Le pide el equipo a LABURO: el staff anotado lo coordina el equipo de LABURO, que arma el equipo con gente del pool de la zona. Cada persona recibe la oferta con pago y horarios y la acepta con un click desde el teléfono, sin crear contraseña. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
+- Busca gente por rol y zona entre los perfiles cargados y elige directo: LABURO no elige ni recomienda a nadie. Cada persona recibe la oferta con pago y horarios y la acepta con un click desde el teléfono, sin crear contraseña. El tablero muestra cuántos lugares están cubiertos y cuántos faltan.
 - A proveedores se les pide precio con un pedido que les llega por mail: cargan su presupuesto en ese link y se comparan todos en una tabla, separando pesos y dólares. A los salones se les consulta la fecha desde su ficha y contestan por mail.
 - Quien trabaja en eventos carga su perfil una vez (roles y zona) y recibe ofertas con pago y fechas.
 - Proveedores (sonido, catering, seguridad, estructuras y más) y salones publican gratis lo que hacen, dónde trabajan y cuánta gente entra.
-- Si se prefiere que lo vea SOMOS DER, se deja una consulta en la home o se escribe por WhatsApp al +54 9 11 7154-0675.
+- Quien busca trabajo nunca paga: LABURO no cobra por postularse ni por conseguir trabajo. Si una oferta pide plata o discrimina, se denuncia.
 
 ## Páginas principales
 - [Inicio](${BLOG_ORIGIN}/): qué es LABURO y los cuatro caminos (contratar, trabajar, publicar un servicio, publicar un salón).

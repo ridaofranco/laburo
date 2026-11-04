@@ -70,8 +70,13 @@ async function gigTerminado(gigId: string): Promise<boolean> {
 
 export async function crearBusqueda(
   gigId: string,
-  input: { role: string; cupo: number; pago: number | null; notas: string | null; publicar: boolean },
+  input: { role: string; cupo: number; pago: number | null; notas: string | null; publicar: boolean; declaracion?: boolean },
 ) {
+  // Declaración jurada obligatoria (Franco 31/10: LABURO no contrata ni intermedia).
+  // Se valida acá porque una server action es un POST invocable: la casilla sola no alcanza.
+  if (input.declaracion !== true) {
+    return { ok: false, error: "Para publicar tenés que aceptar la declaración jurada." };
+  }
   if (input.publicar && (await gigTerminado(gigId))) return { ok: false, error: YA_TERMINO };
   return llamar(
     "staff_app_crear_busqueda",

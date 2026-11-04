@@ -168,7 +168,7 @@ export default async function ServiciosPage({ searchParams }: Props) {
               <p className="text-[16px] md:text-[17px] leading-[1.7] text-[#8a8a8a] max-w-[560px]">
                 {hayFiltros
                   ? "Probá con menos filtros o con otra palabra. Si no aparece lo que buscás, escribinos y te lo conseguimos nosotros: SOMOS DER produce eventos hace años y trabaja con proveedores de todos los rubros."
-                  : "Todavía no hay proveedores publicados acá. Mientras tanto, escribinos y te armamos el evento con los proveedores con los que ya trabajamos."}
+                  : "Todavía no hay proveedores publicados acá. Mientras tanto, volvé pronto: los proveedores se suman solos y gratis."}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mt-2">
                 {hayFiltros ? (

@@ -33,7 +33,7 @@ import { PAGO_TEXTO } from "@/lib/pago";
 import { createClient } from "@/lib/supabase/server";
 
 const DESCRIPCION =
-  "Staff para eventos de un pool real, con el equipo armado por LABURO, más proveedores y salones. Si trabajás en eventos o tenés un servicio, sumate gratis.";
+  "Portal gratuito de ofertas de trabajo y perfiles para eventos: staff, proveedores y salones. Quien publica elige y contrata directo. LABURO no contrata ni intermedia.";
 
 export const metadata: Metadata = {
   title: "LABURO. Todo lo que necesita tu evento",
@@ -125,9 +125,9 @@ const PASOS = [
   },
   {
     n: "PASO 02",
-    titulo: "Te armamos el equipo",
+    titulo: "Buscás y elegís vos",
     texto:
-      "El staff anotado en LABURO lo coordina el equipo de LABURO: le contás qué roles te faltan y te arma el equipo con gente del pool de tu zona. Los proveedores y los salones los buscás vos, por rubro, zona y capacidad.",
+      "Buscás gente por rol y zona entre los perfiles cargados, y proveedores y salones por rubro, zona y capacidad. La elección es tuya: LABURO no elige, no contrata ni intermedia.",
   },
   {
     n: "PASO 03",

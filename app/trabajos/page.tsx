@@ -15,6 +15,7 @@ import { StaffNav } from "@/components/staff-nav";
 import { requireStaff } from "@/lib/staff";
 import { getTrabajosAbiertos } from "./actions";
 import { TrabajosClient } from "./trabajos-client";
+import { AvisoNoIntermediamos, avisoLargo } from "@/components/aviso-no-intermediamos";
 
 export const metadata: Metadata = {
   title: "LABURO. | Trabajos disponibles",
@@ -48,6 +49,7 @@ export default async function TrabajosPage() {
                 ahí decidís.
               </p>
             ) : null}
+            <AvisoNoIntermediamos texto={avisoLargo()} className="max-w-[720px] mt-4" />
           </header>
 
           <TrabajosClient trabajos={trabajos} />

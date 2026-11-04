@@ -42,12 +42,13 @@ export default function TerminosPage() {
         </p>
       </Bloque>
 
-      <Bloque titulo="Hoy es gratis">
+      <Bloque titulo="Es gratis y no cobra entre partes">
         <p>
-          No cobramos comisión ni acceso. Es una decisión comercial, no una
-          promesa eterna:{" "}
+          LABURO no cobra comisión ni maneja plata entre quien publica y quien
+          trabaja, y nunca le va a cobrar a quien busca trabajo. Si algún día
+          sumamos herramientas pagas para productoras,{" "}
           <strong className="text-[#e5e2e1]">
-            si algún día empezamos a cobrar, lo vamos a avisar antes
+            lo vamos a avisar antes
           </strong>{" "}
           y nadie va a encontrarse con un cargo sorpresa.
         </p>

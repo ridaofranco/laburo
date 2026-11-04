@@ -11,6 +11,7 @@
  */
 
 import { useState } from "react";
+import { AvisoNoIntermediamos, AVISO_PUBLICAR, DECLARACION_PUBLICAR } from "@/components/aviso-no-intermediamos";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -59,12 +60,17 @@ function NuevaBusqueda({ gigId }: { gigId: string }) {
   const [cupo, setCupo] = useState("1");
   const [pago, setPago] = useState("");
   const [notas, setNotas] = useState("");
+  const [declaro, setDeclaro] = useState(false);
   const [busy, setBusy] = useState(false);
 
   async function guardar(publicar: boolean) {
     if (busy) return;
     if (!role.trim()) {
       toast.error("Escribí qué rol estás buscando.");
+      return;
+    }
+    if (!declaro) {
+      toast.error("Para publicar tenés que marcar la declaración jurada.");
       return;
     }
     setBusy(true);
@@ -75,6 +81,7 @@ function NuevaBusqueda({ gigId }: { gigId: string }) {
         pago: pago.trim() ? Number(pago) : null,
         notas: notas.trim() || null,
         publicar,
+        declaracion: declaro,
       });
       if (r.ok) {
         toast.success(publicar ? "Publicada, ya la ve el staff" : "Guardada como borrador");
@@ -82,6 +89,7 @@ function NuevaBusqueda({ gigId }: { gigId: string }) {
         setCupo("1");
         setPago("");
         setNotas("");
+        setDeclaro(false);
         router.refresh();
       } else {
         toast.error(r.error ?? "No se pudo.");
@@ -118,6 +126,23 @@ function NuevaBusqueda({ gigId }: { gigId: string }) {
         Si no ponés el pago, al staff le va a decir &quot;a confirmar&quot;. Se
         postula menos gente cuando no sabe cuánto se paga.
       </p>
+      <AvisoNoIntermediamos texto={AVISO_PUBLICAR} />
+      {/* Casilla obligatoria y NO premarcada (TERMINOS-PROPUESTOS.md). */}
+      <label htmlFor="b-declaro" className="flex items-start gap-3 cursor-pointer text-[13px] leading-[1.55] text-[#cfc4c5]">
+        <input
+          id="b-declaro"
+          type="checkbox"
+          checked={declaro}
+          onChange={(e) => setDeclaro(e.target.checked)}
+          className="mt-1 h-5 w-5 shrink-0 accent-[#e5e2e1]"
+        />
+        <span className="break-words">
+          {DECLARACION_PUBLICAR}{" "}
+          <a href="/terminos" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">
+            Ver términos
+          </a>
+        </span>
+      </label>
       <div className="flex flex-wrap gap-3">
         <button
           type="button"

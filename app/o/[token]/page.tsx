@@ -24,6 +24,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { fmtFecha, fmtFechaHora, fmtHora } from "@/lib/dates";
 import { AcceptDecline } from "./accept-decline";
+import { AvisoNoIntermediamos, avisoLargo } from "@/components/aviso-no-intermediamos";
 import { WhatsAppCta, PortalStaffLink } from "./wa-cta";
 import {
   deriveView,
@@ -182,6 +183,8 @@ export default async function OfferPage({
           <OfferRow label="Pago" value={amount} />
           <OfferRow label="Condiciones" value={d.offer?.conditions} />
         </div>
+
+        <AvisoNoIntermediamos texto={avisoLargo(orgName)} color="text-fg" />
 
         {/* Aceptar/Rechazar por POST (Server Action). Sólo la vista activa lo monta. */}
         <AcceptDecline token={token} gigTitle={d.gig?.title ?? null} />

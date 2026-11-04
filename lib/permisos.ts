@@ -5,15 +5,17 @@ import { orgActual } from "@/lib/org";
  * QUIÉN PUEDE VER EL CONTACTO DE ALGUIEN DEL POOL.
  *
  * ── EL PROBLEMA QUE RESUELVE (pedido de Franco) ──
- * El modelo de LABURO es de intermediación: la ficha se ve, el contacto no, y a la
- * persona se llega a través de SOMOS DER. Eso es lo que sostiene la comisión.
+ * LABURO es un portal gratuito de ofertas y perfiles: no contrata ni intermedia
+ * (Franco 31/10). El contacto de cada persona es un dato personal suyo y solo se
+ * muestra a quien corresponde; en la fase 3 lo decide cada persona con su propio
+ * permiso («mostrar mi WhatsApp/mail a quien publica»).
  *
  * Pero hasta hoy eso estaba garantizado **por el acceso, no por el producto**: la
  * pantalla del perfil muestra Email, Teléfono y DNI a cualquiera que sea miembro de
  * la organización, y el visor del CV original tiene el contacto adentro del PDF. Con
  * un solo equipo eso no era un problema. El día que Franco le da acceso a un cliente
- * o abre el marketplace a otra productora, **el contacto queda a la vista y la
- * comisión se puede saltear**. Y ese día **está más cerca**: desde la 0071 existe
+ * o abre el portal a otra productora, **el contacto de terceros queda a la vista
+ * sin que esas personas lo hayan autorizado**. Y ese día **está más cerca**: desde la 0071 existe
  * `manager`, que es justamente el rol para alguien que opera la productora sin ser
  * su dueño, y `viewer` para quien solo mira.
  *
@@ -38,8 +40,8 @@ import { orgActual } from "@/lib/org";
  * reales.
  *
  * ⚠️ **`viewer` NO entra, y es deliberado.** Un rol de sólo lectura no tiene por
- * qué ver mail, teléfono y DNI de terceros: eso es exactamente lo que sostiene
- * la intermediación. El default tiene que ser ocultar.
+ * qué ver mail, teléfono y DNI de terceros: son datos personales (Ley 25.326).
+ * El default tiene que ser ocultar.
  *
  * ⚠️ **`manager` SÍ entra (0071).** Es un rol operativo de la casa: quien arma los
  * eventos y manda las ofertas necesita poder llamar a la gente. Si no viera el

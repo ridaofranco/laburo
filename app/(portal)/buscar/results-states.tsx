@@ -62,15 +62,15 @@ export function EmptyResults({ onClear }: { onClear: () => void }) {
  */
 export function PoolVacio() {
   const wa = `https://wa.me/${SOPORTE_WHATSAPP}?text=${encodeURIComponent(
-    "Hola, necesito staff para un evento (te escribo desde Buscar en LABURO).",
+    "Hola, tengo una duda con LABURO (te escribo desde Buscar).",
   )}`;
   return (
     <div className="flex flex-col items-center text-center gap-md py-2xl">
       <LaburoWordmark className="h-[20px] w-auto opacity-80" />
       <h2 className="font-display text-[28px] text-fg">Todavía no tenés gente en tu pool</h2>
       <p className="text-body text-fg-muted max-w-[340px]">
-        El staff anotado en LABURO lo coordina el equipo de LABURO. Contanos qué evento
-        tenés, cuántas personas y para qué roles, y te armamos el equipo.
+        Cuando la gente se postule a tus ofertas o la sumes a tu equipo, aparece acá.
+        LABURO no elige ni contrata por vos: la decisión es tuya.
       </p>
       <div className="flex flex-wrap justify-center gap-sm">
         <a
@@ -79,7 +79,7 @@ export function PoolVacio() {
           rel="noopener noreferrer"
           className="min-h-[44px] inline-flex items-center rounded-xl bg-accent text-white text-label font-semibold px-lg py-sm transition-transform active:scale-[0.98]"
         >
-          Pedir staff por WhatsApp
+          Dudas por WhatsApp
         </a>
         <Link
           href="/tablero/nuevo"

@@ -134,7 +134,7 @@ export function BlogCta() {
           para tu evento.
         </h2>
         <p className="text-[16px] md:text-[18px] leading-[1.7] text-[#8a8a8a] max-w-[560px] mt-8">
-          Contanos qué roles te faltan y te armamos el equipo con gente real
+          Publicá gratis qué roles te faltan y elegí vos entre la gente
           del pool de tu zona. Y si trabajás en eventos, cargá tu perfil una
           vez y recibí propuestas con pago y fechas.
         </p>
