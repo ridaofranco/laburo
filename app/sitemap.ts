@@ -1,5 +1,13 @@
 import type { MetadataRoute } from "next";
-import { BLOG_ORIGIN, getAllPosts } from "@/lib/blog";
+import {
+  BLOG_ORIGIN,
+  blogIndexUrl,
+  getAllPosts,
+  getPostsByLang,
+  hreflangDe,
+  hreflangIndices,
+  IDIOMAS_TRADUCCION,
+} from "@/lib/blog";
 import { getAllPara } from "@/lib/para";
 import { buscarPublico } from "./servicios/actions";
 import { buscarSalones } from "./salones/actions";
@@ -17,6 +25,12 @@ async function licitacionesAbiertas(): Promise<string[]> {
   return (Array.isArray(data) ? data : [])
     .map((l: Record<string, unknown>) => (typeof l.slug === "string" ? l.slug : null))
     .filter((s): s is string => !!s);
+}
+
+/** `alternates` del sitemap solo para las notas que tienen traducciones. */
+function alternatesDe(p: Parameters<typeof hreflangDe>[0]) {
+  const languages = hreflangDe(p);
+  return Object.keys(languages).length > 0 ? { alternates: { languages } } : {};
 }
 
 /**
@@ -127,12 +141,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: ultimoPost,
       changeFrequency: "weekly",
       priority: 0.7,
+      alternates: { languages: hreflangIndices() },
     },
     ...posts.map((p) => ({
       url: `${BLOG_ORIGIN}/blog/${p.slug}`,
       lastModified: p.date,
       changeFrequency: "monthly" as const,
       priority: 0.6,
+      ...alternatesDe(p),
     })),
+    // BLOG EN 5 IDIOMAS (06/11): índices y notas de content/blog/<idioma>/, con
+    // los alternates del grupo (hreflang recíproco + x-default a la española).
+    // content/blog/**/* ya está en outputFileTracingIncludes (next.config.ts).
+    ...IDIOMAS_TRADUCCION.flatMap((lang) => {
+      const notas = getPostsByLang(lang);
+      return [
+        {
+          url: blogIndexUrl(lang),
+          lastModified: notas.map((p) => p.date).sort().at(-1),
+          changeFrequency: "weekly" as const,
+          priority: 0.6,
+          alternates: { languages: hreflangIndices() },
+        },
+        ...notas.map((p) => ({
+          url: p.canonical,
+          lastModified: p.date,
+          changeFrequency: "monthly" as const,
+          priority: 0.6,
+          ...alternatesDe(p),
+        })),
+      ];
+    }),
   ];
 }

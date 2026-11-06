@@ -50,6 +50,12 @@ export type BlogPost = {
   faqs: BlogFaq[];
   /** Solo en las páginas por público: contrata | trabaja | proveedor | salon. */
   audiencia?: string;
+  /**
+   * Solo en las traducciones (content/blog/<idioma>/*.md): el slug de la nota
+   * ESPAÑOLA de la que salen. Es lo que une las versiones para el hreflang, el
+   * sitemap y el selector de idioma. Ver editorial/BLOG-5-IDIOMAS.md.
+   */
+  traduccionDe?: string;
   /** HTML ya renderizado del cuerpo del post. */
   html: string;
 };
@@ -81,7 +87,7 @@ function toFaqs(value: unknown): BlogFaq[] {
     .filter((f) => f.q.length > 0 && f.a.length > 0);
 }
 
-function parsePost(fileName: string, dir = BLOG_DIR, base = "blog"): BlogPost {
+function parsePost(fileName: string, dir = BLOG_DIR, base = "blog", lang = "es"): BlogPost {
   const raw = fs.readFileSync(path.join(dir, fileName), "utf8");
   const { data, content } = matter(raw);
 
@@ -93,15 +99,20 @@ function parsePost(fileName: string, dir = BLOG_DIR, base = "blog"): BlogPost {
     slug,
     title,
     description: String(data.description ?? ""),
-    metaTitle: String(data.metaTitle ?? `${title} | LABURO`),
+    // `seoTitle` y `pubDate` son los nombres que usan las notas de somosder-web
+    // y de hito-agency: se aceptan igual para que un traductor no tenga que
+    // acordarse de cuál es cuál.
+    metaTitle: String(data.metaTitle ?? data.seoTitle ?? `${title} | LABURO`),
     canonical: String(data.canonical ?? `${BLOG_ORIGIN}/${base}/${slug}`),
-    kicker: String(data.kicker ?? "Guía"),
-    date: toIsoDate(data.date),
+    kicker: String(data.kicker ?? KICKER_POR_IDIOMA[lang] ?? "Guía"),
+    date: toIsoDate(data.date ?? data.pubDate),
     readingTime: String(data.readingTime ?? ""),
     order: Number(data.order ?? 99),
-    lang: String(data.lang ?? "es"),
+    lang: String(data.lang ?? lang),
     faqs: toFaqs(data.faqs),
     audiencia: data.audiencia ? String(data.audiencia) : undefined,
+    // `es:` es un alias corto de `traduccionDe:` (mismo dato).
+    traduccionDe: (data.traduccionDe ?? data.es) ? String(data.traduccionDe ?? data.es) : undefined,
     html: marked.parse(content, { async: false }),
   };
 }
@@ -110,12 +121,12 @@ function parsePost(fileName: string, dir = BLOG_DIR, base = "blog"): BlogPost {
  * Lee una carpeta de .md con el formato del blog. La usan el blog y las páginas
  * por público (`content/para`, lib/para.ts): mismo frontmatter, mismo motor.
  */
-export function readMarkdownDir(dir: string, base: string): BlogPost[] {
+export function readMarkdownDir(dir: string, base: string, lang = "es"): BlogPost[] {
   if (!fs.existsSync(dir)) return [];
   return fs
     .readdirSync(dir)
     .filter((f) => f.endsWith(".md"))
-    .map((f) => parsePost(f, dir, base))
+    .map((f) => parsePost(f, dir, base, lang))
     .sort((a, b) => a.order - b.order || a.title.localeCompare(b.title, "es"));
 }
 
@@ -126,6 +137,107 @@ export function getAllPosts(): BlogPost[] {
 
 export function getPost(slug: string): BlogPost | undefined {
   return getAllPosts().find((p) => p.slug === slug);
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+ * BLOG EN 5 IDIOMAS (06/11/2026), réplica del de somosder.ar.
+ *
+ * El español queda donde estuvo siempre (content/blog/*.md → /blog/<slug>) para
+ * no romper ninguna URL. Cada traducción es un .md en content/blog/<idioma>/
+ * con slug propio en ese idioma y `traduccionDe: <slug-español>`, y se publica
+ * en /<idioma>/blog/<slug>. Con eso solo se arman el hreflang recíproco (más
+ * x-default a la española), el sitemap con alternates y el selector de idioma.
+ * Convención completa: editorial/BLOG-5-IDIOMAS.md.
+ * ──────────────────────────────────────────────────────────────────────────── */
+
+/** Idiomas de las traducciones (el español es el original y no va acá). */
+export const IDIOMAS_TRADUCCION = ["en", "pt", "fr", "it"] as const;
+export type IdiomaTraduccion = (typeof IDIOMAS_TRADUCCION)[number];
+export type Idioma = "es" | IdiomaTraduccion;
+export const IDIOMAS: Idioma[] = ["es", ...IDIOMAS_TRADUCCION];
+
+export function esIdiomaTraduccion(x: string): x is IdiomaTraduccion {
+  return (IDIOMAS_TRADUCCION as readonly string[]).includes(x);
+}
+
+/** Código hreflang de cada idioma (el español es el de Argentina). */
+export const HREFLANG: Record<Idioma, string> = {
+  es: "es-AR",
+  en: "en",
+  pt: "pt",
+  fr: "fr",
+  it: "it",
+};
+
+const KICKER_POR_IDIOMA: Record<string, string> = {
+  es: "Guía",
+  en: "Guide",
+  pt: "Guia",
+  fr: "Guide",
+  it: "Guida",
+};
+
+/** Índice del blog en cada idioma. */
+export function blogIndexUrl(lang: Idioma): string {
+  return lang === "es" ? `${BLOG_ORIGIN}/blog` : `${BLOG_ORIGIN}/${lang}/blog`;
+}
+
+/** Las notas de un idioma de traducción (content/blog/<idioma>/*.md). */
+export function getPostsByLang(lang: IdiomaTraduccion): BlogPost[] {
+  return readMarkdownDir(path.join(BLOG_DIR, lang), `${lang}/blog`, lang);
+}
+
+export function getPostByLang(lang: IdiomaTraduccion, slug: string): BlogPost | undefined {
+  return getPostsByLang(lang).find((p) => p.slug === slug);
+}
+
+/**
+ * Las versiones de una nota en todos los idiomas que existen, por idioma.
+ * Sirve con la nota española o con cualquiera de sus traducciones: devuelve
+ * siempre el mismo grupo, así el hreflang sale recíproco en las cinco.
+ * Si la nota no tiene ninguna traducción devuelve solo la propia.
+ */
+export function versionesDe(post: BlogPost): Partial<Record<Idioma, BlogPost>> {
+  const slugEs = post.lang === "es" ? post.slug : post.traduccionDe;
+  const grupo: Partial<Record<Idioma, BlogPost>> = {};
+  if (!slugEs) {
+    grupo[post.lang as Idioma] = post;
+    return grupo;
+  }
+  const es = getPost(slugEs);
+  if (es) grupo.es = es;
+  for (const lang of IDIOMAS_TRADUCCION) {
+    const t = getPostsByLang(lang).find((p) => p.traduccionDe === slugEs);
+    if (t) grupo[lang] = t;
+  }
+  if (!grupo[post.lang as Idioma]) grupo[post.lang as Idioma] = post;
+  return grupo;
+}
+
+/**
+ * `alternates.languages` para el metadata de Next y para el sitemap:
+ * { "es-AR": url, en: url, ..., "x-default": url-española }. Vacío si la nota
+ * no tiene traducciones (una sola versión no necesita hreflang).
+ */
+export function hreflangDe(post: BlogPost): Record<string, string> {
+  const grupo = versionesDe(post);
+  const langs = Object.keys(grupo) as Idioma[];
+  if (langs.length < 2) return {};
+  const out: Record<string, string> = {};
+  for (const l of IDIOMAS) {
+    const p = grupo[l];
+    if (p) out[HREFLANG[l]] = p.canonical;
+  }
+  out["x-default"] = (grupo.es ?? grupo[langs[0]])!.canonical;
+  return out;
+}
+
+/** hreflang de los índices del blog (existen en los cinco idiomas). */
+export function hreflangIndices(): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const l of IDIOMAS) out[HREFLANG[l]] = blogIndexUrl(l);
+  out["x-default"] = blogIndexUrl("es");
+  return out;
 }
 
 /** Fecha larga en castellano rioplatense: "29 de julio de 2026". */

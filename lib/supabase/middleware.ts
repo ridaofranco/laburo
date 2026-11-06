@@ -179,6 +179,13 @@ export async function updateSession(request: NextRequest) {
     // sin sesión, por la misma razón que el blog. Ninguna otra ruta de primer
     // nivel empieza con "/para", así que el startsWith no abre nada de más.
     "/para",
+    // Blog traducido (06/11/2026): /en/blog, /pt/blog, /fr/blog, /it/blog y sus
+    // notas. Estático y sin sesión como /blog. Van con "/blog" pegado para que
+    // "/en" no abra "/entrar" ni nada que empiece igual.
+    "/en/blog",
+    "/pt/blog",
+    "/fr/blog",
+    "/it/blog",
     // llms.txt: lo que leen los asistentes de IA. Sin esto, 307 a /entrar.
     "/llms.txt",
     // LA VIDRIERA DE PROVEEDORES (Fase 4, migración 0059). Es la puerta del

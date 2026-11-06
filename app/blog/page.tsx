@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BLOG_ORIGIN, type BlogPost, getAllPosts } from "@/lib/blog";
+import { BLOG_ORIGIN, type BlogPost, getAllPosts, hreflangIndices } from "@/lib/blog";
 import { type Audiencia, CTA_POR_AUDIENCIA, paraDeNota } from "@/lib/para";
 import { BlogCta, BlogFooter, BlogHeader, WRAP } from "./chrome";
 
@@ -20,7 +20,8 @@ export const metadata: Metadata = {
   description: DESCRIPCION,
   // Absoluto a propósito (ver BLOG_ORIGIN en lib/blog.ts): relativo se resolvería
   // contra metadataBase, que en local es http://localhost:3000.
-  alternates: { canonical: `${BLOG_ORIGIN}/blog` },
+  // El índice existe en los cinco idiomas (/en/blog, /pt/blog...): hreflang recíproco.
+  alternates: { canonical: `${BLOG_ORIGIN}/blog`, languages: hreflangIndices() },
   openGraph: {
     type: "website",
     url: `${BLOG_ORIGIN}/blog`,

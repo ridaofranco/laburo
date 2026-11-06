@@ -1,4 +1,5 @@
-import { BLOG_ORIGIN, getAllPosts } from "@/lib/blog";
+import { BLOG_ORIGIN, blogIndexUrl, getAllPosts, getPostsByLang, IDIOMAS_TRADUCCION } from "@/lib/blog";
+import { TEXTOS } from "@/lib/blog-i18n";
 import { getAllPara } from "@/lib/para";
 
 /**
@@ -12,6 +13,20 @@ export const dynamic = "force-static";
 export function GET() {
   const para = getAllPara();
   const posts = getAllPosts();
+  // Blog en otros idiomas (06/11): solo los idiomas que ya tienen notas.
+  const traducciones = IDIOMAS_TRADUCCION.map((lang) => ({ lang, notas: getPostsByLang(lang) })).filter(
+    (x) => x.notas.length > 0,
+  );
+  const bloqueIdiomas = traducciones.length
+    ? `\n## Blog en otros idiomas (traducciones de las guías)\n${traducciones
+        .map(
+          ({ lang, notas }) =>
+            `### ${TEXTOS[lang].nombreIdioma} (${blogIndexUrl(lang)})\n${notas
+              .map((p) => `- [${p.title}](${p.canonical}): ${p.description}`)
+              .join("\n")}`,
+        )
+        .join("\n\n")}\n`
+    : "";
 
   const texto = `# LABURO
 
@@ -44,7 +59,7 @@ ${para.map((p) => `- [${p.title}](${p.canonical}): ${p.description}`).join("\n")
 
 ## Blog (guías desde la operación real de SOMOS DER)
 ${posts.map((p) => `- [${p.title}](${p.canonical}): ${p.description}`).join("\n")}
-
+${bloqueIdiomas}
 ## Ecosistema SOMOS DER
 - SOMOS DER (https://www.somosder.ar): productora de eventos y experiencias de marca, Buenos Aires.
 - PASE (https://pase.somosder.ar): acreditación y control de accesos con QR.

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BLOG_ORIGIN, formatBlogDate, getAllPosts, getPost } from "@/lib/blog";
+import { BLOG_ORIGIN, formatBlogDate, getAllPosts, getPost, hreflangDe } from "@/lib/blog";
 import { ctaDe, paraDeNota } from "@/lib/para";
 import { BlogCta, BlogFooter, BlogHeader, WRAP } from "../chrome";
 import { Faq } from "../faq";
+import { SelectorIdioma } from "../idiomas";
 
 /**
  * Post del blog (/blog/<slug>).
@@ -36,7 +37,8 @@ export async function generateMetadata({
   return {
     title: post.metaTitle,
     description: post.description,
-    alternates: { canonical: post.canonical },
+    // hreflang recíproco con las traducciones (si las hay) + x-default a esta.
+    alternates: { canonical: post.canonical, languages: hreflangDe(post) },
     openGraph: {
       type: "article",
       url: post.canonical,
@@ -144,6 +146,7 @@ export default async function BlogPostPage({
                   <span aria-hidden="true">·</span>
                   <span>Por SOMOS DER</span>
                 </div>
+                <SelectorIdioma post={post} />
               </div>
             </div>
           </header>

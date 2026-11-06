@@ -9,7 +9,16 @@ import { WRAP } from "./chrome";
  * son EL MISMO texto. Es lo que hace que Google y los asistentes de IA puedan
  * citar el post sin inventar: la respuesta ya está escrita, entera, en el HTML.
  */
-export function Faq({ faqs }: { faqs: BlogFaq[] }) {
+export function Faq({
+  faqs,
+  eyebrow = "Preguntas frecuentes",
+  titulo = "Lo que más nos preguntan.",
+}: {
+  faqs: BlogFaq[];
+  /** Textos del encabezado: en las traducciones van en el idioma de la nota. */
+  eyebrow?: string;
+  titulo?: string;
+}) {
   if (faqs.length === 0) return null;
 
   const schema = {
@@ -27,10 +36,10 @@ export function Faq({ faqs }: { faqs: BlogFaq[] }) {
       <div className={`${WRAP} py-20 md:py-28`}>
         <div className="max-w-[820px]">
           <span className="label-tech text-[11px] tracking-[0.3em] text-[#0047ff] block">
-            Preguntas frecuentes
+            {eyebrow}
           </span>
           <h2 className="font-[family-name:var(--font-syne)] font-bold uppercase tracking-tighter text-[clamp(28px,5vw,56px)] leading-none mt-4">
-            Lo que más nos preguntan.
+            {titulo}
           </h2>
 
           <div className="mt-12 border-t border-[#1a1a1a]">
