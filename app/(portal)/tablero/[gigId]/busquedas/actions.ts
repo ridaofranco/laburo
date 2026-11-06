@@ -9,6 +9,10 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { createServiceRoleClient } from "@/lib/supabase/admin";
+import { filtrarAviso } from "@/lib/filtro-avisos";
+import { alerta } from "@/lib/alerta";
+import { siteUrl } from "@/lib/site";
 
 function motivo(reason: string | undefined): string {
   switch (reason) {
@@ -78,19 +82,52 @@ export async function crearBusqueda(
     return { ok: false, error: "Para publicar tenés que aceptar la declaración jurada." };
   }
   if (input.publicar && (await gigTerminado(gigId))) return { ok: false, error: YA_TERMINO };
-  return llamar(
-    "staff_app_crear_busqueda",
-    {
-      p_gig_id: gigId,
-      p_role: input.role,
-      p_cupo: input.cupo,
-      p_pago: input.pago,
-      p_notas: input.notas,
-      p_publicar: input.publicar,
-    },
-    gigId,
-  );
+
+  // Filtro de palabras (fase 2, punto 7): lo prohibido no se guarda; lo dudoso se
+  // crea pero queda bajado «en revisión» hasta que se aprueba en /plataforma.
+  const filtro = filtrarAviso({ role: input.role, notas: input.notas });
+  if (filtro.nivel === "prohibido") return { ok: false, error: filtro.mensaje };
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("staff_app_crear_busqueda", {
+    p_gig_id: gigId,
+    p_role: input.role,
+    p_cupo: input.cupo,
+    p_pago: input.pago,
+    p_notas: input.notas,
+    p_publicar: input.publicar,
+  });
+  if (error) {
+    console.error("[busquedas] staff_app_crear_busqueda falló:", error.message);
+    return { ok: false, error: "No se pudo. Probá de nuevo." };
+  }
+  const r = data as { ok?: boolean; reason?: string; id?: string } | null;
+  if (!r?.ok) return { ok: false, error: motivo(r?.reason) };
+
+  let enRevision = false;
+  if (filtro.nivel === "dudoso" && r.id) {
+    const admin = createServiceRoleClient();
+    const { error: errRev } = await admin.rpc("staff_app_busqueda_a_revision", {
+      p_opening_id: r.id,
+      p_motivo: filtro.motivo,
+    });
+    if (errRev) console.error("[busquedas] no se pudo pasar a revisión:", errRev.message);
+    else enRevision = true;
+    await alerta({
+      titulo: "LABURO: búsqueda en revisión",
+      clave: `busqueda-revision:${r.id}`,
+      aviso: true,
+      datos: { rol: input.role, detalle: input.notas ?? "", motivo: filtro.motivo, revisar: siteUrl("/plataforma") },
+    });
+  }
+  revalidatePath(`/tablero/${gigId}/busquedas`);
+  const aviso =
+    enRevision && filtro.nivel === "dudoso"
+      ? `Quedó guardada pero en revisión: ${filtro.motivo.replace(/^En revisión: /, "")}. La miramos en 48 a 72 h y, si está bien, se publica.`
+      : undefined;
+  return { ok: true, enRevision, aviso };
 }
+
 
 export async function publicarBusqueda(gigId: string, openingId: string, publicar: boolean) {
   if (publicar && (await gigTerminado(gigId))) return { ok: false, error: YA_TERMINO };

@@ -39,7 +39,7 @@ function norm(s: string): string {
     .replace(/[̀-ͯ]/g, "");
 }
 
-const DISCRIMINACION = [
+export const DISCRIMINACION = [
   "buena presencia",
   "excelente presencia",
   "muy buena presencia",

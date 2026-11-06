@@ -84,7 +84,8 @@ function NuevaBusqueda({ gigId }: { gigId: string }) {
         declaracion: declaro,
       });
       if (r.ok) {
-        toast.success(publicar ? "Publicada, ya la ve el staff" : "Guardada como borrador");
+        if ("aviso" in r && r.aviso) toast.warning(r.aviso, { duration: 12000 });
+        else toast.success(publicar ? "Publicada, ya la ve el staff" : "Guardada como borrador");
         setRole("");
         setCupo("1");
         setPago("");
@@ -92,7 +93,7 @@ function NuevaBusqueda({ gigId }: { gigId: string }) {
         setDeclaro(false);
         router.refresh();
       } else {
-        toast.error(r.error ?? "No se pudo.");
+        toast.error(r.error ?? "No se pudo.", { duration: 12000 });
       }
     } finally {
       setBusy(false);
