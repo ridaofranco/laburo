@@ -49,18 +49,30 @@ export interface Postulacion {
   eventos_trabajados: number | null;
 }
 
+export const CONDICIONES = [
+  { k: "horario", label: "Horario", ej: "18 a 02 h, llegar 17:30" },
+  { k: "vestimenta", label: "Vestimenta", ej: "Todo negro, zapatos cerrados" },
+  { k: "comida", label: "Comida", ej: "Incluye cena" },
+  { k: "traslado", label: "Traslado", ej: "Combi desde Obelisco a las 16 h" },
+  { k: "forma_pago", label: "Forma de pago", ej: "Transferencia" },
+  { k: "plazo_pago", label: "Plazo de pago", ej: "A los 7 días del evento" },
+] as const;
+
 const input =
   "w-full bg-transparent border-0 border-b border-[#4c4546] focus:border-[#e5e2e1] outline-none text-[16px] text-[#e5e2e1] py-3 px-0 rounded-none transition-colors";
 const label =
   "block mb-1 font-[family-name:var(--font-geist)] text-[11px] uppercase tracking-[0.1em] text-[#cfc4c5]";
 
-function NuevaBusqueda({ gigId }: { gigId: string }) {
+function NuevaBusqueda({ gigId, pideDoc }: { gigId: string; pideDoc: boolean }) {
   const router = useRouter();
   const [role, setRole] = useState("");
   const [cupo, setCupo] = useState("1");
   const [pago, setPago] = useState("");
   const [notas, setNotas] = useState("");
   const [declaro, setDeclaro] = useState(false);
+  const [cond, setCond] = useState({ horario: "", vestimenta: "", comida: "", traslado: "", forma_pago: "", plazo_pago: "" });
+  const [docTipo, setDocTipo] = useState<"CUIT" | "DNI">("CUIT");
+  const [docNumero, setDocNumero] = useState("");
   const [busy, setBusy] = useState(false);
 
   async function guardar(publicar: boolean) {
@@ -82,6 +94,8 @@ function NuevaBusqueda({ gigId }: { gigId: string }) {
         notas: notas.trim() || null,
         publicar,
         declaracion: declaro,
+        condiciones: cond,
+        ...(pideDoc ? { docTipo, docNumero } : {}),
       });
       if (r.ok) {
         if ("aviso" in r && r.aviso) toast.warning(r.aviso, { duration: 12000 });
@@ -90,6 +104,7 @@ function NuevaBusqueda({ gigId }: { gigId: string }) {
         setCupo("1");
         setPago("");
         setNotas("");
+        setCond({ horario: "", vestimenta: "", comida: "", traslado: "", forma_pago: "", plazo_pago: "" });
         setDeclaro(false);
         router.refresh();
       } else {
@@ -119,10 +134,38 @@ function NuevaBusqueda({ gigId }: { gigId: string }) {
           <input id="b-pago" type="number" min={0} className={input} value={pago} onChange={(e) => setPago(e.target.value)} placeholder="45000" />
         </div>
       </div>
-      <div>
-        <label className={label} htmlFor="b-notas">Detalle (opcional)</label>
-        <input id="b-notas" className={input} value={notas} onChange={(e) => setNotas(e.target.value)} placeholder="Horario, si hay que llevar algo, etc." />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {CONDICIONES.map((c) => (
+          <div key={c.k}>
+            <label className={label} htmlFor={`b-${c.k}`}>{c.label}</label>
+            <input
+              id={`b-${c.k}`}
+              className={input}
+              value={cond[c.k]}
+              onChange={(e) => setCond((v) => ({ ...v, [c.k]: e.target.value }))}
+              placeholder={c.ej}
+              maxLength={160}
+            />
+          </div>
+        ))}
       </div>
+      <div>
+        <label className={label} htmlFor="b-notas">Otros requisitos (opcional)</label>
+        <input id="b-notas" className={input} value={notas} onChange={(e) => setNotas(e.target.value)} placeholder="Experiencia previa, idioma, qué llevar" />
+      </div>
+      {pideDoc ? (
+        <div>
+          <label className={label} htmlFor="b-doc">CUIT o DNI de quien publica *</label>
+          <div className="flex gap-3">
+            <select aria-label="Tipo de documento" className={`${input} w-[96px] shrink-0`} value={docTipo} onChange={(e) => setDocTipo(e.target.value as "CUIT" | "DNI")}>
+              <option value="CUIT" className="bg-black">CUIT</option>
+              <option value="DNI" className="bg-black">DNI</option>
+            </select>
+            <input id="b-doc" className={input} inputMode="numeric" value={docNumero} onChange={(e) => setDocNumero(e.target.value)} placeholder={docTipo === "CUIT" ? "30-12345678-9" : "30123456"} />
+          </div>
+          <p className="text-[13px] text-[#988e90] mt-2">Se pide una sola vez. Solo lo ve la plataforma, nunca se muestra en público.</p>
+        </div>
+      ) : null}
       <p className="text-[13px] text-[#988e90] leading-[1.5]">
         Si no ponés el pago, al staff le va a decir &quot;a confirmar&quot;. Se
         postula menos gente cuando no sabe cuánto se paga.
@@ -246,12 +289,15 @@ export function BusquedasClient({
   busquedas,
   postulaciones,
   errorCarga = false,
+  pideDoc = false,
 }: {
   gigId: string;
   busquedas: Busqueda[];
   postulaciones: Postulacion[];
   /** La lectura falló: no decir «no publicaste ninguna» cuando no lo sabemos. */
   errorCarga?: boolean;
+  /** La organización todavía no cargó CUIT o DNI (las de antes de la 0107). */
+  pideDoc?: boolean;
 }) {
   const router = useRouter();
   const [busy, setBusy] = useState<string | null>(null);
@@ -270,7 +316,7 @@ export function BusquedasClient({
 
   return (
     <div className="flex flex-col gap-10">
-      <NuevaBusqueda gigId={gigId} />
+      <NuevaBusqueda gigId={gigId} pideDoc={pideDoc} />
 
       {errorCarga ? (
         <p role="alert" className="border border-[#5c2b2b] px-5 py-4 text-[16px] text-[#e5e2e1] leading-[1.6] max-w-[600px]">

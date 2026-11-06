@@ -17,6 +17,7 @@ import { eventoTerminado } from "./actions";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { BusquedasClient, type Busqueda, type Postulacion } from "./busquedas-client";
 
 export default async function BusquedasPage({
@@ -31,7 +32,7 @@ export default async function BusquedasPage({
   // para esta persona y volvemos al tablero. No hace falta un chequeo aparte.
   const { data: gig, error: gigError } = await supabase
     .from("staff_app_gigs")
-    .select("id,title,starts_at,ends_at,venue_name")
+    .select("id,title,starts_at,ends_at,venue_name,organization_id")
     .eq("id", gigId)
     .maybeSingle();
   // Un id mal formado también da error (22P02): se sigue volviendo al tablero,
@@ -58,6 +59,14 @@ export default async function BusquedasPage({
   if (errB || errP) {
     console.error("[busquedas] no se pudo leer:", errB?.message ?? "", errP?.message ?? "");
   }
+
+  // ¿Ya cargó CUIT o DNI? Tabla privada (0107): se pregunta con service_role.
+  // Si la consulta falla no se pide (mejor no trabar la carga por un error nuestro).
+  const { data: tieneDoc, error: errDoc } = await createServiceRoleClient().rpc("staff_app_org_identidad_tiene", {
+    p_org: (gig as { organization_id: string }).organization_id,
+  });
+  if (errDoc) console.error("[busquedas] no se pudo ver si tiene documento:", errDoc.message);
+  const pideDoc = !errDoc && tieneDoc === false;
 
   return (
     <div className="w-full max-w-[1200px] mx-auto px-6 md:px-10 py-10 md:py-16 flex flex-col gap-10">
@@ -91,6 +100,7 @@ export default async function BusquedasPage({
         busquedas={(busquedas as Busqueda[] | null) ?? []}
         postulaciones={(postulaciones as Postulacion[] | null) ?? []}
         errorCarga={Boolean(errB || errP)}
+        pideDoc={pideDoc}
       />
     </div>
   );

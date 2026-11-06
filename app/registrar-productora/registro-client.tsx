@@ -66,6 +66,8 @@ export function RegistroProductoraClient() {
   const [telefono, setTelefono] = useState("");
   const [queEventos, setQueEventos] = useState("");
   const [volumen, setVolumen] = useState("");
+  const [docTipo, setDocTipo] = useState<"CUIT" | "DNI">("CUIT");
+  const [docNumero, setDocNumero] = useState("");
   useRecuperarGuardado<Parameters<typeof registrarProductora>[0]>("registrar-productora", (g) => {
     if (g.productora !== undefined) setProductora(g.productora);
     if (g.email !== undefined) setEmail(g.email);
@@ -103,6 +105,8 @@ export function RegistroProductoraClient() {
       telefono,
       queEventos,
       volumen,
+      docTipo,
+      docNumero,
     };
     try {
       const r = await registrarProductora(datos);
@@ -256,6 +260,35 @@ export function RegistroProductoraClient() {
                 onChange={(e) => setQueEventos(e.target.value)}
                 placeholder="Ej: casamientos, corporativos"
               />
+            </div>
+
+            <div>
+              <label className={label} htmlFor="doc-numero">
+                CUIT o DNI de quien publica *
+              </label>
+              <div className="flex gap-3">
+                <select
+                  aria-label="Tipo de documento"
+                  className={`${input} appearance-none w-[96px] shrink-0`}
+                  value={docTipo}
+                  onChange={(e) => setDocTipo(e.target.value as "CUIT" | "DNI")}
+                >
+                  <option value="CUIT" className="bg-black">CUIT</option>
+                  <option value="DNI" className="bg-black">DNI</option>
+                </select>
+                <input
+                  id="doc-numero"
+                  className={input}
+                  value={docNumero}
+                  onChange={(e) => setDocNumero(e.target.value)}
+                  required
+                  inputMode="numeric"
+                  placeholder={docTipo === "CUIT" ? "30-12345678-9" : "30123456"}
+                />
+              </div>
+              <p className="text-[13px] text-[#9a9091] mt-2 leading-[1.5]">
+                Solo lo ve la plataforma, nunca se muestra en público.
+              </p>
             </div>
 
             <div>

@@ -40,6 +40,7 @@ import { siteUrl } from "@/lib/site";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { linkParaElegirContrasena } from "@/lib/auth-link";
 import { alerta } from "@/lib/alerta";
+import { validarDocumento } from "@/lib/documento";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -51,6 +52,9 @@ export async function registrarProductora(input: {
   queEventos?: string;
   /** Cuántos eventos por año, rango. Opcional: solo va al aviso interno. */
   volumen?: string;
+  /** CUIT o DNI de quien publica (fase 2, punto 6). Solo lo ve la plataforma. */
+  docTipo?: string;
+  docNumero?: string;
 }): Promise<{ ok: boolean; error?: string; mailOk?: boolean }> {
   const productora = (input.productora || "").trim();
   const email = (input.email || "").trim().toLowerCase();
@@ -64,6 +68,8 @@ export async function registrarProductora(input: {
   // teléfono, se valida que haya algo. Un número mal escrito se corrige por
   // WhatsApp; un campo vacío deja a la productora sin ningún canal de rescate.
   if (!telefono) return { ok: false, error: "Dejanos tu teléfono o WhatsApp." };
+  const doc = validarDocumento(input.docTipo ?? "", input.docNumero ?? "");
+  if (!doc.ok) return { ok: false, error: doc.error };
 
   // Freno de abuso: cada alta crea una organización Y manda un mail.
   const ip = await clientIp();
@@ -89,7 +95,7 @@ export async function registrarProductora(input: {
     return { ok: false, error: "No se pudo crear la cuenta. Probá de nuevo." };
   }
 
-  const r = data as { ok?: boolean; reason?: string; ya_existia?: boolean } | null;
+  const r = data as { ok?: boolean; reason?: string; ya_existia?: boolean; organization_id?: string } | null;
   if (!r?.ok) {
     if (r?.reason === "ya_tiene_cuenta") {
       // No es un error de la persona: ya está adentro. Se la manda a entrar en
@@ -102,6 +108,17 @@ export async function registrarProductora(input: {
     if (r?.reason === "falta_nombre") return { ok: false, error: "Escribí el nombre de tu productora." };
     if (r?.reason === "falta_email") return { ok: false, error: "Ese email no parece válido." };
     return { ok: false, error: "No se pudo crear la cuenta. Probá de nuevo." };
+  }
+
+  // Documento: tabla privada (0107). Si falla no voltea el alta: se le vuelve a
+  // pedir al publicar la primera búsqueda.
+  if (r.organization_id) {
+    const { error: errDoc } = await admin.rpc("staff_app_org_identidad_guardar", {
+      p_org: r.organization_id,
+      p_tipo: doc.tipo,
+      p_numero: doc.numero,
+    });
+    if (errDoc) console.error("[registrar-productora] no se guardó el documento:", errDoc.message);
   }
 
   // El mail sale SIEMPRE, también si ya existía la invitación: el caso normal de
@@ -153,6 +170,7 @@ export async function registrarProductora(input: {
       productora,
       email,
       telefono,
+      documento: `${doc.tipo} ${doc.numero}`,
       // Los dos cualitativos no se persisten: viven acá y en la primera charla.
       // Si vienen vacíos no se mandan, para no ensuciar el aviso con "sin dato".
       ...(queEventos ? { "qué eventos arma": queEventos } : {}),

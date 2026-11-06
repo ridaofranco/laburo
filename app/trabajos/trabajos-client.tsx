@@ -21,6 +21,19 @@ import { fmtFecha, fmtHora as fmtHoraTz } from "@/lib/dates";
 import { money } from "@/lib/format";
 import { AvisoNoIntermediamos, AVISO_CORTO } from "@/components/aviso-no-intermediamos";
 
+/** Condiciones separadas (0107), en el orden en que se leen. */
+function condicionesDe(t: TrabajoAbierto): [string, string][] {
+  const pares: [string, string | null | undefined][] = [
+    ["Horario", t.horario],
+    ["Vestimenta", t.vestimenta],
+    ["Comida", t.comida],
+    ["Traslado", t.traslado],
+    ["Forma de pago", t.forma_pago],
+    ["Plazo de pago", t.plazo_pago],
+  ];
+  return pares.filter((p): p is [string, string] => Boolean(p[1]?.trim()));
+}
+
 function fmtDia(iso: string | null): string {
   return fmtFecha(iso, { day: "2-digit", month: "short", year: "numeric" }) ?? "Fecha a confirmar";
 }
@@ -90,6 +103,27 @@ function Tarjeta({ t }: { t: TrabajoAbierto }) {
             {t.cupo === 1 ? "1 lugar" : `${t.cupo} lugares`}
           </span>
         </div>
+        {t.encaje && (t.encaje.rubro || t.encaje.zona) ? (
+          <p className="label-tech text-[11px] uppercase tracking-widest text-[#9be29b]">
+            Encaja con tu perfil:{" "}
+            {[t.encaje.rubro && "tu rubro", t.encaje.zona && "tu zona", t.encaje.disponible && "tu disponibilidad"]
+              .filter(Boolean)
+              .join(", ")}
+          </p>
+        ) : null}
+        {t.productora?.trim() ? (
+          <span className="text-[13px] text-[#988e90]">Publica: {t.productora}</span>
+        ) : null}
+        {condicionesDe(t).length > 0 ? (
+          <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[14px] leading-[1.5] mt-1 max-w-[560px]">
+            {condicionesDe(t).map(([k, v]) => (
+              <div key={k} className="contents">
+                <dt className="text-[#988e90]">{k}</dt>
+                <dd className="text-[#e5e2e1] break-words">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        ) : null}
         {t.notas?.trim() ? (
           <p className="text-[14px] text-[#988e90] leading-[1.6] mt-1 max-w-[560px]">
             {t.notas}

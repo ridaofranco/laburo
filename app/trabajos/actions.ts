@@ -30,6 +30,16 @@ export interface TrabajoAbierto {
   gig_venue: string | null;
   ya_me_postule: boolean;
   mi_estado: string | null;
+  // 0107: condiciones separadas, quién publica y por qué encaja.
+  horario?: string | null;
+  vestimenta?: string | null;
+  comida?: string | null;
+  traslado?: string | null;
+  forma_pago?: string | null;
+  plazo_pago?: string | null;
+  gig_address?: string | null;
+  productora?: string | null;
+  encaje?: { rubro: boolean; zona: boolean; disponible: boolean } | null;
 }
 
 /** Las búsquedas abiertas para el caller. Vacío si no es staff. */
