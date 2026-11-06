@@ -2,7 +2,7 @@ import Link from "next/link";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import type { IdiomaTraduccion } from "@/lib/blog";
 import { TEXTOS, waLink } from "@/lib/blog-i18n";
-import { WRAP } from "../../blog/chrome";
+import { WRAP } from "../chrome";
 
 /**
  * Header, pie y cierre del blog traducido (/en, /pt, /fr, /it), calcados del

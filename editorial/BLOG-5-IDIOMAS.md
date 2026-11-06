@@ -91,7 +91,7 @@ EOF
 
 - `lib/blog.ts`: `IDIOMAS_TRADUCCION`, `getPostsByLang`, `versionesDe` (arma el grupo de versiones), `hreflangDe` y `hreflangIndices`.
 - `lib/blog-i18n.ts`: textos fijos por idioma (header, FAQ, cierre, mensaje de WhatsApp).
-- `app/[lang]/blog/page.tsx` (índice), `app/[lang]/blog/[slug]/page.tsx` (nota) y sus imágenes OG, todo estático (`generateStaticParams` + `dynamicParams = false`).
+- `app/blog/_intl/` (índice, nota, cabecera, imagen OG) y una carpeta fija por idioma, `app/<idioma>/blog/page.tsx` y `app/<idioma>/blog/[slug]/` (page, opengraph-image, twitter-image), que solo llaman a `_intl`. Todo estático (`generateStaticParams` + `dynamicParams = false`). NO usar una carpeta `app/[lang]` de primer nivel: la regla `no-html-link-for-pages` de `next build` toma entonces cualquier `<a href="/x">` del sitio como página y el deploy falla (pasó el 06/11).
 - `app/blog/idiomas.tsx`: selector de idioma, que también aparece en la nota española cuando tiene traducciones.
 - `app/sitemap.ts` y `app/llms.txt/route.ts`: suman las traducciones solas. `content/blog/**/*` ya está en `outputFileTracingIncludes` (si no, en Vercel el sitemap sale sin ellas).
-- `lib/supabase/middleware.ts`: `/en/blog`, `/pt/blog`, `/fr/blog` e `/it/blog` están en `publicPrefixes`. **Un idioma nuevo** necesita: sumarlo en `IDIOMAS_TRADUCCION` y `HREFLANG` (lib/blog.ts), sus textos en `lib/blog-i18n.ts` y su prefijo en el middleware.
+- `lib/supabase/middleware.ts`: `/en/blog`, `/pt/blog`, `/fr/blog` e `/it/blog` están en `publicPrefixes`. **Un idioma nuevo** necesita: sumarlo en `IDIOMAS_TRADUCCION` y `HREFLANG` (lib/blog.ts), sus textos en `lib/blog-i18n.ts`, su prefijo en el middleware y copiar la carpeta `app/en/blog` cambiando el código de idioma.

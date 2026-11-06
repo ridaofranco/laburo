@@ -1,35 +1,25 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import {
   BLOG_ORIGIN,
   blogIndexUrl,
-  esIdiomaTraduccion,
   getPostsByLang,
   HREFLANG,
   hreflangIndices,
-  IDIOMAS_TRADUCCION,
+  type IdiomaTraduccion,
 } from "@/lib/blog";
 import { TEXTOS } from "@/lib/blog-i18n";
-import { WRAP } from "../../blog/chrome";
+import { WRAP } from "../chrome";
 import { BlogCtaIntl, BlogFooterIntl, BlogHeaderIntl } from "./chrome-intl";
 
 /**
- * Índice del blog traducido (/en/blog, /pt/blog, /fr/blog, /it/blog), 06/11/2026.
+ * Índice del blog traducido (lo usan app/<idioma>/blog/page.tsx) (/en/blog, /pt/blog, /fr/blog, /it/blog), 06/11/2026.
  * Estático como el español: las notas salen de content/blog/<idioma>/*.md al
  * compilar. Los cuatro índices existen siempre (aunque un idioma tenga pocas
  * notas) para que el hreflang de los índices sea recíproco entre los cinco.
  */
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return IDIOMAS_TRADUCCION.map((lang) => ({ lang }));
-}
-
-export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
-  const { lang } = await params;
-  if (!esIdiomaTraduccion(lang)) return {};
+export function indiceMetadata(lang: IdiomaTraduccion): Metadata {
   const t = TEXTOS[lang];
   const url = blogIndexUrl(lang);
   return {
@@ -54,9 +44,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   };
 }
 
-export default async function BlogIndexIntlPage({ params }: { params: Promise<{ lang: string }> }) {
-  const { lang } = await params;
-  if (!esIdiomaTraduccion(lang)) notFound();
+export function IndiceIntl({ lang }: { lang: IdiomaTraduccion }) {
   const t = TEXTOS[lang];
   const posts = getPostsByLang(lang);
   const url = blogIndexUrl(lang);

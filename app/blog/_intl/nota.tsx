@@ -4,39 +4,30 @@ import { notFound } from "next/navigation";
 import {
   BLOG_ORIGIN,
   blogIndexUrl,
-  esIdiomaTraduccion,
   getPostByLang,
   getPostsByLang,
   HREFLANG,
   hreflangDe,
-  IDIOMAS_TRADUCCION,
+  type IdiomaTraduccion,
 } from "@/lib/blog";
 import { formatFecha, TEXTOS } from "@/lib/blog-i18n";
-import { WRAP } from "../../../blog/chrome";
-import { Faq } from "../../../blog/faq";
-import { SelectorIdioma } from "../../../blog/idiomas";
-import { BlogCtaIntl, BlogFooterIntl, BlogHeaderIntl } from "../chrome-intl";
+import { WRAP } from "../chrome";
+import { Faq } from "../faq";
+import { SelectorIdioma } from "../idiomas";
+import { BlogCtaIntl, BlogFooterIntl, BlogHeaderIntl } from "./chrome-intl";
 
 /**
- * Nota traducida (/<idioma>/blog/<slug>), 06/11/2026. Mismo diseño y mismo SEO
+ * Nota traducida (la usan app/<idioma>/blog/[slug]/page.tsx) (/<idioma>/blog/<slug>), 06/11/2026. Mismo diseño y mismo SEO
  * que la nota en español (app/blog/[slug]/page.tsx): estática, con canonical
  * propio, hreflang recíproco con todas sus versiones + x-default a la española,
  * JSON-LD Article + BreadcrumbList y FAQPage en <Faq/>.
  */
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return IDIOMAS_TRADUCCION.flatMap((lang) => getPostsByLang(lang).map((p) => ({ lang, slug: p.slug })));
+export function notaStaticParams(lang: IdiomaTraduccion) {
+  return getPostsByLang(lang).map((p) => ({ slug: p.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ lang: string; slug: string }>;
-}): Promise<Metadata> {
-  const { lang, slug } = await params;
-  if (!esIdiomaTraduccion(lang)) return {};
+export function notaMetadata(lang: IdiomaTraduccion, slug: string): Metadata {
   const post = getPostByLang(lang, slug);
   if (!post) return {};
   const t = TEXTOS[lang];
@@ -57,9 +48,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function BlogPostIntlPage({ params }: { params: Promise<{ lang: string; slug: string }> }) {
-  const { lang, slug } = await params;
-  if (!esIdiomaTraduccion(lang)) notFound();
+export function NotaIntl({ lang, slug }: { lang: IdiomaTraduccion; slug: string }) {
   const post = getPostByLang(lang, slug);
   if (!post) notFound();
   const t = TEXTOS[lang];
