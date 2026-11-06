@@ -17,7 +17,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { ChevronDown, UserRoundSearch, UserRoundPlus, Pencil, MapPin, CreditCard, Megaphone } from "lucide-react";
+import { ChevronDown, UserRoundSearch, UserRoundPlus, Pencil, MapPin, CreditCard, Megaphone, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { offerLabel } from "@/lib/offers";
 import { createClientCheckout } from "./payment-actions";
@@ -171,6 +171,8 @@ function GigCard({ item }: { item: BoardGig }) {
   const faltan = Math.max(0, requiredTotal - resumen.cubierto);
 
   const cobrado = gig.client_payment_status === "paid";
+  // Gente que aceptó: hay que asegurarla (MeCubro, 0109). Paga la productora directo a MeCubro.
+  const aceptados = new Set(item.offers.filter((o) => o.status === "accepted").map((o) => o.staff_profile_id)).size;
   // La bandera va primera: con el cobro apagado el botón directamente no se ofrece.
   // Un gig ya cobrado sigue mostrando su estado, que entra por `cobrado`, no por acá.
   const puedeCobrar = COBRO_AL_CLIENTE_ACTIVO && (Number(gig.client_budget) || 0) > 0 && !cobrado;
@@ -266,6 +268,14 @@ function GigCard({ item }: { item: BoardGig }) {
         >
           <Megaphone size={14} /> Publicar búsqueda
         </Link>
+        {aceptados > 0 ? (
+          <Link
+            href={`/tablero/${gig.id}/seguro`}
+            className="inline-flex items-center gap-2 label-tech text-[11px] text-[#9be29b] hover:text-[#e5e2e1] transition-colors"
+          >
+            <ShieldCheck size={14} /> Asegurar al equipo ({aceptados})
+          </Link>
+        ) : null}
         {cobrado ? (
           <span className="inline-flex items-center gap-2 label-tech text-[11px] text-[#3dd68c]">
             <CreditCard size={14} /> Cobrado
