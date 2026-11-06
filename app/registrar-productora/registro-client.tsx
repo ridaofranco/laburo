@@ -269,7 +269,8 @@ export function RegistroProductoraClient() {
               <div className="flex gap-3">
                 <select
                   aria-label="Tipo de documento"
-                  className={`${input} appearance-none w-[96px] shrink-0`}
+                  className={`${input} appearance-none shrink-0`}
+                  style={{ width: 96 }}
                   value={docTipo}
                   onChange={(e) => setDocTipo(e.target.value as "CUIT" | "DNI")}
                 >
@@ -278,7 +279,7 @@ export function RegistroProductoraClient() {
                 </select>
                 <input
                   id="doc-numero"
-                  className={input}
+                  className={`${input} flex-1 min-w-0`}
                   value={docNumero}
                   onChange={(e) => setDocNumero(e.target.value)}
                   required

@@ -157,11 +157,11 @@ function NuevaBusqueda({ gigId, pideDoc }: { gigId: string; pideDoc: boolean }) 
         <div>
           <label className={label} htmlFor="b-doc">CUIT o DNI de quien publica *</label>
           <div className="flex gap-3">
-            <select aria-label="Tipo de documento" className={`${input} w-[96px] shrink-0`} value={docTipo} onChange={(e) => setDocTipo(e.target.value as "CUIT" | "DNI")}>
+            <select aria-label="Tipo de documento" className={`${input} shrink-0`} style={{ width: 96 }} value={docTipo} onChange={(e) => setDocTipo(e.target.value as "CUIT" | "DNI")}>
               <option value="CUIT" className="bg-black">CUIT</option>
               <option value="DNI" className="bg-black">DNI</option>
             </select>
-            <input id="b-doc" className={input} inputMode="numeric" value={docNumero} onChange={(e) => setDocNumero(e.target.value)} placeholder={docTipo === "CUIT" ? "30-12345678-9" : "30123456"} />
+            <input id="b-doc" className={`${input} flex-1 min-w-0`} inputMode="numeric" value={docNumero} onChange={(e) => setDocNumero(e.target.value)} placeholder={docTipo === "CUIT" ? "30-12345678-9" : "30123456"} />
           </div>
           <p className="text-[13px] text-[#988e90] mt-2">Se pide una sola vez. Solo lo ve la plataforma, nunca se muestra en público.</p>
         </div>

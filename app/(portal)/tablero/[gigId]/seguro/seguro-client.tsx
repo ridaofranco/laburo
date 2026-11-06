@@ -202,12 +202,12 @@ export function SeguroClient({
                           <input id={`a-${f.staff_profile_id}`} className={input} value={f.apellido} onChange={(e) => set(f.staff_profile_id, { apellido: e.target.value })} />
                         </div>
                         <div className="flex gap-3">
-                          <select aria-label="Tipo de documento" className={`${input} w-[110px]`} value={f.documento_tipo} onChange={(e) => set(f.staff_profile_id, { documento_tipo: e.target.value })}>
+                          <select aria-label="Tipo de documento" className={`${input} shrink-0`} style={{ width: 110 }} value={f.documento_tipo} onChange={(e) => set(f.staff_profile_id, { documento_tipo: e.target.value })}>
                             <option value="DNI" className="bg-black">DNI</option>
                             <option value="PASAPORTE" className="bg-black">Pasaporte</option>
                             <option value="OTRO" className="bg-black">Otro</option>
                           </select>
-                          <input aria-label="Número de documento" inputMode="numeric" className={input} value={f.documento} onChange={(e) => set(f.staff_profile_id, { documento: e.target.value })} placeholder="Número" />
+                          <input aria-label="Número de documento" inputMode="numeric" className={`${input} flex-1 min-w-0`} value={f.documento} onChange={(e) => set(f.staff_profile_id, { documento: e.target.value })} placeholder="Número" />
                         </div>
                         <div>
                           <label className={label} htmlFor={`f-${f.staff_profile_id}`}>Nacimiento</label>
