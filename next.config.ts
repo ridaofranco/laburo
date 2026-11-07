@@ -2,6 +2,10 @@ import path from "node:path";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // BLOG EN 5 IDIOMAS (06/11): con ~1.650 páginas estáticas y una imagen og
+  // por nota en cada idioma, el armado en Vercel se satura y hasta /robots.txt
+  // pasaba los 60 s por defecto: el deploy fallaba. 300 s le da aire.
+  staticPageGenerationTimeout: 300,
   // El repo vive dentro de "Proyectos/SOMOS DER" que tiene otro package-lock:
   // fijar la raíz evita que Next infiera mal el workspace.
   outputFileTracingRoot: path.join(__dirname),
