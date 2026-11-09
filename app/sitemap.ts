@@ -9,23 +9,33 @@ import {
   IDIOMAS_TRADUCCION,
 } from "@/lib/blog";
 import { getAllPara } from "@/lib/para";
-import { buscarPublico } from "./servicios/actions";
-import { buscarSalones } from "./salones/actions";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
 
-// Las licitaciones abiertas, para el sitemap. Misma regla que las vidrieras: si
-// la consulta falla o no hay ninguna, no entra nada (ni el índice vacío).
-async function licitacionesAbiertas(): Promise<string[]> {
-  const supabase = await createClient();
-  const { data, error } = await supabase.rpc("staff_app_licitaciones_abiertas", { p_limit: 40 });
-  if (error) {
-    console.error("sitemap: licitaciones", error.message);
-    return [];
-  }
-  return (Array.isArray(data) ? data : [])
-    .map((l: Record<string, unknown>) => (typeof l.slug === "string" ? l.slug : null))
-    .filter((s): s is string => !!s);
+// 09/11: el sitemap quedaba colgado y Google no lo podía leer. Ahora consulta la base
+// con la llave pública y SIN cookies (así Next lo puede guardar armado una hora), con
+// un tope de 8 s por consulta: si la base no contesta, el sitemap sale igual sin esa parte.
+function supabasePublico() {
+  return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
 }
+
+async function rpcConTope(fn: string, args: Record<string, unknown>): Promise<Record<string, unknown>[]> {
+  const pedido = supabasePublico()
+    .rpc(fn, args)
+    .then(({ data, error }) => {
+      if (error) {
+        console.error(`sitemap: ${fn}`, error.message);
+        return [];
+      }
+      return Array.isArray(data) ? (data as Record<string, unknown>[]) : [];
+    }, () => []);
+  const tope = new Promise<Record<string, unknown>[]>((r) => setTimeout(() => r([]), 8000));
+  return Promise.race([pedido, tope]);
+}
+
+const slugs = (filas: Record<string, unknown>[]) =>
+  filas.map((f) => (typeof f.slug === "string" ? f.slug : null)).filter((x): x is string => !!x);
 
 /** `alternates` del sitemap solo para las notas que tienen traducciones. */
 function alternatesDe(p: Parameters<typeof hreflangDe>[0]) {
@@ -59,14 +69,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Las dos vidrieras van juntas: son independientes y encadenarlas sería un
   // viaje de más para nada. Cada una cae sola con su propio catch, así que si
   // una falla el sitemap igual sale con la otra.
-  // 09/11: el sitemap quedaba colgado (Google no lo podía leer). Cada consulta a la
-  // base tiene un tope de 8 s: si no contesta, el sitemap sale igual sin esa parte.
-  const conTope = <T,>(p: Promise<T>, vacio: T): Promise<T> =>
-    Promise.race([p.catch(() => vacio), new Promise<T>((r) => setTimeout(() => r(vacio), 8000))]);
   const [proveedores, salones, licitaciones] = await Promise.all([
-    conTope(buscarPublico({}), [] as Awaited<ReturnType<typeof buscarPublico>>),
-    conTope(buscarSalones({}), [] as Awaited<ReturnType<typeof buscarSalones>>),
-    conTope(licitacionesAbiertas(), [] as string[]),
+    rpcConTope("staff_app_vidriera_buscar", { p_texto: null, p_categoria: null, p_provincia: null }).then(slugs),
+    rpcConTope("staff_app_vidriera_salones", { p_texto: null, p_provincia: null, p_personas: null }).then(slugs),
+    rpcConTope("staff_app_licitaciones_abiertas", { p_limit: 40 }).then(slugs),
   ]);
   const ultimoPost = posts
     .map((p) => p.date)
@@ -106,8 +112,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             changeFrequency: "weekly" as const,
             priority: 0.9,
           },
-          ...proveedores.map((p) => ({
-            url: `${BLOG_ORIGIN}/servicios/${p.slug}`,
+          ...proveedores.map((slug) => ({
+            url: `${BLOG_ORIGIN}/servicios/${slug}`,
             changeFrequency: "weekly" as const,
             priority: 0.7,
           })),
@@ -123,8 +129,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             changeFrequency: "weekly" as const,
             priority: 0.9,
           },
-          ...salones.map((s) => ({
-            url: `${BLOG_ORIGIN}/salones/${s.slug}`,
+          ...salones.map((slug) => ({
+            url: `${BLOG_ORIGIN}/salones/${slug}`,
             changeFrequency: "weekly" as const,
             priority: 0.7,
           })),
