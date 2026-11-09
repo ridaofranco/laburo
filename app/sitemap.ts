@@ -50,16 +50,23 @@ function alternatesDe(p: Parameters<typeof hreflangDe>[0]) {
  * que alguien se publica o se despublica. Si la consulta falla, el sitemap sale
  * igual con el resto: un sitemap incompleto es mucho mejor que ninguno.
  */
+// Se arma como mucho una vez por hora y se sirve desde caché.
+export const revalidate = 3600;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = getAllPosts();
   const para = getAllPara();
   // Las dos vidrieras van juntas: son independientes y encadenarlas sería un
   // viaje de más para nada. Cada una cae sola con su propio catch, así que si
   // una falla el sitemap igual sale con la otra.
+  // 09/11: el sitemap quedaba colgado (Google no lo podía leer). Cada consulta a la
+  // base tiene un tope de 8 s: si no contesta, el sitemap sale igual sin esa parte.
+  const conTope = <T,>(p: Promise<T>, vacio: T): Promise<T> =>
+    Promise.race([p.catch(() => vacio), new Promise<T>((r) => setTimeout(() => r(vacio), 8000))]);
   const [proveedores, salones, licitaciones] = await Promise.all([
-    buscarPublico({}).catch(() => []),
-    buscarSalones({}).catch(() => []),
-    licitacionesAbiertas().catch(() => []),
+    conTope(buscarPublico({}), [] as Awaited<ReturnType<typeof buscarPublico>>),
+    conTope(buscarSalones({}), [] as Awaited<ReturnType<typeof buscarSalones>>),
+    conTope(licitacionesAbiertas(), [] as string[]),
   ]);
   const ultimoPost = posts
     .map((p) => p.date)
