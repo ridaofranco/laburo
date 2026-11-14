@@ -1,5 +1,5 @@
 ---
-title: "Menores de 18 na equipe de um evento na Argentina: o que a lei permite aos 16 e 17 anos"
+title: "Menores de 18 na equipe de um evento: o que diz a lei"
 seoTitle: "Menores de 18 na Equipe de um Evento | LABURO"
 description: "Contratar ou trabalhar na equipe de um evento aos 16 ou 17 anos: autorização dos pais, jornada de 6 horas, nada entre 20h e 6h e os documentos exigidos."
 slug: "menores-de-18-na-equipe-de-um-evento"
@@ -22,48 +22,43 @@ faqs:
     a: "Sim. A lei trabalhista local se aplica à equipe contratada para o seu evento na Argentina, seja qual for o país da marca ou da agência. O parceiro de produção local deve conferir idades e horários ao montar a equipe."
 ---
 
-Na Argentina, adolescentes de 16 e 17 anos podem trabalhar em eventos, mas não em qualquer evento nem em qualquer horário. A lei fixa três limites que batem de frente com o jeito como o setor trabalha: nada de trabalho noturno entre 20h e 6h, jornadas de até 6 horas sem horas extras e documentos em ordem (autorização dos pais, certificado de escolaridade e atestado médico). Na prática, isso deixa de fora quase todas as festas, casamentos e shows, e deixa dentro algumas coisas de dia: uma ativação à tarde, uma feira, um evento esportivo pela manhã.
+Sim, adolescentes de 16 e 17 anos podem trabalhar em eventos na Argentina. O problema é o horário: a lei não deixa um menor de 18 trabalhar entre 20h e 6h, e é justamente aí que acontece a maioria dos eventos. Além disso, a jornada não pode passar de 6 horas, não há hora extra e são necessários a autorização dos pais, o certificado de escolaridade e um atestado médico. Ou seja, festa, casamento ou show ficam de fora, e o que sobra é trabalho de dia, como uma ativação à tarde, uma feira ou um evento esportivo pela manhã.
 
-Se você é uma agência ou uma marca de fora levando um evento para a Argentina, isso importa porque a lei trabalhista local vale para quem é contratado para o seu evento, esteja a sua empresa onde estiver.
+Se você é uma agência ou uma marca de fora levando um evento para a Argentina, isso também é com você: a lei trabalhista local vale para quem é contratado para o seu evento, esteja a sua empresa onde estiver.
 
-## A idade mínima é 16 anos
+## A idade mínima
 
-A [Lei 26.390](https://servicios.infoleg.gob.ar/infolegInternet/anexos/140000-144999/141792/norma.htm) elevou a idade mínima de admissão ao emprego para 16 anos e proíbe o trabalho de menores de 16 em todas as suas formas. Não há exceção por ser «um bico» ou «só uma noite». Dos 16 aos 17 anos, o trabalho é chamado de adolescente e é permitido com restrições.
+A [Lei 26.390](https://servicios.infoleg.gob.ar/infolegInternet/anexos/140000-144999/141792/norma.htm) elevou a idade mínima de admissão ao emprego para 16 anos e proíbe o trabalho de menores de 16 em todas as suas formas. Então não existe exceção por ser «um bico» ou «só uma noite». Dos 16 aos 17 anos, a lei chama de trabalho adolescente e permite com restrições.
 
-A [página do governo argentino sobre trabalho infantil e adolescente](https://www.argentina.gob.ar/trabajo/orientacion/trabajo-infantil) diz o mesmo: o trabalho adolescente é permitido com proteções especiais, e o único proibido de vez é o perigoso, penoso ou insalubre.
+A [página do governo argentino sobre trabalho infantil e adolescente](https://www.argentina.gob.ar/trabajo/orientacion/trabajo-infantil) diz o mesmo: o trabalho adolescente é permitido com proteções especiais, e o que é proibido de vez é o trabalho perigoso, penoso ou insalubre.
 
-## À noite, não
+## O horário noturno
 
-É o ponto que mais pesa em eventos. A lei proíbe ocupar menores de 18 em trabalho noturno, e a Lei de Contrato de Trabalho considera noturno o intervalo entre 20h e 6h do dia seguinte. A página do governo é direta: as jornadas devem ser no período da tarde e não são permitidas atividades em horário noturno.
+Em eventos, é o que mais pesa. A lei proíbe ocupar menores de 18 em trabalho noturno, e a Lei de Contrato de Trabalho considera noturno o intervalo das 20h às 6h do dia seguinte. A página do governo é direta: as jornadas devem ser no período da tarde e não são permitidas atividades em horário noturno.
 
-Pense em um evento real. Uma festa de fim de ano que começa às 21h fica de fora inteira. Um casamento com recepção às 20h também. Um show com abertura de portões às 19h deixa, no máximo, uma hora de trabalho antes do limite, e isso não serve para ninguém. O que entra: um evento de manhã ou de tarde que termina antes das 20h, com a desmontagem incluída.
+Leve isso para datas reais. Uma festa de fim de ano que começa às 21h fica de fora inteira, e um casamento com recepção às 20h também. Um show com abertura de portões às 19h deixa, com sorte, uma hora antes do limite, e não compensa ir. Entra, sim, um evento de manhã ou de tarde que termina antes das 20h, com a desmontagem incluída.
 
-## Seis horas, sem horas extras
+## Até 6 horas e sem hora extra
 
-Segundo a Lei 26.390, a jornada de um trabalhador de 16 ou 17 anos não pode passar de 6 horas diárias nem de 36 semanais. O governo acrescenta que horas extras não são permitidas e que, para ampliar a jornada, é preciso pedir à administração trabalhista, que avalia se cabe.
+A Lei 26.390 limita a jornada de quem tem 16 ou 17 anos a 6 horas por dia e 36 por semana. O governo acrescenta que horas extras não são permitidas e que, para ampliar a jornada, é preciso pedir à administração trabalhista, que avalia se cabe.
 
-Em eventos, o que costuma se esticar é o final: o cliente pede mais uma hora, a desmontagem atrasa, o transporte de volta sai mais tarde. Com um adolescente na equipe, isso não pode acontecer. Monte para ele um turno curto com hora de saída fixa, e que alguém garanta que ele saia na hora mesmo que o resto continue.
+Em evento, o que costuma se esticar é o final. O cliente pede mais uma hora, a desmontagem atrasa, o transporte de volta sai mais tarde. Com alguém de 17 anos na equipe, isso não pode. Monte um turno curto com hora de saída fixa e deixe alguém responsável por garantir que ele saia nesse horário, mesmo que o resto continue.
 
 ## Os documentos
 
-Segundo o governo, para um adolescente trabalhar é preciso:
+Segundo o governo, para um adolescente trabalhar é preciso a autorização dos pais, responsáveis ou tutores. Se ele vive de forma independente, ela é presumida, e a autoridade trabalhista da província ou da cidade pode validá-la. Também são exigidos o certificado de escolaridade, que o empregador deve pedir ao contratar (o trabalho não pode atrapalhar a escola), um atestado médico que comprove a aptidão para a tarefa e o registro, como qualquer outro trabalhador.
 
-- **Autorização dos pais, responsáveis ou tutores.** Se vive de forma independente, presume-se. A autoridade trabalhista da província ou da cidade pode validá-la.
-- **Certificado de escolaridade.** O empregador deve pedi-lo ao contratar, e o trabalho não pode atrapalhar a escola.
-- **Atestado médico** que comprove a aptidão para a tarefa.
-- **Registro**, como qualquer outro trabalhador.
-
-Quem pede e guarda esses documentos é quem contrata, não quem trabalha. Para o resto da documentação de pessoal temporário, veja [documentos para contratar trabalhador temporário](/pt/blog/documentos-para-contratar-trabalhador-temporario).
+Quem pede e guarda esses documentos é quem contrata, não o adolescente. Para o resto da documentação de pessoal temporário, veja [documentos para contratar trabalhador temporário](/pt/blog/documentos-para-contratar-trabalhador-temporario).
 
 ## Que funções fazem sentido
 
-Mesmo de dia, nem toda função serve. Ficam de fora os trabalhos perigosos: montagem em altura, carga pesada ou equipamentos que podem machucar. Uma função no bar também não faz sentido se houver álcool.
+Mesmo de dia, nem toda função serve. Os trabalhos perigosos ficam de fora: montagem em altura, carga pesada, equipamentos com que alguém pode se machucar. E o bar não faz sentido se houver álcool.
 
-O que costuma encaixar melhor em um evento diurno: credenciamento e recepção, entrega de material em uma ativação, apoio em uma feira ou congresso pela manhã, orientação do público em um evento esportivo. Sempre com um adulto responsável e o horário de saída escrito na oferta.
+O que melhor encaixa em um evento de dia é credenciamento e recepção, entrega de material em uma ativação, apoio em uma feira ou um congresso pela manhã, ou orientação do público em um evento esportivo. Sempre com um adulto responsável e o horário de saída escrito na oferta.
 
 ## Se você monta a equipe
 
-A regra mais simples é pedir a data de nascimento ao convocar e não supor. Se alguém tem menos de 18, decida antes se o evento tem um trecho diurno que sirva; se não tiver, diga não com clareza e explique o motivo. E se um adolescente já está na equipe, deixe escrito o horário de saída para que ninguém o segure no final. Para estudantes que querem conciliar com a escola, há [trabalhar em eventos sendo estudante](/pt/blog/trabalhar-em-eventos-sendo-estudante).
+Peça a data de nascimento ao convocar, não suponha. Se alguém tem menos de 18, veja antes se o evento tem um trecho de dia que sirva. Se não tiver, diga que não e explique o motivo. E se já há um adolescente na equipe, deixe escrito o horário de saída para que ninguém o segure no final. Para estudantes que querem conciliar com a escola, há [trabalhar em eventos sendo estudante](/pt/blog/trabalhar-em-eventos-sendo-estudante).
 
 ## Fontes
 
