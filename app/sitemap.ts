@@ -74,6 +74,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     rpcConTope("staff_app_vidriera_salones", { p_texto: null, p_provincia: null, p_personas: null }).then(slugs),
     rpcConTope("staff_app_licitaciones_abiertas", { p_limit: 40 }).then(slugs),
   ]);
+  // La bolsa de trabajo pública (0111): cada búsqueda abierta es una página.
+  const empleos = (await rpcConTope("staff_app_empleos_publicos", {}))
+    .map((e) => (typeof e.id === "string" ? e.id : null))
+    .filter((x): x is string => Boolean(x));
   const ultimoPost = posts
     .map((p) => p.date)
     .sort()
@@ -92,6 +96,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // llegaba por el pie. Google y las IA las miran para confiar en un sitio que pide datos.
     { url: `${BLOG_ORIGIN}/privacidad`, changeFrequency: "yearly", priority: 0.3 },
     { url: `${BLOG_ORIGIN}/terminos`, changeFrequency: "yearly", priority: 0.3 },
+    ...(empleos.length > 0
+      ? [
+          { url: `${BLOG_ORIGIN}/empleos`, changeFrequency: "daily" as const, priority: 0.9 },
+          ...empleos.map((id) => ({ url: `${BLOG_ORIGIN}/empleos/${id}`, changeFrequency: "daily" as const, priority: 0.7 })),
+        ]
+      : []),
     ...(licitaciones.length > 0
       ? [
           { url: `${BLOG_ORIGIN}/licitaciones`, changeFrequency: "daily" as const, priority: 0.8 },

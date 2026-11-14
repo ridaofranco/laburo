@@ -211,6 +211,13 @@ export default async function LandingPage() {
             >
               Ingresar
             </Link>
+            {/* Bolsa de trabajo pública (0111, 14/11). Solo desde sm: en 390px no entra al lado de los otros dos. */}
+            <Link
+              href="/empleos"
+              className="hidden sm:inline label-tech text-[10px] md:text-[11px] tracking-[0.1em] md:tracking-[0.2em] text-white/70 hover:text-[#0047ff] transition-colors duration-300"
+            >
+              Bolsa de trabajo
+            </Link>
             {/* ⚠️ VA AL REGISTRO, NO AL FORMULARIO (7/9/2026, lo marcó Franco:
               * "si toco armo un evento me lleva al contacto, no deberia llevarme
               * ahi"). Tenía razón, y el motivo es de fecha: el formulario se puso
@@ -335,6 +342,12 @@ export default async function LandingPage() {
                     Quiero trabajar
                   </Link>
                 </div>
+                <Link
+                  href="/empleos"
+                  className="inline-block mt-6 text-[15px] text-[#f5f5f5] underline underline-offset-4 hover:text-[#0047ff] transition-colors duration-300"
+                >
+                  Ver la bolsa de trabajo: búsquedas abiertas y publicación gratis
+                </Link>
               </Reveal>
             </div>
           </div>
@@ -697,6 +710,12 @@ export default async function LandingPage() {
               className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
             >
               Proveedores
+            </Link>
+            <Link
+              href="/empleos"
+              className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
+            >
+              Bolsa de trabajo
             </Link>
             {/* Las páginas por público (28/10): entrada discreta, como el blog. */}
             <Link

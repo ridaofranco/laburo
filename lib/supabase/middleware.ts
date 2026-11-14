@@ -154,6 +154,9 @@ export async function updateSession(request: NextRequest) {
     // el baja_token, que validan las RPC de la 0108. Auditado 14/11: ninguna otra
     // ruta de primer nivel empieza con "/red".
     "/red",
+    // La bolsa de trabajo pública (0111): /empleos y /empleos/<id>, sin cuenta.
+    // Auditado 14/11: ninguna otra ruta de primer nivel empieza con "/empleos".
+    "/empleos",
     // ⚠️ CREAR O CAMBIAR LA CONTRASEÑA. Va acá SÍ O SÍ: la persona llega desde el
     // link del mail SIN sesión todavía (la sesión se crea recién al canjear el
     // code en /definir-contrasena/confirmar). Sin esta línea el middleware la
