@@ -168,9 +168,9 @@ export function WelcomeLegacyEmail({ firstName, link, bajaLink }: WelcomeLegacyE
               la propuesta.
             </Item>
             <Item>
-              Hoy arrancamos con nuestros propios eventos. La idea es abrirlo a otras
-              productoras del país, para que el mismo perfil te sirva para trabajar con varias
-              y no solo con nosotros.
+              Ya está abierto a otras productoras y empresas: cualquiera puede publicar una
+              búsqueda, y vos la ves en Trabajos disponibles y te postulás con el mismo perfil.
+              No es solo para trabajar con nosotros.
             </Item>
 
             <Text style={{ ...P, marginTop: "22px" }}>

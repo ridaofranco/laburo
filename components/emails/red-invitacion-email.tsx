@@ -17,6 +17,8 @@ export type IdiomaRed = "es" | "pt" | "en";
 
 export interface RedInvitacionEmailProps {
   idioma: IdiomaRed;
+  /** proveedor o salon: el salón lee «tu espacio» y capacidad en vez de servicios. */
+  tipo?: string;
   nombre: string;
   rubro: string | null;
   linkPanel: string;
@@ -122,6 +124,29 @@ const T = {
   },
 } as const;
 
+
+/** Lo que cambia para un salón. El resto del mail es igual. */
+const SALON = {
+  es: {
+    p2: "Armamos LABURO, una red gratuita y abierta de proveedores, salones y staff para eventos. Sabemos que la mano está difícil: la idea es que cualquier productora que busque dónde hacer su evento, aunque sea a último momento, encuentre tu espacio rápido. No solo nosotros.",
+    yaEsta1: () => "Tu espacio aparece en Salones y espacios, con su nombre y su país.",
+    elegir1: "Sumar fotos, capacidad, tipos de evento y precios desde tu panel.",
+    boton: "Entrar al perfil de mi espacio",
+  },
+  pt: {
+    p2: "Criamos o LABURO, uma rede gratuita e aberta de fornecedores, espaços e equipe para eventos. A ideia é que qualquer produtora que procure onde fazer seu evento, mesmo de última hora, encontre o espaço de vocês rápido.",
+    yaEsta1: () => "O espaço de vocês aparece em Espaços para eventos, com nome e país.",
+    elegir1: "Adicionar fotos, capacidade, tipos de evento e preços no painel.",
+    boton: "Entrar no perfil do espaço",
+  },
+  en: {
+    p2: "We built LABURO, a free and open network of suppliers, venues and event staff. The idea is simple: any producer looking for a place for their event, even at the last minute, can find your venue fast.",
+    yaEsta1: () => "Your venue shows up under Venues, with its name and country.",
+    elegir1: "Add photos, capacity, event types and prices from your panel.",
+    boton: "Open my venue profile",
+  },
+} as const;
+
 export function asuntoRedInvitacion(idioma: IdiomaRed, nombre: string): string {
   return T[idioma].asunto(nombre);
 }
@@ -132,7 +157,7 @@ const item = { margin: "0 0 6px 0", fontSize: "15px", lineHeight: 1.5, color: FG
 const link = { color: "#7FA2FF", textDecoration: "underline" } as const;
 
 export function RedInvitacionEmail(p: RedInvitacionEmailProps) {
-  const t = T[p.idioma];
+  const t = p.tipo === "salon" ? { ...T[p.idioma], ...SALON[p.idioma] } : T[p.idioma];
   return (
     <Html lang={p.idioma}>
       <Preview>{t.preview}</Preview>

@@ -77,6 +77,7 @@ export async function GET(request: Request) {
       const html = await render(
         createElement(RedInvitacionEmail, {
           idioma,
+          tipo: f.tipo,
           nombre,
           rubro: f.rubro,
           linkPanel: siteUrl(`/acceso-proveedor/${f.token}`),
