@@ -71,6 +71,7 @@ import { GET as recordatorioPerfil } from "../recordatorio-perfil/route";
 import { GET as visibilidad } from "../visibilidad/route";
 import { GET as recordatorioCotizacion } from "../recordatorio-cotizacion/route";
 import { GET as avisoCierreCotizacion } from "../aviso-cierre-cotizacion/route";
+import { GET as redInvitacion } from "../red-invitacion/route";
 
 // Nunca cachear: cada disparo del cron debe ejecutar de verdad.
 export const dynamic = "force-dynamic";
@@ -112,6 +113,9 @@ const TANDAS: Tanda[] = [
   // llegaron y que falta elegir, o que cerró vacío. Mira los últimos 7 días, así
   // que si un día se saltea, sale al siguiente.
   { nombre: "aviso-cierre-cotizacion", handler: avisoCierreCotizacion },
+  // Invitación a la red de proveedores y salones armada por DER (0110). Estampa
+  // invitado_at AL SELECCIONAR, así que un reintento no manda dos.
+  { nombre: "red-invitacion", handler: redInvitacion },
   // ⚠️ VA ÚLTIMA, Y NO ES CAPRICHO. Es la única tanda que le escribe al pool
   // entero por un tema que no es trabajo, así que si el presupuesto de tiempo
   // alcanza para una sola, tiene que ganar la que manda una propuesta o un
