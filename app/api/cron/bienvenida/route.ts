@@ -60,7 +60,11 @@ export const dynamic = "force-dynamic";
 
 /** Cuántas invitaciones por corrida. 0 o ausente = tanda apagada. Techo 200 (la RPC también lo limita). */
 function batchSize(): number {
-  const raw = Number(process.env.BIENVENIDA_BATCH);
+  // 14/11: Franco la lanzó («una vez que la bolsa de trabajo funcione, lanzá la
+  // bienvenida»). Sin la variable salen 50 por corrida; BIENVENIDA_BATCH=0 la apaga.
+  const env = process.env.BIENVENIDA_BATCH;
+  if (env === undefined || env === "") return 50;
+  const raw = Number(env);
   if (!Number.isFinite(raw) || raw <= 0) return 0;
   return Math.min(Math.floor(raw), 200);
 }
