@@ -149,6 +149,11 @@ export async function updateSession(request: NextRequest) {
     // valida la propia página/route (lib/baja.ts), no el middleware.
     "/baja",
     "/api/baja",
+    // Los links del mail de invitación a la red de proveedores (0110): «publiquen
+    // mis precios» y «no quiero aparecer». Los abre alguien sin cuenta; el gate es
+    // el baja_token, que validan las RPC de la 0108. Auditado 14/11: ninguna otra
+    // ruta de primer nivel empieza con "/red".
+    "/red",
     // ⚠️ CREAR O CAMBIAR LA CONTRASEÑA. Va acá SÍ O SÍ: la persona llega desde el
     // link del mail SIN sesión todavía (la sesión se crea recién al canjear el
     // code en /definir-contrasena/confirmar). Sin esta línea el middleware la
