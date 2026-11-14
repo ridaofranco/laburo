@@ -63,7 +63,8 @@ function batchSize(): number {
   // 14/11: Franco la lanzó («una vez que la bolsa de trabajo funcione, lanzá la
   // bienvenida»). Sin la variable salen 50 por corrida; BIENVENIDA_BATCH=0 la apaga.
   const env = process.env.BIENVENIDA_BATCH;
-  if (env === undefined || env === "") return 50;
+  // PAUSADA (14/11): Franco quiere ver la prueba antes de que salga. Volver a 50 con su OK.
+  if (env === undefined || env === "") return 0;
   const raw = Number(env);
   if (!Number.isFinite(raw) || raw <= 0) return 0;
   return Math.min(Math.floor(raw), 200);

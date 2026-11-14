@@ -22,7 +22,8 @@ export const dynamic = "force-dynamic";
 
 function batchSize(): number {
   const env = process.env.RED_INVITACION_BATCH;
-  if (env === undefined || env === "") return 50;
+  // PAUSADA (14/11): Franco quiere ver la prueba antes de que salga. Volver a 50 con su OK.
+  if (env === undefined || env === "") return 0;
   const n = Number(env);
   if (!Number.isFinite(n) || n <= 0) return 0;
   return Math.min(Math.floor(n), 200);
