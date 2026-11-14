@@ -22,8 +22,8 @@ export const dynamic = "force-dynamic";
 
 function batchSize(): number {
   const env = process.env.RED_INVITACION_BATCH;
-  // PAUSADA (14/11): Franco quiere ver la prueba antes de que salga. Volver a 50 con su OK.
-  if (env === undefined || env === "") return 0;
+  // 14/11: prueba aprobada por Franco («prendé y dale»).
+  if (env === undefined || env === "") return 50;
   const n = Number(env);
   if (!Number.isFinite(n) || n <= 0) return 0;
   return Math.min(Math.floor(n), 200);
@@ -92,6 +92,8 @@ export async function GET(request: Request) {
         subject: asuntoRedInvitacion(idioma, nombre),
         html,
         headers: { "List-Unsubscribe": `<${linkBaja}>` },
+        // El mail lo firma Franco y dice «respondé este mail»: la respuesta le llega a él.
+        replyTo: "franco@somosder.ar",
       });
       if (r.ok) sent += 1;
       else failed += 1;
