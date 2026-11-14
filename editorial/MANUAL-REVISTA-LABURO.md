@@ -67,3 +67,4 @@ Tanda 2 del C8 (oficios para quien trabaja): barista, cocinero/a o ayudante de c
 
 ## Publicadas por la revista automática (no repetir)
 - 09/11: trabajar en eventos en diciembre, temporada alta para quien trabaja (es + en/pt/fr/it, order 98).
+- 14/11 (reposición del miércoles 11; el viernes 13 tampoco salió por la caída de las tareas): menores de 18 en el staff de un evento, qué permite la ley con 16 y 17 años (Papeles y normas; Ley 26.390 en Infoleg + FAQ del Ministerio de Capital Humano; es + en/pt/fr/it, order 99).

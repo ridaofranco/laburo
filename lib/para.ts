@@ -109,6 +109,7 @@ export const PARA_POR_NOTA: Record<string, string[]> = {
   "como-evaluar-al-staff-despues-del-evento": ["staff-para-eventos-productoras-y-agencias", "planilla-y-whatsapp-o-laburo-para-convocar-staff"],
   "montaje-y-desmontaje-de-eventos-como-cuidarte": ["trabajar-en-montaje-tecnica-y-produccion-de-eventos", "staff-para-eventos-productoras-y-agencias"],
   "trabajar-en-eventos-en-verano-en-la-costa": ["trabajar-en-gastronomia-de-eventos", "trabajo-en-eventos-en-mar-del-plata", "trabajar-de-promotora-o-azafata"],
+  "menores-de-18-en-el-staff-de-un-evento": ["staff-para-eventos-productoras-y-agencias", "trabajar-de-promotora-o-azafata", "personal-de-control-de-accesos-y-acreditacion"],
   "trabajar-en-eventos-en-diciembre-temporada-alta": ["trabajar-en-gastronomia-de-eventos", "trabajar-de-promotora-o-azafata", "trabajo-en-eventos-buenos-aires"],
   "monotributo-para-trabajar-en-eventos": ["trabajo-en-eventos-buenos-aires", "trabajar-de-promotora-o-azafata"],
   "personal-de-limpieza-en-un-evento": ["staff-para-eventos-corporativos", "staff-para-eventos-productoras-y-agencias"],
