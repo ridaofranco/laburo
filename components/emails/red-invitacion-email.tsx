@@ -31,6 +31,13 @@ const BORDER = "#1A1A1A";
 const ACCENT = "#0047FF";
 const FG = "#F5F5F5";
 const FG_MUTED = "#8A8A8A";
+const PRODUCTOS = [
+  { nombre: "SOMOS DER", url: "https://somosder.ar" },
+  { nombre: "LABURO", url: "https://laburo.somosder.ar" },
+  { nombre: "HITO", url: "https://hito.agency" },
+  { nombre: "PASE", url: "https://pase.somosder.ar" },
+] as const;
+
 const FONT_STACK = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif";
 
 export function idiomaDePais(pais: string | null | undefined): IdiomaRed {
@@ -174,7 +181,14 @@ export function RedInvitacionEmail(p: RedInvitacionEmailProps) {
               <br />
               Franco
               <br />
-              <span style={{ color: FG_MUTED, fontSize: "13px" }}>SOMOS DER · LABURO · HITO · PASE</span>
+              <span style={{ color: FG_MUTED, fontSize: "13px" }}>
+                {PRODUCTOS.map((x, i) => (
+                  <span key={x.nombre}>
+                    {i > 0 ? " · " : ""}
+                    <Link href={x.url} style={{ color: FG_MUTED, textDecoration: "underline" }}>{x.nombre}</Link>
+                  </span>
+                ))}
+              </span>
             </Text>
           </Section>
           <Text style={{ margin: "12px 0 0 0", textAlign: "center", fontSize: "12px", lineHeight: 1.6, color: FG_MUTED }}>
