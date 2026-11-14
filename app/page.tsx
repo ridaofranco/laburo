@@ -24,6 +24,7 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Reveal } from "./landing/reveal";
 import { LeadForm } from "./landing/lead-form";
 import { WhatsAppGlyph } from "@/components/icons/whatsapp-glyph";
@@ -115,6 +116,33 @@ function WhatsAppLink({
     </a>
   );
 }
+
+/* Fotos de eventos de SOMOS DER (trabajos propios), para que la home muestre
+ * gente trabajando y no solo texto (Franco, 14/11: «no hay gente y es verdad»).
+ * Los pies dicen el evento y NUNCA que esa gente es del pool de LABURO: hoy no
+ * hay fotos del pool con permiso de cada persona. */
+const FOTOS = [
+  {
+    src: "/img/eventos/feel-gin-festival-2026-3.webp",
+    alt: "Bartender sirviendo gin en la barra de un festival nocturno",
+    pie: "Barra, Feel Gin Festival 2026",
+  },
+  {
+    src: "/img/eventos/databricks-live-argentina-2026.webp",
+    alt: "Tres recepcionistas detrás del mostrador de acreditación de un evento corporativo",
+    pie: "Recepción, Databricks Live Argentina 2026",
+  },
+  {
+    src: "/img/eventos/carmeet-2026-puerto-madero-2.webp",
+    alt: "Staff entregando material al público en un evento al aire libre",
+    pie: "Promotoras, CARMEET 2026",
+  },
+  {
+    src: "/img/eventos/feel-gin-festival-2026-5.webp",
+    alt: "Equipo descargando estructuras de un camión durante un montaje",
+    pie: "Montaje, Feel Gin Festival 2026",
+  },
+];
 
 const PASOS = [
   {
@@ -350,6 +378,26 @@ export default async function LandingPage() {
                 </Link>
               </Reveal>
             </div>
+          </div>
+        </section>
+
+        {/* ── Fotos: gente trabajando en eventos de SOMOS DER ── */}
+        <section aria-label="Fotos de eventos" className="border-t border-[#1a1a1a]">
+          <div className="grid grid-cols-2 lg:grid-cols-4">
+            {FOTOS.map((f) => (
+              <figure key={f.src} className="relative aspect-[4/5] overflow-hidden border-r border-b border-[#1a1a1a]">
+                <Image
+                  src={f.src}
+                  alt={f.alt}
+                  fill
+                  sizes="(min-width: 1024px) 25vw, 50vw"
+                  className="object-cover"
+                />
+                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-4 pb-3 pt-10 label-tech text-[10px] tracking-[0.2em] text-[#f5f5f5]">
+                  {f.pie}
+                </figcaption>
+              </figure>
+            ))}
           </div>
         </section>
 
