@@ -157,8 +157,6 @@ export async function updateSession(request: NextRequest) {
     // La bolsa de trabajo pública (0111): /empleos y /empleos/<id>, sin cuenta.
     // Auditado 14/11: ninguna otra ruta de primer nivel empieza con "/empleos".
     "/empleos",
-    // ⚠️ TEMPORAL (14/11): envío de prueba de los mails, gateado por clave. Se borra con la ruta.
-    "/api/prueba-mails",
     // ⚠️ CREAR O CAMBIAR LA CONTRASEÑA. Va acá SÍ O SÍ: la persona llega desde el
     // link del mail SIN sesión todavía (la sesión se crea recién al canjear el
     // code en /definir-contrasena/confirmar). Sin esta línea el middleware la
