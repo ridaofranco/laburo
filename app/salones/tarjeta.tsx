@@ -17,7 +17,7 @@ import { textoCapacidad, urlDeFotoSalon } from "@/lib/salones";
 import type { SalonPublico } from "./actions";
 
 export function TarjetaSalon({ s }: { s: SalonPublico }) {
-  const ubicacion = [s.ciudad, s.provincia].filter(Boolean).join(", ");
+  const ubicacion = [s.ciudad, s.provincia, s.pais && s.pais !== "Argentina" ? s.pais : null].filter(Boolean).join(", ");
   const capacidad = textoCapacidad(s.capacidad_min, s.capacidad_max);
 
   // Las tres cosas que más se preguntan de un salón, en una línea. Se arma acá

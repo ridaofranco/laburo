@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!s) return { title: "Salón no encontrado | LABURO" };
 
   const capacidad = textoCapacidad(s.capacidad_min, s.capacidad_max);
-  const donde = [s.ciudad, s.provincia].filter(Boolean).join(", ");
+  const donde = [s.ciudad, s.provincia, s.pais && s.pais !== "Argentina" ? s.pais : null].filter(Boolean).join(", ");
   const descripcion =
     recortarDescripcion(s.headline) ||
     [capacidad, donde].filter(Boolean).join(" · ") ||
@@ -82,7 +82,7 @@ export default async function FichaSalonPage({ params }: Props) {
   const s = await getFichaSalon(slug);
   if (!s) notFound();
 
-  const ubicacion = [s.ciudad, s.provincia].filter(Boolean).join(", ");
+  const ubicacion = [s.ciudad, s.provincia, s.pais && s.pais !== "Argentina" ? s.pais : null].filter(Boolean).join(", ");
   const capacidad = textoCapacidad(s.capacidad_min, s.capacidad_max);
 
   // Tres estados y no dos: sí, no, y "no lo dijo". El tercero NO se muestra.

@@ -25,6 +25,7 @@ import { jsonLdSeguro, schemaListado } from "@/lib/schema-vidriera";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { PROVINCIAS } from "@/lib/provincias";
 import { buscarSalones } from "./actions";
+import { getPaisesPublicos } from "../servicios/actions";
 import { FiltrosSalones } from "./filtros";
 import { TarjetaSalon } from "./tarjeta";
 
@@ -63,7 +64,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 interface Props {
-  searchParams: Promise<{ q?: string; provincia?: string; personas?: string }>;
+  searchParams: Promise<{ q?: string; provincia?: string; personas?: string; pais?: string }>;
 }
 
 export default async function SalonesPage({ searchParams }: Props) {
@@ -78,18 +79,21 @@ export default async function SalonesPage({ searchParams }: Props) {
   const filtros = {
     texto: sp.q ?? "",
     provincia: sp.provincia ?? "",
+    pais: sp.pais ?? "",
     // Se refleja el valor SANEADO y no el crudo: si alguien llegó con
     // "personas=abc", el campo tiene que aparecer vacío y no repetirle su error.
     personas: personas ? String(personas) : "",
   };
 
+  const paises = await getPaisesPublicos("salon");
   const salones = await buscarSalones({
     texto: filtros.texto,
     provincia: filtros.provincia,
+    pais: filtros.pais,
     personas,
   });
 
-  const hayFiltros = Boolean(filtros.texto || filtros.provincia || filtros.personas);
+  const hayFiltros = Boolean(filtros.texto || filtros.provincia || filtros.personas || filtros.pais);
 
   return (
     <div className="min-h-dvh bg-black text-[#f5f5f5] selection:bg-[#0047ff] selection:text-white">
@@ -135,7 +139,7 @@ export default async function SalonesPage({ searchParams }: Props) {
         </section>
 
         <section className={`${WRAP} pb-12`}>
-          <FiltrosSalones provincias={PROVINCIAS} inicial={filtros} />
+          <FiltrosSalones provincias={PROVINCIAS} paises={paises} inicial={filtros} />
         </section>
 
         <section className={`${WRAP} pb-28`}>

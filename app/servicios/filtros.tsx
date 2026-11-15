@@ -25,14 +25,17 @@ const labelCls = "label-tech text-[10px] uppercase tracking-[0.2em] text-[#8a8a8
 export function FiltrosVidriera({
   categorias,
   provincias,
+  paises = [],
   inicial,
 }: {
   categorias: string[];
   provincias: string[];
-  inicial: { texto: string; categoria: string; provincia: string };
+  /** Países con perfiles públicos: el select aparece solo si hay más de uno. */
+  paises?: string[];
+  inicial: { texto: string; categoria: string; provincia: string; pais?: string };
 }) {
   const router = useRouter();
-  const hayFiltros = Boolean(inicial.texto || inicial.categoria || inicial.provincia);
+  const hayFiltros = Boolean(inicial.texto || inicial.categoria || inicial.provincia || inicial.pais);
 
   return (
     <form method="get" action="/servicios" className="flex flex-col gap-5">
@@ -83,6 +86,24 @@ export function FiltrosVidriera({
             ))}
           </select>
         </label>
+        {paises.length > 1 ? (
+          <label className="flex flex-col gap-2 md:col-span-3" htmlFor="pais">
+            <span className={labelCls}>País</span>
+            <select
+              id="pais"
+              name="pais"
+              defaultValue={inicial.pais ?? ""}
+              className={`${inputCls} appearance-none`}
+            >
+              <option value="">Todos los países</option>
+              {paises.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
       </div>
 
       <div className="flex flex-wrap items-center gap-4">

@@ -37,6 +37,7 @@ export interface SalonPublico {
   bio: string | null;
   ciudad: string | null;
   provincia: string | null;
+  pais?: string | null;
   is_verified: boolean;
   capacidad_min: number | null;
   capacidad_max: number | null;
@@ -67,12 +68,14 @@ export interface FichaSalon extends SalonPublico {
 export async function buscarSalones(filtros: {
   texto?: string;
   provincia?: string;
+  pais?: string;
   personas?: number | null;
 }): Promise<SalonPublico[]> {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("staff_app_vidriera_salones", {
     p_texto: filtros.texto?.trim() || null,
     p_provincia: filtros.provincia?.trim() || null,
+    p_pais: filtros.pais?.trim() || null,
     // 0 no es un filtro, es un campo vacío mal leído. Sin este guard, un
     // "0 personas" pediría un salón cuyo piso sea 0 y escondería medio
     // directorio sin que nadie entienda por qué.

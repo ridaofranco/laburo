@@ -13,7 +13,7 @@ import { money } from "@/lib/format";
 import type { ProveedorPublico } from "./actions";
 
 export function TarjetaProveedor({ p }: { p: ProveedorPublico }) {
-  const ubicacion = [p.ciudad, p.provincia].filter(Boolean).join(", ");
+  const ubicacion = [p.ciudad, p.provincia, p.pais && p.pais !== "Argentina" ? p.pais : null].filter(Boolean).join(", ");
   // Los rubros se muestran una sola vez cada uno: un proveedor con seis
   // servicios de catering no tiene que llenar la fila con la misma palabra.
   const rubros = Array.from(new Set(p.servicios.map((s) => s.categoria)));

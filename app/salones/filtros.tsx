@@ -29,13 +29,16 @@ const labelCls = "label-tech text-[10px] uppercase tracking-[0.2em] text-[#8a8a8
 
 export function FiltrosSalones({
   provincias,
+  paises = [],
   inicial,
 }: {
   provincias: string[];
-  inicial: { texto: string; provincia: string; personas: string };
+  /** Países con salones públicos: el select aparece solo si hay más de uno. */
+  paises?: string[];
+  inicial: { texto: string; provincia: string; personas: string; pais?: string };
 }) {
   const router = useRouter();
-  const hayFiltros = Boolean(inicial.texto || inicial.provincia || inicial.personas);
+  const hayFiltros = Boolean(inicial.texto || inicial.provincia || inicial.personas || inicial.pais);
 
   return (
     <form method="get" action="/salones" className="flex flex-col gap-5">
@@ -71,6 +74,24 @@ export function FiltrosSalones({
             ))}
           </select>
         </label>
+        {paises.length > 1 ? (
+          <label className="flex flex-col gap-2 md:col-span-3" htmlFor="pais">
+            <span className={labelCls}>País</span>
+            <select
+              id="pais"
+              name="pais"
+              defaultValue={inicial.pais ?? ""}
+              className={`${inputCls} appearance-none`}
+            >
+              <option value="">Todos los países</option>
+              {paises.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
 
         <label className="flex flex-col gap-2 md:col-span-6" htmlFor="q">
           <span className={labelCls}>Qué buscás</span>

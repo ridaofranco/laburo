@@ -27,7 +27,7 @@ import Link from "next/link";
 import { jsonLdSeguro, schemaListado } from "@/lib/schema-vidriera";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { PROVINCIAS } from "@/lib/provincias";
-import { buscarPublico, getCategoriasPublicas } from "./actions";
+import { buscarPublico, getCategoriasPublicas, getPaisesPublicos } from "./actions";
 import { FiltrosVidriera } from "./filtros";
 import { TarjetaProveedor } from "./tarjeta";
 
@@ -67,7 +67,7 @@ export async function generateMetadata(): Promise<Metadata> {
 const WRAP = "max-w-[1440px] mx-auto w-full px-6 md:px-20";
 
 interface Props {
-  searchParams: Promise<{ q?: string; categoria?: string; provincia?: string }>;
+  searchParams: Promise<{ q?: string; categoria?: string; provincia?: string; pais?: string }>;
 }
 
 export default async function ServiciosPage({ searchParams }: Props) {
@@ -76,14 +76,16 @@ export default async function ServiciosPage({ searchParams }: Props) {
     texto: sp.q ?? "",
     categoria: sp.categoria ?? "",
     provincia: sp.provincia ?? "",
+    pais: sp.pais ?? "",
   };
 
-  const [proveedores, categorias] = await Promise.all([
+  const [proveedores, categorias, paises] = await Promise.all([
     buscarPublico(filtros),
     getCategoriasPublicas(),
+    getPaisesPublicos("proveedor"),
   ]);
 
-  const hayFiltros = Boolean(filtros.texto || filtros.categoria || filtros.provincia);
+  const hayFiltros = Boolean(filtros.texto || filtros.categoria || filtros.provincia || filtros.pais);
 
   return (
     <div className="min-h-dvh bg-black text-[#f5f5f5] selection:bg-[#0047ff] selection:text-white">
@@ -142,6 +144,7 @@ export default async function ServiciosPage({ searchParams }: Props) {
           <FiltrosVidriera
             categorias={categorias}
             provincias={PROVINCIAS}
+            paises={paises}
             inicial={filtros}
           />
         </section>

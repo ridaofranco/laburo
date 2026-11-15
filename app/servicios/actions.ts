@@ -51,6 +51,8 @@ export interface ProveedorPublico {
   bio: string | null;
   ciudad: string | null;
   provincia: string | null;
+  /** País del perfil (la red es de varios países, 0108). */
+  pais?: string | null;
   website: string | null;
   instagram: string | null;
   is_verified: boolean;
@@ -67,18 +69,31 @@ export async function buscarPublico(filtros: {
   texto?: string;
   categoria?: string;
   provincia?: string;
+  pais?: string;
 }): Promise<ProveedorPublico[]> {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("staff_app_vidriera_buscar", {
     p_texto: filtros.texto?.trim() || null,
     p_categoria: filtros.categoria?.trim() || null,
     p_provincia: filtros.provincia?.trim() || null,
+    p_pais: filtros.pais?.trim() || null,
   });
   if (error) {
     console.error("[servicios] búsqueda pública falló:", error.message);
     return [];
   }
   return (data as ProveedorPublico[] | null) ?? [];
+}
+
+/**
+ * Los países con perfiles públicos (0112). El filtro por país se dibuja solo si
+ * hay más de uno: con todo en Argentina sería un select de una sola opción.
+ */
+export async function getPaisesPublicos(tipo: "proveedor" | "salon"): Promise<string[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("staff_app_vidriera_paises", { p_tipo: tipo });
+  if (error) console.error("[vidriera] no se pudo leer países:", error.message);
+  return (data as string[] | null) ?? [];
 }
 
 export async function getCategoriasPublicas(): Promise<string[]> {

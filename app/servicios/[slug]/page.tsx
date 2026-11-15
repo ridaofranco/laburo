@@ -68,7 +68,7 @@ export default async function FichaProveedorPage({ params }: Props) {
   if (!p) notFound();
 
   // Sin comas sueltas: una ciudad cargada como «Palermo,» salía «Palermo,, CABA» (31/10).
-  const ubicacion = [p.ciudad, p.provincia]
+  const ubicacion = [p.ciudad, p.provincia, p.pais && p.pais !== "Argentina" ? p.pais : null]
     .map((x) => (x ?? "").trim().replace(/[\s,]+$/, ""))
     .filter(Boolean)
     .join(", ");
