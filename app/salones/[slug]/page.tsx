@@ -30,6 +30,7 @@ import { ConsultaPublicaForm } from "@/components/vidriera/consulta-publica-form
 import { textoCapacidad, urlDeFotoSalon } from "@/lib/salones";
 import { normalizarWebsite } from "@/lib/format";
 import { getFichaSalon } from "../actions";
+import { FamiliaDer } from "@/components/familia-der";
 
 const WRAP = "max-w-[1440px] mx-auto w-full px-6 md:px-20";
 
@@ -319,6 +320,9 @@ export default async function FichaSalonPage({ params }: Props) {
           >
             Ver todos los salones
           </Link>
+        </div>
+        <div className={`${WRAP} pb-10`}>
+          <FamiliaDer />
         </div>
       </footer>
 

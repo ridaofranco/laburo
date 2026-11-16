@@ -876,12 +876,12 @@ export default async function LandingPage() {
               Para quién es
             </Link>
             <a
-              href="https://somosder.ar"
+              href="https://www.somosder.ar"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener"
               className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
             >
-              somosder.ar
+              Producción de eventos · SOMOS DER
             </a>
             {/* Los otros productos de SOMOS DER (30/10): acreditación y entradas. */}
             <a
@@ -890,7 +890,7 @@ export default async function LandingPage() {
               rel="noopener"
               className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
             >
-              PASE · Acreditación
+              Acreditaciones para eventos · PASE
             </a>
             <a
               href="https://www.entratickets.com"
@@ -898,7 +898,15 @@ export default async function LandingPage() {
               rel="noopener"
               className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
             >
-              ENTRÁ · Entradas
+              Ticketera para vender entradas · ENTRÁ
+            </a>
+            <a
+              href="https://hito.agency"
+              target="_blank"
+              rel="noopener"
+              className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
+            >
+              Consultoría y web para negocios de eventos · HITO
             </a>
             <Link
               href="/sumate"

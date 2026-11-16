@@ -75,6 +75,8 @@ export const CATEGORIAS_PROVEEDOR: string[] = [
   "Limpieza",
   "Transporte y logística",
   "Acreditación y control de acceso",
+  // 16/11: la venta de entradas no tenía rubro (ENTRÁ se publicó en la vidriera).
+  "Ticketera y venta de entradas",
 
   // Comunicación
   "Fotografía y video",
@@ -87,6 +89,8 @@ export const CATEGORIAS_PROVEEDOR: string[] = [
   // Administrativo
   "Seguros",
   "Higiene y seguridad",
+  // 16/11: para quien asesora a negocios de eventos (HITO se publicó en la vidriera).
+  "Consultoría y negocio",
 ];
 
 /** Unidades con las que se cotiza un servicio de evento (precio orientativo). */

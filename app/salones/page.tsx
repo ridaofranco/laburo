@@ -28,6 +28,7 @@ import { buscarSalones } from "./actions";
 import { getPaisesPublicos } from "../servicios/actions";
 import { FiltrosSalones } from "./filtros";
 import { TarjetaSalon } from "./tarjeta";
+import { FamiliaDer } from "@/components/familia-der";
 
 const DESCRIPCION =
   "Salones y espacios para casamientos, cumpleaños de 15, egresados y eventos de empresa. Buscá por cuánta gente entra y por dónde queda, y consultá la fecha directo, sin cuenta y sin vueltas.";
@@ -244,6 +245,9 @@ export default async function SalonesPage({ searchParams }: Props) {
               somosder.ar
             </a>
           </div>
+        </div>
+        <div className={`${WRAP} pb-10`}>
+          <FamiliaDer />
         </div>
       </footer>
 

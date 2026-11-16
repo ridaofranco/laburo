@@ -30,6 +30,7 @@ import { PROVINCIAS } from "@/lib/provincias";
 import { buscarPublico, getCategoriasPublicas, getPaisesPublicos } from "./actions";
 import { FiltrosVidriera } from "./filtros";
 import { TarjetaProveedor } from "./tarjeta";
+import { FamiliaDer } from "@/components/familia-der";
 
 // 16/11: decía «Proveedores para tu evento». La gente busca «proveedores para eventos».
 const TITULO = "Proveedores para eventos: catering, sonido y más | LABURO";
@@ -258,6 +259,9 @@ export default async function ServiciosPage({ searchParams }: Props) {
               somosder.ar
             </a>
           </div>
+        </div>
+        <div className={`${WRAP} pb-10`}>
+          <FamiliaDer />
         </div>
       </footer>
 

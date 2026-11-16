@@ -29,6 +29,8 @@ import { getFichaProveedor } from "../actions";
 // El formulario se mudó a components/vidriera cuando entró el pool de salones:
 // es el mismo para las dos vidrieras. Acá no cambió nada de lo que muestra.
 import { ConsultaPublicaForm } from "@/components/vidriera/consulta-publica-form";
+import { FamiliaDer } from "@/components/familia-der";
+import { esFichaDeLaCasa } from "@/lib/fichas-de-la-casa";
 
 const WRAP = "max-w-[1440px] mx-auto w-full px-6 md:px-20";
 
@@ -66,6 +68,9 @@ export default async function FichaProveedorPage({ params }: Props) {
   const { slug } = await params;
   const p = await getFichaProveedor(slug);
   if (!p) notFound();
+
+  // Las fichas de SOMOS DER y sus productos enlazan a su sitio sin nofollow (16/11).
+  const deLaCasa = esFichaDeLaCasa(p.slug);
 
   // Sin comas sueltas: una ciudad cargada como «Palermo,» salía «Palermo,, CABA» (31/10).
   const ubicacion = [p.ciudad, p.provincia, p.pais && p.pais !== "Argentina" ? p.pais : null]
@@ -169,10 +174,12 @@ export default async function FichaProveedorPage({ params }: Props) {
                   <a
                     href={normalizarWebsite(p.website)}
                     target="_blank"
-                    rel="noopener noreferrer nofollow"
+                    rel={deLaCasa ? "noopener" : "noopener noreferrer nofollow"}
                     className="label-tech text-[11px] uppercase tracking-[0.2em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"
                   >
-                    Su web
+                    {deLaCasa
+                      ? normalizarWebsite(p.website).replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")
+                      : "Su web"}
                   </a>
                 ) : null}
                 {p.instagram?.trim() ? (
@@ -218,6 +225,9 @@ export default async function FichaProveedorPage({ params }: Props) {
           >
             Ver todos los proveedores
           </Link>
+        </div>
+        <div className={`${WRAP} pb-10`}>
+          <FamiliaDer />
         </div>
       </footer>
 

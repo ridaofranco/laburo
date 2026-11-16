@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
+import { FamiliaDer } from "@/components/familia-der";
 
 /**
  * Chrome compartido del blog (header + footer), calcado del de la landing para
@@ -133,6 +134,9 @@ export function BlogFooter() {
             Ingresar
           </Link>
         </div>
+      </div>
+      <div className={`${WRAP} pb-10`}>
+        <FamiliaDer />
       </div>
     </footer>
   );
