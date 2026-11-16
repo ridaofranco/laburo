@@ -31,6 +31,8 @@ import { buscarPublico, getCategoriasPublicas, getPaisesPublicos } from "./actio
 import { FiltrosVidriera } from "./filtros";
 import { TarjetaProveedor } from "./tarjeta";
 
+// 16/11: decía «Proveedores para tu evento». La gente busca «proveedores para eventos».
+const TITULO = "Proveedores para eventos: catering, sonido y más | LABURO";
 const DESCRIPCION =
   "Catering, sonido, fotografía, seguridad y todo lo que necesita tu fiesta, en un solo lugar. Pedí presupuesto directo a cada proveedor, sin cuenta y sin vueltas.";
 
@@ -48,7 +50,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const hayAlgo = (await buscarPublico({})).length > 0;
 
   return {
-    title: "Proveedores para tu evento | LABURO",
+    title: TITULO,
     description: DESCRIPCION,
     alternates: { canonical: "/servicios" },
     robots: hayAlgo ? undefined : { index: false, follow: true },
@@ -57,7 +59,7 @@ export async function generateMetadata(): Promise<Metadata> {
       url: "/servicios",
       siteName: "LABURO",
       locale: "es_AR",
-      title: "Proveedores para tu evento | LABURO",
+      title: TITULO,
       description: DESCRIPCION,
       images: [{ url: "/brand/laburo-og.png", width: 1200, height: 630, alt: "LABURO" }],
     },
@@ -125,13 +127,18 @@ export default async function ServiciosPage({ searchParams }: Props) {
 
       <main>
         <section className={`${WRAP} pt-16 md:pt-24 pb-10`}>
-          <span className="label-tech text-[11px] tracking-[0.3em] text-[#0047ff] block">
-            Proveedores // por SOMOS DER
-          </span>
-          <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.9] text-[clamp(34px,5.5vw,64px)] mt-5">
-            Todo lo que
-            <br />
-            necesita tu fiesta.
+          {/* El renglón chico va ADENTRO del h1 (16/11): el título grande no dice
+           * qué es la página, y Google no la mostraba ni una vez para
+           * «proveedores para eventos». Se ve igual que antes. */}
+          <h1>
+            <span className="label-tech text-[11px] tracking-[0.3em] text-[#0047ff] block">
+              Proveedores para eventos // por SOMOS DER
+            </span>
+            <span className="block font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.9] text-[clamp(34px,5.5vw,64px)] mt-5">
+              Todo lo que
+              <br />
+              necesita tu fiesta.
+            </span>
           </h1>
           <p className="text-[17px] md:text-[19px] leading-[1.7] text-[#8a8a8a] max-w-[620px] mt-8">
             Catering, sonido, fotos, seguridad, ambientación. Buscá lo que te

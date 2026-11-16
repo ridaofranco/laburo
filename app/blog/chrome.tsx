@@ -15,6 +15,15 @@ import { LaburoWordmark } from "@/components/laburo-wordmark";
 
 export const WRAP = "max-w-[1440px] mx-auto w-full px-6 md:px-20";
 
+/** Las entradas del sitio que van en el pie de todo el blog y de /para. */
+const ENTRADAS_PIE = [
+  { label: "Personal para eventos", href: "/para/personal-para-eventos" },
+  { label: "Trabajo en eventos", href: "/para/trabajo-en-eventos" },
+  { label: "Bolsa de trabajo", href: "/empleos" },
+  { label: "Proveedores para eventos", href: "/servicios" },
+  { label: "Salones para eventos", href: "/salones" },
+];
+
 export function BlogHeader() {
   return (
     <header className="border-b border-[#1a1a1a]">
@@ -62,6 +71,18 @@ export function BlogFooter() {
           </span>
         </div>
         <div className="flex flex-wrap gap-x-10 gap-y-3">
+          {/* Las cinco entradas del sitio, con el nombre con que se buscan (16/11):
+              el pie del blog y de las páginas por público no enlazaba ni la bolsa
+              de trabajo, ni los proveedores, ni los salones. */}
+          {ENTRADAS_PIE.map((e) => (
+            <Link
+              key={e.href}
+              href={e.href}
+              className="label-tech text-[11px] tracking-[0.25em] text-[#f5f5f5] hover:text-[#0047ff] transition-colors"
+            >
+              {e.label}
+            </Link>
+          ))}
           <Link
             href="/blog"
             className="label-tech text-[11px] tracking-[0.25em] text-[#8a8a8a] hover:text-[#0047ff] transition-colors"

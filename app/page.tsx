@@ -34,10 +34,15 @@ import { PAGO_TEXTO } from "@/lib/pago";
 import { createClient } from "@/lib/supabase/server";
 
 const DESCRIPCION =
-  "Portal gratuito de ofertas de trabajo y perfiles para eventos: staff, proveedores y salones. Quien publica elige y contrata directo. LABURO no contrata ni intermedia.";
+  "Portal gratuito de ofertas de trabajo en eventos y perfiles de personal para eventos. Quien publica elige y contrata directo. LABURO no contrata ni intermedia.";
 
+/* EL TÍTULO DE LA PESTAÑA DICE LO QUE LA GENTE BUSCA (16/11). Con «LABURO. Todo
+ * lo que necesita tu evento», Search Console no registró ni una aparición de la
+ * portada para «personal para eventos», «staff para eventos» ni «trabajo en
+ * eventos» en 28 días: esas palabras no estaban ni en el título, ni en el h1, ni
+ * en el texto. Al compartir (OG y Twitter) sigue saliendo la frase de marca. */
 export const metadata: Metadata = {
-  title: "LABURO. Todo lo que necesita tu evento",
+  title: "Personal para eventos y trabajo en eventos | LABURO",
   description: DESCRIPCION,
   alternates: { canonical: "/" },
   openGraph: {
@@ -141,6 +146,63 @@ const FOTOS = [
     src: "/img/eventos/feel-gin-festival-2026-5.webp",
     alt: "Equipo descargando estructuras de un camión durante un montaje",
     pie: "Montaje, Feel Gin Festival 2026",
+  },
+];
+
+/**
+ * QUÉ HAY EN LABURO, CON EL NOMBRE CON QUE SE BUSCA (16/11).
+ *
+ * Search Console (18/10 al 14/11): 512 apariciones del sitio, todas por notas
+ * del blog, y cero para «personal para eventos», «mozos para eventos»,
+ * «trabajo en eventos», «proveedores para eventos» o «salones para eventos».
+ * La portada no decía ninguna de esas frases ni enlazaba a /salones.
+ *
+ * Los puestos salen del catálogo de oficios (lib/oficios.ts) y los rubros, del
+ * de proveedores (lib/categorias-proveedor.ts). Nada de cifras acá.
+ */
+const QUE_HAY: { titulo: string; texto: string; enlaces: { label: string; href: string }[] }[] = [
+  {
+    titulo: "Personal para eventos",
+    texto:
+      "Mozos, bartenders, promotoras, azafatas, recepcionistas, acreditadores, control de accesos, montaje y técnica. Publicás gratis qué puestos te faltan, con el pago y los horarios.",
+    enlaces: [
+      { label: "Personal para eventos", href: "/para/personal-para-eventos" },
+      { label: "Mozos y bartenders para eventos", href: "/para/mozos-y-bartenders-para-eventos" },
+      { label: "Promotoras y azafatas para eventos", href: "/para/promotoras-y-azafatas-para-activaciones" },
+      { label: "Personal de acreditación y control de accesos", href: "/para/personal-de-control-de-accesos-y-acreditacion" },
+      { label: "Staff para eventos en Buenos Aires", href: "/para/staff-para-eventos-en-buenos-aires" },
+      { label: "Staff para eventos corporativos", href: "/para/staff-para-eventos-corporativos" },
+    ],
+  },
+  {
+    titulo: "Trabajo en eventos",
+    texto:
+      "Cargás tu perfil una vez y te postulás a las búsquedas abiertas. Quien busca trabajo nunca paga.",
+    enlaces: [
+      { label: "Trabajo en eventos", href: "/para/trabajo-en-eventos" },
+      { label: "Bolsa de trabajo en eventos", href: "/empleos" },
+      { label: "Trabajo en eventos en Buenos Aires", href: "/para/trabajo-en-eventos-buenos-aires" },
+      { label: "Trabajo de mozo en eventos", href: "/blog/trabajar-de-mozo-en-eventos" },
+      { label: "Trabajo de promotora o azafata", href: "/para/trabajar-de-promotora-o-azafata" },
+    ],
+  },
+  {
+    titulo: "Proveedores para eventos",
+    texto:
+      "Catering, sonido, iluminación, fotografía, seguridad, estructuras y más. Entrás a la ficha y le pedís el presupuesto directo al proveedor.",
+    enlaces: [
+      { label: "Proveedores para eventos", href: "/servicios" },
+      { label: "Publicar tu servicio gratis", href: "/para/proveedores-para-eventos-publicar-servicio" },
+    ],
+  },
+  {
+    titulo: "Salones para eventos",
+    texto:
+      "Salones y espacios para buscar por cuánta gente entra y por dónde quedan. La fecha se consulta directo con el salón.",
+    enlaces: [
+      { label: "Salones para eventos", href: "/salones" },
+      { label: "Publicar tu salón gratis", href: "/para/publicar-salon-para-eventos" },
+    ],
   },
 ];
 
@@ -292,7 +354,7 @@ export default async function LandingPage() {
              * resto de la landing se cae pero el hero (titulo, cifra del pool,
              * parrafo y los dos CTA) se sirve visible. */}
             <Reveal visibleDeArranque>
-              <Eyebrow>Staff, proveedores y salones // por SOMOS DER</Eyebrow>
+
               {/* `whitespace-nowrap` en cada linea NO es decorativo: sin eso "TU
                * EVENTO." se parte en dos renglones en escritorio y el hero pasa
                * a ocupar TRES lineas de texto monumental, que es lo que Franco
@@ -319,13 +381,24 @@ export default async function LandingPage() {
                * 2. El escalado bajo de 8.5vw a 8vw por el salto de padding: WRAP
                *    pasa de px-6 (24px) a md:px-20 (80px) justo en 768, o sea que
                *    el ancho util CAE 112px en el mismo breakpoint donde el nowrap
-               *    se prende. A 8.5vw no entraba; a 8vw sobran 17px. */}
-              <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.88] text-[clamp(40px,8vw,116px)] mt-6">
-                <span className="block whitespace-normal md:whitespace-nowrap">
-                  Tu evento.
+               *    se prende. A 8.5vw no entraba; a 8vw sobran 17px.
+               *
+               * EL RENGLÓN CHICO VA ADENTRO DEL H1 (16/11). «Tu evento. Entero.»
+               * solo no le dice a Google de qué es el sitio. El renglón azul de
+               * arriba ya existía (decía «Staff, proveedores y salones»): ahora
+               * dice lo que se busca y es parte del h1. El título grande no
+               * cambia de tamaño ni de lugar: sus clases pasaron al <span>. */}
+              <h1>
+                <span className="label-tech text-[11px] tracking-[0.3em] text-[#0047ff] block">
+                  Personal para eventos y trabajo en eventos // por SOMOS DER
                 </span>
-                <span className="block whitespace-normal md:whitespace-nowrap text-transparent [-webkit-text-stroke:1.5px_#f5f5f5]">
-                  Entero.
+                <span className="block font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.88] text-[clamp(40px,8vw,116px)] mt-6">
+                  <span className="block whitespace-normal md:whitespace-nowrap">
+                    Tu evento.
+                  </span>
+                  <span className="block whitespace-normal md:whitespace-nowrap text-transparent [-webkit-text-stroke:1.5px_#f5f5f5]">
+                    Entero.
+                  </span>
                 </span>
               </h1>
             </Reveal>
@@ -398,6 +471,36 @@ export default async function LandingPage() {
                 </figcaption>
               </figure>
             ))}
+          </div>
+        </section>
+
+        {/* ── Qué hay en LABURO: las cuatro búsquedas, con enlaces a su página ── */}
+        <section id="que-hay" aria-label="Qué hay en LABURO" className="border-t border-[#1a1a1a]">
+          <div className={`${WRAP} py-16 md:py-24`}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-14">
+              {QUE_HAY.map((q, i) => (
+                <Reveal key={q.titulo} delay={i * 0.08}>
+                  <h2 className="font-[family-name:var(--font-syne)] text-[22px] md:text-[24px] font-bold uppercase tracking-tight leading-[1.1]">
+                    {q.titulo}
+                  </h2>
+                  <p className="text-[15px] md:text-[16px] leading-[1.7] text-[#8a8a8a] mt-4">
+                    {q.texto}
+                  </p>
+                  <ul className="mt-6 flex flex-col gap-3">
+                    {q.enlaces.map((e) => (
+                      <li key={e.href}>
+                        <Link
+                          href={e.href}
+                          className="text-[15px] text-[#f5f5f5] underline underline-offset-4 decoration-[#565656] hover:text-[#0047ff] hover:decoration-[#0047ff] transition-colors duration-300"
+                        >
+                          {e.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </Reveal>
+              ))}
+            </div>
           </div>
         </section>
 

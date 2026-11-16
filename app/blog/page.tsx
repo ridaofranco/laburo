@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BLOG_ORIGIN, type BlogPost, getAllPosts, hreflangIndices } from "@/lib/blog";
-import { type Audiencia, CTA_POR_AUDIENCIA, paraDeNota } from "@/lib/para";
+import { type Audiencia, CTA_POR_AUDIENCIA, ENTRADA_POR_AUDIENCIA, paraDeNota } from "@/lib/para";
 import { BlogCta, BlogFooter, BlogHeader, WRAP } from "./chrome";
 
 /**
@@ -11,7 +11,9 @@ import { BlogCta, BlogFooter, BlogHeader, WRAP } from "./chrome";
  * sin base de datos, sin sesión — es contenido público y así se sirve.
  */
 
-const TITULO = "Blog de LABURO. Staff para eventos";
+// 16/11: decía «Blog de LABURO. Staff para eventos». El índice no tiene que
+// competir por esa búsqueda con las páginas que la contestan (/para).
+const TITULO = "Blog de LABURO: guías para armar eventos y trabajar en ellos";
 const DESCRIPCION =
   "Guías prácticas para armar el staff de un evento, contratar personal eventual y trabajar en eventos, escritas desde la operación real de SOMOS DER.";
 
@@ -123,7 +125,7 @@ export default function BlogIndexPage() {
         <section className="border-b border-[#1a1a1a]">
           <div className={`${WRAP} py-20 md:py-32`}>
             <span className="label-tech text-[11px] tracking-[0.3em] text-[#0047ff] block">
-              Blog // Staff para eventos
+              Blog // Guías de eventos
             </span>
             <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.9] text-[clamp(44px,10vw,120px)] mt-6">
               Cómo se arma
@@ -162,9 +164,16 @@ export default function BlogIndexPage() {
                     {g.titulo}
                   </h2>
                   <p className="text-[16px] leading-[1.7] text-[#8a8a8a] mt-5 max-w-[420px]">{g.bajada}</p>
+                  {/* La entrada de cada público, con el nombre con que se busca (16/11). */}
+                  <Link
+                    href={ENTRADA_POR_AUDIENCIA[g.id].href}
+                    className="block w-fit text-[16px] text-[#f5f5f5] underline underline-offset-4 decoration-[#565656] hover:text-[#0047ff] hover:decoration-[#0047ff] transition-colors mt-6"
+                  >
+                    {ENTRADA_POR_AUDIENCIA[g.id].label}
+                  </Link>
                   <Link
                     href={CTA_POR_AUDIENCIA[g.id].principal.href}
-                    className="label-tech inline-flex items-center gap-2 min-h-[44px] text-[11px] tracking-[0.25em] text-[#0047ff] mt-6"
+                    className="label-tech inline-flex items-center gap-2 min-h-[44px] text-[11px] tracking-[0.25em] text-[#0047ff] mt-3"
                   >
                     {CTA_POR_AUDIENCIA[g.id].principal.label} →
                   </Link>

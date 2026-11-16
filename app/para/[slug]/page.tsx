@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BLOG_ORIGIN } from "@/lib/blog";
-import { ctaDe, getAllPara, getPara } from "@/lib/para";
+import { ctaDe, entradaDe, getAllPara, getPara, otrasPara } from "@/lib/para";
 import { BlogFooter, BlogHeader, WRAP } from "../../blog/chrome";
 import { Faq } from "../../blog/faq";
 
@@ -59,12 +59,14 @@ export default async function ParaPage({
   if (!page) notFound();
 
   const cta = ctaDe(page.audiencia);
-  // Primero las de la misma audiencia, después el resto: quien llegó buscando
-  // trabajo sigue leyendo sobre trabajo.
-  const otras = getAllPara()
-    .filter((p) => p.slug !== page.slug)
-    .sort((a, b) => Number(b.audiencia === page.audiencia) - Number(a.audiencia === page.audiencia))
-    .slice(0, 4);
+  // Las de la misma audiencia que siguen en el orden (quien llegó buscando
+  // trabajo sigue leyendo sobre trabajo), repartidas parejo: ver otrasPara.
+  const otras = otrasPara(page);
+  // La entrada de su público («Personal para eventos», «Trabajo en eventos»...)
+  // va en las migas, arriba de todo, salvo en la propia página de entrada.
+  const entrada = entradaDe(page.audiencia);
+  const esLaEntrada = entrada.href === `/para/${page.slug}`;
+  const migaEntrada = esLaEntrada ? null : entrada;
 
   const organizacion = {
     "@type": "Organization",
@@ -105,7 +107,10 @@ export default async function ParaPage({
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Inicio", item: BLOG_ORIGIN },
         { "@type": "ListItem", position: 2, name: "Para quién es", item: `${BLOG_ORIGIN}/para` },
-        { "@type": "ListItem", position: 3, name: page.title, item: page.canonical },
+        ...(migaEntrada
+          ? [{ "@type": "ListItem", position: 3, name: migaEntrada.label, item: `${BLOG_ORIGIN}${migaEntrada.href}` }]
+          : []),
+        { "@type": "ListItem", position: migaEntrada ? 4 : 3, name: page.title, item: page.canonical },
       ],
     },
   ];
@@ -131,6 +136,16 @@ export default async function ParaPage({
                       Para quién es
                     </Link>
                   </li>
+                  {migaEntrada && (
+                    <>
+                      <li aria-hidden="true">/</li>
+                      <li>
+                        <Link href={migaEntrada.href} className="text-[#8a8a8a] hover:text-[#0047ff] transition-colors">
+                          {migaEntrada.label}
+                        </Link>
+                      </li>
+                    </>
+                  )}
                 </ol>
               </nav>
 

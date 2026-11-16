@@ -45,6 +45,7 @@ LABURO nace adentro de SOMOS DER (https://www.somosder.ar) y es el mismo sistema
 ## Páginas principales
 - [Inicio](${BLOG_ORIGIN}/): qué es LABURO y los cuatro caminos (contratar, trabajar, publicar un servicio, publicar un salón).
 - [Sumate al pool](${BLOG_ORIGIN}/sumate): alta de quien trabaja en eventos.
+- [Bolsa de trabajo en eventos](${BLOG_ORIGIN}/empleos): búsquedas abiertas que publican productoras y empresas; postularse es gratis.
 - [Proveedores para eventos](${BLOG_ORIGIN}/servicios): directorio público de proveedores.
 - [Salones para eventos](${BLOG_ORIGIN}/salones): directorio público de salones por capacidad y zona.
 - [Para quién es](${BLOG_ORIGIN}/para): páginas por público.

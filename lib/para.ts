@@ -41,7 +41,9 @@ export const CTA_POR_AUDIENCIA: Record<
     texto:
       "Elegí tus roles y tu zona. Cuando haya un evento que encaje, te llega la oferta con pago y fechas, y la aceptás con un click desde el teléfono.",
     principal: { label: "Sumate al pool", href: "/sumate" },
-    secundario: { label: "Leer el blog", href: "/blog" },
+    // 16/11: antes mandaba al blog. La bolsa de trabajo (/empleos) es lo que
+    // busca quien llegó por «trabajo en eventos», y casi nadie la enlazaba.
+    secundario: { label: "Ver búsquedas abiertas", href: "/empleos" },
   },
   proveedor: {
     titulo: "Publicá tu servicio.",
@@ -58,6 +60,52 @@ export const CTA_POR_AUDIENCIA: Record<
     secundario: { label: "Ver los salones", href: "/salones" },
   },
 };
+
+/**
+ * ENLACES CON EL TEXTO DE LA BÚSQUEDA (16/11).
+ *
+ * Search Console, 18/10 al 14/11: Google mostró LABURO 512 veces y todas por
+ * notas del blog. Para «personal para eventos», «trabajo en eventos»,
+ * «proveedores para eventos» o «salones para eventos», ni una. Las páginas
+ * estaban indexadas, pero casi nadie las enlazaba con esas palabras: las notas
+ * las nombraban al pie, con el título entero, entre otros 120 enlaces.
+ *
+ * Cada público tiene una página de entrada, y todo lo que le habla a ese
+ * público la enlaza arriba con el texto exacto: las notas (franja «En LABURO»),
+ * las páginas /para (migas) y el pie.
+ */
+export const ENTRADA_POR_AUDIENCIA: Record<Audiencia, { label: string; href: string }> = {
+  contrata: { label: "Personal para eventos", href: "/para/personal-para-eventos" },
+  trabaja: { label: "Trabajo en eventos", href: "/para/trabajo-en-eventos" },
+  proveedor: { label: "Proveedores para eventos", href: "/servicios" },
+  salon: { label: "Salones para eventos", href: "/salones" },
+};
+
+export function entradaDe(audiencia: string | undefined) {
+  return ENTRADA_POR_AUDIENCIA[(audiencia as Audiencia) in ENTRADA_POR_AUDIENCIA ? (audiencia as Audiencia) : "contrata"];
+}
+
+/** El texto corto con el que se enlaza una página por público. */
+export function anclaDe(p: BlogPost): string {
+  return p.ancla ?? p.title.split(":")[0].trim();
+}
+
+/**
+ * Las páginas que se muestran al pie de una página por público (16/11).
+ *
+ * Antes eran siempre las primeras cuatro de la lista: cuatro páginas juntaban
+ * más de 40 enlaces cada una y «staff para eventos en Buenos Aires» tenía 5.
+ * Ahora son las que siguen a la página en el orden de su público, dando la
+ * vuelta, así todas reciben la misma cantidad.
+ */
+export function otrasPara(page: BlogPost, cuantas = 4): BlogPost[] {
+  const todas = getAllPara();
+  const mias = todas.filter((p) => p.audiencia === page.audiencia);
+  const i = mias.findIndex((p) => p.slug === page.slug);
+  const enOrden = i < 0 ? mias : [...mias.slice(i + 1), ...mias.slice(0, i)];
+  const resto = todas.filter((p) => p.audiencia !== page.audiencia && p.slug !== page.slug);
+  return [...enOrden, ...resto].slice(0, cuantas);
+}
 
 export function ctaDe(audiencia: string | undefined) {
   return CTA_POR_AUDIENCIA[(audiencia as Audiencia) in CTA_POR_AUDIENCIA ? (audiencia as Audiencia) : "contrata"];
@@ -174,4 +222,30 @@ export const PARA_POR_NOTA: Record<string, string[]> = {
 export function paraDeNota(slugNota: string): BlogPost[] {
   const slugs = PARA_POR_NOTA[slugNota] ?? [];
   return slugs.map(getPara).filter((p): p is BlogPost => Boolean(p));
+}
+
+/**
+ * Las notas de «Seguir leyendo» (16/11).
+ *
+ * La lista traía TODAS las demás notas con su bajada: en una nota de 1.000
+ * palabras, Google leía otras 4.400 que eran iguales en las 99, y los enlaces a
+ * las páginas por público quedaban perdidos entre 120. Ahora son seis: cuatro
+ * que comparten página por público (mismo tema) y las dos que siguen en el
+ * orden del blog, dando la vuelta. El índice /blog sigue enlazando todas.
+ */
+export function notasRelacionadas(post: BlogPost, todas: BlogPost[], cuantas = 6): BlogPost[] {
+  const mias = new Set(PARA_POR_NOTA[post.slug] ?? []);
+  const i = todas.findIndex((p) => p.slug === post.slug);
+  const enOrden = i < 0 ? todas : [...todas.slice(i + 1), ...todas.slice(0, i)];
+  const comunes = (p: BlogPost) => (PARA_POR_NOTA[p.slug] ?? []).filter((s) => mias.has(s)).length;
+  // Las dos que siguen en el orden van siempre: así ninguna nota se queda sin
+  // que otra la enlace, por más que no comparta tema con ninguna.
+  const vecinas = enOrden.slice(0, 2);
+  const porTema = enOrden
+    .slice(2)
+    .map((p, pos) => ({ p, pos, c: comunes(p) }))
+    .sort((a, b) => b.c - a.c || a.pos - b.pos)
+    .slice(0, Math.max(0, cuantas - vecinas.length))
+    .map((x) => x.p);
+  return [...porTema, ...vecinas];
 }

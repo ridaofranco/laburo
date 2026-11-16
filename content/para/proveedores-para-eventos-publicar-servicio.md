@@ -2,6 +2,7 @@
 title: "Proveedores para eventos: cómo publicar tu servicio gratis y recibir pedidos de presupuesto"
 description: "Si tenés sonido, catering, seguridad, estructuras o fotografía para eventos, publicá tu servicio gratis en LABURO y recibí pedidos de presupuesto en tu mail."
 metaTitle: "Publicar tu Servicio para Eventos Gratis | LABURO"
+ancla: "Publicar tu servicio para eventos"
 slug: "proveedores-para-eventos-publicar-servicio"
 canonical: "https://laburo.somosder.ar/para/proveedores-para-eventos-publicar-servicio"
 kicker: "Para proveedores"

@@ -51,6 +51,13 @@ export type BlogPost = {
   /** Solo en las páginas por público: contrata | trabaja | proveedor | salon. */
   audiencia?: string;
   /**
+   * Solo en las páginas por público (16/11): el texto corto con el que las
+   * enlazan las notas y las otras páginas, escrito como lo busca la gente
+   * («Promotoras y azafatas para eventos»). Si falta, se usa el título hasta
+   * los dos puntos (anclaDe en lib/para.ts).
+   */
+  ancla?: string;
+  /**
    * Solo en las traducciones (content/blog/<idioma>/*.md): el slug de la nota
    * ESPAÑOLA de la que salen. Es lo que une las versiones para el hreflang, el
    * sitemap y el selector de idioma. Ver editorial/BLOG-5-IDIOMAS.md.
@@ -111,6 +118,7 @@ function parsePost(fileName: string, dir = BLOG_DIR, base = "blog", lang = "es")
     lang: String(data.lang ?? lang),
     faqs: toFaqs(data.faqs),
     audiencia: data.audiencia ? String(data.audiencia) : undefined,
+    ancla: data.ancla ? String(data.ancla) : undefined,
     // `es:` es un alias corto de `traduccionDe:` (mismo dato).
     traduccionDe: (data.traduccionDe ?? data.es) ? String(data.traduccionDe ?? data.es) : undefined,
     html: marked.parse(content, { async: false }),

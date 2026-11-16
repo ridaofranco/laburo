@@ -123,13 +123,17 @@ export default async function SalonesPage({ searchParams }: Props) {
 
       <main>
         <section className={`${WRAP} pt-16 md:pt-24 pb-10`}>
-          <span className="label-tech text-[11px] tracking-[0.3em] text-[#0047ff] block">
-            Salones // por SOMOS DER
-          </span>
-          <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.9] text-[clamp(34px,5.5vw,64px)] mt-5">
-            ¿Dónde
-            <br />
-            entran todos?
+          {/* El renglón chico va adentro del h1 (16/11), igual que en /servicios:
+           * el título grande solo no dice «salones para eventos». */}
+          <h1>
+            <span className="label-tech text-[11px] tracking-[0.3em] text-[#0047ff] block">
+              Salones para eventos // por SOMOS DER
+            </span>
+            <span className="block font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.9] text-[clamp(34px,5.5vw,64px)] mt-5">
+              ¿Dónde
+              <br />
+              entran todos?
+            </span>
           </h1>
           <p className="text-[17px] md:text-[19px] leading-[1.7] text-[#8a8a8a] max-w-[620px] mt-8">
             Decinos cuántos son y dónde es, y te mostramos los salones donde tu

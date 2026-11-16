@@ -1,7 +1,8 @@
 ---
 title: "Mozos y bartenders para eventos: cuántos necesitás y cómo elegirlos"
-description: "Cómo calcular cuántos mozos, bartenders y ayudantes de barra pedir para tu evento, qué mirar en cada perfil, cómo armar turnos y cómo confirmarlos en LABURO."
-metaTitle: "Mozos y Bartenders para Eventos | LABURO"
+description: "Mozos para eventos y bartenders: cómo calcular cuántos pedir, qué mirar en cada perfil, cómo armar turnos y cómo confirmarlos en LABURO."
+metaTitle: "Mozos para Eventos y Bartenders: Cuántos Pedir | LABURO"
+ancla: "Mozos y bartenders para eventos"
 slug: "mozos-y-bartenders-para-eventos"
 canonical: "https://laburo.somosder.ar/para/mozos-y-bartenders-para-eventos"
 kicker: "Para productoras"
@@ -42,7 +43,7 @@ No pidas "gastronómicos". Pedí roles. En el catálogo de oficios de LABURO, la
 
 El rol que más se olvida es el ayudante de barra. Un bartender que tiene que ir a buscar hielo deja la barra sin servir durante esos minutos, justo en el pico.
 
-## Cuántos mozos: depende del servicio
+## Cuántos mozos para un evento: depende del servicio
 
 El mismo evento de 300 invitados necesita dotaciones muy distintas según el formato:
 
@@ -52,7 +53,7 @@ El mismo evento de 300 invitados necesita dotaciones muy distintas según el for
 
 El número por mozo lo tenés que fijar vos según el nivel de servicio que querés dar; no hay un ratio universal que sirva para todos los formatos. Lo importante es partir el salón en sectores y que cada sector tenga a alguien. Si el servicio lo da un catering, acordá por escrito quién pone los mozos y cuántos.
 
-## Cuántos bartenders: la cuenta del pico
+## Cuántos bartenders para un evento: la cuenta del pico
 
 La barra se calcula como la puerta: estimás cuántas consumiciones hay que despachar por hora en el momento más cargado y lo dividís por lo que despacha una posición de barra por hora. El resultado son las posiciones simultáneas.
 

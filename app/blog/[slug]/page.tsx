@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BLOG_ORIGIN, formatBlogDate, getAllPosts, getPost, hreflangDe } from "@/lib/blog";
-import { ctaDe, paraDeNota } from "@/lib/para";
+import { anclaDe, ctaDe, entradaDe, notasRelacionadas, paraDeNota } from "@/lib/para";
 import { BlogCta, BlogFooter, BlogHeader, WRAP } from "../chrome";
 import { Faq } from "../faq";
 import { SelectorIdioma } from "../idiomas";
@@ -65,8 +65,23 @@ export default async function BlogPostPage({
   const post = getPost(slug);
   if (!post) notFound();
 
-  const otros = getAllPosts().filter((p) => p.slug !== post.slug);
   const relacionadas = paraDeNota(post.slug);
+  const otros = notasRelacionadas(post, getAllPosts());
+  // Franja «En LABURO» arriba de la nota (16/11): la entrada del público de la
+  // nota, sus páginas «Para tu caso» y, si es para quien trabaja, la bolsa de
+  // trabajo. Cada enlace dice lo que la gente busca, no el título entero.
+  const atajos = [
+    ...(relacionadas.length > 0 ? [entradaDe(relacionadas[0].audiencia)] : []),
+    ...relacionadas.map((p) => ({ label: anclaDe(p), href: `/para/${p.slug}` })),
+    // Quien arma un evento: la mayor parte del pool está en Buenos Aires, y esa
+    // página (la que tiene que salir por «staff para eventos») tenía 5 enlaces.
+    ...(relacionadas[0]?.audiencia === "contrata"
+      ? [{ label: "Staff para eventos en Buenos Aires", href: "/para/staff-para-eventos-en-buenos-aires" }]
+      : []),
+    ...(relacionadas.some((p) => p.audiencia === "trabaja")
+      ? [{ label: "Bolsa de trabajo en eventos", href: "/empleos" }]
+      : []),
+  ].filter((a, i, lista) => lista.findIndex((b) => b.href === a.href) === i);
   // La barra fija del celular habla al público de la primera página «Para tu caso».
   const ctaFija = relacionadas.length > 0 ? ctaDe(relacionadas[0].audiencia).principal : null;
 
@@ -151,6 +166,23 @@ export default async function BlogPostPage({
             </div>
           </header>
 
+          {atajos.length > 0 && (
+            <nav aria-label="En LABURO" className="border-b border-[#1a1a1a]">
+              <div className={`${WRAP} py-6 flex flex-wrap items-baseline gap-x-7 gap-y-3`}>
+                <span className="label-tech text-[10px] tracking-[0.25em] text-[#565656]">En LABURO</span>
+                {atajos.map((a) => (
+                  <Link
+                    key={a.href}
+                    href={a.href}
+                    className="text-[15px] text-[#f5f5f5] underline underline-offset-4 decoration-[#565656] hover:text-[#0047ff] hover:decoration-[#0047ff] transition-colors"
+                  >
+                    {a.label}
+                  </Link>
+                ))}
+              </div>
+            </nav>
+          )}
+
           <div className={WRAP}>
             <div
               className="prose-laburo max-w-[760px] py-16 md:py-24"
@@ -199,8 +231,8 @@ export default async function BlogPostPage({
                     key={p.slug}
                     href={`/blog/${p.slug}`}
                     className={`group p-8 md:p-12 border-[#1a1a1a] transition-colors hover:bg-[#050505] ${
-                      i > 0 ? "border-t md:border-t-0 md:border-l" : ""
-                    }`}
+                      i > 0 ? "border-t" : ""
+                    } ${i === 1 ? "md:border-t-0" : ""} ${i % 2 === 1 ? "md:border-l" : ""}`}
                   >
                     <span className="label-tech text-[10px] tracking-[0.25em] text-[#8a8a8a]">
                       {p.kicker}

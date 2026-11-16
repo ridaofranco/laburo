@@ -2,6 +2,7 @@
 title: "Personal de control de accesos y acreditación para eventos: cuántos y cómo elegirlos"
 description: "Cómo calcular cuántos puestos de acreditación y control de accesos necesitás, qué perfil pedir, qué no es tarea de seguridad y cómo confirmarlos en LABURO."
 metaTitle: "Personal de Accesos y Acreditación para Eventos | LABURO"
+ancla: "Personal de acreditación y control de accesos"
 slug: "personal-de-control-de-accesos-y-acreditacion"
 canonical: "https://laburo.somosder.ar/para/personal-de-control-de-accesos-y-acreditacion"
 kicker: "Para productoras"

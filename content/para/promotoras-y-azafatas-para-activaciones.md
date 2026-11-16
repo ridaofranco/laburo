@@ -1,7 +1,8 @@
 ---
-title: "Promotoras y azafatas para activaciones de marca: cómo elegirlas y coordinarlas"
+title: "Promotoras y azafatas para eventos y activaciones de marca: cómo elegirlas y coordinarlas"
 description: "Cuántas promotoras pedir para una activación, qué mirar en el perfil, cómo armar el brief y los turnos, y cómo confirmarlas sin faltazos desde LABURO."
-metaTitle: "Promotoras y Azafatas para Activaciones | LABURO"
+metaTitle: "Promotoras y Azafatas para Eventos y Activaciones | LABURO"
+ancla: "Promotoras y azafatas para eventos"
 slug: "promotoras-y-azafatas-para-activaciones"
 canonical: "https://laburo.somosder.ar/para/promotoras-y-azafatas-para-activaciones"
 kicker: "Para marcas y agencias"
