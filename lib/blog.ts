@@ -126,16 +126,38 @@ function parsePost(fileName: string, dir = BLOG_DIR, base = "blog", lang = "es")
 }
 
 /**
+ * CADA CARPETA SE LEE UNA SOLA VEZ POR PROCESO (16/11).
+ *
+ * El sitemap tardaba unos 5 minutos en armarse después de cada publicación
+ * (medido: dos pedidos seguidos a /sitemap.xml sin respuesta, 30 s y 150 s).
+ * Por cada una de las 500 notas, `versionesDe` volvía a leer y a convertir las
+ * 100 notas de cada uno de los 5 idiomas: 250.000 conversiones de markdown.
+ * Mientras tanto, a Google el sitemap no le contestaba.
+ *
+ * Los .md entran con el deploy y no cambian mientras el proceso vive, así que
+ * en producción (y al compilar) se guardan. En desarrollo no, para que una
+ * nota editada se vea al recargar.
+ */
+const LECTURAS = new Map<string, BlogPost[]>();
+const GUARDAR_LECTURAS = process.env.NODE_ENV === "production";
+
+/**
  * Lee una carpeta de .md con el formato del blog. La usan el blog y las páginas
  * por público (`content/para`, lib/para.ts): mismo frontmatter, mismo motor.
  */
 export function readMarkdownDir(dir: string, base: string, lang = "es"): BlogPost[] {
+  const clave = `${dir}|${base}|${lang}`;
+  const guardado = GUARDAR_LECTURAS ? LECTURAS.get(clave) : undefined;
+  // Copia de la lista: si quien la pide la ordena, no desordena la guardada.
+  if (guardado) return [...guardado];
   if (!fs.existsSync(dir)) return [];
-  return fs
+  const posts = fs
     .readdirSync(dir)
     .filter((f) => f.endsWith(".md"))
     .map((f) => parsePost(f, dir, base, lang))
     .sort((a, b) => a.order - b.order || a.title.localeCompare(b.title, "es"));
+  if (GUARDAR_LECTURAS) LECTURAS.set(clave, posts);
+  return [...posts];
 }
 
 /** Todos los posts, ordenados por `order` (y por título ante empate). */
