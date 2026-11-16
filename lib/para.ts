@@ -232,12 +232,17 @@ export function paraDeNota(slugNota: string): BlogPost[] {
  * las páginas por público quedaban perdidos entre 120. Ahora son seis: cuatro
  * que comparten página por público (mismo tema) y las dos que siguen en el
  * orden del blog, dando la vuelta. El índice /blog sigue enlazando todas.
+ *
+ * Sirve igual para las traducciones (en, pt, fr, it): se le pasan las notas de
+ * ese idioma y el tema sale de la nota española de la que cada una es
+ * traducción (`traduccionDe`), que es la clave de PARA_POR_NOTA.
  */
 export function notasRelacionadas(post: BlogPost, todas: BlogPost[], cuantas = 6): BlogPost[] {
-  const mias = new Set(PARA_POR_NOTA[post.slug] ?? []);
+  const temaDe = (p: BlogPost) => PARA_POR_NOTA[p.traduccionDe ?? p.slug] ?? [];
+  const mias = new Set(temaDe(post));
   const i = todas.findIndex((p) => p.slug === post.slug);
   const enOrden = i < 0 ? todas : [...todas.slice(i + 1), ...todas.slice(0, i)];
-  const comunes = (p: BlogPost) => (PARA_POR_NOTA[p.slug] ?? []).filter((s) => mias.has(s)).length;
+  const comunes = (p: BlogPost) => temaDe(p).filter((s) => mias.has(s)).length;
   // Las dos que siguen en el orden van siempre: así ninguna nota se queda sin
   // que otra la enlace, por más que no comparta tema con ninguna.
   const vecinas = enOrden.slice(0, 2);

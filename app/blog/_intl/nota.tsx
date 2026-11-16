@@ -11,6 +11,7 @@ import {
   type IdiomaTraduccion,
 } from "@/lib/blog";
 import { formatFecha, TEXTOS } from "@/lib/blog-i18n";
+import { notasRelacionadas } from "@/lib/para";
 import { WRAP } from "../chrome";
 import { Faq } from "../faq";
 import { SelectorIdioma } from "../idiomas";
@@ -52,7 +53,10 @@ export function NotaIntl({ lang, slug }: { lang: IdiomaTraduccion; slug: string 
   const post = getPostByLang(lang, slug);
   if (!post) notFound();
   const t = TEXTOS[lang];
-  const otros = getPostsByLang(lang).filter((p) => p.slug !== post.slug);
+  // «Seguir leyendo» con 6 relacionadas, igual que la nota en español (16/11):
+  // antes listaba las otras 98 con su bajada, repetidas en todas las notas.
+  // El índice /<idioma>/blog sigue enlazando todas.
+  const otros = notasRelacionadas(post, getPostsByLang(lang));
   const indice = blogIndexUrl(lang);
 
   const schema = [
@@ -146,8 +150,8 @@ export function NotaIntl({ lang, slug }: { lang: IdiomaTraduccion; slug: string 
                     key={p.slug}
                     href={`/${lang}/blog/${p.slug}`}
                     className={`group p-8 md:p-12 border-[#1a1a1a] transition-colors hover:bg-[#050505] ${
-                      i > 0 ? "border-t md:border-t-0 md:border-l" : ""
-                    }`}
+                      i > 0 ? "border-t" : ""
+                    } ${i === 1 ? "md:border-t-0" : ""} ${i % 2 === 1 ? "md:border-l" : ""}`}
                   >
                     <span className="label-tech text-[10px] tracking-[0.25em] text-[#8a8a8a]">{p.kicker}</span>
                     <h3 className="font-[family-name:var(--font-syne)] font-bold uppercase tracking-tight leading-[1.1] text-[22px] md:text-[26px] mt-5 group-hover:text-[#0047ff] transition-colors">
