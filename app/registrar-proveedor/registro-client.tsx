@@ -232,7 +232,7 @@ export function RegistroProveedorClient() {
           crear una cuenta.
         </p>
 
-        <form onSubmit={onSubmit} className="w-full flex flex-col gap-14">
+        <form onSubmit={onSubmit} data-origen="no" className="w-full flex flex-col gap-14">
           {/* ── Quién sos ─────────────────────────────────────────────── */}
           <section>
             <span className={seccion}>01 // Quién sos</span>

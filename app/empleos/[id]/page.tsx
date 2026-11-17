@@ -202,7 +202,7 @@ export default async function EmpleoPage({ params }: Props) {
               </div>
             </>
           )}
-          <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="text-[14px] text-[#7FA2FF] underline w-fit">
+          <a href={whatsapp} target="_blank" rel="noopener noreferrer" data-origen="compartir" className="text-[14px] text-[#7FA2FF] underline w-fit">
             Compartir por WhatsApp
           </a>
         </section>

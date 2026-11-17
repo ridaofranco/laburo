@@ -185,6 +185,7 @@ export function LoginForm() {
           <motion.form
             {...up(0.2)}
             onSubmit={handleEntrar}
+            data-origen="no"
             className="w-full flex flex-col gap-12"
           >
             <div className="relative w-full group">

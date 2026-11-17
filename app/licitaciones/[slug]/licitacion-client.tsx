@@ -189,7 +189,7 @@ export function LicitacionClient({
               </p>
             </div>
           ) : (
-            <form onSubmit={onSubmit} className="flex flex-col gap-6">
+            <form onSubmit={onSubmit} data-origen="no" className="flex flex-col gap-6">
               <div>
                 <h2 className="font-[family-name:var(--font-syne)] text-[24px] font-bold uppercase tracking-tight">
                   Quiero cotizar

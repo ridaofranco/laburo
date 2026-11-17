@@ -16,6 +16,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { enviarLeadProductor } from "./actions";
 import { revisarAntesDeEnviar } from "@/lib/revisar-email";
+import { avisarConsulta } from "@/lib/origen";
 
 const labelCls =
   "block mb-2 font-[family-name:var(--font-geist)] text-[12px] uppercase tracking-[0.1em] text-[#8a8a8a] transition-colors group-focus-within:text-[#f5f5f5]";
@@ -102,6 +103,8 @@ export function LeadForm() {
       }
       if (r.ok) {
         setSent(true);
+        // Registro de origen: la consulta salió bien (lib/origen.ts).
+        avisarConsulta("pedido-de-personal");
       } else setError(r.reason ?? "No pudimos enviar tu consulta. Probá de nuevo.");
     });
   }
@@ -130,7 +133,7 @@ export function LeadForm() {
     // persona. Comprobado el 7/9/2026 en una prueba automatizada: la consulta se
     // perdía sin decir nada Y Vercel Analytics registraba la URL completa, con
     // los datos personales adentro, como si fuera el nombre de una página.
-    <form ref={formRef} onSubmit={onSubmit} method="post" className="flex flex-col gap-8">
+    <form ref={formRef} onSubmit={onSubmit} method="post" data-origen="no" className="flex flex-col gap-8">
       {/* Honeypot anti-bots: invisible para humanos, tentador para scripts. */}
       <input
         type="text"

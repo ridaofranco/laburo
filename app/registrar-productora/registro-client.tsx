@@ -34,6 +34,7 @@ import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { LaburoWordmark } from "@/components/laburo-wordmark";
 import { registrarProductora } from "./actions";
+import { avisarConsulta } from "@/lib/origen";
 
 const up = (delay: number) => ({
   // Sin opacity 0 de entrada: el HTML tiene que salir visible aunque el JS
@@ -110,8 +111,11 @@ export function RegistroProductoraClient() {
     };
     try {
       const r = await registrarProductora(datos);
-      if (r.ok) setMailOk(r.mailOk ?? false);
-      else setError(r.error ?? "No se pudo. Probá de nuevo.");
+      if (r.ok) {
+        setMailOk(r.mailOk ?? false);
+        // Registro de origen: una empresa se dio de alta (lib/origen.ts).
+        avisarConsulta("alta-productora");
+      } else setError(r.error ?? "No se pudo. Probá de nuevo.");
     } catch {
       // Versión nueva publicada con la página abierta: se guarda lo cargado,
       // se recarga una vez y se devuelve. Ver lib/recarga-por-version.ts.
@@ -187,7 +191,7 @@ export function RegistroProductoraClient() {
             ) : null}
           </motion.div>
         ) : (
-          <motion.form {...up(0.15)} onSubmit={onSubmit} className="w-full flex flex-col gap-10">
+          <motion.form {...up(0.15)} onSubmit={onSubmit} data-origen="no" className="w-full flex flex-col gap-10">
             <p className="text-[16px] text-[#cfc4c5] leading-[1.6] -mt-2">
               Productora, agencia, marca o empresa: si armás eventos, esto es
               para vos. Cargá tu evento, publicá qué personal necesitás y recibí

@@ -33,6 +33,7 @@
 import { useRef, useState } from "react";
 import { guardarYRecargar, useRecuperarGuardado } from "@/lib/recarga-por-version";
 import { revisarAntesDeEnviar } from "@/lib/revisar-email";
+import { avisarConsulta } from "@/lib/origen";
 import Link from "next/link";
 import { Send, Check } from "lucide-react";
 import {
@@ -184,6 +185,8 @@ export function ConsultaPublicaForm({
         return;
       }
       setListo({ mailEnviado: Boolean(r.mailEnviado) });
+      // Registro de origen: la consulta salió bien (lib/origen.ts).
+      avisarConsulta(esSalon ? "consulta-salon" : "consulta-proveedor");
     } catch {
       // Versión nueva publicada con la página abierta: se guarda lo escrito,
       // se recarga una vez y se devuelve. Ver lib/recarga-por-version.ts.
@@ -227,7 +230,7 @@ export function ConsultaPublicaForm({
   }
 
   return (
-    <form onSubmit={enviar} className="flex flex-col gap-6">
+    <form onSubmit={enviar} data-origen="no" className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
         <span className="label-tech text-[11px] tracking-[0.25em] text-[#0047ff]">
           Pedir presupuesto

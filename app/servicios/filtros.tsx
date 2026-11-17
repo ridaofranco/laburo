@@ -38,7 +38,7 @@ export function FiltrosVidriera({
   const hayFiltros = Boolean(inicial.texto || inicial.categoria || inicial.provincia || inicial.pais);
 
   return (
-    <form method="get" action="/servicios" className="flex flex-col gap-5">
+    <form method="get" action="/servicios" data-origen="no" className="flex flex-col gap-5">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
         <label className="flex flex-col gap-2 md:col-span-5" htmlFor="q">
           <span className={labelCls}>Qué necesitás</span>

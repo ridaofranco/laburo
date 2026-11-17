@@ -313,7 +313,7 @@ export function RegistroRapido({
         </p>
       </header>
 
-      <form onSubmit={onSubmit} className="flex flex-col gap-8">
+      <form onSubmit={onSubmit} data-origen="no" className="flex flex-col gap-8">
         {/* El adjunto. Input nativo: enfocable con teclado y con foco visible. */}
         <section
           aria-busy={leyendo}

@@ -261,7 +261,7 @@ export function RegistroForm({
         </p>
       </header>
 
-      <form onSubmit={onSubmit} className="flex flex-col gap-12">
+      <form onSubmit={onSubmit} data-origen="no" className="flex flex-col gap-12">
         {/* CV + autollenado */}
         <section className="border border-[#4c4546] p-6 bg-[#0e0e0e] flex flex-col gap-4">
           <div className="flex items-center gap-3">

@@ -227,7 +227,7 @@ export function EntrarClient() {
           </motion.div>
         ) : (
           /* ── Paso 2: mail y contraseña ─────────────────────────────── */
-          <form onSubmit={onSubmit} className="w-full flex flex-col gap-9">
+          <form onSubmit={onSubmit} data-origen="no" className="w-full flex flex-col gap-9">
             <button
               type="button"
               onClick={() => {

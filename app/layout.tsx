@@ -4,6 +4,7 @@ import { Inter, Syne, Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
 import { SITE_URL } from "@/lib/site";
+import { OrigenCasa } from "@/components/origen-casa";
 import "./globals.css";
 
 // Inter — cuerpo/UI (Radical Minimalist: neutral, legible en bloques densos).
@@ -61,6 +62,9 @@ export default function RootLayout({
             en Vercel. Falta un click de Franco: habilitar Analytics en el
             dashboard (proyecto laburo → pestaña Analytics → Enable). */}
         <Analytics />
+        {/* Origen de cada consulta (pauta, Google, ChatGPT, directo), invisible
+            para el visitante. Solo se carga en las páginas públicas. */}
+        <OrigenCasa />
       </body>
     </html>
   );
