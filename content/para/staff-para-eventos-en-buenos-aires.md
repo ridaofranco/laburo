@@ -25,7 +25,7 @@ faqs:
 
 En Buenos Aires el problema casi nunca es que no haya gente. Es que la gente está repartida en un área enorme y el evento está en un punto. Un predio en las afueras, una citación a las 7 de la mañana o un cierre a las 4 cambian quién puede llegar y quién puede volver. Si eso no se piensa antes, aparece el día del evento como faltazo o como llegada tarde.
 
-Esta página es para quien contrata staff en la Ciudad de Buenos Aires y el conurbano (productoras, agencias, marcas, salones, organizadores): qué gente hay en LABURO en el AMBA, cómo pensar zonas y traslados, y cómo confirmar el equipo.
+Esta página es para quien contrata staff en la Ciudad de Buenos Aires y el conurbano (productoras, agencias, marcas, salones, organizadores): qué gente hay en LABURO en el AMBA, cómo pensar zonas y traslados, y cómo confirmar el equipo. Si buscás qué puestos lleva un evento en cualquier provincia, está la guía general de [staff para eventos](/para/personal-para-eventos).
 
 ## Quién hay en Buenos Aires
 
