@@ -31,6 +31,7 @@ import { getFichaProveedor } from "../actions";
 import { ConsultaPublicaForm } from "@/components/vidriera/consulta-publica-form";
 import { FamiliaDer } from "@/components/familia-der";
 import { esFichaDeLaCasa } from "@/lib/fichas-de-la-casa";
+import { CLASE_TITULO_FICHA, estiloTituloFicha } from "@/lib/titulo-segun-largo";
 
 const WRAP = "max-w-[1440px] mx-auto w-full px-6 md:px-20";
 
@@ -110,7 +111,10 @@ export default async function FichaProveedorPage({ params }: Props) {
                *  el proveedor y puede ser una sola palabra larguísima. Sin esto,
                *  "Catering Verificación" ya se salía de la columna y quedaba
                *  cortado contra el borde del formulario (visto al probarlo). */}
-              <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.92] text-[clamp(32px,5vw,64px)] [overflow-wrap:anywhere]">
+              <h1
+                className={`font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.92] ${CLASE_TITULO_FICHA} [overflow-wrap:anywhere]`}
+                style={estiloTituloFicha(p.display_name)}
+              >
                 {p.display_name}
               </h1>
               {p.headline?.trim() ? (

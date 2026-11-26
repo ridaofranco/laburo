@@ -5,6 +5,7 @@ import { BLOG_ORIGIN } from "@/lib/blog";
 import { ctaDe, entradaDe, getAllPara, getPara, otrasPara } from "@/lib/para";
 import { BlogFooter, BlogHeader, WRAP } from "../../blog/chrome";
 import { Faq } from "../../blog/faq";
+import { estiloTituloNota } from "@/lib/titulo-segun-largo";
 
 /**
  * Página por público (/para/<slug>), 28/10/2026.
@@ -153,7 +154,9 @@ export default async function ParaPage({
                 <span className="label-tech text-[11px] tracking-[0.3em] text-[#0047ff] block mt-10">
                   {page.kicker}
                 </span>
-                <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tight leading-[1.1] text-[clamp(21px,4vw,50px)] break-words [hyphens:auto] mt-5">
+                <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tight leading-[1.1] text-[clamp(21px,4vw,50px)] break-words [hyphens:auto] mt-5"
+                  style={estiloTituloNota(page.title)}
+                >
                   {page.title}
                 </h1>
                 <p className="text-[17px] md:text-[19px] leading-[1.7] text-[#8a8a8a] mt-8 max-w-[680px]">

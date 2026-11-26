@@ -16,6 +16,7 @@ import { WRAP } from "../chrome";
 import { Faq } from "../faq";
 import { SelectorIdioma } from "../idiomas";
 import { BlogCtaIntl, BlogFooterIntl, BlogHeaderIntl } from "./chrome-intl";
+import { estiloTituloNota } from "@/lib/titulo-segun-largo";
 
 /**
  * Nota traducida (la usan app/<idioma>/blog/[slug]/page.tsx) (/<idioma>/blog/<slug>), 06/11/2026. Mismo diseño y mismo SEO
@@ -111,7 +112,9 @@ export function NotaIntl({ lang, slug }: { lang: IdiomaTraduccion; slug: string 
 
               <div className="max-w-[900px]">
                 <span className="label-tech text-[11px] tracking-[0.3em] text-[#0047ff] block mt-10">{post.kicker}</span>
-                <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tight leading-[1.1] text-[clamp(21px,4vw,50px)] break-words [hyphens:auto] mt-5">
+                <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tight leading-[1.1] text-[clamp(21px,4vw,50px)] break-words [hyphens:auto] mt-5"
+                  style={estiloTituloNota(post.title)}
+                >
                   {post.title}
                 </h1>
                 <p className="text-[17px] md:text-[19px] leading-[1.7] text-[#8a8a8a] mt-8 max-w-[680px]">{post.description}</p>

@@ -11,6 +11,7 @@ import {
 import { TEXTOS } from "@/lib/blog-i18n";
 import { WRAP } from "../chrome";
 import { BlogCtaIntl, BlogFooterIntl, BlogHeaderIntl } from "./chrome-intl";
+import { estiloPortadaBlog } from "@/lib/titulo-segun-largo";
 
 /**
  * Índice del blog traducido (lo usan app/<idioma>/blog/page.tsx) (/en/blog, /pt/blog, /fr/blog, /it/blog), 06/11/2026.
@@ -89,7 +90,9 @@ export function IndiceIntl({ lang }: { lang: IdiomaTraduccion }) {
         <section className="border-b border-[#1a1a1a]">
           <div className={`${WRAP} py-20 md:py-32`}>
             <span className="label-tech text-[11px] tracking-[0.3em] text-[#0047ff] block">{t.indiceEyebrow}</span>
-            <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.9] text-[clamp(44px,10vw,120px)] mt-6">
+            <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.9] text-[clamp(44px,10vw,120px)] mt-6"
+              style={estiloPortadaBlog(t.indiceH1)}
+            >
               {t.indiceH1[0]}
               <br />
               {t.indiceH1[1]}

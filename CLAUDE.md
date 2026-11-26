@@ -206,3 +206,14 @@ Do not make direct repo edits outside a GSD workflow unless the user explicitly 
 > Profile not yet configured. Run `/gsd-profile-user` to generate your developer profile.
 > This section is managed by `generate-claude-profile` -- do not edit manually.
 <!-- GSD:profile-end -->
+
+## Control visual y traba antes de publicar (26/11/2026)
+
+Regla de Franco: «la estética jamás se puede perder». Todo push a `main` sale en vivo en laburo.somosder.ar.
+
+- **Traba**: `scripts/pre-push.sh` (instalar con `ln -sf ../../scripts/pre-push.sh .git/hooks/pre-push`). En cada push a `main` que toque el sitio compila en `.next-verify` (no pisa el `.next` de un `next dev`), levanta el sitio en un puerto libre y corre `scripts/control-visual.mjs` sobre TODAS las páginas públicas del mapa del sitio (unas 700) más `/empleos`, `/licitaciones` y `/entrar`, en 1440 y 390 px. Tarda unos 4 a 5 minutos. Si falla, el push no sale y le avisa a Franco por Telegram (salvo `CONTROL_SIN_AVISO=1`, para pruebas). Prohibido `--no-verify` sin su OK.
+- **Qué mira**: desborde (la página se corre al costado), hueco (grilla con columnas vacías o tarjeta sola), título (h1 de más de 4 renglones en escritorio / 6 en celular; notas de blog y `/para`: 5 / 8) e imagen rota. Solo abre y mide páginas públicas: nunca paneles ni nada con sesión, no hace clic ni envía formularios.
+- **A mano**: `node scripts/control-visual.mjs --base https://laburo.somosder.ar --por-grupo 1000 --trabajadores 6` (en vivo, solo lectura).
+- **Títulos con texto que viene de datos** (nombre de ficha, título de nota): nunca un tamaño fijo. Usar `lib/titulo-segun-largo.ts` (`estiloTituloFicha` + `CLASE_TITULO_FICHA`, `estiloTituloNota`, `estiloPortadaBlog`), que calcula el tamaño para que entre en pocos renglones y sin palabras cortadas. Plantilla nueva con h1 de datos = sumarle su ajuste ahí.
+- **Datos sueltos (1, 2 o 3 según la ficha)**: en fila con `flex flex-wrap`, no en grilla de columnas fijas, para que no queden columnas vacías.
+- **Excepciones**: `scripts/control-visual.excepciones.json`, pocas y con motivo. Hoy está vacío: no hizo falta ninguna. Si el control marca algo, se corrige la página; no se afloja el control.

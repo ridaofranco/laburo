@@ -31,6 +31,7 @@ import { textoCapacidad, urlDeFotoSalon } from "@/lib/salones";
 import { normalizarWebsite } from "@/lib/format";
 import { getFichaSalon } from "../actions";
 import { FamiliaDer } from "@/components/familia-der";
+import { CLASE_TITULO_FICHA, estiloTituloFicha } from "@/lib/titulo-segun-largo";
 
 const WRAP = "max-w-[1440px] mx-auto w-full px-6 md:px-20";
 
@@ -170,7 +171,10 @@ export default async function FichaSalonPage({ params }: Props) {
                   verificado por SOMOS DER
                 </span>
               ) : null}
-              <h1 className="font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.92] text-[clamp(32px,5vw,64px)] [overflow-wrap:anywhere]">
+              <h1
+                className={`font-[family-name:var(--font-syne)] font-extrabold uppercase tracking-tighter leading-[0.92] ${CLASE_TITULO_FICHA} [overflow-wrap:anywhere]`}
+                style={estiloTituloFicha(s.display_name)}
+              >
                 {s.display_name}
               </h1>
               {s.headline?.trim() ? (
@@ -210,7 +214,10 @@ export default async function FichaSalonPage({ params }: Props) {
             ) : null}
 
             {datos.length ? (
-              <div className="border-t border-[#1a1a1a] pt-8 grid grid-cols-2 sm:grid-cols-3 gap-6">
+              /* En fila y no en grilla de 3 columnas (26/11): los datos son 1, 2 o
+               * 3 según lo que cargó el salón, y con 2 quedaba una columna vacía
+               * (y con 3 en celular, uno solo abajo). Así se acomodan solos. */
+              <div className="border-t border-[#1a1a1a] pt-8 flex flex-wrap gap-x-12 gap-y-6">
                 {datos.map((d) => (
                   <Dato key={d.label} label={d.label} valor={d.valor} />
                 ))}
