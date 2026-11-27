@@ -56,6 +56,11 @@ export function BlogFooterIntl({ lang }: { lang: IdiomaTraduccion }) {
           <Link href={`/${lang}/blog`} className={link}>
             {t.blog}
           </Link>
+          {lang === "en" && (
+            <Link href="/en/event-staffing-argentina" className={link}>
+              Event staffing in Argentina
+            </Link>
+          )}
           <Link href="/blog" hrefLang="es" className={link}>
             Blog (ES)
           </Link>

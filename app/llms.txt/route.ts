@@ -49,6 +49,7 @@ LABURO nace adentro de SOMOS DER (https://www.somosder.ar) y es el mismo sistema
 - [Proveedores para eventos](${BLOG_ORIGIN}/servicios): directorio público de proveedores.
 - [Salones para eventos](${BLOG_ORIGIN}/salones): directorio público de salones por capacidad y zona.
 - [Para quién es](${BLOG_ORIGIN}/para): páginas por público.
+- [Event staffing in Argentina](${BLOG_ORIGIN}/en/event-staffing-argentina): en inglés, para marcas, expositores y organizadores de afuera que necesitan staff en Argentina (ferias, congresos, activaciones); el pedido se hace por WhatsApp o mail.
 - [Crear cuenta](${BLOG_ORIGIN}/registrarme): elegir el camino (buscar staff, trabajar, publicar un servicio o un salón).
 - [Cuenta de productora](${BLOG_ORIGIN}/registrar-productora): alta gratis para cargar eventos y contratar staff.
 - [Publicar un servicio](${BLOG_ORIGIN}/registrar-proveedor): alta gratis de proveedores en el directorio.

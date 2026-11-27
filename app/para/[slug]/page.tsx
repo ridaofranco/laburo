@@ -33,7 +33,13 @@ export async function generateMetadata({
   return {
     title: page.metaTitle,
     description: page.description,
-    alternates: { canonical: page.canonical },
+    alternates: {
+      canonical: page.canonical,
+      // Par en inglés para quien contrata desde afuera (27/11): hreflang recíproco.
+      ...(slug === "personal-para-eventos"
+        ? { languages: { "es-AR": page.canonical, en: `${BLOG_ORIGIN}/en/event-staffing-argentina`, "x-default": page.canonical } }
+        : {}),
+    },
     openGraph: {
       type: "website",
       url: page.canonical,

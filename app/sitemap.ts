@@ -159,6 +159,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           })),
         ]
       : []),
+    // Par en inglés de /para/personal-para-eventos (27/11).
+    {
+      url: `${BLOG_ORIGIN}/en/event-staffing-argentina`,
+      lastModified: "2026-11-27",
+      changeFrequency: "monthly",
+      priority: 0.8,
+      alternates: {
+        languages: {
+          "es-AR": `${BLOG_ORIGIN}/para/personal-para-eventos`,
+          en: `${BLOG_ORIGIN}/en/event-staffing-argentina`,
+          "x-default": `${BLOG_ORIGIN}/para/personal-para-eventos`,
+        },
+      },
+    },
     {
       url: `${BLOG_ORIGIN}/blog`,
       lastModified: ultimoPost,
