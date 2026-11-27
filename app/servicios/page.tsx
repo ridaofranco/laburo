@@ -31,11 +31,37 @@ import { buscarPublico, getCategoriasPublicas, getPaisesPublicos } from "./actio
 import { FiltrosVidriera } from "./filtros";
 import { TarjetaProveedor } from "./tarjeta";
 import { FamiliaDer } from "@/components/familia-der";
+import { Faq } from "../blog/faq";
 
 // 16/11: decía «Proveedores para tu evento». La gente busca «proveedores para eventos».
 const TITULO = "Proveedores para eventos: catering, sonido y más | LABURO";
+// 27/11: la búsqueda principal («proveedores para eventos») va en la descripción,
+// el primer párrafo y un H2 (control de los seis lugares, plan Número 1).
 const DESCRIPCION =
-  "Catering, sonido, fotografía, seguridad y todo lo que necesita tu fiesta, en un solo lugar. Pedí presupuesto directo a cada proveedor, sin cuenta y sin vueltas.";
+  "Proveedores para eventos en un solo lugar: catering, sonido, fotografía, seguridad y ambientación. Pedí presupuesto directo a cada uno, sin cuenta y gratis.";
+
+const FAQS = [
+  {
+    q: "¿Cómo pido presupuesto a proveedores para eventos en LABURO?",
+    a: "Buscás por rubro, provincia o palabra, entrás a la ficha del proveedor y le mandás el pedido por el formulario con tu nombre, tu mail y los datos del evento. No hace falta crear cuenta. El pedido le llega al proveedor por mail y te contesta directo a vos.",
+  },
+  {
+    q: "¿Cuánto cuesta pedir presupuesto?",
+    a: "Nada. Pedir presupuesto es gratis y publicarse como proveedor también. El precio del servicio lo arreglás directo con cada proveedor: LABURO no cobra entre partes.",
+  },
+  {
+    q: "¿Qué datos conviene mandar en el pedido?",
+    a: "Fecha, lugar con dirección, cantidad de personas, horario del evento y horario disponible para montaje y desmontaje. Después, lo propio del rubro: qué equipo o servicio necesitás y qué querés que esté incluido. Cuanto más completo el primer pedido, menos idas y vueltas antes de tener un precio.",
+  },
+  {
+    q: "¿Y si no encuentro el proveedor que necesito?",
+    a: "Probá con menos filtros o con otra palabra. Si igual no aparece, escribinos: SOMOS DER produce eventos y trabaja con proveedores de todos los rubros, y si querés que alguien se ocupe del evento entero, eso es producción integral.",
+  },
+  {
+    q: "Tengo un servicio para eventos, ¿cómo me publico?",
+    a: "Te registrás gratis en /registrar-proveedor con el nombre de tu empresa, un contacto y una descripción, y cargás un servicio por cada cosa distinta que ofrecés. Los pedidos de presupuesto te llegan por mail y los ves en tu panel.",
+  },
+];
 
 /**
  * La metadata es dinámica por UNA razón concreta: el `noindex` de abajo.
@@ -142,9 +168,9 @@ export default async function ServiciosPage({ searchParams }: Props) {
             </span>
           </h1>
           <p className="text-[17px] md:text-[19px] leading-[1.7] text-[#8a8a8a] max-w-[620px] mt-8">
-            Catering, sonido, fotos, seguridad, ambientación. Buscá lo que te
-            falta, entrá al perfil y pedile el presupuesto directo. No hace falta
-            crear ninguna cuenta.
+            Proveedores para eventos de catering, sonido, fotos, seguridad y
+            ambientación. Buscá lo que te falta, entrá al perfil y pedile el
+            presupuesto directo. No hace falta crear ninguna cuenta.
           </p>
         </section>
 
@@ -228,6 +254,59 @@ export default async function ServiciosPage({ searchParams }: Props) {
             </>
           )}
         </section>
+
+        {/* 27/11: el «cómo funciona» y las preguntas, debajo del listado para no
+         * empujar los resultados. El H2 lleva la búsqueda principal. */}
+        <section className="border-t border-[#1a1a1a]">
+          <div className={`${WRAP} py-20 md:py-28`}>
+            <div className="max-w-[760px]">
+              <h2 className="font-[family-name:var(--font-syne)] font-bold uppercase tracking-tight leading-[1.05] text-[clamp(26px,4vw,44px)]">
+                Cómo pedir presupuesto a proveedores para eventos
+              </h2>
+              <ol className="list-decimal pl-6 mt-8 space-y-3 text-[16px] md:text-[17px] leading-[1.7] text-[#c8c8c8]">
+                <li>Filtrá por rubro y provincia, o escribí lo que buscás.</li>
+                <li>Entrá a la ficha y mirá qué incluye cada servicio y dónde trabaja.</li>
+                <li>Mandá el pedido con fecha, lugar, cantidad de personas y horarios. Te contesta el proveedor, directo.</li>
+              </ol>
+              <p className="text-[16px] md:text-[17px] leading-[1.7] text-[#8a8a8a] mt-8">
+                Para armar un pedido que se pueda comparar, leé{" "}
+                <Link href="/blog/como-pedir-presupuesto-a-proveedores-de-eventos" className="text-[#f5f5f5] underline underline-offset-4 hover:text-[#0047ff] transition-colors">
+                  cómo pedir presupuesto a proveedores de eventos
+                </Link>
+                . El lugar lo buscás en{" "}
+                <Link href="/salones" className="text-[#f5f5f5] underline underline-offset-4 hover:text-[#0047ff] transition-colors">
+                  salones para eventos
+                </Link>{" "}
+                y el personal en{" "}
+                <Link href="/para/personal-para-eventos" className="text-[#f5f5f5] underline underline-offset-4 hover:text-[#0047ff] transition-colors">
+                  personal para eventos
+                </Link>
+                . Si preferís que una sola empresa produzca todo, eso hace{" "}
+                <a href="https://www.somosder.ar" target="_blank" rel="noopener" className="text-[#f5f5f5] underline underline-offset-4 hover:text-[#0047ff] transition-colors">
+                  SOMOS DER
+                </a>
+                ; para la acreditación y el control de accesos está{" "}
+                <a href="https://pase.somosder.ar" target="_blank" rel="noopener" className="text-[#f5f5f5] underline underline-offset-4 hover:text-[#0047ff] transition-colors">
+                  PASE
+                </a>
+                .
+              </p>
+              <p className="text-[16px] md:text-[17px] leading-[1.7] text-[#8a8a8a] mt-6">
+                ¿Tenés un servicio para eventos?{" "}
+                <Link href="/registrar-proveedor" className="text-[#f5f5f5] underline underline-offset-4 hover:text-[#0047ff] transition-colors">
+                  Publicarte es gratis
+                </Link>
+                . Y si necesitás web, marketing o ordenar el negocio, eso es{" "}
+                <a href="https://hito.agency" target="_blank" rel="noopener" className="text-[#f5f5f5] underline underline-offset-4 hover:text-[#0047ff] transition-colors">
+                  HITO
+                </a>
+                .
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <Faq faqs={FAQS} />
       </main>
 
       <footer className="border-t border-[#1a1a1a]">
