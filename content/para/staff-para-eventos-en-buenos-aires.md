@@ -1,6 +1,6 @@
 ---
 title: "Staff para eventos en Buenos Aires: cómo armar el equipo en CABA y el conurbano"
-description: "Staff para eventos en CABA y el AMBA: qué gente hay en el pool de LABURO, cómo pensar zonas, traslados, convocatoria temprana y vuelta de madrugada."
+description: "Staff para eventos en Buenos Aires, CABA y el AMBA: qué gente hay en el pool de LABURO, cómo pensar zonas, traslados, convocatoria temprana y vuelta de madrugada."
 metaTitle: "Staff para Eventos en Buenos Aires y AMBA | LABURO"
 slug: "staff-para-eventos-en-buenos-aires"
 canonical: "https://laburo.somosder.ar/para/staff-para-eventos-en-buenos-aires"
@@ -23,11 +23,11 @@ faqs:
     a: "Sí, pero conviene buscar primero en la zona del evento y completar con gente de más lejos. Si convocás desde otra punta del AMBA, tené en cuenta el tiempo de viaje en la hora de citación y en la de salida, y dejalo claro en la oferta."
 ---
 
-En Buenos Aires el problema casi nunca es que no haya gente. Es que la gente está repartida en un área enorme y el evento está en un punto. Un predio en las afueras, una citación a las 7 de la mañana o un cierre a las 4 cambian quién puede llegar y quién puede volver. Si eso no se piensa antes, aparece el día del evento como faltazo o como llegada tarde.
+Al armar el staff para eventos en Buenos Aires, el problema casi nunca es que no haya gente. Es que la gente está repartida en un área enorme y el evento está en un punto. Un predio en las afueras, una citación a las 7 de la mañana o un cierre a las 4 cambian quién puede llegar y quién puede volver. Si eso no se piensa antes, aparece el día del evento como faltazo o como llegada tarde.
 
-Esta página es para quien contrata staff en la Ciudad de Buenos Aires y el conurbano (productoras, agencias, marcas, salones, organizadores): qué gente hay en LABURO en el AMBA, cómo pensar zonas y traslados, y cómo confirmar el equipo. Si buscás qué puestos lleva un evento en cualquier provincia, está la guía general de [staff para eventos](/para/personal-para-eventos).
+Esta página es para quien contrata staff o personal para eventos en la Ciudad de Buenos Aires y el conurbano (productoras, agencias, marcas, salones, organizadores): qué gente hay en LABURO en el AMBA, cómo pensar zonas y traslados, y cómo confirmar el equipo. Si buscás qué puestos lleva un evento en cualquier provincia, está la guía general de [staff para eventos](/para/personal-para-eventos).
 
-## Quién hay en Buenos Aires
+## Staff para eventos en Buenos Aires: quién hay
 
 LABURO tiene **más de 170 fichas de personas que viven en la Ciudad de Buenos Aires** y **más de 300 en la Provincia de Buenos Aires**: juntas, más de 470. En la Provincia hay gente del conurbano (zona norte, sur y oeste), de La Plata y también del interior, como Bahía Blanca, Mar del Plata o Tandil, así que para un evento en el AMBA lo que cuenta es la ciudad, no solo la provincia: pedí gente cerca del lugar.
 
@@ -108,6 +108,10 @@ Crear la cuenta es gratis. El recorrido:
 5. **El día del evento**, el staff ficha entrada y salida desde el celular y las horas quedan registradas.
 
 Si querés comparar con la planilla y el grupo de WhatsApp, está en [planilla y WhatsApp o LABURO](/para/planilla-y-whatsapp-o-laburo-para-convocar-staff). Según el formato, también te sirven [staff para eventos corporativos](/para/staff-para-eventos-corporativos), [personal de control de accesos y acreditación](/para/personal-de-control-de-accesos-y-acreditacion) y [mozos y bartenders para eventos](/para/mozos-y-bartenders-para-eventos).
+
+## Si preferís que lo resuelva una productora
+
+Si no querés armar el equipo vos, el evento entero (staff incluido) lo puede llevar [SOMOS DER, productora de eventos en Buenos Aires](https://www.somosder.ar/productora-eventos-buenos-aires): escribí por [WhatsApp al 11 7154-0675](https://wa.me/5491171540675) con la fecha, el lugar y la cantidad de invitados. Si tu evento tiene acreditación, [PASE](https://pase.somosder.ar) hace la acreditación y el control de accesos con QR.
 
 ## Si trabajás en eventos en Buenos Aires
 
