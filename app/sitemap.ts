@@ -169,6 +169,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         languages: {
           "es-AR": `${BLOG_ORIGIN}/para/personal-para-eventos`,
           en: `${BLOG_ORIGIN}/en/event-staffing-argentina`,
+          "pt-BR": `${BLOG_ORIGIN}/pt/staff-para-eventos-argentina`,
+          "x-default": `${BLOG_ORIGIN}/para/personal-para-eventos`,
+        },
+      },
+    },
+    // Par en portugués (27/11).
+    {
+      url: `${BLOG_ORIGIN}/pt/staff-para-eventos-argentina`,
+      lastModified: "2026-11-27",
+      changeFrequency: "monthly",
+      priority: 0.8,
+      alternates: {
+        languages: {
+          "es-AR": `${BLOG_ORIGIN}/para/personal-para-eventos`,
+          en: `${BLOG_ORIGIN}/en/event-staffing-argentina`,
+          "pt-BR": `${BLOG_ORIGIN}/pt/staff-para-eventos-argentina`,
           "x-default": `${BLOG_ORIGIN}/para/personal-para-eventos`,
         },
       },

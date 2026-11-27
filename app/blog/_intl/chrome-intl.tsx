@@ -61,6 +61,11 @@ export function BlogFooterIntl({ lang }: { lang: IdiomaTraduccion }) {
               Event staffing in Argentina
             </Link>
           )}
+          {lang === "pt" && (
+            <Link href="/pt/staff-para-eventos-argentina" className={link}>
+              Staff para eventos na Argentina
+            </Link>
+          )}
           <Link href="/blog" hrefLang="es" className={link}>
             Blog (ES)
           </Link>

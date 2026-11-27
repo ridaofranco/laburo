@@ -61,7 +61,7 @@ export const metadata: Metadata = {
   description: DESCRIPCION,
   alternates: {
     canonical: URL,
-    languages: { "es-AR": URL_ES, en: URL, "x-default": URL_ES },
+    languages: { "es-AR": URL_ES, en: URL, "pt-BR": `${BLOG_ORIGIN}/pt/staff-para-eventos-argentina`, "x-default": URL_ES },
   },
   openGraph: {
     type: "website",

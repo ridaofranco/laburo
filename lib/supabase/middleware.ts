@@ -196,6 +196,7 @@ export async function updateSession(request: NextRequest) {
     "/it/blog",
     // Página en inglés para quien contrata desde afuera (27/11). Ruta exacta.
     "/en/event-staffing-argentina",
+    "/pt/staff-para-eventos-argentina",
     // llms.txt: lo que leen los asistentes de IA. Sin esto, 307 a /entrar.
     "/llms.txt",
     // LA VIDRIERA DE PROVEEDORES (Fase 4, migración 0059). Es la puerta del
